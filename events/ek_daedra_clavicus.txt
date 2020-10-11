@@ -1,0 +1,1604 @@
+####Etienne's Clavicus Vile Events####
+
+namespace = clavicus
+
+#Bargain Selection Events
+
+character_event = {
+	id = clavicus.1
+	desc = Clavicus1
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_adult = yes
+	}
+	
+	option = {
+		name = "Clavicus1Wealth"
+		ai_chance = {
+
+			factor = 1
+
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			modifier = {
+				factor = 0.5
+				trait = charitable
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = clavicus.10 }
+		}	
+	}
+	option = {
+		name = "Clavicus1Immortality"
+		trigger = {
+			is_undead = no
+			is_immortal = no
+			is_adult = yes
+		}
+		ai_chance = {
+
+			factor = 1
+
+			modifier = {
+				factor = 2
+				trait = paranoid
+			}
+			modifier = {
+				factor = 0.5
+				trait = trusting
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = clavicus.25 }
+		}
+	}
+	option = {
+		name = "Clavicus1Love"
+		trigger = {
+			is_adult = yes
+			is_marriage_adult = yes
+		}
+		ai_chance = {
+
+			factor = 1
+
+			modifier = {
+				factor = 2
+				trait = lustful
+			}
+			modifier = {
+				factor = 0.5
+				trait = chaste
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = clavicus.40 }
+		}
+	}
+	option = {
+		name = "Clavicus1Wrap"
+		ai_chance = {
+
+			factor = 1
+		}
+		hidden_tooltip = {
+			character_event = { id = clavicus.2 }
+		}
+	}
+}
+
+character_event = {
+	id = clavicus.2
+	desc = Clavicus2
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus2Respect"
+		ai_chance = {
+			factor = 1
+
+			modifier = {
+				factor = 2
+				trait = gregarious
+			}
+			modifier = {
+				factor = 0.5
+				trait = shy
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = clavicus.80 }
+		}	
+	}
+	option = {
+		name = "Clavicus2Power"
+		ai_chance = {
+			factor = 1
+
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = clavicus.100 }
+		}
+	}
+	option = {
+		name = "Clavicus2Wrap"
+		ai_chance = {
+			factor = 1
+		}
+		hidden_tooltip = {
+			character_event = { id = clavicus.1 }
+		}
+	}
+	option = {
+		name = "Clavicus2Decline"
+		ai_chance = {
+			factor = 0
+		}
+		piety = -25
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Hidden event for AI
+character_event = {
+	id = clavicus.5
+	hide_window = yes
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { character_event = { id = clavicus.10 } }
+			20 = {
+				modifier = { #Potentially gamebreaking if they pick this but are disqualified
+					OR = {
+						is_undead = yes
+						is_immortal = yes
+					}
+					factor = 0
+				}
+				character_event = { id = clavicus.25 } 
+			}
+			20 = { character_event = { id = clavicus.80 } }
+			20 = { character_event = { id = clavicus.100 } }
+		}
+	}
+}
+
+#Wished for Money
+
+character_event = {
+	id = clavicus.10
+	desc = Clavicus10
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus10Accept"
+		ai_chance = {
+			factor = 1
+		}
+		hidden_tooltip = {
+				random_list = {
+				33 = { character_event = { id = clavicus.11 } } #Great wealth, bad taxes.
+				33 = { character_event = { id = clavicus.12 } } #Break-even wealth, bad taxes.
+				33 = { character_event = { id = clavicus.13 } } #No wealth, bad taxes.
+			}
+		}
+	}
+}
+
+#Great wealth, bad taxes.
+
+character_event = {
+	id = clavicus.11
+	desc = Clavicus11
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus11Acknowledge"
+		scaled_wealth = 2
+		random = {
+			chance = 25
+			random_demesne_province = {
+			add_province_modifier = {
+				name = clavicus_taxes
+				duration = 365
+				}
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Break even wealth, bad taxes.
+
+character_event = {
+	id = clavicus.12
+	desc = Clavicus12
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus12Acknowledge"
+		scaled_wealth = 1
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#No wealth, bad taxes.
+
+character_event = {
+	id = clavicus.13
+	desc = Clavicus13
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus13Acknowledge"
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Wished for Immortality
+
+character_event = {
+	id = clavicus.25
+	desc = Clavicus25
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus25Accept"
+		ai_chance = {
+			factor = 0
+		}
+		hidden_tooltip = {
+				random_list = {
+					2 = { character_event = { id = clavicus.26 } } #Sweet sweet immortality
+					60 = { character_event = { id = clavicus.27 } } #Some random immortalizes you in a book
+					28 = { character_event = { id = clavicus.28 } } #A vampire bites you
+					10 = { character_event = { id = clavicus.29 } } #Immortalized for incredible ugliness
+			}
+		}
+	}
+}
+
+#Sweet sweet immortality
+
+character_event = {
+	id = clavicus.26
+	desc = Clavicus26
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus26Acknowledge"
+		add_trait = immortal
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+			set_character_flag = immortal_no_cheat
+		}
+	}
+}
+
+#Some random immortalizes you in a book
+
+character_event = {
+	id = clavicus.27
+	desc = Clavicus27
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus27Acknowledge"
+		character_event = { id = clavicus.32 days = 3 }
+	}
+}
+
+#Bitten by a vampire
+
+character_event = {
+	id = clavicus.28
+	desc = Clavicus28
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = {
+			is_undead = no
+			is_disease_immune = no
+		}
+		name = "Clavicus28AcknowledgeBite"
+		hidden_tooltip = {
+			set_character_flag = vampire_disease
+			character_event = { id = clavicus.30 }
+		}
+	}
+	option = {
+		trigger = {
+			OR = {
+				is_undead = yes
+				is_disease_immune = yes
+			}
+		}
+		name = "Clavicus28AcknowledgeNoBite"
+		hidden_tooltip = {
+			character_event = { id = clavicus.31 }
+		}
+	}
+}
+
+#Known ugliness
+
+character_event = {
+	id = clavicus.29
+	desc = Clavicus29
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus29Acknowledge"
+		add_trait = ugly
+		add_character_modifier = { name = clavicus_ugliness months = 12000 }
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Infected
+
+character_event = {
+	id = clavicus.30
+	desc = Clavicus30
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		add_trait = vampire
+	}
+	
+	option = {
+		name = "Clavicus30Acknowledge"
+		set_character_flag = stage_1_vampire
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+	option = {
+		name = "Clavicus30Acknowledge"
+		prestige = -50
+		piety = -50
+		death = { death_reason = death_suicide }
+	}
+}
+
+character_event = {
+	id = clavicus.31
+	desc = Clavicus31
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus31Acknowledge"
+		prestige = 25
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#The book
+
+character_event = {
+	id = clavicus.32
+	desc = Clavicus32
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus32Acknowledge"
+		clr_character_flag = clavicus_deal
+		prestige = 10
+	}
+}
+
+#Wishing for Love
+
+character_event = {
+	id = clavicus.40
+	desc = Clavicus40
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_adult = yes
+	}
+	
+	option = {
+		name = "Clavicus40SpouseLove"
+		trigger = {
+			is_married = yes
+			any_spouse = {
+				ai = yes
+				NOR = { 
+					is_lover = ROOT
+					is_rival = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}
+			modifier = {
+				factor = 5
+				trait = chaste
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				20 = { character_event = { id = clavicus.41 } } #Spousal true love
+				30 = { character_event = { id = clavicus.42 } } #Spousal love in the form of friendship
+				20 = { character_event = { id = clavicus.43 } } #Spousal approval but not necessarily love
+				30 = { character_event = { id = clavicus.44 } } #Spousal love...*madly* in love!
+			}
+		}
+	}
+	option = {
+		name = "Clavicus40NewLove"
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 5
+				trait = lustful
+			}
+			modifier = {
+				factor = 5
+				trait = hedonist
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				30 = { character_event = { id = clavicus.61 } } #A random courtier of proper culture
+				35 = { character_event = { id = clavicus.62 } } #Madly in love (as in, you're both crazy)
+				35 = { character_event = { id = clavicus.63 } } #A random ugly diseased courtier
+			}
+		}
+	}
+}
+
+#Spousal Love events#
+
+#Spousal True Love
+
+character_event = {
+	id = clavicus.41
+	desc = Clavicus41
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_married = yes
+		any_spouse = {
+			NOT = { is_lover = ROOT }
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	immediate = {
+		random_spouse = {
+			limit = {
+				NOT = { is_lover = ROOT }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			save_event_target_as = target_clavicus_spouse
+		}
+	}
+	
+	option = {
+		name = "Clavicus41Acknowledge"
+		event_target:target_clavicus_spouse = { save_event_target_as = new_lover }
+		add_new_lover_target = yes
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Spousal Friendship
+
+character_event = {
+	id = clavicus.42
+	desc = Clavicus42
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_married = yes
+		any_spouse = {
+			NOT = { is_lover = ROOT }
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	immediate = {
+		random_spouse = {
+			limit = {
+				NOT = { is_lover = ROOT }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			save_event_target_as = target_clavicus_spouse
+		}
+	}
+	
+	option = {
+		name = "Clavicus42Acknowledge"
+		trigger = {
+			event_target:target_clavicus_spouse = {
+				NOT = { is_friend = ROOT }
+			}
+		}
+		add_friend = event_target:target_clavicus_spouse
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+	
+	option = {
+		name = "Clavicus42Acknowledge"
+		trigger = {
+			event_target:target_clavicus_spouse = {
+				is_friend = ROOT
+			}
+		}
+		event_target:target_clavicus_spouse = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 1
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Spousal Approval
+
+character_event = {
+	id = clavicus.43
+	desc = Clavicus43
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_married = yes
+		any_spouse = {
+			NOT = { is_lover = ROOT }
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	immediate = {
+		random_spouse = {
+			limit = {
+				NOT = { is_lover = ROOT }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			save_event_target_as = target_clavicus_spouse
+		}
+	}
+	
+	option = {
+		name = "Clavicus43Acknowledge"
+		event_target:target_clavicus_spouse = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 1
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Spousal love...crazy love!
+
+character_event = {
+	id = clavicus.44
+	desc = Clavicus44
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_married = yes
+		any_spouse = {
+			NOT = { is_lover = ROOT }
+			NOT = { is_inaccessible_trigger = yes }
+		}
+	}
+	
+	immediate = {
+		random_spouse = {
+			limit = {
+				NOT = { is_lover = ROOT }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			add_trait = lustful
+			add_trait = lunatic
+			add_trait = possessed
+			add_trait = paranoid
+			save_event_target_as = target_clavicus_spouse
+			set_character_flag = permanent_lunatic
+		}
+	}
+	
+	option = {
+		name = "Clavicus44Acknowledge"
+
+		event_target:target_clavicus_spouse = { save_event_target_as = new_lover }
+		add_new_lover_target = yes
+		
+		add_trait = lustful
+		add_trait = lunatic
+		add_trait = possessed
+		add_trait = paranoid
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+			set_character_flag = permanent_lunatic
+		}
+	}
+}
+
+#Courtier generated romantics
+
+#Proper courtier shows up so that love can ensue
+
+character_event = {
+	id = clavicus.61
+	desc = Clavicus61
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_adult = yes
+	}
+	
+	option = {
+		name = "Clavicus61Acknowledge"
+		trigger = {
+			is_female = yes
+			prefers_men_trigger = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	option = {
+		name = "Clavicus61Acknowledge"
+		trigger = {
+			is_female = yes
+			prefers_men_trigger = no
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = yes
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			assign_samesex_pref_trait = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	option = {
+		name = "Clavicus61Acknowledge"
+		trigger = {
+			is_female = no
+			prefers_men_trigger = no
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = yes
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	option = {
+		name = "Clavicus61Acknowledge"
+		trigger = {
+			is_female = no
+			prefers_men_trigger = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			assign_samesex_pref_trait = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	
+	after = {
+		clr_character_flag = clavicus_deal
+		add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+	}
+}
+
+#Character appears as lover and you both go mad
+character_event = {
+	id = clavicus.62
+	desc = Clavicus62
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_adult = yes
+	}
+	
+	option = {
+		name = "Clavicus62Acknowledge"
+		trigger = {
+			is_female = yes
+			prefers_men_trigger = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = lunatic
+			trait = possessed
+			trait = paranoid
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			set_character_flag = permanent_lunatic
+		}
+		add_trait = lustful
+		add_trait = lunatic
+		add_trait = possessed
+		add_trait = paranoid
+	}
+	option = {
+		name = "Clavicus62Acknowledge"
+		trigger = {
+			is_female = yes
+			prefers_men_trigger = no
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = yes
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = lunatic
+			trait = possessed
+			trait = paranoid
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			assign_samesex_pref_trait = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			set_character_flag = permanent_lunatic
+		}
+		add_trait = lustful
+		add_trait = lunatic
+		add_trait = possessed
+		add_trait = paranoid
+	}
+	option = {
+		name = "Clavicus62Acknowledge"
+		trigger = {
+			is_female = no
+			prefers_men_trigger = no
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = yes
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = lunatic
+			trait = possessed
+			trait = paranoid
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			set_character_flag = permanent_lunatic
+		}
+		add_trait = lustful
+		add_trait = lunatic
+		add_trait = possessed
+		add_trait = paranoid
+	}
+	option = {
+		name = "Clavicus62Acknowledge"
+		trigger = {
+			is_female = no
+			prefers_men_trigger = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = lunatic
+			trait = possessed
+			trait = paranoid
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			assign_samesex_pref_trait = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			set_character_flag = permanent_lunatic
+		}
+		add_trait = lustful
+		add_trait = lunatic
+		add_trait = possessed
+		add_trait = paranoid
+	}
+	
+	after = {
+		clr_character_flag = clavicus_deal
+		add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		set_character_flag = permanent_lunatic
+	}
+}
+
+#A diseased, ugly individual
+
+character_event = {
+	id = clavicus.63
+	desc = Clavicus63
+	picture = GFX_evt_two_moon_aurora
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_adult = yes
+	}
+	
+	option = {
+		name = "Clavicus63Acknowledge"
+		trigger = {
+			is_female = yes
+			prefers_men_trigger = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = ugly
+			trait = syphilitic
+			trait = cannibal_trait
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	option = {
+		name = "Clavicus63Acknowledge"
+		trigger = {
+			is_female = yes
+			prefers_men_trigger = no
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = yes
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = ugly
+			trait = syphilitic
+			trait = cannibal_trait
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			assign_samesex_pref_trait = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	option = {
+		name = "Clavicus63Acknowledge"
+		trigger = {
+			is_female = no
+			prefers_men_trigger = no
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = yes
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = ugly
+			trait = syphilitic
+			trait = cannibal_trait
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	option = {
+		name = "Clavicus63Acknowledge"
+		trigger = {
+			is_female = no
+			prefers_men_trigger = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			female = no
+			age = 20
+			religion = ROOT
+			culture = ROOT
+			trait = lustful
+			trait = ugly
+			trait = syphilitic
+			trait = cannibal_trait
+		}
+		new_character = {
+			ROOT = { save_event_target_as = new_lover }
+			add_new_lover_target = yes
+			assign_samesex_pref_trait = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	
+	after = {
+		clr_character_flag = clavicus_deal
+		add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+	}
+}
+
+#Wishing for Respect
+
+character_event = {
+	id = clavicus.80
+	desc = Clavicus80
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus80Accept"
+		ai_chance = {
+			factor = 1
+		}
+		hidden_tooltip = {
+			random_list = {
+				25 = { character_event = { id = clavicus.81 } } #Admired by all
+				25 = { character_event = { id = clavicus.82 } } #Admired by all for a month
+				50 = { character_event = { id = clavicus.83 } } #Admired by all just a little too much
+				25 = { character_event = { id = clavicus.84 } } #Admired by all and then immediately villified
+			}
+		}
+	}
+}
+
+character_event = {
+	id = clavicus.81
+	desc = Clavicus81
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus81Acknowledge"
+		add_character_modifier = { name = clavicus_respected months = 36 }
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+character_event = {
+	id = clavicus.82
+	desc = Clavicus82
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus82Acknowledge"
+		add_character_modifier = { name = clavicus_respected months = 6 }
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+character_event = {
+	id = clavicus.83
+	desc = Clavicus83
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus83Acknowledge"
+		add_character_modifier = { name = clavicus_respected months = 36 }
+		hidden_tooltip = {
+			character_event = { id = clavicus.85 days = 30 }
+		}
+	}
+}
+
+character_event = {
+	id = clavicus.84
+	desc = Clavicus84
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus84Acknowledge"
+		add_character_modifier = { name = clavicus_respected months = 36 }
+		hidden_tooltip = {
+			character_event = { id = clavicus.86 days = 30 }
+		}
+	}
+}
+
+character_event = {
+	id = clavicus.85
+	desc = Clavicus85
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus85Acknowledge"
+		prestige = 50
+		random_demesne_province = {
+			add_province_modifier = { name = clavicus_riots duration = 730 }
+		}
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+character_event = {
+	id = clavicus.86
+	desc = Clavicus86
+	picture = GFX_evt_market
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus86Acknowledge"
+		remove_character_modifier = clavicus_respected
+		add_character_modifier = { name = clavicus_disrespected months = 12 }
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}
+
+#Wishing for Power
+
+character_event = {
+	id = clavicus.100
+	desc = Clavicus100
+	picture = GFX_evt_library
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus100Accept"
+		hidden_tooltip = {
+				random_list = {
+				10 = { set_character_flag = clavicus_101_flag }
+				10 = { set_character_flag = clavicus_102_flag }
+				10 = { set_character_flag = clavicus_103_flag }
+				10 = { set_character_flag = clavicus_104_flag }
+				10 = { set_character_flag = clavicus_105_flag }
+				10 = { set_character_flag = clavicus_106_flag }
+				10 = { set_character_flag = clavicus_107_flag }
+				10 = { set_character_flag = clavicus_108_flag }
+				10 = { set_character_flag = clavicus_109_flag }
+				10 = { set_character_flag = clavicus_110_flag }
+			}
+			character_event = { id = clavicus.101 }
+		}
+	}
+}
+
+#Power of diplomacy!
+
+character_event = {
+	id = clavicus.101
+	desc = {
+		text = Clavicus101
+		trigger = {
+			has_character_flag = clavicus_101_flag
+		}
+	}
+	desc = {
+		text = Clavicus102
+		trigger = {
+			has_character_flag = clavicus_102_flag
+		}
+	}
+	desc = {
+		text = Clavicus103
+		trigger = {
+			has_character_flag = clavicus_103_flag
+		}
+	}
+	desc = {
+		text = Clavicus104
+		trigger = {
+			has_character_flag = clavicus_104_flag
+		}
+	}
+	desc = {
+		text = Clavicus105
+		trigger = {
+			has_character_flag = clavicus_105_flag
+		}
+	}
+	desc = {
+		text = Clavicus106
+		trigger = {
+			has_character_flag = clavicus_106_flag
+		}
+	}
+	desc = {
+		text = Clavicus107
+		trigger = {
+			has_character_flag = clavicus_107_flag
+		}
+	}
+	desc = {
+		text = Clavicus108
+		trigger = {
+			has_character_flag = clavicus_108_flag
+		}
+	}
+	desc = {
+		text = Clavicus109
+		trigger = {
+			has_character_flag = clavicus_109_flag
+		}
+	}
+	desc = {
+		text = Clavicus110
+		trigger = {
+			has_character_flag = clavicus_110_flag
+		}
+	}
+	picture = GFX_evt_library
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Clavicus101Acknowledge"
+			if = {
+				limit = { has_character_flag = clavicus_101_flag }
+				change_diplomacy = 2
+				random_list = {
+					25 = { change_martial = -1 }
+					25 = { change_stewardship = -1 }
+					25 = { change_intrigue = -1 }
+					25 = { change_learning = -1 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_102_flag }
+				change_martial = 2
+				random_list = {
+					25 = { change_diplomacy = -1 }
+					25 = { change_stewardship = -1 }
+					25 = { change_intrigue = -1 }
+					25 = { change_learning = -1 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_103_flag }
+				change_stewardship = 2
+				random_list = {
+					25 = { change_diplomacy = -1 }
+					25 = { change_martial = -1 }
+					25 = { change_intrigue = -1 }
+					25 = { change_learning = -1 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_104_flag }
+				change_intrigue = 2
+				random_list = {
+					25 = { change_diplomacy = -1 }
+					25 = { change_martial = -1 }
+					25 = { change_stewardship = -1 }
+					25 = { change_learning = -1 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_105_flag }
+				change_diplomacy = 2
+				random_list = {
+					25 = { change_diplomacy = -1 }
+					25 = { change_martial = -1 }
+					25 = { change_stewardship = -1 }
+					25 = { change_intrigue = -1 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_106_flag }
+				change_diplomacy = 3
+				random_list = {
+					25 = { change_martial = -2 }
+					25 = { change_stewardship = -2 }
+					25 = { change_intrigue = -2 }
+					25 = { change_learning = -2 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_107_flag }
+				change_martial = 3
+				random_list = {
+					25 = { change_diplomacy = -2 }
+					25 = { change_stewardship = -2 }
+					25 = { change_intrigue = -2 }
+					25 = { change_learning = -2 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_108_flag }
+				change_stewardship = 3
+				random_list = {
+					25 = { change_diplomacy = -2 }
+					25 = { change_martial = -2 }
+					25 = { change_intrigue = -2 }
+					25 = { change_learning = -2 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_109_flag }
+				change_intrigue = 3
+				random_list = {
+					25 = { change_diplomacy = -2 }
+					25 = { change_martial = -2 }
+					25 = { change_stewardship = -2 }
+					25 = { change_learning = -2 }
+				}
+			}
+			if = {
+				limit = { has_character_flag = clavicus_110_flag }
+				change_diplomacy = 3
+				random_list = {
+					25 = { change_diplomacy = -2 }
+					25 = { change_martial = -2 }
+					25 = { change_stewardship = -2 }
+					25 = { change_intrigue = -2 }
+				}
+			}
+			
+		hidden_tooltip = {
+			clr_character_flag = clavicus_deal
+			clr_character_flag = clavicus_101_flag
+			clr_character_flag = clavicus_102_flag
+			clr_character_flag = clavicus_103_flag
+			clr_character_flag = clavicus_104_flag
+			clr_character_flag = clavicus_105_flag
+			clr_character_flag = clavicus_106_flag
+			clr_character_flag = clavicus_107_flag
+			clr_character_flag = clavicus_108_flag
+			clr_character_flag = clavicus_109_flag
+			clr_character_flag = clavicus_110_flag
+			add_character_modifier = { name = clavicus_cooldown months = 6 hidden = yes }
+		}
+	}
+}

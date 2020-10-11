@@ -1,0 +1,112 @@
+title_chief_bureaucrat = {
+	is_high_prio = yes
+    dignity = 0.99
+    realm_in_name = no
+	grant_limit = 1
+	opinion_effect = 10
+	monthly_salary = 0.2
+	
+	allowed_to_grant = {
+		any_courtier = { has_character_flag = ec_bureaucrat }
+	}
+	
+	allowed_to_hold = {
+		custom_tooltip = {
+			text = is_ec_bureaucrat_tooltip
+			has_character_flag = ec_bureaucrat
+		}
+		NOT = { trait = in_hiding }
+		NOT = { trait = incapable }
+		prisoner = no
+	}
+
+	revoke_trigger = {
+		always = yes
+	}
+	
+	gain_effect = {
+		if = {
+			limit = {
+				has_character_modifier = ec_tax_bureaucrat
+			}
+			liege = {
+				add_character_modifier = {
+					name = employing_ec_tax_bureaucrat
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_modifier = ec_quartermaster
+			}
+			liege = {
+				add_character_modifier = {
+					name = employing_ec_quartermaster
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_modifier = ec_administrator
+			}
+			liege = {
+				add_character_modifier = {
+					name = employing_ec_administrator
+					duration = -1
+				}
+			}
+		}
+	}
+	lose_effect = {
+		liege = {
+			if = {
+				limit = { has_character_modifier = employing_ec_tax_bureaucrat }
+				remove_character_modifier = employing_ec_tax_bureaucrat
+			}
+			else_if = {
+				limit = { has_character_modifier = employing_ec_quartermaster }
+				remove_character_modifier = employing_ec_quartermaster
+			}
+			else_if = {
+				limit = { has_character_modifier = employing_ec_administrator }
+				remove_character_modifier = employing_ec_administrator
+			}
+		}
+	}
+	retire_effect = {
+		liege = {
+			if = {
+				limit = { has_character_modifier = employing_ec_tax_bureaucrat }
+				remove_character_modifier = employing_ec_tax_bureaucrat
+			}
+			else_if = {
+				limit = { has_character_modifier = employing_ec_quartermaster }
+				remove_character_modifier = employing_ec_quartermaster
+			}
+			else_if = {
+				limit = { has_character_modifier = employing_ec_administrator }
+				remove_character_modifier = employing_ec_administrator
+			}
+		}
+	}
+	death_effect = {
+		liege = {
+			if = {
+				limit = { has_character_modifier = employing_ec_tax_bureaucrat }
+				remove_character_modifier = employing_ec_tax_bureaucrat
+			}
+			else_if = {
+				limit = { has_character_modifier = employing_ec_quartermaster }
+				remove_character_modifier = employing_ec_quartermaster
+			}
+			else_if = {
+				limit = { has_character_modifier = employing_ec_administrator }
+				remove_character_modifier = employing_ec_administrator
+			}
+		}
+	}
+
+	message = yes
+}

@@ -1,0 +1,254 @@
+namespace = NE
+
+# Notification event for invited character
+character_event = {
+	id = NE.1
+	desc = EVTDESC_NE_1
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_tooltip = {
+			#Stat booster, to increase viability of employment.
+			#Also random artifact seeding.
+			event_target:invited_character = {
+				if = {
+					limit = {
+						has_character_flag = invited_steward
+						NOT = { stewardship = 8 }
+					}
+					random_list = {
+						1 = { change_stewardship = 10 }
+						2 = { change_stewardship = 9 }
+						3 = { change_stewardship = 8 }
+						4 = { change_stewardship = 7 }
+						5 = { change_stewardship = 6 }
+						6 = { change_stewardship = 5 }
+						7 = { change_stewardship = 4 }
+						8 = { change_stewardship = 3 }
+						9 = { change_stewardship = 2 }
+						10 = { change_stewardship = 1 }
+					}
+					clr_character_flag = invited_steward
+				}
+				if = {
+					limit = {
+						has_character_flag = invited_chancellor
+						NOT = { diplomacy = 8 }
+					}
+					random_list = {
+						1 = { change_diplomacy = 10 }
+						2 = { change_diplomacy = 9 }
+						3 = { change_diplomacy = 8 }
+						4 = { change_diplomacy = 7 }
+						5 = { change_diplomacy = 6 }
+						6 = { change_diplomacy = 5 }
+						7 = { change_diplomacy = 4 }
+						8 = { change_diplomacy = 3 }
+						9 = { change_diplomacy = 2 }
+						10 = { change_diplomacy = 1 }
+					}
+					clr_character_flag = invited_chancellor
+				}
+				if = {
+					limit = {
+						OR = {
+							has_character_flag = invited_priest
+							has_character_flag = invited_mage
+						}
+						NOT = { learning = 8 }
+					}
+					random_list = {
+						1 = { change_learning = 10 }
+						2 = { change_learning = 9 }
+						3 = { change_learning = 8 }
+						4 = { change_learning = 7 }
+						5 = { change_learning = 6 }
+						6 = { change_learning = 5 }
+						7 = { change_learning = 4 }
+						8 = { change_learning = 3 }
+						9 = { change_learning = 2 }
+						10 = { change_learning = 1 }
+					}
+					clr_character_flag = invited_mage
+					clr_character_flag = invited_priest
+				}
+				if = {
+					limit = {
+						OR = {
+							has_character_flag = invited_marshal
+							has_character_flag = invited_assassin
+						}
+						NOT = { martial = 8 }
+					}
+					random_list = {
+						1 = { change_martial = 10 }
+						2 = { change_martial = 9 }
+						3 = { change_martial = 8 }
+						4 = { change_martial = 7 }
+						5 = { change_martial = 6 }
+						6 = { change_martial = 5 }
+						7 = { change_martial = 4 }
+						8 = { change_martial = 3 }
+						9 = { change_martial = 2 }
+						10 = { change_martial = 1 }
+					}
+					clr_character_flag = invited_assassin
+				}
+				if = {
+					limit = {
+						OR = {
+							has_character_flag = invited_spymaster
+							has_character_flag = invited_assassin
+						}
+						NOT = { intrigue = 8 }
+					}
+					random_list = {
+						1 = { change_intrigue = 10 }
+						2 = { change_intrigue = 9 }
+						3 = { change_intrigue = 8 }
+						4 = { change_intrigue = 7 }
+						5 = { change_intrigue = 6 }
+						6 = { change_intrigue = 5 }
+						7 = { change_intrigue = 4 }
+						8 = { change_intrigue = 3 }
+						9 = { change_intrigue = 2 }
+						10 = { change_intrigue = 1 }
+					}
+					clr_character_flag = invited_spymaster
+					clr_character_flag = invited_assassin
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_NE_1
+		
+		trigger = {
+			OR = { 
+				NOT = { ROOT = { has_law = succ_byzantine_elective } }  #Either not Imperial...
+				NOT = { #...Or there are no valid vassal candidates that can be commanders.
+					any_vassal = { 
+						higher_real_tier_than = BARON
+						NOT = { 
+							primary_title = { temporary = yes } 
+						}
+						OR = {
+							AND = {
+								OR = {
+									male_can_hold_minor_title_trigger = yes
+									female_can_hold_minor_commander_title_trigger = yes
+								}
+								is_adult = yes
+							}
+							has_character_flag = special_marshal
+						}
+				
+						prisoner = no
+						NOT = { trait = incapable }
+						NOT = { is_inaccessible_trigger = yes }
+						NOT = { has_character_modifier = refusing_to_lead }
+						NOR = {
+							has_job_title = job_chancellor
+							has_job_title = job_marshal
+							has_job_title = job_treasurer
+							has_job_title = job_spymaster
+							has_job_title = job_spiritual
+							has_minor_title = title_commander
+						}
+					} 
+				}
+			}
+			event_target:invited_character = { has_character_flag = invited_marshal }
+			OR = {
+				AND = {
+					tier = COUNT
+					NOT = {
+						any_realm_character = {
+							count = 2
+							liege = { character = ROOT }
+							has_minor_title = title_commander
+						}
+					}
+				}
+				AND = {
+					tier = DUKE
+					NOT = {
+						any_realm_character = {
+							count = 4
+							liege = { character = ROOT }
+							has_minor_title = title_commander
+						}
+					}
+				}
+				AND = {
+					tier = KING
+					is_nomadic = no
+					NOT = {
+						any_realm_character = {
+							count = 6
+							liege = { character = ROOT }
+							has_minor_title = title_commander
+						}
+					}
+				}
+				AND = {
+					tier = EMPEROR
+					is_nomadic = no
+					NOT = {
+						any_realm_character = {
+							count = 8
+							liege = { character = ROOT }
+							has_minor_title = title_commander
+						}
+					}
+				}
+				AND = {
+					tier = KING
+					is_nomadic = yes
+					NOT = {
+						any_realm_character = {
+							count = 2
+							liege = { character = ROOT }
+							has_minor_title = title_commander
+						}
+					}
+				}
+				AND = {
+					tier = EMPEROR
+					is_nomadic = yes
+					NOT = {
+						any_realm_character = {
+							count = 4
+							liege = { character = ROOT }
+							has_minor_title = title_commander
+						}
+					}
+				}
+			}
+		}
+		
+		event_target:invited_character = {
+			give_minor_title = title_commander
+			clr_character_flag = invited_marshal
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+	}
+	
+	option = {
+		name = EVTOPTB_NE_1
+		
+		hidden_tooltip = {
+			event_target:invited_character = { 
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}

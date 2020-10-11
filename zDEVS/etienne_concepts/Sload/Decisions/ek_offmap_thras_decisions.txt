@@ -1,0 +1,921 @@
+#Offmap decisions for the Coral Kingdom#
+#Requires Jade Dragon#
+
+offmap_decisions = {
+	#Offering to become Sload Benefactor - Based on JD Become Tributary decision
+	offmap_thras_become_sload_benefactor = {
+		only_independent = yes
+		button_name = offmap_gifts
+		ai_check_interval = 36
+
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+	
+		from_potential = {
+			independent = yes
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				war = no
+				OR = {
+					custom_tooltip = { #Borders the Embassy
+						text = chinese_grace_become_tributary_allow_governor_neighbor_tt
+						any_neighbor_independent_ruler = {
+							has_landed_title = k_thras_embassy
+						}
+					}
+					custom_tooltip = { #Borders a tributary of the Embassy
+						text = chinese_grace_become_tributary_allow_tributary_neighbor_tt
+						any_neighbor_independent_ruler = {
+							suzerain = {
+								has_landed_title = k_thras_embassy
+							}
+						}
+					}
+					custom_tooltip = { #Near the Sea of Pearls and has a port
+						text = sload_become_tributary_port_tt
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel_summerset
+								region = nirn_tamriel_pyandonea
+								region = nirn_yokuda
+							}
+							port = yes
+						}
+					}
+				}
+				custom_tooltip = {
+					text = chinese_grace_become_tributary_allow_suzerain_tt
+					NOT = {
+						is_tributary = yes
+					}
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				NOT = { has_character_flag = asked_to_become_tributary }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			make_tributary = {
+				who = FROM
+				tributary_type = sload_benefactor
+			}
+			hidden_effect = { offmap_thras = { governor = { character_event = { id = ekthras.100 } } } }
+			custom_tooltip = { text = offmap_thras_become_sload_benefactor_effect_tt }
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_gain
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.01 # slow down
+			}
+			
+			modifier = {
+				FROM = { NOT = { trait = sload } }
+			}
+		}
+	}
+	#Offering to become Sload Protectorate - Based on JD Become Tributary decision
+	offmap_thras_become_sload_protectorate = {
+		only_independent = yes
+		button_name = offmap_gifts
+		ai_check_interval = 36
+
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+	
+		from_potential = {
+			independent = yes
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				war = no
+				OR = {
+					custom_tooltip = { #Borders the Embassy
+						text = chinese_grace_become_tributary_allow_governor_neighbor_tt
+						any_neighbor_independent_ruler = {
+							has_landed_title = k_thras_embassy
+						}
+					}
+					custom_tooltip = { #Borders a tributary of the Embassy
+						text = chinese_grace_become_tributary_allow_tributary_neighbor_tt
+						any_neighbor_independent_ruler = {
+							suzerain = {
+								has_landed_title = k_thras_embassy
+							}
+						}
+					}
+					custom_tooltip = { #Near the Sea of Pearls and has a port
+						text = sload_become_tributary_port_tt
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel_summerset
+								region = nirn_tamriel_pyandonea
+								region = nirn_yokuda
+							}
+							port = yes
+						}
+					}
+				}
+				custom_tooltip = {
+					text = chinese_grace_become_tributary_allow_suzerain_tt
+					NOT = {
+						is_tributary = yes
+					}
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				NOT = { has_character_flag = asked_to_become_tributary }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			make_tributary = {
+				who = FROM
+				tributary_type = sload_protectorate
+			}
+			hidden_effect = { offmap_thras = { governor = { character_event = { id = ekthras.110 } } } }
+			custom_tooltip = { text = offmap_thras_become_sload_protectorate_effect_tt }
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_gain
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.01 # slow down
+			}
+			
+			modifier = {
+				FROM = { NOT = { trait = sload } }
+			}
+		}
+	}
+}
+
+offmap_decisions = {
+	
+	#Sload Courtiers#
+	#Sload Envoy - Talented Diplomat
+	offmap_thras_sload_envoy = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+		
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+		
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_thras value = 750 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			offmap_thras_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = offmap_thras
+					value = -750
+				}
+			}
+			hidden_effect = { 
+				FROM = { 
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekthras.300 }
+				}
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	#Sload Admiral - Talented General
+	offmap_thras_sload_admiral = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+		
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+		
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_thras value = 750 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			offmap_thras_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = offmap_thras
+					value = -750
+				}
+			}
+			hidden_effect = { 
+				FROM = { 
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekthras.304 }
+				}
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	#Sload Artificer - Talented Engineer
+	offmap_thras_sload_artificer = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+		
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+		
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_thras value = 750 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			offmap_thras_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = offmap_thras
+					value = -750
+				}
+			}
+			hidden_effect = { 
+				FROM = { 
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekthras.308 }
+				}
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	#Sload Spy - Talented...Spy
+	offmap_thras_sload_spy = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+		
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+		
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_thras value = 750 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			offmap_thras_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = offmap_thras
+					value = -750
+				}
+			}
+			hidden_effect = { 
+				FROM = { 
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekthras.312 }
+				}
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	#Sload Wizard - Talented Mage
+	offmap_thras_sload_wizard = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+		
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+		
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_thras value = 750 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			offmap_thras_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = offmap_thras
+					value = -750
+				}
+			}
+			hidden_effect = { 
+				FROM = { 
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekthras.316 }
+				}
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+
+	#Thrassian Interventionary Unit - For Sload Benefactors
+	offmap_thras_interventionary_unit = {
+		only_playable = yes
+		button_name = offmap_boons
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			is_playable = yes
+			is_landed = yes
+			OR = {
+				war = yes
+				ai = no
+			}
+			is_tributary = {
+				type = sload_benefactor
+			}
+		}
+
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_thras value = 2500 }
+				war = yes
+				custom_tooltip = {
+					text = already_raised_major_TT
+					NOT = {
+						has_earmarked_regiments = thrassian_major_army
+					}
+				}
+				custom_tooltip = {
+					text = raise_thras_major_army_TT
+					NOT = { has_character_modifier = thrassian_major_army_timer }
+				}
+			}
+			offmap_thras = {
+				NOR = {
+					has_policy = thras_isolationist
+					has_status = thras_internal_war
+					has_status = thras_invaded
+					has_status = thras_recovering
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = offmap_thras
+					value = -2500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					add_character_modifier = { #Can't use it too often
+						name = thrassian_major_army_timer
+						hidden = yes
+						duration = 365
+					}
+					character_event = { id = ekthras.350 }
+				}
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	#Thrassian Expeditionary Force - For Sload Protectorates
+	offmap_thras_expeditionary_force = {
+		only_playable = yes
+		button_name = offmap_boons
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			is_playable = yes
+			is_landed = yes
+			OR = {
+				war = yes
+				ai = no
+			}
+			is_tributary = {
+				type = sload_protectorate
+			}
+		}
+
+		potential = {
+			is_offmap_tag = offmap_thras
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_thras value = 2500 }
+				war = yes
+				custom_tooltip = {
+					text = already_raised_major_TT
+					NOT = {
+						has_earmarked_regiments = thrassian_major_army
+					}
+				}
+				custom_tooltip = {
+					text = raise_thras_major_army_TT
+					NOT = { has_character_modifier = thrassian_major_army_timer }
+				}
+			}
+			offmap_thras = {
+				NOR = {
+					has_policy = thras_isolationist
+					has_status = thras_internal_war
+					has_status = thras_invaded
+					has_status = thras_recovering
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = offmap_thras
+					value = -2500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					add_character_modifier = { #Can't use it too often
+						name = thrassian_major_army_timer
+						hidden = yes
+						duration = 365
+					}
+					character_event = { id = ekthras.355 }
+				}
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+}
+
+##################################
+###Raising armies based on:###
+###JD Decisions###
+#Written by:
+#Drikus Kuiper
+#Matthew Clohessy
+##################################
+
+decisions = {
+	raise_thras_embassy_guard = { #Based on raise_chinese_regiment
+		only_playable = yes
+		is_high_prio = yes
+		is_mercenary = yes
+
+		potential = {
+			is_playable = yes
+			is_landed = yes
+			OR = {
+				is_tributary = {
+					type = sload_benefactor
+				}
+				is_tributary = {
+					type = sload_protectorate
+				}
+			}
+		}
+		allow = {
+			war = yes
+			custom_tooltip = {
+				text = already_raised_TT
+				NOT = {
+					has_earmarked_regiments = thrassian_embassy_guards
+				}
+			}
+			custom_tooltip = {
+				text = raise_thras_embassy_guard_TT
+				NOT = { has_character_modifier = thrassian_embassy_guard_timer }
+			}
+			offmap_thras = {
+				NOR = {
+					has_status = thras_internal_war
+					has_status = thras_invaded
+					has_status = thras_recovering
+				}
+			}
+		}
+		effect = {
+			hidden_effect = {
+				add_character_modifier = { #Can't use it too often
+					name = thrassian_embassy_guard_timer
+					hidden = yes
+					duration = 365
+				}
+			}
+			capital_scope = {
+				PREV = {
+					if = {
+						limit = {
+							ROOT = {
+								OR = {
+									tier = EMPEROR
+									num_of_count_titles_in_realm > 16
+								}
+							}
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 10 10 }
+								undead_troop = { 500 500 }
+								archers = { 100 100 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								sorcerers = { 20 20 }
+								pikemen = { 30 30 }
+								archers = { 100 100 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 10 10 }
+								undead_troop = { 500 500 }
+								archers = { 100 100 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+					}
+					else_if = {
+						limit = {
+							ROOT = {
+								OR = {
+									tier = KING
+									num_of_count_titles_in_realm > 12
+								}
+							}
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 8 8 }
+								undead_troop = { 400 400 }
+								archers = { 80 80 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								sorcerers = { 16 16 }
+								pikemen = { 24 24 }
+								archers = { 80 80 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 8 8 }
+								undead_troop = { 400 400 }
+								archers = { 80 80 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+					}
+					else_if = {
+						limit = {
+							ROOT = {
+								OR = {
+									tier = DUKE
+									num_of_count_titles_in_realm > 8
+								}
+							}
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 6 6 }
+								undead_troop = { 300 300 }
+								archers = { 60 60 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								sorcerers = { 12 12 }
+								pikemen = { 18 18 }
+								archers = { 60 60 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 6 6 }
+								undead_troop = { 300 300 }
+								archers = { 60 60 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+					}
+					else = {
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 4 4 }
+								undead_troop = { 200 200 }
+								archers = { 40 40 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								sorcerers = { 8 8 }
+								pikemen = { 12 12 }
+								archers = { 40 40 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+						spawn_unit = {
+							province = PREV
+							home = PREV
+							owner = ROOT
+							troops = {
+								pikemen = { 4 4 }
+								undead_troop = { 200 200 }
+								archers = { 40 40 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+							maintenance_multiplier = 0.5
+							earmark = thrassian_embassy_guards
+							merge = yes
+						}
+					}
+				}
+			}
+
+		}
+		ai_will_do = {
+			factor = 0 # decisions with the "is_mercenary" will not be calculated from the script
+		}
+	}
+}

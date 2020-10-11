@@ -1,0 +1,1110 @@
+has_society_currency_massive_trigger_mortal = {
+	society_currency >= 4000
+}
+has_society_currency_massive_trigger_immortal = {
+	society_currency >= 10000
+}
+has_society_currency_large_trigger_mortal = {
+	society_currency >= 500
+}
+has_society_currency_large_trigger_immortal = {
+	society_currency >= 1250
+}
+is_great_house_grandmaster = {
+	is_society_grandmaster = yes
+	is_member_great_house_society = yes
+}
+is_member_great_house_society = {
+	custom_tooltip = {
+		text = IS_MEMBER_GREAT_HOUSE_SOCIETY_CT
+		hidden_tooltip = {
+			OR = {
+				society_member_of = house_dres_council
+				society_member_of = house_hlaalu_council
+				society_member_of = house_indoril_council
+				society_member_of = house_redoran_council
+				society_member_of = house_telvanni_council
+				society_member_of = house_sadras_council
+				society_member_of = house_sul_council
+				society_member_of = house_veloth_council
+				society_member_of = house_dagoth_council
+			}
+		}
+	}
+}
+### Checks what's the type of guild you're in - Primary characteristic
+# Mostly used for education purposes, or tech points
+is_member_diplomacy_guild = {
+	OR = {
+		society_member_of = scenarist_guild_tamriel
+		society_member_of = scenarist_guild_akavir
+		society_member_of = house_indoril_council
+		society_member_of = house_veloth_council
+		society_member_of = clan_mothers
+	}
+}
+is_member_martial_guild = {
+	OR = {
+		society_member_of = fighters_guild_tamriel
+		society_member_of = fighters_guild_akavir
+		society_member_of = companions_tamriel
+		society_member_of = ansei_guild_tamriel
+		society_member_of = house_redoran_council
+		society_member_of = house_sul_council
+	}
+}
+is_member_stewardship_guild = {
+	OR = {
+		society_member_of = mercantile_guild_tamriel
+		society_member_of = mercantile_guild_akavir
+		society_member_of = elder_council
+		society_member_of = house_dres_council
+	}
+}
+is_member_intrigue_guild = {
+	OR = {
+		society_member_of = dark_brotherhood_tamriel
+		society_member_of = assassin_guild_akavir
+		society_member_of = morag_tong_tamriel
+		society_member_of = thieves_guild_tamriel
+		society_member_of = camonna_tong_tamriel
+		society_member_of = house_hlaalu_council
+		society_member_of = house_sadras_council
+	}
+}
+is_member_learning_guild = {
+	OR = {
+		society_member_of = mages_guild_tamriel
+		society_member_of = mages_guild_akavir
+		society_member_of = house_telvanni_council
+		society_member_of = house_dagoth_council
+	}
+}
+is_member_generic_guild_no_agent = { # Some generic guilds don't allow the Agent education to be upgraded
+	OR = {
+		is_member_generic_guild = yes
+		society_member_of = greybeards_tamriel
+		society_member_of = moth_priests_tamriel
+	}
+}
+is_member_generic_guild = {
+	OR = {
+		is_member_great_house_society = yes
+		society_member_of = elder_council
+	}
+}
+
+### These triggers check the number of ranks in a society, INCLUDING THE LAST RANK (who can't get quests, fyi)
+is_member_society_3_ranks = {
+	custom_tooltip = {
+		text = IS_MEMBER_SOCIETY_3_RANKS_CT
+		OR = {
+			is_member_great_house_society = yes
+			society_member_of = clan_mothers
+		}
+	}
+}
+is_member_society_4_ranks = {
+	custom_tooltip = {
+		text = IS_MEMBER_SOCIETY_4_RANKS_CT
+		OR = {
+			society_member_of = elder_council
+			society_member_of = companions_tamriel
+			society_member_of = mages_guild_akavir
+			society_member_of = scenarist_guild_akavir
+			society_member_of = scenarist_guild_tamriel
+			society_member_of = mercantile_guild_akavir
+			society_member_of = mercantile_guild_tamriel
+			society_member_of = assassin_guild_akavir
+			society_member_of = camonna_tong_tamriel
+			society_member_of = morag_tong_tamriel
+			society_member_of = greybeards_tamriel
+			society_member_of = moth_priests_tamriel
+			society_member_of = secret_religious_cult
+		}
+	}
+}
+is_member_society_5_ranks = {
+	custom_tooltip = {
+		text = IS_MEMBER_SOCIETY_5_RANKS_CT
+		OR = {
+			society_member_of = ansei_guild_tamriel
+			society_member_of = dark_brotherhood_tamriel
+			society_member_of = thieves_guild_tamriel
+		}
+	}
+}
+is_member_society_6_ranks = {
+	custom_tooltip = {
+		text = IS_MEMBER_SOCIETY_6_RANKS_CT
+		OR = {
+			society_member_of = mages_guild_tamriel
+		}
+	}
+}
+is_member_society_7_ranks = {
+	custom_tooltip = {
+		text = IS_MEMBER_SOCIETY_7_RANKS_CT
+		OR = {
+			society_member_of = fighters_guild_tamriel
+			society_member_of = fighters_guild_akavir
+		}
+	}
+}
+### Specialization
+is_in_society_allows_specialisation = {
+	OR = {
+		is_member_of_fighters_guild = yes
+		society_member_of = companions_tamriel
+		society_member_of = ansei_guild_tamriel
+		is_member_of_mages_guild = yes
+		is_member_of_mercantile_guild = yes
+		is_member_of_scenarist_guild = yes
+		is_member_of_thieves_guild = yes
+		is_member_of_assassins_guild = yes
+		society_member_of = greybeards_tamriel
+		society_member_of = moth_priests_tamriel
+		is_member_great_house_society = yes
+		society_member_of = elder_council
+	}
+}
+is_studying_warrior_specialization = {
+	OR = {
+		has_character_flag = fighters_guild_assassin
+		has_character_flag = fighters_guild_barbarian
+		has_character_flag = fighters_guild_battlemage
+		has_character_flag = fighters_guild_crusader
+		has_character_flag = fighters_guild_knight
+		has_character_flag = fighters_guild_monk
+		has_character_flag = fighters_guild_rogue
+		has_character_flag = fighters_guild_scout
+		has_character_flag = fighters_guild_spellsword
+		has_character_flag = fighters_guild_wayfarer
+	}
+}
+
+is_studying_mage_specialization = {
+	OR = {
+		has_character_flag = mages_guild_bard
+		has_character_flag = mages_guild_battlemage
+		has_character_flag = mages_guild_crusader
+		has_character_flag = mages_guild_healer
+		has_character_flag = mages_guild_nightblade
+		has_character_flag = mages_guild_priest
+		has_character_flag = mages_guild_savant
+		has_character_flag = mages_guild_sorcerer
+		has_character_flag = mages_guild_spellsword
+		has_character_flag = mages_guild_witchhunter
+	}
+}
+
+is_studying_mercantile_specialization = {
+	OR = {
+		has_character_flag = mercantile_guild_acrobat
+		has_character_flag = mercantile_guild_barbarian
+		has_character_flag = mercantile_guild_healer
+		has_character_flag = mercantile_guild_monk
+		has_character_flag = mercantile_guild_nightblade
+		has_character_flag = mercantile_guild_scout
+		has_character_flag = mercantile_guild_sorcerer
+		has_character_flag = mercantile_guild_thief
+		has_character_flag = mercantile_guild_trader
+		has_character_flag = mercantile_guild_witchhunter
+	}
+}
+
+is_studying_scenarist_specialization = {
+	OR = {
+		has_character_flag = scenarist_guild_acrobat
+		has_character_flag = scenarist_guild_assassin
+		has_character_flag = scenarist_guild_bard
+		has_character_flag = scenarist_guild_knight
+		has_character_flag = scenarist_guild_priest
+		has_character_flag = scenarist_guild_rogue
+		has_character_flag = scenarist_guild_savant
+		has_character_flag = scenarist_guild_thief
+		has_character_flag = scenarist_guild_trader
+		has_character_flag = scenarist_guild_wayfarer
+	}
+}
+
+is_studying_monastic_order_specialization = {
+	OR = {
+		has_character_flag = monastic_order_bard
+		has_character_flag = monastic_order_battlemage
+		has_character_flag = monastic_order_crusader
+		has_character_flag = monastic_order_healer
+		has_character_flag = monastic_order_monk
+		has_character_flag = monastic_order_priest
+		has_character_flag = monastic_order_savant
+		has_character_flag = monastic_order_spellsword
+		has_character_flag = monastic_order_wayfarer
+		has_character_flag = monastic_order_witchhunter
+	}
+}
+
+is_studying_thief_specialization = {
+	OR = {
+		has_character_flag = thieves_guild_acrobat
+		has_character_flag = thieves_guild_assassin
+		has_character_flag = thieves_guild_bard
+		has_character_flag = thieves_guild_monk
+		has_character_flag = thieves_guild_nightblade
+		has_character_flag = thieves_guild_rogue
+		has_character_flag = thieves_guild_savant
+		has_character_flag = thieves_guild_thief
+		has_character_flag = thieves_guild_trader
+		has_character_flag = thieves_guild_wayfarer
+	}
+}
+
+is_studying_assassin_specialization = {
+	OR = {
+		has_character_flag = assassins_guild_acrobat
+		has_character_flag = assassins_guild_assassin
+		has_character_flag = assassins_guild_barbarian
+		has_character_flag = assassins_guild_battlemage
+		has_character_flag = assassins_guild_nightblade
+		has_character_flag = assassins_guild_rogue
+		has_character_flag = assassins_guild_scout
+		has_character_flag = assassins_guild_sorcerer
+		has_character_flag = assassins_guild_thief
+		has_character_flag = assassins_guild_witchhunter
+	}
+}
+
+# Great Houses
+is_studying_dres_specialization = {
+	OR = {
+		has_character_flag = house_dres_acrobat
+		has_character_flag = house_dres_barbarian
+		has_character_flag = house_dres_healer
+		has_character_flag = house_dres_knight
+		has_character_flag = house_dres_monk
+		has_character_flag = house_dres_scout
+		has_character_flag = house_dres_sorcerer
+		has_character_flag = house_dres_spellsword
+		has_character_flag = house_dres_trader
+		has_character_flag = house_dres_wayfarer
+	}
+}
+
+is_studying_hlaalu_specialization = {
+	OR = {
+		has_character_flag = house_hlaalu_acrobat
+		has_character_flag = house_hlaalu_assassin
+		has_character_flag = house_hlaalu_bard
+		has_character_flag = house_hlaalu_crusader
+		has_character_flag = house_hlaalu_monk
+		has_character_flag = house_hlaalu_nightblade
+		has_character_flag = house_hlaalu_savant
+		has_character_flag = house_hlaalu_thief
+		has_character_flag = house_hlaalu_trader
+		has_character_flag = house_hlaalu_witchhunter
+	}
+}
+
+is_studying_indoril_specialization = {
+	OR = {
+		has_character_flag = house_indoril_bard
+		has_character_flag = house_indoril_crusader
+		has_character_flag = house_indoril_healer
+		has_character_flag = house_indoril_knight
+		has_character_flag = house_indoril_priest
+		has_character_flag = house_indoril_rogue
+		has_character_flag = house_indoril_savant
+		has_character_flag = house_indoril_thief
+		has_character_flag = house_indoril_trader
+		has_character_flag = house_indoril_wayfarer
+	}
+}
+
+is_studying_redoran_specialization = {
+	OR = {
+		has_character_flag = house_redoran_assassin
+		has_character_flag = house_redoran_barbarian
+		has_character_flag = house_redoran_battlemage
+		has_character_flag = house_redoran_crusader
+		has_character_flag = house_redoran_knight
+		has_character_flag = house_redoran_priest
+		has_character_flag = house_redoran_rogue
+		has_character_flag = house_redoran_scout
+		has_character_flag = house_redoran_spellsword
+		has_character_flag = house_redoran_witchhunter
+	}
+}
+
+is_studying_telvanni_specialization = {
+	OR = {
+		has_character_flag = house_telvanni_assassin
+		has_character_flag = house_telvanni_battlemage
+		has_character_flag = house_telvanni_healer
+		has_character_flag = house_telvanni_priest
+		has_character_flag = house_telvanni_monk
+		has_character_flag = house_telvanni_nightblade
+		has_character_flag = house_telvanni_savant
+		has_character_flag = house_telvanni_sorcerer
+		has_character_flag = house_telvanni_spellsword
+		has_character_flag = house_telvanni_witchhunter
+	}
+}
+
+is_studying_sadras_specialization = {
+	OR = {
+		has_character_flag = house_sadras_acrobat
+		has_character_flag = house_sadras_assassin
+		has_character_flag = house_sadras_bard
+		has_character_flag = house_sadras_crusader
+		has_character_flag = house_sadras_monk
+		has_character_flag = house_sadras_nightblade
+		has_character_flag = house_sadras_savant
+		has_character_flag = house_sadras_thief
+		has_character_flag = house_sadras_trader
+		has_character_flag = house_sadras_witchhunter
+	}
+}
+
+is_studying_sul_specialization = {
+	OR = {
+		has_character_flag = house_sul_assassin
+		has_character_flag = house_sul_barbarian
+		has_character_flag = house_sul_battlemage
+		has_character_flag = house_sul_crusader
+		has_character_flag = house_sul_knight
+		has_character_flag = house_sul_priest
+		has_character_flag = house_sul_rogue
+		has_character_flag = house_sul_scout
+		has_character_flag = house_sul_spellsword
+		has_character_flag = house_sul_witchhunter
+	}
+}
+
+is_studying_veloth_specialization = {
+	OR = {
+		has_character_flag = house_veloth_bard
+		has_character_flag = house_veloth_crusader
+		has_character_flag = house_veloth_healer
+		has_character_flag = house_veloth_knight
+		has_character_flag = house_veloth_priest
+		has_character_flag = house_veloth_rogue
+		has_character_flag = house_veloth_savant
+		has_character_flag = house_veloth_thief
+		has_character_flag = house_veloth_trader
+		has_character_flag = house_veloth_wayfarer
+	}
+}
+
+is_studying_dagoth_specialization = {
+	OR = {
+		has_character_flag = house_dagoth_assassin
+		has_character_flag = house_dagoth_battlemage
+		has_character_flag = house_dagoth_healer
+		has_character_flag = house_dagoth_priest
+		has_character_flag = house_dagoth_monk
+		has_character_flag = house_dagoth_nightblade
+		has_character_flag = house_dagoth_savant
+		has_character_flag = house_dagoth_sorcerer
+		has_character_flag = house_dagoth_spellsword
+		has_character_flag = house_dagoth_witchhunter
+	}
+}
+
+is_studying_great_house_specialization = {
+	OR = {
+		is_studying_dres_specialization = yes
+		is_studying_hlaalu_specialization = yes
+		is_studying_indoril_specialization = yes
+		is_studying_redoran_specialization = yes
+		is_studying_telvanni_specialization = yes
+		is_studying_sadras_specialization = yes
+		is_studying_sul_specialization = yes
+		is_studying_veloth_specialization = yes
+		is_studying_dagoth_specialization = yes
+	}
+}
+#
+is_studying_specialization = {
+	OR = {
+		is_studying_warrior_specialization = yes
+		is_studying_mage_specialization = yes
+		is_studying_mercantile_specialization = yes
+		is_studying_scenarist_specialization = yes
+		is_studying_monastic_order_specialization = yes
+		is_studying_thief_specialization = yes
+		is_studying_assassin_specialization = yes
+		is_studying_great_house_specialization = yes
+	}
+}
+#
+society_and_specialization_match = {
+	OR = {
+		AND = {
+			OR = {
+				is_member_of_fighters_guild = yes
+				society_member_of = companions_tamriel
+				society_member_of = ansei_guild_tamriel
+			}
+			is_studying_warrior_specialization = yes
+		}
+		AND = {
+			is_member_of_mages_guild = yes
+			is_studying_mage_specialization = yes
+		}
+		AND = {
+			is_member_of_mercantile_guild = yes
+			is_studying_mercantile_specialization = yes
+		}
+		AND = {
+			is_member_of_scenarist_guild = yes
+			is_studying_scenarist_specialization = yes
+		}
+		AND = {
+			is_member_of_thieves_guild = yes
+			is_studying_thief_specialization = yes
+		}
+		AND = {
+			is_member_of_assassins_guild = yes
+			is_studying_assassin_specialization = yes
+		}
+		AND = {
+			OR = {
+				society_member_of = greybeards_tamriel
+				society_member_of = moth_priests_tamriel
+			}
+			is_studying_monastic_order_specialization = yes
+		}
+		AND = {
+			society_member_of = house_dres_council
+			is_studying_dres_specialization = yes
+		}
+		AND = {
+			society_member_of = house_hlaalu_council
+			is_studying_hlaalu_specialization = yes
+		}
+		AND = {
+			society_member_of = house_indoril_council
+			is_studying_indoril_specialization = yes
+		}
+		AND = {
+			society_member_of = house_redoran_council
+			is_studying_redoran_specialization = yes
+		}
+		AND = {
+			society_member_of = house_telvanni_council
+			is_studying_telvanni_specialization = yes
+		}
+		AND = {
+			society_member_of = house_sadras_council
+			is_studying_sadras_specialization = yes
+		}
+		AND = {
+			society_member_of = house_sul_council
+			is_studying_sul_specialization = yes
+		}
+		AND = {
+			society_member_of = house_veloth_council
+			is_studying_veloth_specialization = yes
+		}
+		AND = {
+			society_member_of = house_dagoth_council
+			is_studying_dagoth_specialization = yes
+		}
+	}
+}
+
+#
+can_actually_level_up_specialization = {
+	NOT = {
+		has_maxed_specializations = yes
+	}
+	OR = {
+		AND = {
+			OR = {
+				is_member_of_fighters_guild = yes
+				society_member_of = companions_tamriel
+				society_member_of = ansei_guild_tamriel
+			}
+			OR = {
+				is_assassin = yes
+				is_barbarian = yes
+				is_battlemage = yes
+				is_crusader = yes
+				is_knight = yes
+				is_monk_education = yes
+				is_rogue = yes
+				is_scout = yes
+				is_spellsword = yes
+				is_wayfarer = yes
+			}
+		}
+		AND = {
+			OR = {
+				society_member_of = mages_guild_tamriel
+				society_member_of = mages_guild_akavir
+			}
+			OR = {
+				is_bard = yes
+				is_battlemage = yes
+				is_crusader = yes
+				is_healer = yes
+				is_nightblade = yes
+				is_priest_education = yes
+				is_savant = yes
+				is_sorcerer = yes
+				is_spellsword = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			is_member_of_mercantile_guild = yes
+			OR = {
+				is_acrobat = yes
+				is_barbarian = yes
+				is_healer = yes
+				is_monk_education = yes
+				is_nightblade = yes
+				is_scout = yes
+				is_sorcerer = yes
+				is_thief = yes
+				is_trader = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			OR = {
+				society_member_of = scenarist_guild_tamriel
+				society_member_of = scenarist_guild_akavir
+			}
+			OR = {
+				is_acrobat = yes
+				is_assassin = yes
+				is_bard = yes
+				is_knight = yes
+				is_priest_education = yes
+				is_rogue = yes
+				is_savant = yes
+				is_thief = yes
+				is_trader = yes
+				is_wayfarer = yes
+			}
+		}
+		AND = {
+			OR = {
+				society_member_of = thieves_guild_tamriel
+				society_member_of = camonna_tong_tamriel
+			}
+			OR = {
+				is_acrobat = yes
+				is_assassin = yes
+				is_bard = yes
+				is_monk_education = yes
+				is_nightblade = yes
+				is_rogue = yes
+				is_savant = yes
+				is_thief = yes
+				is_trader = yes
+				is_wayfarer = yes
+			}
+		}
+		AND = {
+			OR = {
+				society_member_of = dark_brotherhood_tamriel
+				society_member_of = assassin_guild_akavir
+				society_member_of = morag_tong_tamriel
+			}
+			OR = {
+				is_acrobat = yes
+				is_assassin = yes
+				is_barbarian = yes
+				is_battlemage = yes
+				is_nightblade = yes
+				is_rogue = yes
+				is_scout = yes
+				is_sorcerer = yes
+				is_thief = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			OR = {
+				society_member_of = greybeards_tamriel
+				society_member_of = moth_priests_tamriel
+			}
+			OR = {
+				is_bard = yes
+				is_battlemage = yes
+				is_crusader = yes
+				is_healer = yes
+				is_monk_education = yes
+				is_priest_education = yes
+				is_savant = yes
+				is_spellsword = yes
+				is_wayfarer = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			society_member_of = house_dres_council
+			OR = {
+				is_acrobat = yes
+				is_barbarian = yes
+				is_healer = yes
+				is_knight = yes
+				is_monk_education = yes
+				is_scout = yes
+				is_sorcerer = yes
+				is_spellsword = yes
+				is_trader = yes
+				is_wayfarer = yes
+			}
+		}
+		AND = {
+			society_member_of = house_hlaalu_council
+			OR = {
+				is_acrobat = yes
+				is_assassin = yes
+				is_bard = yes
+				is_crusader = yes
+				is_monk_education = yes
+				is_nightblade = yes
+				is_savant = yes
+				is_thief = yes
+				is_trader = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			society_member_of = house_indoril_council
+			OR = {
+				is_bard = yes
+				is_crusader = yes
+				is_healer = yes
+				is_knight = yes
+				is_priest_education = yes
+				is_rogue = yes
+				is_savant = yes
+				is_thief = yes
+				is_trader = yes
+				is_wayfarer = yes
+			}
+		}
+		AND = {
+			society_member_of = house_redoran_council
+			OR = {
+				is_assassin = yes
+				is_barbarian = yes
+				is_battlemage = yes
+				is_crusader = yes
+				is_knight = yes
+				is_priest_education = yes
+				is_rogue = yes
+				is_scout = yes
+				is_spellsword = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			society_member_of = house_telvanni_council
+			OR = {
+				is_assassin = yes
+				is_battlemage = yes
+				is_healer = yes
+				is_priest_education = yes
+				is_monk_education = yes
+				is_nightblade = yes
+				is_savant = yes
+				is_sorcerer = yes
+				is_spellsword = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			society_member_of = house_sadras_council
+			OR = {
+				is_acrobat = yes
+				is_assassin = yes
+				is_bard = yes
+				is_crusader = yes
+				is_monk_education = yes
+				is_nightblade = yes
+				is_savant = yes
+				is_thief = yes
+				is_trader = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			society_member_of = house_sul_council
+			OR = {
+				is_assassin = yes
+				is_barbarian = yes
+				is_battlemage = yes
+				is_crusader = yes
+				is_knight = yes
+				is_priest_education = yes
+				is_rogue = yes
+				is_scout = yes
+				is_spellsword = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			society_member_of = house_veloth_council
+			OR = {
+				is_bard = yes
+				is_crusader = yes
+				is_healer = yes
+				is_knight = yes
+				is_priest_education = yes
+				is_rogue = yes
+				is_savant = yes
+				is_thief = yes
+				is_trader = yes
+				is_wayfarer = yes
+			}
+		}
+		AND = {
+			society_member_of = house_dagoth_council
+			OR = {
+				is_assassin = yes
+				is_battlemage = yes
+				is_healer = yes
+				is_priest_education = yes
+				is_monk_education = yes
+				is_nightblade = yes
+				is_savant = yes
+				is_sorcerer = yes
+				is_spellsword = yes
+				is_witchhunter = yes
+			}
+		}
+		AND = {
+			society_member_of = elder_council
+			OR = {
+				is_bard = yes
+				is_battlemage = yes
+				is_crusader = yes
+				is_knight = yes
+				is_nightblade = yes
+				is_savant = yes
+				is_scout = yes
+				is_sorcerer = yes
+				is_thief = yes
+				is_trader = yes
+			}
+		}
+	}
+}
+### Guild type
+is_member_of_scenarist_guild = {
+	OR = {
+		society_member_of = scenarist_guild_tamriel
+		society_member_of = scenarist_guild_akavir
+	}
+}
+is_member_of_fighters_guild = {
+	OR = {
+		society_member_of = fighters_guild_tamriel
+		society_member_of = fighters_guild_akavir
+	}
+}
+is_member_of_mercantile_guild = {
+	OR = {
+		society_member_of = mercantile_guild_tamriel
+		society_member_of = mercantile_guild_akavir
+	}
+}
+is_member_of_thieves_guild = {
+	OR = {
+		society_member_of = thieves_guild_tamriel
+		society_member_of = thieves_guild_akavir
+		society_member_of = camonna_tong_tamriel
+	}
+}
+is_member_of_assassins_guild = {
+	OR = {
+		society_member_of = dark_brotherhood_tamriel
+		society_member_of = assassin_guild_akavir
+		society_member_of = morag_tong_tamriel
+	}
+}
+is_member_of_mages_guild = {
+	OR = {
+		society_member_of = mages_guild_tamriel
+		society_member_of = mages_guild_akavir
+	}
+}
+### Quests are given per tier
+can_get_trivial_quest = {
+	OR = {
+		AND = {
+			is_member_society_7_ranks = yes
+			society_rank <= 2
+		}
+		AND = {
+			is_member_society_6_ranks = yes
+			society_rank <= 2
+		}
+		AND = {
+			is_member_society_5_ranks = yes
+			society_rank <= 1
+		}
+		AND = {
+			is_member_society_4_ranks = yes
+			society_rank <= 1
+		}
+		AND = {
+			is_member_society_3_ranks = yes
+			society_rank <= 1
+		}
+	}
+}
+
+can_get_easy_quest = {
+	OR = {
+		AND = {
+			is_member_society_7_ranks = yes
+			society_rank >= 2
+			society_rank <= 3
+		}
+		AND = {
+			is_member_society_6_ranks = yes
+			society_rank >= 2
+			society_rank <= 3
+		}
+		AND = {
+			is_member_society_5_ranks = yes
+			society_rank <= 2
+		}
+		AND = {
+			is_member_society_4_ranks = yes
+			society_rank <= 2
+		}
+		AND = {
+			is_member_society_3_ranks = yes
+			society_rank <= 1
+		}
+	}
+}
+
+can_get_medium_quest = {
+	OR = {
+		AND = {
+			is_member_society_7_ranks = yes
+			society_rank >= 3
+			society_rank <= 4
+		}
+		AND = {
+			is_member_society_6_ranks = yes
+			society_rank >= 3
+			society_rank <= 4
+		}
+		AND = {
+			is_member_society_5_ranks = yes
+			society_rank <= 2
+			society_rank >= 2
+		}
+		AND = {
+			is_member_society_4_ranks = yes
+			society_rank <= 2
+			society_rank >= 2
+		}
+		AND = {
+			is_member_society_3_ranks = yes
+			society_rank <= 2
+		}
+	}
+}
+
+can_get_hard_quest = {
+	OR = {
+		AND = {
+			is_member_society_7_ranks = yes
+			society_rank >= 4
+			society_rank <= 5
+		}
+		AND = {
+			is_member_society_6_ranks = yes
+			society_rank >= 4
+			society_rank <= 4
+		}
+		AND = {
+			is_member_society_5_ranks = yes
+			society_rank <= 3
+			society_rank >= 3
+		}
+		AND = {
+			is_member_society_4_ranks = yes
+			society_rank <= 2
+			society_rank >= 3
+		}
+		AND = {
+			is_member_society_3_ranks = yes
+			society_rank <= 2
+			society_rank >= 2
+		}
+	}
+}
+
+can_get_very_hard_quest = {
+	OR = {
+		AND = {
+			is_member_society_7_ranks = yes
+			society_rank >= 5
+			society_rank <= 6
+		}
+		AND = {
+			is_member_society_6_ranks = yes
+			society_rank >= 5
+			society_rank <= 5
+		}
+		AND = {
+			is_member_society_5_ranks = yes
+			society_rank <= 4
+			society_rank >= 4
+		}
+		AND = {
+			is_member_society_4_ranks = yes
+			society_rank <= 3
+			society_rank >= 3
+		}
+		AND = {
+			is_member_society_3_ranks = yes
+			society_rank >= 2
+			society_rank <= 2
+		}
+	}
+}
+
+general_society_join_conditions = {
+	NOT = { is_offmap_governor = yes }
+}
+
+### Used for the society rank up decisions and tooltips
+is_one_off_max_rank = {
+	custom_tooltip = {
+		text = IS_ONE_OFF_MAX_RANK_CT
+		OR = {
+			AND = {
+				is_member_society_3_ranks = yes
+				society_rank == 2
+			}
+			AND = {
+				is_member_society_4_ranks = yes
+				society_rank == 3
+			}
+			AND = {
+				is_member_society_5_ranks = yes
+				society_rank == 4
+			}
+			AND = {
+				is_member_society_6_ranks = yes
+				society_rank == 5
+			}
+			AND = {
+				is_member_society_7_ranks = yes
+				society_rank == 6
+			}
+		}
+	}
+}
+
+is_two_off_max_rank = {
+	custom_tooltip = {
+		text = IS_TWO_OFF_MAX_RANK_CT
+		OR = {
+			AND = {
+				is_member_society_3_ranks = yes
+				society_rank == 1
+			}
+			AND = {
+				is_member_society_4_ranks = yes
+				society_rank == 2
+			}
+			AND = {
+				is_member_society_5_ranks = yes
+				society_rank == 3
+			}
+			AND = {
+				is_member_society_6_ranks = yes
+				society_rank == 4
+			}
+			AND = {
+				is_member_society_7_ranks = yes
+				society_rank == 5
+			}
+		}
+	}
+}
+
+is_three_off_max_rank = {
+	custom_tooltip = {
+		text = IS_THREE_OFF_MAX_RANK_CT
+		OR = {
+			AND = {
+				is_member_society_4_ranks = yes
+				society_rank == 1
+			}
+			AND = {
+				is_member_society_5_ranks = yes
+				society_rank == 2
+			}
+			AND = {
+				is_member_society_6_ranks = yes
+				society_rank == 3
+			}
+			AND = {
+				is_member_society_7_ranks = yes
+				society_rank == 4
+			}
+		}
+	}
+}
+
+is_four_off_max_rank = {
+	custom_tooltip = {
+		text = IS_FOUR_OFF_MAX_RANK_CT
+		OR = {
+			AND = {
+				is_member_society_5_ranks = yes
+				society_rank == 1
+			}
+			AND = {
+				is_member_society_6_ranks = yes
+				society_rank == 2
+			}
+			AND = {
+				is_member_society_7_ranks = yes
+				society_rank == 3
+			}
+		}
+	}
+}
+
+is_five_off_max_rank = {
+	custom_tooltip = {
+		text = IS_FIVE_OFF_MAX_RANK_CT
+		OR = {
+			AND = {
+				is_member_society_6_ranks = yes
+				society_rank == 1
+			}
+			AND = {
+				is_member_society_7_ranks = yes
+				society_rank == 2
+			}
+		}
+	}
+}
+
+is_six_off_max_rank = {
+	custom_tooltip = {
+		text = IS_FOUR_OFF_MAX_RANK_CT
+		OR = {
+			AND = {
+				is_member_society_7_ranks = yes
+				society_rank == 1
+			}
+		}
+	}
+}

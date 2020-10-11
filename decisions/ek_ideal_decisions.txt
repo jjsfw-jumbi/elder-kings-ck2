@@ -1,0 +1,86 @@
+decisions = {
+	increase_soul_harvesting = {
+		potential = {
+			has_landed_title = e_undead_army
+			OR = {
+				has_character_modifier = ideal_soul_harvest_1
+				has_character_modifier = ideal_soul_harvest_2
+			}
+			has_submenu_open = no
+		}
+
+		allow = {
+			always = yes
+		}
+
+		effect = {
+			clr_character_flag = ideal_harvest_increase
+			if = {
+				limit = {
+					has_character_modifier = ideal_soul_harvest_1
+				}
+				remove_character_modifier = ideal_soul_harvest_1
+				add_character_modifier = { name = ideal_soul_harvest_2 duration = -1 }
+			}
+			else = {
+				remove_character_modifier = ideal_soul_harvest_2
+				add_character_modifier = { name = ideal_soul_harvest_3 duration = -1 }
+			}
+		}
+
+		ai_will_do = {
+			modifier = {
+				factor = 0
+				monthly_piety = 0
+			}
+			modifier = {
+				factor = 0
+				has_character_flag = ideal_harvest_increase
+				NOT = {
+					had_character_flag = { flag = ideal_harvest_increase days = 30} # only do once a month so as to let income update
+				}
+			}
+			modifier = {
+				factor = 1
+				NOT = {
+					monthly_piety = 0
+				}
+			}
+		}
+	}
+
+	decrease_soul_harvesting = {
+		potential = {
+			has_landed_title = e_undead_army
+			OR = {
+				has_character_modifier = ideal_soul_harvest_3
+				has_character_modifier = ideal_soul_harvest_2
+			}
+			has_submenu_open = no
+		}
+
+		allow = {
+			always = yes
+			piety = 3000 # soul cost to prevent abuse
+		}
+
+		effect = {
+			piety = -3000
+			if = {
+				limit = {
+					has_character_modifier = ideal_soul_harvest_2
+				}
+				remove_character_modifier = ideal_soul_harvest_2
+				add_character_modifier = { name = ideal_soul_harvest_1 duration = -1 }
+			}
+			else = {
+				remove_character_modifier = ideal_soul_harvest_3
+				add_character_modifier = { name = ideal_soul_harvest_2 duration = -1 }
+			}
+		}
+
+		ai_will_do = {
+			factor = 0 # never
+		}
+	}
+}

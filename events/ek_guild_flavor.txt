@@ -1,0 +1,8697 @@
+#Flavor events for Guild Membership#
+
+namespace = ekguildflavor
+
+### Tombola replaced by random draws, to avoid some strange and edge cases
+# Education
+character_event = {
+	id = ekguildflavor.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { is_inaccessible_trigger = yes }
+		
+		#Can't upgrade your education if it's already at its maximum duh
+		NOT = { maxed_education = yes }
+		
+		## Is part of the right society
+		trigger_if = {
+			limit = { is_diplomat = yes }
+			OR = {
+				is_member_diplomacy_guild = yes
+				is_member_generic_guild_no_agent = yes
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_warrior = yes }
+			OR = {
+				is_member_martial_guild = yes
+				is_member_generic_guild_no_agent = yes
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_magistrate = yes }
+			OR = {
+				is_member_stewardship_guild = yes
+				is_member_generic_guild_no_agent = yes
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_agent = yes }
+			OR = {
+				is_member_intrigue_guild = yes
+				is_member_generic_guild = yes
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_mage = yes }
+			OR = {
+				is_member_learning_guild = yes
+				is_member_generic_guild_no_agent = yes
+			}
+		}
+		
+		# Need to not be a complete dumbass
+		trigger_if = {
+			limit = { is_diplomat = yes }
+			
+			trigger_if = {
+				limit = { has_bottom_tier_education_trait_trigger = yes }
+				diplomacy = 5
+			}
+			
+			trigger_else_if = {
+				limit = { has_2nd_tier_education_trait_trigger = yes }
+				diplomacy = 10
+			}
+			
+			trigger_else_if = {
+				limit = { has_3rd_tier_education_trait_trigger = yes }
+				diplomacy = 15
+			}
+			
+			trigger_else_if = {
+				limit = { has_top_tier_education_trait_trigger = yes }
+				diplomacy = 20
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_warrior = yes }
+			
+			trigger_if = {
+				limit = { has_bottom_tier_education_trait_trigger = yes }
+				martial = 5
+			}
+			
+			trigger_else_if = {
+				limit = { has_2nd_tier_education_trait_trigger = yes }
+				martial = 10
+			}
+			
+			trigger_else_if = {
+				limit = { has_3rd_tier_education_trait_trigger = yes }
+				martial = 15
+			}
+			
+			trigger_else_if = {
+				limit = { has_top_tier_education_trait_trigger = yes }
+				martial = 20
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_magistrate = yes }
+			
+			trigger_if = {
+				limit = { has_bottom_tier_education_trait_trigger = yes }
+				stewardship = 5
+			}
+			
+			trigger_else_if = {
+				limit = { has_2nd_tier_education_trait_trigger = yes }
+				stewardship = 10
+			}
+			
+			trigger_else_if = {
+				limit = { has_3rd_tier_education_trait_trigger = yes }
+				stewardship = 15
+			}
+			
+			trigger_else_if = {
+				limit = { has_top_tier_education_trait_trigger = yes }
+				stewardship = 20
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_agent = yes }
+			
+			trigger_if = {
+				limit = { has_bottom_tier_education_trait_trigger = yes }
+				intrigue = 5
+			}
+			
+			trigger_else_if = {
+				limit = { has_2nd_tier_education_trait_trigger = yes }
+				intrigue = 10
+			}
+			
+			trigger_else_if = {
+				limit = { has_3rd_tier_education_trait_trigger = yes }
+				intrigue = 15
+			}
+			
+			trigger_else_if = {
+				limit = { has_top_tier_education_trait_trigger = yes }
+				intrigue = 20
+			}
+		}
+		
+		trigger_else_if = {
+			limit = { is_mage = yes }
+			
+			trigger_if = {
+				limit = { has_bottom_tier_education_trait_trigger = yes }
+				learning = 5
+			}
+			
+			trigger_else_if = {
+				limit = { has_2nd_tier_education_trait_trigger = yes }
+				learning = 10
+			}
+			
+			trigger_else_if = {
+				limit = { has_3rd_tier_education_trait_trigger = yes }
+				learning = 15
+			}
+			
+			trigger_else_if = {
+				limit = { has_top_tier_education_trait_trigger = yes }
+				learning = 20
+			}
+		}
+	}
+	
+	immediate = {
+		random = {
+			chance = 25
+			
+			modifier = {
+				factor = 0.5
+				is_landed = no
+			}
+			modifier = {
+				factor = 0.5
+				is_long_lived = yes
+			}
+			modifier = {
+				factor = 0.33
+				is_immortal = yes
+			}
+			#Characters without an education really need one rn
+			modifier = {
+				factor = 3
+				NOR = {
+					is_agent = yes
+					is_diplomat = yes
+					is_mage = yes
+					is_magistrate = yes
+					is_warrior = yes
+				}
+			}
+			#Trait bonuses
+			works_hard_be_smart_score_value = yes
+			#Trait maluses
+			lazy_stupid_score_value = yes
+			#The higher your education, the more difficult it is to upgrade it
+			modifier = {
+				factor = 2
+				has_bottom_tier_education_trait_trigger = yes
+			}
+			modifier = {
+				factor = 1.5
+				has_2nd_tier_education_trait_trigger = yes
+			}
+			modifier = {
+				factor = 0.5
+				has_3rd_tier_education_trait_trigger = yes
+			}
+			modifier = {
+				factor = 0.25
+				has_top_tier_education_trait_trigger = yes
+			}
+			#Generic guilds allow you to upgrade your education, but at a slower pace
+			modifier = {
+				factor = 0.5
+				OR = {
+					AND = {
+						is_diplomat = yes
+						is_member_generic_guild_no_agent = yes
+						NOT = { is_member_diplomacy_guild = yes }
+					}
+					AND = {
+						is_warrior = yes
+						is_member_generic_guild_no_agent = yes
+						NOT = { is_member_martial_guild = yes }
+					}
+					AND = {
+						is_magistrate = yes
+						is_member_generic_guild_no_agent = yes
+						NOT = { is_member_stewardship_guild = yes }
+					}
+					AND = {
+						is_agent = yes
+						is_member_generic_guild = yes
+						NOT = { is_member_intrigue_guild = yes }
+					}
+					AND = {
+						is_mage = yes
+						is_member_generic_guild_no_agent = yes
+						NOT = { is_member_learning_guild = yes }
+					}
+				}
+			}
+			#Scaling with society influence
+			guild_influence_modifier = yes
+			#Scaling with main stat
+			modifier = {
+				factor = 1.1
+				
+				OR = {
+					AND = {
+						is_diplomat = yes
+						diplomacy = 10
+					}
+					AND = {
+						is_warrior = yes
+						martial = 10
+					}
+					AND = {
+						is_magistrate = yes
+						stewardship = 10
+					}
+					AND = {
+						is_agent = yes
+						intrigue = 10
+					}
+					AND = {
+						is_mage = yes
+						learning = 10
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				
+				OR = {
+					AND = {
+						is_diplomat = yes
+						diplomacy = 15
+					}
+					AND = {
+						is_warrior = yes
+						martial = 15
+					}
+					AND = {
+						is_magistrate = yes
+						stewardship = 15
+					}
+					AND = {
+						is_agent = yes
+						intrigue = 15
+					}
+					AND = {
+						is_mage = yes
+						learning = 15
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				
+				OR = {
+					AND = {
+						is_diplomat = yes
+						diplomacy = 20
+					}
+					AND = {
+						is_warrior = yes
+						martial = 20
+					}
+					AND = {
+						is_magistrate = yes
+						stewardship = 20
+					}
+					AND = {
+						is_agent = yes
+						intrigue = 20
+					}
+					AND = {
+						is_mage = yes
+						learning = 20
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				
+				OR = {
+					AND = {
+						is_diplomat = yes
+						diplomacy = 25
+					}
+					AND = {
+						is_warrior = yes
+						martial = 25
+					}
+					AND = {
+						is_magistrate = yes
+						stewardship = 25
+					}
+					AND = {
+						is_agent = yes
+						intrigue = 25
+					}
+					AND = {
+						is_mage = yes
+						learning = 25
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				
+				OR = {
+					AND = {
+						is_diplomat = yes
+						diplomacy = 30
+					}
+					AND = {
+						is_warrior = yes
+						martial = 30
+					}
+					AND = {
+						is_magistrate = yes
+						stewardship = 30
+					}
+					AND = {
+						is_agent = yes
+						intrigue = 30
+					}
+					AND = {
+						is_mage = yes
+						learning = 30
+					}
+				}
+			}
+			#Focus
+			modifier = {
+				factor = 1.25
+				OR = {
+					AND = {
+						is_diplomat = yes
+						OR = {
+							has_focus = focus_carousing
+							has_focus = focus_family
+						}
+					}
+					AND = {
+						is_warrior = yes
+						OR = {
+							has_focus = focus_war
+							has_focus = focus_hunting
+						}
+					}
+					AND = {
+						is_magistrate = yes
+						OR = {
+							has_focus = focus_business
+							has_focus = focus_rulership
+						}
+					}
+					AND = {
+						is_agent = yes
+						OR = {
+							has_focus = focus_intrigue
+							has_focus = focus_seduction
+						}
+					}
+					AND = {
+						is_mage = yes
+						OR = {
+							has_focus = focus_scholarship
+						}
+					}
+				}	
+			}
+			
+			education_rankup_check = yes
+		}
+	}
+}
+
+# Specialisation
+character_event = {
+	id = ekguildflavor.11
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { is_inaccessible_trigger = yes }
+		
+		#Can't upgrade your specialization if it's already at its maximum duh
+		NOT = { has_maxed_specializations = yes }
+		#Need to currently be learning some stuff
+		is_studying_specialization = yes
+		
+		society_and_specialization_match = yes
+	}
+	
+	immediate = {
+		random = {
+			chance = 20
+			
+			modifier = {
+				factor = 0.5
+				is_landed = no
+			}
+			modifier = {
+				factor = 0.25
+				is_long_lived = yes
+			}
+			#Trait bonuses
+			works_hard_be_smart_score_value = yes
+			#Trait maluses
+			lazy_stupid_score_value = yes
+			#Scaling with society influence
+			guild_influence_modifier = yes
+			
+			character_event = { id = eksocieties.100 days = 10 random = 3  }
+		}
+	}
+}
+
+# Thu'Um
+character_event = {
+	id = ekguildflavor.12
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		society_member_of = greybeards_tamriel
+		
+		NOT = { is_inaccessible_trigger = yes }
+		
+		NOT = { trait = thuum_3 }
+		
+		# Can't combine Thu'um and Sword-Singing
+		NOR = {
+			trait = swordsinger_1
+			trait = swordsinger_2
+			trait = swordsinger_3
+			trait = ansei_1
+			trait = ansei_2
+			trait = ansei_3
+		}
+		
+		# Mute characters can't use the Voice (see Tiber Septim)
+		NOT = { trait = mute }
+		NOT = { trait = throat_slit }
+	}
+	
+	immediate = {
+		random = {
+			chance = 10
+			
+			modifier = {
+				factor = 0.5
+				is_landed = no
+			}
+			modifier = {
+				factor = 0.15 #Mer and other such beings take longer to learn
+				is_long_lived = yes
+			}
+			#The more you learn, the longer it takes
+			modifier = {
+				factor = 0.75
+				trait = thuum_1
+			}
+			modifier = {
+				factor = 0.33
+				trait = thuum_2
+			}
+			# Dragonblood
+			modifier = {
+				factor = 2.5 # Stacks with below
+				trait = dragonborn
+			}
+			modifier = {
+				factor = 2
+				is_dragonblood = yes
+			}
+			# Artifacts
+			modifier = {
+				factor = 1.5
+				any_artifact = {
+					is_artifact_equipped = yes
+					artifact_type = amulet_of_talos
+				}
+			}
+			# Society rank
+			modifier = {
+				factor = 1.25
+				society_rank = 2
+			}
+			modifier = {
+				factor = 1.75
+				society_rank = 3
+			}
+			modifier = { #Got tired of Masters of the Way without any thu'um knowledge.
+				factor = 2.25
+				society_rank = 4
+			}
+			#Trait bonuses
+			works_hard_be_smart_score_value = yes
+			#Trait maluses
+			lazy_stupid_score_value = yes
+			#Scaling with society influence
+			guild_influence_modifier = yes
+			
+			character_event = { id = ekguildflavor.525 days = 10 random = 3  }
+		}
+	}
+}
+
+# Sword-Singing
+character_event = {
+	id = ekguildflavor.13
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		society_member_of = ansei_guild_tamriel
+		
+		NOT = { is_inaccessible_trigger = yes }
+		
+		NOT = { trait = swordsinger_3 }
+		
+		NOR = {
+			trait = ansei_1
+			trait = ansei_2
+			trait = ansei_3
+		}
+		
+		# Can't combine Thu'um and Sword-Singing
+		NOR = {
+			trait = thuum_1
+			trait = thuum_2
+			trait = thuum_3
+		}
+	}
+	
+	immediate = {
+		random = {
+			chance = 10
+			
+			modifier = {
+				factor = 0.5
+				is_landed = no
+			}
+			#Mer and other such beings take longer to learn
+			modifier = {
+				factor = 0.15
+				is_long_lived = yes
+			}
+			#The more you learn, the longer it takes
+			modifier = {
+				factor = 0.5
+				trait = swordsinger_1
+			}
+			modifier = {
+				factor = 0.2
+				trait = swordsinger_2
+			}
+			#Those descendent from a legendary Sword-Singer learn this art more quickly
+			modifier = {
+				factor = 1.5 
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_frandar
+					bloodline_is_active_for = PREV
+				}
+			}
+			# Society rank
+			modifier = {
+				factor = 1.25
+				society_rank = 3
+			}
+			modifier = {
+				factor = 1.75
+				society_rank = 4
+			}
+			modifier = { 
+				factor = 2.25
+				society_rank = 5
+			}
+			#Trait bonuses
+			works_hard_be_smart_score_value = yes
+			modifier = {
+				factor = 1.2
+				OR = {
+					trait = duelist
+					trait = gladiator
+				}
+			}
+			#Trait maluses
+			lazy_stupid_score_value = yes
+			#Disabled characters learn fighting styles slower
+			modifier = {
+				factor = 0.5
+				OR = {
+					has_severe_disability_trigger = yes
+					has_medium_disability_trigger = yes
+				}
+			}
+			#Scaling with society influence
+			guild_influence_modifier = yes
+			
+			character_event = { id = ekguildflavor.802 days = 10 random = 3  }
+		}
+	}
+}
+
+#Hidden Guild Generic Quest Tombola - Based on MNM Hermetics events
+
+#Fighters variant
+character_event = {
+	id = ekguildflavor.20
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		OR = {
+			is_member_of_fighters_guild = yes
+			society_member_of = companions_tamriel
+			#society_member_of = ansei_guild_tamriel
+		}
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Minor quest
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							has_character_flag = guild_quests_disabled
+						}
+						
+						set_character_flag = tombola_minor_quest
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.21 }
+						}
+					}
+					
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_war
+								has_focus = focus_hunting
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.21 }
+						}
+					}
+					
+					# Minor training with someone else
+					10 = {
+						set_character_flag = tombola_sparring
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.21 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.21
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+				tombola_minor_quest = {
+					clr_character_flag = tombola_minor_quest
+					character_event = { id = ekguildflavor.100 }
+				}
+				tombola_sparring = {
+					clr_character_flag = tombola_sparring
+					character_event = { id = ekguildflavor.115 }
+				}
+			}
+		}
+	}
+}
+
+#Mages variant
+character_event = {
+	id = ekguildflavor.25
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_member_of_mages_guild = yes
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Minor quest
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							has_character_flag = guild_quests_disabled
+						}
+						
+						set_character_flag = tombola_minor_quest
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.26 }
+						}
+					}
+					
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_scholarship
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.26 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.26
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+				tombola_minor_quest = {
+					clr_character_flag = tombola_minor_quest
+					character_event = { id = ekguildflavor.200 }
+				}
+			}
+		}
+	}
+}
+
+#Mercantile variant
+character_event = {
+	id = ekguildflavor.30
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_member_of_mercantile_guild = yes
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Minor quest
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							has_character_flag = guild_quests_disabled
+						}
+						
+						set_character_flag = tombola_minor_quest
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.31 }
+						}
+					}
+					
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_rulership
+								has_focus = focus_business
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.31 }
+						}
+					}
+					
+					# Taking inventory
+					10 = {
+						modifier = {
+							factor = 0
+							num_of_artifacts > 2
+						}
+						character_event = { id = ekguildflavor.320 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.31
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+				tombola_minor_quest = {
+					clr_character_flag = tombola_minor_quest
+					character_event = { id = ekguildflavor.300 }
+				}
+			}
+		}
+	}
+}
+
+#Scenarist variant
+character_event = {
+	id = ekguildflavor.35
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_member_of_scenarist_guild = yes
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Minor quest
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							has_character_flag = guild_quests_disabled
+						}
+						
+						set_character_flag = tombola_minor_quest
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.36 }
+						}
+					}
+					
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_carousing
+								has_focus = focus_seduction
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.36 }
+						}
+					}
+					
+					# Great painting
+					10 = {
+						character_event = { id = ekguildflavor.420 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.36
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+				tombola_minor_quest = {
+					clr_character_flag = tombola_minor_quest
+					character_event = { id = ekguildflavor.400 }
+				}
+			}
+		}
+	}
+}
+
+#Greybeards/Moth Priests Variant
+character_event = {
+	id = ekguildflavor.40
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		OR = {
+			society_member_of = greybeards_tamriel
+			society_member_of = moth_priests_tamriel
+		}
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_theology
+								has_focus = focus_seduction
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.41 }
+						}
+					}
+					
+					# Personality
+					10 = {
+						character_event = { id = ekguildflavor.500 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.41
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+			}
+		}
+	}
+}
+
+#Thieves Guild/Camonna Tong Variant
+character_event = {
+	id = ekguildflavor.45
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_member_of_thieves_guild = yes
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Minor quest
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							has_character_flag = guild_quests_disabled
+						}
+						
+						set_character_flag = tombola_minor_quest
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.46 }
+						}
+					}
+					
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_business
+								has_focus = focus_intrigue
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.46 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.46
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+				tombola_minor_quest = {
+					clr_character_flag = tombola_minor_quest
+					character_event = { id = ekguildflavor.600 }
+				}
+			}
+		}
+	}
+}
+
+#Dark Brotherhood/Morag Tong Variant
+character_event = {
+	id = ekguildflavor.50
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_member_of_assassins_guild = yes
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Minor quest
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							has_character_flag = guild_quests_disabled
+						}
+						
+						set_character_flag = tombola_minor_quest
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.51 }
+						}
+					}
+					
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_hunting
+								has_focus = focus_intrigue
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.51 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.51
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+				tombola_minor_quest = {
+					clr_character_flag = tombola_minor_quest
+					character_event = { id = ekguildflavor.700 }
+				}
+			}
+		}
+	}
+}
+
+#Dunmer Great House Councils
+character_event = {
+	id = ekguildflavor.55
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_member_great_house_society = yes
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				character_event = { id = ekguildflavor.550 }
+			}
+			150 = {
+				#Do nothing
+			}
+		}
+	}
+}
+
+# #Elder Council
+# character_event = {
+	# id = ekguildflavor.60
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# is_in_society = yes
+	# min_age = 16
+	# capable_only = yes
+	# prisoner = no
+	
+	# trigger = {
+		# society_member_of = elder_council
+		# has_any_quest = no
+		# NOT = { has_character_modifier = quest_cooldown_timer }
+		# NOT = { is_inaccessible_trigger = yes }
+	# }
+	
+	# immediate = {
+		# random_list = {
+			# 20 = {
+				# modifier = {
+					# factor = 0.25
+					# is_long_lived = yes
+				# }
+				# modifier = {
+					# factor = 1.1
+					# is_smart_trigger = yes
+				# }
+				# modifier = {
+					# factor = 1.1
+					# trait = ambitious
+				# }
+				# modifier = {
+					# factor = 1.1
+					# trait = diligent
+				# }
+				# modifier = {
+					# factor = 0.9
+					# is_dumb_trigger = yes
+				# }
+				# modifier = {
+					# factor = 0.9
+					# trait = content
+				# }
+				# modifier = {
+					# factor = 0.9
+					# trait = slothful
+				# }
+				# modifier = {
+					# factor = 0
+					# OR = {
+						# has_character_flag = elder_council_bard
+						# has_character_flag = elder_council_savant
+						# has_character_flag = elder_council_knight
+						# has_character_flag = elder_council_crusader
+						# has_character_flag = elder_council_battlemage
+						# has_character_flag = elder_council_sorcerer
+						# has_character_flag = elder_council_trader
+						# has_character_flag = elder_council_scout
+						# has_character_flag = elder_council_thief
+						# has_character_flag = elder_council_nightblade
+					# }
+				# }
+				# modifier = {
+					# factor = 0
+					# calc_true_if = {
+						# amount = 2
+						# trait = acrobat_3
+						# trait = assassin_3
+						# trait = barbarian_3
+						# trait = bard_3
+						# trait = battlemage_3
+						# trait = crusader_3
+						# trait = knight_3
+						# trait = healer_3
+						# trait = monk_3
+						# trait = nightblade_3
+						# trait = priest_3
+						# trait = rogue_3
+						# trait = savant_3
+						# trait = scout_3
+						# trait = sorcerer_3
+						# trait = spellsword_3
+						# trait = thief_3
+						# trait = trader_3
+						# trait = wayfarer_3
+						# trait = witchhunter_3
+					# }
+				# }
+				# character_event = { id = eksocieties.100 }
+			# }
+			# 20 = {
+				# modifier = {
+					# factor = 0.5
+					# is_landed = no
+				# }
+				# modifier = {
+					# factor = 0.25
+					# is_long_lived = yes
+				# }
+				# modifier = {
+					# factor = 3
+					# NOR = {
+						# is_agent = yes
+						# is_diplomat = yes
+						# is_mage = yes
+						# is_magistrate = yes
+						# is_warrior = yes
+					# }
+				# }
+				# modifier = {
+					# factor = 1.1
+					# is_smart_trigger = yes
+				# }
+				# modifier = {
+					# factor = 1.1
+					# trait = ambitious
+				# }
+				# modifier = {
+					# factor = 1.1
+					# trait = diligent
+				# }
+				# modifier = {
+					# factor = 0.9
+					# is_dumb_trigger = yes
+				# }
+				# modifier = {
+					# factor = 0.9
+					# trait = content
+				# }
+				# modifier = {
+					# factor = 0.9
+					# trait = slothful
+				# }
+				# modifier = {
+					# factor = 2
+					# OR = {
+						# trait = agent_1
+						# trait = diplomat_1
+						# trait = mage_1
+						# trait = magistrate_1
+						# trait = warrior_1
+					# }
+				# }
+				# modifier = {
+					# factor = 1.5
+					# OR = {
+						# trait = agent_2
+						# trait = diplomat_2
+						# trait = mage_2
+						# trait = magistrate_2
+						# trait = warrior_2
+					# }
+				# }
+				# modifier = {
+					# factor = 0.5
+					# OR = {
+						# trait = agent_3
+						# trait = diplomat_3
+						# trait = mage_3
+						# trait = magistrate_3
+						# trait = warrior_3
+					# }
+				# }
+				# modifier = {
+					# factor = 0.25
+					# OR = {
+						# trait = agent_4
+						# trait = diplomat_4
+						# trait = mage_4
+						# trait = magistrate_4
+						# trait = warrior_4
+					# }
+				# }
+				# modifier = {
+					# factor = 0
+					# OR = {
+						# trait = agent_5
+						# trait = diplomat_5
+						# trait = mage_5
+						# trait = magistrate_5
+						# trait = warrior_5
+					# }
+				# }
+				# character_event = { id = eksocieties.110 }
+			# }
+			# 150 = {
+				# #Do nothing
+			# }
+		# }
+	# }
+# }
+
+#Sword-Singers Variant
+character_event = {
+	id = ekguildflavor.65
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	is_in_society = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		society_member_of = ansei_guild_tamriel
+		has_any_quest = no
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+	}
+	
+	#Check if the description is apt for all the non-unique tombola events
+	immediate = {
+		random_list = {
+			### The AI will either skip the quest or win/lose a small amount of society currency, avoiding the society influence skyrocketing/tanking due to the AI
+			50 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 0.75
+							society_influence >= 25
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.75
+							society_influence >= 75
+						}
+						add_mission_succeed_influence_effect = yes
+					}
+					25 = {
+						add_mission_fail_influence_effect = yes
+					}
+					25 = { # Do nothing
+					}
+				}
+			}
+			
+			### The player will always have ~something~
+			50 = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+						same_society_as = ROOT
+					}
+					save_event_target_as = society_leader
+				}
+				random_list = {
+					# Minor quest
+					10 = {
+						modifier = {
+							factor = 0
+							is_society_grandmaster = yes
+						}
+						modifier = {
+							factor = 0
+							has_character_flag = guild_quests_disabled
+						}
+						
+						set_character_flag = tombola_minor_quest
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.66 }
+						}
+					}
+					
+					# Focus
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = { has_dlc = "Way of Life" }
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_focus = focus_hunting
+								has_focus = focus_war
+							}
+						}
+						modifier = {
+							factor = 0
+							is_playable = no
+						}
+						
+						set_character_flag = tombola_focus
+						
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.66 }
+						}
+					}
+					
+					# Minor training with someone else
+					10 = {
+						set_character_flag = tombola_sparring
+						event_target:society_leader = {
+							character_event = { id = ekguildflavor.66 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Ping the grandmaster (so we have their portrait)
+character_event = {
+	id = ekguildflavor.66
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				tombola_focus = {
+					clr_character_flag = tombola_focus
+					character_event = { id = ekguildflavor.95 }
+				}
+				tombola_minor_quest = {
+					clr_character_flag = tombola_minor_quest
+					character_event = { id = ekguildflavor.100 }
+				}
+				tombola_sparring = {
+					clr_character_flag = tombola_sparring
+					character_event = { id = ekguildflavor.115 }
+				}
+			}
+		}
+	}
+}
+
+### MINOR QUESTS GENERAL EVENTS
+# Results of the quest
+character_event = { # Maimed
+	id = ekguildflavor.90
+	desc = ekguildflavor.90.d
+	picture = GFX_evt_greathall
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekguildflavor.90.optA
+	}
+}
+
+character_event = { # Wounded
+	id = ekguildflavor.91
+	desc = ekguildflavor.91.d
+	picture = GFX_evt_greathall
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekguildflavor.91.optA
+	}
+}
+
+character_event = { # Success, unharmed
+	id = ekguildflavor.92
+	desc = ekguildflavor.92.d
+	picture = GFX_evt_greathall
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekguildflavor.92.optA
+	}
+}
+
+character_event = { # Failure
+	id = ekguildflavor.93
+	desc = ekguildflavor.93.d
+	picture = GFX_evt_greathall
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekguildflavor.93.optA
+	}
+}
+
+character_event = { # Success
+	id = ekguildflavor.94
+	desc = ekguildflavor.94.d
+	picture = GFX_evt_greathall
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekguildflavor.94.optA
+	}
+}
+
+### Quest: Change focus
+society_quest_event = {
+	id = ekguildflavor.95
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = ekguildflavor.95.d.fighter
+		
+		trigger = {
+			OR = {
+				is_member_of_fighters_guild = yes
+				society_member_of = companions_tamriel
+			}
+		}
+	}
+	
+	desc = {
+		text = ekguildflavor.95.d.mage
+		
+		trigger = {
+			is_member_of_mages_guild = yes
+		}
+	}
+	
+	desc = {
+		text = ekguildflavor.95.d.mercantile
+		
+		trigger = {
+			is_member_of_mercantile_guild = yes
+		}
+	}
+	
+	desc = {
+		text = ekguildflavor.95.d.scenarist
+		
+		trigger = {
+			is_member_of_scenarist_guild = yes
+		}
+	}
+	
+	desc = {
+		text = ekguildflavor.95.d.monastic
+		
+		trigger = {
+			OR = {
+				society_member_of = greybeards_tamriel
+				society_member_of = moth_priests_tamriel
+			}
+		}
+	}
+	
+	desc = {
+		text = ekguildflavor.95.d.thief
+		
+		trigger = {
+			is_member_of_thieves_guild = yes
+		}
+	}
+	
+	desc = {
+		text = ekguildflavor.95.d.assassin
+		
+		trigger = {
+			is_member_of_assassins_guild = yes
+		}
+	}
+	
+	desc = {
+		text = ekguildflavor.95.d.ansei
+		
+		trigger = {
+			OR = {
+				society_member_of = ansei_guild_tamriel
+			}
+		}
+	}
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_any_quest = yes }
+		
+		trigger_if = {
+			limit = {
+				OR = {
+					is_member_of_fighters_guild = yes
+					society_member_of = companions_tamriel
+				}
+			}
+			NOR = {
+				has_focus = focus_war
+				has_focus = focus_hunting
+			}
+		}
+		
+		trigger_else_if = {
+			limit = {
+				is_member_of_mages_guild = yes
+			}
+			NOR = {
+				has_focus = focus_scholarship
+			}
+		}
+		
+		trigger_else_if = {
+			limit = {
+				is_member_of_mercantile_guild = yes
+			}
+			NOR = {
+				has_focus = focus_rulership
+				has_focus = focus_business
+			}
+		}
+		
+		trigger_else_if = {
+			limit = {
+				is_member_of_scenarist_guild = yes
+			}
+			NOR = {
+				has_focus = focus_carousing
+				has_focus = focus_seduction
+			}
+		}
+		
+		trigger_else_if = {
+			limit = {
+				OR = {
+					society_member_of = greybeards_tamriel
+					society_member_of = moth_priests_tamriel
+				}
+			}
+			NOR = {
+				has_focus = focus_theology
+			}
+		}
+		
+		trigger_else_if = {
+			limit = {
+				is_member_of_thieves_guild = yes
+			}
+			NOR = {
+				has_focus = focus_business
+				has_focus = focus_intrigue
+			}
+		}
+		
+		trigger_else_if = {
+			limit = {
+				is_member_of_assassins_guild = yes
+			}
+			NOR = {
+				has_focus = focus_hunting
+				has_focus = focus_intrigue
+			}
+		}
+		
+		trigger_else_if = {
+			limit = {
+				OR = {
+					society_member_of = ansei_guild_tamriel
+				}
+			}
+			NOR = {
+				has_focus = focus_hunting
+				has_focus = focus_war
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			OR = {
+				is_member_of_fighters_guild = yes
+				society_member_of = companions_tamriel
+			}
+		}
+		name = ACCEPT
+		set_quest = quest_fighter_focus
+	}
+	
+	option = {
+		trigger = {
+			is_member_of_mages_guild = yes
+		}
+		name = ACCEPT
+		set_quest = quest_mage_focus
+	}
+	
+	option = {
+		trigger = {
+			is_member_of_mercantile_guild = yes
+		}
+		name = ACCEPT
+		set_quest = quest_mercantile_focus
+	}
+	
+	option = {
+		trigger = {
+			is_member_of_scenarist_guild = yes
+		}
+		name = ACCEPT
+		set_quest = quest_scenarist_focus
+	}
+	
+	option = {
+		trigger = {
+			OR = {
+				society_member_of = greybeards_tamriel
+				society_member_of = moth_priests_tamriel
+			}
+		}
+		name = ACCEPT
+		set_quest = quest_monastic_focus
+	}
+	
+	option = {
+		trigger = {
+			is_member_of_thieves_guild = yes
+		}
+		name = ACCEPT
+		set_quest = quest_thief_focus
+	}
+	
+	option = {
+		trigger = {
+			is_member_of_assassins_guild = yes
+		}
+		name = ACCEPT
+		set_quest = quest_assassin_focus
+	}
+	
+	option = {
+		trigger = {
+			OR = {
+				society_member_of = ansei_guild_tamriel
+			}
+		}
+		name = ACCEPT
+		set_quest = quest_ansei_focus
+	}
+
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = decline_quest_tooltip }
+
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+character_event = {
+	id = ekguildflavor.96
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		random_society_member = {
+			limit = {
+				same_society_as = ROOT
+				is_society_grandmaster = yes
+			}
+			character_event = {
+				id = ekguildflavor.97
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.97
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		FROM = {
+			letter_event = {
+				id = ekguildflavor.98
+			}
+		}
+	}
+}
+
+letter_event = {
+	id = ekguildflavor.98
+	
+	desc = ekguildflavor.98.d
+
+	is_triggered_only = yes
+
+	option = {
+		name = EKGuildFlavorAccept
+		
+		if = {
+			limit = { has_quest = quest_fighter_focus }
+			clr_quest = quest_fighter_focus
+		}
+		
+		else_if = {
+			limit = { has_quest = quest_mage_focus }
+			clr_quest = quest_mage_focus
+		}
+		
+		else_if = {
+			limit = { has_quest = quest_mercantile_focus }
+			clr_quest = quest_mercantile_focus
+		}
+		
+		else_if = {
+			limit = { has_quest = quest_scenarist_focus }
+			clr_quest = quest_scenarist_focus
+		}
+		
+		else_if = {
+			limit = { has_quest = quest_monastic_focus }
+			clr_quest = quest_monastic_focus
+		}
+		
+		else_if = {
+			limit = { has_quest = quest_thief_focus }
+			clr_quest = quest_thief_focus
+		}
+		
+		else_if = {
+			limit = { has_quest = quest_assassin_focus }
+			clr_quest = quest_assassin_focus
+		}
+		
+		else_if = {
+			limit = { has_quest = quest_ansei_focus }
+			clr_quest = quest_ansei_focus
+		}
+		
+		add_society_currency_minor_effect = yes
+	}
+}
+
+#########################
+# FIGHTERS              #
+#########################
+character_event = {
+	id = ekguildflavor.100
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				society_quest_event = { id = ekguildflavor.101 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				society_quest_event = { id = ekguildflavor.103 }
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				society_quest_event = { id = ekguildflavor.105 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				society_quest_event = { id = ekguildflavor.107 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				society_quest_event = { id = ekguildflavor.109 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+			
+			5 = { # Forging gear (scales with rank)
+				society_quest_event = { id = ekguildflavor.111 }
+				
+				modifier = {
+					factor = 2
+					trait = blacksmith
+				}
+				
+				modifier = {
+					factor = 0.5
+					has_character_flag = no_blacksmith_for_me
+				}
+			}
+		}
+	}
+}
+
+### Trivial quests
+# Deliver supplies, Repair equipment
+society_quest_event = {
+	id = ekguildflavor.101
+	
+	desc = { # Bring supplies to another guild hall
+		text = EKGuildFlavor101A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Repair some equipment for your brothers and sisters
+		text = EKGuildFlavor101B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = trivial_quest
+		character_event = { id = ekguildflavor.102 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.102
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor102A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor102B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		clr_quest = trivial_quest
+		
+		give_trivial_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+	}
+}
+
+### Easy quests
+# Lowly animal, one humanoid
+society_quest_event = {
+	id = ekguildflavor.103
+	
+	desc = { # Put down a rabid animal
+		text = EKGuildFlavor103A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Take care of a drunk and agressive loner
+		text = EKGuildFlavor103B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = { # A couple of skeletons have been spotted
+		text = EKGuildFlavor103C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+			20 = { set_character_flag = quest_desc_3 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = easy_quest
+		
+		roll_easy_pcs = yes
+		character_event = { id = ekguildflavor.104 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.104
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor104A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor104B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor104C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_accident }
+			
+			break = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			guild_pcs_maimed_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			guild_pcs_wounded_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			guild_pcs_success_effect = yes
+		}
+		
+		clr_quest = easy_quest
+		give_easy_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+	}
+}
+
+### Medium Quest
+# Beast, Bandits
+society_quest_event = {
+	id = ekguildflavor.105
+	
+	desc = { # Clear an animal den
+		text = EKGuildFlavor105A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Put down some bandits
+		text = EKGuildFlavor105B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = { # A couple of undeads have been spotted
+		text = EKGuildFlavor105C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = { # Kill a wild beast
+		text = EKGuildFlavor105D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+			20 = { set_character_flag = quest_desc_3 }
+			20 = { set_character_flag = quest_desc_4 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = medium_quest
+		
+		roll_medium_pcs = yes
+		character_event = { id = ekguildflavor.106 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.106
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor106A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor106B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor106C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor106D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_accident }
+			
+			break = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			guild_pcs_maimed_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			guild_pcs_wounded_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			guild_pcs_success_effect = yes
+		}
+		
+		clr_quest = medium_quest
+		give_medium_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+	}
+}
+
+### Hard quest
+# Magical beasts, bandits den
+society_quest_event = {
+	id = ekguildflavor.107
+	
+	desc = { # Killing some magical beast
+		text = EKGuildFlavor107A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Put down some bandits
+		text = EKGuildFlavor107B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = hard_quest
+		
+		roll_hard_pcs = yes
+		character_event = { id = ekguildflavor.108 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.108
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor108A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor108B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_accident }
+			
+			break = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			guild_pcs_maimed_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			guild_pcs_wounded_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			guild_pcs_success_effect = yes
+		}
+		
+		clr_quest = hard_quest
+		give_hard_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+	}
+}
+
+### Very hard Quest
+# Supernatural beasts (vamp, lycan and the like)
+society_quest_event = {
+	id = ekguildflavor.109
+	
+	desc = { # Kill a vampire
+		text = EKGuildFlavor109A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Kill a werebeast
+		text = EKGuildFlavor109B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = { # Kill an undead commander
+		text = EKGuildFlavor109C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+			20 = { set_character_flag = quest_desc_3 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = very_hard_quest
+		
+		roll_very_hard_pcs = yes
+		character_event = { id = ekguildflavor.110 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.110
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor110A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor110B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor110C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_accident }
+			
+			break = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			guild_pcs_maimed_effect = yes
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_1
+				}
+				random = {
+					chance = 25
+					roll_for_vampirism = yes
+				}
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_2
+				}
+				random = {
+					chance = 25
+					roll_for_lycanthropy = yes
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			guild_pcs_wounded_effect = yes
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_1
+				}
+				random = {
+					chance = 10
+					roll_for_vampirism = yes
+				}
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_2
+				}
+				random = {
+					chance = 10
+					roll_for_lycanthropy = yes
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			guild_pcs_success_effect = yes
+		}
+		
+		clr_quest = very_hard_quest
+		give_very_hard_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+	}
+}
+
+### General Quest
+# Forge some gear (quality depends on rank)
+society_quest_event = {
+	id = ekguildflavor.111
+	
+	desc = {
+		text = EKGuildFlavor111A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor111B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor111C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor111D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor111E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				set_character_flag = quest_desc_1
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				set_character_flag = quest_desc_2
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				set_character_flag = quest_desc_3
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				set_character_flag = quest_desc_4
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				set_character_flag = quest_desc_5
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = forging_quest
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			roll_trivial_martial = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			roll_easy_martial = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			roll_medium_martial = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			roll_hard_martial = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			roll_very_hard_martial = yes
+		}
+		
+		character_event = { id = ekguildflavor.112 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.112
+	picture = GFX_evt_battle
+	
+	desc = ekguildflavor.112.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		generic_quest_stat_result = yes
+		
+		clr_quest = forging_quest
+		random = { # Only sent if the quest is a success
+			chance = 25
+			modifier = {
+				factor = 0
+				OR = {
+					has_character_flag = no_blacksmith_for_me 
+					lifestyle_traits = 1
+					trait = blacksmith
+				}
+			}
+			society_propose_blacksmith = yes
+		}
+	}
+}
+
+### Minor training with someone else
+society_quest_event = {
+	id = ekguildflavor.115
+	desc = ekguildflavor.115.d
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_society_member = {
+			limit = {
+				same_society_as = ROOT
+				prisoner = no
+				is_within_diplo_range = ROOT
+			}
+			save_event_target_as = training_companion
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = minor_training_quest
+		event_target:training_companion = { character_event = { id = ekguildflavor.116 } }
+	}
+	
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+# Ping the sparring partner
+character_event = {
+	id = ekguildflavor.116
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { FROM = { character_event = { id = ekguildflavor.117 days = 3 } } }
+}
+
+character_event = {
+	id = ekguildflavor.117
+	desc = ekguildflavor.117.d
+	
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	# Just a small physical exercise
+	option = {
+		name = ekguildflavor.117.optA
+		
+		custom_tooltip = {
+			text = MINOR_TRAINING_PHYSICAL_EXERCISE_CT
+			
+			hidden_tooltip = { character_event = { id = ekguildflavor.118 days = 5 random = 2 } }
+		}
+	}
+	
+	# Let's put into practice some of the moves I learned recently
+	option = {
+		name = ekguildflavor.117.optB
+		
+		custom_tooltip = { text = MINOR_TRAINING_MOVES_LEARNING_CT }
+		
+		hidden_tooltip = { character_event = { id = ekguildflavor.119 days = 5 random = 2 } }
+	}
+}
+
+character_event = {
+	id = ekguildflavor.118
+	desc = ekguildflavor.118.d
+	
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekguildflavor.118.optA
+		
+		# Good for moral
+		if = {
+			limit = { OR = { trait = stressed trait = depressed } }
+			random_list = {
+				25 = {
+					modifier = { factor = 0 NOT = { trait = stressed } }
+					remove_trait = stressed
+				}
+				25 = {
+					modifier = { factor = 0 NOT = { trait = depressed } }
+					remove_trait = depressed
+				}
+				50 = { }
+			}
+		}
+			
+		# Can help with people, maybe?
+		if = {
+			limit = { trait = shy }
+			random = { chance = 25 remove_trait = shy }
+		}
+		
+		# At the very least, a minor health bonus might help
+		add_character_modifier = { name = minor_fighter_training_health days = 730 }
+		
+		clr_quest = minor_training_quest
+	}
+}
+
+character_event = {
+	id = ekguildflavor.119
+	desc = ekguildflavor.119.d
+	
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekguildflavor.119.optA
+		
+		random_list = {
+			# Temporary bonus
+			50 = { add_character_modifier = { name = minor_fighter_training_practice days = 730 } }
+			# Permanent bonus
+			25 = { 
+				modifier = {
+					factor = 2
+					NOT = { martial = 10 }
+				}
+				modifier = {
+					factor = 1.5
+					NOT = { martial = 15 }
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { martial = 25 }
+				}
+				change_martial = 1
+			}
+			25 = {
+				modifier = {
+					factor = 0
+					NOT = { is_warrior = yes }
+				}
+				modifier = {
+					factor = 0
+					trait = warrior_5
+				}
+				modifier = {
+					factor = 2
+					trait = warrior_1
+				}
+				modifier = {
+					factor = 0.75
+					trait = warrior_3
+				}
+				modifier = {
+					factor = 0.33
+					trait = warrior_4
+				}
+				education_rankup_check = yes
+			}
+		}
+		
+		clr_quest = minor_training_quest
+	}
+}
+
+#########################
+# MAGES                 #
+#########################
+character_event = {
+	id = ekguildflavor.200
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				society_quest_event = { id = ekguildflavor.201 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				society_quest_event = { id = ekguildflavor.203 }
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				society_quest_event = { id = ekguildflavor.205 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				society_quest_event = { id = ekguildflavor.207 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				society_quest_event = { id = ekguildflavor.209 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+			
+			5 = { # Alchemy (scales with rank)
+				society_quest_event = { id = ekguildflavor.211 }
+				
+				modifier = {
+					factor = 2
+					trait = alchemist
+				}
+				
+				modifier = {
+					factor = 0.5
+					has_character_flag = no_alchemy_for_me
+				}
+			}
+		}
+	}
+}
+
+### Trivial quests
+# Deliver supplies, Recharge equipment
+society_quest_event = {
+	id = ekguildflavor.201
+	
+	desc = { # Bring supplies to another guild hall
+		text = EKGuildFlavor201A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Recharge some of your sisters and brothers enchanted gear
+		text = EKGuildFlavor201B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = trivial_quest
+		character_event = { id = ekguildflavor.202 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.202
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor202A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor202B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		clr_quest = trivial_quest
+		
+		give_trivial_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+	}
+}
+
+### Easy quests
+# Teach novices in Restoration [include other schools]
+society_quest_event = {
+	id = ekguildflavor.203
+	
+	desc = { # Teach Restoration
+		text = EKGuildFlavor203A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Teach Destruction
+		text = EKGuildFlavor203B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = { # Teach Alteration
+		text = EKGuildFlavor203C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = { # Teach Illusion
+		text = EKGuildFlavor203D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = { # Teach Conjuration
+		text = EKGuildFlavor203E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+			20 = { set_character_flag = quest_desc_3 }
+			20 = { set_character_flag = quest_desc_4 }
+			20 = { set_character_flag = quest_desc_5 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = easy_quest
+		
+		roll_easy_learning = yes
+		character_event = { id = ekguildflavor.204 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.204
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor204A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor204B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor204C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor204D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor204E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		easy_quest_stat_result = yes
+	}
+}
+
+### Medium Quest
+# Enchant stuff, Charge scrolls
+society_quest_event = {
+	id = ekguildflavor.205
+	
+	desc = { # Enchant a piece of equipment
+		text = EKGuildFlavor205A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Charge some scrolls
+		text = EKGuildFlavor205B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = medium_quest
+		
+		roll_medium_learning = yes
+		character_event = { id = ekguildflavor.206 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.206
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor206A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor206B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		medium_quest_stat_result = yes
+	}
+}
+
+### Hard quest
+# Decipher an unknown scroll, disenchant an unknown item
+society_quest_event = {
+	id = ekguildflavor.207
+	
+	desc = { # Decipher unknwon scroll
+		text = EKGuildFlavor207A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Disenchant unknown item
+		text = EKGuildFlavor207B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = hard_quest
+		
+		roll_hard_learning = yes
+		character_event = { id = ekguildflavor.208 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.208
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor208A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor208B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		hard_quest_stat_result = yes
+	}
+}
+
+### Very hard Quest
+# Cure a Daedric curse, destroy a cursed item
+society_quest_event = {
+	id = ekguildflavor.209
+	
+	desc = { # Cure a Daedric Curse
+		text = EKGuildFlavor209A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Destroy a cursed item
+		text = EKGuildFlavor209B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = very_hard_quest
+		
+		roll_very_hard_learning = yes
+		character_event = { id = ekguildflavor.210 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.210
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor210A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor210B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		very_hard_quest_stat_result = yes
+	}
+}
+
+### General Quest
+# Brew a potion
+society_quest_event = {
+	id = ekguildflavor.211
+	
+	desc = {
+		text = EKGuildFlavor211A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor211B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor211C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor211D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor211E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				set_character_flag = quest_desc_1
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				set_character_flag = quest_desc_2
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				set_character_flag = quest_desc_3
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				set_character_flag = quest_desc_4
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				set_character_flag = quest_desc_5
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = alchemy_quest
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			roll_trivial_learning = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			roll_easy_learning = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			roll_medium_learning = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			roll_hard_learning = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			roll_very_hard_learning = yes
+		}
+		
+		character_event = { id = ekguildflavor.212 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.212
+	picture = GFX_evt_battle
+	
+	desc = ekguildflavor.212.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		generic_quest_stat_result = yes
+		
+		clr_quest = alchemy_quest
+		random = { # Only sent if the quest is a success
+			chance = 25
+			modifier = {
+				factor = 0
+				OR = {
+					has_character_flag = no_alchemy_for_me 
+					lifestyle_traits = 1
+					trait = alchemist
+				}
+			}
+			society_propose_alchemist = yes
+		}
+	}
+}
+
+#character_event = {
+#	id = ekguildflavor.215
+#	desc = ekguildflavor215
+#	picture = GFX_evt_courtiers_talking
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = ekguildflavor215Acknowledge
+#		hidden_tooltip = {
+#			random_list = {
+#				6 = { if = { limit = { NOT = { has_artifact = ring_silver } } add_artifact = ring_silver } }
+#				5 = { if = { limit = { NOT = { has_artifact = ring_gold } } add_artifact = ring_gold } }
+#				4 = { if = { limit = { NOT = { has_artifact = ring_of_sunfire } } add_artifact = ring_of_sunfire } }
+#				4 = { if = { limit = { NOT = { has_artifact = ring_ebony } } add_artifact = ring_ebony } }
+#				3 = { if = { limit = { NOT = { has_artifact = ring_happiness } } add_artifact = ring_happiness ring_happiness_effect = yes } }
+#				2 = { if = { limit = { NOT = { has_artifact = ring_blackband } } add_artifact = ring_blackband } }
+#				1 = { if = { limit = { NOT = { has_artifact = ring_lordship } } add_artifact = ring_lordship } }
+#				6 = { if = { limit = { NOT = { has_artifact = ring_copper } } add_artifact = ring_copper } }
+#				5 = { if = { limit = { NOT = { has_artifact = armor_mithril } } add_artifact = armor_mithril } }
+#				5 = { if = { limit = { NOT = { has_artifact = weapon_sword_silver } } add_artifact = weapon_sword_silver } }
+#				2 = { if = { limit = { NOT = { has_artifact = dwemer_puzzle_cube } } add_artifact = dwemer_puzzle_cube } }
+#				1 = { if = { limit = { NOT = { has_artifact = pentamagic_loop } } add_artifact = pentamagic_loop } }
+#			}
+#		}
+#	}
+#}
+
+#NECROMANCY?!?!
+character_event = {
+	id = ekguildflavor.240
+	picture = GFX_evt_mage
+	desc = EKGuildFlavor240
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		become_necromancer = yes
+		clr_character_flag = studying_necromancy
+	}
+}
+
+#########################
+# MAGISTRATES           #
+#########################
+character_event = {
+	id = ekguildflavor.300
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				society_quest_event = { id = ekguildflavor.301 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				society_quest_event = { id = ekguildflavor.303 }
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				society_quest_event = { id = ekguildflavor.305 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				society_quest_event = { id = ekguildflavor.307 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				society_quest_event = { id = ekguildflavor.309 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+			
+			5 = { # Reparations supervision (scales with rank)
+				society_quest_event = { id = ekguildflavor.311 }
+				
+				modifier = {
+					factor = 2
+					trait = engineer
+				}
+				
+				modifier = {
+					factor = 0.5
+					has_character_flag = no_engineer_for_me
+				}
+			}
+		}
+	}
+}
+
+### Trivial quests
+# Deliver supplies, Verify guild appointments
+society_quest_event = {
+	id = ekguildflavor.301
+	
+	desc = { # Bring supplies to another guild hall
+		text = EKGuildFlavor301A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Make sure all the recent guild meetings have been kept in the books
+		text = EKGuildFlavor301B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = trivial_quest
+		character_event = { id = ekguildflavor.302 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.302
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor302A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor302B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		clr_quest = trivial_quest
+		
+		give_trivial_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+	}
+}
+
+### Easy quests
+# Break a deal with a local shopowner, buy a small plot of land
+society_quest_event = {
+	id = ekguildflavor.303
+	
+	desc = { # Deal with local shopowner
+		text = EKGuildFlavor303A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Buy plot of land
+		text = EKGuildFlavor303B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = easy_quest
+		
+		roll_easy_stewardship = yes
+		character_event = { id = ekguildflavor.304 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.304
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor304A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor304B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		easy_quest_stat_result = yes
+	}
+}
+
+### Medium Quest
+# Take control of business, buy a farm
+society_quest_event = {
+	id = ekguildflavor.305
+	
+	desc = { # Take control of business
+		text = EKGuildFlavor305A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Buy a farm
+		text = EKGuildFlavor305B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = medium_quest
+		
+		roll_medium_stewardship = yes
+		character_event = { id = ekguildflavor.306 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.306
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor306A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor306B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		medium_quest_stat_result = yes
+	}
+}
+
+### Hard quest
+# Boost local trade, buy a mine
+society_quest_event = {
+	id = ekguildflavor.307
+	
+	desc = { # Boost local trade
+		text = EKGuildFlavor307A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Buy mine
+		text = EKGuildFlavor307B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = hard_quest
+		
+		roll_hard_stewardship = yes
+		character_event = { id = ekguildflavor.308 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.308
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor308A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor308B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		hard_quest_stat_result = yes
+	}
+}
+
+### Very hard Quest
+# Pacify province, buy a small castle for a lord
+society_quest_event = {
+	id = ekguildflavor.309
+	
+	desc = { # Pacify a province
+		text = EKGuildFlavor309A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Buy the castle
+		text = EKGuildFlavor309B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = very_hard_quest
+		
+		roll_very_hard_stewardship = yes
+		character_event = { id = ekguildflavor.310 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.310
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor310A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor310B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		very_hard_quest_stat_result = yes
+	}
+}
+
+### General Quest
+# Supervise reparations
+society_quest_event = {
+	id = ekguildflavor.311
+	
+	desc = {
+		text = EKGuildFlavor311A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor311B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor311C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor311D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor311E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				set_character_flag = quest_desc_1
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				set_character_flag = quest_desc_2
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				set_character_flag = quest_desc_3
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				set_character_flag = quest_desc_4
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				set_character_flag = quest_desc_5
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = engineer_quest
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			roll_trivial_stewardship = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			roll_easy_stewardship = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			roll_medium_stewardship = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			roll_hard_stewardship = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			roll_very_hard_stewardship = yes
+		}
+		
+		character_event = { id = ekguildflavor.312 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.312
+	picture = GFX_evt_battle
+	
+	desc = EKGuildFlavor312
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		generic_quest_stat_result = yes
+		
+		clr_quest = engineer
+		random = { # Only sent if the quest is a success
+			chance = 25
+			modifier = {
+				factor = 0
+				OR = {
+					has_character_flag = no_engineer_for_me 
+					lifestyle_traits = 1
+					trait = engineer
+				}
+			}
+			society_propose_engineer = yes
+		}
+	}
+}
+
+#Taking inventory - Gain a random mundane artifact!
+character_event = {
+	id = ekguildflavor.320
+	desc = EKGuildFlavor320
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		hidden_tooltip = {
+			random_list = {
+				5 = { if = { limit = { NOT = { has_artifact = ring_silver } } add_artifact = ring_silver } }
+				2 = { if = { limit = { NOT = { has_artifact = ring_gold } } add_artifact = ring_gold } }
+				1 = { if = { limit = { NOT = { has_artifact = ring_ebony } } add_artifact = ring_ebony } }
+				10 = { if = { limit = { NOT = { has_artifact = ring_copper } } add_artifact = ring_copper } }
+			}
+		}
+	}
+}
+
+#########################
+# MAGISTRATES           #
+#########################
+character_event = {
+	id = ekguildflavor.400
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				society_quest_event = { id = ekguildflavor.401 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				society_quest_event = { id = ekguildflavor.403 }
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				society_quest_event = { id = ekguildflavor.405 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				society_quest_event = { id = ekguildflavor.407 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				society_quest_event = { id = ekguildflavor.409 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+			
+			5 = { # Reparations supervision (scales with rank)
+				society_quest_event = { id = ekguildflavor.411 }
+				
+				modifier = {
+					factor = 2
+					trait = engineer
+				}
+				
+				modifier = {
+					factor = 0.5
+					has_character_flag = no_engineer_for_me
+				}
+			}
+		}
+	}
+}
+
+### Trivial quests
+# Deliver supplies, Verify guild appointments
+society_quest_event = {
+	id = ekguildflavor.401
+	
+	desc = { # Bring supplies to another guild hall
+		text = EKGuildFlavor401A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Make sure all the recent guild meetings have been kept in the books
+		text = EKGuildFlavor401B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = trivial_quest
+		character_event = { id = ekguildflavor.402 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.402
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor402A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor402B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		clr_quest = trivial_quest
+		
+		give_trivial_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+	}
+}
+
+### Easy quests
+# Repair an instrument, Teach new recruits the history of the Guild
+society_quest_event = {
+	id = ekguildflavor.403
+	
+	desc = { # Repain an instrument
+		text = EKGuildFlavor403A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Teach new recruits the history of the Guild
+		text = EKGuildFlavor403B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = easy_quest
+		
+		roll_easy_diplomacy = yes
+		character_event = { id = ekguildflavor.404 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.404
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor404A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor404B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		easy_quest_stat_result = yes
+	}
+}
+
+### Medium Quest
+# Assist on a local performance, Teach the arts
+society_quest_event = {
+	id = ekguildflavor.405
+	
+	desc = { # Assist on a local performance
+		text = EKGuildFlavor405A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Teach the arts
+		text = EKGuildFlavor405B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = medium_quest
+		
+		roll_medium_diplomacy = yes
+		character_event = { id = ekguildflavor.406 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.406
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor406A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor406B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		medium_quest_stat_result = yes
+	}
+}
+
+### Hard quest
+# Give feedback on a new instrument, Manage a performance for a noble
+society_quest_event = {
+	id = ekguildflavor.407
+	
+	desc = { # Boost local trade
+		text = EKGuildFlavor407A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Buy mine
+		text = EKGuildFlavor407B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = hard_quest
+		
+		roll_hard_diplomacy = yes
+		character_event = { id = ekguildflavor.408 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.408
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor408A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor408B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		hard_quest_stat_result = yes
+	}
+}
+
+### Very hard Quest
+# Design a new instrument, Design a statue for the town
+society_quest_event = {
+	id = ekguildflavor.409
+	
+	desc = { # Design a new instrument
+		text = EKGuildFlavor409A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Design a statue for the town
+		text = EKGuildFlavor409B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = very_hard_quest
+		
+		roll_very_hard_diplomacy = yes
+		character_event = { id = ekguildflavor.410 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.410
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor410A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor410B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		very_hard_quest_stat_result = yes
+	}
+}
+
+### General Quest
+# Songs for whoever asks one
+society_quest_event = {
+	id = ekguildflavor.411
+	
+	desc = { # Young couple
+		text = EKGuildFlavor411A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Inn
+		text = EKGuildFlavor411B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = { # Funeral
+		text = EKGuildFlavor411C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = { # Noble
+		text = EKGuildFlavor411D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = { # Foreign dignitary
+		text = EKGuildFlavor411E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				set_character_flag = quest_desc_1
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				set_character_flag = quest_desc_2
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				set_character_flag = quest_desc_3
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				set_character_flag = quest_desc_4
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				set_character_flag = quest_desc_5
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = musician_quest
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			roll_trivial_diplomacy = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			roll_easy_diplomacy = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			roll_medium_diplomacy = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			roll_hard_diplomacy = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			roll_very_hard_diplomacy = yes
+		}
+		
+		character_event = { id = ekguildflavor.412 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.412
+	picture = GFX_evt_battle
+	
+	desc = EKGuildFlavor412
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		generic_quest_stat_result = yes
+		
+		clr_quest = musician_quest
+		random = { # Only sent if the quest is a success
+			chance = 25
+			modifier = {
+				factor = 0
+				OR = {
+					has_character_flag = no_musician_for_me 
+					lifestyle_traits = 1
+					trait = musician
+				}
+			}
+			society_propose_musician = yes
+		}
+	}
+}
+
+#Scenarist Guild - The Singer
+# society_quest_event = {
+	# id = ekguildflavor.400
+	# title = quest_scenarist_singer
+	# desc = EKGuildFlavor400
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = ACCEPT
+		# set_quest = quest_scenarist_singer
+		# character_event = { id = ekguildflavor.401 days = 3 }
+	# }
+	# option = {
+		# name = DECLINE
+		# custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		# add_character_modifier = {
+			# name = quest_cooldown_timer
+			# hidden = yes
+			# days = 1000
+		# }
+	# }
+# }
+# character_event = {
+	# id = ekguildflavor.401
+	# desc = EKGuildFlavor401
+	# picture = GFX_evt_courtiers_talking
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = EKGuildFlavor401OptA #Classical instrumental
+		# character_event = { id = ekguildflavor.405 days = 3 }
+	# }
+	# option = {
+		# name = EKGuildFlavor401OptB #A lively folk song
+		# set_character_flag = folk_scenarist
+		
+		# roll_easy_diplomacy = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# character_event = { id = ekguildquests.410 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# character_event = { id = ekguildquests.415 days = 3 }
+		# }
+	# }
+	# option = { #A heart-wrenching ballad
+		# name = EKGuildFlavor401OptC
+		# set_character_flag = dramatic_scenarist
+		
+		# roll_medium_diplomacy = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# character_event = { id = ekguildquests.410 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# character_event = { id = ekguildquests.415 days = 3 }
+		# }
+	# }
+	# option = { #A bawdy tavern song
+		# name = EKGuildFlavor401OptD
+		# set_character_flag = bawdy_scenarist
+		
+		# roll_hard_diplomacy = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# character_event = { id = ekguildquests.410 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# character_event = { id = ekguildquests.415 days = 3 }
+		# }
+	# }
+# }
+
+#Classical song, nothing special but it always works
+# character_event = {
+	# id = ekguildflavor.405
+	# desc = ekguildflavor405
+	# picture = GFX_evt_courtiers_talking
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = ekguildflavor405Acknowledge
+		# clr_quest = quest_scenarist_singer
+		# add_society_currency_minor_effect = yes
+	# }
+# }
+
+#Critical Failure
+# character_event = {
+	# id = ekguildflavor.410
+	# picture = GFX_evt_comet #Placeholder
+	# desc = {
+		# text = ekguildflavor410ScenaristA
+		# picture = GFX_evt_scandal
+		# trigger = {
+			# has_character_flag = folk_scenarist
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor410ScenaristB
+		# picture = GFX_evt_scandal
+		# trigger = {
+			# has_character_flag = dramatic_scenarist
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor410ScenaristC
+		# picture = GFX_evt_scandal
+		# trigger = {
+			# has_character_flag = bawdy_scenarist
+		# }
+	# }
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = ekguildflavor410Acknowledge
+		# clr_quest = quest_scenarist_singer
+		# detract_society_currency_minor_effect = yes
+		# clr_character_flag = folk_scenarist
+		# clr_character_flag = dramatic_scenarist
+		# clr_character_flag = bawdy_scenarist
+	# }
+# }
+
+# character_event = {
+	# id = ekguildflavor.415
+	# picture = GFX_evt_comet #Placeholder
+	# desc = {
+		# text = ekguildflavor415ScenaristA
+		# picture = GFX_evt_scandal
+		# trigger = {
+			# has_character_flag = folk_scenarist
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor415ScenaristB
+		# picture = GFX_evt_scandal
+		# trigger = {
+			# has_character_flag = dramatic_scenarist
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor415ScenaristC
+		# picture = GFX_evt_scandal
+		# trigger = {
+			# has_character_flag = bawdy_scenarist
+		# }
+	# }
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = ekguildflavor415Acknowledge
+		
+		# clr_quest = quest_scenarist_singer
+		# add_society_currency_minor_effect = yes
+		# if = {
+			# limit = { has_character_flag = folk_scenarist }
+			# wealth = 5
+			# clr_character_flag = folk_scenarist
+		# }
+		# if = {
+			# limit = { has_character_flag = dramatic_scenarist }
+			# wealth = 10
+			# clr_character_flag = dramatic_scenarist
+		# }
+		# if = {
+			# limit = { has_character_flag = bawdy_scenarist }
+			# wealth = 15
+			# clr_character_flag = bawdy_scenarist
+		# } 
+		# hidden_tooltip = {
+			# if = {
+				# limit = {
+					# NOR = {
+						# has_character_flag = no_musician_for_me
+						# lifestyle_traits = 1
+						# trait = musician
+					# }
+				# }
+				# random = {
+					# chance = 33
+					# society_propose_musician = yes #Am I a Musician?
+				# }
+			# }
+		# }
+	# }
+# }
+
+#I made a great painting, what to do with it?
+character_event = {
+	id = ekguildflavor.420
+	desc = ekguildflavor420
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	option = { #Keep the Painting for Myself
+		name = ekguildflavor420OptA
+		prestige = 20
+		if = {
+			limit = {
+				NOR = {
+					trait = humble
+					trait = proud 
+				}
+			}
+			random = {
+				chance = 33
+				add_trait = proud
+			}
+		}
+		if = {
+			limit = {
+				trait = humble
+			}
+			random = {
+				chance = 33
+				remove_trait = humble
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					NOR = {
+						has_character_flag = no_painter_for_me 
+						lifestyle_traits = 1
+						trait = painter
+					}
+				}
+				random = {
+					chance = 33
+					society_propose_painter = yes #Am I a Painter?
+				}
+			}
+		}
+	}
+	option = { #Gift the painting to the Scenarist Guild Hall
+		name = ekguildflavor420OptB
+		if = {
+			limit = {
+				NOR = {
+					trait = greedy
+					trait = charitable
+				}
+			}
+			random = {
+				chance = 33
+				add_trait = charitable
+			}
+		}
+		if = {
+			limit = {
+				trait = greedy
+			}
+			random = {
+				chance = 33
+				remove_trait = greedy
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					NOR = {
+						has_character_flag = no_painter_for_me 
+						lifestyle_traits = 1
+						trait = painter
+					}
+				}
+				random = {
+					chance = 33
+					society_propose_painter = yes #Am I a Painter?
+				}
+			}
+		}
+	}
+	option = { #Gift the Painting to my Spouse
+		name = ekguildflavor420OptC
+		trigger = {
+			is_married = yes
+		}
+		spouse = {
+			character_event = { id = ekguildflavor.425 days = 3 }
+		}
+		prestige = 5
+		hidden_tooltip = {
+			if = {
+				limit = {
+					NOR = {
+						has_character_flag = no_painter_for_me
+						lifestyle_traits = 1						
+						trait = painter
+					}
+				}
+				random = {
+					chance = 33
+					society_propose_painter = yes #Am I a Painter?
+				}
+			}
+		}
+	}
+	option = { #Sell it!
+		name = ekguildflavor420OptD
+		wealth = 10
+		hidden_tooltip = {
+			if = {
+				limit = {
+					NOR = {
+						has_character_flag = no_painter_for_me 
+						lifestyle_traits = 1
+						trait = painter
+					}
+				}
+				random = {
+					chance = 33
+					society_propose_painter = yes #Am I a Painter?
+				}
+			}
+		}
+	}
+}
+
+#Receives a painting from spouse
+character_event = {
+	id = ekguildflavor.425
+	desc = ekguildflavor425
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	option = { #What a thoughtful gift!
+		name = ekguildflavor425Acknowledge
+		opinion = {
+			who = FROM
+			modifier = opinion_very_grateful
+			years = 5
+		}
+	}
+}
+
+#Guided tour
+# society_quest_event = {
+	# id = ekguildflavor.430
+	# title = quest_scenarist_tour
+	# desc = ekguildflavor430
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = ACCEPT
+		# set_quest = quest_scenarist_tour
+		# character_event = { id = ekguildflavor.431 }
+	# }
+	# option = {
+		# name = DECLINE
+		# custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		# add_character_modifier = {
+			# name = quest_cooldown_timer
+			# hidden = yes
+			# days = 1000
+		# }
+	# }
+# }
+# character_event = {
+	# id = ekguildflavor.431
+	# picture = GFX_evt_castle_construction
+	# desc = {
+		# text = ekguildflavor431A
+		# picture = GFX_evt_castle_construction
+		# trigger = {
+			# has_character_flag = tourists_monuments
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor431B
+		# picture = GFX_evt_large_army
+		# trigger = {
+			# has_character_flag = tourists_garrison
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor431C
+		# picture = GFX_evt_market
+		# trigger = {
+			# has_character_flag = tourists_marketplace
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor431D
+		# picture = GFX_evt_thieves
+		# trigger = {
+			# has_character_flag = tourists_sewers
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor431E
+		# picture = GFX_evt_two_moon_aurora
+		# trigger = {
+			# has_character_flag = tourists_shrines
+		# }
+	# }
+	
+	# is_triggered_only = yes
+	
+	# immediate = {
+		# random_list = {
+			# 10 = {
+				# modifier = {
+					# factor = 2
+					# diplomacy = 15
+				# }
+				# set_character_flag = tourists_monuments
+			# }
+			# 10 = {
+				# modifier = {
+					# factor = 2
+					# martial = 15
+				# }
+				# set_character_flag = tourists_garrison
+			# }
+			# 10 = {
+				# modifier = {
+					# factor = 2
+					# stewardship = 15
+				# }
+				# set_character_flag = tourists_marketplace
+			# }
+			# 10 = {
+				# modifier = {
+					# factor = 2
+					# intrigue = 15
+				# }
+				# set_character_flag = tourists_sewers
+			# }
+			# 10 = {
+				# modifier = {
+					# factor = 2
+					# learning = 15
+				# }
+				# set_character_flag = tourists_shrines
+			# }
+		# }
+	# }
+	
+	# option = { #Monuments - Diplo check
+		# name = EKGuildFlavorAcceptA
+		# trigger = { has_character_flag = tourists_monuments }
+		
+		# roll_medium_diplomacy = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# long_character_event = { id = ekguildquests.432 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# long_character_event = { id = ekguildquests.433 days = 3 }
+		# }
+	# }
+	# option = { #Garrison - Martial check
+		# name = EKGuildFlavorAcceptB
+		# trigger = { has_character_flag = tourists_garrison }
+		
+		# roll_medium_martial = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# long_character_event = { id = ekguildquests.432 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# long_character_event = { id = ekguildquests.433 days = 3 }
+		# }
+	# }
+	# option = { #Marketplace - Stewardship check
+		# name = EKGuildFlavorAcceptC
+		# trigger = { has_character_flag = tourists_marketplace }
+		
+		# roll_medium_stewardship = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# long_character_event = { id = ekguildquests.432 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# long_character_event = { id = ekguildquests.433 days = 3 }
+		# }
+	# }
+	# option = { #Sewers - Intrigue check
+		# name = EKGuildFlavorAcceptD
+		# trigger = { has_character_flag = tourists_sewers }
+		
+		# roll_medium_intrigue = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# long_character_event = { id = ekguildquests.432 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# long_character_event = { id = ekguildquests.433 days = 3 }
+		# }
+	# }
+	# option = { #Shrines - Learning check
+		# name = EKGuildFlavorAcceptE
+		# trigger = { has_character_flag = tourists_shrines }
+		
+		# roll_medium_learning = yes
+		
+		# if = {
+			# limit = { has_character_flag = guild_quest_fail }
+			# long_character_event = { id = ekguildquests.432 days = 3 }
+		# }
+		
+		# else_if = {
+			# limit = { has_character_flag = guild_quest_success }
+			# long_character_event = { id = ekguildquests.433 days = 3 }
+		# }
+	# }
+# }
+
+# Critical Failure
+# long_character_event = {
+	# id = ekguildflavor.432
+	# picture = GFX_evt_comet #Placeholder
+	# desc = {
+		# text = ekguildflavor432A
+		# picture = GFX_evt_castle_construction
+		# trigger = {
+			# has_character_flag = tourists_monuments
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor432B
+		# picture = GFX_evt_large_army
+		# trigger = {
+			# has_character_flag = tourists_garrison
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor432C
+		# picture = GFX_evt_market
+		# trigger = {
+			# has_character_flag = tourists_marketplace
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor432D
+		# picture = GFX_evt_thieves
+		# trigger = {
+			# has_character_flag = tourists_sewers
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor432E
+		# picture = GFX_evt_two_moon_aurora
+		# trigger = {
+			# has_character_flag = tourists_shrines
+		# }
+	# }
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = EKGuildFlavorAccept
+		# clr_quest = quest_scenarist_tour
+		# detract_society_currency_minor_effect = yes
+		# clr_character_flag = tourists_monuments
+		# clr_character_flag = tourists_garrison
+		# clr_character_flag = tourists_marketplace
+		# clr_character_flag = tourists_sewers
+		# clr_character_flag = tourists_shrines
+	# }
+# }
+
+# Success!
+# long_character_event = {
+	# id = ekguildflavor.433
+	# picture = GFX_evt_comet #Placeholder
+	# desc = {
+		# text = ekguildflavor433A
+		# picture = GFX_evt_castle_construction
+		# trigger = {
+			# has_character_flag = tourists_monuments
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor433B
+		# picture = GFX_evt_large_army
+		# trigger = {
+			# has_character_flag = tourists_garrison
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor433C
+		# picture = GFX_evt_market
+		# trigger = {
+			# has_character_flag = tourists_marketplace
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor433D
+		# picture = GFX_evt_thieves
+		# trigger = {
+			# has_character_flag = tourists_sewers
+		# }
+	# }
+	# desc = {
+		# text = ekguildflavor433E
+		# picture = GFX_evt_two_moon_aurora
+		# trigger = {
+			# has_character_flag = tourists_shrines
+		# }
+	# }
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = EKGuildFlavorAccept
+		# clr_quest = quest_scenarist_tour
+		# random_list = {
+			# 25 = { wealth = 10 }
+			# 20 = { wealth = 15 }
+			# 15 = { wealth = 20 }
+			# 10 = { wealth = 25 }
+			# 5 = { wealth = 30 }
+		# }
+		# add_society_currency_minor_effect = yes
+		# clr_character_flag = tourists_monuments
+		# clr_character_flag = tourists_garrison
+		# clr_character_flag = tourists_marketplace
+		# clr_character_flag = tourists_sewers
+		# clr_character_flag = tourists_shrines
+	# }
+# }
+
+#Lifestyle event! - Rhetorician/Philosopher
+# character_event = {
+	# id = ekguildflavor.455
+	# desc = ekguildflavor455
+	# picture = GFX_evt_courtiers_talking
+	
+	# min_age = 16
+	# capable_only = yes
+	# prisoner = no
+	# has_dlc = "The Old Gods"
+	
+	# trigger = {
+		# has_character_flag = is_scenarist_guild
+		# NOT = { has_character_flag = no_rhetorician_for_me }
+		# NOT = { lifestyle_traits = 1 }
+		# NOT = { trait = rhetorician }
+	# }
+	
+	# mean_time_to_happen = {
+		# months = 480
+		
+		# modifier = {
+			# factor = 0.9
+			# trait = ambitious
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = gregarious
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = brave
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = patient
+		# }
+		# modifier = {
+			# factor = 0.9
+			# is_smart_trigger = yes
+		# }
+		# modifier = {
+			# factor = 1.1
+			# is_dumb_trigger = yes
+		# }
+		# modifier = {
+			# factor = 1.1
+			# trait = wroth
+		# }
+		# modifier = {
+			# factor = 2.5
+			# trait = arbitrary
+		# }
+		# modifier = {
+			# factor = 2.5
+			# trait = slothful
+		# }
+	# }
+	
+	# option = {
+		# name = EKGuildFlavorAccept
+		# add_trait = rhetorician
+	# }
+	# option = {
+		# name = ekguildflavor455Decline
+		# change_diplomacy = 1
+		# set_character_flag = no_rhetorician_for_me
+	# }
+# }
+
+
+#The Greybeards/Moth Priests
+#Meditation
+character_event = {
+	id = ekguildflavor.500
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { character_event = { id = ekguildflavor.505 } } #Lose Deceitful/Gain Honest
+			10 = { character_event = { id = ekguildflavor.506 } } #Lose Cruel and Envious/Gain Kind
+			10 = { character_event = { id = ekguildflavor.507 } } #Lose Lustful and Hedonist/Gain Chaste
+			10 = { character_event = { id = ekguildflavor.508 } } #Lose Drunkard/Skooma Addiction and Gluttonous/Gain Temperate
+			10 = { character_event = { id = ekguildflavor.509 } } #Lose Wroth and Reckless/Gain Patient
+			10 = { character_event = { id = ekguildflavor.510 } } #Lose Slothful/Gain Diligent
+			10 = { character_event = { id = ekguildflavor.511 } } #Lose Proud/Gain Humble
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.505
+	picture = GFX_evt_comet
+	desc = {
+		text = EKGuildFlavor505Greybeard
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = greybeards_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor505MothPriest
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = moth_priests_tamriel
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = deceitful
+			}
+			remove_trait = deceitful
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = deceitful
+					trait = honest
+				}
+			}
+			add_trait = honest
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = honest
+			}
+			piety = 5
+		}
+	}
+}
+character_event = {
+	id = ekguildflavor.506
+	picture = GFX_evt_comet
+	desc = {
+		text = EKGuildFlavor506Greybeard
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = greybeards_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor506MothPriest
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = moth_priests_tamriel
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				OR = {
+					trait = cruel
+					trait = envious
+				}
+			}
+			remove_trait = cruel
+			remove_trait = envious
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = cruel
+					trait = envious
+					trait = kind
+				}
+			}
+			add_trait = kind
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = kind
+			}
+			piety = 5
+		}
+	}
+}
+character_event = {
+	id = ekguildflavor.507
+	picture = GFX_evt_comet
+	desc = {
+		text = EKGuildFlavor507Greybeard
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = greybeards_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor507MothPriest
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = moth_priests_tamriel
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				OR = {
+					trait = lustful
+					trait = hedonist
+				}
+			}
+			remove_trait = lustful
+			remove_trait = hedonist
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = lustful
+					trait = hedonist
+					trait = chaste
+				}
+			}
+			add_trait = chaste
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = chaste
+			}
+			piety = 5
+		}
+	}
+}
+character_event = {
+	id = ekguildflavor.508
+	picture = GFX_evt_comet
+	desc = {
+		text = EKGuildFlavor508Greybeard
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = greybeards_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor508MothPriest
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = moth_priests_tamriel
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				OR = {
+					trait = gluttonous
+					trait = drunkard
+					trait = skooma_addiction
+				}
+			}
+			remove_trait = gluttonous
+			remove_trait = drunkard
+			remove_trait = skooma_addiction
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = gluttonous
+					trait = drunkard
+					trait = skooma_addiction
+					trait = temperate
+				}
+			}
+			add_trait = temperate
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = temperate
+			}
+			piety = 5
+		}
+	}
+}
+character_event = {
+	id = ekguildflavor.509
+	picture = GFX_evt_comet
+	desc = {
+		text = EKGuildFlavor509Greybeard
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = greybeards_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor509MothPriest
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = moth_priests_tamriel
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				OR = {
+					trait = reckless
+					trait = wroth
+				}
+			}
+			remove_trait = reckless
+			remove_trait = wroth
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = reckless
+					trait = wroth
+					trait = patient
+				}
+			}
+			add_trait = patient
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = patient
+			}
+			piety = 5
+		}
+	}
+}
+character_event = {
+	id = ekguildflavor.510
+	picture = GFX_evt_comet
+	desc = {
+		text = EKGuildFlavor510Greybeard
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = greybeards_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor510MothPriest
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = moth_priests_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor510Ansei
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = ansei_guild_tamriel
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = slothful
+			}
+			remove_trait = slothful
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = slothful
+					trait = diligent
+				}
+			}
+			add_trait = diligent
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = diligent
+			}
+			piety = 5
+		}
+	}
+}
+character_event = {
+	id = ekguildflavor.511
+	picture = GFX_evt_comet
+	desc = {
+		text = EKGuildFlavor511Greybeard
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = greybeards_tamriel
+		}
+	}
+	desc = {
+		text = EKGuildFlavor511MothPriest
+		picture = GFX_evt_comet
+		trigger = {
+			society_member_of = moth_priests_tamriel
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = proud
+			}
+			remove_trait = proud
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = proud
+					trait = humble
+				}
+			}
+			add_trait = humble
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = humble
+			}
+			piety = 5
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.525
+	desc = EKGuildFlavor525
+	picture = GFX_evt_mountains_0
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				NOR = {
+					trait = thuum_1
+					trait = thuum_2
+					trait = thuum_3
+				}
+			}
+			add_trait = thuum_1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = thuum_1
+			}
+			remove_trait = thuum_1
+			add_trait = thuum_2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = thuum_2
+			}
+			remove_trait = thuum_2
+			add_trait = thuum_3
+			break = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.550
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { #Lose Arbitrary/Gain Just
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_redoran_council
+						society_member_of = house_sul_council
+					}
+				}
+				character_event = { id = ekguildflavor.551 }
+			}
+			
+			10 = { #Lose Coward/Gain Brave
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_redoran_council
+						society_member_of = house_sul_council
+						society_member_of = house_indoril_council
+						society_member_of = house_veloth_council
+					}
+				}
+				character_event = { id = ekguildflavor.552 }
+			}
+			
+			10 = { #Lose Proud/Gain Humble
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_redoran_council
+						society_member_of = house_sul_council
+					}
+				}
+				character_event = { id = ekguildflavor.553 }
+			}
+			
+			10 = { #Lose Slothful/Gain Diligent
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_redoran_council
+						society_member_of = house_sul_council
+						society_member_of = house_dres_council
+						society_member_of = house_hlaalu_council
+						society_member_of = house_sadras_council
+						society_member_of = house_indoril_council
+						society_member_of = house_veloth_council
+					}
+				}
+				character_event = { id = ekguildflavor.554 }
+			}
+			
+			10 = { #Lose Deceitful/Gain Honest
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_redoran_council
+						society_member_of = house_sul_council
+					}
+				}
+				character_event = { id = ekguildflavor.555 }
+			}
+			
+			10 = { #Lose Cynical/Gain Zealous
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_redoran_council
+						society_member_of = house_sul_council
+						society_member_of = house_indoril_council
+						society_member_of = house_veloth_council
+					}
+				}
+				
+				modifier = {
+					factor = 2
+					OR = {
+						society_member_of = house_indoril_council
+						society_member_of = house_veloth_council
+					}
+				}
+				character_event = { id = ekguildflavor.556 }
+			}
+			
+			10 = { #Lose Wroth/Gain Patient
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_redoran_council
+						society_member_of = house_sul_council
+						society_member_of = house_sadras_council
+						society_member_of = house_indoril_council
+						society_member_of = house_veloth_council
+					}
+				}
+				character_event = { id = ekguildflavor.557 }
+			}
+			
+			10 = { #Lose Humble/Gain Proud
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_telvanni_council
+						society_member_of = house_dagoth_council
+						society_member_of = house_dres_council
+						society_member_of = house_indoril_council
+						society_member_of = house_veloth_council
+					}
+				}
+				character_event = { id = ekguildflavor.558 }
+			}
+			
+			10 = { #Lose Kind-Charitable/Gain Ruthless
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_telvanni_council
+						society_member_of = house_dagoth_council
+					}
+				}
+				character_event = { id = ekguildflavor.559 }
+			}
+			
+			10 = { #Lose Honest/Gain Deceitful
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_telvanni_council
+						society_member_of = house_dagoth_council
+						society_member_of = house_hlaalu_council
+						society_member_of = house_sadras_council
+					}
+				}
+				character_event = { id = ekguildflavor.560 }
+			}
+			
+			10 = { #Lose Kind/Gain Envious
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_telvanni_council
+						society_member_of = house_dagoth_council
+						society_member_of = house_dres_council
+					}
+				}
+				character_event = { id = ekguildflavor.561 }
+			}
+			
+			10 = { #Lose Trusting/Gain Paranoid
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_telvanni_council
+						society_member_of = house_dagoth_council
+						society_member_of = house_hlaalu_council
+						society_member_of = house_sadras_council
+					}
+				}
+				character_event = { id = ekguildflavor.562 }
+			}
+			
+			10 = { #Lose Content/Gain Ambitious
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_telvanni_council
+						society_member_of = house_dagoth_council
+					}
+				}
+				character_event = { id = ekguildflavor.563 }
+			}
+			
+			10 = { #Lose Zealous/Gain Cynical
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_telvanni_council
+						society_member_of = house_dagoth_council
+					}
+				}
+				character_event = { id = ekguildflavor.564 }
+			}
+			
+			10 = { #Lose Charitable/Gain Greedy
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_dres_council
+					}
+				}
+				character_event = { id = ekguildflavor.565 }
+			}
+			
+			10 = { #Lose Ambitious/Gain Content
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_dres_council
+					}
+				}
+				character_event = { id = ekguildflavor.566 }
+			}
+			
+			10 = { #Lose Kind-Charitable/Gain Cruel
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_dres_council
+					}
+				}
+				character_event = { id = ekguildflavor.567 }
+			}
+			
+			10 = { #Lose Shy/Gain Gregarious
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_hlaalu_council
+						society_member_of = house_sadras_council
+					}
+				}
+				character_event = { id = ekguildflavor.568 }
+			}
+			
+			10 = { #Lose Ruthless-Greedy/Gain Charitable
+				modifier = {
+					factor = 0
+					NOR = {
+						society_member_of = house_indoril_council
+						society_member_of = house_veloth_council
+					}
+				}
+				character_event = { id = ekguildflavor.569 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.551
+	desc = ekguildflavor.551.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = arbitrary
+			}
+			remove_trait = arbitrary
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = arbitrary
+					trait = just
+				}
+			}
+			add_trait = just
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = just
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.552
+	desc = ekguildflavor.552.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = craven
+			}
+			remove_trait = craven
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = craven
+					trait = brave
+				}
+			}
+			add_trait = brave
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = brave
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.553
+	desc = ekguildflavor.553.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = proud
+			}
+			remove_trait = proud
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = proud
+					trait = humble
+				}
+			}
+			add_trait = humble
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = humble
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.554
+	desc = ekguildflavor.554.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = slothful
+			}
+			remove_trait = slothful
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = slothful
+					trait = diligent
+				}
+			}
+			add_trait = diligent
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = diligent
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.555
+	desc = ekguildflavor.555.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = deceitful
+			}
+			remove_trait = deceitful
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = deceitful
+					trait = honest
+				}
+			}
+			add_trait = honest
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = honest
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.556
+	desc = ekguildflavor.556.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = cynical
+			}
+			remove_trait = cynical
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = cynical
+					trait = zealous
+				}
+			}
+			add_trait = zealous
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = zealous
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.557
+	desc = ekguildflavor.557.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = wroth
+			}
+			remove_trait = wroth
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = wroth
+					trait = patient
+				}
+			}
+			add_trait = patient
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = patient
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.558
+	desc = ekguildflavor.558.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = humble
+			}
+			remove_trait = humble
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = humble
+					trait = proud
+				}
+			}
+			add_trait = proud
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = proud
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.559
+	desc = ekguildflavor.559.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+				}
+					
+			}
+			random_list = {
+				50 = { trigger = { trait = kind } remove_trait = kind }
+				50 = { trigger = { trait = charitable } remove_trait = charitable }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = kind
+					trait = charitable
+					trait = ruthless
+				}
+			}
+			add_trait = ruthless
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = ruthless
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.560
+	desc = ekguildflavor.560.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = honest
+			}
+			remove_trait = honest
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = honest
+					trait = deceitful
+				}
+			}
+			add_trait = deceitful
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = honest
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.561
+	desc = ekguildflavor.561.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = kind
+			}
+			remove_trait = kind
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = kind
+					trait = envious
+				}
+			}
+			add_trait = envious
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = kind
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.562
+	desc = ekguildflavor.562.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = trusting
+			}
+			remove_trait = trusting
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = trusting
+					trait = paranoid
+				}
+			}
+			add_trait = paranoid
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = paranoid
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.563
+	desc = ekguildflavor.563.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = content
+			}
+			remove_trait = content
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = content
+					trait = ambitious
+				}
+			}
+			add_trait = ambitious
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = ambitious
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.564
+	desc = ekguildflavor.564.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = zealous
+			}
+			remove_trait = zealous
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = zealous
+					trait = cynical
+				}
+			}
+			add_trait = cynical
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = cynical
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+
+character_event = {
+	id = ekguildflavor.565
+	desc = ekguildflavor.565.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = charitable
+					trait = greedy
+				}
+			}
+			add_trait = greedy
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = greedy
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.566
+	desc = ekguildflavor.566.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = ambitious
+			}
+			remove_trait = ambitious
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = ambitious
+					trait = content
+				}
+			}
+			add_trait = content
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = content
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.567
+	desc = ekguildflavor.567.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+				}
+					
+			}
+			random_list = {
+				50 = { trigger = { trait = kind } remove_trait = kind }
+				50 = { trigger = { trait = charitable } remove_trait = charitable }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = kind
+					trait = charitable
+					trait = cruel
+				}
+			}
+			add_trait = cruel
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = cruel
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.568
+	desc = ekguildflavor.568.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = shy
+			}
+			remove_trait = shy
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = shy
+					trait = gregarious
+				}
+			}
+			add_trait = gregarious
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = gregarious
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.569
+	desc = ekguildflavor.569.d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				OR = {
+					trait = ruthless
+					trait = greedy
+				}
+					
+			}
+			random_list = {
+				50 = { trigger = { trait = ruthless } remove_trait = ruthless }
+				50 = { trigger = { trait = greedy } remove_trait = greedy }
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = ruthless
+					trait = greedy
+					trait = charitable
+				}
+			}
+			add_trait = charitable
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			add_society_currency_trivial_effect = yes
+		}
+	}
+}
+
+#########################
+# INTRIGUE - THIEVES    #
+#########################
+character_event = {
+	id = ekguildflavor.600
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				society_quest_event = { id = ekguildflavor.601 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				society_quest_event = { id = ekguildflavor.603 }
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				society_quest_event = { id = ekguildflavor.605 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				society_quest_event = { id = ekguildflavor.607 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				society_quest_event = { id = ekguildflavor.609 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+			
+			5 = { # Smuggling goods
+				society_quest_event = { id = ekguildflavor.611 }
+				
+				modifier = {
+					factor = 2
+					trait = smuggler
+				}
+				
+				modifier = {
+					factor = 0.5
+					has_character_flag = no_smuggler_for_me
+				}
+			}
+		}
+	}
+}
+
+### Trivial quests
+# Restock thieves caches, Take care of the guild hall
+society_quest_event = {
+	id = ekguildflavor.601
+	
+	desc = { # Restock thieves caches around the guild hall
+		text = EKGuildFlavor601A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Take care of the guild hall 
+		text = EKGuildFlavor601B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = trivial_quest
+		character_event = { id = ekguildflavor.602 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.602
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor602A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor602B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		clr_quest = trivial_quest
+		
+		give_trivial_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+	}
+}
+
+### Easy quests
+# Change shadowmarks in the province, Contact a fence
+society_quest_event = {
+	id = ekguildflavor.603
+	
+	desc = { # Change shadowmarks
+		text = EKGuildFlavor603A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Contact a fence
+		text = EKGuildFlavor603B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = easy_quest
+		
+		roll_easy_intrigue = yes
+		character_event = { id = ekguildflavor.604 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.604
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor604A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor604B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		easy_quest_stat_result = yes
+	}
+}
+
+### Medium Quest
+# Steal a valuable item in a house, Forge some numbers in a shop
+society_quest_event = {
+	id = ekguildflavor.605
+	
+	desc = { # Steal a valuable item in a house
+		text = EKGuildFlavor605A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Forge some numbers in a shop
+		text = EKGuildFlavor605B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = medium_quest
+		
+		roll_medium_intrigue = yes
+		character_event = { id = ekguildflavor.606 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.606
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor606A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor606B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		medium_quest_stat_result = yes
+	}
+}
+
+### Hard quest
+# Help a fellow thief break out of jail, Frame a noble
+society_quest_event = {
+	id = ekguildflavor.607
+	
+	desc = { # Help a fellow thief break out of jail
+		text = EKGuildFlavor607A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Frame a noble
+		text = EKGuildFlavor607B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = hard_quest
+		
+		roll_hard_intrigue = yes
+		character_event = { id = ekguildflavor.608 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.608
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor608A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor608B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		hard_quest_stat_result = yes
+	}
+}
+
+### Very hard Quest
+# Bedlam, Ambush and steal a travelling caravan
+society_quest_event = {
+	id = ekguildflavor.609
+	
+	desc = { # Bedlam
+		text = EKGuildFlavor609A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Ambush and steal a travelling caravan
+		text = EKGuildFlavor609B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = very_hard_quest
+		
+		roll_very_hard_intrigue = yes
+		character_event = { id = ekguildflavor.610 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.610
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor610A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor610B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		very_hard_quest_stat_result = yes
+	}
+}
+
+### General Quest
+# Smuggling illegal goods
+society_quest_event = {
+	id = ekguildflavor.611
+	
+	desc = { # Counterfeit goods in a small town
+		text = EKGuildFlavor611A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Weapons
+		text = EKGuildFlavor611B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = { # Food into a city under siege
+		text = EKGuildFlavor611C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = { # Drugs [duh]
+		text = EKGuildFlavor611D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = { # Slaves
+		text = EKGuildFlavor611E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				set_character_flag = quest_desc_1
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				set_character_flag = quest_desc_2
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				set_character_flag = quest_desc_3
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				set_character_flag = quest_desc_4
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				set_character_flag = quest_desc_5
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = smuggler_quest
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			roll_trivial_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			roll_easy_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			roll_medium_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			roll_hard_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			roll_very_hard_intrigue = yes
+		}
+		
+		character_event = { id = ekguildflavor.612 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.612
+	picture = GFX_evt_battle
+	
+	desc = EKGuildFlavor612
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		generic_quest_stat_result = yes
+		
+		clr_quest = smuggler_quest
+		random = { # Only sent if the quest is a success
+			chance = 25
+			modifier = {
+				factor = 0
+				OR = {
+					has_character_flag = no_smuggler_for_me 
+					lifestyle_traits = 1
+					trait = smuggler
+				}
+			}
+			society_propose_smuggler = yes
+		}
+	}
+}
+
+
+#########################
+# INTRIGUE - ASSASSINS  #
+#########################
+# Special case: Some quests will run a pcs check if you fail the intrigue one. Done in three events?
+# A: Set up the quest / B: Roll intrigue. If good, gg, if bad, roll C / C: Roll pcs. Can be success, wound, maim, or death.
+character_event = {
+	id = ekguildflavor.700
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				society_quest_event = { id = ekguildflavor.701 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				society_quest_event = { id = ekguildflavor.703 }
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				society_quest_event = { id = ekguildflavor.705 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				society_quest_event = { id = ekguildflavor.707 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				society_quest_event = { id = ekguildflavor.709 }
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Actual assassinations quests! (Will be much much much easier to handle)
+				# No lifestyle trait, so double the probability
+				society_quest_event = { id = ekguildflavor.711 }
+			}
+		}
+	}
+}
+
+### Trivial quests
+# Resupply the guild hall, Repair some equipment
+society_quest_event = {
+	id = ekguildflavor.701
+	
+	desc = { # Resupply the guild hall
+		text = EKGuildFlavor701A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Repair some equipment
+		text = EKGuildFlavor701B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = trivial_quest
+		character_event = { id = ekguildflavor.702 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.702
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor702A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor702B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		clr_quest = trivial_quest
+		
+		give_trivial_quest_reward = yes
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+	}
+}
+
+### Easy quests
+# Get intel on low-scale target, Make sure escape roads are clear
+society_quest_event = {
+	id = ekguildflavor.703
+	
+	desc = { # Get intel on low-scale target
+		text = EKGuildFlavor703A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Make sure escape roads are clear
+		text = EKGuildFlavor703B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = easy_quest
+		
+		roll_easy_intrigue = yes
+		character_event = { id = ekguildflavor.704 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.704
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor704A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor704B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		easy_quest_stat_result = yes
+	}
+}
+
+### Medium Quest
+# Pretend to assassinate a willing target, Impersonate a guard
+society_quest_event = {
+	id = ekguildflavor.705
+	
+	desc = { # Pretend to assassinate a willing target
+		text = EKGuildFlavor705A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Impersonate a guard
+		text = EKGuildFlavor705B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = medium_quest
+		
+		roll_medium_intrigue = yes
+		character_event = { id = ekguildflavor.706 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.706
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor706A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor706B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		medium_quest_stat_result = yes
+	}
+}
+
+### Hard quest
+# Poison a meal, Cover younger assassins
+society_quest_event = {
+	id = ekguildflavor.707
+	
+	desc = { # Poison a meal
+		text = EKGuildFlavor707A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Cover younger assassins
+		text = EKGuildFlavor707B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = hard_quest
+
+		roll_hard_intrigue = yes
+		character_event = { id = ekguildflavor.708 days = 3 }
+		
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.708
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor708A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor708B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		hard_quest_stat_result = yes
+	}
+}
+
+### Very hard Quest
+# Impersonate a recently killed target, Frame a noble
+society_quest_event = {
+	id = ekguildflavor.709
+	
+	desc = { # Impersonate a recently killed target
+		text = EKGuildFlavor709A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Frame a noble
+		text = EKGuildFlavor709B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = quest_desc_1 }
+			20 = { set_character_flag = quest_desc_2 }
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = very_hard_quest
+		
+		roll_very_hard_intrigue = yes
+		character_event = { id = ekguildflavor.710 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.710
+	picture = GFX_evt_battle
+	
+	desc = {
+		text = EKGuildFlavor710A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = {
+		text = EKGuildFlavor710B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		
+		very_hard_quest_stat_result = yes
+	}
+}
+
+### General Quest
+# ASSASSINATIONS, WOUHOU
+# 2 checks: First, intrigue. If pass, good. If not, pcs check, is treated like pcs quest.
+society_quest_event = {
+	id = ekguildflavor.711
+	
+	desc = { # Low target (commoner)
+		text = EKGuildFlavor711A
+		trigger = { has_character_flag = quest_desc_1 }
+	}
+	
+	desc = { # Low target group (bandits)
+		text = EKGuildFlavor711B
+		trigger = { has_character_flag = quest_desc_2 }
+	}
+	
+	desc = { # Low ranked noble
+		text = EKGuildFlavor711C
+		trigger = { has_character_flag = quest_desc_3 }
+	}
+	
+	desc = { # Powerful individual (bandit chief, magic user)
+		text = EKGuildFlavor711D
+		trigger = { has_character_flag = quest_desc_4 }
+	}
+	
+	desc = { # Several high ranking officials
+		text = EKGuildFlavor711E
+		trigger = { has_character_flag = quest_desc_5 }
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { # Trivial quest
+				set_character_flag = quest_desc_1
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_trivial_quest = yes }
+				}
+			}
+			
+			10 = { # Easy quest
+				set_character_flag = quest_desc_2
+
+				modifier = {
+					factor = 0
+					NOT = { can_get_easy_quest = yes }
+				}
+			}
+			
+			10 = { # Medium quest
+				set_character_flag = quest_desc_3
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_medium_quest = yes }
+				}
+			}
+			
+			10 = { # Hard quest
+				set_character_flag = quest_desc_4
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_hard_quest = yes }
+				}
+			}
+			
+			10 = { # Very hard quest
+				set_character_flag = quest_desc_5
+				
+				modifier = {
+					factor = 0
+					NOT = { can_get_very_hard_quest = yes }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ACCEPT
+		set_quest = assassin_quest
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			roll_trivial_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			roll_easy_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			roll_medium_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			roll_hard_intrigue = yes
+		}
+		
+		else_if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			roll_very_hard_intrigue = yes
+		}
+		
+		custom_tooltip = {
+			text = ASSASSIN_MISSION_TWO_CHECKS_CT
+		}
+		
+				character_event = { id = ekguildflavor.712 days = 3 }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.712
+	picture = GFX_evt_battle
+	
+	desc = EKGuildFlavor712
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_stat = yes
+		generic_quest_tooltip_result = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			# Quest failed, assassin spotted, has to fight its way out of it + kill the target
+			# Check pcs
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_1
+				}
+				roll_trivial_pcs = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_2
+				}
+				roll_easy_pcs = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_3
+				}
+				roll_medium_pcs = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_4
+				}
+				roll_hard_pcs = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_5
+				}
+				roll_very_hard_pcs = yes
+			}
+			
+			character_event = { id = ekguildflavor.713 days = 1 }
+			
+			break = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			
+			guild_stat_success_effect = yes
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_1
+				}
+				give_trivial_quest_reward = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_2
+				}
+				give_easy_quest_reward = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_3
+				}
+				give_medium_quest_reward = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_4
+				}
+				give_hard_quest_reward = yes
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = quest_desc_5
+				}
+				give_very_hard_quest_reward = yes
+			}
+		}
+		
+		clr_quest = assassin_quest
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+		clr_character_flag = quest_desc_5
+	}
+}
+
+character_event = {
+	id = ekguildflavor.713
+	picture = GFX_evt_battle
+	
+	desc = EKGuildFlavor713
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_accident }
+			
+			break = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			guild_pcs_maimed_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			guild_pcs_wounded_effect = yes
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			guild_pcs_success_effect = yes
+		}
+		
+		clr_quest = assassin_quest
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			give_trivial_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			give_easy_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			give_medium_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			give_hard_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			give_very_hard_quest_reward = yes
+		}
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+		clr_character_flag = quest_desc_5
+	}
+}
+#The Sword-Singers
+character_event = {
+	id = ekguildflavor.800
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			
+			#30 = { society_quest_event = { id = ekguildflavor.120 } } #Kill a bear
+			#30 = { society_quest_event = { id = ekguildflavor.125 } } #Kill a zombie
+			#20 = { society_quest_event = { id = ekguildflavor.130 } } #Escort a merchant
+			10 = { character_event = { id = ekguildflavor.510 } } #Lose Slothful/Gain Diligent
+			10 = { character_event = { id = ekguildflavor.801 } } #Lose Arbitrary/Gain Just
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.801
+	picture = GFX_evt_comet
+	desc = EKGuildFlavor801Ansei
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				trait = arbitrary
+			}
+			remove_trait = arbitrary
+			break = yes
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = arbitrary
+					trait = just
+				}
+			}
+			add_trait = just
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = just
+			}
+			piety = 5
+		}
+	}
+}
+
+character_event = {
+	id = ekguildflavor.802
+	desc = EKGuildFlavor802
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = { 
+			NOT = {
+				society_rank = 5 
+			}
+		}
+		name = EKGuildFlavorAccept
+		if = {
+			limit = {
+				NOR = {
+					trait = swordsinger_1
+					trait = swordsinger_2
+					trait = swordsinger_3
+				}
+			}
+			add_trait = swordsinger_1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = swordsinger_1
+			}
+			remove_trait = swordsinger_1
+			add_trait = swordsinger_2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = swordsinger_2
+			}
+			remove_trait = swordsinger_2
+			add_trait = swordsinger_3
+			break = yes
+		}
+	}
+	option = {
+		trigger = { 
+			society_rank = 5 
+		}
+		name = EKGuildFlavorAcceptLeader
+		if = {
+			limit = {
+				NOR = {
+					trait = swordsinger_1
+					trait = swordsinger_2
+					trait = swordsinger_3
+				}
+			}
+			add_trait = swordsinger_1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = swordsinger_1
+			}
+			remove_trait = swordsinger_1
+			add_trait = swordsinger_2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = swordsinger_2
+			}
+			remove_trait = swordsinger_2
+			add_trait = swordsinger_3
+			break = yes
+		}
+	}
+}

@@ -1,0 +1,3374 @@
+#Special decisions for the Tribunal Temple, REQUIRES JADE DRAGON DLC
+
+#Efforts to earn Temple support
+offmap_decisions = {
+	tribunal_send_donation = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		ai_check_interval = 36
+
+		potential = {
+			is_title_active = k_almsivi
+			OR = {
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					tribunal_almalexia = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					tribunal_sothasil = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					tribunal_vivec = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+			}
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		allow = {
+			k_almsivi = {
+				holder_scope = {
+					NOT = { war_with = FROM }
+				}
+			}
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				NOT = { war_with = ROOT }
+				NOT = { has_character_modifier = tribunal_recent_donation }
+				is_inaccessible_trigger = no
+				scaled_wealth = { value = 1 min = 30 }
+			}
+		}
+	
+		effect = {
+			k_almsivi = {
+				holder_scope = {
+					transfer_scaled_wealth = {
+						to = THIS
+						from = FROM
+						value = 1
+						min = 30
+					}
+				}
+			}
+			FROM = {
+				sound_effect = china_grace_gain
+				add_character_modifier = {
+					modifier = tribunal_recent_donation
+					days = 1825
+				}
+				character_event = { id = ektribunal.10 }
+			}
+		}
+	
+
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.075 # slow down
+			}
+			modifier = {
+				factor = 0.1
+				FROM = { NOT = { monthly_income = 2.5 } } #That's over 30 gold every 3 years
+			}
+			modifier = {
+				factor = 3
+				OR = {
+					ROOT = {
+						is_offmap_tag = tribunal_almalexia
+					}
+					FROM = { trait = p_almalexia }
+				}
+				OR = {
+					ROOT = {
+						is_offmap_tag = tribunal_sothasil
+					}
+					FROM = { trait = p_sotha }
+				}
+				OR = {
+					ROOT = {
+						is_offmap_tag = tribunal_vivec
+					}
+					FROM = { trait = p_vivec }
+				}
+			}
+		}
+	}
+	
+	tribunal_commission_mural = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		ai_check_interval = 12
+
+		potential = {
+			OR = {
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					tribunal_almalexia = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					tribunal_sothasil = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					tribunal_vivec = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+			}
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		allow = {
+			k_almsivi = {
+				holder_scope = {
+					NOT = { war_with = FROM }
+				}
+			}
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				NOT = { war_with = ROOT }
+				NOR = {
+					has_character_modifier = almsivi_mural_almalexia_commissioned
+					has_character_modifier = almsivi_mural_almalexia_completed
+					has_character_modifier = almsivi_mural_sothasil_commissioned
+					has_character_modifier = almsivi_mural_sothasil_completed
+					has_character_modifier = almsivi_mural_vivec_commissioned
+					has_character_modifier = almsivi_mural_vivec_completed
+				}
+				is_inaccessible_trigger = no
+				scaled_wealth = { value = 1.5 min = 50 }
+			}
+		}
+	
+		effect = {
+			if = {
+				limit = {
+					is_offmap_tag = tribunal_almalexia
+				}
+				FROM = {
+					add_character_modifier = {
+						modifier = almsivi_mural_almalexia_commissioned
+						duration = -1
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_offmap_tag = tribunal_sothasil
+				}
+				FROM = {
+					add_character_modifier = {
+						modifier = almsivi_mural_sothasil_commissioned
+						duration = -1
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_offmap_tag = tribunal_vivec
+				}
+				FROM = {
+					add_character_modifier = {
+						modifier = almsivi_mural_vivec_commissioned
+						duration = -1
+					}
+				}
+			}
+			FROM = {
+				scaled_wealth = { value = -1.5 min = -50 }
+				sound_effect = china_grace_gain
+				character_event = { id = ektribunal.25 }
+			}
+		}
+	
+
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.075 # slow down
+			}
+			modifier = {
+				factor = 2.5
+				FROM = { scaled_wealth = 3 }
+			}
+			modifier = {
+				factor = 5
+				FROM = { scaled_wealth = 5 }
+			}
+			modifier = {
+				factor = 5
+				OR = {
+					ROOT = {
+						is_offmap_tag = tribunal_almalexia
+					}
+					FROM = { trait = p_almalexia }
+				}
+				OR = {
+					ROOT = {
+						is_offmap_tag = tribunal_sothasil
+					}
+					FROM = { trait = p_sotha }
+				}
+				OR = {
+					ROOT = {
+						is_offmap_tag = tribunal_vivec
+					}
+					FROM = { trait = p_vivec }
+				}
+			}
+		}
+	}
+	
+	tribunal_show_trial = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		third_party_filter = home_court
+		ai_third_party_filter = home_court
+		third_party = FROM
+		ai_check_interval = 24
+		show_third_party_potential = yes
+
+		potential = {
+			OR = {
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					tribunal_almalexia = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					tribunal_sothasil = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					tribunal_vivec = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+			}
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROM = {
+				any_courtier = {
+					character = FROMFROM
+				}
+			}
+			FROMFROM = {
+				show_scope_change = no
+				OR = { #Must be a heretic or a follower of the House of Troubles
+					is_heretic = yes
+					religion = daedra_malacath
+					religion = daedra_mehrunes
+					religion = daedra_molag
+					religion = daedra_sheogorath
+				}
+				prisoner = yes
+				is_adult = yes
+				NOT = { has_character_flag = tribunal_show_trial_defendant }
+				NOT = { #You cannot try the same person more than once
+					has_opinion_modifier = { who = FROM modifier = opinion_show_trial_defendant }
+				}
+			}
+		}
+		
+		third_party_allow = {
+			show_only_failed_conditions = yes
+		}
+		
+		third_party_score = {
+			factor = 25
+			
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 8					
+					hidden_trigger = {
+						NOT = { diplomacy = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 12					
+					hidden_trigger = {
+						NOT = { diplomacy = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 16				
+					hidden_trigger = {
+						NOT = { diplomacy = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					martial = 8					
+					hidden_trigger = {
+						NOT = { martial = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					martial = 12					
+					hidden_trigger = {
+						NOT = { martial = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					martial = 16				
+					hidden_trigger = {
+						NOT = { martial = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					martial = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 8					
+					hidden_trigger = {
+						NOT = { stewardship = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 12					
+					hidden_trigger = {
+						NOT = { stewardship = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 16				
+					hidden_trigger = {
+						NOT = { stewardship = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 8					
+					hidden_trigger = {
+						NOT = { intrigue = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 12					
+					hidden_trigger = {
+						NOT = { intrigue = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 16				
+					hidden_trigger = {
+						NOT = { intrigue = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					learning = 8					
+					hidden_trigger = {
+						NOT = { learning = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					learning = 12					
+					hidden_trigger = {
+						NOT = { learning = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					learning = 16				
+					hidden_trigger = {
+						NOT = { learning = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					learning = 20
+				}
+			}
+			additive_modifier = {
+				value = 25
+				FROMFROM = {
+					show_scope_change = no
+					tier == BARON
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = {
+					show_scope_change = no
+					tier == COUNT
+				}
+			}
+			additive_modifier = {
+				value = 150
+				FROMFROM = {
+					show_scope_change = no
+					tier == DUKE
+				}
+			}
+			additive_modifier = {
+				value = 400
+				FROMFROM = {
+					show_scope_change = no
+					tier == KING
+				}
+			}
+			additive_modifier = {
+				value = 1000
+				FROMFROM = {
+					show_scope_change = no
+					tier == EMPEROR
+				}
+			}
+			additive_modifier = {
+				value = 2500
+				FROMFROM = {
+					show_scope_change = no
+					trait = dragonborn
+				}
+			}
+			additive_modifier = {
+				value = 250
+				FROMFROM = {
+					show_scope_change = no
+					trait = dragonborn_descendant
+				}
+			}
+			additive_modifier = {
+				value = 100
+				FROMFROM = {
+					show_scope_change = no
+					has_bloodline = yes
+				}
+			}
+		}
+	
+		effect = {
+			FROM = {
+				sound_effect = china_grace_gain
+			}
+			FROMFROM = {
+				set_character_flag = tribunal_show_trial_defendant
+				long_character_event = { id = ektribunal.50 }
+			}
+		}
+	
+
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.75 # slow down
+			}
+		}
+	}
+	
+}
+
+offmap_decisions = {
+	#Cleanse Province - Tribunal destroys ALL province disasters in your demesne
+	tribunal_cleanse_province = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		potential = {
+			OR = {
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					tribunal_almalexia = {
+						NOT = { has_status = tribunal_0 }
+						OR = {
+							has_policy = tribunal_warlike
+							has_policy = tribunal_convivial
+						}
+					}
+					tribunal_almalexia_boon_decisions_enabled_trigger = yes
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					tribunal_sothasil = {
+						NOT = { has_status = tribunal_0 }
+						OR = {
+							has_policy = tribunal_warlike
+							has_policy = tribunal_convivial
+						}
+					}
+					tribunal_sothasil_boon_decisions_enabled_trigger = yes
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					tribunal_vivec = {
+						NOT = { has_status = tribunal_0 }
+						OR = {
+							has_policy = tribunal_warlike
+							has_policy = tribunal_convivial
+						}
+					}
+					tribunal_vivec_boon_decisions_enabled_trigger = yes
+				}
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				NOT = { has_character_flag = tribunal_decision_pending }
+				any_demesne_province = {
+					custom_tooltip = {
+						text = EKTribunalProvinceDisasters
+						hidden_tooltip = {
+							OR = {
+								has_province_modifier = goblin_infestation
+								has_province_modifier = falmer_infestation
+								has_province_modifier = skeever_infestation
+								has_province_modifier = kwama_infestation
+								has_province_modifier = undead_infestation
+								has_province_modifier = lycan_infestation
+								has_province_modifier = vampire_infestation
+								has_province_modifier = highway_robber_band
+								has_province_modifier = trolls
+								has_province_modifier = giants
+							}
+						}
+					}
+				}
+				
+				# Almalexia
+				trigger_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_almalexia } }
+					
+					trigger_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_10
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 500 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_9
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 575 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_8
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 650 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_7
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 725 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_6
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 800 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_5
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 875 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_4
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 950 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_3
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1025 }
+					}
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_2
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1100 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_1
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1175 }
+					}
+				}
+				
+				# Sotha Sil
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_sothasil } }
+					
+					trigger_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_10
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 500 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_9
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 575 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_8
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 650 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_7
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 725 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_6
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 800 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_5
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 875 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_4
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 950 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_3
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1025 }
+					}
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_2
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1100 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_1
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1175 }
+					}
+				}
+				
+				# Vivec
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_vivec } }
+					
+					trigger_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_10
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 500 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_9
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 575 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_8
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 650 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_7
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 725 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_6
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 800 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_5
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 875 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_4
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 950 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_3
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1025 }
+					}
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_2
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1100 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_1
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1175 }
+					}
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				set_character_flag = tribunal_decision_pending
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -625
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -875
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1000
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1125
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1250
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1375
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -2000
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -625
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -875
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1000
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1125
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1250
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1375
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -2000
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -625
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -875
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1000
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1125
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1250
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1375
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -2000
+					}
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+					}
+					FROM = { narrative_event = { id = ektribunal.305 } }
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+					}
+					FROM = { narrative_event = { id = ektribunal.305 } }
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+					}
+					FROM = { narrative_event = { id = ektribunal.305 } }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	tribunal_temple_crusaders = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+			war = yes
+		}
+
+		potential = {
+			OR = {
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					tribunal_almalexia = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					tribunal_sothasil = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					tribunal_vivec = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				war = yes
+				any_war = {
+					any_defender = {
+						character = PREVPREV
+					}
+					any_attacker = {
+						NOT = {
+							religion = almsivi
+						}
+					}
+				}
+				NOT = { has_character_flag = tribunal_decision_pending }
+				
+				trigger_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_almalexia } }
+					
+					trigger_if = {
+						limit = {
+							OR = {
+								tribunal_almalexia = { has_policy = tribunal_warlike }
+								has_landed_title = k_almsivi
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 750 }
+					}
+					
+					trigger_else = {
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1500 }
+					}
+				}
+				
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_sothasil } }
+					
+					trigger_if = {
+						limit = {
+							OR = {
+								tribunal_sothasil = { has_policy = tribunal_warlike }
+								has_landed_title = k_almsivi
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 750 }
+					}
+					
+					trigger_else = {
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1500 }
+					}
+				}
+				
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_vivec } }
+					
+					trigger_if = {
+						limit = {
+							OR = {
+								tribunal_vivec = { has_policy = tribunal_warlike }
+								has_landed_title = k_almsivi
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 750 }
+					}
+					
+					trigger_else = {
+						has_offmap_currency = { offmap = tribunal_vivec value = 1500 }
+					}
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				set_character_flag = tribunal_decision_pending
+				if = {
+					limit = { NOT = { has_landed_title = k_almsivi } }
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_almalexia
+								tribunal_almalexia = {
+									has_policy = tribunal_warlike
+								}
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_almalexia
+							value = -750
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_almalexia
+								tribunal_almalexia = {
+									NOT = { has_policy = tribunal_warlike }
+								}
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_almalexia
+							value = -1500
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_sothasil
+								tribunal_sothasil = {
+									has_policy = tribunal_warlike
+								}
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_sothasil
+							value = -750
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_sothasil
+								tribunal_sothasil = {
+									NOT = { has_policy = tribunal_warlike }
+								}
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_sothasil
+							value = -1500
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_vivec
+								tribunal_vivec = {
+									has_policy = tribunal_warlike
+								}
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_vivec
+							value = -750
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_vivec
+								tribunal_vivec = {
+									NOT = { has_policy = tribunal_warlike }
+								}
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_vivec
+							value = -1500
+						}
+					}
+				}
+				if = {
+					limit = { has_landed_title = k_almsivi }
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_almalexia
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_almalexia
+							value = -750
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_sothasil
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_sothasil
+							value = -750
+						}
+					}
+					if = {
+						limit = {
+							ROOT = {
+								is_offmap_tag = tribunal_vivec
+							}
+						}
+						add_offmap_currency = {
+							offmap = tribunal_vivec
+							value = -750
+						}
+					}
+				}
+				character_event = { id = ektribunal.325 }
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.25 # slow down
+			}
+			modifier = {
+				FROM = {
+					any_war = {
+						defender = {
+							character = PREVPREV
+						}
+						attacker = {
+							NOT = {
+								religion = almsivi
+							}
+						}
+						NOT = { war_score = 0 }
+						war_score = -85 #No point in spending for an army that dissolves the next day
+					}
+				}
+				factor = 100
+			}
+		}
+	}
+	
+	#Ordinator Purge - Ordinators eliminate heretics and infidels
+	tribunal_ordinator_inquisition = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		potential = {
+			OR = {
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					tribunal_almalexia = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					tribunal_sothasil = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					tribunal_vivec = {
+						NOT = { has_status = tribunal_0 }
+					}
+				}
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				NOT = { has_character_flag = tribunal_decision_pending }
+				OR = {
+					any_demesne_province = {
+						NOT = { religion = almsivi }
+					}
+					any_realm_character = {
+						is_landed = yes
+						higher_tier_than = BARON
+						any_demesne_province = {
+							NOT = { religion = almsivi }
+						}
+					}
+				}
+				# Almalexia
+				trigger_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_almalexia } }
+					
+					trigger_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_10
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 750 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_9
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 825 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_8
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 900 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_7
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 975 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_6
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1050 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_5
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1125 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_4
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1200 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_3
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1275 }
+					}
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_2
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1350 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_almalexia = {
+								has_status = tribunal_1
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_almalexia value = 1425 }
+					}
+				}
+				
+				# Sotha Sil
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_sothasil } }
+					
+					trigger_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_10
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 750 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_9
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 825 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_8
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 900 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_7
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 975 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_6
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1050 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_5
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1125 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_4
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1200 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_3
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1275 }
+					}
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_2
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1350 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_sothasil = {
+								has_status = tribunal_1
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_sothasil value = 1425 }
+					}
+				}
+				
+				# Vivec
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = tribunal_vivec } }
+					
+					trigger_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_10
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 750 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_9
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 825 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_8
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 900 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_7
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 975 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_6
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1050 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_5
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1125 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_4
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1200 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_3
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1275 }
+					}
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_2
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1350 }
+					}
+					
+					trigger_else_if = {
+						limit = {
+							tribunal_vivec = {
+								has_status = tribunal_1
+							}
+						}
+						has_offmap_currency = { offmap = tribunal_vivec value = 1425 }
+					}
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				set_character_flag = tribunal_decision_pending
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -825
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -900
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -975
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1050
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1125
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1200
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1275
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1350
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -825
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -900
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -975
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1050
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1125
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1200
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1275
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1350
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -825
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -900
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -975
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1050
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1125
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1200
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1275
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1350
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = { narrative_event = { id = ektribunal.310 } }
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					any_demesne_province = {
+						has_province_modifier = tribunal_ordinators
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					any_demesne_province = {
+						NOT = { religion = almsivi }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	tribunal_almalexia_grace = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 12
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		potential = {
+			is_offmap_tag = tribunal_almalexia
+			tribunal_almalexia = {
+				NOT = { has_status = tribunal_0 }
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			tribunal_almalexia_boon_decisions_enabled_trigger = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = depressed
+					trait = stressed
+					trait = lunatic
+					trait = possessed
+				}
+				NOT = { has_character_flag = tribunal_decision_pending }
+				
+				trigger_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_10
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 750 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_9
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 900 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_8
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 1050 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_7
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 1200 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_6
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 1350 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_5
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 1500 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_4
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 1650 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_3
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 1800 }
+				}
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_2
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 1950 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_almalexia = {
+							has_status = tribunal_1
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_almalexia value = 2100 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				set_character_flag = tribunal_decision_pending
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -900
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1050
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1200
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1350
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1650
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1800
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -1950
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_almalexia
+						}
+						tribunal_almalexia = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_almalexia
+						value = -2100
+					}
+				}
+				narrative_event = { id = ektribunal.340 }
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = { #AI needs to be willing to use this since it's niche...but strong
+				factor = 10
+			}
+		}
+	}
+	
+	tribunal_sothasil_mirror = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 12
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		potential = {
+			is_offmap_tag = tribunal_sothasil
+			tribunal_sothasil = {
+				NOT = { has_status = tribunal_0 }
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			tribunal_sothasil_boon_decisions_enabled_trigger = yes
+			FROM = {
+				show_scope_change = no
+				NOT = { has_character_modifier = tribunal_sotha_mirror }
+				NOT = { has_character_flag = tribunal_decision_pending }
+				
+				trigger_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_10
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 750 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_9
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 900 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_8
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 1050 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_7
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 1200 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_6
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 1350 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_5
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 1500 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_4
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 1650 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_3
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 1800 }
+				}
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_2
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 1950 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_sothasil = {
+							has_status = tribunal_1
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_sothasil value = 2100 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				set_character_flag = tribunal_decision_pending
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -900
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1050
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1200
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1350
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1650
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1800
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -1950
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_sothasil
+						}
+						tribunal_sothasil = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_sothasil
+						value = -2100
+					}
+				}
+				narrative_event = { id = ektribunal.345 }
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = { #Slow it down
+				factor = 0.1
+			}
+		}
+	}
+	
+	tribunal_vivec_touch = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = almsivi
+		}
+
+		potential = {
+			is_offmap_tag = tribunal_vivec
+			tribunal_vivec = {
+				NOT = { has_status = tribunal_0 }
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			tribunal_vivec_boon_decisions_enabled_trigger = yes
+			FROM = {
+				show_scope_change = no
+				has_disease_trigger = yes
+				NOT = { has_character_flag = tribunal_decision_pending }
+				
+				trigger_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_10
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 750 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_9
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 900 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_8
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 1050 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_7
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 1200 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_6
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 1350 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_5
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 1500 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_4
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 1650 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_3
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 1800 }
+				}
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_2
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 1950 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						tribunal_vivec = {
+							has_status = tribunal_1
+						}
+					}
+					has_offmap_currency = { offmap = tribunal_vivec value = 2100 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				set_character_flag = tribunal_decision_pending
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_10
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -750
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_9
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -900
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_8
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1050
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_7
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1200
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_6
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1350
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_5
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1500
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_4
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1650
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_3
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1800
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_2
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -1950
+					}
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = tribunal_vivec
+						}
+						tribunal_vivec = {
+							has_status = tribunal_1
+						}
+					}
+					add_offmap_currency = {
+						offmap = tribunal_vivec
+						value = -2100
+					}
+				}
+				narrative_event = { id = ektribunal.350 }
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = { #AI will always try to cure itself if it can
+				factor = 10
+			}
+		}
+	}
+}

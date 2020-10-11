@@ -1,0 +1,187 @@
+#### Etienne's Daedric Events - Vaermina ####
+
+namespace = vaermina
+
+#Provincial Nightmare event#
+
+province_event = {
+	id = vaermina.1
+	desc = Vaermina1
+	picture = GFX_evt_two_moon_aurora
+	
+	trigger = {
+		owner = {
+			is_ruler = yes
+			higher_tier_than = BARON
+			NOT = { religion = daedra_vaermina }
+		}
+		NOT = { religion = daedra_vaermina }
+		NOT = { has_province_modifier = vaermina_provincial_nightmares }
+		
+		any_neighbor_province = {
+			has_owner = yes
+			religion = daedra_vaermina
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+	}
+	
+	option = {
+		name = "Vaermina1Acknowledge"
+		add_province_modifier = {
+			name = vaermina_provincial_nightmares
+			duration = 1825
+		}
+	}
+}
+
+#Local ruler gets afflicted with nightmares
+
+character_event = {
+	id = vaermina.2
+	desc = Vaermina2
+	picture = GFX_evt_bad_news
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		NOT = { religion = daedra_vaermina }
+		NOT = { has_character_modifier = vaermina_character_nightmares }
+		location = {
+			OR = {
+					has_province_modifier = vaermina_provincial_nightmares
+					religion = daedra_vaermina
+				}
+			}
+		}
+	
+	mean_time_to_happen = {
+		months = 72
+		
+		modifier = {
+			factor = 2
+			trait = brave
+		}
+		modifier = {
+			factor = 2
+			trait = content
+		}
+		modifier = {
+			factor = 2
+			trait = zealous
+		}
+		modifier = {
+			factor = 2
+			trait = cynical
+		}
+		modifier = {
+			factor = 2
+			trait = patient
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.1
+			trait = depressed
+		}
+	}
+	
+	option = {
+		name = "Vaermina2Acknowledge"
+		add_character_modifier = { name = vaermina_character_nightmares months = 36 }
+	}
+}
+
+#A Master Alchemist offers their skills
+
+character_event = {
+	id = vaermina.10
+	desc = Vaermina10
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_ruler = yes
+		religion = daedra_vaermina
+		NOT = { has_character_flag = vaermina_alchemist }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	option = {
+		name = "Vaermina10Accept"
+		trigger = {
+			scaled_wealth = 1.5
+		}
+		set_character_flag = vaermina_alchemist
+		scaled_wealth = -1.5
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			age = 35
+			religion = daedra_vaermina
+			culture = ROOT
+			trait = mage_3
+			trait = nightblade_2
+			trait = alchemist
+			trait = zealous
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			change_learning = 5
+		}
+	}
+	
+	option = {
+		name = "Vaermina10Decline"
+		prestige = -5
+	}
+}
+
+#Vaermina targeted nightmares
+character_event = {
+	id = vaermina.20
+	desc = Vaermina20
+	picture = GFX_evt_bad_news
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vaermina20Accept
+		add_character_modifier = { name = vaermina_character_nightmares months = 36 }
+		hidden_tooltip = {
+			FROMFROM = {
+				character_event = { id = vaermina.25 }
+			}
+		}
+	}
+}
+character_event = {
+	id = vaermina.25
+	desc = Vaermina25
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vaermina25Accept
+		clr_character_flag = vaermina_deal
+	}
+}

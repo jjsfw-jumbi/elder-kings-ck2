@@ -1,0 +1,57 @@
+decisions = {
+	
+	altmer_become_pure = {
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			race = altmer
+			culture = altmer
+			trait = impure_altmer
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			in_command = no
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = {
+				any_demesne_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+			prisoner = no
+			NOT = { trait = incapable }
+			scaled_wealth = 2.5
+			age = 16
+		}
+		effect = {
+			scaled_wealth = -2.5
+			set_character_flag = do_not_disturb
+			add_character_modifier = {
+					name = altmer_pilgrim_timer
+					months = 12
+					hidden = yes
+				}
+			character_event = { id = altmer.74 }
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 5
+				trait = zealous
+			}
+			modifier = {
+				factor = 5
+				trait = proud
+			}
+			modifier = {
+				factor = 5
+				trait = vain
+			}
+		}
+	}
+	
+}

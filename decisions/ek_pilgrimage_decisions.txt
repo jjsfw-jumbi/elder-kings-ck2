@@ -1,0 +1,198 @@
+decisions = {
+		
+	go_on_pilgrimage_vvardenfell = {
+		is_high_prio = yes
+		potential = {
+			is_ruler = yes
+			capital_scope = {
+				region = nirn_tamriel
+			}
+			religion = almsivi
+			# OR = {
+				# religion = almsivi
+				# #religion = almsivi_old_velothi
+				# religion = reclamationist
+				# #religion = reclamationist_lessons
+			# }
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = pilgrim }
+			NOT = { trait = on_pilgrimage }
+			NOT = { trait = on_guild }
+			NOT = {	has_character_flag = preparing_pilgrimage }
+			NOT = {	has_character_flag = meditation }
+			NOT = {	has_character_flag = activated_pilgrimage }
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			prisoner = no
+			scaled_wealth = 0.20
+			age = 16
+		}
+		effect = {
+			scaled_wealth = -0.20
+			clr_character_flag = promise_pilgrimage
+			set_character_flag = activated_pilgrimage
+
+			hidden_tooltip = {
+				letter_event = {
+					id = 86000
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+			modifier = { #Monthly randomizer for when AI takes decision (1% chance)
+				factor = 0
+				random = 1
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}						
+		}
+	}
+	
+	go_on_pilgrimage_highhrothgar = {
+		is_high_prio = yes
+		potential = {
+			is_ruler = yes
+			capital_scope = {
+				region = nirn_tamriel
+			}
+			OR = {
+				religion = animism
+				religion = eight_divines
+				religion = nine_divines
+				trait = dragonborn
+				trait = dragonborn_descendant
+			}
+			OR = {
+				culture = nord
+				culture = atmoran
+				# skall should have All-Maker stones pilgrimage
+				trait = dragonborn
+				trait = dragonborn_descendant
+			}
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = pilgrim }
+			NOT = { trait = on_pilgrimage }
+			NOT = {	has_character_flag = preparing_pilgrimage }
+			NOT = {	has_character_flag = meditation }
+			NOT = {	has_character_flag = activated_pilgrimage }
+			NOT = { has_character_flag = visited_greybeards } #If you've done this pilgrimage, you can only revisit High Hrothgar to join the Greybeards
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			prisoner = no
+			scaled_wealth = 0.20
+			age = 16
+		}
+		effect = {
+			scaled_wealth = -0.20
+			clr_character_flag = promise_pilgrimage
+			set_character_flag = activated_pilgrimage
+
+			hidden_tooltip = {
+				letter_event = {
+					id = apilgrimage.1
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.25
+				trait = cynical
+			}
+			modifier = { #Monthly randomizer for when AI takes decision (1% chance)
+				factor = 0
+				random = 1
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = {
+				factor = 100
+				trait = dragonborn
+			}
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}						
+		}
+	}
+
+	kamal_winter_pilgrimage = {
+		is_high_prio = yes
+		ai_check_interval = 36
+
+		potential = {
+			is_ruler = yes
+			religion_group = kamal_religions
+			capital_scope = {
+				region = nirn_akavir
+			}
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = pilgrim }
+			NOT = { trait = on_pilgrimage }
+			NOT = { trait = on_guild }
+			NOT = {	has_character_flag = preparing_pilgrimage }
+			NOT = {	has_character_flag = meditation }
+			NOT = {	has_character_flag = activated_pilgrimage }
+			has_submenu_open = no
+		}
+
+		allow = {
+			war = no
+			prisoner = no
+			age = 16
+			month = 10
+		}
+
+		effect = {
+			set_character_flag = activated_pilgrimage
+
+			hidden_tooltip = {
+				character_event = { id = ekakaviri.1 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+			modifier = { #Monthly randomizer for when AI takes decision (1% chance)
+				factor = 0
+				random = 1
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = { # Bring a coat!
+				factor = 0
+				is_ill = yes
+			}						
+		}
+	}
+}

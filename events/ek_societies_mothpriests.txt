@@ -1,0 +1,182 @@
+namespace = ekmothpriests
+
+#Events for the Cult of the Ancestor Moth
+
+character_event = {
+	id = ekmothpriests.10
+	picture = GFX_evt_two_moon_aurora
+	desc = EKMothPriests10
+
+	is_triggered_only = yes
+
+	option = {
+		name = EKMothPriests10Accept
+		clr_character_flag = mitigating_blindness
+		add_character_modifier = {
+			name = mitigating_blindness
+			duration = -1
+		}
+	}
+}
+
+#Scroll Studying
+character_event = {
+	id = ekmothpriests.20
+	picture = GFX_evt_two_moon_aurora
+	desc = {
+		trigger = { 
+			has_character_flag = moth_scroll_plotting
+		}
+		text = EKMothPriests20A
+		picture = GFX_evt_two_moon_aurora
+	}
+	desc = {
+		trigger = { 
+			has_character_flag = moth_scroll_medicine
+		}
+		text = EKMothPriests20B
+		picture = GFX_evt_two_moon_aurora
+	}
+	desc = {
+		trigger = { 
+			has_character_flag = moth_scroll_martial
+		}
+		text = EKMothPriests20C
+		picture = GFX_evt_two_moon_aurora
+	}
+	desc = {
+		trigger = { 
+			has_character_flag = moth_scroll_economic
+		}
+		text = EKMothPriests20D
+		picture = GFX_evt_two_moon_aurora
+	}
+	desc = {
+		trigger = { 
+			has_character_flag = moth_scroll_cultural
+		}
+		text = EKMothPriests20E
+		picture = GFX_evt_two_moon_aurora
+	}
+
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { set_character_flag = moth_scroll_plotting }
+			20 = { set_character_flag = moth_scroll_medicine }
+			20 = { set_character_flag = moth_scroll_martial }
+			20 = { set_character_flag = moth_scroll_economic }
+			20 = { set_character_flag = moth_scroll_cultural }
+		}
+	}
+
+	option = {
+		name = {
+			text = EKMothPriests20AcceptA
+			trigger = { NOT = { has_character_flag = moth_blindness_3 } }
+		}
+		
+		name = {
+			text = EKMothPriests20AcceptB
+			trigger = { has_character_flag = moth_blindness_3 }
+		}
+		
+		if = {
+			limit = { has_character_flag = moth_scroll_plotting }
+			add_character_modifier = {
+				name = moth_bonus_plotting
+				duration = 1095
+			}
+		}
+		if = {
+			limit = { has_character_flag = moth_scroll_medicine }
+			capital_scope = {
+				add_province_modifier = {
+					name = moth_bonus_medicine
+					duration = 1095
+				}
+			}
+		}
+		if = {
+			limit = { has_character_flag = moth_scroll_martial }
+			military_techpoints = 50
+		}
+		if = {
+			limit = { has_character_flag = moth_scroll_economic }
+			economy_techpoints = 50
+		}
+		if = {
+			limit = { has_character_flag = moth_scroll_cultural }
+			culture_techpoints = 50
+		}
+		clr_character_flag = moth_study_scroll
+		clr_character_flag = moth_scroll_plotting
+		clr_character_flag = moth_scroll_medicine
+		clr_character_flag = moth_scroll_martial
+		clr_character_flag = moth_scroll_economic
+		clr_character_flag = moth_scroll_cultural
+		
+		if = {
+			limit = {
+				NOT = { has_character_flag = moth_blindness_3 }
+			}
+			add_character_modifier = {
+				name = moth_scroll_cooldown
+				duration = 730
+				hidden = yes
+			}
+			hidden_tooltip = { #Blindness may result
+				if = {
+					limit = {
+						NOR = {
+							has_character_flag = moth_blindness_1
+							has_character_flag = moth_blindness_2
+							has_character_flag = moth_blindness_3
+							trait = blind
+							trait = blinded
+							trait = blind_moth
+						}
+					}
+					random = {
+						chance = 10
+						set_character_flag = moth_blindness_1
+					}
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = moth_blindness_1
+					}
+					random = {
+						chance = 20
+						clr_character_flag = moth_blindness_1
+						set_character_flag = moth_blindness_2
+					}
+					break = yes
+				}
+				if = {
+					limit = {
+						has_character_flag = moth_blindness_2
+					}
+					random = {
+						chance = 50
+						clr_character_flag = moth_blindness_2
+						set_character_flag = moth_blindness_3
+					}
+					break = yes
+				}
+			}
+		}
+		
+		else = { # Will get blind
+			add_trait = blind_moth
+			clr_character_flag = moth_blindness_3
+			add_character_modifier = {
+				name = moth_scroll_cooldown
+				duration = 1095
+				hidden = yes
+			}
+		}
+	}
+}

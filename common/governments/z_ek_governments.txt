@@ -1,0 +1,321 @@
+feudal_governments = {
+	confederacy_government = {
+		frame_suffix = "_confederacy"
+		preferred_holdings = { CASTLE }
+		allowed_holdings = {
+			CASTLE
+			FORT
+			HOSPITAL
+			TEMPLE
+			CITY
+		}
+		allowed_holdings_culture = { # Will not get the wrong government type penalty for tribes of the same culture
+			TRIBAL
+		}
+		accepts_liege_governments = { # Gets the wrong religion modifier instead
+			#feudal_government
+		}
+		free_revoke_on_governments_religion = { # Tribal vassals of other religions can have their titles revoked for free
+			#tribal_government
+		}
+		potential = {
+			NAND = {
+				controls_religion = yes
+				NOT = { religion = pyandoneaic } #"Caliphate"
+			}
+			is_patrician = no
+			NAND = {
+				culture = orsimer
+				religion = daedra_malacath
+			}
+			NAND = {
+				culture = tsaesci
+				religion = five_courts
+				mercenary = no
+			}
+			liege = {
+				OR = {
+					character = PREV
+					NOT = {
+						government = confederacy_government
+					}
+				}
+			}
+			primary_title = {
+				NOR = { 
+					title = e_cyrodiil
+					title = e_tamriel
+				}
+				#has_law = succ_imperial_elder_council
+			}
+			NOT = { is_government_potential = undead_government }
+		}
+
+		color = { 100 15 255 }
+		barons_need_dynasty = yes
+		can_build_tribal = no
+		ignores_de_jure_laws = yes
+		vassal_call_to_arms = {
+			feudal_government tribal_government
+		}
+		aggression = 1.5
+		demesne_size = -1 # This is -really- incredibly punitive - especially only at the King level.
+		vassal_limit = 10 #So I'm buffing this.
+		commander_limit = 1
+		castle_vassal_tax_modifier = -0.25
+		city_vassal_tax_modifier = -0.25
+		temple_vassal_tax_modifier = -0.25
+		tribal_vassal_tax_modifier = -0.25 
+		
+		ignore_in_vassal_limit_calculation = {
+			tribal_government
+		}
+		capital_move_delay = 600
+	}
+	matriarchy_government = {
+	
+		frame_suffix = "_chineseimperial"
+		preferred_holdings = { CASTLE }
+		allowed_holdings = { 
+			CASTLE 
+			FORT
+			HOSPITAL
+			TEMPLE
+			CITY
+		}
+		allowed_holdings_culture = { # Will not get the wrong government type penalty for tribes of the same culture
+			TRIBAL
+		}
+		accepts_liege_governments = { # Gets the wrong religion modifier instead
+			
+		}
+		free_revoke_on_governments_religion = { # Tribal vassals of other religions can have their titles revoked for free
+			#tribal_government
+		}
+		potential = {
+			is_patrician = no
+			mercenary = no
+			culture = tsaesci
+			religion = five_courts
+			NOT = { is_government_potential = undead_government }
+		}
+		
+		color = { 180 255 15 }
+		
+		dukes_called_kings = yes
+		barons_need_dynasty = yes
+		can_build_tribal = no
+		
+		demesne_size = 2
+		
+		ignore_in_vassal_limit_calculation = {
+			tribal_government
+		}
+
+		capital_move_delay = 600
+	}
+	orsimer_government = {
+		
+		color = { 100 150 70 }
+		frame_suffix = "_malacath"
+		
+		potential = {
+			is_patrician = no
+			culture = orsimer
+			religion = daedra_malacath
+			NOT = { is_government_potential = undead_government }
+		}
+		preferred_holdings = { CASTLE }
+		allowed_holdings = { 
+			CASTLE
+			FORT
+			HOSPITAL
+			TEMPLE
+			CITY
+		}
+		allowed_holdings_culture = { TRIBAL }
+		accepts_liege_governments = { #Orcs will be ruled by whoever
+			feudal_government merchant_republic_government tribal_government theocracy_government 
+			republic_government	matriarchy_government confederacy_government
+		}
+		free_revoke_on_governments_religion = {
+			#tribal_government
+		}
+		vassal_call_to_arms = {
+			orsimer_government
+			tribal_government
+		}
+		dukes_called_kings = yes
+		barons_need_dynasty = yes
+		uses_prestige_for_law_change = yes
+		can_build_city = no
+		can_build_tribal = yes
+		#can_build_hospitals = no
+		allow_looting = yes
+		ignores_de_jure_laws = yes
+		allows_matrilineal_marriage = no
+		have_gender_laws = no
+		commander_limit = 2
+
+		capital_move_delay = 600
+	}
+	mane_government = {
+		frame_suffix = "_confucian"
+		preferred_holdings = { CASTLE TEMPLE }
+		allowed_holdings = { 
+			CASTLE 
+			FORT
+			HOSPITAL
+			TEMPLE
+			CITY
+		}
+		allowed_holdings_culture = { # Will not get the wrong government type penalty for tribes of the same culture
+			TRIBAL
+		}
+		accepts_liege_governments = { # Gets the wrong religion modifier instead
+			feudal_government
+		}
+		potential = {
+			controls_religion = yes
+			religion = riddlethar
+			is_patrician = no
+			NOT = { is_government_potential = undead_government }
+		}
+		vassal_call_to_arms = {
+			tribal_government
+		}
+		
+		color = { 0 160 180 }
+		
+		uses_piety_for_law_change = yes
+		max_consorts = 3
+		barons_need_dynasty = yes
+		can_build_tribal = no
+		
+		ignore_in_vassal_limit_calculation = {
+			tribal_government
+		}
+
+		capital_move_delay = 600
+	}
+
+	imperial_commune_government = {
+		preferred_holdings = { CASTLE CITY }
+		allowed_holdings = { 
+			CASTLE
+			FORT
+			HOSPITAL
+			CITY
+			#Imperial Commune rump state lacks administrative capability to properly administer these holdings:
+			#TEMPLE
+		}
+		allowed_holdings_culture = { # Will not get the wrong government type penalty for tribes of the same culture
+			TRIBAL
+		}
+		accepts_liege_governments = {
+		}
+		free_revoke_on_governments_religion = { # Tribal vassals of other religions can have their titles revoked for free
+		}
+		frame_suffix = "_commune"
+		title_prefix = "city_"
+		potential = {
+			is_patrician = no
+			mercenary = no
+			NOT = { controls_religion = yes }
+			OR = {
+				has_landed_title = c_imperialisle
+				has_landed_title = d_imperialisle
+				has_landed_title = k_heartlands
+			}
+			independent = yes
+			NOT = { is_government_potential = undead_government }
+		}
+		
+		color = { 254 154 154 }
+		vassal_call_to_arms = {
+			imperial_commune_government
+			reformed_imperial_commune_government
+			mane_government
+			orsimer_government
+			matriarchy_government
+			confederacy_government
+			merchant_republic_government
+			republic_government
+			theocracy_government
+			tribal_government
+			feudal_government
+		}
+		
+		barons_need_dynasty = yes
+		can_build_tribal = no
+		
+		vassal_limit = 10
+		
+		can_imprison_without_reason = no
+		can_revoke_without_reason = no
+		can_usurp_kingdoms_and_empires = no
+		can_create_kingdoms = no
+		can_be_granted_kingdoms_and_empires_by_other_government = no
+		#capital_move_delay = 600
+	}
+
+	reformed_imperial_commune_government = {
+		preferred_holdings = { CASTLE CITY TEMPLE }
+		allowed_holdings = { 
+			CASTLE
+			FORT
+			HOSPITAL
+			TEMPLE
+			CITY
+		}
+		allowed_holdings_culture = { # Will not get the wrong government type penalty for tribes of the same culture
+			TRIBAL
+		}
+		accepts_liege_governments = {
+		}
+		free_revoke_on_governments_religion = { # Tribal vassals of other religions can have their titles revoked for free
+		}
+		frame_suffix = "_commune_reformed"
+		title_prefix = "city_"
+		potential = {
+			is_patrician = no
+			mercenary = no
+			NOT = { controls_religion = yes }
+			OR = {
+				has_landed_title = c_imperialisle
+				has_landed_title = d_imperialisle
+				has_landed_title = k_heartlands
+				has_landed_title = k_cyrodiil
+				has_landed_title = e_cyrodiil
+				has_landed_title = e_tamriel
+				has_landed_title = e_potentate
+			}
+			independent = yes
+			NOT = { is_government_potential = undead_government }
+		}
+		
+		color = { 250 150 150 }
+		vassal_call_to_arms = {
+			imperial_commune_government
+			reformed_imperial_commune_government
+			mane_government
+			orsimer_government
+			matriarchy_government
+			confederacy_government
+			merchant_republic_government
+			republic_government
+			theocracy_government
+			tribal_government
+			feudal_government
+		}
+		
+		barons_need_dynasty = yes
+		can_build_tribal = no
+		
+		aggression = 1.5 #This should be funny.
+		vassal_limit = 10
+		commander_limit = 2 #Give some actual reward for reforming.
+
+		capital_move_delay = 600
+	}
+}

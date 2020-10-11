@@ -1,0 +1,45 @@
+namespace = relbeh
+
+# Handles traits related to religious behaviour (anti/pro undeath, ...)
+
+# On startup => Give the traits
+character_event = {
+	id = relbeh.0
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_trait = pro_necromancy_trait
+		remove_trait = anti_necromancy_trait
+		remove_trait = pro_lycanthropy_trait
+		
+		if = {
+			limit = { is_necromancy_religion = yes }
+			add_trait = pro_necromancy_trait
+		}
+		
+		if = {
+			limit = { is_anti_necromancy_religion = yes }
+			add_trait = anti_necromancy_trait
+		}
+		
+		if = {
+			limit = { is_werewolf_religion = yes }
+			add_trait = pro_lycanthropy_trait
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					is_hedonistic_religion = yes
+					has_character_modifier = hedonist_0_lover
+					has_character_modifier = hedonist_1_lover
+					has_character_modifier = hedonist_2_lover
+					has_character_modifier = hedonist_3_lover
+				}
+			}
+			update_lover_hedonistic_bonus = yes 
+		}
+	}
+}

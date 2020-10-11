@@ -1,0 +1,60 @@
+# Events for changing title coats of arms
+
+namespace = ekcoa
+
+# Debug
+character_event = {
+	id = ekcoa.0
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		k_skyrim = {
+			set_coa = k_skyrim_falmer
+		}
+	}
+}
+
+# Title change
+character_event = {
+	id = ekcoa.1
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	only_playable = yes
+
+	trigger = {
+		has_landed_title = k_skyrim
+		OR = { 
+			culture = falmer
+			culture = nord
+			culture = skaal
+			culture = atmoran
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					culture = nord
+					culture = skaal
+					culture = atmoran
+				}
+			}
+			k_skyrim = {
+				reset_coa = yes
+			}
+		}
+		else_if = {
+			limit = {
+				culture = falmer
+			}
+			k_skyrim = {
+				set_coa = k_skyrim_falmer
+			}
+		}
+	}
+}

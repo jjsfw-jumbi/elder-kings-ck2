@@ -1,0 +1,802 @@
+##########################################
+# COUNCILLOR TITLES
+##########################################
+
+#	attribute: This attribute is added to the ruler's for governance purposes
+#	viceroy: This is the Viceroy title for de jure Kingdoms
+#	allow: conditions for the character to hold the title
+#	gain_effect: fires when the title is granted
+#	lose_effect: fires when a title is lost through most causes
+#	retire_effect: fires when a title is lost due to the character stepping down, or getting a different liege
+#	death_effect: fires when a title is lost due to the character dying
+#	The other fields are all character modifiers.
+#########################################
+#New Job Title & Modifications by Korba
+#########################################
+
+job_chancellor = {
+	is_chancellor = yes
+	is_voter = yes
+	attribute = diplomacy
+	dignity = 0.33
+	opinion_effect = 10
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.20
+	
+	allow = {
+		can_be_chancellor_trigger = yes
+		ec_can_join_realm_council = yes
+	}
+	dismiss_trigger = {
+		FROM = {
+			NOT = {
+				AND = {
+					ec_is_emperor = yes
+					has_global_flag = ec_imperial_council_restricted
+					ROOT = {
+						society_member_of = elder_council
+					}
+				}
+			}
+			NOT = { 
+				AND = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+			}
+			conditional_tooltip = {
+				trigger = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+					hidden_tooltip = {
+						NOT = {
+							has_character_flag = swapping_councillors
+						}
+					}
+				}
+			}
+		}
+	}
+	gain_effect = {
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = ec_imperial_council_restricted
+					has_global_flag = ec_imperial_council_confirmed
+				}
+				FROM = {
+					ec_is_emperor = yes
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			imperial_council_confirmation = yes
+		}
+		if = {
+			limit = {
+				has_minor_title = title_commander
+				NOT = { has_game_rule = { name = no_council_commanders value = disabled } }
+			}
+			remove_title = title_commander
+		}
+	}
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+				NOT = {
+					has_character_flag = imperial_council_nominee
+				}
+
+				NOT = { trait = incapable }
+				NOT = { trait = sick_incapable }
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+		}
+		clr_character_flag = imperial_council_nominee
+		if = {
+			limit = {
+				society_member_of = elder_council
+			}
+			ec_calculate_imperialism = yes
+		}
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	}
+	retire_effect = {
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	
+		if = {
+			limit = {
+				OR = {
+					is_immortal = yes
+					AND = {
+						is_long_lived = no
+						NOT = {
+							age = 65
+						}
+					}
+					AND = {
+						is_long_lived = yes
+						NOT = {
+							age = 275
+						}
+					}
+				}
+				health = 3
+				NOT = {
+					is_sick_or_injured_trigger = yes
+				}
+				can_be_councilmember_king_trigger = yes
+			}
+			
+			FROM = { 
+				opinion = { who = ROOT modifier = opinion_resigned_from_council }
+			}
+		}
+	}
+	
+	action = action_statecraft
+	action = action_improve_relations
+	action = action_fabricate_claims
+	action = action_clan_sentiment # Replaces Fabricate Claims for Nomads
+	action = action_sow_dissent
+
+	lift_fow = yes
+}
+
+job_marshal = {
+	is_marshal = yes
+	is_voter = yes
+	attribute = martial
+	dignity = 0.33
+	opinion_effect = 10
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.20
+	
+	allow = {
+		can_be_marshal_trigger = yes
+		ec_can_join_realm_council = yes
+	}
+	dismiss_trigger = {
+		FROM = {
+			NOT = {
+				AND = {
+					ec_is_emperor = yes
+					has_global_flag = ec_imperial_council_restricted
+					ROOT = {
+						society_member_of = elder_council
+					}
+				}
+			}
+			NOT = { 
+				AND = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+			}
+			conditional_tooltip = {
+				trigger = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+					hidden_tooltip = {
+						NOT = {
+							has_character_flag = swapping_councillors
+						}
+					}
+				}
+			}
+		}
+	}
+	gain_effect = {
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = ec_imperial_council_restricted
+					has_global_flag = ec_imperial_council_confirmed
+				}
+				FROM = {
+					ec_is_emperor = yes
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			imperial_council_confirmation = yes
+		}
+		if = {
+			limit = {
+				has_minor_title = title_commander
+				NOT = { has_game_rule = { name = no_council_commanders value = disabled } }
+			}
+			remove_title = title_commander
+		}
+	}
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+				NOT = {
+					has_character_flag = imperial_council_nominee
+				}
+
+				NOT = { trait = incapable }
+				NOT = { trait = sick_incapable }
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+			if = {
+				limit = {
+					FROM = { has_law = succ_byzantine_elective }
+				}
+				if = {
+					limit = {
+						martial = 15
+						NOT = {  
+							martial = 18
+						}
+					}
+					FROM = { change_variable = { which = byzantine_credibility_discharged_hero value = -1 } }
+				}
+				else_if = {
+					limit = {
+						martial = 18
+						NOT = {  
+							martial = 21
+						}
+					}
+					FROM = { change_variable = { which = byzantine_credibility_discharged_hero value = -2 } }
+				}
+				else_if = {
+					limit = {  
+						martial = 21
+						NOT = {  
+							martial = 24
+						}
+					}
+					FROM = { change_variable = { which = byzantine_credibility_discharged_hero value = -3 } }
+				}
+				else_if = {
+					limit = {
+						martial = 24
+						NOT = {  
+							martial = 27
+						}
+					}
+					FROM = { change_variable = { which = byzantine_credibility_discharged_hero value = -4 } }
+				}
+				else_if = {
+					limit = {
+						martial = 27
+						NOT = {  
+							martial = 30
+						}
+					}
+					FROM = { change_variable = { which = byzantine_credibility_discharged_hero value = -5 } }
+				}
+				else_if = {
+					limit = {
+						martial = 30
+					}
+					FROM = { change_variable = { which = byzantine_credibility_discharged_hero value = -10 } }
+				}
+			}
+		}
+		clr_character_flag = imperial_council_nominee
+		if = {
+			limit = {
+				society_member_of = elder_council
+			}
+			ec_calculate_imperialism = yes
+		}
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	}
+	retire_effect = {
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	
+		if = {
+			limit = {
+				OR = {
+					is_immortal = yes
+					AND = {
+						is_long_lived = no
+						NOT = {
+							age = 65
+						}
+					}
+					AND = {
+						is_long_lived = yes
+						NOT = {
+							age = 275
+						}
+					}
+				}
+				health = 3
+				NOT = {
+					is_sick_or_injured_trigger = yes
+				}
+				can_be_councilmember_king_trigger = yes
+			}
+			
+			FROM = { 
+				opinion = { who = ROOT modifier = opinion_resigned_from_council }
+			}
+		}
+	}
+	
+	action = action_organize_army
+	action = action_assist_arrest
+	action = action_train_troops
+	action = action_train_troops_nomadic
+	action = action_advance_mil_tech
+	#action = action_organize_raid # Replaces action_advance_mil_tech for Tribes
+
+	lift_fow = yes
+}
+
+job_treasurer = {
+	is_treasurer = yes
+	is_voter = yes
+	attribute = stewardship
+	dignity = 0.2
+	opinion_effect = 10
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.20
+	
+	allow = {
+		can_be_treasurer_trigger = yes
+		ec_can_join_realm_council = yes
+	}
+	dismiss_trigger = {
+		FROM = {
+			NOT = {
+				AND = {
+					ec_is_emperor = yes
+					has_global_flag = ec_imperial_council_restricted
+					ROOT = {
+						society_member_of = elder_council
+					}
+				}
+			}
+			NOT = { 
+				AND = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+			}
+			conditional_tooltip = {
+				trigger = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+					hidden_tooltip = {
+						NOT = {
+							has_character_flag = swapping_councillors
+						}
+					}
+				}
+			}
+		}
+	}
+	gain_effect = {
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = ec_imperial_council_restricted
+					has_global_flag = ec_imperial_council_confirmed
+				}
+				FROM = {
+					ec_is_emperor = yes
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			imperial_council_confirmation = yes
+		}
+		if = {
+			limit = {
+				has_minor_title = title_commander
+				NOT = { has_game_rule = { name = no_council_commanders value = disabled } }
+			}
+			remove_title = title_commander
+		}
+	}
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+				NOT = {
+					has_character_flag = imperial_council_nominee
+				}
+
+				NOT = { trait = incapable }
+				NOT = { trait = sick_incapable }
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+		}
+		clr_character_flag = imperial_council_nominee
+		if = {
+			limit = {
+				society_member_of = elder_council
+			}
+			ec_calculate_imperialism = yes
+		}
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	}
+	retire_effect = {
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	
+		if = {
+			limit = {
+				OR = {
+					is_immortal = yes
+					AND = {
+						is_long_lived = no
+						NOT = {
+							age = 65
+						}
+					}
+					AND = {
+						is_long_lived = yes
+						NOT = {
+							age = 275
+						}
+					}
+				}
+				health = 3
+				NOT = {
+					is_sick_or_injured_trigger = yes
+				}
+				can_be_councilmember_king_trigger = yes
+			}
+			
+			FROM = { 
+				opinion = { who = ROOT modifier = opinion_resigned_from_council }
+			}
+		}
+	}
+	
+	action = action_administer_realm
+	action = action_squeeze_peasants
+	action = action_collect_tribute # Replaces action_squeeze_peasants for Nomads
+	action = action_settle_tribe # Replaces action_squeeze_peasants for Tribes
+	action = action_oversee_construction
+	action = action_advance_eco_tech
+	action = action_build_legend # Replaces action_advance_eco_tech for Tribes
+	
+	lift_fow = yes
+}
+
+job_spymaster = {
+	is_spymaster = yes
+	is_voter = yes
+	attribute = intrigue
+	dignity = 0.1
+	opinion_effect = 10
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.01
+	
+	allow = {
+		can_be_spymaster_trigger = yes
+		ec_can_join_realm_council = yes
+	}
+	dismiss_trigger = {
+		FROM = {
+			NOT = {
+				AND = {
+					ec_is_emperor = yes
+					has_global_flag = ec_imperial_council_restricted
+					ROOT = {
+						society_member_of = elder_council
+					}
+				}
+			}
+			NOT = { 
+				AND = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+			}
+			conditional_tooltip = {
+				trigger = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+					hidden_tooltip = {
+						NOT = {
+							has_character_flag = swapping_councillors
+						}
+					}
+				}
+			}
+		}
+	}
+	gain_effect = {
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = ec_imperial_council_restricted
+					has_global_flag = ec_imperial_council_confirmed
+				}
+				FROM = {
+					ec_is_emperor = yes
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			imperial_council_confirmation = yes
+		}
+		if = {
+			limit = {
+				has_minor_title = title_commander
+				NOT = { has_game_rule = { name = no_council_commanders value = disabled } }
+			}
+			remove_title = title_commander
+		}
+	}
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+				NOT = {
+					has_character_flag = imperial_council_nominee
+				}
+
+				NOT = { trait = incapable }
+				NOT = { trait = sick_incapable }
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+		}
+		clr_character_flag = imperial_council_nominee
+		if = {
+			limit = {
+				society_member_of = elder_council
+			}
+			ec_calculate_imperialism = yes
+		}
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	}
+	retire_effect = {
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	
+		if = {
+			limit = {
+				OR = {
+					is_immortal = yes
+					AND = {
+						is_long_lived = no
+						NOT = {
+							age = 65
+						}
+					}
+					AND = {
+						is_long_lived = yes
+						NOT = {
+							age = 275
+						}
+					}
+				}
+				health = 3
+				NOT = {
+					is_sick_or_injured_trigger = yes
+				}
+				can_be_councilmember_king_trigger = yes
+			}
+			
+			FROM = { 
+				opinion = { who = ROOT modifier = opinion_resigned_from_council }
+			}
+		}
+	}
+	
+	action = action_uncover_plots
+	action = action_uncover_plots_offmap	# Replaces action_uncover_plots if mystics is activated.
+	action = action_sabotage_province
+	action = action_organize_spies
+	action = action_organize_spies_mystics
+	action = action_study_technology
+
+	lift_neighbor_fow = yes
+}
+
+job_spiritual = {
+	is_spiritual = yes
+	is_voter = yes
+	attribute = learning
+	dignity = 0.15
+	opinion_effect = 10
+	
+	monthly_salary = 0.1
+	monthly_piety = 0.125
+	
+	allow = {
+		can_be_spiritual_trigger = yes
+		ec_can_join_realm_council = yes
+	}
+	gain_effect = {
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = ec_imperial_council_restricted
+					has_global_flag = ec_imperial_council_confirmed
+				}
+				FROM = {
+					ec_is_emperor = yes
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			imperial_council_confirmation = yes
+		}
+		if = {
+			limit = {
+				has_minor_title = title_commander
+				NOT = { has_game_rule = { name = no_council_commanders value = disabled } }
+			}
+			remove_title = title_commander
+		}
+	}
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+				NOT = {
+					has_character_flag = imperial_council_nominee
+				}
+
+				NOT = { trait = incapable }
+				NOT = { trait = sick_incapable }
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+		}
+		clr_character_flag = imperial_council_nominee
+		if = {
+			limit = {
+				society_member_of = elder_council
+			}
+			ec_calculate_imperialism = yes
+		}
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	}
+	retire_effect = {
+	#	if = {
+	#		limit = { has_character_flag = relic_hunter }
+	#		character_event = { id = MNM.9034 }
+	#	}
+	
+		if = {
+			limit = {
+				OR = {
+					is_immortal = yes
+					AND = {
+						is_long_lived = no
+						NOT = {
+							age = 65
+						}
+					}
+					AND = {
+						is_long_lived = yes
+						NOT = {
+							age = 275
+						}
+					}
+				}
+				health = 3
+				NOT = {
+					is_sick_or_injured_trigger = yes
+				}
+				can_be_councilmember_king_trigger = yes
+			}
+			
+			FROM = { 
+				opinion = { who = ROOT modifier = opinion_resigned_from_council }
+			}
+		}
+	}
+	dismiss_trigger = {
+		FROM = {
+#			NOT = { religion = ROOT } #This serves no real purpose and is just annoying.
+			NOT = {
+				AND = {
+					ec_is_emperor = yes
+					has_global_flag = ec_imperial_council_restricted
+					ROOT = {
+						society_member_of = elder_council
+					}
+				}
+			}
+			NOT = { 
+				AND = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+			}
+			conditional_tooltip = {
+				trigger = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+					hidden_tooltip = {
+						NOT = {
+							has_character_flag = swapping_councillors
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	action = action_hunt_heretics
+	action = action_inquisition
+	action = action_advance_cul_tech
+	action = action_improve_rel_relations
+	action = action_charity
+	action = action_build_zeal # Tribal replacement for 'action_advance_cul_tech'
+	
+	lift_fow = yes
+}

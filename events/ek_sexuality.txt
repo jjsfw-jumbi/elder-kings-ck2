@@ -1,0 +1,276 @@
+#Basic same-sex marriage events
+namespace = eksexuality
+
+character_event = {
+	id = eksexuality.2
+	desc = eksexuality2d
+	picture = GFX_evt_s_campfire #Placeholder, lacking a better one.
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = eksexuality2o1
+		FROMFROM = { character_event = { id = eksexuality.3 } }
+		ai_chance = {
+			factor = 10
+			modifier = {	
+				factor = 0
+				NOT = { opinion = { who = FROMFROM value = -60 } }
+			}
+			modifier = {
+				factor = 0.25
+				NOT = { opinion = { who = FROMFROM value = -45 } }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { opinion = { who = FROMFROM value = -30 } }
+			}
+			modifier = {
+				factor = 0.75
+				NOT = { opinion = { who = FROMFROM value = -15 } }
+			}
+			modifier = {
+				factor = 1.25
+				opinion = { who = FROMFROM value = 25 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.75
+				opinion = { who = FROMFROM value = 75 }
+			}
+			modifier = {
+				factor = 2
+				opinion = { who = FROMFROM value = 100 }
+			}
+		}
+	}
+	option = {
+		name = eksexuality2o2
+		FROMFROM = { character_event = { id = eksexuality.4 } }
+		ai_chance = {
+			factor = 10
+			modifier = {	
+				factor = 2
+				NOT = { opinion = { who = FROMFROM value = -60 } }
+			}
+			modifier = {
+				factor = 1.75
+				NOT = { opinion = { who = FROMFROM value = -45 } }
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { opinion = { who = FROMFROM value = -30 } }
+			}
+			modifier = {
+				factor = 1.25
+				NOT = { opinion = { who = FROMFROM value = -15 } }
+			}
+			modifier = {
+				factor = 0.75
+				opinion = { who = FROMFROM value = 25 }
+			}
+			modifier = {
+				factor = 0.5
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 0.25
+				opinion = { who = FROMFROM value = 75 }
+			}
+			modifier = {
+				factor = 0
+				opinion = { who = FROMFROM value = 100 }
+			}
+		}
+	}
+}
+character_event = {
+	id = eksexuality.3
+	desc = eksexuality3d
+	picture = GFX_evt_s_campfire #Placeholder, lacking a better one.
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = eksexuality3o
+		add_spouse = FROM
+		add_trait = samesex
+		FROM = { add_trait = samesex }
+	}
+}
+character_event = {
+	id = eksexuality.4
+	desc = eksexuality4d
+	picture = GFX_evt_s_campfire #Placeholder, lacking a better one.
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = eksexuality4o
+		FROM = { save_event_target_as = former_lover }
+		break_up_with_target = yes
+		opinion = {
+			who = FROM
+			modifier = heart_broken
+			years = 36
+		}
+	}
+}
+
+# TODO:JJPERF See if this trait is still needed
+character_event = {
+	id = eksexuality.5
+	hide_window = yes
+	
+	min_age = 16
+	
+	trigger = {
+		OR = {
+			AND = {
+				is_female = no
+				NOT = { trait = samesex }
+				spouse = { is_female = no }
+			}
+			AND = {
+				is_female = yes
+				NOT = { trait = samesex }
+				spouse = { is_female = yes }
+			}
+			AND = {
+				is_female = no
+				trait = samesex
+				OR = { spouse = { is_female = yes } is_married = no }
+			}
+			AND = {
+				is_female = yes
+				trait = samesex
+				OR = { spouse = { is_female = no } is_married = no }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				is_female = no
+				NOT = { trait = samesex }
+				spouse = { is_female = no }
+			}
+			add_trait = samesex
+		}
+		if = {
+			limit = {
+				is_female = yes
+				NOT = { trait = samesex }
+				spouse = { is_female = yes }
+			}
+			add_trait = samesex
+		}
+		if = {
+			limit = {
+				is_female = no
+				trait = samesex
+				OR = { spouse = { is_female = yes } is_married = no }
+			}
+			remove_trait = samesex
+		}
+		if = {
+			limit = {
+				is_female = yes
+				trait = samesex
+				OR = { spouse = { is_female = no } is_married = no }
+			}
+			remove_trait = samesex
+		}
+	}
+}
+
+
+#####
+#Gender-changing events
+
+character_event = { #21 - rename prompt
+	id = eksexuality.21 #made its own event in an attempt to fix the parental renaming options. will move to a delay if it doesn't work afterwards.
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		prompt_name = {
+			player = ROOT
+			type = RENAME_CHARACTER_MESSAGE #testing
+		}
+		#any_spouse = {
+		#	limit = { NOT = { is_lover = ROOT } } #Don't let spouses who are also lovers get this event twice
+		#	character_event = { id = eksexuality.22 days = 3 random = 3 }
+		#}
+		#any_lover = {
+		#	character_event = { id = eksexuality.22 days = 3 random = 3 }
+		#}
+	}
+}
+#character_event = { #22 - spouses/lovers get notification
+#	id = eksexuality.22
+#	desc = eksexuality22
+#	picture = GFX_evt_s_campfire #PH
+#	
+#	is_triggered_only = yes
+#	
+#	option = { #Positive - Be supportive
+#		name = eksexuality22opta
+#		ROOT = { character_event = { id = eksexuality.23 days = 3 random = 3 } }
+#	}
+#	option = { #Neutral - Live and let live
+#		name = eksexuality22optb
+#		ROOT = { character_event = { id = eksexuality.24 days = 3 random = 3 } }
+#	}
+#	option = { #Negative - frist of all how DARE yuo
+#		name = eksexuality22optc
+#		ROOT = { character_event = { id = eksexuality.25 days = 3 random = 3 } }
+#	}
+#}
+#character_event = { #23 - Supportive response to ROOT
+#	id = eksexuality.23
+#	desc = eksexuality23
+#	picture = GFX_evt_s_campfire #PH
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = eksexuality23opta
+#	}
+#}
+#character_event = { #24 - Neutral response to ROOT
+#	id = eksexuality.24
+#	desc = eksexuality24
+#	picture = GFX_evt_s_campfire #PH
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = eksexuality24opta
+#	}
+#}
+#character_event = { #25 - Negative response to ROOT
+#	id = eksexuality.25
+#	desc = eksexuality25
+#	picture = GFX_evt_s_campfire #PH
+#	
+#	is_triggered_only = yes
+#	
+#	option = {
+#		name = eksexuality25opta
+#		
+#		random_list = {
+#			25 = { add_trait_stressed_effect = yes modifier = { factor = 0 trait = stressed } }
+#			25 = { add_trait_depressed_effect = yes modifier = { factor = 0 NOT = { trait = stressed } } }
+#			75 = { custom_tooltip = { text = couldbeworse } }
+#		}
+#	}
+#}

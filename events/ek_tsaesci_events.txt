@@ -1,0 +1,269 @@
+#Tsaesci and Five Courts events#
+
+namespace = ektsaesci
+
+#Zusk's Tsaesci "Drink Blood" events
+#Edited/expanded by Etienne
+character_event = {
+	id = ektsaesci.5
+	desc = zusk_akavirevents.5_desc
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = yes
+		
+	is_triggered_only = yes
+	
+	option = {
+		name = nooo
+		add_character_modifier = {
+			name = tsaesci_blood_ritual_health
+			duration = 180
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = lycan
+					trait = vampire
+				}
+			}
+			FROMFROM = { character_event = { id = ektsaesci.10 } }
+		}
+		if = {
+			limit = {
+				OR = {
+					trait = lycan
+					trait = vampire
+				}
+			}
+			FROMFROM = { character_event = { id = ektsaesci.15 } }
+		}
+		custom_tooltip = { text = goodchanceaaccidentcouldoccur }
+		hidden_tooltip = {
+		random_list = { #Less careful with prisoners then with the ruler		
+				60 = {}
+				35 = {
+					modifier = {
+						factor = 0
+						trait = wounded
+					}
+					add_trait = wounded 
+				}	
+				5 = {
+					modifier = {
+						factor = 0
+						health = 5
+					}
+					death = { death_reason = death_accident } 
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = ektsaesci.10
+	desc = zusk_akavirevents.6_desc
+	picture = GFX_evt_snakebowledit
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "usefulforoffering"
+		trigger = {
+			NOT = {
+				any_realm_wonder_upgrade = {
+					has_wonder_upgrade = upgrade_haematic_temple
+					is_active = yes
+				}
+			}
+		}
+		piety = 30
+		add_character_modifier = {
+			name = tsaesci_blood_ritual_piety
+			duration = 360
+		}
+		if = { #Vampires have their hunger reset
+			limit = { is_vampire = yes }
+			character_event = { id = vamp.25 }
+		}
+		if = { #Werewolves without adequate self-control transform
+			limit = { 
+				is_lycan = yes
+				has_average_control_beast_form = no
+			}
+			character_event = { id = lycan.50 }
+		}
+	}
+
+	option = {
+		name = "usefulforoffering"
+
+		tooltip_info_custom = tsaesci_blood_ritual_haematic_temple_tt
+
+		trigger = {
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade = upgrade_haematic_temple
+				is_active = yes
+			}
+		}
+		piety = 75
+		add_character_modifier = {
+			name = tsaesci_blood_ritual_piety
+			duration = 360
+		}
+		if = { #Vampires have their hunger reset
+			limit = { is_vampire = yes }
+			character_event = { id = vamp.25 }
+		}
+		if = { #Werewolves without adequate self-control transform
+			limit = { 
+				is_lycan = yes
+				has_average_control_beast_form = no
+			}
+			character_event = { id = lycan.50 }
+		}
+	}
+}
+character_event = {
+	id = ektsaesci.15
+	desc = {
+		text = EKTsaesci15
+		trigger = {
+			NOR = {
+				trait = lycan
+				trait = vampire
+			}
+		}
+	}
+	desc = {
+		text = EKTsaesci15VampWolf
+		trigger = {
+			trait = vampire
+			FROM = { trait = lycan }
+		}
+	}
+	desc = {
+		text = EKTsaesci15VampVamp
+		trigger = {
+			trait = vampire
+			FROM = { trait = vampire }
+		}
+	}
+	desc = {
+		text = EKTsaesci15WolfVamp
+		trigger = {
+			trait = lycan
+			FROM = { trait = vampire }
+		}
+	}
+	desc = {
+		text = EKTsaesci15WolfWolf
+		trigger = {
+			trait = lycan
+			FROM = { trait = lycan }
+		}
+	}
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKTsaesci15Accept"
+		trigger = {
+			NOR = {
+				trait = lycan
+				trait = vampire
+			}
+		}
+		if = {
+			limit = { FROM = { trait = lycan } }
+			character_event = { id = lycan.232 }
+		}
+		if = {
+			limit = { FROM = { trait = vampire } }
+			character_event = { id = vamp.232 }
+		}
+		if = {
+			limit = { is_disease_immune = no }
+			if = {
+				limit = { FROM = { trait = lycan } }
+				roll_for_lycanthropy = yes
+			}
+			if = {
+				limit = { FROM = { trait = vampire } }
+				roll_for_vampirism = yes
+			}
+		}
+	}
+	option = {
+		name = "EKTsaesci15VampWolfAccept"
+		trigger = {
+			trait = vampire
+			FROM = { trait = lycan }
+		}
+		if = { #Vampires have their hunger reset
+			limit = { is_vampire = yes }
+			character_event = { id = vamp.25 }
+		}
+		if = {
+			limit = { FROM = { trait = lycan } }
+			character_event = { id = lycan.232 }
+		}
+	}
+	option = {
+		name = "EKTsaesci15VampVampAccept"
+		trigger = {
+			trait = vampire
+			FROM = { trait = vampire }
+		}
+		if = {
+			limit = { FROM = { trait = vampire } }
+			character_event = { id = vamp.230 }
+		}
+	}
+	option = {
+		name = "EKTsaesci15WolfVampAccept"
+		trigger = {
+			trait = lycan
+			FROM = { trait = vampire }
+		}
+		if = { #Werewolves without adequate self-control transform
+			limit = { 
+				is_lycan = yes
+				has_average_control_beast_form = no
+			}
+			character_event = { id = lycan.50 }
+		}
+		if = {
+			limit = { FROM = { trait = vampire } }
+			character_event = { id = vamp.232 }
+		}
+	}
+	option = {
+		name = "EKTsaesci15WolfWolfAccept"
+		trigger = {
+			trait = lycan
+			FROM = { trait = lycan }
+		}
+		if = { #Werewolves without adequate self-control transform
+			limit = { 
+				is_lycan = yes
+				has_average_control_beast_form = no
+			}
+			character_event = { id = lycan.50 }
+		}
+		if = {
+			limit = { FROM = { trait = lycan } }
+			character_event = { id = vamp.230 }
+		}
+	}
+}

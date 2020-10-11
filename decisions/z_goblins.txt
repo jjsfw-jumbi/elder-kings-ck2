@@ -1,0 +1,69 @@
+settlement_decisions = {
+	summon_goblin_tribe = {
+		filter = owned
+		ai_target_filter = owned
+		
+		ai_check_interval = 96
+		
+		from_potential = {
+			higher_tier_than = BARON
+			OR = {
+				AND = {
+					any_artifact = {
+						artifact_type = weapon_staff_goblin
+						is_artifact_active = yes
+					}
+					has_submenu_open = no
+				}
+				ai = yes
+			}
+			NOT = { has_earmarked_regiments = summoned_goblin_tribe }
+		}
+		potential = {
+			owner = {
+				OR = {
+					any_liege = {
+						character = FROM
+					}
+					character = FROM
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				war = yes
+				any_artifact = {
+					artifact_type = weapon_staff_goblin
+					is_artifact_active = yes
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				spawn_unit = {
+					owner = PREV
+					province = ROOT
+					home = ROOT
+					troops = {
+						archers = { 15 15 }
+						light_infantry = { 30 30 }
+						light_cavalry = { 8 8 }
+						heavy_infantry = { 10 10 }
+						battlemages = { 3 3 }
+					}
+					attrition = 0.25
+					disband_on_peace = yes
+					maintenance_multiplier = 0.1
+					can_toggle_looting = yes
+					cannot_inherit = yes
+					reinforces = yes
+					earmark = summoned_goblin_tribe
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

@@ -1,0 +1,339 @@
+namespace = ekgreybeards
+
+#Events for the Greybeards, guild joining events based off of MNM assassins events
+
+character_event = {
+	id = ekgreybeards.1
+	desc = {
+		text = EKGreybeards1Ready
+		trigger = {
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = on_pilgrimage }
+			NOT = {	has_character_flag = preparing_pilgrimage }
+			NOT = {	has_character_flag = meditation }
+			NOT = {	has_character_flag = activated_pilgrimage }
+			NOT = { has_character_flag = visited_greybeards }
+			war = no
+			prisoner = no
+			scaled_wealth = 0.20
+			age = 16
+		}
+	}
+	desc = {
+		text = EKGreybeards1NotReady
+		trigger = {
+			OR = {
+				is_indisposed = yes
+				is_inaccessible_trigger = yes
+				trait = on_pilgrimage
+				has_character_flag = preparing_pilgrimage
+				has_character_flag = meditation
+				has_character_flag = activated_pilgrimage
+				has_character_flag = visited_greybeards
+				war = yes
+				prisoner = yes
+				NOT = { scaled_wealth = 0.20 }
+				NOT = { age = 16 }
+			}
+		}
+	}
+	picture = GFX_evt_rift_scape
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKGreybeards1Accept"
+		letter_event = { id = apilgrimage.1 }
+	}
+	option = {
+		name = "EKGreybeards1Decline"
+		character_event = { id = ekgreybeards.1 days = 15 }
+	}
+	option = {
+		name = "EKGreybeards1Reject"
+		clr_character_flag = greybeards_initiation
+		clr_character_flag = society_join_block
+	}
+}
+
+character_event = {
+	id = ekgreybeards.5
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = visited_greybeards
+		hidden_effect = {
+			random_society_member = {
+				limit = { 
+					society_rank = {
+						rank == 4
+						society = greybeards_tamriel
+					}
+				}
+				save_event_target_as = greybeard_recruiter
+				event_target:greybeard_recruiter = { long_character_event = { id = ekgreybeards.8 } }
+			}
+		}
+	}
+}
+
+long_character_event = {
+	id = ekgreybeards.8
+	picture = GFX_evt_mountains_0
+	desc = {
+		trigger = { 
+			FROM = {
+				NOR = {
+					trait = dragonborn
+					trait = dragonborn_descendant
+					combat_rating = 120
+					piety = 5000
+					prestige = 5000
+				}
+				NOT = { has_character_flag = revisiting_greybeards }
+			}
+		}
+		text = EKGreybeards8A
+		picture = GFX_evt_mountains_0
+	}
+	desc = {
+		trigger = { 
+			FROM = {
+				OR = {
+					trait = dragonborn
+					trait = dragonborn_descendant
+					combat_rating = 120
+					piety = 5000
+					prestige = 5000
+				}
+				NOT = { has_character_flag = revisiting_greybeards }
+			}
+		}
+		text = EKGreybeards8B
+		picture = GFX_evt_mountains_0
+	}
+	desc = {
+		trigger = { 
+			FROM = {
+				has_character_flag = revisiting_greybeards
+			}
+		}
+		text = EKGreybeards8C
+		picture = GFX_evt_mountains_0
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = EKGreybeards8Accept
+		FROM = { long_character_event = { id = ekgreybeards.10 days = 3 } }
+	}
+}
+
+long_character_event = {
+	id = ekgreybeards.10
+	picture = GFX_evt_mountains_0
+	desc = {
+		trigger = { 
+			NOR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+		}
+		text = EKGreybeards10A
+		picture = GFX_evt_mountains_0
+	}
+	desc = {
+		trigger = { 
+			OR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+		}
+		text = EKGreybeards10B
+		picture = GFX_evt_mountains_0
+	}
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	#Agrees to join Greybeards
+	option = {
+		name = EKGreybeards10Accept
+		event_target:greybeard_recruiter = {
+			character_event = { id = ekgreybeards.11 }
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	#Declines Greybeards
+	option = {
+		name = EKGreybeards10DeclineA
+		trigger = {
+			NOR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+			NOT = { has_character_flag = revisiting_greybeards }
+		}
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+				FROM = { clear_event_target = greybeards_recruiter }
+			}
+		}
+		piety = 250
+		prestige = 250
+		
+		ai_chance = {
+			factor = 0
+		}
+	}
+	
+	option = {
+		name = EKGreybeards10DeclineB
+		trigger = {
+			OR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+			NOT = { has_character_flag = revisiting_greybeards }
+		}
+		character_event = { id = apilgrimage.57 days = 30 }
+		hidden_tooltip = {
+			FROM = { clear_event_target = greybeards_recruiter }
+		}
+		
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekgreybeards.11
+	picture = GFX_evt_mountains_0
+	desc = EKGreybeards11
+
+	is_triggered_only = yes
+
+	option = {
+		name = EKGreybeards11Accept
+		FROM = { character_event = { id = ekgreybeards.12 } }
+	}
+}
+
+character_event = {
+	id = ekgreybeards.12
+	picture = GFX_evt_mountains_0
+	desc = EKGreybeards12
+
+	is_triggered_only = yes
+
+	option = {
+		name = EKGreybeards12Accept
+		join_society = greybeards_tamriel
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+				if = {
+					limit = {
+						OR = {
+							trait = dragonborn
+							trait = dragonborn_descendant
+							combat_rating = 120
+							piety = 5000
+							prestige = 5000
+						}
+						NOR = { 
+							trait = thuum_1
+							trait = thuum_2
+							trait = thuum_3
+						}
+					}
+					character_event = { id = ekgreybeards.15 days = 30 }
+				}
+				FROM = { clear_event_target = greybeards_recruiter }
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = revisiting_greybeards }
+			}
+			piety = 250
+			prestige = 250
+		}
+	}
+}
+
+character_event = {
+	id = ekgreybeards.15
+	picture = GFX_evt_mountains_0
+	desc = EKGreybeards15
+
+	is_triggered_only = yes
+
+	option = {
+		name = EKGreybeards15Accept
+		if = {
+			limit = {
+				NOR = {
+					trait = thuum_1
+					trait = thuum_2
+					trait = thuum_3
+				}
+			}
+			add_trait = thuum_1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = thuum_1
+			}
+			remove_trait = thuum_1
+			add_trait = thuum_2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = thuum_2
+			}
+			remove_trait = thuum_2
+			add_trait = thuum_3
+			break = yes
+		}
+	}
+}

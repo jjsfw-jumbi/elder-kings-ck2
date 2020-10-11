@@ -1,0 +1,401 @@
+<snippet>
+	<content><![CDATA[
+# Imperial veto
+character_event = {
+	id = eldercouncil.${1:$SELECTION}
+	desc = eldercouncil.${1:$SELECTION}.desc
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.veto
+		trigger = {
+			block_general_event_trigger = no
+		}
+		save_event_target_as = target_emperor
+
+		ec_veto_council = yes
+		elder_council = {
+			any_society_member = {
+				character_event = { id = eldercouncil.${7:$SELECTION+6} }
+			}
+		}
+		any_realm_lord = {
+			limit = {
+				top_liege = {
+					character = ROOT
+				}
+				NOT = {
+					society_member_of = elder_council
+				}
+			}
+			character_event = { id = eldercouncil.${7:$SELECTION+6} }
+		}
+
+		ai_chance = {
+			factor = 10
+			ec_veto_default_score_${8:§IMP_OR_COUNC§} = yes
+		}
+	}
+
+	option = {
+		name = eldercouncil.dont_veto
+
+		custom_tooltip = {
+			text = elder_council_vote
+			hidden_tooltip = {
+				elder_council = {
+					any_society_member = {
+						limit = {
+							is_society_grandmaster = yes
+						}
+						character_event = { id = eldercouncil.${2:$SELECTION+1} }
+					}
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 100
+			ec_dont_veto_default_score = yes
+		}
+	}
+}
+
+# High Chancellor ping/notification event - triggered by decision - single desc
+character_event = {
+	id = eldercouncil.${2:$SELECTION+1}
+	desc = eldercouncil.${2:$SELECTION+1}.desc
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.hc_accept
+
+		ec_vote_prepare = yes
+
+		hidden_tooltip = {
+			elder_council = {
+				any_society_member = {
+					character_event = { id = eldercouncil.${3:$SELECTION+2} }
+				}
+			}
+			character_event = { id = eldercouncil.${4:$SELECTION+3} days = 3 }
+		}
+	}
+}
+
+# Councillor votes
+character_event = {
+	id = eldercouncil.${3:$SELECTION+2}
+	desc = {
+		text = eldercouncil.${3:$SELECTION+2}.advisory.phc # Proposed by HC
+		trigger = {
+			ec_imperial_legislature_none = yes
+			FROMFROM = {
+				character = FROM
+			}
+		}
+	}
+	desc = {
+		text = eldercouncil.${3:$SELECTION+2}.de_facto.phc # Proposed by HC
+		trigger = {
+			has_global_flag = ec_imperial_legislature_advisory
+			FROMFROM = {
+				character = FROM
+			}
+		}
+	}
+	desc = {
+		text = eldercouncil.${3:$SELECTION+2}.advisory.pemp # Proposed by Emp
+		trigger = {
+			ec_imperial_legislature_none = yes
+			FROMFROM = {
+				NOT = {
+					character = FROM
+				}
+			}
+		}
+	}
+	desc = {
+		text = eldercouncil.${2:$SELECTION+1}.de_facto.pemp # Proposed by Emp
+		trigger = {
+			has_global_flag = ec_imperial_legislature_advisory
+			FROMFROM = {
+				NOT = {
+					character = FROM
+				}
+			}
+		}
+	}
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	immediate = {
+		ec_vote_clr_flags = yes
+	}
+
+	option = {
+		name = ec_vote_yes
+
+		ec_vote_yes = yes
+
+		ai_chance = {
+			factor = 21
+			ec_${9:§IMP_OR_COUNC§}_${10:§OPINION§}_score = yes${11:§YES_WEIGHTS§}
+		}
+	}
+
+	option = {
+		name = ec_vote_no
+
+		ec_vote_no = yes
+
+		ai_chance = {
+			factor = 36 # favour status quo
+			ec_${12:§IMP_OR_COUNC§}_${13:§OPINION§}_score = yes${14:§NO_WEIGHTS§}
+		}
+	}
+}
+
+# High Chancellor tallies, breaks tie
+character_event = {
+	id = eldercouncil.${4:$SELECTION+3}
+
+	desc = {
+		text = eldercouncil.${4:$SELECTION+3}.passed
+		trigger = {
+			ec_vote_passed = yes
+		}
+	}
+	desc = {
+		text = eldercouncil.${4:$SELECTION+3}.failed
+		trigger = {
+			ec_vote_failed = yes
+		}
+	}
+	desc = {
+		text = eldercouncil.${4:$SELECTION+3}.tied
+		trigger = {
+			ec_vote_tied = yes
+		}
+	}
+
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.passed.accept
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_passed = yes
+		}
+
+		ec_end_vote = yes
+
+		${15:§DESIRED_LAW_SCRIPTED_EFFECT§}
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = eldercouncil.${5:$SELECTION+4} }
+			}
+		}
+
+		event_target:target_emperor = {
+			character_event = { id = eldercouncil.${5:$SELECTION+4} }
+		}
+	}
+
+	option = {
+		name = eldercouncil.failed.accept
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_failed = yes
+		}
+
+		ec_end_vote = yes
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = eldercouncil.${6:$SELECTION+5} }
+			}
+		}
+
+
+		event_target:target_emperor = {
+			character_event = { id = eldercouncil.${6:$SELECTION+5} }
+		}
+	}
+
+	option = {
+		name = eldercouncil.tied.pass
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_tied = yes
+		}
+
+		ec_end_vote = yes
+
+		${15:§DESIRED_LAW_SCRIPTED_EFFECT§}
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = eldercouncil.${5:$SELECTION+4} }
+			}
+		}
+
+		event_target:target_emperor = {
+			character_event = { id = eldercouncil.${5:$SELECTION+4} }
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_character_flag = ec_vote_no
+			}
+		}
+	}
+
+	option = {
+		name = eldercouncil.tied.fail
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_tied = yes
+		}
+
+		ec_end_vote = yes
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = eldercouncil.${6:$SELECTION+5} }
+			}
+		}
+
+		event_target:target_emperor = {
+			character_event = { id = eldercouncil.${6:$SELECTION+5} }
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_character_flag = ec_vote_yes
+			}
+		}
+	}
+}
+
+# Vote passes - inform Council
+character_event = {
+	id = eldercouncil.${5:$SELECTION+4}
+	desc = {
+		text = eldercouncil.${5:$SELECTION+4}.passed
+		trigger = {
+			ec_vote_passed = yes
+		}
+	}
+	desc = {
+		text = eldercouncil.${5:$SELECTION+4}.tied
+		trigger = {
+			ec_vote_tied = yes
+		}
+	}
+	desc = {
+		text = eldercouncil.${5:$SELECTION+4}.error
+		trigger = {
+			ec_vote_failed = yes
+		}
+	}
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.very_well
+		ec_show_votes = yes
+		ec_tooltip_imperial_legislature = yes
+	}
+}
+
+# Vote fails - inform Council
+character_event = {
+	id = eldercouncil.${6:$SELECTION+5}
+	desc = {
+		text = eldercouncil.${6:$SELECTION+5}.error
+		trigger = {
+			ec_vote_passed = yes
+		}
+	}
+	desc = {
+		text = eldercouncil.${6:$SELECTION+5}.tied
+		trigger = {
+			ec_vote_tied = yes
+		}
+	}
+	desc = {
+		text = eldercouncil.${6:$SELECTION+5}.failed
+		trigger = {
+			ec_vote_failed = yes
+		}
+	}
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.very_well
+		ec_show_votes = yes
+		ec_tooltip_imperial_legislature = yes
+	}
+}
+
+# Emperor vetoes motion - inform realm, council
+character_event = {
+	id = eldercouncil.${7:$SELECTION+6}
+	desc = eldercouncil.${7:$SELECTION+6}.desc
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.veto_react
+		trigger = {
+			block_general_event_trigger = no
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

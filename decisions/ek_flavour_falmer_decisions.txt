@@ -1,0 +1,102 @@
+decisions = {
+	proclaim_falmereth = {
+		is_high_prio = yes
+		only_independent = yes
+		
+		potential = {
+			has_submenu_open = no
+			culture = falmer
+			is_falmer = yes
+			
+			capital_scope = {
+				region = nirn_tamriel_skyrim
+			}
+			
+			NOT = { has_global_flag = falmereth_restored_flag }
+		}
+		
+		allow = {
+			completely_controls_region = nirn_tamriel_eastern_skyrim
+			completely_controls_region = nirn_tamriel_western_skyrim
+			completely_controls_region = nirn_tamriel_solstheim
+			
+			OR = {
+				has_landed_title = k_skyrim
+				has_landed_title = e_nordic
+			}
+			
+			prestige = 1000
+		}
+		
+		effect = {
+			set_global_flag = falmereth_restored_flag
+			
+			create_bloodline = {
+				type = bloodline_falmer_skyrim
+			}
+			
+			custom_tooltip = {
+				text = PROCLAIM_FALMERETH_EVENT_CT
+				narrative_event = { id = falmer_flavor.10 days = 1 }
+			}
+		}
+	}
+	
+	sp_claim_legacy = {
+		is_high_prio = yes
+		only_independent = yes
+		
+		potential = {
+			has_submenu_open = no
+			culture = falmer
+			is_falmer = yes
+			NOT = { has_global_flag = sp_legacy_claimed }
+			prestige = 250
+			higher_real_tier_than = DUKE
+			age = 16
+		}
+		
+		allow = {
+			prestige = 2000
+			is_high_king = yes
+			OR = { #ORiel
+				religion = auriel
+				secret_religion = auriel
+			}
+			custom_tooltip = {
+				text = falmer_flavor_book_or_bloodline
+				hidden_tooltip = {
+					OR = { #Must have a reasonable connection, either in the form of knowing the history or being of prominent Falmer blood
+						any_artifact = {
+							AND = {
+								artifact_type = book_fall_of_the_snow_prince
+								is_artifact_active = yes
+							}
+						}
+						any_bloodline = {
+							has_bloodline_flag = falmer_bloodline
+						}
+					}
+				}
+			}
+			OR = { #Must control Jolgeirr Barrow, and thus Moesring
+				has_landed_title = c_moesring
+				any_realm_character = {
+					has_landed_title = c_moesring
+				}
+			}
+		}
+		
+		effect = {
+			long_character_event = { id = falmer_flavor.1 }
+			hidden_tooltip = {
+				set_global_flag = sp_legacy_claimed
+				c_moesring = { #TODO: Decision to reinter at your capital
+					capital_scope = {
+						set_title_flag = sp_tomb
+					}
+				}
+			}
+		}
+	}
+}

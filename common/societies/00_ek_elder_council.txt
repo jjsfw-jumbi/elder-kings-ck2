@@ -1,0 +1,604 @@
+elder_council = {
+	primary_attribute = stewardship
+	society_ranks_gfx = generic_ranks
+	#opinion_to_other_members = +10
+	#opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	active = {
+		NOT = {
+			has_global_flag = elder_council_abolished
+		}
+	}
+	indestructible = yes
+
+	can_join_society = {
+		custom_tooltip = {
+			text = ec_join_info
+		}
+		custom_tooltip = {
+			text = ec_not_appointed
+			OR = {
+				NOT = {
+					has_global_flag = ec_policy_join_vote_hc
+					has_global_flag = ec_policy_join_vote_emp
+					has_global_flag = ec_policy_join_appoint_hc
+					has_global_flag = ec_policy_join_appoint_emp
+				}
+				ai = no
+			}
+		}
+		ec_not_voting_no_quorum = yes
+		in_elder_council_range = yes
+		is_in_society = no
+		age = 16
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		NOT = {
+			trait = known_lycan
+			trait = known_lycan_benevolent
+		}
+		NOT = {
+			has_character_modifier = warlord_imperial_claim_rejected
+		}
+		NOT = {
+			trait = hagraven
+			trait = briarheart
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		NOT = {
+			real_tier = emperor
+		}
+		NOT = {
+			has_landed_title = e_pretender_empire
+		}
+		custom_tooltip = {
+			text = ec_5_years_between_join_requests
+			OR = {
+				NOT = {
+					has_character_flag = ec_join_rejected
+				}
+				had_character_flag = { flag = ec_join_rejected days = 1825 }
+			}
+		}
+
+		#hidden_tooltip = {
+		#	OR = {
+		#		ai = no
+		#		AND = {
+		#			ai = yes
+		#			OR = {
+		#				worthy_of_elder_council = yes
+		#				AND = {
+		#					has_global_flag = ec_policy_join_payment
+		#					scaled_wealth = { value = 2 min = 200 max = 1000 }
+		#				}
+		#			}
+		#		}
+		#	}
+		#}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = elder_council
+			AND = {
+				liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			AND = {
+				top_liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+			in_elder_council_range = yes
+		}
+	}
+
+	potential = {
+		general_society_join_conditions = yes
+		ec_meets_potential = yes
+	}
+
+	# Emperor (leave out of society?) > High Chancellor > Chief Councillor > Advisor > Councillor
+	# TODO:JJ rank abilities, decisions
+	society_rank = {
+		level = 1
+		limit = 50
+		startup_limit = 25
+		modifier = {
+			monthly_character_prestige = 0.1
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			ec_participate_in_votes_tooltip
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 15
+		startup_limit = 7
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			mercantile_buy_techpoints
+		}
+		powers = {
+			ec_council_power_tooltip
+			ec_recruit_bureaucrat_tooltip
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 5
+		startup_limit = 2
+		modifier = {
+			monthly_character_prestige = 0.5
+			global_tax_modifier = 0.025
+		}
+		
+		powers = {
+			
+		}
+	}
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1 # Define in history?
+		modifier = {
+			monthly_character_prestige = 1
+			global_tax_modifier = 0.05
+		}
+
+		powers = {
+			ec_change_laws_tooltip
+		}
+	}
+
+	plots = {
+
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_elder_council
+
+		per_attribute = {
+			name = stewardship
+			value = 0.25
+		}
+
+		per_attribute = {
+			name = diplomacy
+			value = 0.5 # TODO:JJ decrease this once a diplo quest is added
+		}
+
+		per_attribute = {
+			name = intrigue
+			value = 0.25
+		}
+
+		# Personality
+		has_trait = {
+			value = 1
+			trait = gregarious
+		}
+
+		has_trait = {
+			value = 1
+			trait = diligent
+		}
+
+		has_trait = {
+			value = 1
+			trait = patient
+		}
+
+		has_trait = {
+			value = 1
+			trait = administrator
+		}
+
+		has_trait = {
+			value = 0.5
+			trait = socializer
+		}
+
+		has_trait = {
+			value = 1
+			trait = genius
+		}
+
+		has_trait = {
+			value = 0.5
+			trait = quick
+		}
+
+		has_trait = {
+			value = 0.5
+			trait = shrewd
+		}
+
+		has_trait = {
+			value = 0.5
+			trait = just
+		}
+
+		has_trait = {
+			value = 0.5
+			trait = ambitious
+		}
+
+		# Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+
+		society_rank = {
+			rank = 4
+			value = 4
+		}
+
+		# Imperial Battlemage (until such a point when the Imperial Battlemage is properly fleshed out)
+		has_trait = {
+			value = 0.25
+			trait = battlemage_1
+		}
+
+		has_trait = {
+			value = 0.5
+			trait = battlemage_2
+		}
+
+		has_trait = {
+			value = 0.75
+			trait = battlemage_3
+		}
+
+		triggered_gain = {
+			desc = in_cyrodiil.triggered_gain
+			trigger = {
+				OR = {
+					AND = {
+						is_landed = yes
+						capital_holding = {
+							kingdom = {
+								title = k_cyrodiil
+							}
+						}
+					}
+					AND = {
+						is_landed = no
+						liege = {
+							capital_holding = {
+								kingdom = {
+									title = k_cyrodiil
+								}
+							}
+						}
+					}
+				}
+			}
+			value = 3
+		}
+
+		triggered_gain = {
+			desc = potentate.triggered_gain
+			trigger = {
+				ec_regency_potentate = yes
+			}
+			value = 5
+		}
+
+		triggered_gain = {
+			desc = councillor.triggered_gain
+			trigger = {
+				liege = {
+					ec_is_emperor = yes
+				}
+				is_voter = yes
+			}
+			value = 5
+		}
+
+		triggered_gain = {
+			desc = duke.triggered_gain
+			trigger = {
+				real_tier = DUKE
+			}
+			value = 3
+		}
+
+		triggered_gain = {
+			desc = king.triggered_gain
+			trigger = {
+				real_tier = king
+			}
+			value = 5
+		}
+
+		triggered_gain = {
+			desc = nepotism.triggered_gain
+			trigger = {
+				any_dynasty_member = {
+					ec_is_emperor = yes
+				}
+			}
+			value = -3
+		}
+
+		triggered_gain = {
+			desc = council_defender.triggered_gain
+			trigger = {
+				has_character_modifier = ec_council_defender
+			}
+			value = 3
+		}
+
+		triggered_gain = {
+			desc = inaccessible.triggered_gain
+			trigger = {
+				OR = {
+					is_inaccessible_trigger = yes
+					prisoner = yes
+					trait = incapable
+				}
+			}
+			value = -5
+		}
+	}
+
+	member_score_per_attribute = 2.5
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+
+		modifier = {
+			factor = 1.5
+			trait = diligent
+		}
+
+		modifier = {
+			factor = 1.5
+			trait = administrator
+		}
+
+		modifier = {
+			factor = 1.25
+			trait = gregarious
+		}
+
+		modifier = {
+			factor = 1.1
+			trait = just
+		}
+
+		modifier = {
+			factor = 1.25
+			trait = ambitious
+		}
+
+		modifier = {
+			factor = 2
+			has_character_modifier = ec_council_defender
+		}
+
+		modifier = {
+			factor = 0
+			has_character_modifier = warlord_imperial_claim_rejected
+		}
+
+		additive_modifier = {
+			value = 10000
+			custom_tooltip = {
+				text = ec_hc_appointed_successor
+				has_character_flag = ec_hc_appointed_successor
+				is_society_grandmaster = no
+			}
+		}
+
+		additive_modifier = {
+			value = 100
+			custom_tooltip = {
+				text = ec_councillor_score_bonus
+				is_voter = yes
+				liege = {
+					ec_is_emperor = yes
+				}
+			}
+		}
+	}
+
+	startup_populate = {
+		trigger = {
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			#is_theocracy = no
+			prisoner = no
+			OR = {
+				is_immortal = yes
+				higher_tier_than = BARON
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+			}
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			NOT = {
+				trait = hagraven
+				trait = briarheart
+				trait = clone
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+			worthy_of_elder_council = yes # TODO:JJ put a date limit on this for when seats were made to be bought
+			OR = {
+				AND = {
+					NOT = {
+						year = 3455 # Interregnum
+					}
+					religion_group = human_pantheon
+				}
+				AND = {
+					year = 3455 # Longhouse Emperors
+					OR = {
+						religion_group = human_pantheon
+						religion_group = reach_faiths
+					}
+				}
+			}
+			# Religious restrictions to try and avoid things like an all Maormer council in 3370
+			# Base on Emperor/High Chancellor?
+			#OR = {
+				# Any time - same religion as the Imperial City
+				#1 = {
+					# Imperial Isle
+				#	PREV = {
+				#		religion = PREV
+				#	}
+				#}
+				# 2E pre-Vasenon, human pantheon
+				#AND = {
+					# add in an actual restriction for this block to be chosen
+				#	religion_group = human_pantheon
+				#}
+
+				# 2E Vasenon, human pantheon, reach faiths
+			#}
+#			OR = {
+#				AND = {
+#					is_ruler = no
+#					liege = {
+#						any_demesne_province = {
+#							OR = {
+#								de_jure_liege_or_above = e_cyrodiil
+#								de_jure_liege_or_above = e_tamriel
+#							}
+#						}
+#					}
+#				}
+#				AND = {
+#					top_liege = {
+#						any_demesne_title = {
+#							#has_title_flag = elder_council_empire
+#							# flag doesn't seem to work in startup, using title instead
+#							OR = {
+#								title = e_cyrodiil
+#								title = e_tamriel
+#							}
+#						}
+#					}
+#				}
+#				AND = {
+#					is_ruler = yes
+#					any_demesne_province = {
+#						OR = {
+#							de_jure_liege_or_above = e_cyrodiil
+#							de_jure_liege_or_above = e_tamriel
+#						}
+#					}
+#				}
+#			}
+			OR = {
+                OR = {
+                    any_liege = {
+                        OR = {
+                            has_landed_title = e_cyrodiil
+                            has_landed_title = e_tamriel
+                        }
+                    }
+                    AND = {
+                        is_tributary = yes
+                        suzerain = {
+                            OR = {
+                                has_landed_title = e_cyrodiil
+                                has_landed_title = e_tamriel
+                            }
+                        }
+                    }
+                    AND = {
+                        any_liege = {
+                            is_tributary = yes
+                            suzerain = {
+                                OR = {
+                                    has_landed_title = e_cyrodiil
+                                    has_landed_title = e_tamriel
+                                }
+                            }
+                        }
+                    }
+                }
+                AND = {
+                    e_cyrodiil = {
+                    	has_holder = no
+                    }
+                    e_tamriel = {
+                    	has_holder = no
+                    }
+                    AND = {
+                        is_ruler = yes
+                        any_demesne_province = {
+                            OR = {
+                                de_jure_liege_or_above = e_cyrodiil
+                                de_jure_liege_or_above = e_tamriel
+                            }
+                        }
+                    }
+                }
+            }
+		}
+	}
+}

@@ -1,0 +1,117 @@
+# Priest
+action_inquisition = {
+	attribute = learning
+	
+	potential = {
+	}
+	
+	trigger = {
+		owner = { same_realm = FROM NOT = { religion = PREV } }
+		OR = {
+			AND = {
+				owner = { religion_group = hist_group }
+				culture_group = argonian
+			}
+			AND = {
+				owner = { NOT = { religion_group = hist_group } }
+				NOT = { culture_group = argonian }
+			}
+		}
+	}
+	
+	events = { 900 901 902 903 }
+}
+action_improve_rel_relations = {
+	attribute = learning
+	
+	potential = {
+		FROM = {
+			OR = {
+				religion = maruhkati
+				religion = nerevarine
+				religion = alikr
+				religion = satakal
+				religion = green_pact
+				religion = auriel
+				religion = riddlethar
+				religion = forsworn_heresy
+				religion = pyandoneaic
+				religion = postorgnumic
+			}
+		}
+	}
+		
+	trigger = {
+		any_province_lord = {
+			religion = FROM
+			is_theocracy = yes
+		}
+		is_within_diplo_range = FROM
+	}
+	
+	events = { 906 907 }
+}
+action_advance_cul_tech = {
+	attribute = learning
+	
+	potential = {
+	}
+	
+	trigger = {
+		any_province_lord = {
+			OR = {
+				character = FROM
+				is_liege_or_above = FROM
+			}
+		}
+		technology_can_spread = yes
+	}
+	
+	tech_growth_modifier_culture = 0.05
+	monthly_character_piety = 0.05
+	
+	events = { 926 927 20218 }
+}
+action_charity = {
+	attribute = learning
+	
+	potential = {
+		FROM = {
+			NOR = {
+				religion = maruhkati
+				religion = nerevarine
+				religion = alikr
+				religion = satakal
+				religion = green_pact
+				religion = auriel
+				religion = riddlethar
+				religion = forsworn_heresy
+				religion = pyandoneaic
+				religion = postorgnumic
+			}
+		}
+	}
+	
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+	}
+	
+	local_revolt_risk = -0.005
+	
+	events = { 20040 20043 20048 20050 }
+}
+action_hunt_heretics = {
+	attribute = learning
+
+	potential = {
+		has_dlc = Mystics
+	}
+	
+	liege_modifier = apostate_liege_mod
+
+	offmap = yes
+	
+	events = { MNM.70100 ekjobs.100 ekjobs.200 }
+}

@@ -1,0 +1,156 @@
+oblivion_ideal_masters = {
+	name = ideal_masters_offmap
+	window_name = domestic_offmaps_window
+	button_name = icon_offmaps_entry
+	currency_name = TXT_SOUL_FAVOUR
+	currency_gain = monthly_souls
+	currency_reset_on_dynasty_change = no
+	holder_title = title_oblivion_ideal
+	governor_title = e_soul_cairn
+	tier = emperor
+	non_aggression_modifier = peace_deal_with_china
+	coa_religion = ideal_masters
+	government = confucian_bureaucracy
+	beginning_of_history = 1.1.1
+	sound = china_interaction_interface
+	display_trigger = {
+		has_dlc = "Jade Dragon"
+		FROM = {
+			worships_ideal_masters = yes
+		}
+	}
+	policies = {
+		ideal_souls_status
+	}
+	statuses = {
+		ideal_normal
+	}
+	buttons = {
+		offmap_gifts = {
+			is_active_trigger = {
+				always = yes
+			}
+		}
+		offmap_boons = {
+			is_active_trigger = {
+				#oblivion_azura_boon_decisions_enabled_trigger = yes
+				always = yes
+			}
+		}
+		offmap_hostility = {
+			is_active_trigger = {
+				#china_offmap_hostile_decisions_enabled_trigger = yes
+			}
+			display_trigger = {
+				always = no
+			}
+		}
+		offmap_hostility2 = {
+			display_trigger = {
+				always = no
+			}
+		}
+	}
+
+	#These conditions only effect the appearance of the button, it does not actually disable them from being clickable. The same triggers are used in all tribute/boon decisions respectively
+	
+	icon_triggers = {
+	}
+
+	monthly_currency_gain = {
+		offmap_openly_worship = {
+			value = 2.5
+			FROM = { likes_ideal_masters = yes }
+		}
+		offmap_secretly_worship = {
+			value = 1.25
+			FROM = { likes_secretly_ideal_masters = yes }
+		}
+		# soul sacrifice?
+		offmap_likes_necromancers = {
+			value = 0.75
+			FROM = { likes_necromancers = yes }
+		}
+		offmap_likes_undead = {
+			value = 0.25
+			FROM = { is_undead = yes }
+		}
+		offmap_likes_ruthless = {
+			value = 0.25
+			FROM = { likes_ruthless = yes }
+		}
+		offmap_likes_cruel = {
+			value = 0.25
+			FROM = { likes_cruel = yes }
+		}
+		offmap_likes_ambitious = {
+			value = 0.25
+			FROM = { likes_ambitious = yes }
+		}
+		#offmap_likes_soul_harvest = {
+		#	value = 5
+		#	FROM = { has_character_modifier = ideal_offmap_harvest }
+		#}
+		#offmap_dislikes_loaned_soldiers = {
+		#	value = -5
+		#	FROM = { has_earmarked_regiments = ideal_boon_troops }
+		#}
+	}
+
+	temple_names = {
+		{ #Founder
+			"The Ideal Masters"
+		}
+		{ #Successor
+			"The Ideal Masters"
+		}
+	}
+
+	holder_succession = {
+		is_female = {
+			value = 0
+		}
+		culture = {
+			outsider = {
+				value = 100
+			}
+		}
+		graphical_culture = {
+			FROM = {
+				value = 100
+			}
+		}
+
+		religion = {
+			ideal_masters = {
+				value = 100
+			}
+		}
+
+		dynasty = {
+			FROM = {
+				value = 100
+			}
+		}
+
+		likes = {
+			likes_dragonborns = {
+				value = 250
+			}
+		}
+		
+		dislikes = {
+			likes_kind = {
+				value = 100
+			}
+		}
+	}
+
+	diplomatic_range = { #Already includes the western governor's "normal" diplo range
+		OR = {
+			religion = ideal_masters
+			secret_religion = ideal_masters
+			trait = necromancer
+		}
+	}
+}

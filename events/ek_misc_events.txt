@@ -1,0 +1,2361 @@
+#130000000-137999999
+###############################
+#Miscellaneous Events by Korba
+###############################
+
+namespace = kmisc
+
+#Trait Toggling
+character_event = {
+	id = kmisc.0
+	desc = "Choose which traits you wish to toggle from the options below."
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Toggle Birthsigns."
+		if = {
+			limit = { NOT = { has_character_flag = birthsigns_off } }
+			custom_tooltip = {
+				text = togglebstt0
+				hidden_tooltip = { set_character_flag = birthsigns_off break = yes }
+			}
+		}
+		if = {
+			limit = { has_character_flag = birthsigns_off }
+			custom_tooltip = {
+				text = togglebstt1
+				hidden_tooltip = { clr_character_flag = birthsigns_off }
+			}
+		}
+	}
+	option = {
+		name = "Toggle Racial Traits."
+		if = {
+			limit = { NOT = { has_character_flag = racial_traits_off } }
+			custom_tooltip = {
+				text = togglerttt0
+				hidden_tooltip = { set_character_flag = racial_traits_off break = yes }
+			}
+		}
+		if = {
+			limit = { has_character_flag = racial_traits_off }
+			custom_tooltip = {
+				text = togglerttt1
+				hidden_tooltip = { clr_character_flag = racial_traits_off }
+			}
+		}
+	}
+	option = {
+		name = "Toggle All Togglable Traits."
+		trigger = {
+			NOR = { has_character_flag = racial_traits_off  has_character_flag = birthsigns_off }
+		}
+		if = {
+			limit = { NOR = { has_character_flag = racial_traits_off  has_character_flag = birthsigns_off } }
+			custom_tooltip = {
+				text = togglerttt0
+				hidden_tooltip = { set_character_flag = racial_traits_off set_character_flag = birthsigns_off break = yes }
+			}
+		}
+		if = {
+			limit = { has_character_flag = racial_traits_off has_character_flag = racial_traits_off }
+			custom_tooltip = {
+				text = togglerttt1
+				hidden_tooltip = { clr_character_flag = racial_traits_off clr_character_flag = birthsigns_off }
+			}
+		}
+	}
+	option = {
+		name = "Cancel"
+	}
+}
+
+#Permanent Lunacy
+character_event = {
+	id = kmisc.1
+	title = kmisc.1.t #Insanity
+	desc = kmisc.1.d #Though you managed to somehow gain respite from your madness, the manner in which your mind was first broken means that eventually it will always shatter once again into a million pieces.
+	picture = GFX_evt_lunatic
+	
+	trigger = {
+		has_character_flag = permanent_lunatic
+		NOT = { trait = lunatic }
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	option = {
+		name = kmisc.1.o1 #I can feel it, my mind slipping away once again!
+		add_trait = lunatic
+	}
+}
+
+#Zap AI Wealth on death
+character_event = {
+	id = kmisc.2
+	hide_window = yes
+	is_triggered_only = yes
+	
+	ai = yes
+
+	immediate = {
+		current_heir = {
+			if = {
+				limit = {
+					ai = no
+					NOT = { dynasty = ROOT }
+					is_liege_or_above_of = ROOT
+				}
+				ROOT = { clear_wealth = yes }
+			}
+		}
+	}
+}
+
+#Zap Cheating Immortals
+character_event = {
+	id = kmisc.3
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+	desc = nocheatimmortaldbeventdesc
+
+	hide_from = yes
+	capable_only = yes
+	prisoner = no
+	ai = no
+	
+	trigger = {
+		NOT = {
+			has_game_rule = {
+				name = immortal_dragonborn_restriction
+				value = unrestricted
+			}
+		}
+		OR = {
+			AND = {
+				trait = immortal
+				NOT = { has_character_flag = immortal_no_cheat }
+			}
+			AND = {
+				trait = dragonborn
+				NOR = {
+					has_character_flag = dragonborn_candidate
+					is_dragonblood = yes
+				}
+			}
+		}
+		NOT = { has_character_modifier = nocheat_timer }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 0.5
+			any_child = {
+				is_alive = yes
+				NOT = { trait = immortal }
+			}
+		}
+		modifier = { factor = 0.1 multiplayer = yes }
+	}
+	
+	immediate = {
+		random_list = {
+			75 = { modifier = { factor = 0 AND = { trait = incapable trait = imbecile } } set_character_flag = nocheat_outcome_1 }
+			25 = { set_character_flag = nocheat_outcome_2 }
+		}
+	}
+	
+	option = {
+		name = N_DAEDRA_SANGUINE8O
+		trigger = { has_character_flag = nocheat_outcome_1 }
+		add_trait = incapable
+		add_trait = imbecile
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = nocheat_timer
+				months = 12
+				hidden = yes
+			}
+		}
+	}
+	option = {
+		name = N_DAEDRA_SANGUINE8O
+		trigger = { has_character_flag = nocheat_outcome_2 }
+		death = { death_reason = death_accident }
+	}
+	after = {
+		clr_character_flag = nocheat_outcome_1
+		clr_character_flag = nocheat_outcome_2
+	}
+}
+#AI Education/Specialisation Booster
+character_event = {
+	id = kmisc.4
+	hide_window = yes
+	
+	ai = yes
+	min_age = 25
+	max_age = 250
+	is_triggered_only = yes
+	
+	trigger = {
+		NOR = {
+			is_incapacitated = yes
+			maxed_education = yes
+			has_two_specializations = yes
+			has_maxed_a_specialization = yes
+		}
+		OR = {
+			AND = {
+				is_long_lived = yes
+				age > 50
+			}
+			AND = {
+				is_long_lived = no
+				age < 61
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_education = yes }
+			random = {
+				chance = 10
+				modifier = { has_bottom_tier_education_trait_trigger = yes factor = 3 }
+				modifier = { has_2nd_tier_education_trait_trigger = yes factor = 2 }
+				modifier = { has_3rd_tier_education_trait_trigger = yes factor = 2 }
+				modifier = { has_top_tier_education_trait_trigger = yes factor = 2 }
+				modifier = { has_bottom_tier_education_trait_trigger = yes factor = 2 }
+				upgrade_education_effect = yes
+			}
+		}
+		else_if = {
+			limit = { has_education = no }
+			random_list = {
+				20 = { chancellor_education_assignment = yes }
+				20 = { mage_education_assignment = yes }
+				20 = { marshal_education_assignment = yes }
+				20 = { spymaster_education_assignment = yes }
+				20 = { steward_education_assignment = yes }
+			}
+		}
+		if = {
+			limit = { has_specialisation = yes }
+			random = { chance = 25 upgrade_specialisation_effect = yes }
+		}
+		else_if = {
+			limit = { has_specialisation = no }
+			random = {
+				chance = 25
+				if = {
+					limit = { is_agent = yes }
+					random_list = {
+						11 = { add_trait = bard_1 }
+						#9 = { add_trait = wayfarer_1 }
+						3 = { add_trait = savant_1 }
+						6 = { add_trait = rogue_1 }
+						#3 = { add_trait = knight_1 }
+						7 = { add_trait = crusader_1 }
+						1 = { add_trait = barbarian_1 }
+						4 = { add_trait = spellsword_1 }
+						1 = { add_trait = priest_1 }
+						9 = { add_trait = witchhunter_1 }
+						#1 = { add_trait = battlemage_1 }
+						2 = { add_trait = sorcerer_1 }
+						7 = { add_trait = trader_1 }
+						7 = { add_trait = monk_1 }
+						5 = { add_trait = scout_1 }
+						#8 = { add_trait = healer_1 }
+						9 = { add_trait = acrobat_1 }
+						9 = { add_trait = thief_1 }
+						10 = { add_trait = assassin_1 }
+						9 = { add_trait = nightblade_1 }
+					}
+				}
+				if = {
+					limit = { is_warrior = yes }
+					random_list = {
+						3 = { add_trait = bard_1 }
+						4 = { add_trait = wayfarer_1 }
+						#8 = { add_trait = savant_1 }
+						8 = { add_trait = rogue_1 }
+						10 = { add_trait = knight_1 }
+						9 = { add_trait = crusader_1 }
+						10 = { add_trait = barbarian_1 }
+						9 = { add_trait = spellsword_1 }
+						#4 = { add_trait = priest_1 }
+						6 = { add_trait = witchhunter_1 }
+						9 = { add_trait = battlemage_1 }
+						2 = { add_trait = sorcerer_1 }
+						#12 = { add_trait = trader_1 }
+						4 = { add_trait = monk_1 }
+						7 = { add_trait = scout_1 }
+						1 = { add_trait = healer_1 }
+						3 = { add_trait = acrobat_1 }
+						#5 = { add_trait = thief_1 }
+						9 = { add_trait = assassin_1 }
+						6 = { add_trait = nightblade_1 }
+					}
+				}
+				if = {
+					limit = { is_mage = yes }
+					random_list = {
+						7 = { add_trait = bard_1 }
+						6 = { add_trait = wayfarer_1 }
+						6 = { add_trait = savant_1 }
+						#6 = { add_trait = rogue_1 }
+						4 = { add_trait = knight_1 }
+						5 = { add_trait = crusader_1 }
+						#6 = { add_trait = barbarian_1 }
+						8 = { add_trait = spellsword_1 }
+						9 = { add_trait = priest_1 }
+						6 = { add_trait = witchhunter_1 }
+						6 = { add_trait = battlemage_1 }
+						7 = { add_trait = sorcerer_1 }
+						6 = { add_trait = trader_1 }
+						5 = { add_trait = monk_1 }
+						#6 = { add_trait = scout_1 }
+						9 = { add_trait = healer_1 }
+						4 = { add_trait = acrobat_1 }
+						5 = { add_trait = thief_1 }
+						#6 = { add_trait = assassin_1 }
+						7 = { add_trait = nightblade_1 }
+					}
+				}
+				if = {
+					limit = { is_magistrate = yes }
+					random_list = {
+						#7 = { add_trait = bard_1 }
+						9 = { add_trait = wayfarer_1 }
+						8 = { add_trait = savant_1 }
+						7 = { add_trait = rogue_1 }
+						3 = { add_trait = knight_1 }
+						#5 = { add_trait = crusader_1 }
+						5 = { add_trait = barbarian_1 }
+						2 = { add_trait = spellsword_1 }
+						4 = { add_trait = priest_1 }
+						#6 = { add_trait = witchhunter_1 }
+						1 = { add_trait = battlemage_1 }
+						8 = { add_trait = sorcerer_1 }
+						12 = { add_trait = trader_1 }
+						9 = { add_trait = monk_1 }
+						9 = { add_trait = scout_1 }
+						8 = { add_trait = healer_1 }
+						7 = { add_trait = acrobat_1 }
+						5 = { add_trait = thief_1 }
+						3 = { add_trait = assassin_1 }
+						#7 = { add_trait = nightblade_1 }
+					}
+				}
+				if = {
+					limit = { is_diplomat = yes }
+					random_list = {
+						11 = { add_trait = bard_1 }
+						9 = { add_trait = wayfarer_1 }
+						9 = { add_trait = savant_1 }
+						10 = { add_trait = rogue_1 }
+						5 = { add_trait = knight_1 }
+						3 = { add_trait = crusader_1 }
+						2 = { add_trait = barbarian_1 }
+						#8 = { add_trait = spellsword_1 }
+						6 = { add_trait = priest_1 }
+						4 = { add_trait = witchhunter_1 }
+						3 = { add_trait = battlemage_1 }
+						#7 = { add_trait = sorcerer_1 }
+						9 = { add_trait = trader_1 }
+						#5 = { add_trait = monk_1 }
+						6 = { add_trait = scout_1 }
+						7 = { add_trait = healer_1 }
+						#4 = { add_trait = acrobat_1 }
+						6 = { add_trait = thief_1 }
+						5 = { add_trait = assassin_1 }
+						5 = { add_trait = nightblade_1 }
+					}
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = kmisc.5
+	desc = kmisc.5.donttrytogamethedraugr
+	picture = GFX_evt_undead
+
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		OR = {
+			liege = { ai = yes trait = undead }
+			top_liege = { ai = yes trait = undead }
+		}
+		NOT = { trait = undead }
+	}
+	
+	option = {
+		name = kmisc.5.excellent
+		custom_tooltip = {
+			text = kmisc.5.tttext
+			any_dynasty_member = { death = { death_reason = death_accident } }
+			death = { death_reason = death_accident }
+		}
+	}
+}
+#Argonia is a very unhealthy place for Non-Argonians
+character_event = {
+	id = kmisc.900
+	desc = ahealth100d
+	picture = GFX_evt_illness
+	
+	trigger = {
+		location = {
+			terrain = argonia
+		}
+		is_disease_immune = no
+		NOR = {
+			trait = argonian
+			capital_scope = { TECH_RECRUITMENT = 6 }
+			capital_scope = { TECH_RELIGIOUS_CUSTOMS = 5 }
+		}
+		NOT = { trait = argonian }
+		NOT = { trait = undead }
+		NOT = { trait = lich }
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			capital_scope = { TECH_RELIGIOUS_CUSTOMS = 2 }
+			factor = 1.25
+		}
+		modifier = {
+			capital_scope = { TECH_RELIGIOUS_CUSTOMS = 4 }
+			factor = 1.5
+		}
+		modifier = {
+			capital_scope = { TECH_RECRUITMENT = 3 }
+			factor = 1.1
+		}
+		modifier = {
+			capital_scope = { TECH_RECRUITMENT = 5 }
+			factor = 1.25
+		}
+		modifier = {
+			capital_scope = { TECH_RECRUITMENT = 7 }
+			factor = 1.5
+		}
+		modifier = { trait = lucky factor = 2.0 }
+		modifier = { trait = unlucky factor = 0.75 }
+		modifier = { trait = slovenly factor = 0.75 }
+		modifier = { trait = slothful factor = 0.8 }
+		modifier = { trait = absent_minded factor = 0.85 }
+		modifier = { trait = lustful factor = 0.85 }
+		modifier = { trait = reckless factor = 0.85 }
+		modifier = { trait = diligent factor = 1.25 }
+		modifier = { trait = temperate factor = 1.1 }
+		modifier = { trait = chaste factor = 1.05 }
+		modifier = { trait = celibate factor = 1.05 }
+		modifier = { trait = swamp_terrain_leader factor = 1.25 }
+	}
+	
+	option = {
+		name = ahealth100o1
+		trigger = { wealth = 10 }
+		scaled_wealth = { value = -0.25 min = -10 max = -50 }
+		random = {
+			chance = 25
+			modifier = { health >= 4.0 health < 5.0 factor = 0.95 }
+			modifier = { health >= 5.0 health < 6.0 factor = 0.9 }
+			modifier = { health >= 6.0 health < 7.0 factor = 0.85 }
+			modifier = { health >= 7.0 health < 8.0 factor = 0.8 }
+			modifier = { health >= 8.0 health < 9.0 factor = 0.75 }
+			modifier = { health >= 9.0 health < 10.0 factor = 0.7 }
+			modifier = { health >= 10.0 factor = 0.65 }
+			modifier = { health >= 2.0 health < 3.0 factor = 1.1 }
+			modifier = { health >= 1.0 health < 2.0 factor = 1.2 }
+			modifier = { health >= 0.0 health < 1.0 factor = 1.3 }
+			modifier = { health < 0.0 factor = 2.0 }
+			modifier = { trait = lucky factor = 0.1 }
+			modifier = { trait = unlucky factor = 2.0 }
+			
+			custom_tooltip = {
+				text = ahealth100tt
+				hidden_tooltip = {
+					if = {
+						limit = {
+							NOT = {
+								has_dlc = "Reapers"
+							}
+						}
+						random_list = {
+							12 = { character_event = { id = eknotify.216 } } #Stomach Rot
+							9 = { character_event = { id = eknotify.215 } } #Rockjoint
+							8 = { character_event = { id = eknotify.214 } } #Greenspore
+							10 = { character_event = { id = eknotify.212 } } #Dampworm
+							14 = { character_event = { id = eknotify.211 } } #Cholera
+							12 = { character_event = { id = eknotify.210 } } #Swamp Rot
+							6 = { character_event = { id = eknotify.206 } } #Leprosy
+							5 = { character_event = { id = eknotify.202 } } #Typhus
+							5 = { character_event = { id = eknotify.201 } } #Typhoid
+							16 = { character_event = { id = eknotify.218 } } #Illness
+							1 = { character_event = { id = eknotify.209 } } #Knahaten Flu
+						}
+					}
+					if = {
+						limit = {
+							has_dlc = "Reapers"
+						}
+						add_symptom_effect = yes
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ahealth100o2
+		custom_tooltip = {
+			text = ahealth100tt
+			hidden_tooltip = {
+				if = {
+					limit = {
+						NOT = {
+							has_dlc = "Reapers"
+						}
+					}
+					random_list = {
+						12 = { character_event = { id = eknotify.216 } } #Stomach Rot
+						9 = { character_event = { id = eknotify.215 } } #Rockjoint
+						8 = { character_event = { id = eknotify.214 } } #Greenspore
+						10 = { character_event = { id = eknotify.212 } } #Dampworm
+						14 = { character_event = { id = eknotify.211 } } #Cholera
+						12 = { character_event = { id = eknotify.210 } } #Swamp Rot
+						6 = { character_event = { id = eknotify.206 } } #Leprosy
+						5 = { character_event = { id = eknotify.202 } } #Typhus
+						5 = { character_event = { id = eknotify.201 } } #Typhoid
+						16 = { character_event = { id = eknotify.218 } } #Illness
+						1 = { character_event = { id = eknotify.209 } } #Knahaten Flu
+					}
+				}
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_symptom_effect = yes
+				}
+			}
+		}
+	}
+}
+
+#Jungle can be bad for your health too
+character_event = {
+	id = kmisc.901
+	desc = ahealth101d
+	picture = GFX_evt_illness
+	
+	trigger = {
+		location = {
+			OR = {
+				terrain = jungle
+				terrain = valen_woods
+			}
+		}
+		is_disease_immune = no
+		is_tsaesci = no
+		NOR = {
+			trait = argonian
+			AND = {
+				is_bosmer = yes
+				location = { OR = { region = nirn_tamriel_valenwood terrain = valen_woods } }
+			}
+			AND = {
+				trait = khajiit
+				location = { region = nirn_tamriel_elsweyr }
+			}
+			capital_scope = { TECH_RECRUITMENT = 3 }
+			capital_scope = { TECH_RELIGIOUS_CUSTOMS = 3 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 150
+
+		modifier = {
+			capital_scope = { TECH_RELIGIOUS_CUSTOMS = 2 }
+			factor = 1.25
+		}
+		modifier = {
+			capital_scope = { TECH_RECRUITMENT = 2 }
+			factor = 1.25
+		}
+		modifier = { trait = lucky factor = 2.0 }
+		modifier = { trait = unlucky factor = 0.75 }
+		modifier = { trait = slovenly factor = 0.75 }
+		modifier = { trait = slothful factor = 0.8 }
+		modifier = { trait = absent_minded factor = 0.85 }
+		modifier = { trait = lustful factor = 0.85 }
+		modifier = { trait = reckless factor = 0.85 }
+		modifier = { trait = diligent factor = 1.25 }
+		modifier = { trait = temperate factor = 1.1 }
+		modifier = { trait = chaste factor = 1.05 }
+		modifier = { trait = celibate factor = 1.05 }
+		modifier = { trait = jungle_terrain_leader factor = 1.25 }
+	}
+	
+	option = {
+		name = ahealth100o1
+		trigger = { wealth = 10 }
+		scaled_wealth = { value = -0.25 min = -10 max = -50 }
+		random = {
+			chance = 25
+			modifier = { health >= 4.0 health < 5.0 factor = 0.95 }
+			modifier = { health >= 5.0 health < 6.0 factor = 0.9 }
+			modifier = { health >= 6.0 health < 7.0 factor = 0.85 }
+			modifier = { health >= 7.0 health < 8.0 factor = 0.8 }
+			modifier = { health >= 8.0 health < 9.0 factor = 0.75 }
+			modifier = { health >= 9.0 health < 10.0 factor = 0.7 }
+			modifier = { health >= 10.0 factor = 0.65 }
+			modifier = { health >= 2.0 health < 3.0 factor = 1.1 }
+			modifier = { health >= 1.0 health < 2.0 factor = 1.2 }
+			modifier = { health >= 0.0 health < 1.0 factor = 1.3 }
+			modifier = { health < 0.0 factor = 2.0 }
+			modifier = { trait = lucky factor = 0.1 }
+			modifier = { trait = unlucky factor = 2.0 }
+			
+			custom_tooltip = {
+				text = ahealth100tt
+				hidden_tooltip = {
+					if = {
+						limit = {
+							NOT = {
+								has_dlc = "Reapers"
+							}
+						}
+						random_list = {
+							12 = { character_event = { id = eknotify.216 } } #Stomach Rot
+							9 = { character_event = { id = eknotify.215 } } #Rockjoint
+							8 = { character_event = { id = eknotify.214 } } #Greenspore
+							10 = { character_event = { id = eknotify.212 } } #Dampworm
+							14 = { character_event = { id = eknotify.211 } } #Cholera
+							12 = { character_event = { id = eknotify.210 } } #Swamp Rot
+							6 = { character_event = { id = eknotify.206 } } #Leprosy
+							5 = { character_event = { id = eknotify.202 } } #Typhus
+							5 = { character_event = { id = eknotify.201 } } #Typhoid
+							16 = { character_event = { id = eknotify.218 } } #Illness
+							1 = { character_event = { id = eknotify.209 } } #Knahaten Flu
+						}
+					}
+					if = {
+						limit = {
+							has_dlc = "Reapers"
+						}
+						add_symptom_effect = yes
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ahealth100o2
+		custom_tooltip = {
+			text = ahealth100tt
+			hidden_tooltip = {
+				if = {
+					limit = {
+						NOT = {
+							has_dlc = "Reapers"
+						}
+					}
+					random_list = {
+						16 = { character_event = { id = eknotify.216 } } #Stomach Rot
+						10 = { character_event = { id = eknotify.215 } } #Rockjoint
+						14 = { character_event = { id = eknotify.214 } } #Greenspore
+						15 = { character_event = { id = eknotify.212 } } #Dampworm
+						7 = { character_event = { id = eknotify.206 } } #Leprosy
+						5 = { character_event = { id = eknotify.202 } } #Typhus
+						5 = { character_event = { id = eknotify.201 } } #Typhoid
+						27 = { character_event = { id = eknotify.218 } } #Illness
+					}
+				}
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_symptom_effect = yes
+				}
+			}
+		}
+	}
+}
+
+#So can Mangroves and Swamps
+character_event = {
+	id = kmisc.902
+	desc = ahealth102d
+	picture = GFX_evt_illness
+	
+	trigger = {
+		location = {
+			OR = {
+				terrain = marsh
+				terrain = mangrove_swamp
+			}
+		}
+		is_disease_immune = no
+		NOR = {
+			trait = argonian
+			AND = {
+				is_maormer = yes
+				location = { region = nirn_tamriel_pyandonea }
+			}
+			capital_scope = { TECH_RECRUITMENT = 3 }
+			capital_scope = { TECH_RELIGIOUS_CUSTOMS = 3 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 150
+		
+		modifier = {
+			capital_scope = { TECH_RELIGIOUS_CUSTOMS = 2 }
+			factor = 1.25
+		}
+		modifier = {
+			capital_scope = { TECH_RECRUITMENT = 2 }
+			factor = 1.25
+		}
+		modifier = { trait = slovenly factor = 0.75 }
+		modifier = { trait = slothful factor = 0.8 }
+		modifier = { trait = absent_minded factor = 0.85 }
+		modifier = { trait = lustful factor = 0.85 }
+		modifier = { trait = reckless factor = 0.85 }
+		modifier = { trait = diligent factor = 1.25 }
+		modifier = { trait = temperate factor = 1.1 }
+		modifier = { trait = chaste factor = 1.05 }
+		modifier = { trait = celibate factor = 1.05 }
+		modifier = { trait = swamp_terrain_leader factor = 1.25 }
+	}
+	
+	option = {
+		name = ahealth100o1
+		trigger = { wealth = 10 }
+		scaled_wealth = { value = -0.25 min = -10 max = -50 }
+		random = {
+			chance = 25
+			modifier = { health >= 4.0 health < 5.0 factor = 0.95 }
+			modifier = { health >= 5.0 health < 6.0 factor = 0.9 }
+			modifier = { health >= 6.0 health < 7.0 factor = 0.85 }
+			modifier = { health >= 7.0 health < 8.0 factor = 0.8 }
+			modifier = { health >= 8.0 health < 9.0 factor = 0.75 }
+			modifier = { health >= 9.0 health < 10.0 factor = 0.7 }
+			modifier = { health >= 10.0 factor = 0.65 }
+			modifier = { health >= 2.0 health < 3.0 factor = 1.1 }
+			modifier = { health >= 1.0 health < 2.0 factor = 1.2 }
+			modifier = { health >= 0.0 health < 1.0 factor = 1.3 }
+			modifier = { health < 0.0 factor = 2.0 }
+			modifier = { trait = lucky factor = 0.1 }
+			modifier = { trait = unlucky factor = 2.0 }
+			
+			custom_tooltip = {
+				text = ahealth100tt
+				hidden_tooltip = {
+					if = {
+						limit = {
+							NOT = {
+								has_dlc = "Reapers"
+							}
+						}
+						random_list = {
+							12 = { character_event = { id = eknotify.216 } } #Stomach Rot
+							9 = { character_event = { id = eknotify.215 } } #Rockjoint
+							8 = { character_event = { id = eknotify.214 } } #Greenspore
+							10 = { character_event = { id = eknotify.212 } } #Dampworm
+							14 = { character_event = { id = eknotify.211 } } #Cholera
+							12 = { character_event = { id = eknotify.210 } } #Swamp Rot
+							6 = { character_event = { id = eknotify.206 } } #Leprosy
+							5 = { character_event = { id = eknotify.202 } } #Typhus
+							5 = { character_event = { id = eknotify.201 } } #Typhoid
+							16 = { character_event = { id = eknotify.218 } } #Illness
+							1 = { character_event = { id = eknotify.209 } } #Knahaten Flu
+						}
+					}
+					if = {
+						limit = {
+							has_dlc = "Reapers"
+						}
+						add_symptom_effect = yes
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ahealth100o2
+		custom_tooltip = {
+			text = ahealth100tt
+			hidden_tooltip = {
+				if = {
+					limit = {
+						NOT = {
+							has_dlc = "Reapers"
+						}
+					}
+					random_list = {
+						16 = { character_event = { id = eknotify.216 } } #Stomach Rot
+						10 = { character_event = { id = eknotify.215 } } #Rockjoint
+						14 = { character_event = { id = eknotify.214 } } #Greenspore
+						15 = { character_event = { id = eknotify.212 } } #Dampworm
+						7 = { character_event = { id = eknotify.206 } } #Leprosy
+						5 = { character_event = { id = eknotify.202 } } #Typhus
+						5 = { character_event = { id = eknotify.201 } } #Typhoid
+						27 = { character_event = { id = eknotify.218 } } #Illness
+					}
+				}
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_symptom_effect = yes
+				}
+			}
+		}
+	}
+}
+
+##################
+#Religion Events
+##################
+#130001000-130001999
+character_event = {
+	id = kmisc.1000
+	desc = COMMUNEWITHIST1DESC
+	picture = GFX_evt_black_marsh
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = COMMUNEWITHIST1OPT
+		piety = 40
+		clr_character_flag = commune_with_hist
+	}
+}
+character_event = {
+	id = kmisc.1001
+	desc = COMMUNEWITHIST2DESC
+	picture = GFX_evt_black_marsh
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = COMMUNEWITHIST1OPT
+		piety = 25
+		clr_character_flag = commune_with_hist
+		add_character_modifier = {
+			name = hist_communion
+			duration = 1095
+		}
+	}
+}
+character_event = {
+	id = kmisc.1002
+	desc = COMMUNEWITHIST3DESC
+	picture = GFX_evt_black_marsh
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = COMMUNEWITHIST2OPT
+		if = {
+			limit = {
+				NOT = {
+					has_dlc = "Reapers"
+				}
+			}
+			add_trait = ill
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			add_symptom_effect = yes
+		}
+		clr_character_flag = commune_with_hist
+		random_list = {
+			50 = { add_trait = lunatic }
+			15 = { add_trait = possessed }
+			10 = { death = { death_reason = death_trait } }
+			25 = {}
+		}
+	}
+}
+
+character_event = {
+	id = kmisc.1003
+	desc = HONOURACNESTORS1DESC
+	picture = GFX_evt_redoran
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = HONOURACNESTORS1OPT
+		piety = 25
+		clr_character_flag = honoured_ancestors
+	}
+}
+character_event = {
+	id = kmisc.1004
+	desc = HONOURACNESTORS2DESC
+	picture = GFX_evt_redoran
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = HONOURACNESTORS2OPT
+		piety = 25
+		any_dynasty_member = {
+			opinion = {
+				modifier = opinion_honoured_ancestors
+				who = ROOT
+			}
+		}
+		clr_character_flag = honoured_ancestors
+	}
+}
+character_event = {
+	id = kmisc.1005
+	desc = HONOURACNESTORS3DESC
+	picture = GFX_evt_redoran
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = HONOURACNESTORS3OPT
+		any_dynasty_member = {
+			opinion = {
+				modifier = opinion_dishonoured_ancestors
+				who = ROOT
+			}
+		}
+		clr_character_flag = honoured_ancestors
+	}
+}
+
+character_event = {
+	id = kmisc.1006
+	desc = TRIBUNALTRIBUTE1DESC
+	picture = GFX_evt_morrowind
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = TRIBUNALTRIBUTE1OPTA # Accept Donation, Give Piety
+		scaled_wealth = 0.25
+		FROM = {
+			opinion = {
+				modifier = opinion_tribute_religion
+				who = ROOT
+			}
+		}
+		FROM = { character_event = { id = kmisc.1007 days = 5 random = 3 } }
+		ai_chance = {
+			factor = 12
+			modifier = {
+				trait = kind
+				factor = 3
+			}
+			modifier = {
+				trait = just
+				factor = 2
+			}
+			modifier = {
+				trait = diligent
+				factor = 2
+			}
+			modifier = {
+				FROM = { trait = zealous }
+				factor = 3
+			}
+			modifier = {
+				FROM = { piety = 100 }
+				factor = 2
+			}
+			modifier = {
+				opinion = { who = FROM value = 25 }
+				factor = 2
+			}
+			modifier = {
+				opinion = { who = FROM value = 50 }
+				factor = 3
+			}
+			modifier = {
+				opinion = { who = FROM value = 75 }
+				factor = 4
+			}
+			modifier = {
+				trait = greedy
+				factor = 2
+			}
+			modifier = {
+				FROM = { any_dynasty_member = { character = ROOT } }
+				factor = 3
+			}
+		}
+	}
+	option = {
+		name = TRIBUNALTRIBUTE1OPTB # Accept Donation, Give Piety & Blessing
+		scaled_wealth = 0.25
+		opinion = {
+			modifier = opinion_tribute_religion
+			who = FROM
+		}
+		FROM = { character_event = { id = kmisc.1008 days = 5 random = 3 } }
+		ai_chance = {
+			factor = 10
+			modifier = {
+				trait = kind
+				factor = 3
+			}
+			modifier = {
+				trait = charitable
+				factor = 3
+			}
+			modifier = {
+				FROM = { trait = zealous }
+				factor = 5
+			}
+			modifier = {
+				FROM = { piety = 250 }
+				factor = 2
+			}
+			modifier = {
+				opinion = { who = FROM value = 50 }
+				factor = 2
+			}
+			modifier = {
+				opinion = { who = FROM value = 75 }
+				factor = 3
+			}
+			modifier = {
+				FROM = { any_dynasty_member = { character = ROOT } }
+				factor = 3
+			}
+		}
+	}
+	option = {
+		name = TRIBUNALTRIBUTE1OPTC # Spurn Donation
+		FROM = { character_event = { id = kmisc.1009 days = 5 random = 3 } }
+		opinion = {
+			who = FROM
+			modifier = opinion_tribute_religion_negative
+		}
+		ai_chance = {
+			factor = 8
+			modifier = {
+				trait = cruel
+				factor = 2
+			}
+			modifier = {
+				trait = impaler
+				factor = 2
+			}
+			modifier = {
+				trait = ruthless
+				factor = 2
+			}
+			modifier = {
+				trait = envious
+				factor = 2
+			}
+			modifier = {
+				NOT = { opinion = { who = FROM value = 0 } }
+				factor = 2
+			}
+			modifier = {
+				NOT = { opinion = { who = FROM value = -25 } }
+				factor = 3
+			}
+			modifier = {
+				NOT = { opinion = { who = FROM value = -50 } }
+				factor = 4
+			}
+			modifier = {
+				NOT = { FROM = { any_dynasty_member = { character = ROOT } } }
+				factor = 2
+			}
+		}
+	}
+}
+character_event = {
+	id = kmisc.1007
+	desc = TRIBUNALTRIBUTE2DESC
+	picture = GFX_evt_morrowind
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = TRIBUNALTRIBUTE2OPT
+		piety = 25
+		clr_character_flag = made_tribute
+	}
+}
+character_event = {
+	id = kmisc.1008
+	desc = TRIBUNALTRIBUTE3DESC
+	picture = GFX_evt_morrowind
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = TRIBUNALTRIBUTE3OPT
+		piety = 25
+		add_character_modifier = {
+			name = tribunal_blessing
+			duration = 1095
+		}
+		clr_character_flag = made_tribute
+	}
+}
+character_event = {
+	id = kmisc.1009
+	desc = TRIBUNALTRIBUTE4DESC
+	picture = GFX_evt_morrowind
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = TRIBUNALTRIBUTE4OPT
+		opinion = {
+			who = FROM
+			modifier = opinion_tribute_religion_negative
+		}
+		add_character_modifier = {
+			name = tribunal_curse
+			duration = 1095
+		}
+		clr_character_flag = made_tribute
+	}
+}
+character_event = {
+	id = kmisc.1010
+	desc = AEDRAOFFERING1DESC
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AEDRAOFFERING1OPT
+		piety = 25
+		clr_character_flag = made_offering
+	}
+}
+character_event = {
+	id = kmisc.1011
+	desc = AEDRAOFFERING2DESC
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AEDRAOFFERING1OPT
+		piety = 25
+		add_character_modifier = {
+			name = aedra_blessing
+			duration = 1095
+		}
+		clr_character_flag = made_offering
+	}
+}
+character_event = {
+	id = kmisc.1012
+	desc = AEDRAOFFERING3DESC
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AEDRAOFFERING2OPT
+		piety = -10
+		clr_character_flag = made_offering
+	}
+}
+
+character_event = {
+	id = kmisc.1013
+	desc = RIDDLETRIBUTE1DESC
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = RIDDLETRIBUTE1OPTA
+		FROM = { character_event = { id = kmisc.1014 days = 7 random = 5 } }
+		rightful_religious_head_scope = {
+			opinion = {
+				modifier = opinion_tribute_religion
+				who = FROM
+			}
+			reverse_opinion = {
+				modifier = opinion_tribute_religion
+				who = FROM
+			}
+		}
+		ai_chance = { factor = 10 }
+	}
+	option = {
+		name = RIDDLETRIBUTE1OPTB
+		FROM = { character_event = { id = kmisc.1015 days = 7 random = 5 } }
+		rightful_religious_head_scope = {
+			opinion = {
+				modifier = opinion_tribute_religion
+				who = FROM
+			}
+			reverse_opinion = {
+				modifier = opinion_tribute_religion
+				who = FROM
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				rightful_religious_head_scope = { NOT = { opinion = { who = FROM value = 0 } } }
+				factor = 0
+			}
+			modifier = {
+				rightful_religious_head_scope = { opinion = { who = FROM value = 75 } }
+				factor = 3
+			}
+			modifier = {
+				FROM = { trait = zealous }
+				factor = 3
+			}
+		}
+	}
+}
+character_event = {
+	id = kmisc.1014
+	desc = RIDDLETRIBUTE2DESC
+	picture = GFX_evt_divines
+	hide_from = yes
+	show_from_from = no
+	is_triggered_only = yes
+	
+	option = {
+		name = RIDDLETRIBUTE2OPT
+		piety = 25
+		clr_character_flag = made_tribute
+	}
+}
+character_event = {
+	id = kmisc.1015
+	desc = RIDDLETRIBUTE3DESC
+	picture = GFX_evt_divines
+	hide_from = yes
+	show_from_from = no
+	is_triggered_only = yes
+	
+	option = {
+		name = RIDDLETRIBUTE2OPT
+		piety = 25
+		add_character_modifier = { name = riddlethar_blessing duration = 1095 }
+		clr_character_flag = made_tribute
+	}
+}
+
+character_event = {
+	id = kmisc.1016
+	desc = DAEDRAOFFERING1DESC
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = DAEDRAOFFERING1OPT
+		piety = 30
+		clr_character_flag = made_offering
+	}
+}
+character_event = {
+	id = kmisc.1017
+	desc = DAEDRAOFFERING3DESC
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = DAEDRAOFFERING2OPT
+		piety = -10
+		clr_character_flag = made_offering
+	}
+}
+character_event = {
+	id = kmisc.1018
+	title = BRIARHEART
+	desc = HAGRAVENCOVEN0
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = HAGRAVENCOVEN0OPT
+		piety = -1000
+		random_list = {
+			50 = { add_trait = briarheart }
+			50 = { death = { death_reason = death_sacrificed } }
+		}
+		clr_character_flag = made_offering
+	}
+	option = {
+		name = HAGRAVENCOVEN0OPT2
+		piety = -10
+		clr_character_flag = made_offering
+	}
+}
+character_event = {
+	id = kmisc.1019
+	title = HAGRAVEN
+	desc = HAGRAVENCOVEN1
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = HAGRAVENCOVEN1OPT
+		piety = -1000
+		custom_tooltip = {
+			text = 5050chanceofhagraven
+			hidden_tooltip = {
+				random_list = {
+					17 = {
+						add_trait = hagraven
+						set_character_flag = hagraven_1
+					}
+					17 = {
+						add_trait = hagraven
+						set_character_flag = hagraven_2
+					}
+					16 = {
+						add_trait = hagraven
+						set_character_flag = hagraven_3
+					}
+					50 = { death = { death_reason = death_sacrificed } }
+				}
+			}
+		}
+		clr_character_flag = made_offering
+	}
+	
+	option = {
+		name = HAGRAVENCOVEN0OPT2
+		piety = -10
+		clr_character_flag = made_offering
+	}
+}
+
+######Potun/Khajiit Interbreeding
+character_event = {
+	id = kmisc.1999
+	desc = halfbreedcats
+	picture = GFX_evt_born_purple_byzantine
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			AND = {
+				OR = {
+					father = { graphical_culture = anequinagfx }
+					father = { graphical_culture = pellitinegfx }
+				}
+				mother = { graphical_culture = kapotungfx }
+			}
+			AND = {
+				father = { graphical_culture = kapotungfx }
+				OR = {
+					mother = { graphical_culture = anequinagfx }
+					mother = { graphical_culture = pellitinegfx }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = halfbreedcats_opt
+		add_trait = halfbreed
+	}
+}
+#########
+#Thrown overboard
+character_event = {
+	id = kmisc.2050
+	title = overboardt
+	desc = overboardd
+	picture = GFX_evt_seas
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		in_command = yes
+		is_at_sea = yes
+		is_waterbreather = no #Argonians, Undead, Sload, Dragons
+		NOR = {
+			character = 39000
+			trait = warrior_5
+			trait = mage_5
+			trait = agent_5
+			trait = diplomat_5
+			trait = magistrate_5
+			trait = seaking
+			trait = sea_queen
+			trait = pirate
+			has_artifact = ring_rumare
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 180
+		
+		modifier = {
+			is_lucky = yes
+			factor = 10.0
+		}
+		modifier = {
+			is_unlucky = yes
+			factor = 0.25
+		}
+		modifier = {
+			trait = diligent
+			factor = 2.0
+		}
+		modifier = {
+			has_religion_feature = religion_seafaring
+			factor = 2.0
+		}
+		modifier = {
+			trait = agile
+			factor = 3
+		}
+		modifier = {
+			OR = {
+				trait = strong
+				trait = raht
+			}
+			factor = 3
+		}
+		modifier = {
+			factor = 2.0
+			ai = yes
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { any_realm_province = { has_epidemic = yes } }
+		}
+		modifier = {
+			trait = genius
+			factor = 2
+		}
+		modifier = {
+			trait = quick
+			factor = 2.5
+		}
+		modifier = {
+			trait = perceptive
+			factor = 3
+		}
+		modifier = {
+			trait = slothful
+			factor = 0.85
+		}
+		modifier = {
+			trait = reckless
+			factor = 0.75
+		}
+		modifier = {
+			trait = absent_minded
+			factor = 0.7
+		}
+		modifier = {
+			trait = slow
+			factor = 0.8
+		}
+		modifier = {
+			trait = imbecile
+			factor = 0.5
+		}
+		modifier = {
+			is_mage = yes
+			factor = 2.0
+		}
+		modifier = {
+			is_wayfarer = yes
+			factor = 1.25
+		}
+		modifier = {
+			is_scout = yes
+			factor = 1.25
+		}
+		modifier = {
+			is_acrobat = yes
+			factor = 1.25
+		}
+		modifier = {
+			is_battlemage = yes
+			factor = 1.25
+		}
+		modifier = {
+			is_sorcerer = yes
+			factor = 1.25
+		}
+	}
+	
+	immediate = { #If you have a Horker or Lungshark, they can rescue you!
+		if = {
+			limit = {
+				any_artifact = {
+					is_artifact_equipped = yes
+					OR = {
+						artifact_type = pet_horker
+						artifact_type = pet_lungshark
+					}
+				}
+			}
+			random_artifact = {
+				limit = {
+					is_artifact_equipped = yes
+					OR = {
+						artifact_type = pet_horker
+						artifact_type = pet_lungshark
+					}
+				}
+				save_event_target_as = ek_rescue_pet
+			}
+		}
+	}
+	
+	option = {
+		name = overboardopta #Help! I can't swim!
+		trigger = {
+			OR = {
+				is_unlucky = yes
+				trait = slothful
+				trait = feeble
+			}
+		}
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				any_artifact = {
+					is_artifact_equipped = yes
+					OR = {
+						artifact_type = pet_horker
+						artifact_type = pet_lungshark
+					}
+				}
+			}
+		}
+		death = { death_reason = death_accident }
+	}
+	option = {
+		name = overboardoptb #Hey! Throw me a line!
+		trigger = {
+			NOR = {
+				is_unlucky = yes
+				trait = slothful
+				trait = feeble
+			}
+		}
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				any_artifact = {
+					is_artifact_equipped = yes
+					OR = {
+						artifact_type = pet_horker
+						artifact_type = pet_lungshark
+					}
+				}
+			}
+		}
+		random_list = {
+			40 = {
+				modifier = { has_disease_trigger = yes factor = 2.0 }
+				modifier = { is_dumb_trigger = yes factor = 2.0 }
+				modifier = { is_weak_trigger = yes factor = 2.0 }
+				modifier = { is_maimed_trigger = yes factor = 2.0 }
+				modifier = { has_injury_trigger = yes factor = 2.0 }
+				modifier = { has_disability_trigger = yes factor = 2.0 }
+				modifier = { has_mental_disorder_trigger = yes factor = 2.0 }
+				modifier = { has_negative_congenital_trigger = yes factor = 2.0 }
+				death = { death_reason = death_accident }
+			}
+			60 = {
+				modifier = { trait = agile factor = 2.0 }
+				modifier = { is_strong_trigger = yes factor = 1.5 }
+				modifier = { is_acrobat = yes factor = 2.0 }
+				modifier = { is_smart_trigger = yes factor = 1.5 }
+				modifier = { is_agent = yes factor = 1.5 }
+				prestige = -100
+				random = {
+					chance = 50
+					custom_tooltip = {
+						text = overboard_ct_0
+						hidden_tooltip = {
+							random_list = { #TODO: Add notification events.
+								20 = { health = -1 }
+								10 = { add_trait = infirm }
+								30 = { add_trait = wounded }
+								40 = { add_trait = ill }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = overboardoptc #Pet to the rescue!
+		custom_tooltip = { text = overboardoptc_tooltip }
+		trigger = {
+			any_artifact = {
+				is_artifact_equipped = yes
+				OR = {
+					artifact_type = pet_horker
+					artifact_type = pet_lungshark
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+character_event = {
+	id = kmisc.3002
+	desc = ESMARTOLD2
+	picture = GFX_evt_battle
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		trait = absent_minded
+		num_of_artifacts = 1
+	}
+	
+	mean_time_to_happen = {
+		months = 540
+		
+		modifier = {
+			trait = slothful
+			factor = 0.75
+		}
+		modifier = {
+			trait = reckless
+			factor = 0.5
+		}
+		modifier = {
+			OR = {
+				is_mer = yes
+				is_tsaesci = yes
+			}
+			age = 200
+			factor = 0.5
+		}
+		modifier = {
+			is_mortal_race = yes
+			age = 65
+			factor = 0.5
+		}
+	}
+	
+	option = {
+		name = nowwheredidi
+		random_artifact = {
+			limit = { is_indestructible = no }
+			destroy_artifact = yes
+		}
+	}
+}
+character_event = {
+	id = kmisc.5000
+	title = borderincident
+	desc = borderincident0
+	picture = GFX_evt_map
+	
+	only_playable = yes
+	min_age = 21
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+	
+	trigger = {
+		independent = yes
+		NOT = { trait = absent_minded }
+		NOT = { trait = imbecile }
+		NOT = { trait = slow }
+		demesne_size = 2
+	}
+	
+	mean_time_to_happen = {
+		years = 300
+		
+		modifier = {
+			war = yes
+			factor = 2
+		}
+		modifier = {
+			num_of_claims = 2
+			factor = 3
+		}
+	}
+	
+	option = {
+		name = howdarethey
+		random_realm_province = {
+			limit = {
+				any_neighbor_province = {
+					NOT = { owner = { character = ROOT } }
+				}
+			}
+			random_neighbor_province = {
+				limit = { NOT = { owner = { character = ROOT } } }
+				county = { add_weak_claim = ROOT }
+				owner = {
+					opinion = {
+						modifier = opinion_claimed_my_title
+						who = ROOT
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				trait = reckless
+				factor = 2
+			}
+			modifier = {
+				trait = envious
+				factor = 3
+			}
+			modifier = {
+				trait = proud
+				factor = 3
+			}
+			modifier = {
+				trait = wroth
+				factor = 2
+			}
+			modifier = {
+				trait = ambitious
+				factor = 2
+			}
+			modifier = {
+				trait = zealous
+				factor = 2
+			}
+			modifier = {
+				trait = paranoid
+				factor = 2
+			}
+		}
+	}
+	option = {
+		name = forgiveandforget
+		prestige = -10
+		ai_chance = {
+			factor = 5
+			modifier = {
+				trait = content
+				factor = 5
+			}
+			modifier = {
+				trait = kind
+				factor = 3
+			}
+			modifier = {
+				trait = temperate
+				factor = 2
+			}
+			modifier = {
+				trait = charitable
+				factor = 2
+			}
+			modifier = {
+				trait = slothful
+				factor = 3
+			}
+			modifier = {
+				trait = trusting
+				factor = 2
+			}
+		}
+	}
+}
+character_event = {
+	id = kmisc.5001
+	desc = ancientclaim0
+	picture = GFX_evt_map
+	
+	only_playable = yes
+	min_age = 21
+	capable_only = yes
+	prisoner = no
+	only_rulers = yes
+	
+	trigger = {
+		independent = yes
+		NOR = {
+			trait = absent_minded
+			trait = imbecile
+			trait = slow
+		}
+		NOT = { primary_title = { tier = EMPEROR } }
+		NOT = { primary_title = { tier = KING } }
+	}
+	
+	mean_time_to_happen = {
+		years = 400
+		
+		modifier = {
+			war = yes
+			factor = 2
+		}
+		modifier = {
+			num_of_claims = 2
+			factor = 3
+		}
+	}
+	
+	option = {
+		name = useit
+		prestige = 5
+		piety = -5
+		random_realm_province = {
+			limit = {
+				any_neighbor_province = {
+					NOT = { owner = { character = ROOT } }
+				}
+			}
+			random_neighbor_province = {
+				limit = { NOT = { owner = { character = ROOT } } }
+				county = { add_weak_claim = ROOT }
+				owner = {
+					opinion = {
+						modifier = opinion_claimed_my_title
+						who = ROOT
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				trait = reckless
+				factor = 2
+			}
+			modifier = {
+				trait = envious
+				factor = 3
+			}
+			modifier = {
+				trait = proud
+				factor = 3
+			}
+			modifier = {
+				trait = wroth
+				factor = 2
+			}
+			modifier = {
+				trait = ambitious
+				factor = 2
+			}
+			modifier = {
+				trait = zealous
+				factor = 2
+			}
+			modifier = {
+				trait = paranoid
+				factor = 2
+			}
+		}
+	}
+	option = {
+		name = ignoreit
+		prestige = -5
+		piety = 5
+		ai_chance = {
+			factor = 5
+			modifier = {
+				trait = content
+				factor = 5
+			}
+			modifier = {
+				trait = kind
+				factor = 3
+			}
+			modifier = {
+				trait = temperate
+				factor = 2
+			}
+			modifier = {
+				trait = charitable
+				factor = 2
+			}
+			modifier = {
+				trait = slothful
+				factor = 3
+			}
+			modifier = {
+				trait = trusting
+				factor = 2
+			}
+		}
+	}
+}
+character_event = {
+	id = kmisc.5010
+	hide_window = yes
+	
+	only_men = yes
+	min_age = 16
+	ai = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = undead
+		OR = {
+			is_married = yes
+			num_of_consorts = 1
+		}
+	}
+	
+	immediate = {
+		any_spouse = {
+			remove_spouse = ROOT
+		}
+		any_consort = {
+			remove_consort = ROOT
+		}
+	}
+}
+
+#Inviting relative to court
+letter_event = {
+	id = kmisc.5025
+	desc = kmisc5025
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kmisc5025accept
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0.05
+				opinion = { who = FROMFROM value = -100 }
+			}
+			modifier = {
+				factor = 0.1
+				opinion = { who = FROMFROM value = -90 }
+			}
+			modifier = {
+				factor = 0.2
+				opinion = { who = FROMFROM value = -80 }
+			}
+			modifier = {
+				factor = 0.3
+				opinion = { who = FROMFROM value = -70 }
+			}
+			modifier = {
+				factor = 0.4
+				opinion = { who = FROMFROM value = -60 }
+			}
+			modifier = {
+				factor = 0.5
+				opinion = { who = FROMFROM value = -50 }
+			}
+			modifier = {
+				factor = 0.6
+				opinion = { who = FROMFROM value = -40 }
+			}
+			modifier = {
+				factor = 0.7
+				opinion = { who = FROMFROM value = -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value = -20 }
+			}
+			modifier = {
+				factor = 0.9
+				opinion = { who = FROMFROM value = -10 }
+			}
+			modifier = {
+				factor = 0.95
+				opinion = { who = FROMFROM value = -5 }
+			}
+			modifier = {
+				factor = 1.10
+				opinion = { who = FROMFROM value = 5 }
+			}
+			modifier = {
+				factor = 1.25
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 15 }
+			}
+			modifier = {
+				factor = 2.0
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 2.5
+				opinion = { who = FROMFROM value = 25 }
+			}
+			modifier = {
+				factor = 3.0
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 3.5
+				opinion = { who = FROMFROM value = 35 }
+			}
+			modifier = {
+				factor = 4.0
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 4.5
+				opinion = { who = FROMFROM value = 45 }
+			}
+			modifier = {
+				factor = 5.0
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 5.5
+				opinion = { who = FROMFROM value = 55 }
+			}
+			modifier = {
+				factor = 6.0
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 6.5
+				opinion = { who = FROMFROM value = 65 }
+			}
+			modifier = {
+				factor = 7.0
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 7.5
+				opinion = { who = FROMFROM value = 75 }
+			}
+			modifier = {
+				factor = 8.0
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 8.5
+				opinion = { who = FROMFROM value = 85 }
+			}
+			modifier = {
+				factor = 9.0
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 9.5
+				opinion = { who = FROMFROM value = 95 }
+			}
+			modifier = {
+				factor = 10
+				opinion = { who = FROMFROM value = 100 }
+			}
+		}
+		FROMFROM = { letter_event = { id = kmisc.5026 } }
+	}
+	option = {
+		name = kmisc5025decline
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 2.5
+				is_councillor = yes
+			}
+			modifier = {
+				factor = 0.05
+				opinion = { who = LIEGE value = -100 }
+			}
+			modifier = {
+				factor = 0.1
+				opinion = { who = LIEGE value = -90 }
+			}
+			modifier = {
+				factor = 0.2
+				opinion = { who = LIEGE value = -80 }
+			}
+			modifier = {
+				factor = 0.3
+				opinion = { who = LIEGE value = -70 }
+			}
+			modifier = {
+				factor = 0.4
+				opinion = { who = LIEGE value = -60 }
+			}
+			modifier = {
+				factor = 0.5
+				opinion = { who = LIEGE value = -50 }
+			}
+			modifier = {
+				factor = 0.6
+				opinion = { who = LIEGE value = -40 }
+			}
+			modifier = {
+				factor = 0.7
+				opinion = { who = LIEGE value = -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = LIEGE value = -20 }
+			}
+			modifier = {
+				factor = 0.9
+				opinion = { who = LIEGE value = -10 }
+			}
+			modifier = {
+				factor = 0.95
+				opinion = { who = LIEGE value = -5 }
+			}
+			modifier = {
+				factor = 1.10
+				opinion = { who = LIEGE value = 5 }
+			}
+			modifier = {
+				factor = 1.25
+				opinion = { who = LIEGE value = 10 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = LIEGE value = 15 }
+			}
+			modifier = {
+				factor = 2.0
+				opinion = { who = LIEGE value = 20 }
+			}
+			modifier = {
+				factor = 2.5
+				opinion = { who = LIEGE value = 25 }
+			}
+			modifier = {
+				factor = 3.0
+				opinion = { who = LIEGE value = 30 }
+			}
+			modifier = {
+				factor = 3.5
+				opinion = { who = LIEGE value = 35 }
+			}
+			modifier = {
+				factor = 4.0
+				opinion = { who = LIEGE value = 40 }
+			}
+			modifier = {
+				factor = 4.5
+				opinion = { who = LIEGE value = 45 }
+			}
+			modifier = {
+				factor = 5.0
+				opinion = { who = LIEGE value = 50 }
+			}
+			modifier = {
+				factor = 5.5
+				opinion = { who = LIEGE value = 55 }
+			}
+			modifier = {
+				factor = 6.0
+				opinion = { who = LIEGE value = 60 }
+			}
+			modifier = {
+				factor = 6.5
+				opinion = { who = LIEGE value = 65 }
+			}
+			modifier = {
+				factor = 7.0
+				opinion = { who = LIEGE value = 70 }
+			}
+			modifier = {
+				factor = 7.5
+				opinion = { who = LIEGE value = 75 }
+			}
+			modifier = {
+				factor = 8.0
+				opinion = { who = LIEGE value = 80 }
+			}
+			modifier = {
+				factor = 8.5
+				opinion = { who = LIEGE value = 85 }
+			}
+			modifier = {
+				factor = 9.0
+				opinion = { who = LIEGE value = 90 }
+			}
+			modifier = {
+				factor = 9.5
+				opinion = { who = LIEGE value = 95 }
+			}
+			modifier = {
+				factor = 10
+				opinion = { who = LIEGE value = 100 }
+			}
+		}
+		FROMFROM = { letter_event = { id = kmisc.5027 } }
+	}
+}
+letter_event = {
+	id = kmisc.5026
+	desc = kmisc5026
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kmisc5026accept
+		FROM = {
+			opinion = { who = ROOT modifier = recently_invited_relative }
+		}
+		reverse_banish = FROM
+		clr_character_flag = ek_inviting_close_relative
+	}
+}
+letter_event = {
+	id = kmisc.5027
+	desc = kmisc5027
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kmisc5027accept
+		FROM = {
+			opinion = { who = ROOT modifier = recently_invited_relative }
+		}
+		clr_character_flag = ek_inviting_close_relative
+	}
+}
+
+character_event = {
+	id = kmisc.10000
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		any_demesne_province = {
+			add_holding_slot = -1
+		}
+	}
+}
+character_event = {
+	id = kmisc.10001
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		any_realm_province = {
+			any_province_holding = {
+				destroy_settlement = THIS
+			}
+		}
+	}
+}
+
+#Racial trait
+character_event = {
+	id = kmisc.10050
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_racial_trait = no
+			has_birthsign = no
+			check_variable = { which = birth_seed value == 0 }
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_racial_trait = no
+			}
+			assign_racial_trait = yes
+		}
+		if = {
+			limit = {
+				has_birthsign = no
+			}
+			assign_birthsign = yes
+		}
+		if = {
+			limit = {
+				check_variable = { which = birth_seed value == 0 }
+			}
+			assign_birth_seed = yes
+		}
+	}
+	
+	after = {
+		if = {
+			limit = { graphical_culture = noculturegfx }
+			culture_scope = { save_event_target_as = ek_my_own_culture }
+			set_graphical_culture = event_target:ek_my_own_culture
+		}
+	}
+}
+# #Birthsign
+# character_event = {
+	# id = kmisc.10051
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# has_birthsign = no
+	# }
+	
+	# immediate = {
+		# assign_birthsign = yes
+	# }
+# }
+# #Birth Seed
+# character_event = {
+	# id = kmisc.10052
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# check_variable = { which = birth_seed value == 0 }
+	# }
+	
+	# immediate = {
+		# assign_birth_seed = yes
+	# }
+# }

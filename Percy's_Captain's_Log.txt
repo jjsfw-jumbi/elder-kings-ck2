@@ -1,0 +1,755 @@
+To do:
+- Implement Twiddle Factor's Standing Armies mod in EK.
+- abandon_imperial_commune_decission & reform_imperial_commune_decission - localisation needed
+- skillsimprove localisation needed
+
+Bugs to fix:
+- While in combat the skill improvement event needs skillsimprove localization
+
+##################################################
+- Standing Armies files:
+	common 	> buildings 				> standing_army_buildings.txt 	- retinue size increase buildings for capital city or castle
+					> event_modifiers 	> standing_army_modifiers.txt 	- province levy size + reinforce rate reduction
+					> laws						> standing_army_laws.txt			- army laws: Levy - Retinues - Standing Armies
+					> on_actions			> standing_army_on_actions.txt	- yearly pulse army upkeep event
+					> opinion_modifiers > standing_armies_opinion_modifiers.txt - opinions for naming & revoking generals
+	decisions	> standing_armies_decisions.txt
+	events		> standing_army_events.txt
+	localisation > standing_armies_localisation.csv
+##################################################
+Scrapped:
+- Akavir Legions
+- Disband Legions upon changing back to Levy Law.
+- Legion province based stand down/raise back up by decision/right click province, giving the number of the legion as garrison to the castle of that province.
+- Legion modifier disappears shortly after creating the Legion.
+- Legion maintenance recheck. - Ev proposed 0.4
+##################################################
+[12:36 PM] Ratel_DE: ai_will_do = { factor = 0 }
+[12:36 PM] Ratel_DE: on the open/close decisions
+[12:36 PM] Ratel_DE: then on the ones that would normally be hidden if you don't open them
+[12:36 PM] Ratel_DE: if i can find any
+[12:36 PM] Ratel_DE: well
+[12:37 PM] Ratel_DE: we have no collapsed decisions that the AI can use anyway
+[12:37 PM] Ratel_DE: but basically
+[12:37 PM] Ratel_DE: you'd just put in an OR
+[12:37 PM] Ratel_DE: OR = { ai = yes has_character_flag = <yourflag> }
+[12:37 PM] Ratel_DE: so non-ai only see it if they have the flag
+[12:37 PM] Ratel_DE: in potential
+##################################################
+Ratel_DE: @Percy you may want to check the troop thing in game in reference to faction power
+ 1k pike, 400 light and 200 horse archers.
+
+https://ck2.paradoxwikis.com/Commands
+https://ck2.paradoxwikis.com/Scripting
+https://ck2.paradoxwikis.com/Scopes
+https://ck2.paradoxwikis.com/Modifiers
+https://ck2.paradoxwikis.com/Event_modding
+
+Legion Composition:
+15% Archers
+15% Light Infantry
+30% Heavy Infantry
+20% Light Cavalry
+15% Knights
+5% Sorcerers
+
+Initial Legion Creation:
+- Cost: 500 gold
+- Prestige: 500 prestige
+- Legion size: 5000 men
+
+Regiment size x3
+archers = { 250 1 }
+light_infantry = { 250 1 }
+heavy_infantry = { 500 1 }
+light_cavalry = { 340 1 }
+knights = { 250 1 }
+sorcerers = { 80 1 }
+
+Legion upgrade:
+- Cost: 100 gold
+- Prestige: 100 prestige
+- Legion size: base + 500 men
+- Upgrades 10 times to a maximum of 10.000
+
+Regiment size x3
+archers = { 25 25 }
+light_infantry = { 25 1 }
+heavy_infantry = { 50 1 }
+light_cavalry = { 34 1 }
+knights = { 250 1 }
+sorcerers = { 8 1 }
+
+troops - clause - Fixed amount of troops in the form troop_type = { <max_value> <starting_value> }. Ex: archers = { 100 100 }
+
+[1:05 PM] Ratel_DE: remove the wealth limitation for the AI
+[1:06 PM] Ratel_DE: and instead have an if statement in effects
+[1:06 PM] Ratel_DE: or wait a better method
+[1:06 PM] Ratel_DE: using the new trigger_switch
+
+if = {
+    limit = { ai = yes }
+    trigger_switch = {
+        on_trigger = wealth
+        500 > { wealth = -500 } #If the AI has more than 500 wealth, take away 500 wealth.
+        500 < { clear_wealth = yes } #If the AI has less than 500 wealth, we instead set their wealth to 0.
+    }  
+}
+
+[1:09 PM] Ratel_DE: I'm not sure if they've enabled greater than/less than operators in trigger_switch
+[1:09 PM] Ratel_DE: that's something you'd have to test
+[1:09 PM] Ratel_DE: if not, just go to using the old style ifs
+
+if = {
+    limit = { ai = yes NOT = { wealth = 500 } }  #If the AI has less than 500 wealth, we instead set their wealth to 0.
+    clear_wealth = yes
+    }
+if = {
+    limit = { ai = yes wealth = 500 } #If the AI has more than 500 wealth, take away 500 wealth.
+    wealth = -500
+}
+
+[1:10 PM] Ratel_DE: when 2.8 comes out you could use an else instead on the second one
+
+if = {
+    limit = { ai = yes NOT = { wealth = 500 } } #If the AI has less than 500 wealth, we instead set their wealth to 0.
+    clear_wealth = yes
+}
+else = {
+    wealth = -500 #If the AI has more than 500 wealth, take away 500 wealth.
+}
+
+[1:11 PM] Ratel_DE: actually in 2.8 you can change the NOT too
+
+if = {
+    limit = { ai = yes wealth <= 499 } #If the AI has less than 500 wealth, we instead set their wealth to 0.
+    clear_wealth = yes
+}
+else = {
+    wealth = -500 #If the AI has more than 500 wealth, take away 500 wealth.
+}
+
+##################################################
+
+warlord_conquest = { # Best version so far
+	name = CB_NAME_WARLORD_CONQUEST
+	war_name = WAR_NAME_WARLORD_CONQUEST
+	sprite = 28
+	truce_days = 3650
+	hostile_against_others = yes
+	can_ask_to_join_war = yes
+	attacker_can_call_allies = no
+	defender_can_call_allies = yes
+	is_permanent = yes
+	check_de_jure_tier = KING
+	#check_all_titles = yes
+	
+	can_use = {
+		ROOT = {
+			#CB Specific Traits and things
+			OR = {
+				trait = warlord
+				has_ambition = obj_warlord
+			}
+			NOT = { same_realm = FROM }	
+			#Undead Handling
+			NOT = { trait = undead } #Not as Undead
+			FROM = { NOT = { trait = undead } } #Not vs Undead
+			OR = {
+			#Riddlethar vs. Mane
+				ROOT = { NOT = { religion = riddlethar } }
+				AND = {
+					FROM = { NOT = { trait = mane } }
+					ROOT = { religion = riddlethar }
+				}
+			}
+			OR = {
+			#Almsivi Religion
+				ROOT = { NOT = { religion = almsivi } }
+				AND = {
+					FROM = { 
+						NOT = { has_landed_title = k_almsivi } 
+						religion = almsivi
+					}
+					ROOT = { religion = almsivi }
+				}
+				AND = {
+					ROOT = { 
+						has_landed_title = k_almsivi
+						religion = almsivi 
+					}
+					FROM = { religion = almsivi }
+				}				
+			}
+		}
+	}
+	
+	can_use_gui = {
+		ROOT = {
+			OR = {
+				trait = warlord
+				has_ambition = obj_warlord
+			}
+			NOT = { trait = incapable }
+		}
+	}
+	
+	can_use_title = {
+		# The attacker needs at least one county in the target kingdom, or a border, or be only one sea zone away from one of your counties
+		any_direct_de_jure_vassal_title = {
+			OR = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+				}
+				location = {
+					any_neighbor_province = {
+						OR = {
+							AND = {
+								has_owner = yes
+								owner = {
+									OR = {
+										character = ROOT
+										is_liege_or_above = ROOT
+									}
+								}
+							}
+							AND = {
+								is_land = no
+								any_neighbor_province = {
+									OR = {
+										AND = {
+											has_owner = yes
+											owner = {
+												OR = {
+													character = ROOT
+													is_liege_or_above = ROOT
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	is_valid_title = {
+		FROM = {
+			any_realm_title = {
+				de_jure_liege_or_above = PREVPREV
+			}
+		}
+	}
+	
+	on_success = {
+		#Ambition and Prestige Handling
+		any_attacker = {
+			limit = { character = ROOT }
+			participation_scaled_prestige = 100
+		}
+		if = {
+			limit = { ROOT = { has_ambition = obj_warlord } }
+			ROOT = { set_character_flag = warlord_flg }
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { participation_scaled_prestige = 100 }
+		}
+
+		hidden_tooltip = {
+			ROOT = {
+				#occupy_minors_of_occupied_settlements = FROM #Needs to be changed
+				#gain_all_occupied_titles = FROM #Needs to be changed
+				
+				if = {
+					limit = {
+						has_nickname = no
+					}
+					random_list = {
+						10 = { give_nickname = nick_the_great }
+						10 = { give_nickname = nick_the_victorious }
+						10 = { give_nickname = nick_the_bold }
+						10 = { give_nickname = nick_the_conqueror }
+					}
+				}
+				
+				if = {
+					limit = {
+						has_nickname = nick_the_bastard
+					}
+					give_nickname = nick_the_conqueror
+				}
+			}
+		}
+
+		FROM = {
+			prestige = -200
+			
+			custom_tooltip = {
+				text = invasion_succ_tip
+			}
+				
+			hidden_tooltip = {
+				opinion = {
+					modifier = opinion_subjugated
+					who = ROOT
+				}
+				any_vassal = {
+					opinion = {
+						modifier = opinion_subjugated
+						who = ROOT
+					}
+				}				
+				any_demesne_title = {
+					limit = {
+						higher_tier_than = ROOT
+					}
+					ROOT = { usurp_title = { target = PREV type = invasion } }
+					add_pressed_claim = PREV
+				}
+				any_demesne_title = {
+					limit = {
+						tier = ROOT
+					}
+					ROOT = { usurp_title = { target = PREV type = invasion } }
+					add_pressed_claim = PREV
+				}
+				set_defacto_liege = ROOT
+			}
+		}
+	}
+
+	on_fail = {
+		FROM = {
+			piety = 50
+		}
+		any_defender = {
+			limit = { character = FROM }
+			participation_scaled_prestige = 50
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { participation_scaled_prestige = 50 }
+		}
+		ROOT = {
+			piety = -100
+			prestige = -100
+		}
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			prestige = -200
+			piety = -200
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 5.0
+			}
+		}
+		FROM = {
+			piety = 100
+		}
+		any_defender = {
+			limit = { character = FROM }
+			participation_scaled_prestige = 100
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { participation_scaled_prestige = 100 }
+		}
+	}
+	
+	on_attacker_leader_death = {
+		hidden_tooltip = {
+			any_defender = {
+				letter_event = {
+					id = 251
+				}
+			}
+		}
+		end_war = invalid
+	}
+
+	attacker_ai_victory_worth = {
+		factor = 100
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
+##################################################
+
+Warord Conquest #2
+on_success = {
+		#Ambition and Prestige Handling
+		any_attacker = {
+			limit = { character = ROOT }
+			participation_scaled_prestige = 100
+		}
+		if = {
+			limit = { ROOT = { has_ambition = obj_warlord } }
+			ROOT = { set_character_flag = warlord_flg }
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { participation_scaled_prestige = 100 }
+		}
+		
+		hidden_tooltip = {
+			ROOT = {
+				#occupy_minors_of_occupied_settlements = FROM
+				#gain_all_occupied_titles = FROM			
+				
+				if = {
+					limit = {
+						has_nickname = no
+					}
+					random_list = {
+						10 = { give_nickname = nick_the_great }
+						10 = { give_nickname = nick_the_victorious }
+						10 = { give_nickname = nick_the_bold }
+						10 = { give_nickname = nick_the_conqueror }
+					}
+				}
+				
+				if = {
+					limit = {
+						has_nickname = nick_the_bastard
+					}
+					give_nickname = nick_the_conqueror
+				}
+			}
+		}
+		
+		FROM = {
+			prestige = -200
+
+			hidden_tooltip = {
+				opinion = {
+					modifier = opinion_subjugated
+					who = ROOT
+				}				
+				any_demesne_title = {
+					limit = {
+						higher_tier_than = ROOT
+					}
+					ROOT = { usurp_title = { target = PREV type = invasion } }
+					add_pressed_claim = PREV
+				}
+				set_defacto_liege = ROOT
+			}
+		}
+	}
+
+
+	on_success_title = {
+		custom_tooltip = {
+			text = invasion_succ_tip
+			hidden_tooltip = {
+				ROOT = {
+				vassalize_or_take_under_title = { title = PREV enemy = FROM type = invasion }
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				higher_tier_than = BARON
+				NOT = { culture = ROOT }
+			}
+			hidden_tooltip = { conquest_culture = ROOT }
+		}
+	}
+
+##################################################
+
+Warlord Conquest #1
+	on_success = {
+		#Ambition and Prestige Handling
+		any_attacker = {
+			limit = { character = ROOT }
+			participation_scaled_prestige = 100
+		}
+		if = {
+			limit = { ROOT = { has_ambition = obj_warlord } }
+			ROOT = { set_character_flag = warlord_flg }
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { participation_scaled_prestige = 100 }
+		}
+		
+		hidden_tooltip = {
+			ROOT = {
+				occupy_minors_of_occupied_settlements = FROM
+				gain_all_occupied_titles = FROM			
+				
+				if = {
+					limit = {
+						has_nickname = no
+					}
+					random_list = {
+						10 = { give_nickname = nick_the_great }
+						10 = { give_nickname = nick_the_victorious }
+						10 = { give_nickname = nick_the_bold }
+						10 = { give_nickname = nick_the_conqueror }
+					}
+				}
+				
+				if = {
+					limit = {
+						has_nickname = nick_the_bastard
+					}
+					give_nickname = nick_the_conqueror
+				}
+			}
+		}
+		
+		FROM = {
+			prestige = -200
+		}
+	}
+
+
+	on_success_title = {
+		custom_tooltip = {
+			text = invasion_succ_tip
+			hidden_tooltip = {
+				usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+				FROM = { set_defacto_liege = ROOT }
+				if = {
+					limit = {
+						FROM = { is_liege_or_above = ROOT }
+					}
+					FROM = { imprison = ROOT }
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				higher_tier_than = BARON
+				NOT = { culture = ROOT }
+			}
+			hidden_tooltip = { conquest_culture = ROOT }
+		}
+	}
+##################################################
+
+Pagan Subjugation
+	on_success = {
+		ROOT = {
+			piety = 100
+		}
+		any_attacker = {
+			limit = { character = ROOT }
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { participation_scaled_prestige = 100 }
+		}
+		FROM = {
+			piety = -100
+			prestige = -100
+			
+			if = {
+				limit = {
+					is_reformed_religion = ROOT
+					controls_religion = no
+				}
+				religion = ROOT # Reformed pagans are forced to convert back
+			}
+			
+			custom_tooltip = {
+				text = tribal_subjugation_tip
+			}
+				
+			hidden_tooltip = {
+				opinion = {
+					modifier = opinion_subjugated 
+					who = ROOT
+				}
+				any_vassal = {
+					opinion = {
+						modifier = opinion_subjugated 
+						who = ROOT
+					}
+				}				
+				any_demesne_title = {
+					limit = {
+						higher_tier_than = ROOT
+					}
+					ROOT = { usurp_title = { target = PREV type = invasion } }
+					add_pressed_claim = PREV
+				}
+				any_demesne_title = {
+					limit = {
+						tier = ROOT
+					}
+					ROOT = { usurp_title = { target = PREV type = invasion } }
+					add_pressed_claim = PREV
+				}
+				set_defacto_liege = ROOT
+			}
+		}
+	}
+##################################################
+
+Nomad Subjugation
+	on_success = {
+		hidden_tooltip = {
+			ROOT = {
+				if = {
+					limit = {
+						has_nickname = no
+					}
+					FROM = {
+						save_event_target_as = nickname_target
+					}
+					ROOT = { 
+						save_event_target_as = nickname_receiver
+					}
+					random_list = {
+						2 = { give_nickname = nick_the_eastern_wind }
+						5 = { give_nickname = nick_the_despoiler }
+						5 = { 
+							give_nickname = nick_the_bane_of_realmname
+							modifier = {
+								factor = 0
+								event_target:nickname_target = { is_nomadic = yes }
+							}
+							modifier = {
+								factor = 0
+								event_target:nickname_target = { culture = ROOT }
+							}
+						}
+						5 = { 
+							give_nickname = nick_the_culture_marauder
+							modifier = {
+								factor = 0
+								event_target:nickname_target = { is_nomadic = yes }
+							}
+							modifier = {
+								factor = 0
+								event_target:nickname_target = { culture = ROOT }
+							}
+						}
+						100 = { }
+					}
+				}
+			}
+		}
+		ROOT = {
+			piety = 100
+		}
+		any_attacker = {
+			limit = { character = ROOT }
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { participation_scaled_prestige = 100 }
+		}
+		FROM = {
+			piety = -100
+			prestige = -100
+			
+			if = {
+				limit = {
+					is_reformed_religion = ROOT
+					controls_religion = no
+				}
+				religion = ROOT # Reformed pagans are forced to convert back
+			}
+			
+			custom_tooltip = {
+				text = tribal_subjugation_tip
+			}
+				
+			hidden_tooltip = {
+				opinion = {
+					modifier = opinion_subjugated 
+					who = ROOT
+				}
+				any_vassal = {
+					opinion = {
+						modifier = opinion_subjugated 
+						who = ROOT
+					}
+				}
+				
+				any_demesne_title = {
+					limit = {
+						higher_tier_than = ROOT
+						NOT = { controls_religion = yes }
+					}
+					ROOT = { grant_title_no_opinion = { target = PREV type = invasion } }
+					add_pressed_claim = PREV
+				}
+				
+				any_demesne_title = {
+					limit = {
+						tier = ROOT
+						NOT = { controls_religion = yes }
+					}
+					ROOT = { grant_title_no_opinion = { target = PREV type = invasion } }
+					add_pressed_claim = PREV
+				}
+
+				if = {
+					limit = {
+						NOT = {
+							any_demesne_title = {
+								controls_religion = yes
+							}
+						}
+					}
+					set_defacto_liege = ROOT
+					break = yes
+				}
+				any_vassal = {
+					set_defacto_liege = ROOT
+				}
+				any_demesne_title = {
+					limit = {
+						NOT = { controls_religion = yes }
+					}
+					ROOT = {
+						grant_title_no_opinion = { target = PREV type = invasion }
+					}
+				}
+			}
+		}
+	}
+##################################################
+Nomad Expansion
+	on_success_title = {
+		custom_tooltip = {
+			text = pagan_subjugation_tip
+			hidden_tooltip = {
+				ROOT = {
+					subjugate_or_take_under_title = {
+						title = PREV
+						enemy = FROM
+					}
+				}
+			}
+		}
+	}
+##################################################

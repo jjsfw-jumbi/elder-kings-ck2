@@ -1,0 +1,65 @@
+# Scripted triggers for papal ai scripted scores
+# Gutted for the time being until we decide what HF features will be used and by whom
+
+is_bad_priest = {
+	always = no # We don't have bad priest traits
+}
+
+# Return true iff ROOT_FROM baptised THIS
+baptized_by_root_from = {
+	always = no # We don't have baptisms
+	#OR = { 
+	#	trait = baptized_by_pope 
+	#	trait = baptized_by_patriarch
+	#}
+	#persistent_event_target:baptizing_pope_per = { character = ROOT_FROM } #Ruler asking was baptized by this very same Pope.
+}
+
+# THIS baptised by FROM
+baptized_by_from = {
+	always = no # We don't have baptisms
+	#OR = { 
+	#	trait = baptized_by_pope 
+	#	trait = baptized_by_patriarch
+	#}
+	#persistent_event_target:baptizing_pope_per = { character = FROM } #Ruler asking was baptized by this very same Pope.
+}
+
+# Return true iff THIS is baptised, but not by ROOT_FROM
+baptized_by_not_root_from = {
+	always = no # We don't have baptisms
+	#OR = { 
+	#	trait = baptized_by_pope 
+	#	trait = baptized_by_patriarch
+	#}
+	#NOT = { persistent_event_target:baptizing_pope_per = { character = ROOT_FROM } }
+}
+
+# THIS baptised, but not by ROOT_FROM
+baptized_by_not_from = {
+	always = no # We don't have baptisms
+	#OR = { 
+	#	trait = baptized_by_pope 
+	#	trait = baptized_by_patriarch
+	#}
+	#NOT = { persistent_event_target:baptizing_pope_per = { character = FROM } }
+}
+
+should_be_crowned = {
+	always = no # We don't have coronations
+	#has_dlc = "Holy Fury"
+	#higher_tier_than = DUKE
+	#age = 16
+	#religion = FROM
+	#is_feudal = yes
+	#OR = { 
+	#	religion = catholic
+	#	religion = fraticelli
+	#}
+	#NOR = { 
+	#	trait = crowned_by_pope 
+	#	trait = crowned_by_bishop
+	#	trait = crowned_by_priest
+	#	trait = crowned_by_myself
+	#}
+}

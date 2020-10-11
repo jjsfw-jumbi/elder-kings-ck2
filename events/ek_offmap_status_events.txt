@@ -1,0 +1,2476 @@
+#Events for Daedric Princes' Status and Policy Shifts#
+#Events for Tribunal Temple Status and Policy Shifts#
+#Based on Jade Dragon Chinese Status and Policy events#
+
+namespace = ekoffmapstatus
+
+#Status: Daedric Prince increases in power#
+character_event = {
+	id = ekoffmapstatus.10
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+			}
+			NOR = {
+				#offmap_ruler = { has_character_modifier = recent_status_shift } #Status recently changed, can't change again for a while
+				has_status = oblivion_apogee #You can't increase status from Apogee 
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 0.5
+			event_target:lit_dragonfires = { #The Dragonfires are burning, which reduces strength increase progression
+				is_alive = yes
+			}
+		}
+		modifier = { #Convalescing takes some time
+			factor = 5
+			FROM = {
+				has_status = oblivion_convalescing
+			}
+		}
+		modifier = { #Cataclysms are short-lived...usually
+			factor = 10
+			FROM = {
+				has_status = oblivion_cataclysm
+			}
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = {
+				limit = {
+					has_status = oblivion_normal
+				}
+				set_status = oblivion_apogee
+			}
+			if = {
+				limit = {
+					has_status = oblivion_convalescing
+				}
+				set_status = oblivion_normal
+			}
+			if = {
+				limit = {
+					has_status = oblivion_cataclysm
+				}
+				set_status = oblivion_convalescing
+			}
+			# offmap_ruler = {
+				# add_character_modifier = {
+					# name = recent_status_shift
+					# months = 36
+				# }
+			# }
+		}
+		
+		if = {
+			limit = {
+				FROM = {
+					NOT = { has_offmap_flag = no_status_news }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_azura }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_azura = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_boethiah }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_boethiah = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_clavicus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_clavicus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hermaeus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hermaeus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hircine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hircine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_malacath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_malacath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mehrunes }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mehrunes = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mephala }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mephala = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_meridia }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_meridia = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_molag }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_molag = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_namira }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_namira = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_nocturnal }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_nocturnal = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_peryite }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_peryite = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sanguine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sanguine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sheogorath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sheogorath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_vaermina }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_vaermina = yes
+					}
+					narrative_event = { id = ekoffmapstatus.50 }
+				}
+			}
+		}
+	}
+}
+
+#Status: Daedric Prince decreases in power
+character_event = {
+	id = ekoffmapstatus.12
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = { #A Prince CANNOT weaken during their own invasion
+				AND = {
+					is_offmap_tag = oblivion_azura
+					NOT = { has_global_flag = oblivion_invasion_azura }
+				}
+				AND = {
+					is_offmap_tag = oblivion_boethiah
+					NOT = { has_global_flag = oblivion_invasion_boethiah }
+				}
+				AND = {
+					is_offmap_tag = oblivion_clavicus
+					NOT = { has_global_flag = oblivion_invasion_clavicus }
+				}
+				AND = {
+					is_offmap_tag = oblivion_hermaeus
+					NOT = { has_global_flag = oblivion_invasion_hermaeus }
+				}
+				AND = {
+					is_offmap_tag = oblivion_hircine
+					NOT = { has_global_flag = oblivion_invasion_hircine }
+				}
+				AND = {
+					is_offmap_tag = oblivion_malacath
+					NOT = { has_global_flag = oblivion_invasion_malacath }
+				}
+				AND = {
+					is_offmap_tag = oblivion_mehrunes
+					NOT = { has_global_flag = oblivion_invasion_mehrunes }
+				}
+				AND = {
+					is_offmap_tag = oblivion_mephala
+					NOT = { has_global_flag = oblivion_invasion_mephala }
+				}
+				AND = {
+					is_offmap_tag = oblivion_meridia
+					NOT = { has_global_flag = oblivion_invasion_meridia }
+				}
+				AND = {
+					is_offmap_tag = oblivion_molag
+					NOT = { has_global_flag = oblivion_invasion_molag }
+				}
+				AND = {
+					is_offmap_tag = oblivion_namira
+					NOT = { has_global_flag = oblivion_invasion_namira }
+				}
+				AND = {
+					is_offmap_tag = oblivion_nocturnal
+					NOT = { has_global_flag = oblivion_invasion_nocturnal }
+				}
+				AND = {
+					is_offmap_tag = oblivion_peryite
+					NOT = { has_global_flag = oblivion_invasion_peryite }
+				}
+				AND = {
+					is_offmap_tag = oblivion_sanguine
+					NOT = { has_global_flag = oblivion_invasion_sanguine }
+				}
+				AND = {
+					is_offmap_tag = oblivion_sheogorath
+					NOT = { has_global_flag = oblivion_invasion_sheogorath }
+				}
+				AND = {
+					is_offmap_tag = oblivion_vaermina
+					NOT = { has_global_flag = oblivion_invasion_vaermina }
+				}
+			}
+			NOR = {
+				#offmap_ruler = { has_character_modifier = recent_status_shift } #Status recently changed, can't change again for a while
+				has_status = oblivion_cataclysm #You can't decrease status from Cataclysm 
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 1.25
+			event_target:lit_dragonfires = { #The Dragonfires are burning, which makes it more likely to lose strength
+				is_alive = yes
+			}
+		}
+		modifier = { #Apogee far more likely to weaken
+			factor = 2.5
+			FROM = {
+				has_status = oblivion_apogee
+			}
+		}
+		modifier = { #Convalescing very unlikely to weaken further...but it can happen
+			factor = 0.01
+			FROM = {
+				has_status = oblivion_convalescing
+			}
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = {
+				limit = {
+					has_status = oblivion_convalescing
+				}
+				set_status = oblivion_cataclysm
+			}
+			if = {
+				limit = {
+					has_status = oblivion_normal
+				}
+				set_status = oblivion_convalescing
+			}
+			if = {
+				limit = {
+					has_status = oblivion_apogee
+				}
+				set_status = oblivion_normal
+			}
+			# offmap_ruler = {
+				# add_character_modifier = {
+					# name = recent_status_shift
+					# months = 36
+				# }
+			# }
+		}
+		
+		if = {
+			limit = {
+				FROM = {
+					NOT = { has_offmap_flag = no_status_news }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_azura }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_azura = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_boethiah }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_boethiah = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_clavicus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_clavicus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hermaeus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hermaeus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hircine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hircine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_malacath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_malacath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mehrunes }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mehrunes = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mephala }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mephala = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_meridia }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_meridia = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_molag }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_molag = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_namira }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_namira = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_nocturnal }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_nocturnal = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_peryite }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_peryite = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sanguine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sanguine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sheogorath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sheogorath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_vaermina }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_vaermina = yes
+					}
+					narrative_event = { id = ekoffmapstatus.52 }
+				}
+			}
+		}
+	}
+}
+
+#Policy: Daedric Prince takes a more hands-on approach
+character_event = {
+	id = ekoffmapstatus.14
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+			}
+			NOR = {
+				#offmap_ruler = { has_character_modifier = recent_policy_shift } #Policy recently changed, can't change again for a while
+				has_policy = oblivion_interventionist #You can't increase policy from Interventionist 
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 0.5
+			event_target:lit_dragonfires = { #The Dragonfires are burning, which reduces strength increase progression
+				is_alive = yes
+			}
+		}
+		modifier = { #Isolationist will eventually look to make bargains
+			factor = 5
+			FROM = {
+				has_policy = oblivion_isolationist
+			}
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = {
+				limit = {
+					has_policy = oblivion_interactive
+				}
+				set_policy = oblivion_interventionist
+			}
+			if = {
+				limit = {
+					has_policy = oblivion_isolationist
+				}
+				set_policy = oblivion_interactive
+			}
+			# offmap_ruler = {
+				# add_character_modifier = {
+					# name = recent_policy_shift
+					# months = 36
+				# }
+			# }
+		}
+		
+		if = {
+			limit = {
+				FROM = {
+					NOT = { has_offmap_flag = no_status_news }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_azura }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_azura = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_boethiah }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_boethiah = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_clavicus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_clavicus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hermaeus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hermaeus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hircine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hircine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_malacath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_malacath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mehrunes }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mehrunes = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mephala }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mephala = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_meridia }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_meridia = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_molag }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_molag = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_namira }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_namira = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_nocturnal }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_nocturnal = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_peryite }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_peryite = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sanguine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sanguine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sheogorath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sheogorath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_vaermina }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_vaermina = yes
+					}
+					narrative_event = { id = ekoffmapstatus.54 }
+				}
+			}
+		}
+	}
+}
+
+#Policy: Daedric Prince takes a more lax approach
+character_event = {
+	id = ekoffmapstatus.16
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = { #A Prince CANNOT weaken during their own invasion
+				AND = {
+					is_offmap_tag = oblivion_azura
+					NOT = { has_global_flag = oblivion_invasion_azura }
+				}
+				AND = {
+					is_offmap_tag = oblivion_boethiah
+					NOT = { has_global_flag = oblivion_invasion_boethiah }
+				}
+				AND = {
+					is_offmap_tag = oblivion_clavicus
+					NOT = { has_global_flag = oblivion_invasion_clavicus }
+				}
+				AND = {
+					is_offmap_tag = oblivion_hermaeus
+					NOT = { has_global_flag = oblivion_invasion_hermaeus }
+				}
+				AND = {
+					is_offmap_tag = oblivion_hircine
+					NOT = { has_global_flag = oblivion_invasion_hircine }
+				}
+				AND = {
+					is_offmap_tag = oblivion_malacath
+					NOT = { has_global_flag = oblivion_invasion_malacath }
+				}
+				AND = {
+					is_offmap_tag = oblivion_mehrunes
+					NOT = { has_global_flag = oblivion_invasion_mehrunes }
+				}
+				AND = {
+					is_offmap_tag = oblivion_mephala
+					NOT = { has_global_flag = oblivion_invasion_mephala }
+				}
+				AND = {
+					is_offmap_tag = oblivion_meridia
+					NOT = { has_global_flag = oblivion_invasion_meridia }
+				}
+				AND = {
+					is_offmap_tag = oblivion_molag
+					NOT = { has_global_flag = oblivion_invasion_molag }
+				}
+				AND = {
+					is_offmap_tag = oblivion_namira
+					NOT = { has_global_flag = oblivion_invasion_namira }
+				}
+				AND = {
+					is_offmap_tag = oblivion_nocturnal
+					NOT = { has_global_flag = oblivion_invasion_nocturnal }
+				}
+				AND = {
+					is_offmap_tag = oblivion_peryite
+					NOT = { has_global_flag = oblivion_invasion_peryite }
+				}
+				AND = {
+					is_offmap_tag = oblivion_sanguine
+					NOT = { has_global_flag = oblivion_invasion_sanguine }
+				}
+				AND = {
+					is_offmap_tag = oblivion_sheogorath
+					NOT = { has_global_flag = oblivion_invasion_sheogorath }
+				}
+				AND = {
+					is_offmap_tag = oblivion_vaermina
+					NOT = { has_global_flag = oblivion_invasion_vaermina }
+				}
+			}
+			NOR = {
+				#offmap_ruler = { has_character_modifier = recent_policy_shift } #Status recently changed, can't change again for a while
+				has_policy = oblivion_isolationist #You can't decrease status from Aloof 
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 0.5
+			event_target:lit_dragonfires = { #The Dragonfires are burning, which reduces strength increase progression
+				is_alive = yes
+			}
+		}
+		modifier = { #Might decide to become more withdrawn for various reasons
+			factor = 2.5
+			FROM = {
+				has_policy = oblivion_interventionist
+			}
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = {
+				limit = {
+					has_policy = oblivion_interactive
+				}
+				set_policy = oblivion_isolationist
+				
+			}
+			if = {
+				limit = {
+					has_policy = oblivion_interventionist
+				}
+				set_policy = oblivion_interactive
+			}
+			offmap_ruler = {
+				add_character_modifier = {
+					name = recent_policy_shift
+					months = 36
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				FROM = {
+					NOT = { has_offmap_flag = no_status_news }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_azura }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_azura = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_boethiah }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_boethiah = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_clavicus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_clavicus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hermaeus }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hermaeus = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_hircine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_hircine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_malacath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_malacath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mehrunes }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mehrunes = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_mephala }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_mephala = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_meridia }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_meridia = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_molag }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_molag = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_namira }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_namira = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_nocturnal }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_nocturnal = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_peryite }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_peryite = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sanguine }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sanguine = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_sheogorath }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_sheogorath = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+			if = {
+				limit = { is_offmap_tag = oblivion_vaermina }
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						worships_vaermina = yes
+					}
+					narrative_event = { id = ekoffmapstatus.56 }
+				}
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = ekoffmapstatus.50
+	title = EKOffmapStatus50Title
+	desc = {
+		trigger = { FROM = { has_status = oblivion_convalescing } }
+		text = EKOffmapStatus50A
+	}
+	desc = {
+		trigger = { FROM = { has_status = oblivion_normal } }
+		text = EKOffmapStatus50B
+	}
+	desc = {
+		trigger = { FROM = { has_status = oblivion_apogee } }
+		text = EKOffmapStatus50C
+	}
+	picture = GFX_evt_comet
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus50Accept
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.52
+	title = EKOffmapStatus52Title
+	desc = {
+		trigger = { FROM = { has_status = oblivion_normal } }
+		text = EKOffmapStatus52A
+	}
+	desc = {
+		trigger = { FROM = { has_status = oblivion_convalescing } }
+		text = EKOffmapStatus52B
+	}
+	desc = {
+		trigger = { FROM = { has_status = oblivion_cataclysm } }
+		text = EKOffmapStatus52C
+	}
+	picture = GFX_evt_bad_news
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus52Accept
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.54
+	title = EKOffmapStatus54Title
+	desc = {
+		trigger = { FROM = { has_policy = oblivion_interactive } }
+		text = EKOffmapStatus54A
+	}
+	desc = {
+		trigger = { FROM = { has_policy = oblivion_interventionist } }
+		text = EKOffmapStatus54B
+	}
+	picture = GFX_evt_comet
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus54Accept
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.56
+	title = EKOffmapStatus56Title
+	desc = {
+		trigger = { FROM = { has_policy = oblivion_interactive } }
+		text = EKOffmapStatus56A
+	}
+	desc = {
+		trigger = { FROM = { has_policy = oblivion_isolationist } }
+		text = EKOffmapStatus56B
+	}
+	picture = GFX_evt_bad_news
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus56Accept
+	}
+}
+
+
+#Tribunal Temple Status events
+character_event = {
+	id = ekoffmapstatus.100
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = { #Obviously has to be a Tribune
+				is_offmap_tag = tribunal_almalexia
+				is_offmap_tag = tribunal_sothasil
+				is_offmap_tag = tribunal_vivec
+			}
+			NOT = { has_global_flag = heart_of_lorkhan_destroyed }
+			OR = {
+				NOT = { has_global_flag = sixth_house_risen }
+				has_global_flag = sixth_house_destroyed
+			}
+		}
+		AND = {
+			OR = { #One Tribune must control Keening
+				tribunal_almalexia = {
+					offmap_ruler = {
+						has_artifact = weapon_keening
+					}
+				}
+				tribunal_sothasil = {
+					offmap_ruler = {
+						has_artifact = weapon_keening
+					}
+				}
+				tribunal_vivec = {
+					offmap_ruler = {
+						has_artifact = weapon_keening
+					}
+				}
+			}
+			OR = { #One Tribune must control Sunder
+				tribunal_almalexia = {
+					offmap_ruler = {
+						has_artifact = weapon_sunder
+					}
+				}
+				tribunal_sothasil = {
+					offmap_ruler = {
+						has_artifact = weapon_sunder
+					}
+				}
+				tribunal_vivec = {
+					offmap_ruler = {
+						has_artifact = weapon_sunder
+					}
+				}
+			}
+			OR = { #One Tribune must control Wraithguard
+				tribunal_almalexia = {
+					offmap_ruler = {
+						has_artifact = armor_wraithguard
+					}
+				}
+				tribunal_sothasil = {
+					offmap_ruler = {
+						has_artifact = armor_wraithguard
+					}
+				}
+				tribunal_vivec = {
+					offmap_ruler = {
+						has_artifact = armor_wraithguard
+					}
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+	}
+    
+	immediate = {
+		FROM = {
+			if = {
+				limit = {
+					is_offmap_tag = tribunal_almalexia
+					NOT = { has_status = tribunal_0 }
+				}
+				set_status = tribunal_10
+			}
+			if = {
+				limit = {
+					is_offmap_tag = tribunal_sothasil
+					NOT = { has_status = tribunal_0 }
+				}
+				set_status = tribunal_10
+			}
+			if = {
+				limit = {
+					is_offmap_tag = tribunal_vivec
+					NOT = { has_status = tribunal_0 }
+				}
+				set_status = tribunal_10
+			}
+		}
+	}
+}
+
+#Tribunes lose their power
+character_event = {
+	id = ekoffmapstatus.105
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					NOT = { has_status = tribunal_1 }
+					NOT = { has_status = tribunal_0 }
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					NOT = { has_status = tribunal_1 }
+					NOT = { has_status = tribunal_0 }
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					NOT = { has_status = tribunal_1 }
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 10
+			has_global_flag = heart_of_lorkhan_destroyed
+		}
+		modifier = {
+			factor = 0.9
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_9
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_9
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_9
+				}
+			}
+		}
+		modifier = {
+			factor = 0.8
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_8
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_8
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_8
+				}
+			}
+		}
+		modifier = {
+			factor = 0.65
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_7
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_7
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_7
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_6
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_6
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_6
+				}
+			}
+		}
+		modifier = {
+			factor = 0.35
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_5
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_5
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_5
+				}
+			}
+		}
+		modifier = {
+			factor = 0.25
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_4
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_4
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_4
+				}
+			}
+		}
+		modifier = {
+			factor = 0.1
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_3
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_3
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_3
+				}
+			}
+		}
+		modifier = {
+			factor = 0.025
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					has_status = tribunal_2
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					has_status = tribunal_2
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					has_status = tribunal_2
+				}
+			}
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = { limit = { is_offmap_tag = tribunal_almalexia }
+				if = {
+					limit = {
+						has_status = tribunal_2
+					}
+					set_status = tribunal_1
+				}
+				if = {
+					limit = {
+						has_status = tribunal_3
+					}
+					set_status = tribunal_2
+				}
+				if = {
+					limit = {
+						has_status = tribunal_4
+					}
+					set_status = tribunal_3
+				}
+				if = {
+					limit = {
+						has_status = tribunal_5
+					}
+					set_status = tribunal_4
+				}
+				if = {
+					limit = {
+						has_status = tribunal_6
+					}
+					set_status = tribunal_5
+				}
+				if = {
+					limit = {
+						has_status = tribunal_7
+					}
+					set_status = tribunal_6
+				}
+				if = {
+					limit = {
+						has_status = tribunal_8
+					}
+					set_status = tribunal_7
+				}
+				if = {
+					limit = {
+						has_status = tribunal_9
+					}
+					set_status = tribunal_8
+				}
+				if = {
+					limit = {
+						has_status = tribunal_10
+					}
+					set_status = tribunal_9
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_sothasil }
+				if = {
+					limit = {
+						has_status = tribunal_2
+					}
+					set_status = tribunal_1
+				}
+				if = {
+					limit = {
+						has_status = tribunal_3
+					}
+					set_status = tribunal_2
+				}
+				if = {
+					limit = {
+						has_status = tribunal_4
+					}
+					set_status = tribunal_3
+				}
+				if = {
+					limit = {
+						has_status = tribunal_5
+					}
+					set_status = tribunal_4
+				}
+				if = {
+					limit = {
+						has_status = tribunal_6
+					}
+					set_status = tribunal_5
+				}
+				if = {
+					limit = {
+						has_status = tribunal_7
+					}
+					set_status = tribunal_6
+				}
+				if = {
+					limit = {
+						has_status = tribunal_8
+					}
+					set_status = tribunal_7
+				}
+				if = {
+					limit = {
+						has_status = tribunal_9
+					}
+					set_status = tribunal_8
+				}
+				if = {
+					limit = {
+						has_status = tribunal_10
+					}
+					set_status = tribunal_9
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_vivec }
+				if = {
+					limit = {
+						has_status = tribunal_2
+					}
+					set_status = tribunal_1
+				}
+				if = {
+					limit = {
+						has_status = tribunal_3
+					}
+					set_status = tribunal_2
+				}
+				if = {
+					limit = {
+						has_status = tribunal_4
+					}
+					set_status = tribunal_3
+				}
+				if = {
+					limit = {
+						has_status = tribunal_5
+					}
+					set_status = tribunal_4
+				}
+				if = {
+					limit = {
+						has_status = tribunal_6
+					}
+					set_status = tribunal_5
+				}
+				if = {
+					limit = {
+						has_status = tribunal_7
+					}
+					set_status = tribunal_6
+				}
+				if = {
+					limit = {
+						has_status = tribunal_8
+					}
+					set_status = tribunal_7
+				}
+				if = {
+					limit = {
+						has_status = tribunal_9
+					}
+					set_status = tribunal_8
+				}
+				if = {
+					limit = {
+						has_status = tribunal_10
+					}
+					set_status = tribunal_9
+				}
+			}
+		}
+	}
+}
+
+#Tribunes change policy - to Warlike
+character_event = {
+	id = ekoffmapstatus.150
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_warlike }
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_warlike }
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_warlike }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = { #Almsivi take a warlike approach
+			factor = 10
+			k_morrowind = {
+				any_direct_de_jure_vassal_title = {
+					NOT = {
+						holder_scope = {
+							OR = {
+								AND = {
+									independent = yes
+									NOT = { religion = almsivi }
+								}
+								AND = {
+									top_liege = { 
+										independent = yes 
+										NOT = { religion = almsivi }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 2.5
+			FROM = {
+				OR = {
+					has_status = tribunal_10
+					has_status = tribunal_9
+					has_status = tribunal_8
+					has_status = tribunal_7
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 0.1
+			has_global_flag = heart_of_lorkhan_destroyed
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = { limit = { is_offmap_tag = tribunal_almalexia }
+				set_policy = tribunal_warlike
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.200 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_sothasil }
+				set_policy = tribunal_warlike
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.200 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_vivec }
+				set_policy = tribunal_warlike
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.200 }
+				}
+			}
+		}
+	}
+}
+
+#Tribunes change policy - to Convivial
+character_event = {
+	id = ekoffmapstatus.155
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_convivial }
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_convivial }
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_convivial }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		
+		
+		modifier = {
+			factor = 5
+			FROM = {
+				OR = {
+					has_status = tribunal_10
+					has_status = tribunal_9
+					has_status = tribunal_8
+					has_status = tribunal_7
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 5
+			has_global_flag = sixth_house_destroyed
+		}
+		
+		modifier = {
+			factor = 0.1
+			has_global_flag = heart_of_lorkhan_destroyed
+		}
+		modifier = {
+			factor = 0.25
+			has_global_flag = sixth_house_risen
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = { limit = { is_offmap_tag = tribunal_almalexia }
+				set_policy = tribunal_convivial
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.201 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_sothasil }
+				set_policy = tribunal_convivial
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.201 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_vivec }
+				set_policy = tribunal_convivial
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.201 }
+				}
+			}
+		}
+	}
+}
+
+#Tribunes change policy - to Cordial
+character_event = {
+	id = ekoffmapstatus.160
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_cordial }
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_cordial }
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					NOT = { has_status = tribunal_0 }
+					NOT = { has_policy = tribunal_cordial }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 5
+			k_almsivi = {
+				holder_scope = {
+					independent = no
+					top_liege = { NOT = { religion = almsivi } }
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 5
+			FROM = {
+				OR = {
+					has_status = tribunal_7
+					has_status = tribunal_6
+					has_status = tribunal_5
+					has_status = tribunal_4
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 5
+			NOT = { has_global_flag = sixth_house_risen }
+		}
+		
+		modifier = {
+			factor = 10
+			has_global_flag = sixth_house_destroyed
+		}
+		
+		modifier = {
+			factor = 0.25
+			has_global_flag = heart_of_lorkhan_destroyed
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = sixth_house_risen
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = { limit = { is_offmap_tag = tribunal_almalexia }
+				set_policy = tribunal_cordial
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.202 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_sothasil }
+				set_policy = tribunal_cordial
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.202 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_vivec }
+				set_policy = tribunal_cordial
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.202 }
+				}
+			}
+		}
+	}
+}
+
+#Tribunes change policy - to Withdrawn
+character_event = {
+	id = ekoffmapstatus.165
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = { #Almsivi will NEVER go Withdrawn as long as they're sufficiently powerful
+		FROM = {
+			OR = { #Obviously has to be a Tribune
+				AND = {
+					is_offmap_tag = tribunal_almalexia
+					NOR = {
+						has_status = tribunal_10
+						has_status = tribunal_9
+						has_status = tribunal_8
+						has_status = tribunal_7
+						has_status = tribunal_0
+					}
+					NOT = { has_policy = tribunal_withdrawn }
+				}
+				AND = {
+					is_offmap_tag = tribunal_sothasil
+					NOR = {
+						has_status = tribunal_10
+						has_status = tribunal_9
+						has_status = tribunal_8
+						has_status = tribunal_7
+						has_status = tribunal_0
+					}
+					NOT = { has_policy = tribunal_withdrawn }
+				}
+				AND = {
+					is_offmap_tag = tribunal_vivec
+					NOR = {
+						has_status = tribunal_10
+						has_status = tribunal_9
+						has_status = tribunal_8
+						has_status = tribunal_7
+						has_status = tribunal_0
+					}
+					NOT = { has_policy = tribunal_withdrawn }
+				}
+			}
+		}
+	}
+	
+	weight_multiplier = {
+		factor = 1
+		
+		modifier = {
+			factor = 5
+			k_almsivi = {
+				holder_scope = {
+					independent = no
+					top_liege = { NOT = { religion = almsivi } }
+				}
+			}
+		}
+		modifier = {
+			factor = 5
+			FROM = {
+				OR = {
+					has_status = tribunal_4
+					has_status = tribunal_3
+					has_status = tribunal_2
+					has_status = tribunal_1
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 0.25
+			NOT = { has_global_flag = sixth_house_risen }
+		}
+		
+		modifier = {
+			factor = 0.75
+			has_global_flag = sixth_house_destroyed
+		}
+		
+		modifier = {
+			factor = 10
+			has_global_flag = heart_of_lorkhan_destroyed
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = sixth_house_risen
+		}
+	}
+    
+	immediate = {
+		FROM = {
+			if = { limit = { is_offmap_tag = tribunal_almalexia }
+				set_policy = tribunal_withdrawn
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.203 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_sothasil }
+				set_policy = tribunal_withdrawn
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.203 }
+				}
+			}
+			if = { limit = { is_offmap_tag = tribunal_vivec }
+				set_policy = tribunal_withdrawn
+				any_player = {
+					limit = {
+						has_offmap_news_enabled = FROM
+						religion = almsivi
+					}
+					narrative_event = { id = ekoffmapstatus.203 }
+				}
+			}
+		}
+	}
+}
+
+#Deaths in the Tribunal - based on Orgnum death events
+
+character_event = {
+	id = ekoffmapstatus.170
+	offmap = only
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROMFROM = {
+			is_offmap_tag = tribunal_almalexia
+		}
+		FROM = {
+			character = 250000
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			set_policy = tribunal_hidden
+			set_status = tribunal_0
+		}
+		tribunal_almalexia = {
+			offmap_ruler = {
+				add_trait = immortal
+				dynasty = none
+				set_father = 0
+				set_mother = 0
+				set_name = Vacant
+			}
+		}
+		any_player = {
+			narrative_event = { id = ekoffmapstatus.225 }
+		}
+	}
+}
+character_event = {
+	id = ekoffmapstatus.172
+	offmap = only
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROMFROM = {
+			is_offmap_tag = tribunal_almalexia
+		}
+		FROM = {
+			NOT = { character = 250000 }
+		}
+	}
+	
+	immediate = {
+		tribunal_almalexia = {
+			offmap_ruler = {
+				add_trait = immortal
+				dynasty = none
+				set_father = 0
+				set_mother = 0
+				set_name = Vacant
+			}
+		}
+	}
+}
+character_event = {
+	id = ekoffmapstatus.175
+	offmap = only
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROMFROM = {
+			is_offmap_tag = tribunal_sothasil
+		}
+		FROM = {
+			character = 250001
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			set_policy = tribunal_hidden
+			set_status = tribunal_0
+		}
+		tribunal_sothasil = {
+			offmap_ruler = {
+				add_trait = immortal
+				dynasty = none
+				set_father = 0
+				set_mother = 0
+				set_name = Vacant
+			}
+		}
+		any_player = {
+			narrative_event = { id = ekoffmapstatus.226 }
+		}
+	}
+}
+character_event = {
+	id = ekoffmapstatus.177
+	offmap = only
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROMFROM = {
+			is_offmap_tag = tribunal_sothasil
+		}
+		FROM = {
+			NOT = { character = 250001 }
+		}
+	}
+	
+	immediate = {
+		tribunal_sothasil = {
+			offmap_ruler = {
+				add_trait = immortal
+				dynasty = none
+				set_father = 0
+				set_mother = 0
+				set_name = Vacant
+			}
+		}
+	}
+}
+character_event = {
+	id = ekoffmapstatus.180
+	offmap = only
+
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROMFROM = {
+			is_offmap_tag = tribunal_vivec
+		}
+		FROM = {
+			character = 250002
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			set_policy = tribunal_hidden
+			set_status = tribunal_0
+		}
+		tribunal_vivec = {
+			offmap_ruler = {
+				add_trait = immortal
+				dynasty = none
+				set_father = 0
+				set_mother = 0
+				set_name = Vacant
+			}
+		}
+		any_player = {
+			narrative_event = { id = ekoffmapstatus.227 }
+		}
+	}
+}
+character_event = {
+	id = ekoffmapstatus.182
+	offmap = only
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROMFROM = {
+			is_offmap_tag = tribunal_vivec
+		}
+		FROM = {
+			NOT = { character = 250002 }
+		}
+	}
+	
+	immediate = {
+		tribunal_vivec = {
+			offmap_ruler = {
+				add_trait = immortal
+				dynasty = none
+				set_father = 0
+				set_mother = 0
+				set_name = Vacant
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = ekoffmapstatus.200
+	title = EKOffmapStatus200Title
+	desc = EKOffmapStatus200
+	picture = GFX_evt_battle
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus200Accept
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.201
+	title = EKOffmapStatus201Title
+	desc = EKOffmapStatus201
+	picture = GFX_evt_throne_room_dunmer
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus201Accept
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.202
+	title = EKOffmapStatus202Title
+	desc = EKOffmapStatus202
+	picture = GFX_evt_dunmer_ambassadors
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus202Accept
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.203
+	title = EKOffmapStatus203Title
+	desc = EKOffmapStatus203
+	picture = GFX_evt_dunmer_boethiah
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapStatus203Accept
+	}
+}
+
+narrative_event = {
+	id = ekoffmapstatus.225
+	title = EKOffmapStatus225Title
+	desc = EKOffmapStatus225
+	picture = GFX_evt_dunmer_mephala
+	border = GFX_event_narrative_frame_religion	
+	
+	is_triggered_only = yes
+	major = yes
+	hide_from = yes
+	hide_new = yes
+	
+	only_rulers = yes
+
+	option = {
+		name = EKOffmapStatus225Almsivi
+		trigger = {
+			religion = almsivi
+		}
+	}
+	option = {
+		name = EKOffmapStatus225Heretic
+		trigger = {
+			is_heresy_of = almsivi
+		}
+	}
+	option = {
+		name = EKOffmapStatus225Other
+		trigger = {
+			NOT = { religion_group = tribunal }
+
+		}
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.226
+	title = EKOffmapStatus226Title
+	desc = EKOffmapStatus226
+	picture = GFX_evt_dunmer_mephala
+	border = GFX_event_narrative_frame_religion	
+	
+	is_triggered_only = yes
+	major = yes
+	hide_from = yes
+	hide_new = yes
+	
+	only_rulers = yes
+
+	option = {
+		name = EKOffmapStatus225Almsivi
+		trigger = {
+			religion = almsivi
+		}
+	}
+	option = {
+		name = EKOffmapStatus225Heretic
+		trigger = {
+			is_heresy_of = almsivi
+		}
+	}
+	option = {
+		name = EKOffmapStatus225Other
+		trigger = {
+			NOT = { religion_group = tribunal }
+
+		}
+	}
+}
+narrative_event = {
+	id = ekoffmapstatus.227
+	title = EKOffmapStatus227Title
+	desc = EKOffmapStatus227
+	picture = GFX_evt_dunmer_mephala
+	border = GFX_event_narrative_frame_religion	
+	
+	is_triggered_only = yes
+	major = yes
+	hide_from = yes
+	hide_new = yes
+	
+	only_rulers = yes
+
+	option = {
+		name = EKOffmapStatus225Almsivi
+		trigger = {
+			religion = almsivi
+		}
+	}
+	option = {
+		name = EKOffmapStatus225Heretic
+		trigger = {
+			is_heresy_of = almsivi
+		}
+	}
+	option = {
+		name = EKOffmapStatus225Other
+		trigger = {
+			NOT = { religion_group = tribunal }
+
+		}
+	}
+}

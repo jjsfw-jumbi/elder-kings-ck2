@@ -1,0 +1,351 @@
+#News and current events
+
+namespace = eknews
+
+#Note from Etienne: These events are QoL tools to help the player keep up to date on current events
+
+#Dragonborn
+long_character_event = {
+	id = eknews.0
+	desc = {
+		text = EKNews0A
+		trigger = {
+			event_target:current_dragonborn = {
+				is_alive = yes
+			}
+		}
+	}
+	desc = {
+		text = EKNews0B
+		trigger = {
+			NOT = {
+				event_target:current_dragonborn = {
+					is_alive = yes
+				}
+			}
+		}
+	}
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKNewsOptA
+		clr_character_flag = reading_the_news
+		event_target:current_dragonborn = {
+			if = {
+				limit = { is_alive = yes }
+				hidden_tooltip = { prestige = -1 prestige = 1 }
+			}
+		}
+	}
+}
+
+#Dragonfires
+long_character_event = {
+	id = eknews.1
+	desc = {
+		text = EKNews1A
+		trigger = {
+			event_target:lit_dragonfires = {
+				is_alive = yes
+			}
+		}
+	}
+	desc = {
+		text = EKNews1B
+		trigger = {
+			NOT = {
+				event_target:lit_dragonfires = {
+					is_alive = yes
+				}
+			}
+		}
+	}
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKNewsOptA
+		clr_character_flag = reading_the_news
+	}
+}
+
+#Amulet of Kings
+long_character_event = {
+	id = eknews.2
+	desc = {
+		text = EKNews2A
+		trigger = {
+			has_global_flag = amulet_of_kings_active
+			event_target:the_amulet_of_kings = {
+				artifact_owner = {
+					is_alive = yes
+				}
+			}
+		}
+	}
+	desc = {
+		text = EKNews2B
+		trigger = {
+			NAND = {
+				has_global_flag = amulet_of_kings_active
+				event_target:the_amulet_of_kings = {
+					artifact_owner = {
+						is_alive = yes
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = amulet_of_kings_active
+				event_target:the_amulet_of_kings = {
+					artifact_owner = {
+						is_alive = yes
+					}
+				}
+			}
+			event_target:the_amulet_of_kings = {
+				artifact_owner = {
+					save_event_target_as = news_aok_holder
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EKNewsOptA
+		clr_character_flag = reading_the_news
+	}
+}
+
+#Daedric Invasion
+long_character_event = {
+	id = eknews.3
+	desc = {
+		text = EKNews3A1
+		trigger = {
+			has_global_flag = oblivion_invasion_azura
+		}
+	}
+	desc = {
+		text = EKNews3A2
+		trigger = {
+			has_global_flag = oblivion_invasion_boethiah
+		}
+	}
+	desc = {
+		text = EKNews3A3
+		trigger = {
+			has_global_flag = oblivion_invasion_clavicus
+		}
+	}
+	desc = {
+		text = EKNews3A4
+		trigger = {
+			has_global_flag = oblivion_invasion_hermaeus
+		}
+	}
+	desc = {
+		text = EKNews3A5
+		trigger = {
+			has_global_flag = oblivion_invasion_hircine
+		}
+	}
+	desc = {
+		text = EKNews3A6
+		trigger = {
+			has_global_flag = oblivion_invasion_malacath
+		}
+	}
+	desc = {
+		text = EKNews3A7
+		trigger = {
+			has_global_flag = oblivion_invasion_mehrunes
+		}
+	}
+	desc = {
+		text = EKNews3A8
+		trigger = {
+			has_global_flag = oblivion_invasion_mephala
+		}
+	}
+	desc = {
+		text = EKNews3A9
+		trigger = {
+			has_global_flag = oblivion_invasion_meridia
+		}
+	}
+	desc = {
+		text = EKNews3A10
+		trigger = {
+			has_global_flag = oblivion_invasion_molag
+		}
+	}
+	desc = {
+		text = EKNews3A11
+		trigger = {
+			has_global_flag = oblivion_invasion_namira
+		}
+	}
+	desc = {
+		text = EKNews3A12
+		trigger = {
+			has_global_flag = oblivion_invasion_nocturnal
+		}
+	}
+	desc = {
+		text = EKNews3A13
+		trigger = {
+			has_global_flag = oblivion_invasion_peryite
+		}
+	}
+	desc = {
+		text = EKNews3A14
+		trigger = {
+			has_global_flag = oblivion_invasion_sanguine
+		}
+	}
+	desc = {
+		text = EKNews3A15
+		trigger = {
+			has_global_flag = oblivion_invasion_sheogorath
+		}
+	}
+	desc = {
+		text = EKNews3A16
+		trigger = {
+			has_global_flag = oblivion_invasion_vaermina
+		}
+	}
+	desc = {
+		text = EKNews3B
+		trigger = {
+			NOR = {
+				has_global_flag = oblivion_invasion_azura
+				has_global_flag = oblivion_invasion_boethiah
+				has_global_flag = oblivion_invasion_clavicus
+				has_global_flag = oblivion_invasion_hermaeus
+				has_global_flag = oblivion_invasion_hircine
+				has_global_flag = oblivion_invasion_malacath
+				has_global_flag = oblivion_invasion_mehrunes
+				has_global_flag = oblivion_invasion_mephala
+				has_global_flag = oblivion_invasion_meridia
+				has_global_flag = oblivion_invasion_molag
+				has_global_flag = oblivion_invasion_namira
+				has_global_flag = oblivion_invasion_nocturnal
+				has_global_flag = oblivion_invasion_peryite
+				has_global_flag = oblivion_invasion_sanguine
+				has_global_flag = oblivion_invasion_sheogorath
+				has_global_flag = oblivion_invasion_vaermina
+			}
+		}
+	}
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKNewsOptA
+		clr_character_flag = reading_the_news
+	}
+}
+
+#Necromancy
+long_character_event = {
+	id = eknews.4
+	desc = {
+		text = EKNews4A1
+		trigger = {
+			has_global_flag = mages_tamriel_necromancy_allowed
+			capital_scope = {
+				region = nirn_tamriel
+			}
+		}
+	}
+	desc = {
+		text = EKNews4A2
+		trigger = {
+			has_global_flag = mages_tamriel_necromancy_banned
+			capital_scope = {
+				region = nirn_tamriel
+			}
+		}
+	}
+	desc = {
+		text = EKNews4B1
+		trigger = {
+			has_global_flag = mages_akavir_necromancy_allowed
+			capital_scope = {
+				region = nirn_akavir
+			}
+		}
+	}
+	desc = {
+		text = EKNews4B2
+		trigger = {
+			has_global_flag = mages_akavir_necromancy_banned
+			capital_scope = {
+				region = nirn_akavir
+			}
+		}
+	}
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKNewsOptA
+		clr_character_flag = reading_the_news
+	}
+}
+
+#Towers
+long_character_event = {
+	id = eknews.5
+	desc = {
+		text = EKNews5A1
+		trigger = {
+			calc_true_if = { 
+				amount = 5 
+				has_global_flag = whitegold_deactivated
+				has_global_flag = adamantine_deactivated
+				has_global_flag = snowthroat_deactivated
+				has_global_flag = greensap_deactivated
+				has_global_flag = crystal_deactivated
+				has_global_flag = redtower_deactivated
+			}
+		}
+	}
+	desc = {
+		text = EKNews5A2
+		trigger = {
+			calc_true_if = { 
+				amount <= 4 
+				has_global_flag = whitegold_deactivated
+				has_global_flag = adamantine_deactivated
+				has_global_flag = snowthroat_deactivated
+				has_global_flag = greensap_deactivated
+				has_global_flag = crystal_deactivated
+				has_global_flag = redtower_deactivated
+			}
+		}
+	}
+	
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKNewsOptA
+		clr_character_flag = reading_the_news
+	}
+}

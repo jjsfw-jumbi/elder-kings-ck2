@@ -1,0 +1,844 @@
+targetted_decisions = {
+	create_standing_army = {
+		only_independent = yes
+		filter = realm
+		ai_target_filter = realm
+		
+		from_potential = {
+			is_playable = yes
+			war = no
+			is_landed = yes
+			mercenary = no
+			holy_order = no
+			higher_tier_than = DUKE
+			has_dlc = "Zeus"
+			has_law = standing_army_law_2
+
+			NAND = {
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_1 }
+				}
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_2 }
+				}
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_3 }
+				}
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_4 }
+				}
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_5 }
+				}
+			}
+		}
+		
+		potential = {
+			NOT = { character = FROM }
+			OR = {
+				FROM = {
+					has_law = true_cognatic_succession
+					is_female = yes
+				}
+				is_female = no
+			}
+			NOT = {
+				any_mercenary_band = {
+					holder_scope = { character = ROOT }
+				}
+			}
+			OR = {
+				higher_tier_than = COUNT
+				is_ruler = no
+			}
+			FROM = { is_liege_of = ROOT }
+			is_adult = yes
+			has_education_martial_trigger = yes
+		}
+		
+		allow = {
+			FROM = { wealth = 100 }
+		}
+		effect = {
+			host = {
+				capital_holding = {
+					save_event_target_as = name_target
+				}
+				primary_title = {
+					create_title = {
+						tier = DUKE
+						name = "[name_target.GetBaseName] Legion"
+						landless = yes
+						temporary = no
+						custom_created = yes
+						culture = ROOT
+						holder = ROOT
+						base_title = THIS
+						mercenary = yes
+						ruler = "General"
+						ruler_female = "General"
+						foa = "General"
+						army_template = default_culture_band_composition
+					}
+				}
+			}
+			ROOT = {
+				wealth = 100
+				set_defacto_liege = FROM
+				opinion = {
+					modifier = opinion_army_general
+					who = FROM
+				}
+			}
+			FROM = {
+				wealth = -100
+				any_realm_province = {
+					add_province_modifier = {
+						modifier = standing_army_recruiting
+						stacking = yes
+						months = 6
+					}
+				}
+			}
+			any_mercenary_band = {
+				limit = { holder_scope = { character = ROOT } }
+				set_title_flag = ze_dyn_merc
+				set_title_flag = not_hired
+				cut_mercenary_creator_relation = yes
+				
+				succession = open_elective
+				
+				set_variable = { which = army_size value = 1 }
+				
+				if = {
+					limit = {
+						NOT = {
+							FROM = {
+								any_vassal = {
+									any_demesne_title = { has_title_flag = standing_army_1 }
+								}
+							}
+						}
+					}
+					set_title_flag = standing_army_1
+					holder_scope = { set_character_flag = st_1 }
+					if = {
+						limit = {
+							always = no
+							#FROM = {
+							#	culture_group = byzantine
+							#}
+						}	
+						set_name = tagmata_1_name
+						adjective = "1st Tagmata"
+						break = yes
+					}
+					
+					if = {
+						limit = {
+							FROM = {
+								OR = {
+									culture = imperial
+									culture = nibenean
+									culture = colovian
+								}
+							}
+						}	
+						set_name = legion_1_name
+						adjective = "1st Legion"				
+						break = yes
+					}
+					
+					#set_name = regiment_1_name
+					adjective = "1st Regiment"
+					break = yes
+						
+				}
+					
+				if = {
+					limit = {
+						NOT = {
+							FROM = {
+								any_vassal = {
+									any_demesne_title = { has_title_flag = standing_army_2 }
+								}
+							}
+						}
+					}
+					set_title_flag = standing_army_2
+					holder_scope = { set_character_flag = st_2 }
+					if = {
+						limit = {
+							always = no
+							#FROM = {
+							#	culture_group = byzantine
+							#}
+						}	
+						set_name = tagmata_2_name
+						adjective = "2nd Tagmata"
+						break = yes
+					}
+					
+					if = {
+						limit = {
+							FROM = {
+								OR = {
+									culture = imperial
+									culture = nibenean
+									culture = colovian
+								}
+							}
+						}	
+						set_name = legion_2_name
+						adjective = "2nd Legion"
+						break = yes
+					}
+					
+					set_name = regiment_2_name
+					adjective = "2nd Regiment"
+					break = yes
+						
+				}
+										
+				if = {
+					limit = {
+						NOT = {
+							FROM = {
+								any_vassal = {
+									any_demesne_title = { has_title_flag = standing_army_3 }
+								}
+							}
+						}
+					}
+					set_title_flag = standing_army_3
+					holder_scope = { set_character_flag = st_3 }
+					if = {
+						limit = {
+							always = no
+							#FROM = {
+							#	culture_group = byzantine
+							#}
+						}	
+						set_name = tagmata_3_name
+						adjective = "3rd Tagmata"
+						break = yes
+					}
+					
+					if = {
+						limit = {
+							FROM = {
+								OR = {
+									culture = imperial
+									culture = nibenean
+									culture = colovian
+								}
+							}
+						}	
+						#set_name = legion_2_name
+						adjective = "3rd Legion"
+						break = yes
+					}
+					
+					set_name = regiment_3_name
+					adjective = "3rd Regiment"
+					break = yes
+				}
+									
+				if = {
+					limit = {
+						NOT = {
+							FROM = {
+								any_vassal = {
+									any_demesne_title = { has_title_flag = standing_army_4 }
+								}
+							}
+						}
+					}
+					set_title_flag = standing_army_4
+					holder_scope = { set_character_flag = st_4 }
+					if = {
+						limit = {
+							always = no
+							#FROM = {
+							#	culture_group = byzantine
+							#}
+						}	
+						set_name = tagmata_4_name
+						adjective = "4th Tagmata"
+						break = yes
+					}
+					
+					if = {
+						limit = {
+							FROM = {
+								OR = {
+									culture = imperial
+									culture = nibenean
+									culture = colovian
+								}
+							}
+						}	
+						set_name = legion_4_name
+						adjective = "4th Legion"
+						break = yes
+					}
+					
+					set_name = regiment_4_name
+					adjective = "4th Regiment"
+					break = yes
+				}					
+				
+				if = {
+					limit = {
+						NOT = {
+							FROM = {
+								any_vassal = {
+									any_demesne_title = { has_title_flag = standing_army_5 }
+								}
+							}
+						}
+					}
+					set_title_flag = standing_army_5
+					holder_scope = { set_character_flag = st_5 }
+					if = {
+						limit = {
+							always = no
+							#FROM = {
+							#	culture_group = byzantine
+							#}
+						}	
+						set_name = tagmata_5_name
+						adjective = "5th Tagmata"
+						break = yes
+					}
+					
+					if = {
+						limit = {
+							FROM = {
+								OR = {
+									culture = imperial
+									culture = nibenean
+									culture = colovian
+								}
+							}
+						}	
+						set_name = legion_5_name
+						adjective = "5th Legion"
+						break = yes
+					}
+					
+					set_name = regiment_5_name
+					adjective = "5th Regiment"
+					break = yes
+				}
+			}	
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0.1
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_1 }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_2 }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_3 }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_4 }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_vassal = {
+					any_demesne_title = { has_title_flag = standing_army_5 }
+				}
+			}
+
+			modifier = {
+				factor = 2
+				FROM = { realm_size = 100 }
+			}
+			modifier = {
+				factor = 2
+				FROM = { realm_size = 200 }
+			}
+			modifier = {
+				factor = 2
+				FROM = { realm_size = 400 }
+			}
+
+			modifier = {
+				factor = 0.5
+				NOT = { FROM = { wealth = 300 } }
+			}
+			modifier = {
+				factor = 0.2
+				NOT = { FROM = { wealth = 200 } }
+			}
+			modifier = {
+				factor = 2
+				FROM = { opinion = { who = ROOT value = 50 } }
+			}
+			modifier = {
+				factor = 2
+				FROM = { opinion = { who = ROOT value = 25 } }
+			}
+			modifier = {
+				factor = 0.1
+				FROM = { opinion = { who = ROOT value = -25 } }
+			}
+			modifier = {
+				factor = 0.0
+				FROM = { opinion = { who = ROOT value = -50 } }
+			}
+		}
+	}
+
+	change_composition_standing_army = {
+		only_rulers = yes
+		filter = realm
+		ai_target_filter = realm	
+
+		from_potential = {
+			has_dlc = "Zeus"
+			war = no
+		}
+		potential = {
+			any_mercenary_band = {
+				AND = {
+					holder_scope = { character = ROOT }
+					OR = {
+						has_title_flag = standing_army_1
+						has_title_flag = standing_army_2
+						has_title_flag = standing_army_3
+						has_title_flag = standing_army_4
+						has_title_flag = standing_army_5
+					}
+				}
+			}
+			OR = {
+				de_facto_liege = FROM
+				AND = {
+					character = FROM
+					independent = no
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				wealth = 50
+			}
+			NOT = { has_raised_standing_troops = yes }
+		}
+		effect = {
+			character_event = { id = stand.5 }
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0.5
+				NOT = { FROM = { wealth = 300 } }
+			}
+			modifier = {
+				factor = 0.2
+				NOT = { FROM = { wealth = 200 } }
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { FROM = { wealth = 100 } }
+			}
+			modifier = {
+				factor = 0.1
+				FROM = { character = ROOT }
+			}
+			modifier = {
+				factor = 2
+				FROM = { has_education_martial_trigger = yes }
+			}
+		}
+	}
+	
+	send_troops_standing_army = {
+		only_playable = yes
+		filter = realm
+		ai_target_filter = realm
+		
+		from_potential = {
+			is_playable = yes
+			has_dlc = "Zeus"
+			war = no
+		}
+		potential = {
+			any_mercenary_band = {
+				AND = {
+					holder_scope = { character = ROOT }
+					NOT = { check_variable = { which = army_size value = 250 } }
+					OR = {
+						has_title_flag = standing_army_1
+						has_title_flag = standing_army_2
+						has_title_flag = standing_army_3
+						has_title_flag = standing_army_4
+						has_title_flag = standing_army_5
+					}
+				}
+			}
+			OR = {
+				de_facto_liege = FROM
+				AND = {
+					character = FROM
+					independent = no
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				wealth = 50
+			}
+			NOT = { has_raised_standing_troops = yes }
+		}
+		effect = {
+			character_event = { id = stand.7 }
+		}
+
+		ai_will_do = {
+			factor = 0.001
+			modifier = {
+				factor = 4
+				FROM = {
+					AND = {
+						independent = yes
+						character = ROOT
+					}
+				}
+			}
+			modifier = {
+				factor = 4
+				NOT = { FROM = { character = ROOT } }
+			}
+			modifier = {
+				factor = 2
+				any_mercenary_band = {
+					AND = {
+						holder_scope = {
+							AND = {
+								character = ROOT
+								independent = no
+							}
+						}
+						NOT = {
+							check_variable = { which = army_size value = 10 }
+						}
+					}
+				}	
+			}
+			modifier = {
+				factor = 2
+				any_mercenary_band = {
+					AND = {
+						holder_scope = {
+							AND = {
+								character = ROOT
+								independent = no
+							}
+						}
+						NOT = {
+							check_variable = { which = army_size value = 20 }
+						}
+					}
+				}	
+			}
+			modifier = {
+				factor = 2
+				any_mercenary_band = {
+					AND = {
+						holder_scope = {
+							AND = {
+								character = ROOT
+								independent = no
+							}
+						}
+						NOT = {
+							check_variable = { which = army_size value = 50 }
+						}
+					}
+				}	
+			}
+			modifier = {
+				factor = 2
+				FROM = { realm_size = 100 }
+			}
+			modifier = {
+				factor = 2
+				FROM = { realm_size = 200 }
+			}
+			modifier = {
+				factor = 2
+				FROM = { realm_size = 400 }
+			}
+
+			modifier = {
+				factor = 0.5
+				NOT = { FROM = { wealth = 300 } }
+			}
+			modifier = {
+				factor = 0.2
+				NOT = { FROM = { wealth = 200 } }
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { FROM = { wealth = 100 } }
+			}
+			modifier = {
+				factor = 2
+				FROM = { has_education_martial_trigger = yes }
+			}
+		}
+	}
+
+	dissolve_standing_army = {
+		only_playable = yes
+		filter = vassals
+		ai_target_filter = vassals
+		
+		from_potential = {
+			is_playable = yes
+			is_landed = yes
+			has_dlc = "Zeus"
+			war = no
+		}
+		potential = {
+			any_mercenary_band = {
+				AND = {
+					holder_scope = { character = ROOT }
+					OR = {
+						has_title_flag = standing_army_1
+						has_title_flag = standing_army_2
+						has_title_flag = standing_army_3
+						has_title_flag = standing_army_4
+						has_title_flag = standing_army_5
+					}
+				}
+			}
+			de_facto_liege = FROM
+		}
+		allow = {
+			NOT = { has_raised_standing_troops = yes }
+		}
+		effect = {
+			character_event = { id = stand.1 }
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0.0
+				has_law = standing_army_law_2
+			}
+		}
+	}
+
+	make_general_standing_army_third_party = {
+		only_playable = yes
+		filter = realm
+		ai_target_filter = realm
+		third_party_filter = realm
+		ai_third_party_filter = realm
+		
+		from_potential = {
+			war = no
+			is_playable = yes
+			is_landed = yes
+			has_dlc = "Zeus"
+			independent = yes
+			has_law = standing_army_law_2
+		}
+		potential = {
+			vassal_of = FROM
+			any_demesne_title = {
+				OR = {
+					has_title_flag = standing_army_1
+					has_title_flag = standing_army_2
+					has_title_flag = standing_army_3
+					has_title_flag = standing_army_4
+					has_title_flag = standing_army_5
+				}
+			}
+			
+		}		
+		third_party_potential = {
+			FROMFROM = {
+				AND = {
+					NOT = { character = FROM }
+					NOT = {
+						has_character_flag = standing_army_replacement
+					}
+					OR = {
+						FROM = {
+							has_law = true_cognatic_succession
+							is_female = yes
+						}
+						is_female = no
+					}
+					NOT = {
+						any_demesne_title = { has_title_flag = standing_army_1 }
+						any_demesne_title = { has_title_flag = standing_army_2 }
+						any_demesne_title = { has_title_flag = standing_army_3 }
+						any_demesne_title = { has_title_flag = standing_army_4 }
+						any_demesne_title = { has_title_flag = standing_army_5 }
+						any_mercenary_band = {
+							holder_scope = { character = FROMFROM }
+						}
+					}
+					is_adult = yes
+					has_education_martial_trigger = yes
+					OR = {
+						higher_tier_than = COUNT
+						is_ruler = no
+					}
+				}
+			}
+			FROM = { is_liege_of = FROMFROM }
+		}
+		allow = {
+			FROM = {
+				wealth = 100
+			}
+		}
+		effect = {
+			FROMFROM = {
+				save_event_target_as = replacement_general
+				set_character_flag = standing_army_replacement
+			}
+			ROOT = { character_event = { id = stand.9 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	maintain_army = {
+		only_rulers = yes
+		filter = realm
+		ai_target_filter = realm
+		
+		from_potential = {
+			has_dlc = "Zeus"
+			war = no
+			top_liege = {
+				has_law = standing_army_law_2
+			}
+		}
+		potential = {
+			any_mercenary_band = {
+				AND = {				
+					holder_scope = { character = ROOT }
+					OR = {
+						has_title_flag = standing_army_1
+						has_title_flag = standing_army_2
+						has_title_flag = standing_army_3
+						has_title_flag = standing_army_4
+						has_title_flag = standing_army_5
+					}
+					OR = {
+						has_title_flag = understaffed_1
+						has_title_flag = understaffed_2
+						has_title_flag = understaffed_3
+						has_title_flag = understaffed_4
+					}
+				}
+				
+			}
+			OR = {
+				de_facto_liege = FROM
+				character = FROM
+			}
+		}
+		allow = {
+			FROM = { wealth = 100 }
+		}
+		effect = {
+			FROM = { character_event = { id = stand.18 } }
+		}
+
+		ai_will_do = {
+			factor = 0.01
+			modifier = {
+				factor = 10
+				FROM = {
+					AND = {
+						character = ROOT
+						independent = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					AND = {
+						character = ROOT
+						independent = no
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					wealth = 100
+				}
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					wealth = 300
+				}
+			}
+			modifier = {
+				factor = 2
+				reverse_opinion = { who = FROM value = 30 }
+			}
+			modifier = {
+				factor = 2
+				reverse_opinion = { who = FROM value = 60 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { reverse_opinion = { who = FROM value = 10 } }
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { reverse_opinion = { who = FROM value = -10 } }
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					trait = greedy
+				}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					OR = {
+						trait = slothful
+						trait = arbitrary
+					}
+				}
+			}
+									
+		}
+	}
+}

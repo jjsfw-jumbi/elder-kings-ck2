@@ -1,0 +1,2306 @@
+#Events for the Alliance War (3502) Bookmark
+
+namespace = alliancewar
+
+### Flavor events during the Alliance War
+# Alinor falls!
+narrative_event = {
+	id = alliancewar.50
+	title = alliancewar.50.t
+	desc = alliancewar.50.d
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			character = ROOT
+			ai = no
+		}
+	}
+	
+	picture = GFX_evt_dominion
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_global_flag = tbw_alinor_falls }
+		start_date == 3502.1.30
+		NOT = { has_global_flag = three_alliances_war_ended }
+		FROM = { title = b_alinor }
+	}
+	
+	immediate = {
+		set_global_flag = tbw_alinor_falls
+	}
+	
+	option = {
+		name = alliancewar.fallCurses
+		trigger = { top_liege = { any_realm_title = { title = b_alinor } } }
+	}
+	option = {
+		name = alliancewar.fallDominion
+		trigger = {
+			NOT = { top_liege = { any_realm_title = { title = b_alinor } } }
+			NOT = { character = ROOT }
+		}
+	}
+	option = {
+		name = alliancewar.fallNice
+		trigger = { character = ROOT }
+		prestige = 100
+	}
+}
+
+# Wayrest falls!
+narrative_event = {
+	id = alliancewar.51
+	title = alliancewar.51.t
+	desc = alliancewar.51.d
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			character = ROOT
+			ai = no
+		}
+	}
+	
+	picture = GFX_evt_covenant
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_global_flag = tbw_wayrest_falls }
+		start_date == 3502.1.30
+		NOT = { has_global_flag = three_alliances_war_ended }
+		FROM = { title = b_wayrest_city }
+	}
+	
+	immediate = {
+		set_global_flag = tbw_wayrest_falls
+	}
+	
+	option = {
+		name = alliancewar.fallCurses
+		trigger = { top_liege = { any_realm_title = { title = b_wayrest_city } } }
+	}
+	option = {
+		name = alliancewar.fallCovenant
+		trigger = {
+			NOT = { top_liege = { any_realm_title = { title = b_wayrest_city } } }
+			NOT = { character = ROOT }
+		}
+	}
+	option = {
+		name = alliancewar.fallNice
+		trigger = { character = ROOT }
+		prestige = 100
+	}
+}
+
+# Windhelm falls!
+narrative_event = {
+	id = alliancewar.52
+	title = alliancewar.52.t
+	desc = alliancewar.52.d
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			character = ROOT
+			ai = no
+		}
+	}
+	
+	picture = GFX_evt_pact
+	border = "GFX_event_narrative_frame_war"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_global_flag = tbw_windhelm_falls }
+		start_date == 3502.1.30
+		NOT = { has_global_flag = three_alliances_war_ended }
+		FROM = { title = b_palaceofthekings }
+	}
+	
+	immediate = {
+		set_global_flag = tbw_windhelm_falls
+	}
+	
+	option = {
+		name = alliancewar.fallCurses
+		trigger = { top_liege = { any_realm_title = { title = b_palaceofthekings } } }
+	}
+	option = {
+		name = alliancewar.fallPact
+		trigger = {
+			NOT = { top_liege = { any_realm_title = { title = b_palaceofthekings } } }
+			NOT = { character = ROOT }
+		}
+	}
+	option = {
+		name = alliancewar.fallNice
+		trigger = { character = ROOT }
+		prestige = 100
+	}
+}
+
+#####
+# Winners of the Alliance War
+#####
+# Jorunn - Cyrodiilic Empire destroyed
+narrative_event = {
+	id = alliancewar.100
+	title = alliancewar.100.t
+	
+	desc = {
+		trigger = { character = ROOT }
+		text = alliancewar.100.d
+	}
+	
+	desc = {
+		trigger = { NOT = { character = ROOT } }
+		text = alliancewar.tbwOver
+	}
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			character = ROOT
+			ai = no
+		}
+	}
+	
+	picture = GFX_evt_pact
+	
+	only_capable = yes
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		has_character_flag = jorunn_the_skald_king
+		war = no
+		start_date == 3502.1.30
+		NOT = { has_global_flag = three_alliances_war_ended }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_global_flag = three_alliances_war_ended
+	}
+	
+	option = {
+		trigger = { character = ROOT }
+		name = alliancewar.100.optA
+		
+		prestige = 500
+		piety = 250
+		
+		# Territory in Cyrodiil becomes independent
+		custom_tooltip = {
+			text = JORUNN_ALLIANCE_WAR_WINNER_VASSALS_CYRODIIL_INDEPENDENT_CT
+			
+			any_demesne_title = {
+				limit = { region = nirn_tamriel_cyrodiil }
+				create_random_steward = {
+					random_traits = yes
+					trait = magistrate_2
+					dynasty = random
+					female = 50
+					culture = THIS
+					religion = THIS
+					attributes = {
+						diplomacy = 2
+						martial = 2
+						stewardship = 8
+						intrigue = 2
+						learning = 2
+					}
+				}
+				
+				new_character = {
+					grant_title = PREV
+					set_defacto_liege = THIS
+					
+					recalc_succession = yes
+				}
+			}
+		}
+		
+		# Ends the wars
+		e_cyrodiil = { unsafe_destroy_landed_title = THIS }
+		
+		# Keep the Ghost Sea Merchants
+		hidden_tooltip = {
+			d_ghost_merchants = { set_defacto_liege = ROOT }
+		}
+		
+		# Get rid of the Emperor and Former Emperor traits
+		hidden_tooltip = {
+			remove_trait = tamriel_emperor
+			clr_character_flag = has_emperor_trait
+			remove_trait = tamriel_emperor_former
+		}
+		
+		# Aldmeri Dominion breaks
+		e_aldmeri = {
+			owner = {
+				character_event = { id = alliancewar.104 }
+			}
+		}
+		
+		create_bloodline = {
+			type = bloodline_jorunn_alliance_war_winner
+		}
+	}
+	
+	option = {
+		trigger = { NOT = { character = ROOT } }
+		name = alliancewar.tbwOverOpt
+		
+		tooltip = {
+			ROOT = {
+				# Ends the wars
+				e_cyrodiil = { unsafe_destroy_landed_title = THIS }
+				create_bloodline = {
+					type = bloodline_jorunn_alliance_war_winner
+				}
+			}
+		}
+	}
+}
+
+# Emeric - Daggerfall Covenant discarded, Cyrodiilic Empire assumed
+narrative_event = {
+	id = alliancewar.101
+	title = alliancewar.101.t
+	
+	desc = {
+		trigger = { character = ROOT }
+		text = alliancewar.101.d
+	}
+	
+	desc = {
+		trigger = { NOT = { character = ROOT } }
+		text = alliancewar.tbwOver
+	}
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			character = ROOT
+			ai = no
+		}
+	}
+	
+	picture = GFX_evt_covenant
+	
+	only_capable = yes
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		has_character_flag = is_emeric
+		war = no #Otherwise will fire even if Emeric hasn't actually won
+		start_date == 3502.1.30
+		NOT = { has_global_flag = three_alliances_war_ended }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_global_flag = three_alliances_war_ended
+	}
+	
+	option = {
+		trigger = { character = ROOT }
+		name = alliancewar.101.optA
+		
+		prestige = 500
+		piety = 250
+		
+		# Destroys the Daggerfall Covenant and gets the Cyrodiilic Empire instead
+		e_daggerfall = {
+			unsafe_destroy_landed_title = THIS
+		}
+		
+		create_bloodline = {
+			type = bloodline_emeric_alliance_war_winner
+		}
+		
+		# Aldmeri Dominion breaks
+		e_aldmeri = {
+			owner = {
+				character_event = { id = alliancewar.104 }
+			}
+		}
+	}
+	
+	option = {
+		trigger = { NOT = { character = ROOT } }
+		name = alliancewar.tbwOverOpt
+		
+		tooltip = {
+			ROOT = {
+				# Ends the wars
+				e_daggerfall = {
+					unsafe_destroy_landed_title = THIS
+				}
+				create_bloodline = {
+					type = bloodline_emeric_alliance_war_winner
+				}
+			}
+		}
+	}
+}
+
+# Ayrenn - Aldmeri Dominion + Cyrodiilic Empire
+narrative_event = {
+	id = alliancewar.102
+	title = alliancewar.102.t
+	
+	desc = {
+		trigger = { character = ROOT }
+		text = alliancewar.102.d
+	}
+	
+	desc = {
+		trigger = { NOT = { character = ROOT } }
+		text = alliancewar.tbwOver
+	}
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			character = ROOT
+			ai = no
+		}
+	}
+	
+	picture = GFX_evt_dominion
+	
+	only_capable = yes
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		has_character_flag = theunforeseenqueen
+		war = no #Otherwise will fire even if Ayrenn hasn't actually won
+		start_date == 3502.1.30
+		NOT = { has_global_flag = three_alliances_war_ended }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_global_flag = three_alliances_war_ended
+		
+		if = {
+			limit = { character = ROOT }
+			set_special_character_title = title_eagle_primarch
+		}
+	}
+	
+	option = {
+		trigger = { character = ROOT }
+		name = alliancewar.102.optA
+		
+		prestige = 500
+		piety = 250
+		
+		tooltip = { set_special_character_title = title_eagle_primarch }
+		
+		create_bloodline = {
+			type = bloodline_ayrenn_alliance_war_winner
+		}
+	}
+	
+	option = {
+		trigger = { NOT = { character = ROOT } }
+		name = alliancewar.tbwOverOpt
+		
+		tooltip = {
+			ROOT = {
+				set_special_character_title = title_eagle_primarch
+				create_bloodline = {
+					type = bloodline_ayrenn_alliance_war_winner
+				}
+			}
+		}
+	}
+}
+
+# Fake Clivia/Cyrodiil - Just Cyrodiilic Empire
+narrative_event = {
+	id = alliancewar.103
+	title = alliancewar.103.t
+	
+	desc = alliancewar.103.d
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			character = ROOT
+			ai = no
+		}
+	}
+	
+	picture = GFX_evt_cyrodiil
+	
+	only_capable = yes
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		NOR = {
+			has_character_flag = theunforeseenqueen
+			has_character_flag = jorunn_the_skald_king
+			has_character_flag = is_emeric
+		}
+		
+		war = no #Otherwise will fire even if Ayrenn hasn't actually won
+		start_date == 3502.1.30
+		NOT = { has_global_flag = three_alliances_war_ended }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_global_flag = three_alliances_war_ended
+	}
+	
+	option = {
+		trigger = { character = ROOT }
+		name = alliancewar.103.optA
+		
+		prestige = 1000
+		piety = 500
+		
+		create_bloodline = {
+			type = bloodline_cyrodiil_alliance_war_winner
+		}
+		
+		e_aldmeri = {
+			owner = {
+				character_event = { id = alliancewar.104 }
+			}
+		}
+		
+		### Clivia's Legacy: Amiel becomes a Tharn
+		if = {
+			limit = { has_character_flag = molag_kena NOT = { c_6123 = { dynasty = 90422 } } }
+			c_6123 = { dynasty = 90422 }
+		}
+	}
+	
+	option = {
+		trigger = { NOT = { character = ROOT } }
+		name = alliancewar.tbwOverOpt
+	}
+}
+
+### Aldmeri Dominion breaks down since there is no Empire to claim
+character_event = {
+	id = alliancewar.104
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		any_vassal = {
+			limit = {
+				NOT = { war_with = ROOT }
+				NOR = {
+					culture = ROOT
+					religion = ROOT
+				}
+				primary_title = { temporary = no }
+			}
+			narrative_event = { id = alliancewar.105 days = 3 random = 2 }
+		}
+	}
+}
+
+narrative_event = {
+	id = alliancewar.105
+	title = AllianceWar105Title
+	desc = AllianceWar105
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = { # War it is!
+		name = AllianceWar105OptA
+		ai_chance = {
+			factor = 1
+
+			modifier = {
+				factor = 0
+				NOT = { tier = king }
+			}
+		}
+		war = {
+			target = FROM
+			casus_belli = cb_faction_independence
+			faction = faction_independence
+		}
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = FROM
+					match_mult = 0.33
+					attrition = 1.0
+					disband_on_peace = yes
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = FROM
+					match_mult = 0.33
+					attrition = 1.0
+					disband_on_peace = yes
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = FROM
+					match_mult = 0.33
+					attrition = 1.0
+					disband_on_peace = yes
+				}
+			}
+		}
+	}
+	option = { # War it is not!
+		name = AllianceWar105OptB
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				tier = king
+			}
+		}
+		war = {
+			target = FROM
+			casus_belli = cb_faction_independence
+			faction = faction_independence
+		}
+	}
+}
+
+### A faction is defeated - Fired from on_war_ended_defeat, for Cyrodiil
+# The Aldmeri Dominion lost
+narrative_event = {
+	id = alliancewar.110
+	title = alliancewar.110.t
+	
+	desc = { # Cyrodiil
+		trigger = {
+			NOR = {
+				has_character_flag = theunforeseenqueen
+				has_character_flag = is_emeric
+				has_character_flag = jorunn_the_skald_king
+			}
+		}
+		
+		text = alliancewar.110.d
+	}
+	
+	desc = { # One of the other alliances
+		trigger = {
+			OR = {
+				has_character_flag = theunforeseenqueen
+				has_character_flag = is_emeric
+				has_character_flag = jorunn_the_skald_king
+			}
+		}
+		
+		text = alliancewar.110.dAlliance
+	}
+	
+	picture = GFX_evt_cyrodiil
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			has_landed_title = e_cyrodiil
+			has_character_flag = theunforeseenqueen
+			ai = no
+		}
+	}
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		FROM = { has_character_flag = theunforeseenqueen }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = { has_landed_title = e_cyrodiil }
+		name = alliancewar.110.optA
+		
+		prestige = 100
+	}
+	
+	option = {
+		trigger = { has_character_flag = theunforeseenqueen }
+		name = alliancewar.110.optB
+		
+		character_event = { id = alliancewar.104 }
+	}
+	
+	option = {
+		trigger = {
+			NOR = {
+				has_landed_title = e_cyrodiil
+				has_character_flag = theunforeseenqueen
+			}
+		}
+		name = alliancewar.110.optC
+	}
+}
+
+# The Ebonheart Pact lost
+narrative_event = {
+	id = alliancewar.111
+	title = alliancewar.111.t
+	desc = alliancewar.111.d
+	picture = GFX_evt_cyrodiil
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			has_landed_title = e_cyrodiil
+			has_character_flag = jorunn_the_skald_king
+			ai = no
+		}
+	}
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		FROM = { has_character_flag = jorunn_the_skald_king }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = { has_landed_title = e_cyrodiil }
+		name = alliancewar.110.optA
+		
+		prestige = 100
+	}
+	
+	option = {
+		trigger = { has_character_flag = jorunn_the_skald_king }
+		name = alliancewar.110.optB
+	}
+	
+	option = {
+		trigger = {
+			NOR = {
+				has_landed_title = e_cyrodiil
+				has_character_flag = jorunn_the_skald_king
+			}
+		}
+		name = alliancewar.110.optC
+	}
+}
+
+# The Daggerfall Covenant lost
+narrative_event = {
+	id = alliancewar.112
+	title = alliancewar.112.t
+	desc = alliancewar.112.d
+	picture = GFX_evt_cyrodiil
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			has_landed_title = e_cyrodiil
+			has_character_flag = is_emeric
+			ai = no
+		}
+	}
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		FROM = { has_character_flag = is_emeric }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = { has_landed_title = e_cyrodiil }
+		name = alliancewar.110.optA
+		
+		prestige = 100
+	}
+	
+	option = {
+		trigger = { has_character_flag = is_emeric }
+		name = alliancewar.110.optB
+	}
+	
+	option = {
+		trigger = {
+			NOR = {
+				has_landed_title = e_cyrodiil
+				has_character_flag = is_emeric
+			}
+		}
+		name = alliancewar.110.optC
+	}
+}
+
+# Cyrodiil is claimed by one of the three major alliances
+narrative_event = {
+	id = alliancewar.115
+	title = alliancewar.115.t
+	
+	desc = { # Cyrodiil was held by someone else
+		trigger = {
+			ROOT = {
+				NOR = {
+					has_character_flag = theunforeseenqueen
+					has_character_flag = jorunn_the_skald_king
+					has_character_flag = is_emeric
+				}
+			}
+		}
+		text = alliancewar.115.d
+	}
+	
+	desc = { # Cyrodiil was held by a faction
+		trigger = {
+			ROOT = {
+				OR = {
+					has_character_flag = theunforeseenqueen
+					has_character_flag = jorunn_the_skald_king
+					has_character_flag = is_emeric
+				}
+			}
+		}
+		text = alliancewar.115.dFaction
+	}
+	
+	picture = GFX_evt_cyrodiil
+	
+	major = yes
+	
+	major_trigger = {
+		OR = {
+			has_landed_title = e_cyrodiil
+			has_character_flag = theunforeseenqueen
+			has_character_flag = jorunn_the_skald_king
+			has_character_flag = is_emeric
+			ai = no
+		}
+	}
+	
+	trigger = {
+		has_landed_title = e_cyrodiil
+		FROM = {
+			OR = {
+				has_character_flag = theunforeseenqueen
+				has_character_flag = jorunn_the_skald_king
+				has_character_flag = is_emeric
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = { character = FROM }
+		name = alliancewar.115.optA
+		
+		prestige = 100
+	}
+	
+	option = {
+		trigger = {
+			NOT = { character = FROM }
+			OR = {
+				has_character_flag = theunforeseenqueen
+				has_character_flag = jorunn_the_skald_king
+				has_character_flag = is_emeric
+			}
+		}
+		name = alliancewar.115.optB
+		
+		prestige = -100
+	}
+	
+	option = {
+		trigger = {
+			NOR = {
+				has_landed_title = e_cyrodiil
+				has_character_flag = theunforeseenqueen
+				has_character_flag = jorunn_the_skald_king
+				has_character_flag = is_emeric
+			}
+		}
+		name = alliancewar.115.optC
+	}
+}
+
+#################### Alabcain and the Reachmen Clans ############################
+#Adapted from vanilla "Rise of the Seljuks" event chain from Mongol Horde Events#
+#################################################################################
+
+# Reachmen clan leaders want to attack Skyrim, High Rock, etc.
+
+#Hidden Event for characters with appropriate flags to ping liege for subsidy to invade
+
+character_event = {
+	id = alliancewar.200
+	hide_window = yes
+	
+	only_capable = yes
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_character_flag = leads_boneshaper
+				NOT = { has_global_flag = boneshaper_invasion }
+			}
+			AND = {
+				has_character_flag = leads_dark_witness
+				NOT = { has_global_flag = dark_witness_invasion }
+			}
+			AND = {
+				has_character_flag = leads_rageclaw
+				NOT = { has_global_flag = rageclaw_invasion }
+			}
+			AND = {
+				has_character_flag = leads_stonetalon
+				NOT = { has_global_flag = stonetalon_invasion }
+			}
+			AND = {
+				has_character_flag = leads_winterborn
+				NOT = { has_global_flag = winterborn_invasion }
+			}
+		}
+		liege = {
+			OR = {
+				culture = ROOT 
+				religion = ROOT
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		liege = { character_event = { id = alliancewar.210 } }
+	}
+}
+
+character_event = {
+	id = alliancewar.210
+	desc = AllianceWar210
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	only_playable = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = { has_character_flag = leads_boneshaper }
+			}
+			set_global_flag = boneshaper_invasion
+		}
+		if = {
+			limit = {
+				FROM = { has_character_flag = leads_dark_witness }
+			}
+			set_global_flag = dark_witness_invasion
+		}
+		if = {
+			limit = {
+				FROM = { has_character_flag = leads_rageclaw }
+			}
+			set_global_flag = rageclaw_invasion
+		}
+		if = {
+			limit = {
+				FROM = { has_character_flag = leads_stonetalon }
+			}
+			set_global_flag = stonetalon_invasion
+		}
+		if = {
+			limit = {
+				FROM = { has_character_flag = leads_winterborn }
+			}
+			set_global_flag = winterborn_invasion
+		}
+	}
+	
+	option = { # You have a deal, FROM
+		name = AllianceWar210OptA
+		trigger = { 
+			scaled_wealth = 0.75
+		}
+		ai_chance = {
+			factor = 75
+		}
+		transfer_scaled_wealth = { to = FROM value = 0.75 }
+		FROM = {
+			set_character_flag = bolstered_army_size
+			opinion = {
+				who = ROOT
+				modifier = opinion_sponsored_my_adventure
+				years = 100
+			}
+			character_event = { id = alliancewar.215 }
+		}
+	}
+	
+	option = { # No, I have no interest. But go ahead...
+		name = AllianceWar210OptB
+		ai_chance = {
+			factor = 5
+		}
+		FROM = {
+			character_event = { id = alliancewar.215 } 
+		}
+	}
+}
+
+# The Leader decides where to strike...
+character_event = {
+	id = alliancewar.215
+	desc = AllianceWar215
+	
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		lower_tier_than = king
+		
+		OR = {
+			AND = {
+				has_character_flag = leads_boneshaper
+				OR = {
+					305 = { # Nilheim
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+					307 = { # Morvunskar
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				has_character_flag = leads_rageclaw
+				OR = {
+					55 = { # Ansilvund
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+					127 = { # Riften
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				has_character_flag = leads_stonetalon
+				OR = {
+					141 = { # Whiterun
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+					711 = { # Valtgard
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				has_character_flag = leads_dark_witness
+				OR = {
+					177 = { # Evermore
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+					178 = { # Dunkarn
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				has_character_flag = leads_winterborn
+				OR = {
+					174 = { # Jehenna
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+					175 = { # Farrun
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+					472 = { # Dorven
+						owner = {
+							NOT = { same_realm = ROOT }
+							NOR = {
+								religion_group = reach_faiths
+								religion = daedra_molag
+								religion = king_of_worms_cult
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = { # Attack Nilheim!
+		name = AllianceWarNilheim
+		trigger = {
+			has_character_flag = leads_boneshaper
+			305 = { # Nilheim
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 750
+		}
+		
+		305 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	option = { # Attack Morvunskar!
+		name = AllianceWarMorvunskar
+		trigger = {
+			has_character_flag = leads_boneshaper
+			307 = { # Morvunskar
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 250
+		}
+		
+		307 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	
+	option = { # Attack Ansilvund!
+		name = AllianceWarAnsilvund
+		trigger = {
+			has_character_flag = leads_rageclaw
+			55 = { # Ansilvund
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 250
+		}
+		
+		55 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	option = { # Attack Riften!
+		name = AllianceWarRiften
+		trigger = {
+			has_character_flag = leads_rageclaw
+			127 = { # Riften
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 750
+		}
+		
+		127 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	
+	option = { # Attack Whiterun!
+		name = AllianceWarWhiterun
+		trigger = {
+			has_character_flag = leads_rageclaw
+			141 = { # Whiterun
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 250
+		}
+		
+		141 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	option = { # Attack Valtgard!
+		name = AllianceWarValtgard
+		trigger = {
+			has_character_flag = leads_rageclaw
+			711 = { # Valtgard
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 750
+		}
+		
+		711 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	
+	option = { # Attack Evermore!
+		name = AllianceWarEvermore
+		trigger = {
+			has_character_flag = leads_dark_witness
+			177 = { # Evermore
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 750
+		}
+		
+		177 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	option = { # Attack Dunkarn!
+		name = AllianceWarDunkarn
+		trigger = {
+			has_character_flag = leads_dark_witness
+			178 = { # Dunkarn
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 250
+		}
+		
+		178 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	
+	option = { # Attack Jehenna!
+		name = AllianceWarJehenna
+		trigger = {
+			has_character_flag = leads_winterborn
+			174 = { # Jehenna
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 500
+		}
+		
+		174 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	option = { # Attack Farrun!
+		name = AllianceWarFarrun
+		trigger = {
+			has_character_flag = leads_winterborn
+			175 = { # Farrun
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 1000
+		}
+		
+		175 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	option = { # Attack Dorven!
+		name = AllianceWarDorven
+		trigger = {
+			has_character_flag = leads_winterborn
+			472 = { # Dorven
+				owner = {
+					NOT = { same_realm = ROOT }
+					NOR = {
+						religion_group = reach_faiths
+						religion = daedra_molag
+						religion = king_of_worms_cult
+					}
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 250
+		}
+		
+		472 = {
+			province_event = {
+				id = alliancewar.220
+				days = 2
+			}
+		}
+	}
+	
+}
+
+# Ping the target province
+province_event = {
+	id = alliancewar.220
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = yes
+					NOT = { has_character_flag = bolstered_army_size }
+				}
+			}
+			FROM = {
+				character_event = {
+					id = alliancewar.223
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = yes
+					has_character_flag = bolstered_army_size
+				}
+			}
+			FROM = {
+				character_event = {
+					id = alliancewar.224
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = no
+					NOT = { has_character_flag = bolstered_army_size }
+				}
+			}
+			FROM = {
+				character_event = {
+					id = alliancewar.221
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_ruler = no
+					has_character_flag = bolstered_army_size
+				}
+			}
+			FROM = {
+				character_event = {
+					id = alliancewar.222
+				}
+			}
+		}
+	}
+}
+
+# The landless leader launches an invasion - NOT bolstered
+character_event = {
+	id = alliancewar.221
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 250
+		
+		any_liege = {
+			character_event = {
+				id = alliancewar.225
+				days = 1
+			}
+		}
+		
+		liege = {
+			capital_scope = {
+				FROM = {
+					owner = {
+						top_liege = {
+							ROOT = {
+								set_defacto_liege = ROOT
+								create_title = {
+									tier = DUKE
+									landless = yes
+									temporary = yes
+									culture = ROOT
+									name = "CLAIMANT_ADVENTURE"
+									holder = ROOT
+								}
+								
+								set_character_flag = duchy_adventurer
+							
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 350
+									match_max = 1200
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 350
+									match_max = 1200
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.33
+									match_min = 350
+									match_max = 1200
+									attrition = 0.25
+								}
+								war = {
+									target = PREV
+									casus_belli = duchy_adventure
+									thirdparty_title = PREVPREVPREV
+									tier = DUKE
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 25
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 22
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+# The landless leader launches an invasion - Bolstered
+character_event = {
+	id = alliancewar.222
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = alliancewar.225
+				days = 1
+			}
+		}
+		
+		liege = {
+			capital_scope = {
+				FROM = {
+					owner = {
+						top_liege = {
+							ROOT = {
+								set_defacto_liege = ROOT
+								create_title = {
+									tier = DUKE
+									landless = yes
+									temporary = yes
+									culture = ROOT
+									name = "CLAIMANT_ADVENTURE"
+									holder = ROOT
+								}
+								
+								set_character_flag = duchy_adventurer
+							
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREV
+									match_mult = 0.75
+									match_min = 700
+									match_max = 3000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.75
+									match_min = 700
+									match_max = 3000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREVPREVPREVPREV
+									home = PREVPREVPREVPREV
+									owner = THIS
+									match_character = PREV
+									match_mult = 0.75
+									match_min = 700
+									match_max = 3000
+									attrition = 0.25
+								}
+								war = {
+									target = PREV
+									casus_belli = duchy_adventure
+									thirdparty_title = PREVPREVPREV
+									tier = DUKE
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 25
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 22
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Landed Leader begins invasion - Not bolstered
+character_event = {
+	id = alliancewar.223
+	desc = AllianceWar223
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 250
+		
+		any_liege = {
+			character_event = {
+				id = alliancewar.225
+				days = 1
+			}
+		}
+		
+		FROM = {
+			owner = {
+				top_liege = {
+					ROOT = {
+						capital_scope = {
+							ROOT = {
+								set_character_flag = duchy_adventurer
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 350
+									match_max = 1200
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 350
+									match_max = 1200
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.33
+									match_min = 350
+									match_max = 1200
+									attrition = 0.25
+								}
+							}
+						}
+						
+						war = {
+							target = PREV
+							casus_belli = duchy_adventure
+							thirdparty_title = PREVPREVPREV
+							tier = DUKE
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 25
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 22
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	
+	option = {
+		name = AllianceWar223Acknowledge
+	}
+}
+#Landed Leader begins invasion - Bolstered
+character_event = {
+	id = alliancewar.224
+	desc = AllianceWar224
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	prisoner = no
+	only_capable = yes
+	
+	trigger = {
+		is_alive = yes
+		lower_tier_than = king
+	}
+	
+	immediate = {
+		wealth = 500
+		
+		any_liege = {
+			character_event = {
+				id = alliancewar.225
+				days = 1
+			}
+		}
+		
+		FROM = {
+			owner = {
+				top_liege = {
+					ROOT = {
+						capital_scope = {
+							ROOT = {
+								set_character_flag = duchy_adventurer
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									#leader = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.75
+									match_min = 700
+									match_max = 3000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.75
+									match_min = 700
+									match_max = 3000
+									attrition = 0.25
+								}
+								spawn_unit = {
+									province = PREV
+									home = PREV
+									owner = THIS
+									match_character = PREVPREVPREV
+									match_mult = 0.75
+									match_min = 700
+									match_max = 3000
+									attrition = 0.25
+								}
+							}
+						}
+						
+						war = {
+							target = PREV
+							casus_belli = duchy_adventure
+							thirdparty_title = PREVPREVPREV
+							tier = DUKE
+						}
+					}
+				}
+			}
+		}
+		
+		# Create some characters
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 25
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 22
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 16
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 17
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = yes
+			age = 18
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	
+	option = {
+		name = AllianceWar224Acknowledge
+	}
+}
+character_event = {
+	id = alliancewar.225
+	desc = AllianceWar225
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { is_ruler = yes } # The DoW worked and the adventurer has a temporary title
+	}
+	
+	option = {
+		name = AllianceWar225Acknowledge
+	}
+}
+character_event = {
+	id = alliancewar.230
+	desc = AllianceWar230
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					independent = yes
+					liege = {
+						ai = yes
+					}
+				}
+			}
+			set_defacto_liege = ROOT
+		}
+		if = {
+			limit = { 
+				has_character_flag = leads_boneshaper
+				higher_tier_than = BARON
+				lower_tier_than = DUKE
+			}
+			activate_title = { title = d_reachmen_boneshaper status = yes }
+			d_reachmen_boneshaper = {
+				grant_title = ROOT
+			}
+		}
+		if = {
+			limit = { 
+				has_character_flag = leads_dark_witness
+				higher_tier_than = BARON
+				lower_tier_than = DUKE
+			}
+			activate_title = { title = d_reachmen_dark_witnesses status = yes }
+			d_reachmen_dark_witnesses = {
+				grant_title = ROOT
+			}
+		}
+		if = {
+			limit = { 
+				has_character_flag = leads_rageclaw
+				higher_tier_than = BARON
+				lower_tier_than = DUKE
+			}
+			activate_title = { title = d_reachmen_rageclaw status = yes }
+			d_reachmen_rageclaw = {
+				grant_title = ROOT
+			}
+		}
+		if = {
+			limit = { 
+				has_character_flag = leads_stonetalon
+				higher_tier_than = BARON
+				lower_tier_than = DUKE
+			}
+			activate_title = { title = d_reachmen_stonetalon status = yes }
+			d_reachmen_stonetalon = {
+				grant_title = ROOT
+			}
+		}
+		if = {
+			limit = { 
+				has_character_flag = leads_winterborn
+				higher_tier_than = BARON
+				lower_tier_than = DUKE
+			}
+			activate_title = { title = d_reachmen_winterborn status = yes }
+			d_reachmen_winterborn = {
+				grant_title = ROOT
+			}
+		}
+		prestige = 150
+	}
+	
+	option = {
+		name = AllianceWar230OptA
+		trigger = {
+			any_playable_ruler = {
+				higher_tier_than = ROOT
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_sponsored_my_adventure }
+			}
+		}
+		ai_chance = {
+			factor = 25
+		}
+		random_playable_ruler = {
+			limit = {
+				higher_tier_than = ROOT
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_sponsored_my_adventure }
+			}
+			letter_event = { id = alliancewar.231 }
+		}
+	}
+	
+	option = {
+		name = AllianceWar230OptB
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+letter_event = {
+	id = alliancewar.231
+	desc = AllianceWar231
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { independent = yes }
+	}
+	
+	option = {
+		name = AllianceWar231OptA
+		ai_chance = {
+			factor = 50
+		}
+		FROM = { set_defacto_liege = ROOT }
+	}
+	
+	option = {
+		name = AllianceWar231OptB
+		ai_chance = {
+			factor = 0
+		}
+	}
+}

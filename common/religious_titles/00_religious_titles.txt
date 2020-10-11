@@ -1,0 +1,234 @@
+########################################################
+# RELIGIOUS TITLES
+# Titles given out by the religious head
+########################################################
+#	religion: Religion that owns this title.
+#	can_elect_head: If holders of this title can elect a new head.
+#	grant_limit: Max number of holders.
+#	realm_in_name: Append the name of the country after the title (Queen [of Sweden])
+#	allow: conditions for the character to hold the title
+#	gain_effect: fires when the title is granted
+#	lose_effect: fires when a title is lost if dismissal_trigger evaluates to false
+#	message: should fire a message to the its owner when set
+#	The other fields are all character modifiers.
+
+title_cardinal = {
+	religion = almsivi
+	can_elect_head = yes
+	revoke_allowed = no
+	
+	grant_limit = 9
+	
+	realm_in_name = no
+	show_as_title = yes
+	
+	opinion_effect = 20
+	dignity = 0.9
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.5
+	
+	#allowed_to_grant = {
+	#	always = no
+	#}
+	
+	allow = {
+		true_religion = almsivi
+		OR = {
+			is_theocracy = yes
+			AND = {
+				OR = {
+					AND = { is_long_lived = yes age > 175 }
+					AND = { is_long_lived = no age > 45 }
+				}
+				OR = {
+					AND = {
+						OR = {
+							has_job_title = job_spiritual
+							trait = zealous
+							trait = theologian
+						}
+						OR = {
+							is_priest_education = yes
+							is_monk_education = yes
+						}
+					}
+				}
+				NOT = { trait = cynical }
+			}
+		}
+		k_almsivi = {
+			holder_scope = {
+				is_within_diplo_range = ROOT
+			}
+		}
+		
+		NOT = {
+			top_liege = {
+				any_vassal = {
+					any_claim = {
+						title = k_almsivi
+					}
+				}
+			}
+		}
+		is_immortal = no
+	}
+	
+	gain_effect = {
+	}
+	
+	lose_effect = {
+	}
+
+	message = yes
+}
+
+title_fraticelli_cardinal = {
+	religion = maruhkati
+	can_elect_head = yes
+	revoke_allowed = no
+	
+	grant_limit = 9
+	
+	realm_in_name = no
+	show_as_title = yes
+	
+	opinion_effect = 20
+	dignity = 0.9
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.5
+	
+	#allowed_to_grant = {
+	#	always = no
+	#}
+	
+	allow = {
+		#always = no
+		has_global_flag = restored_college_cardinals_maruhkati_flag
+		
+		true_religion = maruhkati
+		OR = {
+			is_theocracy = yes
+			AND = {
+				OR = {
+					AND = { is_long_lived = yes age > 175 }
+					AND = { is_long_lived = no age > 45 }
+				}
+				OR = {
+					AND = {
+						OR = {
+							has_job_title = job_spiritual
+							trait = zealous
+							trait = theologian
+						}
+						OR = {
+							is_priest_education = yes
+							is_monk_education = yes
+						}
+					}
+				}
+				NOT = { trait = cynical }
+			}
+		}
+		d_alessianorder = {
+			holder_scope = {
+				is_within_diplo_range = ROOT
+			}
+		}
+		
+		NOT = {
+			top_liege = {
+				any_vassal = {
+					any_claim = {
+						title = d_alessianorder
+					}
+				}
+			}
+		}
+	}
+	
+	gain_effect = {
+	}
+	
+	lose_effect = {
+	}
+
+	message = yes
+}
+
+title_sun_court_cardinal = {
+	religion = sun_court
+	can_elect_head = yes
+	revoke_allowed = no
+	
+	grant_limit = 9
+	
+	realm_in_name = no
+	show_as_title = yes
+	
+	opinion_effect = 20
+	dignity = 0.9
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.5
+	
+	# allowed_to_grant = {
+		# always = no
+	# }
+	
+	allow = {
+		# always = no
+		has_global_flag = restored_college_cardinals_sun_court_flag
+		
+		true_religion = sun_court
+		
+		OR = {
+			is_theocracy = yes
+			AND = {
+				OR = {
+					AND = { is_long_lived = yes age > 175 }
+					AND = { is_long_lived = no age > 45 }
+				}
+				OR = {
+					AND = {
+						OR = {
+							has_job_title = job_spiritual
+							trait = zealous
+							trait = theologian
+						}
+						OR = {
+							is_priest_education = yes
+							is_monk_education = yes
+						}
+					}
+				}
+				NOT = { trait = cynical }
+			}
+		}
+		d_suncourt = {
+			holder_scope = {
+				is_within_diplo_range = ROOT
+			}
+		}
+		
+		NOT = {
+			top_liege = {
+				any_vassal = {
+					any_claim = {
+						title = d_suncourt
+					}
+				}
+			}
+		}
+	}
+	
+	gain_effect = {
+	}
+	
+	lose_effect = {
+	}
+
+	message = yes
+}

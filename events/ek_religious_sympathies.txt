@@ -1,0 +1,220 @@
+namespace = relsym
+character_event = {
+	id = relsym.0
+	desc = relsym.0.d
+	picture = GFX_evt_shady_meeting
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	friends = yes
+	war = no
+	capable_only = yes
+	
+	trigger = {
+		any_friend = { NOT = { religion_group = ROOT } }
+		NOT = { trait = zealous }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = { factor = 2 num_of_friends > 1 }
+		modifier = { factor = 2 any_friend = { count > 2 NOT = { religion = ROOT } } }
+		modifier = { factor = 3 trait = trusting }
+		modifier = { factor = 2 trait = humble }
+		modifier = { factor = 2 trait = kind }
+		modifier = { factor = 2 trait = gregarious }
+		modifier = { factor = 2 trait = socializer }
+		modifier = { factor = 0.5 trait = paranoid }
+		modifier = { factor = 0.5 trait = ruthless }
+		modifier = { factor = 0.5 trait = diligent }
+		modifier = { factor = 0.5 trait = celibate }
+		modifier = { factor = 0.25 is_priest_education = yes }
+		modifier = { factor = 0.1 is_crusader = yes }
+		modifier = { factor = 0.5 is_monk_education = yes }
+		modifier = { factor = 0.5 is_knight = yes }
+		modifier = { factor = 0.75 trait = theologian }
+		modifier = { factor = 2 trait = erudite }
+		modifier = { factor = 0.85 trait = mystic }
+	}
+	
+	immediate = {
+		random_friend = {
+			limit = { NOT = { religion_group = ROOT } }
+			save_event_target_as = friend_of_another_religion
+		}
+	}
+	
+	option = {
+		name = relsym.0.opt
+		event_target:friend_of_another_religion = {
+			if = {
+				limit = { NOT = { trait = zealous } }
+				trigger_switch = {
+					on_trigger = religion_group
+					human_pantheon = { ROOT = { add_trait = sympathy_human_pantheon } }
+					yokudan_pantheon = { ROOT = { add_trait = sympathy_yokudan_pantheon } }
+					mer_pantheon = { ROOT = { add_trait = sympathy_mer_pantheon } }
+					tribunal = { ROOT = { add_trait = sympathy_tribunal } }
+					daedra = { ROOT = { add_trait = sympathy_daedra } }
+					khajiit_pantheon = { ROOT = { add_trait = sympathy_khajiit_pantheon } }
+					hist_group = { ROOT = { add_trait = sympathy_hist_group } }
+					reach_faiths = { ROOT = { add_trait = sympathy_reach_faiths } }
+					old_faith = { ROOT = { add_trait = sympathy_old_faith } }
+					void_religions = { ROOT = { add_trait = sympathy_void_religions } }
+					atmoran_pantheon = { ROOT = { add_trait = sympathy_atmoran_pantheon } }
+					oblivion_religions = { ROOT = { add_trait = sympathy_oblivion_religions } }
+					tsaesci_courts = { ROOT = { add_trait = sympathy_tsaesci_courts } }
+					tangmo_religions = { ROOT = { add_trait = sympathy_tangmo_religions } }
+					potun_religions = { ROOT = { add_trait = sympathy_potun_religions } }
+					kamal_religions = { ROOT = { add_trait = sympathy_kamal_religions } }
+					islander_religions = { ROOT = { add_trait = sympathy_islander_religions } }
+					maormer_religion = { ROOT = { add_trait = sympathy_maormer_religion } }
+				}
+				piety = -25
+			}
+			else = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_pleased
+					years = 3
+				}
+			}
+		}
+		ROOT = {
+			trigger_switch = {
+				on_trigger = religion_group
+				human_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_human_pantheon } }
+				yokudan_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_yokudan_pantheon } }
+				mer_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_mer_pantheon } }
+				tribunal = { event_target:friend_of_another_religion = { add_trait = sympathy_tribunal } }
+				daedra = { event_target:friend_of_another_religion = { add_trait = sympathy_daedra } }
+				khajiit_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_khajiit_pantheon } }
+				hist_group = { event_target:friend_of_another_religion = { add_trait = sympathy_hist_group } }
+				reach_faiths = { event_target:friend_of_another_religion = { add_trait = sympathy_reach_faiths } }
+				old_faith = { event_target:friend_of_another_religion = { add_trait = sympathy_old_faith } }
+				void_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_void_religions } }
+				atmoran_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_atmoran_pantheon } }
+				oblivion_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_oblivion_religions } }
+				tsaesci_courts = { event_target:friend_of_another_religion = { add_trait = sympathy_tsaesci_courts } }
+				tangmo_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_tangmo_religions } }
+				potun_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_potun_religions } }
+				kamal_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_kamal_religions } }
+				islander_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_islander_religions } }
+				maormer_religion = { event_target:friend_of_another_religion = { add_trait = sympathy_maormer_religion } }
+			}
+			piety = -25
+		}
+	}
+}
+character_event = {
+	id = relsym.1
+	desc = relsym.1.d
+	picture = GFX_evt_lovers
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	war = no
+	capable_only = yes
+	
+	trigger = {
+		any_lover = { NOT = { religion_group = ROOT } }
+		NOT = { trait = zealous }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = { factor = 2 num_of_lovers > 1 }
+		modifier = { factor = 2 any_lover = { count > 2 NOT = { religion = ROOT } } }
+		modifier = { factor = 3 trait = trusting }
+		modifier = { factor = 2 trait = humble }
+		modifier = { factor = 2 trait = kind }
+		modifier = { factor = 2 trait = gregarious }
+		modifier = { factor = 2 trait = socializer }
+		modifier = { factor = 0.5 trait = paranoid }
+		modifier = { factor = 0.5 trait = ruthless }
+		modifier = { factor = 0.5 trait = diligent }
+		modifier = { factor = 0.5 trait = celibate }
+		modifier = { factor = 0.25 is_priest_education = yes }
+		modifier = { factor = 0.1 is_crusader = yes }
+		modifier = { factor = 0.5 is_monk_education = yes }
+		modifier = { factor = 0.5 is_knight = yes }
+		modifier = { factor = 0.75 trait = theologian }
+		modifier = { factor = 2 trait = erudite }
+		modifier = { factor = 0.85 trait = mystic }
+		modifier = { factor = 2 NOR = { is_married = yes is_married_matrilineally = yes } }
+		modifier = { factor = 2 NOT = { any_spouse = { is_alive = yes } } }
+	}
+	
+	immediate = {
+		random_lover = {
+			limit = { NOT = { religion_group = ROOT } }
+			save_event_target_as = friend_of_another_religion
+		}
+	}
+	option = {
+		name = relsym.0.opt
+		event_target:friend_of_another_religion = {
+			if = {
+				limit = { NOT = { trait = zealous } }
+				trigger_switch = {
+					on_trigger = religion_group
+					human_pantheon = { ROOT = { add_trait = sympathy_human_pantheon } }
+					yokudan_pantheon = { ROOT = { add_trait = sympathy_yokudan_pantheon } }
+					mer_pantheon = { ROOT = { add_trait = sympathy_mer_pantheon } }
+					tribunal = { ROOT = { add_trait = sympathy_tribunal } }
+					daedra = { ROOT = { add_trait = sympathy_daedra } }
+					khajiit_pantheon = { ROOT = { add_trait = sympathy_khajiit_pantheon } }
+					hist_group = { ROOT = { add_trait = sympathy_hist_group } }
+					reach_faiths = { ROOT = { add_trait = sympathy_reach_faiths } }
+					old_faith = { ROOT = { add_trait = sympathy_old_faith } }
+					void_religions = { ROOT = { add_trait = sympathy_void_religions } }
+					atmoran_pantheon = { ROOT = { add_trait = sympathy_atmoran_pantheon } }
+					oblivion_religions = { ROOT = { add_trait = sympathy_oblivion_religions } }
+					tsaesci_courts = { ROOT = { add_trait = sympathy_tsaesci_courts } }
+					tangmo_religions = { ROOT = { add_trait = sympathy_tangmo_religions } }
+					potun_religions = { ROOT = { add_trait = sympathy_potun_religions } }
+					kamal_religions = { ROOT = { add_trait = sympathy_kamal_religions } }
+					islander_religions = { ROOT = { add_trait = sympathy_islander_religions } }
+					maormer_religion = { ROOT = { add_trait = sympathy_maormer_religion } }
+				}
+				piety = -25
+			}
+			else = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_pleased
+					years = 3
+				}
+			}
+		}
+		ROOT = {
+			trigger_switch = {
+				on_trigger = religion_group
+				human_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_human_pantheon } }
+				yokudan_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_yokudan_pantheon } }
+				mer_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_mer_pantheon } }
+				tribunal = { event_target:friend_of_another_religion = { add_trait = sympathy_tribunal } }
+				daedra = { event_target:friend_of_another_religion = { add_trait = sympathy_daedra } }
+				khajiit_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_khajiit_pantheon } }
+				hist_group = { event_target:friend_of_another_religion = { add_trait = sympathy_hist_group } }
+				reach_faiths = { event_target:friend_of_another_religion = { add_trait = sympathy_reach_faiths } }
+				old_faith = { event_target:friend_of_another_religion = { add_trait = sympathy_old_faith } }
+				void_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_void_religions } }
+				atmoran_pantheon = { event_target:friend_of_another_religion = { add_trait = sympathy_atmoran_pantheon } }
+				oblivion_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_oblivion_religions } }
+				tsaesci_courts = { event_target:friend_of_another_religion = { add_trait = sympathy_tsaesci_courts } }
+				tangmo_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_tangmo_religions } }
+				potun_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_potun_religions } }
+				kamal_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_kamal_religions } }
+				islander_religions = { event_target:friend_of_another_religion = { add_trait = sympathy_islander_religions } }
+				maormer_religion = { event_target:friend_of_another_religion = { add_trait = sympathy_maormer_religion } }
+			}
+			piety = -25
+		}
+	}
+}
+#TODO: Spouse/Consort of another religion.
+#TODO: Councillor of another religion.
+#TODO: Childhood random sympathies.

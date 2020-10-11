@@ -1,0 +1,450 @@
+decisions = {
+	study_necromancy = {
+		potential = {
+			has_submenu_open = no
+			
+			is_mage = yes
+			learning = 10
+			NOT = { trait = necromancer }
+			### Could be either used as a piety farm or a death sentence, so let's just forbid that
+			NOT = { religion = daedra_meridia }
+			
+			OR = {
+				NOT = { society_member_of = mages_guild_akavir }
+				has_global_flag = mages_akavir_necromancy_allowed
+			}
+			
+			OR = {
+				NOT = { society_member_of = mages_guild_tamriel }
+				has_global_flag = mages_tamriel_necromancy_allowed
+			}
+			
+			OR = {
+				AND = {
+					# General blocker traits
+					NOT = { trait = kind }
+					NOT = { trait = just }
+					
+					OR = {
+						is_necromancy_religion = yes
+						
+						AND = {
+							OR = {
+								# Anti-necromancy religion must be cynical and not good
+								# Those neutral about necromancy only need to not be good
+								NOR = {
+									is_necromancy_religion = yes
+									is_anti_necromancy_religion = yes
+								}
+							
+								trait = cynical
+							}
+							
+							OR = {
+								NOT = { trait = content }
+								NOT = { trait = charitable }
+							}
+						}
+					}
+				}
+				
+				has_character_flag = studying_necromancy
+			}
+		}
+		
+		allow = {
+			custom_tooltip = {
+				text = STUDY_NECROMANCY_NO_FLAG_CT
+				OR = {
+					NOT = { has_character_flag = is_studying_necromancy_flag }
+					had_character_flag = {
+						flag = is_studying_necromancy_flag
+						days = 1825
+					}
+				}
+			}
+			
+			trigger_if = {
+				limit = {
+					NOT = { is_necromancy_religion = yes }
+					NOT = { has_character_flag = studying_necromancy }
+				}
+				
+				OR = {
+					trait = ambitious
+					trait = cruel
+					trait = ruthless
+					trait = envious
+					trait = reckless
+					trait = impaler
+				}
+			}
+		}
+		
+		effect = {
+			set_character_flag = is_studying_necromancy_flag
+			character_event = {
+				id = necromancy.1
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0.01 #Tone it down bro
+			
+			modifier = {
+				factor = 2 # Scales with bonus below
+				OR = {
+					religion = ideal_masters
+					religion = king_of_worms_cult
+				}
+			}
+			
+			modifier = {
+				factor = 1.25
+				is_necromancy_religion = yes
+			}
+			
+			modifier = {
+				factor = 0.5
+				is_anti_necromancy_religion = yes
+			}
+		}
+	}
+	
+	raise_risen_dead_army = {
+		only_rulers = yes
+		is_high_prio = yes
+		ai_check_interval = 12
+		
+		potential = {
+			has_submenu_open = no
+			
+			trait = necromancer
+			check_variable = { which = number_risen_dead_army value = 0 }
+			NOT = { check_variable = { which = number_risen_dead_army which = necromantic_charges } }
+		}
+		
+		allow = {
+			piety = 25
+		}
+		
+		effect = {
+			piety = -25
+			
+			change_variable = { which = number_risen_dead_army value = 1 }
+			
+			if = {
+				limit = { NOT = { has_earmarked_regiments = risen_dead_army_1 } }
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_1
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_2 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_2
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_3 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_3
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_4 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_4
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_5 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_5
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_6 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_6
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_7 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_7
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_8 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_8
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_9 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_9
+						}
+					}
+				}
+				
+				break = yes
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_earmarked_regiments = risen_dead_army_10 }
+				}
+				
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							province = PREV
+							owner = ROOT
+							troops = {
+								undead_troop = { 250 500 }
+							}
+							attrition = 0.5
+							maintenance_multiplier = 0
+							reinforces = yes
+							cannot_inherit = yes
+							earmark = risen_dead_army_10
+						}
+					}
+				}
+				
+				break = yes
+			}
+		}
+	}
+	
+	# Template taken on the "use_skyforge_decision"
+	corrupt_artifact = {
+		ai_check_interval = 120
+		only_playable = yes
+
+		potential = {
+			has_submenu_open = no
+			
+			is_mage = yes
+			trait = necromancer
+			
+			NOT = { has_character_flag = is_corrupting_artifact }
+		}
+		
+		allow = {
+			## Can only corrupt non-unique artifacts with a quality <= 4
+			# Stronger or unique artifact are just too powerful
+			custom_tooltip = {
+				text = CORRUPT_ARTIFACT_2_YEARS_COOLDOWN_CT
+				
+				NOR = {
+					has_character_modifier = corruption_ritual_health_tribute_minor
+					has_character_modifier = corruption_ritual_health_tribute_medium
+					has_character_modifier = corruption_ritual_health_tribute_major
+				}
+			}
+			
+			OR = {
+				custom_tooltip = {
+					text = CORRUPT_ARTIFACT_HAS_RING_TO_CORRUPT_CT
+					
+					any_artifact = {
+						has_artifact_flag = ring
+						NOT = { has_artifact_flag = unique }
+						quality <= 4
+					}
+				}
+				
+				custom_tooltip = {
+					text = CORRUPT_ARTIFACT_HAS_AMULET_TO_CORRUPT_CT
+					
+					any_artifact = {
+						has_artifact_flag = amulet
+						NOT = { has_artifact_flag = unique }
+						quality <= 4
+					}
+				}
+				
+				scaled_wealth = 0.25
+			}
+		}
+		
+		effect = {
+			custom_tooltip = { text = CORRUPT_ARTIFACT_EFFECT_CT }
+			set_character_flag = is_corrupting_artifact
+			character_event = { id = necromancy.200 days = 2 }
+		}
+		
+		ai_will_do = {
+			modifier = {
+				factor = 0.01 # Let's really slow it down
+			}
+		}
+	}
+}

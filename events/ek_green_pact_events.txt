@@ -1,0 +1,372 @@
+####Green Pact/Blacksap Events####
+
+namespace = greenpact
+
+###New Silvenar### 
+
+#Silvenar dies
+character_event = {
+	id = greenpact.1
+	is_triggered_only = yes
+	hide_window = yes
+	
+	only_men = yes
+	religion_group = mer_pantheon
+	
+	trigger = {
+		OR = {
+			has_character_modifier = green_pact_silvenar
+			has_landed_title = d_greenpact
+		}
+	}
+	
+	immediate = {
+		#Warns relatives and followers
+		any_playable_ruler = {
+			limit = {
+				OR = { 
+					religion = green_pact
+					is_close_relative = ROOT
+				}
+			}
+			character_event = { id = greenpact.2 days = 2 }
+		}
+		#Old Green Lady eventually loses it
+		any_spouse = {
+			character_event = { id = greenpact.4 days = 5 random = 600 }
+			set_special_character_title = green_widow
+			add_trait = nun
+		}
+		#Chooses a new Silvenar
+		random_character = {
+			limit = {
+				trait = bosmer
+				religion = green_pact
+				is_female = no
+				is_ruler = no
+				controls_religion = no
+				is_married = no
+				is_adult = yes
+				NOR = { 
+					has_character_modifier = green_pact_silvenar
+					trait = cynical
+					trait = incapable
+					trait = has_knahaten_flu
+					trait = eunuch					
+				}
+				OR = {
+					learning = 15
+					trait = mystic
+					trait = zealous
+					is_priest = yes
+					is_crusader = yes
+					is_priest_education = yes
+					is_monk_education = yes
+					is_healer = yes
+					any_dynasty_member_even_if_dead = { has_character_modifier = green_pact_silvenar }
+					any_close_relative = { has_character_modifier = green_pact_silvenar }
+				}
+			}
+			d_greenpact = {
+				grant_title = PREV
+			}
+			add_claim = d_greenpact
+			add_claim = b_silvenar
+			add_claim = c_silvenar
+			character_event = { id = greenpact.3 }
+		}
+	}
+}
+
+#Warns relatives and followers of Silvenar death
+character_event = {
+	id = greenpact.2
+	desc = greenpact.2.desc
+	picture = GFX_evt_exhaustedforest
+	is_triggered_only = yes
+	
+	option = {
+		name = "greenpact.2.opt1"
+		trigger = { religion = green_pact }
+	}
+	
+	option = {
+		name = "greenpact.2.opt2"
+		trigger = { NOT = { religion = green_pact } }
+	}
+}
+
+#New Silvenar chosen
+character_event = {
+	id = greenpact.3
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_special_character_title = silvenar
+		add_character_modifier = {
+			name = green_pact_silvenar
+			duration = -1
+		}
+		
+		#Warns relatives and followers
+		any_playable_ruler = {
+			limit = {
+				OR = { 
+					religion = green_pact
+					is_close_relative = ROOT
+				}
+			}
+			character_event = { id = greenpact.5 days = 10 }
+		}
+		
+		#Chooses a new Green Lady
+		random_character = {
+			limit = {
+				trait = bosmer
+				religion = green_pact
+				is_female = yes
+				is_ruler = no
+				controls_religion = no
+				is_married = no
+				is_adult = yes
+				NOR = { 
+					has_character_modifier = green_pact_green_lady
+					trait = cynical
+					trait = incapable
+					trait = has_knahaten_flu
+					trait = eunuch					
+				}
+				OR = {
+					trait = strong
+					trait = tall
+					is_priest = yes
+					is_martially_inclined = yes
+					any_dynasty_member_even_if_dead = { has_character_modifier = green_pact_green_lady }
+					any_close_relative = { has_character_modifier = green_pact_green_lady }
+				}
+			}
+			add_trait = nun
+			character_event = { id = greenpact.6 days = 30 random = 60 }
+		}
+	}
+}
+
+#Green Lady/Silvenar loses it
+character_event = {
+	id = greenpact.4
+	desc = greenpact.4.desc
+	picture = GFX_evt_lunatic_bosmer
+	
+	is_triggered_only = yes
+	
+	#Possessed
+	option = {
+		name = "greenpact.4.opt1"
+		add_trait = possessed
+		add_trait = weak
+		health = -2
+	}
+	
+	#Lunatic
+	option = {
+		name = "greenpact.4.opt2"
+		add_trait = delirium
+		add_trait = weak
+		health = -2
+	}
+	
+	#Depressed
+	option = {
+		name = "greenpact.4.opt3"
+		add_depressed = yes
+		add_trait = weak
+		health = -2
+	}
+	
+}
+
+#Warns relatives and followers of new Silvenar
+character_event = {
+	id = greenpact.5
+	desc = greenpact.5.desc
+	picture = GFX_evt_coronation_bosmer
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "greenpact.5.opt1"
+		trigger = { religion = green_pact }
+	}
+	
+	option = {
+		name = "greenpact.5.opt2"
+		trigger = { NOT = { religion = green_pact } }
+	}
+}
+
+#New Green Lady chosen
+character_event = {
+	id = greenpact.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_special_character_title = green_lady
+		add_character_modifier = {
+			name = green_pact_green_lady
+			duration = -1
+		}
+		
+		#Marries Silvenar
+		remove_trait = nun
+		add_spouse = FROM
+		
+		#Warns relatives and followers of the impeding wedding ceremony 
+		any_playable_ruler = {
+			limit = {
+				OR = { 
+					religion = green_pact
+					is_close_relative = ROOT
+				}
+			}
+			#Gift
+			character_event = { id = greenpact.7 days = 10 random = 30 }
+			#Handfasting
+			narrative_event = { id = greenpact.10 days = 30 random = 60 }
+		}
+	}
+}
+
+#Will ruler contribute to the Handfasting?
+character_event = {
+	id = greenpact.7
+	desc = greenpact.7.desc
+	picture = GFX_evt_coronation_bosmer
+	
+	is_triggered_only = yes
+	
+	#I'll send them a big gift
+	option = {
+		name = "greenpact.7.opt1"
+		trigger = {
+			religion = green_pact
+			wealth = 200
+		}
+		prestige = 100
+		piety = 200
+		scaled_wealth = { value = -0.5 min = -200 }
+	}
+	
+	#I'll send them a medium gift
+	option = {
+		name = "greenpact.7.opt2"
+		trigger = {
+			religion = green_pact
+			wealth = 100
+		}
+		prestige = 50
+		piety = 100
+		scaled_wealth = { value = -0.25 min = -100 }
+	}
+	
+	#I'll send them a small gift
+	option = {
+		name = "greenpact.7.opt3"
+		trigger = {
+			religion = green_pact
+		}
+		piety = 50
+		scaled_wealth = { value = -0.1 min = -10 }
+	}
+	
+	#I don't have time or money for that
+	option = {
+		name = "greenpact.7.opt4"
+		trigger = {
+			religion = green_pact
+		}
+		piety = -100
+	}
+	
+	#Congratulations to the new couple!
+	option = {
+		name = "greenpact.7.opt4"
+		trigger = {
+			NOT = { religion = green_pact }
+		}
+	}
+}
+
+#Green Lady dies!
+character_event = {
+	id = greenpact.8
+	is_triggered_only = yes
+	hide_window = yes
+	
+	only_women = yes
+	religion_group = mer_pantheon
+	
+	trigger = {
+		spouse = { has_character_modifier = green_pact_silvenar }
+		has_character_modifier = green_pact_green_lady
+	}
+	
+	immediate = {
+		#Warns relatives and followers
+		any_playable_ruler = {
+			limit = {
+				OR = { 
+					religion = green_pact
+					is_close_relative = ROOT
+				}
+			}
+			character_event = { id = greenpact.9 days = 2 }
+		}
+		#Old Silvenar eventually loses it
+		any_spouse = {
+			character_event = { id = greenpact.4 days = 5 random = 600 }
+			add_trait = monk
+		}
+	}
+}
+
+#Warns relatives and followers of Green Lady death
+character_event = {
+	id = greenpact.9
+	desc = greenpact.9.desc
+	picture = GFX_evt_exhaustedforest
+	is_triggered_only = yes
+	
+	option = {
+		name = "greenpact.9.opt1"
+		trigger = { religion = green_pact }
+	}
+	
+	option = {
+		name = "greenpact.9.opt2"
+		trigger = { NOT = { religion = green_pact } }
+	}
+}
+
+#Handfasting happens
+narrative_event = {
+	id = greenpact.10
+	title = greenpact.10.title
+	desc = greenpact.10.desc
+	picture = GFX_evt_feast_bosmer
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = "greenpact.10.opt1"
+		trigger = { religion = green_pact }
+	}
+	
+	option = {
+		name = "greenpact.10.opt2"
+		trigger = { NOT = { religion = green_pact } }
+	}
+}

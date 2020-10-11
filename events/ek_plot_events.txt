@@ -1,0 +1,4958 @@
+################################
+# PLOT EVENTS FOR EK
+################################
+namespace = EKplots
+
+################################
+# REPLACE REGENT - PLOT EVENTS
+################################
+#	01 - 10
+
+#liege receives request
+character_event = { 
+	id = EKplots.1
+	desc = EKplots.1_desc
+	picture = GFX_evt_spymaster #placeholder
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	option = { #optionA - accepts
+		name = EKplots.1_OPTA
+		ai_chance = {
+			factor = 1
+			
+			#vassal has at least 100% plot power
+			modifier = { 
+				factor = 2
+				FROM = { plot_power = 1.0 }
+			}
+			
+			modifier = { #200% power
+				factor = 2
+				FROM = { plot_power = 2.0 }
+			}
+			
+			#ai will never appoint rivals
+			modifier = {
+				factor = 0
+				FROM = { is_rival = ROOT }
+			}
+			#ai will always accepts request if regent is their rival
+			modifier = {
+				factor = 1000
+				event_target:target_current_regent = {
+					is_rival = ROOT
+				}
+			}
+			#kind rulers more likely to accept?
+			modifier = { 
+				factor = 1.25
+				trait = kind
+			}
+			#qualified people should be more likely to become regents
+			modifier = {
+				factor = 15
+				FROM = { trait = genius }
+			}
+			modifier = {
+				factor = 10
+				FROM = { trait = diligent }
+			}
+			modifier = {
+				factor = 10
+				FROM = { trait = quick }
+			}
+			modifier = {
+				factor = 5
+				FROM = { 
+					OR = {
+						diplomacy = 20
+						stewardship = 20
+						martial = 20
+						#intrigue = 20 #?
+						AND = {
+							learning = 20
+							is_theocracy = yes
+						}
+					}
+				}
+			}
+			#regent has bad traits
+			modifier = {
+				factor = 20
+				event_target:target_current_regent = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 20
+				event_target:target_current_regent = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 15
+				event_target:target_current_regent = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 10
+				event_target:target_current_regent = {
+					trait = slow
+				}
+			}
+			#liege's opinion influences her/his decision
+			modifier = { #liege doesn't like regent
+				factor = 5
+				event_target:target_current_regent = {
+					NOT = { reverse_opinion = { who = ROOT value = 0 } }
+				}
+			}
+			modifier = {
+				factor = 10
+				event_target:target_current_regent = {
+					NOT = { reverse_opinion = { who = ROOT value = -25 } }
+				}
+			}
+			modifier = {
+				factor = 15
+				event_target:target_current_regent = {
+					NOT = { reverse_opinion = { who = ROOT value = -50 } }
+				}
+			}
+			modifier = { #liege likes the requester
+				factor = 5
+				opinion = { who = FROM value = 25 }
+			}
+			modifier = {
+				factor = 10
+				opinion = { who = FROM value = 50 }
+			}
+			modifier = {
+				factor = 15
+				opinion = { who = FROM value = 75 }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { letter_event = { id = EKplots.2 days = 3 } }
+			event_target:target_current_regent = { letter_event = { id = EKplots.4 days = 3 } }
+		}
+	}
+	
+	option = { #optionB - refuses
+		name = EKplots.1_OPTB
+		ai_chance = {
+			factor = 2
+			#ai shouldn't replace a well-qualified regent
+			modifier = { 
+				factor = 20
+				event_target:target_current_regent = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 15
+				event_target:target_current_regent = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 15
+				event_target:target_current_regent = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 10
+				event_target:target_current_regent = {
+					OR = {
+						diplomacy = 20
+						stewardship = 20
+						martial = 20
+						#intrigue = 20 #?
+						AND = {
+							learning = 20
+							is_theocracy = yes #only theocrasies care about it?
+						}
+					}
+				}
+			}
+			#ruthless rulers more likely to refuse?
+			modifier = { 
+				factor = 1.5
+				trait = ruthless
+			}
+			#people with bad traits should be less likely to be appointed
+			modifier = {
+				factor = 20
+				FROM = { trait = imbecile }
+			}
+			modifier = {
+				factor = 20
+				FROM = { trait = inbred }
+			}
+			modifier = {
+				factor = 15
+				FROM = { trait = slothful }
+			}
+			modifier = {
+				factor = 10
+				FROM = { trait = slow }
+			}
+			#liege's opinion influences her/his decision
+			modifier = { #liege doesn't like requester
+				factor = 5
+				NOT = { opinion = { who = FROM value = 0 } }
+			}
+			modifier = {
+				factor = 10
+				NOT = { opinion = { who = FROM value = -25 } }
+			}
+			modifier = {
+				factor = 15
+				NOT = { opinion = { who = FROM value = -50 } }
+			}
+			modifier = { #liege likes regent
+				factor = 5
+				event_target:target_current_regent = {
+					reverse_opinion = { who = ROOT value = 25 }
+				}
+			}
+			modifier = {
+				factor = 10
+				event_target:target_current_regent = {
+					reverse_opinion = { who = ROOT value = 50 }
+				}
+			}
+			modifier = {
+				factor = 15
+				event_target:target_current_regent = {
+					reverse_opinion = { who = ROOT value = 75 }
+				}
+			}
+		}
+		hidden_tooltip = {
+			FROM = { letter_event = { id = EKplots.3 days = 3 } }
+			event_target:target_current_regent = { letter_event = { id = EKplots.5 days = 3 } }
+		}
+	}
+}
+
+#liege accepts request
+letter_event = { 
+	id = EKplots.2
+	desc = EKplots.2_desc
+	#border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKplots.2_OPT
+		give_minor_title = title_regent
+		opinion = {
+			modifier = opinion_very_grateful
+			who = FROM
+			years = 10
+		}
+		hidden_tooltip = {
+			set_character_flag = accepted_regency_request
+		}
+	}
+}
+
+#liege refuses request
+letter_event = { 
+	id = EKplots.3
+	desc = EKplots.3_desc
+	#border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	option = {
+		name = EKplots.3_OPT
+		opinion = {
+			modifier = opinion_very_disappointed
+			who = FROM
+			years = 10
+		}
+		hidden_tooltip = {
+			set_character_flag = refused_regent #can't request appointment for 5 years
+			character_event = { id = EKplots.6 days = 1825 }
+		}
+	}
+}
+
+#inform the regent - was replaced
+letter_event = { 
+	id = EKplots.4
+	desc = EKplots.4_desc
+	#border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	option = {
+		name = EKplots.4_OPT
+		remove_title = title_regent
+		opinion = {
+			modifier = opinion_revoked_honorary_title
+			who = FROM
+			years = 10
+		}
+		opinion = {
+			modifier = opinion_usurped_position 
+			who = FROMFROM #the plotter
+			years = 10
+		}
+	}
+}
+
+#inform the regent - wasn't replaced
+letter_event = { 
+	id = EKplots.5
+	desc = EKplots.5_desc
+	#border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	option = {
+		name = EKplots.5_OPT
+		opinion = {
+			modifier = opinion_relieved 
+			who = FROM #liege
+			years = 10
+		}
+		opinion = {
+			modifier = opinion_tried_to_usurp 
+			who = FROMFROM #the plotter
+			years = 10
+		}
+	}
+}
+
+#clears refused_regent flag
+character_event = { 
+	id = EKplots.6
+	hide_window = yes 
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	immediate = { clr_character_flag = refused_regent}
+	option = { name = OK }
+}
+
+
+
+###################################
+# FABRICATE TREASON - PLOT EVENTS
+###################################
+# 11 - 25
+
+#Plotter pings a plotbacker, starts an event chain
+character_event = { 
+	id = EKplots.11
+	hide_window = yes 
+	
+	#pre-triggers
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = { 
+		NOR = {  #event won't trigger once the forgery was accepted
+			has_character_flag = quality_evidence
+			has_character_flag = mediocre_evidence
+			has_character_flag = bad_evidence 
+		}
+		has_plot =  plot_fabricate_evidence
+		plot_power = 0.5
+		num_of_plot_backers = 1
+	}
+	mean_time_to_happen = { 
+		days = 1000
+		modifier = {
+			factor = 0.5
+			plot_power = 1.5
+		}
+		modifier = {
+			factor = 0.5
+			plot_power = 2
+		}
+		modifier = {
+			factor = 0.5
+			num_of_plot_backers = 10
+		}
+		modifier = {
+			factor = 0.5
+			num_of_plot_backers = 20
+		}
+		modifier = {
+			factor = 0.5
+			intrigue = 20
+		}
+	}
+	immediate = {
+		ROOT = { 
+			save_event_target_as = target_plotter 
+			activate_plot = yes
+		}
+		plot_target_char = { save_event_target_as = plot_target }
+		any_plot_backer = { character_event = { id = EKplots.12 } }
+	}
+	option = { name = OK }
+}
+
+#plotbacker random actions
+character_event = { 
+	id = EKplots.12 
+	desc = EKplots.12_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = { 
+		name = EKplots.12_OPT
+		custom_tooltip = { text = EKplots.12_OPTdesc } #probably mention possible outcomes
+		hidden_tooltip = {
+			random_list = { #chooses from the possible events - different success ratios
+				20 = { #tries forging evidence personally
+					modifier = { #high intrigue - more confident
+						factor = 3
+						intrigue = 16
+					}
+					ROOT = { character_event = { id = EKplots.13 } }
+				}
+				
+				30 = { #hires a forger
+					ROOT = { character_event = { id = EKplots.14 days = 30 } }
+				}
+				
+				30 = { #hires false witness
+					ROOT = { character_event = { id = EKplots.15 days = 30 } }
+				}
+				
+				10 = { #discovers actual plot
+					modifier = { #first check if there's even a plot to discover
+						factor = 0
+						#NOT = { event_target:plot_target = { is_part_of_plot = yes } }
+						#is_part_of_plot is a major trigger for events only
+					}
+					modifier = { #first check if there's even a plot to discover
+						factor = 0
+						NOT = { event_target:plot_target = { has_plot = yes } }
+					}
+					modifier = { #plotbacker's spymaster helps
+						factor = 5
+						any_realm_character = {
+							ROOT = { is_liege_of = PREV }
+							has_job_title = job_spymaster
+							has_job_action = action_uncover_plots
+							NOT = { is_plot_target_of = FROM } #is this really necessary?
+						}
+					}
+					ROOT = { character_event = { id = EKplots.16 days = 30 } }
+				}
+			}
+		}
+	}
+}
+
+#Plotbacker actions
+
+#plotbacker forges evidence him/herself - free, but least likely to work
+character_event = {
+	id = EKplots.13
+	desc = EKplots.13_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	immediate = {
+		set_character_flag = forged_personally
+	}
+	option = { 
+		name = EKplots.13_OPTA
+		hidden_tooltip = {
+			random_list = { #10-30-60
+				5 = {
+					modifier = { #plotbacker - intrigue helps a lot
+						factor = 5
+						intrigue = 17
+					}
+					modifier = { 
+						factor = 1.25
+						intrigue = 18
+					}
+					modifier = { 
+						factor = 1.25
+						intrigue = 19
+					}
+					modifier = {
+						factor = 1.25
+						intrigue = 20
+					}
+					modifier = {
+						factor = 0.5
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 2
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.17 days = 30 } }
+				}
+				35 = {
+					modifier = {
+						factor = 1.05
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 0.95
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.18 days = 30 } }
+				}
+				60 = {
+					modifier = {
+						factor = 2
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 0.5
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.19 days = 30 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = lets_try_something_else
+		hidden_tooltip = {
+			clr_character_flag = forged_personally
+		}
+	}
+}
+
+#plotbacker finds forgerer - expensive, but good results
+character_event = {
+	id = EKplots.14
+	desc = EKplots.14_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	immediate = {
+		set_character_flag = hired_forger
+	}
+	option = { 
+		name = EKplots.14_OPTA
+		hidden_tooltip = {
+			random_list = {#70-20-10
+				70 = {
+					modifier = {
+						factor = 0.5
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 2
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.17 days = 30 } }
+				}
+				20 = {
+					modifier = {
+						factor = 1.05
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 0.95
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.18 days = 30 } }
+				}
+				10 = {
+					modifier = {
+						factor = 2
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 0.5
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.19 days = 30 } }
+				}
+			}
+		}
+		scaled_wealth = -1.5 #maybe more?
+		event_target:target_plotter = { letter_event = { id = EKplots.24 days = 60 } }
+	}
+	option = {
+		name = lets_try_something_else
+		hidden_tooltip = {
+			clr_character_flag = hired_forger
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 10
+				trait = greedy
+			}
+		}
+	}
+}
+
+#plotbacker bribes false witness
+character_event = {
+	id = EKplots.15
+	desc = EKplots.15_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	immediate = {
+		set_character_flag = bribed_witness
+	}
+	option = { 
+		name = EKplots.15_OPTA
+		hidden_tooltip = {
+			random_list = { #30-30-40
+				30 = {
+					modifier = {
+						factor = 0.5
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 2
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.17 days = 30 } }
+				}
+				40 = {
+					modifier = {
+						factor = 1.05
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 0.95
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.18 days = 30 } }
+				}
+				30 = {
+					modifier = {
+						factor = 2
+						event_target:plot_target = {
+							any_realm_character = {
+								event_target:plot_target = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_uncover_plots
+							}
+						}
+					}
+					modifier = {
+						factor = 0.5
+						event_target:target_plotter = {
+							any_realm_character = {
+								event_target:target_plotter = { is_liege_of = PREV }
+								has_job_title = job_spymaster
+								has_job_action = action_organize_spies
+							}
+						}
+					}
+					ROOT = { character_event = { id = EKplots.19 days = 30 } }
+				}
+			}
+		}
+		scaled_wealth = -0.5
+		event_target:target_plotter = { letter_event = { id = EKplots.24 days = 60 } }
+	}
+	option = {
+		name = lets_try_something_else
+		hidden_tooltip = {
+			clr_character_flag = bribed_witness
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 10
+				trait = greedy
+			}
+		}
+	}
+}
+
+#plotbacker discovers plot
+character_event = {
+	id = EKplots.16
+	desc = EKplots.16_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	immediate = {
+		reveal_plot = event_target:plot_target
+		set_character_flag = actual_plot
+	}
+	option = { 
+		name = EKplots.16_OPTA #let's send it
+		hidden_tooltip = { event_target:target_plotter = { letter_event = { id = EKplots.20 days = 1 } } }
+	}
+	option = { 
+		name = lets_try_something_else
+		hidden_tooltip = { clr_character_flag = actual_plot }
+	}
+}
+
+#plotbacker HASS the evidence
+character_event = { #quality forgery
+	id = EKplots.17
+	#dynamic description
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = forged_personally }
+		}
+		text = EKplots.17_descA 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = hired_forger }
+		}
+		text = EKplots.17_descB 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = bribed_witness }
+		}
+		text = EKplots.17_descC 
+	}
+	
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	immediate = {
+		set_character_flag = quality_forgery
+	}
+	option = { 
+		name = EKplots.17_OPTA #let's send it
+		hidden_tooltip = { event_target:target_plotter = { letter_event = { id = EKplots.20 days = 1 } } }
+	}
+	#option = { 
+	#	name = not_good_enough #let's try for better results - doesn't make sense for quality forgery, imo
+	#}
+}
+character_event = { #mediocre forgery
+	id = EKplots.18
+	#dynamic description
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = forged_personally }
+		}
+		text = EKplots.18_descA 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = hired_forger }
+		}
+		text = EKplots.18_descB 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = bribed_witness }
+		}
+		text = EKplots.18_descC 
+	}
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	immediate = {
+		set_character_flag = mediocre_forgery
+	}
+	option = { 
+		name = EKplots.18_OPTA #let's send it
+		hidden_tooltip = { event_target:target_plotter = { letter_event = { id = EKplots.20 days = 1 } } }
+	}
+	option = { 
+		name = not_good_enough #let's try for better results
+	}
+}
+character_event = { #bad forgery
+	id = EKplots.19
+	#dynamic description
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = forged_personally }
+		}
+		text = EKplots.19_descA 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = hired_forger }
+		}
+		text = EKplots.19_descB 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = bribed_witness }
+		}
+		text = EKplots.19_descC 
+	}
+	
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	immediate = {
+		set_character_flag = bad_forgery
+	}
+	option = {
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = genius
+			}
+			modifier = {
+				factor = 0.5
+				trait = quick
+			}
+		}
+		name = EKplots.19_OPTA #let's send it
+		hidden_tooltip = { event_target:target_plotter = { letter_event = { id = EKplots.20 days = 1 } } }
+	}
+	option = { 
+		name = not_good_enough #let's try for better results
+	}
+}
+#plotbacker informs plotter about the evidence
+letter_event = { 
+	id = EKplots.20
+	#dynamic description
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = quality_forgery }
+		}
+		text = EKplots.20_descA 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = mediocre_forgery }
+		}
+		text = EKplots.20_descB 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = bad_forgery }
+		}
+		text = EKplots.20_descC 
+	}
+	desc = { 
+		trigger = {
+			FROM = { has_character_flag = actual_plot }
+		}
+		text = EKplots.20_descD
+	}
+	
+	border = GFX_event_letter_frame_intrigue 
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { FROM = { has_character_flag = quality_forgery } }
+			ROOT = { set_character_flag = quality_evidence }
+		}
+		if = {
+			limit = { FROM = { has_character_flag = mediocre_forgery } }
+			ROOT = { set_character_flag = mediocre_evidence }
+		}
+		if = {
+			limit = { FROM = { has_character_flag = bad_forgery } }
+			ROOT = { set_character_flag = bad_evidence }
+		}
+		if = {
+			limit = { 
+				FROM = { has_character_flag = actual_plot } 
+				OR = { #check if it really is treason
+					event_target:plot_target = { any_liege = { is_plot_target_of = event_target:plot_target } }
+					event_target:plot_target = { any_liege = { any_close_relative = { is_plot_target_of = event_target:plot_target } } }
+				}
+			}
+			ROOT = { 
+				set_character_flag = perfect_evidence
+				reveal_plot = event_target:plot_target
+			}
+		}
+		if = {
+			limit = { 
+				FROM = { has_character_flag = actual_plot } 
+				NOR = { 
+					event_target:plot_target = { any_liege = { is_plot_target_of = event_target:plot_target } }
+					event_target:plot_target = { any_liege = { any_close_relative = { is_plot_target_of = event_target:plot_target } } }
+				}
+			}
+			ROOT = { 
+				set_character_flag = known_plot
+				reveal_plot = event_target:plot_target
+			}
+		}
+			
+		FROM = { #let's clear some flags
+			clr_character_flag = forged_personally
+			clr_character_flag = hired_forger
+			clr_character_flag = bribed_witness
+			clr_character_flag = quality_forgery
+			clr_character_flag = mediocre_forgery
+			clr_character_flag = bad_forgery
+			clr_character_flag = actual_plot
+		}
+	}
+	
+	option = { 
+		trigger = {
+			OR = {
+				has_character_flag = quality_evidence
+				has_character_flag = mediocre_evidence
+				has_character_flag = bad_evidence
+				has_character_flag = perfect_evidence
+			}
+		}
+		name = EKplots.20_OPTA #send this to his liege immediately
+		hidden_tooltip = { 
+			event_target:plot_target = { 
+				liege = { 
+					character_event = { id = EKplots.21 days = 1 } 
+				} 
+			}
+		}
+	}
+	option = { 
+		trigger = {
+			has_character_flag = known_plot
+		}
+		name = EKplots.20_OPTB #let's reveal the plot to the plot_target
+		hidden_tooltip = { 
+			any_independent_ruler = {
+				any_realm_character = { 
+					limit = {
+						is_plot_target_of = event_target:plot_target
+					} 
+					letter_event = { id = EKplots.25 days = 3 } 
+				}
+			}
+			reverse_opinion = {
+				modifier = revealed_plot
+				who = event_target:plot_target
+				years = 5
+			}
+			clr_character_flag = known_plot
+		}
+	}
+	option = { 
+		name = not_good_enough #the evidence isn't good enough
+	}
+}
+
+#liege is presented with the evidence
+character_event = { 
+	id = EKplots.21
+	desc = EKplots.21_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { FROM = { has_character_flag = perfect_evidence } }
+			reveal_plot = event_target:plot_target
+		}
+	}
+	option = { #believes
+		name = EKplots.21_OPTA
+		ai_chance = {
+			factor = 5
+			modifier = { #liege knows about the plotters attempt to fabricate treason
+				factor = 0
+				FROM = { plot_is_known_by = ROOT }
+			}
+			modifier = { #actual treason
+				factor = 20
+				FROM = { has_character_flag = perfect_evidence }
+			}
+			modifier = { #successful forgery
+				factor = 10
+				FROM = { has_character_flag = quality_evidence }
+			}
+			modifier = { #liege is trusting, more likely to believe you
+				factor = 10
+				trait = trusting
+			}
+			modifier = { #liege has low intrigue
+				factor = 5
+				NOT = { intrigue = 5 }
+			}
+			modifier = { 
+				factor = 2
+				NOT = { intrigue = 10 }
+			}
+		}
+		opinion = {
+			modifier = opinion_traitor_scum
+			who = event_target:plot_target
+			years = 20
+		}
+		hidden_tooltip = {
+			event_target:target_plotter = {
+				set_character_flag = EKplot_success
+				letter_event = { id = EKplots.22 days = 3 } 
+			}
+		}
+	}
+	option = { #dismisses
+		trigger = {#player character should have a reason to be able to choose this option
+			OR = {
+				intrigue = 12
+				trait = paranoid
+				trait = quick
+				trait = genius
+				FROM = { has_character_flag = bad_evidence }
+			}
+		}
+		name = EKplots.21_OPTB
+		ai_chance = {
+			factor = 5 
+			modifier = { #unsuccessful forgery
+				factor = 10
+				FROM = { has_character_flag = bad_evidence }
+			}
+			modifier = { #liege is paranoid, so suspicious about the origin of the evidence
+				factor = 10
+				trait = paranoid #?
+			}
+			modifier = { #high intrigue
+				factor = 10
+				intrigue = 15
+			}
+			modifier = { #liege knows about the plotters attempt to fabricate treason
+				factor = 0
+				OR = {
+					trait = slow
+					trait = imbecile
+				}
+			}
+		}
+		hidden_tooltip = {
+			event_target:target_plotter = { letter_event = { id = EKplots.23 days = 3 } }
+		}
+	}
+}
+
+#liege answers
+letter_event = { #believes
+	id = EKplots.22
+	desc = EKplots.22_desc
+	border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	option = {
+		name = EKplots.22_OPT
+		FROM = { 
+			opinion = {
+				modifier = opinion_informed_about_treason
+				who = ROOT
+				years = 10
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = perfect_evidence
+			clr_character_flag = quality_evidence
+			clr_character_flag = mediocre_evidence
+			clr_character_flag = bad_evidence
+			clr_character_flag = EKplot_success
+			add_character_modifier = {
+				name = treason_spam_blocker
+				months = 60
+				hidden = yes
+			}
+		}
+	}
+}
+
+letter_event = { #doesn't believe
+	id = EKplots.23
+	desc = EKplots.23_desc
+	border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	option = {
+		name = EKplots.23_OPT
+		opinion = {
+			modifier = opinion_very_disappointed
+			who = FROM
+			years = 10
+		}
+		reverse_opinion = {
+			modifier = opinion_falsified_evidence
+			who = ROOT
+			years = 10
+		}
+		hidden_tooltip = {
+			clr_character_flag = perfect_evidence
+			clr_character_flag = quality_evidence
+			clr_character_flag = mediocre_evidence
+			clr_character_flag = bad_evidence
+			set_character_flag = EKplot_failed
+		}
+	}
+}
+
+#plotbacker asks for monetary compensation after paying for forgery
+letter_event = { 
+	id = EKplots.24
+	desc = EKplots.24_desc #ask for [1.55] money
+	border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	option = { #compensate
+		name = EKplots.24_OPTA
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+		}
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 1.55
+		}
+	}
+	option = { #don't compensate
+		name = EKplots.24_OPTB
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+		}
+		ROOT = { 
+			reverse_opinion = {
+				modifier = opinion_stingy
+				who = FROM 
+				years = 5
+			}
+		}
+	}
+}	
+
+letter_event = { #plotter reveals discovered plot
+	id = EKplots.25
+	desc = EKplots.25_desc
+	border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	immediate = {
+		reveal_plot = event_target:plot_target
+	}
+	option = {
+		name = EKplots.25_OPT
+		FROM = { 
+			opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+}
+	
+##############################
+# SLANDER - PLOT EVENTS
+#############################
+#  31 - 40
+
+#ping plot_target
+character_event = {
+	id = EKplots.31
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_plot = plot_slander
+	}
+	
+	
+	mean_time_to_happen = {
+		months = 60
+		modifier = { #the more plot backers you have the less time it takes
+			factor = 0.85
+			num_of_plot_backers = 5
+		}
+		modifier = {
+			factor = 0.85
+			num_of_plot_backers = 10
+		}
+		modifier = {
+			factor = 0.85
+			num_of_plot_backers = 15
+		}
+		modifier = {
+			factor = 0.85
+			num_of_plot_backers = 20
+		}
+		modifier = { #high intrigue helps
+			factor = 0.85
+			intrigue = 18
+		}
+		modifier = { 
+			factor = 0.85
+			intrigue = 19
+		}
+		modifier = { 
+			factor = 0.85
+			intrigue = 20
+		}
+		modifier = { 
+			factor = 0.85
+			trait = schemer
+		}
+		modifier = { #suspicious people halt your progress
+			factor = 2
+			has_character_modifier = rumored_tried_starting_rumours
+		}
+		modifier = { 
+			factor = 1.15
+			any_plot_backer = {	has_character_modifier = rumored_tried_starting_rumours }
+		}
+		#modifier = { #plot_targer has better intrigue
+		#	factor = 1.35
+		#	attribute_diff = {
+		#		character = plot_target_char
+		#		attribute = intrigue
+		#		value = -3
+		#	}
+		#}
+		modifier = { #spymaster helps
+			factor = 0.75
+			any_realm_character = {
+				ROOT = { is_liege_of = PREV }
+				has_job_title = job_spymaster
+				has_job_action = action_organize_spies
+			}
+		}
+	}
+	immediate = { plot_target_char = { character_event = { id = EKplots.32 days = 7 } } }
+	option = { name = OK }
+}
+
+#event dealing with opinion drop 
+character_event = {
+	id = EKplots.32
+	desc = EKplots.32_desc #plot_target describes how people keep starring at him/her weirdly
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	show_from_from = no
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EKplots.32_OPT
+		hidden_tooltip = {
+			random_list = { #randomly determines a negative character modifier to add to the plot target.
+				15 = {
+					FROM = { letter_event = { id = EKplots.39 days = 3 } }
+					add_character_modifier = {
+						name = bad_rumours
+						months = 120
+					}
+					add_character_modifier = {
+						name = vicious_rumors
+						months = 120
+					}
+				}
+				5 = {
+					FROM = { letter_event = { id = EKplots.39 days = 3 } }
+					add_character_modifier = {
+						name = bad_rumours
+						months = 120
+					}
+					add_character_modifier = {
+						name = rumored_weak_ruler
+						months = 120
+					}
+					modifier = {
+						factor = 0
+						is_ruler = no
+					}
+				}
+				5 = {
+					FROM = { letter_event = { id = EKplots.39 days = 3 } }
+					add_character_modifier = {
+						name = bad_rumours
+						months = 120
+					}
+					add_character_modifier = {
+						name = rumored_night_monster 
+						months = 120
+					}
+					modifier = {
+						factor = 0
+						OR = {
+							trait = known_vampire
+							trait = known_lycan
+							religion_group = daedra
+						}
+					}
+				}
+				5 = {
+					FROM = { letter_event = { id = EKplots.39 days = 3 } }
+					add_character_modifier = {
+						name = bad_rumours
+						months = 120
+					}
+					add_character_modifier = {
+						name = rumored_treasonous_bastard
+						months = 120
+					}
+					modifier = {
+						factor = 0
+						independent = yes
+					}
+				}
+				30 = {				#failure to start rumours
+					random_list = {
+						70 = {
+							FROM = {
+								any_plot_backer = {
+									letter_event = { id = EKplots.40 days = 3 }
+								}
+							}
+						}
+						30 = {
+							FROM = {
+								letter_event = { id = EKplots.40 days = 3 }
+							}
+						}
+					}
+				}
+				90 = {
+					clr_character_flag = bad_rumours
+					#nothing happens
+				}
+			}	
+		}
+	}
+}
+
+#events dealing with plot_target gaining traits due to the rumours
+character_event = { #stressed
+	id = EKplots.33
+	desc = EKplots.33_desc #fighting these rumours is slowly getting to her/him
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_character_modifier = bad_rumours
+		NOT = { has_character_flag = known_smear_campaign }
+		NOT = { trait = stressed }
+		NOT = { trait = depressed }
+	}
+	mean_time_to_happen = {
+		months = 60 
+		modifier = {
+			factor = 5
+			is_immortal = yes
+		}
+		modifier = {
+			factor = 5
+			is_away = yes
+		}
+		modifier = {
+			factor = 2
+			trait = proud
+		}
+		modifier = {
+			factor = 2
+			trait = wroth
+		}
+		modifier = {
+			factor = 2
+			trait = chaste
+		}
+		modifier = {
+			factor = 2
+			trait = genius
+		}
+		modifier = {
+			factor = 1.5
+			trait = strong
+		}
+		modifier = {
+			factor = 1.5
+			trait = quick
+		}
+		modifier = {
+			factor = 1.5
+			trait = fair
+		}
+		modifier = {
+			factor = 0.2
+			trait = bastard
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = ugly
+		}
+		modifier = {
+			factor = 0.5
+			trait = hunchback
+		}
+		modifier = {
+			factor = 0.5
+			trait = lisp
+		}
+		modifier = {
+			factor = 0.5
+			trait = stutter
+		}
+		modifier = {
+			factor = 0.5
+			trait = harelip
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.5
+			trait = sickly
+		}
+		modifier = {
+			factor = 0.5
+			is_maimed_trigger = yes
+		}
+	}
+	
+	option = {
+		name = EKplots.33_OPT
+		add_stressed = yes
+	}
+	option = {
+		trigger = {
+			OR = {
+				trait = arbitrary
+				trait = proud
+				trait = slovenly
+				trait = slothful
+			}
+		}
+		name = EKplots_i_dont_care
+	}
+}
+
+character_event = { #depressed
+	id = EKplots.34
+	desc = EKplots.34_desc #things are looking really bleak
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_character_modifier = bad_rumours
+		NOT = { has_character_flag = known_smear_campaign }
+		trait = stressed
+		NOT = { trait = depressed }
+	}
+	mean_time_to_happen = {
+		months = 60
+		modifier = {
+			factor = 5
+			is_immortal = yes
+		}
+		modifier = {
+			factor = 5
+			is_away = yes
+		}
+		modifier = {
+			factor = 2
+			trait = proud
+		}
+		modifier = {
+			factor = 2
+			trait = wroth
+		}
+		modifier = {
+			factor = 2
+			trait = chaste
+		}
+		modifier = {
+			factor = 2
+			trait = genius
+		}
+		modifier = {
+			factor = 1.5
+			trait = strong
+		}
+		modifier = {
+			factor = 1.5
+			trait = quick
+		}
+		modifier = {
+			factor = 1.5
+			trait = fair
+		}
+		modifier = {
+			factor = 0.2
+			trait = bastard
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = ugly
+		}
+		modifier = {
+			factor = 0.5
+			trait = hunchback
+		}
+		modifier = {
+			factor = 0.5
+			trait = lisp
+		}
+		modifier = {
+			factor = 0.5
+			trait = stutter
+		}
+		modifier = {
+			factor = 0.5
+			trait = harelip
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.5
+			trait = sickly
+		}
+		modifier = {
+			factor = 0.5
+			is_maimed_trigger = yes
+		}
+	}
+	
+	option = {
+		name = EKplots.34_OPT
+		add_depressed = yes
+	}
+	option = {
+		trigger = {
+			OR = {
+				trait = arbitrary
+				trait = proud
+				trait = slovenly
+				trait = slothful
+			}
+		}
+		name = EKplots_i_dont_care
+	}
+}
+character_event = {
+	id = EKplots.35
+	desc = EKplots.35_desc #can't take it anymore
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {	
+		has_character_modifier = bad_rumours
+		trait = depressed
+		NOT = { has_character_flag = known_smear_campaign }
+	}
+	mean_time_to_happen = {
+		months = 60
+		modifier = {
+			factor = 5
+			is_immortal = yes
+		}
+		modifier = {
+			factor = 5
+			is_away = yes
+		}
+		modifier = {
+			factor = 2
+			trait = proud
+		}
+		modifier = {
+			factor = 2
+			trait = wroth
+		}
+		modifier = {
+			factor = 2
+			trait = chaste
+		}
+		modifier = {
+			factor = 2
+			trait = genius
+		}
+		modifier = {
+			factor = 1.5
+			trait = strong
+		}
+		modifier = {
+			factor = 1.5
+			trait = quick
+		}
+		modifier = {
+			factor = 1.5
+			trait = fair
+		}
+		modifier = {
+			factor = 0.2
+			trait = bastard
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = ugly
+		}
+		modifier = {
+			factor = 0.5
+			trait = hunchback
+		}
+		modifier = {
+			factor = 0.5
+			trait = lisp
+		}
+		modifier = {
+			factor = 0.5
+			trait = stutter
+		}
+		modifier = {
+			factor = 0.5
+			trait = harelip
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.5
+			trait = sickly
+		}
+		modifier = {
+			factor = 0.5
+			is_maimed_trigger = yes
+		}
+	}
+	
+	option = {
+		name = EKplots.35_OPT
+		custom_tooltip = { text = EKplots.35_OPTdesc }
+		hidden_tooltip = {
+			random_list = { #suicide attempt
+				35 = {
+					add_trait = wounded
+				}
+				30 = {
+					add_trait = lunatic
+				}
+				15 = {
+					add_trait = infirm
+				}
+				10 = {
+					add_trait = incapable
+				}
+				10 = {
+					death = { death_reason = death_suicide killer = ROOT }
+				}
+			}
+		}
+	}
+	option = {
+		trigger = {
+			OR = {
+				trait = arbitrary
+				trait = proud
+				trait = slovenly
+				trait = slothful
+			}
+		}
+		name = EKplots_i_dont_care
+	}
+}
+
+#councillor gets fired due to rumours, plotter gets promoted, if elligible
+character_event = {
+	id = EKplots.36
+	desc = EKplots.36_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_character_modifier = bad_rumours
+		has_job_title = yes
+	}
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 2
+			trait = genius
+		}
+		modifier = {
+			factor = 1.5
+			trait = strong
+		}
+		modifier = {
+			factor = 1.5
+			trait = quick
+		}
+		modifier = {
+			factor = 5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				opinion = {
+					value = 100
+					who = ROOT
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				opinion = {
+					value = 50
+					who = ROOT
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = paranoid
+			}
+		}
+		modifier = {
+			factor = 0.75
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = cruel
+			}
+		}
+		modifier = {
+			factor = 4
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = trusting
+			}
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = slow
+			}
+		}
+		modifier = {
+			factor = 5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = imbecile
+			}
+		}
+		modifier = {
+			factor = 10
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = inbred
+			}
+		}
+		modifier = {
+			factor = 5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = infirm
+			}
+		}
+		modifier = {
+			factor = 10
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = incapable
+			}
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = kind
+			}
+		}
+	}
+	
+	immediate = {
+		liege = {
+			any_realm_character = { 
+				limit = {
+					has_plot = plot_slander
+					ROOT = { is_plot_target_of = THIS }
+				}
+				save_event_target_as = target_plotter
+			}
+		}
+	}
+	
+	option = {
+		name = EKplots.36_OPT
+		hidden_tooltip = {
+			if = { 
+				limit = { has_job_title = job_chancellor }
+				remove_title = job_chancellor
+				if = { 
+					limit = {
+						event_target:target_plotter = { 
+							can_hold_title = job_chancellor 
+							liege = { is_liege_of = ROOT }
+						}
+					}
+					give_job_title = job_chancellor
+				}
+			}
+			if = { 
+				limit = { has_job_title = job_marshal }
+				remove_title = job_marshal
+				if = { 
+					limit = {
+						event_target:target_plotter = { 
+							can_hold_title = job_treasurer
+							liege = { is_liege_of = ROOT }
+						}
+					}
+					give_job_title = job_marshal
+				}
+			}
+			if = { 
+				limit = { has_job_title = job_treasurer }
+				remove_title = job_treasurer
+				if = { 
+					limit = {
+						event_target:target_plotter = { 
+							can_hold_title = job_treasurer
+							liege = { is_liege_of = ROOT }
+						}
+					}
+					give_job_title = job_treasurer
+				}
+			}
+			if = { 
+				limit = { has_job_title = job_spymaster }
+				remove_title = job_spymaster
+				if = { 
+					limit = {
+						event_target:target_plotter = { 
+							can_hold_title = job_spymaster
+							liege = { is_liege_of = ROOT }
+						}
+					}
+					give_job_title = job_spymaster
+				}
+			}
+			if = { 
+				limit = { has_job_title = job_spiritual }
+				remove_title = job_spiritual
+				if = { 
+					limit = {
+						event_target:target_plotter = { 
+							can_hold_title = job_spiritual
+							liege = { is_liege_of = ROOT }
+						}
+					}
+					give_job_title = job_spiritual
+				}
+			}
+		}
+	}
+}
+
+#plot_target is someone's lover, they break up 
+character_event = {
+	id = EKplots.37
+	desc = EKplots.37_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EKplots.37_OPT
+		hidden_tooltip = {
+			FROM = { save_event_target_as = former_lover }
+			break_up_with_target = yes
+			opinion = {
+				modifier = opinion_former_lover
+				who = FROM
+			}
+			reverse_opinion = {
+				modifier = opinion_former_lover
+				who = FROM
+			}
+		}
+	}
+}
+
+#plot_target is someone's consort, gets set aside 
+character_event = {
+	id = EKplots.38
+	desc = EKplots.38_desc
+	picture = GFX_evt_spymaster
+	border = GFX_event_normal_frame_intrigue
+	
+	is_triggered_only = yes
+	option = {
+		name = EKplots.38_OPT
+		hidden_tooltip = {
+			ROOT = { remove_spouse = yes }
+			opinion = {
+				modifier = opinion_set_aside
+				who = FROM
+			}
+		}
+	}
+}
+
+#feedback event, plotter informed that the rumour was successfully started
+letter_event = {
+	id = EKplots.39
+	desc = EKplots.39_desc
+	border = GFX_event_letter_frame_intrigue
+
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	option = {
+		name = EKplots.39_OPT
+		hidden_tooltip = { set_character_flag = EKplot_success }
+	}
+}
+
+#plotter or plotbacker failed to start rumours, backlash
+letter_event = {
+	id = EKplots.40
+	desc = EKplots.40_desc
+	border = GFX_event_letter_frame_intrigue
+
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	option = {
+		name = EKplots.40_OPT
+		add_character_modifier = {
+			name = rumored_tried_starting_rumours
+			months = 120
+		}
+	}
+}
+
+#pinging
+#plot_target is someone's lover, they break up 
+character_event = {
+	id = EKplots.41
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { is_lover = no }
+		has_character_modifier = bad_rumours
+		is_lover = yes
+		is_alive = yes
+		has_lover = yes
+	}
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 2
+			trait = genius
+		}
+		modifier = {
+			factor = 1.5
+			trait = strong
+		}
+		modifier = {
+			factor = 1.5
+			trait = quick
+		}
+		modifier = {
+			factor = 5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				opinion = {
+					value = 100
+					who = ROOT
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				opinion = {
+					value = 50
+					who = ROOT
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = paranoid
+			}
+		}
+		modifier = {
+			factor = 0.75
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = cruel
+			}
+		}
+		modifier = {
+			factor = 4
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = trusting
+			}
+		}
+		modifier = {
+			factor = 3
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = slow
+			}
+		}
+		modifier = {
+			factor = 5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = imbecile
+			}
+		}
+		modifier = {
+			factor = 5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = infirm
+			}
+		}
+		modifier = {
+			factor = 10
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = incapable
+			}
+		}
+		modifier = {
+			factor = 4
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = lustful
+			}
+			trait = fair
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = kind
+			}
+		}
+	}
+	
+	immediate = {
+		any_lover = {
+			character_event = { id = EKplots.42 days = 1}
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+
+
+character_event = {
+	id = EKplots.42
+	hide_window = yes
+
+	is_triggered_only = yes
+	option = {
+		name = OK
+		FROM = { character_event = { id = EKplots.37 days = 1 } }
+	}
+}
+
+character_event = {
+	id = EKplots.43
+	hide_window = yes
+	
+	#pre triggers
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_character_modifier = bad_rumours
+		is_consort = yes
+		is_main_spouse = no
+		any_realm_character = { 
+			ROOT = { is_consort = THIS }
+			is_ruler = yes
+		}
+	}
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 2
+			trait = genius
+		}
+		modifier = {
+			factor = 1.5
+			trait = strong
+		}
+		modifier = {
+			factor = 1.5
+			trait = quick
+		}
+		modifier = {
+			factor = 5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				opinion = {
+					value = 100
+					who = ROOT
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				opinion = {
+					value = 50
+					who = ROOT
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = paranoid
+			}
+		}
+		modifier = {
+			factor = 0.75
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = cruel
+			}
+		}
+		modifier = {
+			factor = 4
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = trusting
+			}
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = slow
+			}
+		}
+		modifier = {
+			factor = 3
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = imbecile
+			}
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = infirm
+			}
+		}
+		modifier = {
+			factor = 4
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = incapable
+			}
+		}
+		modifier = {
+			factor = 4
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = lustful
+			}
+			trait = fair
+		}
+		modifier = {
+			factor = 2
+			any_realm_character = { 
+				is_liege_of = ROOT
+				trait = kind
+			}
+		}
+	}
+	
+	immediate = {
+		any_realm_character = {
+			if = {
+				limit = {
+					is_consort = ROOT
+				}
+			}
+			character_event = { id = EKplots.44 days = 1 }
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+character_event = {
+	id = EKplots.44
+	hide_window = yes
+
+	is_triggered_only = yes
+	option = {
+		name = OK
+		FROM = { character_event = { id = EKplots.38 days = 1 } }
+	}
+}
+
+##############################################################
+#plot target finds out about the plot
+##############################################################
+#custom discovery event
+
+#plot target discovers plot
+character_event = { 
+	id = EKplots.50
+	hide_window = yes
+	
+	#pre-triggers
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		OR = {
+			has_plot = plot_fabricate_evidence
+			has_plot = plot_slander
+		}
+		NOT = { has_character_flag = EKplot_discovered }
+		num_of_plot_backers = 1
+	}
+	
+	immediate = {
+		ROOT = { save_event_target_as = target_plotter }
+		set_character_flag = EKplot_discovered
+		plot_target_char = {
+			reveal_plot = event_target:target_plotter
+			opinion = {
+				modifier = scheming_bastard
+				who = event_target:target_plotter
+				years = 10			
+			}
+		}
+	}
+	
+	mean_time_to_happen = { 
+		months = 120 
+		modifier = { #plot target's spymaster doing his job
+			factor = 0.5
+			plot_target_char = {
+				any_realm_character = {
+					plot_target_char = { is_liege_of = PREV }
+					has_job_title = job_spymaster
+					has_job_action = action_uncover_plots
+				}
+			}
+		}
+		modifier = { #plot target's spymaster is backing our plots
+			factor = 10
+			ROOT = {
+				any_plot_backer = { 
+					liege = { is_plot_target_of = PREVPREV }
+					has_job_title = job_spymaster
+				}
+			}
+		}
+		#plot target's intrigue
+		modifier = {
+			factor = 0.9
+			plot_target_char = { 
+				intrigue = 15
+			}
+		}
+		modifier = {
+			factor = 0.9
+			plot_target_char = { 
+				intrigue = 16
+			}
+		}
+		modifier = {
+			factor = 0.9
+			plot_target_char = { 
+				intrigue = 17
+			}
+		}
+		modifier = {
+			factor = 0.9
+			plot_target_char = { 
+				intrigue = 18
+			}
+		}
+		modifier = {
+			factor = 0.9
+			plot_target_char = { 
+				intrigue = 19
+			}
+		}
+		modifier = {
+			factor = 0.9
+			plot_target_char = { 
+				intrigue = 20
+			}
+		}
+		#plotbacker has bad traits/intrigue
+		modifier = {
+			factor = 0.95
+			ROOT = {
+				any_plot_backer = {
+					trait = honest
+				}
+			}
+		}
+		modifier = {
+			factor = 0.95
+			ROOT = {
+				any_plot_backer = {
+					trait = drunkard
+				}
+			}
+		}
+		modifier = {
+			factor = 0.98
+			ROOT = {
+				any_plot_backer = {
+					NOT = { intrigue = 0 }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.98
+			ROOT = {
+				any_plot_backer = {
+					intrigue = 1
+				}
+			}
+		}
+		modifier = {
+			factor = 0.98
+			ROOT = {
+				any_plot_backer = {
+					intrigue = 2
+				}
+			}
+		}
+		modifier = {
+			factor = 0.98
+			ROOT = {
+				any_plot_backer = {
+					intrigue = 3
+				}
+			}
+		}
+		modifier = {
+			factor = 0.98
+			ROOT = {
+				any_plot_backer = {
+					intrigue = 4
+				}
+			}
+		}
+		modifier = {
+			factor = 0.98
+			ROOT = {
+				any_plot_backer = {
+					intrigue = 5
+				}
+			}
+		}
+		modifier = {
+			factor = 0.98
+			ROOT = {
+				any_plot_backer = {
+					intrigue = 6
+				}
+			}
+		}
+	}
+	option = {
+		name = OK
+		plot_target_char = { letter_event = { id = EKplots.51 days = 3 } }
+	}
+	
+}
+
+letter_event = { 
+	id = EKplots.51
+	desc = EKplots.51_desc
+	border = GFX_event_letter_frame_intrigue
+
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	option = { #for treason plot
+		trigger = {
+			event_target:target_plotter = {
+				has_plot = plot_fabricate_evidence
+			}
+		}
+		name = EKplots.51_OPTA #sends letter to liege and plotter
+		hidden_tooltip = {
+			event_target:target_plotter = { 
+				liege = { letter_event = { id = EKplots.52 days = 3 } }
+				letter_event = { id = EKplots.53 days = 3 } 
+			}
+		}
+	}
+	option = { #for slander
+		trigger = {
+			event_target:target_plotter = {
+				has_plot = plot_slander
+			}
+		}
+		name = EKplots.51_OPTB #sends letter to the plotter
+		plot_target_char = { 
+			add_rival = event_target:target_plotter
+			opinion = {
+				modifier = opinion_slandered
+				who = event_target:target_plotter
+			}
+		}
+		hidden_tooltip = {
+			set_character_flag = known_smear_campaign
+			event_target:target_plotter = { letter_event = { id = EKplots.54 days = 1 } }
+		}
+	}
+}
+
+#liege informed of the fabricate treason plot
+letter_event = { 
+	id = EKplots.52
+	desc = EKplots.52_desc
+	border = GFX_event_letter_frame_intrigue
+
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EKplots.52_OPT #liege informed of plot
+		hidden_tooltip = {
+			reveal_plot = event_target:target_plotter
+		}
+		opinion = {
+			modifier = opinion_dishonorable
+			who = event_target:target_plotter
+			years = 5			
+		}
+	}
+}
+
+#plotter informed that plot target and liege knows about the plot 
+letter_event = { 
+	id = EKplots.53
+	desc = EKplots.53_desc 
+	border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EKplots.53_OPT 
+		hidden_tooltip = {
+			cancel_plot = plot_fabricate_evidence #cancel plot, no point in trying anymore
+			clr_character_flag = EKplot_discovered
+		}
+	}
+}
+
+#SLANDER
+#plot target announces rivalry to plotter
+letter_event = {
+	id = EKplots.54
+	desc = EKplots.54_desc	
+	border = GFX_event_letter_frame_intrigue
+	
+	capable_only = yes
+	prisoner = no
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EKplots.54_OPT 
+		hidden_tooltip = {
+			cancel_plot = plot_slander
+			clr_character_flag = EKplot_discovered
+			FROM = { clr_character_flag = known_smear_campaign }
+		}
+	}
+}
+
+###Kidnap Plot
+#Optimized in accordance with vanilla plot_events
+#Now includes vanilla-style MTTH and modifiers
+
+#Plot Backer ~ Kidnap attempt in transit
+
+character_event = {
+	id = EKplots.80
+	desc = EKPlots80
+	picture = GFX_evt_carriage
+
+	capable_only = yes
+	prisoner = no
+	is_part_of_plot = yes
+	
+	trigger = {
+		has_plot = plot_kidnap
+		plot_target_char = {
+			prisoner = no
+			NOT = { trait = incapable }
+			NOT = { is_inaccessible_trigger = yes }
+		}
+		OR = {
+			NOT = { has_character_flag = kidnap_in_progress }
+			had_character_flag = { flag = kidnap_in_progress days = 100 }
+		}
+		plot_power_contribution = 
+		{
+			plotter = ROOT
+			power = 0.025
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 4200
+		
+		modifier = {
+			factor = 0.01
+			has_character_flag = evdebugkidnap
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.10
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.20
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.30
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.40
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.50
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.60
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.70
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.80
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 0.90
+			}
+		}
+		modifier = {
+			factor = 0.7
+			plot_power_contribution = 
+			{
+				plotter = ROOT
+				power = 1.5
+			}
+		}
+		
+		modifier = {
+			factor = 0.33
+			any_backed_character = {
+				has_plot = plot_kidnap
+				plot_power = 1.0
+			}
+		}
+		modifier = {
+			factor = 0.33
+			any_backed_character = {
+				has_plot = plot_kidnap
+				plot_power = 1.5
+			}
+		}
+		modifier = {
+			factor = 0.33
+			any_backed_character = {
+				has_plot = plot_kidnap
+				plot_power = 2.0
+			}
+		}
+	}
+	
+	immediate = {
+		plot_target_char = { save_event_target_as = plot_target }
+	}
+	
+	option = {
+		name = EKPlots80Accept
+		set_character_flag = kidnap_in_progress
+		hidden_tooltip = {
+			if = {
+				limit = {
+					plot_power = 0.5
+					NOT = { plot_power = 1 }
+				}
+				event_target:plot_target = {
+					random_list = {
+						20 = {  #succeeds
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 1 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 2 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 3 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 4 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 5 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 6 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 7 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 8 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 9 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 10 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 11 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 12 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 13 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 14 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 15 }
+							}
+							character_event = { id = EKplots.83 tooltip = kplot2tt1 days = 14 }
+						}
+						30 = { #fails, not discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.84 tooltip = kplot2tt2 days = 14 }
+						}
+						50 = { #fails, discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.85 tooltip = kplot2tt3  days = 14 } 
+						}
+					}
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					plot_power = 1
+					NOT = { plot_power = 1.5 }
+				}
+				event_target:plot_target = {
+					random_list = {
+						33 = {  #succeeds
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 1 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 2 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 3 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 4 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 5 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 6 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 7 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 8 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 9 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 10 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 11 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 12 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 13 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 14 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 15 }
+							}
+							character_event = { id = EKplots.83 tooltip = kplot2tt1 days = 14 }
+						}
+						33 = { #fails, not discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.84 tooltip = kplot2tt2 days = 14 }
+						}
+						34 = { #fails, discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.85 tooltip = kplot2tt3  days = 14 } 
+						}
+					}
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					plot_power = 1.5
+					NOT = { plot_power = 2 }
+				}
+				event_target:plot_target = {
+					random_list = {
+						45 = {  #succeeds
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 1 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 2 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 3 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 4 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 5 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 6 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 7 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 8 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 9 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 10 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 11 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 12 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 13 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 14 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 15 }
+							}
+							character_event = { id = EKplots.83 tooltip = kplot2tt1 days = 14 }
+						}
+						30 = { #fails, not discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.84 tooltip = kplot2tt2 days = 14 }
+						}
+						25 = { #fails, discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.85 tooltip = kplot2tt3  days = 14 } 
+						}
+					}
+				}
+				break = yes
+			}
+			if = {
+				limit = {
+					plot_power = 2
+					NOT = { plot_power = 2.5 }
+				}
+				event_target:plot_target = {
+					random_list = {
+						60 = {  #succeeds
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 1 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 2 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 3 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 4 }
+							}
+							modifier = {
+								factor = 1.25
+								NOT = { intrigue = 5 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 6 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 7 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 8 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 9 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 10 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 11 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 12 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 13 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 14 }
+							}
+							modifier = {
+								factor = 1.1
+								NOT = { intrigue = 15 }
+							}
+							character_event = { id = EKplots.83 tooltip = kplot2tt1 days = 14 }
+						}
+						23 = { #fails, not discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.84 tooltip = kplot2tt2 days = 14 }
+						}
+						17 = { #fails, discovered
+							modifier = {
+								factor = 1.1
+								combat_rating = 4
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 8
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 12
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 16
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 20
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 24
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 28
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 32
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 36
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 40
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 44
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 48
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 52
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 56
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 60
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 64
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 68
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 72
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 76
+							}
+							modifier = {
+								factor = 1.1
+								combat_rating = 80
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 84
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 88
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 92
+							}
+							modifier = {
+								factor = 2.5
+								combat_rating = 96
+							}
+							modifier = {
+								factor = 5
+								combat_rating = 100
+							}
+							modifier = {
+								factor = 10
+								combat_rating = 104
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 108
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 112
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 116
+							}
+							modifier = {
+								factor = 20
+								combat_rating = 120
+							}
+							character_event = { id = EKplots.85 tooltip = kplot2tt3  days = 14 } 
+						}
+					}
+				}
+				break = yes
+			}
+			if = {
+			limit = {
+				plot_power = 2.5
+			}
+			event_target:plot_target = {
+				random_list = {
+					76 = {  #succeeds
+						modifier = {
+							factor = 1.25
+							NOT = { intrigue = 1 }
+						}
+						modifier = {
+							factor = 1.25
+							NOT = { intrigue = 2 }
+						}
+						modifier = {
+							factor = 1.25
+							NOT = { intrigue = 3 }
+						}
+						modifier = {
+							factor = 1.25
+							NOT = { intrigue = 4 }
+						}
+						modifier = {
+							factor = 1.25
+							NOT = { intrigue = 5 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 6 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 7 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 8 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 9 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 10 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 11 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 12 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 13 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 14 }
+						}
+						modifier = {
+							factor = 1.1
+							NOT = { intrigue = 15 }
+						}
+						character_event = { id = EKplots.83 tooltip = kplot2tt1 days = 14 }
+					}
+					14 = { #fails, not discovered
+						modifier = {
+							factor = 1.1
+							combat_rating = 4
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 8
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 12
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 16
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 20
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 24
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 28
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 32
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 36
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 40
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 44
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 48
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 52
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 56
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 60
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 64
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 68
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 72
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 76
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 80
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 84
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 88
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 92
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 96
+						}
+						modifier = {
+							factor = 5
+							combat_rating = 100
+						}
+						modifier = {
+							factor = 10
+							combat_rating = 104
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 108
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 112
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 116
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 120
+						}
+						character_event = { id = EKplots.84 tooltip = kplot2tt2 days = 14 }
+					}
+					10 = { #fails, discovered
+						modifier = {
+							factor = 1.1
+							combat_rating = 4
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 8
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 12
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 16
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 20
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 24
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 28
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 32
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 36
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 40
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 44
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 48
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 52
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 56
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 60
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 64
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 68
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 72
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 76
+						}
+						modifier = {
+							factor = 1.1
+							combat_rating = 80
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 84
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 88
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 92
+						}
+						modifier = {
+							factor = 2.5
+							combat_rating = 96
+						}
+						modifier = {
+							factor = 5
+							combat_rating = 100
+						}
+						modifier = {
+							factor = 10
+							combat_rating = 104
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 108
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 112
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 116
+						}
+						modifier = {
+							factor = 20
+							combat_rating = 120
+						}
+						character_event = { id = EKplots.85 tooltip = kplot2tt3  days = 14 } 
+					}
+				}
+			}
+			break = yes
+		}
+		}
+	}
+}
+character_event = {
+	id = EKplots.83
+	desc = EKPlots83
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		prisoner = no
+		
+		# Is the plot still in motion?
+		FROM = {
+			has_plot = plot_kidnap
+			plot_target_char = {
+				character = ROOT
+			}
+		}
+	}
+	
+	option = {
+		name = EKPlots83Accept
+		imprison = FROM
+		FROM = { character_event = { id = EKplots.86 } }
+		opinion = {
+			who = FROM
+			modifier = opinion_kidnapped_me
+			months = 3600
+		}
+		any_spouse = {
+			limit = {
+				opinion = {
+					who = ROOT
+					value = 10
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_kidnapped_family
+				months = 360
+			}
+		}
+		any_dynasty_member = {
+			limit = {
+				is_close_relative = ROOT
+				opinion = {
+					who = ROOT
+					value = 15
+				}
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_kidnapped_family
+				months = 288
+			}
+		}
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = kidnap_timer
+				duration = 2555
+				hidden = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = EKplots.84
+	desc = EKPlots84
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EKPlots84Accept
+		FROM = { character_event = { id = EKplots.87 } }
+	}
+}
+character_event = {
+	id = EKplots.85
+	desc = EKPlots85
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EKPlots85Accept
+		FROM = { character_event = { id = EKplots.88 } }
+		opinion = {
+			who = FROM
+			modifier = opinion_attempted_kidnap
+			months = 360
+		}
+	}
+}
+character_event = { #Success
+	id = EKplots.86
+	desc = EKPlots86
+	picture = GFX_evt_carriage
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		clr_character_flag = kidnap_in_progress
+	}
+}
+character_event = { #Fail - Undiscovered
+	id = EKplots.87
+	desc = EKPlots87
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		clr_character_flag = kidnap_in_progress
+	}
+}
+character_event = { #Fail - Discovered
+	id = EKplots.88
+	desc = kplot8d
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kplot8o
+		clr_character_flag = kidnap_in_progress
+		cancel_plot = plot_kidnap
+		prestige = -25
+		if = {
+			limit = {
+				NOT = { FROM = { employer = { character = ROOT } } }
+			}
+			FROM = {
+				employer = {
+					opinion = {
+						who = ROOT
+						modifier =  opinion_attempted_kidnap
+						months = 60
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { FROM = { liege = { character = FROM } } }
+				NOT = { FROM = { liege = { character = ROOT } } }
+				NOT = { FROM = { liege = { employer = { character = FROM } } } }
+				NOT = { FROM = { liege = { employer = { character = ROOT } } } }
+			}
+			FROM = {
+				liege = {
+					opinion = {
+						who = ROOT
+						modifier =  opinion_attempted_kidnap
+						months = 60
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# Ultimatum - confirmation
+
+letter_event = {
+	id = EKplots.100
+	desc = "EKPlots100Desc"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { in_faction = faction_succ_feudal_confirmation }
+	}
+	
+	immediate = {
+		FROM = { 
+			diplomatic_immunity = yes 
+			any_faction_backer = {
+				faction = faction_succ_feudal_confirmation
+				diplomatic_immunity = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA8000"
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0			
+				NOT = {
+					FROM = {
+						faction_power = 
+						{
+							faction = faction_succ_feudal_confirmation
+							power = 0.5
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				is_weak_trigger = yes
+			}
+			modifier = {
+				factor = 1.25
+				trait = craven
+			}
+			modifier = {
+				factor = 1.25
+				trait = humble
+			}
+			modifier = {
+				factor = 1.25
+				trait = kind
+			}
+			modifier = {
+				factor = 1.25
+				trait = charitable
+			}
+			modifier = {
+				factor = 1.25
+				trait = patient
+			}
+			modifier = {
+				factor = 1.25
+				trait = content
+			}
+		}
+		
+		hidden_tooltip = {
+			any_vassal = {
+				limit = {
+					ai = no
+					NOT = { in_faction = faction_succ_feudal_confirmation }
+				}
+				character_event = { id = EKplots.110 }
+			}
+			FROM = {
+				letter_event = { id = EKplots.102 }
+				any_faction_backer = {
+					faction = faction_succ_feudal_confirmation
+					letter_event = { id = EKplots.105 }
+					diplomatic_immunity = no
+				}
+				diplomatic_immunity = no
+			}
+		}
+		FROM = {
+			faction_succ_feudal_confirmation = { # The target (title) of the faction
+				succession = succ_feudal_confirmation
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB8000"
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 1.25
+				is_strong_trigger = yes
+			}
+			modifier = {
+				factor = 1.25
+				trait = brave
+			}
+			modifier = {
+				factor = 1.25
+				trait = proud
+			}
+			modifier = {
+				factor = 1.25
+				trait = envious
+			}
+			modifier = {
+				factor = 1.25
+				trait = greedy
+			}
+			modifier = {
+				factor = 1.25
+				trait = wroth
+			}
+			modifier = {
+				factor = 1.25
+				trait = ambitious
+			}		
+			modifier = {
+				factor = 0.75
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_feudal_confirmation
+						power = 1.5
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_feudal_confirmation
+						power = 1.0
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_feudal_confirmation
+						power = 2.0
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_feudal_confirmation
+						power = 3.0
+					}
+				}
+			}	
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_feudal_confirmation
+						power = 4.0
+					}
+				}
+			}	
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					FROM = { faction_power = { faction = faction_succ_feudal_confirmation power = 1.0 } }
+				}
+				random = {
+					chance = 25
+					character_event = { id = 45002 days = 120 } # Loyalists flock to the liege's banner
+				}
+			}
+		}
+		
+		FROM = {
+			letter_event = { id = EKplots.115 days = 3 tooltip = "EVTTOOLTIP8100" }
+			tooltip = {
+				any_faction_backer = {
+					faction = faction_succ_feudal_confirmation
+				}
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						NOT = { faction_power = { faction = faction_succ_feudal_confirmation power = 0.75 } }
+					}
+					random_list = {
+						50 = {
+						}
+						30 = {
+							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+						}
+						20 = {
+							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+						}
+					}
+				}
+				if = {
+					limit = {
+						faction_power = { faction = faction_succ_feudal_confirmation power = 0.75 }
+						NOT = { faction_power = { faction = faction_succ_feudal_confirmation power = 1.5 } }
+					}
+					random_list = {
+						75 = {
+						}
+						5 = {
+							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+						}
+						20 = {
+							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Demand accepted - feudal confirmation
+letter_event = {
+	id = EKplots.102
+	desc = "EKPlots102Desc"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EXCELLENT"
+		clr_character_flag = faction_succ_feudal_confirmation_ultimatum_taken
+		add_character_modifier = {
+			name = faction_succ_feudal_confirmation_ultimatum_timer
+			hidden = yes
+			duration = 3650
+		}
+	}
+}
+
+# Inform faction backer - feudal confirmation
+letter_event = {
+	id = EKplots.105
+	desc = "EKPlots105Desc"
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "GOOD"
+		reverse_opinion = {
+			modifier = opinion_grateful
+			who = FROMFROM
+			years = 5
+		}
+		
+		add_character_modifier = {
+			name = faction_succ_feudal_confirmation_ultimatum_timer
+			hidden = yes
+			duration = 3650
+		}
+	}
+}
+
+# Inform other vassals - feudal confirmation
+character_event = {
+	id = EKplots.110
+	desc = EKPlots110Desc
+	
+	notification = yes
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_intrigue
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "I_SEE"
+	}
+}
+
+# Demand rejected - feudal confirmation
+letter_event = {
+	id = EKplots.115
+	desc = "EKPlots115Desc"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8100"
+		
+		clr_character_flag = faction_succ_feudal_confirmation_ultimatum_taken
+		
+		faction_succ_feudal_confirmation = { # The target (title) of the faction
+			reverse_war = {
+				target = ROOT
+				casus_belli = change_feudal_confirmation_succession_law
+				faction = faction_succ_feudal_confirmation
+			}
+		}
+	}
+}

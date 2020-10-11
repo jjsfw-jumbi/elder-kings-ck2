@@ -1,0 +1,1305 @@
+obj_obtain_artifact = {
+	type = character
+	
+	potential = {
+		is_adult = yes
+		num_of_artifacts < 1
+		NOT = { trait = content }
+		NOT = { has_character_flag = artifact_ambition }
+	}
+	allow = {
+		scaled_wealth = 1
+		NOT = { trait = incapable }
+	}
+	chance = {
+		factor = 90
+		
+		modifier = {
+			factor = 3
+			trait = envious
+		}
+		modifier = {
+			factor = 3
+			trait = greedy
+		}
+		modifier = {
+			factor = 2
+			trait = vain
+		}
+		modifier = {
+			factor = 2
+			trait = adventurer
+		}
+		modifier = {
+			factor = 2
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			trait = humble
+		}
+		modifier = {
+			factor = 0.75
+			trait = temperate
+		}
+		modifier = {
+			factor = 1.25
+			trait = ruthless
+		}
+		modifier = {
+			factor = 0.75
+			trait = blind
+		}
+		modifier = {
+			factor = 1.5
+			is_magistrate = yes
+		}
+		modifier = {
+			factor = 0.25
+			tier = EMPEROR
+		}
+		modifier = {
+			factor = 0.5
+			tier = KING
+		}
+	}
+	
+	success = {
+		custom_tooltip = {
+			text = plot_artifact_tt
+			num_of_artifacts > 1
+		}
+	}
+	
+	abort = {
+		OR = {
+			trait = incapable
+			trait = content
+		}
+	}
+	
+	abort_effect = {
+		prestige = -25
+	}
+	
+	effect = {
+		prestige = 100
+		set_character_flag = artifact_ambition
+		hidden_tooltip = {
+			location = {
+				any_province_character = {
+					limit = {
+						trait = envious
+					}
+					opinion = {
+						who = ROOT
+						modifier = opinion_envy
+						months = 36
+					}
+				}
+				random = {
+					chance = 33
+					random_province_character = {
+						limit = {
+							NOT = { trait = envious }
+							NOT = { trait = humble }
+						}
+						opinion = {
+							who = ROOT
+							modifier = opinion_envy
+							months = 36
+						}
+					}
+				}
+			}
+		}
+	}
+}
+obj_obtain_amulet = {
+	type = character
+	
+	potential = {
+		ai = no
+		is_adult = yes
+		NOT = { has_artifact = amulet_of_kings }
+		NOT = { has_global_flag = amulet_of_kings_active }
+		OR = {
+			tier = EMPEROR
+			has_landed_title = k_cyrodiil
+			has_landed_title = k_skyrim
+			has_landed_title = k_valenwood
+			has_landed_title = k_highrock
+			has_landed_title = k_elsweyr
+			has_landed_title = k_morrowind
+			has_landed_title = k_summerset
+			has_landed_title = k_argonia
+			has_landed_title = k_hammerfell
+		}
+		NOT = { e_tamriel = { has_holder = yes } }
+		OR = {
+			religion = eight_divines
+			religion = nine_divines
+			religion = alikr
+		}
+	}
+	allow = {
+		higher_real_tier_than = COUNT
+		NOT = { trait = infirm }
+		NOT = { trait = incapable }
+		NOT = { trait = slothful }
+		OR = {
+			is_dragonblood = yes
+			trait = ambitious
+			trait = envious
+			trait = ruthless
+		}
+		prestige = 500
+	}
+	chance = {
+		factor = 90
+		
+		modifier = {
+			factor = 3
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2
+			trait = ruthless
+		}
+		modifier = {
+			factor = 3
+			trait = envious
+		}
+		modifier = {
+			factor = 2
+			trait = brave
+		}
+		modifier = {
+			factor = 2
+			trait = vain
+		}
+		modifier = {
+			factor = 3
+			trait = dragonborn
+		}
+		modifier = {
+			factor = 3
+			trait = hero
+		}
+		modifier = {
+			factor = 2
+			is_dragonblood = yes
+			NOT = { trait = dragonborn }
+		}
+		modifier = {
+			factor = 0.01
+			trait = lich
+		}
+		modifier = {
+			factor = 3
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.5
+			trait = blinded
+		}
+		modifier = {
+			factor = 0.5
+			trait = blind
+		}
+		modifier = {
+			factor = 0.5
+			trait = blind_moth
+		}
+		modifier = {
+			factor = 0.1
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 2
+			trait = patient
+		}
+		modifier = {
+			factor = 0.75
+			trait = sickly
+		}
+		modifier = {
+			factor = 1.25
+			trait = strong
+		}
+		modifier = {
+			factor = 0.5
+			trait = imbecile
+		}
+		modifier = {
+			factor = 0.75
+			trait = slow
+		}
+		modifier = {
+			factor = 0.9
+			trait = clubfooted
+		}
+		modifier = {
+			factor = 0.5
+			trait = inbred
+		}
+		modifier = {
+			factor = 2
+			trait = proud
+		}
+		modifier = {
+			factor = 0.75
+			trait = shy
+		}
+		modifier = {
+			factor = 0.8
+			trait = slovenly
+		}
+		modifier = {
+			factor = 0.5
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.1
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 1.5
+			tier = KING
+		}
+		modifier = {
+			factor = 2
+			tier = EMPEROR
+		}
+		modifier = {
+			factor = 2
+			has_landed_title = c_imperialisle
+		}
+	}
+	
+	success = {
+		has_artifact = amulet_of_kings
+	}
+	
+	abort = {
+		OR = {
+			trait = incapable
+			trait = slothful
+		}
+		NOT = { religion = eight_divines }
+		NOT = { religion = nine_divines }
+		NOT = { religion = alikr }
+		NOT = { trait = ambitious }
+		NOT = { trait = envious }
+		NOT = { trait = ruthless }
+	}
+	
+	abort_effect = {
+		prestige = -250
+	}
+	
+	effect = {
+		prestige = 500
+		e_tamriel = { add_claim = ROOT }
+		any_vassal = {
+			limit = {
+				NOT = { trait = envious }
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_amulet_found
+				months = 72
+			}
+		}
+		hidden_tooltip = {
+			any_vassal = {
+				limit = {
+					trait = envious
+				}
+				opinion = {
+					who = ROOT
+					modifier = opinion_envy
+					months = 72
+				}
+			}
+		}
+	}
+}
+obj_warlord = {
+	type = character
+
+	can_cancel = no
+
+	potential = {
+		is_adult = yes
+		is_playable = yes
+		is_landed = yes
+		independent = yes
+		higher_tier_than = COUNT
+		OR = {
+			lower_tier_than = EMPEROR
+			has_landed_title = e_tamriel
+			# Heroes and Dragonborns should still be able to use it
+			trait = hero
+			trait = dragonborn
+		}
+		#NOT = {
+		#	any_heir_title = {
+		#		higher_tier_than = KING
+		#	}
+		#}
+		NOT = { trait = warlord }
+		NOT = { trait = mane }
+	}
+	
+	allow = {
+		#Traits that prohibit you from becoming a Warlord
+		NOT = { trait = incapable }
+		NOT = { trait = greybeard }
+		
+		NOT = { trait = content }
+		NOT = { trait = craven }
+		NOT = { trait = humble }
+		NOT = { trait = kind }
+		NOT = { trait = slothful }
+		
+		#Age Restriction for Warlords, Depending on Culture  (Essentially Race)
+		OR = {
+			NOT = { age = 70 }			
+			AND = {
+				NOT = { age = 200 }
+				is_immortal = no
+				is_long_lived = yes
+			}
+			AND = {
+				NOT = { age = 500 }
+				is_immortal = yes
+			}
+		}
+		#Undead may never become Warlords
+		NOT = { culture_group = undead }
+		
+		prestige = 500
+	}
+	
+	chance = {
+		factor = 90
+		
+		modifier = {
+			factor = 5
+			has_character_flag = demon_child_non_pagan
+		}
+		modifier = {
+			factor = 4
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2.5
+			OR = {
+				culture = kamal
+				culture = orsimer
+			}
+		}
+		modifier = {
+			factor = 2
+			culture_group = nedic
+		}
+		modifier = {
+			factor = 1.5
+			culture_group = yokudan_group
+		}
+		modifier = {
+			factor = 3
+			trait = ruthless
+		}
+		modifier = {
+			factor = 1.5
+			trait = wroth
+		}
+		modifier = {
+			factor = 2
+			trait = envious
+		}
+		modifier = {
+			factor = 1.5
+			trait = greedy
+		}
+		modifier = {
+			factor = 2
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = quey
+		}
+		modifier = {
+			factor = 5
+			trait = dragonborn
+		}
+		modifier = {
+			factor = 3
+			trait = hero
+		}
+		modifier = {
+			factor = 3
+			is_dragonblood = yes
+			NOT = { trait = dragonborn }
+		}
+		modifier = {
+			factor = 2
+			trait = lich
+		}
+		modifier = {
+			factor = 2
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.0
+			trait = blinded
+		}
+		modifier = {
+			factor = 0.1
+			trait = blind
+		}
+		modifier = {
+			factor = 0.1
+			trait = blind_moth
+		}
+		modifier = {
+			factor = 0.1
+			trait = mute
+		}
+		modifier = {
+			factor = 0.1
+			trait = deaf
+		}
+		modifier = {
+			factor = 0.1
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.5
+			trait = patient
+		}
+		modifier = {
+			factor = 0.5
+			trait = weak
+		}
+		modifier = {
+			factor = 0.25
+			trait = sickly
+		}
+		modifier = {
+			factor = 1.25
+			trait = strong
+		}
+		modifier = {
+			factor = 0.5
+			trait = imbecile
+		}
+		modifier = {
+			factor = 0.75
+			trait = slow
+		}
+		modifier = {
+			factor = 1.25
+			trait = powerful_voice
+		}
+		modifier = {
+			factor = 0.8
+			trait = clubfooted
+		}
+		modifier = {
+			factor = 0.7
+			trait = harelip
+		}
+		modifier = {
+			factor = 0.9
+			trait = stutter
+		}
+		modifier = {
+			factor = 0.9
+			trait = lisp
+		}
+		modifier = {
+			factor = 0.5
+			trait = hunchback
+		}
+		modifier = {
+			factor = 0.5
+			trait = dwarf
+		}
+		modifier = {
+			factor = 0.5
+			trait = inbred
+		}
+		modifier = {
+			factor = 0.75
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.75
+			trait = charitable
+		}
+		modifier = {
+			factor = 2
+			trait = proud
+		}
+		modifier = {
+			factor = 0.8
+			trait = just
+		}
+		modifier = {
+			factor = 0.75
+			trait = shy
+		}
+		modifier = {
+			factor = 0.8
+			trait = temperate
+		}
+		modifier = {
+			factor = 0.8
+			trait = chaste
+		}
+		modifier = {
+			factor = 0.75
+			trait = kind
+		}
+		modifier = {
+			factor = 0.8
+			trait = slovenly
+		}
+		modifier = {
+			factor = 0.5
+			trait = humble
+		}
+		modifier = {
+			factor = 0.5
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.1
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 0.5
+			tier = KING
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { year = 3800 }
+		}
+		modifier = {
+			factor = 0.5
+			year = 3830
+		}
+		modifier = {
+			factor = 0.75
+			e_tamriel = { has_holder = yes }
+		}
+		modifier = {
+			factor = 2
+			e_tamriel = {
+				holder_scope = {
+					OR = {
+						NOT = { age = 17 }
+						trait = incapable
+						trait = infirm
+						trait = inbred
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			top_liege = {
+				tier = emperor
+				NOT = { has_landed_title = e_tamriel }
+			}
+		}
+	}
+	
+	abort = {
+		OR = {
+			trait = incapable
+			trait = greybeard
+			is_playable = no
+			independent = no
+			AND = {
+				higher_tier_than = KING
+				NOT = { has_landed_title = e_tamriel }
+			}
+			#any_heir_title = {
+			#	higher_tier_than = KING
+			#}
+		}
+	}
+	
+	success = {
+		custom_tooltip = {
+			text = OBJ_WARLORD_SUCCESS_CT
+			
+			hidden_tooltip = {
+				has_character_flag = warlord_flg
+			}
+		}
+	}
+	
+	effect = {
+		add_trait = warlord
+	}
+}
+
+#Additional Objectives ESM Adaptation
+#obj_make_a_friend
+#obj_spouse_councillor
+#obj_become_regent
+#obj_lead_troops
+#plot_seduce_for_men
+#plot_seduce_liege
+
+obj_make_a_friend = {
+	type = character
+	
+	allow = {
+		prisoner = no
+		age = 5
+		NOT = { trait = incapable }
+		NOT = { trait = shy }
+		NOT = { trait = paranoid }
+		NOT = { trait = undead }
+		OR = {
+			AND = {
+				NOT = { age = 75 }
+				is_mer = no
+			}
+			AND = {
+				NOT = { age = 200 }
+				is_mer = yes
+			}
+			is_immortal = yes
+		}
+		NOT = { num_of_friends = 1 }
+	}
+	
+	chance = {
+		factor = 25
+		
+		modifier = {
+			factor = 4
+			trait = gregarious
+		}
+		modifier = {
+			factor = 3
+			trait = kind
+		}
+		modifier = {
+			factor = 2
+			trait = lustful
+		}
+		modifier = {
+			factor = 2
+			trait = hedonist
+		}
+		modifier = {
+			factor = 3.5
+			trait = trusting
+		}
+		modifier = {
+			factor = 1.5
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.75
+			trait = humble
+		}
+		modifier = {
+			factor = 1.25
+			trait = proud
+		}
+		modifier = {
+			factor = 2
+			trait = charitable
+		}
+		modifier = {
+			factor = 2
+			trait = drunkard
+		}
+		modifier = {
+			factor = 1.25
+			trait = patient
+		}
+		modifier = {
+			factor = 1.25
+			trait = brave
+		}
+		modifier = {
+			factor = 0.25
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.5
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 0.25
+			trait = ruthless
+		}
+		modifier = {
+			factor = 0.25
+			trait = wroth
+		}
+		modifier = {
+			factor = 0.1
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.75
+			OR = {
+				AND = {
+					age = 50
+					is_mer = no
+				}
+				AND = {
+					age = 125
+					is_mer = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				AND = {
+					age = 65
+					is_mer = no
+				}
+				AND = {
+					age = 150
+					is_mer = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 0.25
+			OR = {
+				AND = {
+					age = 80
+					is_mer = no
+				}
+				AND = {
+					age = 200
+					is_mer = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			age = 16
+			NOT = { age = 25 }
+		}
+		modifier = {
+			factor = 2
+			age = 12
+			NOT = { age = 16 }
+		}
+		modifier = {
+			factor = 3
+			NOT = { age = 12 }
+		}
+	}
+	
+	success = {
+		OR = {
+			any_courtier = {
+				is_friend = ROOT
+			}
+			liege = {
+				is_friend = ROOT
+			}
+			liege = {
+				any_courtier = {
+					is_friend = ROOT
+				}
+			}
+		}
+	}
+	
+	abort = {
+		OR = {
+			trait = incapable
+			trait = shy
+			trait = undead
+			AND = {
+				age = 200
+				is_mer = yes
+				is_immortal = no
+			}
+			AND = {
+				age = 85
+				is_mer = no
+				is_immortal = no
+			}				
+		}
+	}
+	
+	abort_effect = {
+	}
+	
+	effect = {
+		if = {
+			limit = { NOT = { has_character_flag = made_a_friend } }
+			change_diplomacy = 1
+		}
+		if = {
+			limit = { NOT = { trait = gregarious } }
+			random = {
+				chance = 10
+				add_trait = gregarious
+			}
+		}
+		set_character_flag = made_a_friend
+	}
+}
+
+obj_spouse_councillor = {
+	type = character
+	
+	allow = {
+		prisoner = no
+		age = 16
+		is_married = yes
+		independent = no
+		NOT = { trait = incapable }
+		spouse = { 
+			prisoner = no
+			age = 16
+			is_councillor = no
+			independent = no
+			NOT = { trait = incapable }
+			liege = {
+				NOT = { character = ROOT }
+			}
+		}
+	}
+	chance = {
+		factor = 25
+		
+		modifier = {
+			factor = 2.0
+			trait = ambitious
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = envious
+		}
+		
+		modifier = {
+			factor = 0.5
+			trait = content
+		}
+		
+		modifier = {
+			factor = 1.25
+			spouse = {
+				OR = {
+					trait = warrior_4
+					trait = mage_4
+					trait = diplomat_4
+					trait = magistrate_4
+					trait = agent_4
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 0.01
+			spouse = {
+				OR = {
+				trait = imbecile
+				trait = slow
+				}
+			}
+		}
+	}
+	
+	success = {
+		spouse = {
+			is_councillor = yes
+		}
+	}
+	
+	abort = {
+		OR = {
+			is_married = no
+			independent = yes
+			trait = incapable
+			spouse = {
+				independent = yes
+				trait = incapable
+			}
+		}
+	}
+	
+	abort_effect = {
+	}
+	
+	effect = {
+		prestige = 20
+		change_intrigue = 1
+	}
+}
+obj_become_regent = {
+	type = character
+	
+	allow = {
+		age = 21
+		prisoner = no
+		independent = no
+		NOT = { trait = incapable }
+		host = { character = liege }
+		NOT = { has_minor_title = title_regent }
+		liege = {
+			OR = {
+				NOT = { age = 15 }
+				prisoner = yes
+			    trait = incapable
+			}
+		}
+	}
+	chance = {
+		factor = 50
+		
+		modifier = {
+			factor = 2.0
+			trait = ambitious
+		}
+		
+		modifier = {
+			factor = 2.0
+			liege = {
+				dynasty = ROOT
+			}
+		}
+		modifier = {
+			factor = 3.0
+			OR = {
+				has_minor_title = title_ruler_consort
+				has_minor_title = title_queen_mother
+			}
+		}		
+		modifier = {
+			factor = 1.5
+			trait = diligent
+		}
+		
+		modifier = {
+			factor = 1.25
+			trait = greedy
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = envious
+		}
+		
+		modifier = {
+			factor = 0.25
+			trait = slothful
+		}
+		
+		modifier = {
+			factor = 0.25
+			trait = craven
+		}
+		
+		modifier = {
+			factor = 0.5
+			trait = shy
+		}
+		
+		modifier = {
+			factor = 0.01
+			trait = content
+		}
+		
+	}
+	success = {
+		has_minor_title = title_regent 
+	}
+	
+	abort = {
+		liege = {
+				age = 15
+				prisoner = no
+			    NOT = { trait = incapable }
+			}
+		}
+		
+	abort_effect = {
+	}
+	
+	effect = {
+		change_intrigue = 1
+		prestige = 25
+	}
+}
+obj_lead_troops = {
+	type = character
+	
+	allow = {
+		age = 16
+		NOT = { trait = craven }
+		NOT = { trait = incapable }
+		NOT = { trait = veteran_leader_1 }
+		NOT = { trait = veteran_leader_2 }
+		NOT = { trait = veteran_leader_3 }
+		NOT = { trait = veteran_leader_4 }
+		NOT = { trait = veteran_leader_5 }
+		NOT = { trait = maimed }
+		NOT = { trait = blinded }
+		NOT = { trait = infirm }
+		OR = {
+			trait = warrior_4
+			martial = 12
+		}
+	}
+	chance = {
+		factor = 25
+		
+		modifier = {
+			factor = 2.0
+			trait = zealous
+		}
+		modifier = {
+			factor = 3.0
+			trait = brave
+		}
+		modifier = {
+			factor = 4.0
+			trait = reckless
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2.0
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.5
+			war = no
+		}
+		modifier = {
+			factor = 0.25
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.01
+			is_councillor = yes
+		}
+		modifier = {
+			factor = 1.5
+			trait = warrior_1
+		}
+		modifier = {
+			factor = 2.0
+			trait = warrior_2
+		}
+		modifier = {
+			factor = 3.0
+			trait = warrior_3
+		}
+		modifier = {
+			factor = 5.0
+			trait = warrior_4
+		}
+		modifier = {
+			factor = 10.0
+			mercenary = yes
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = ambitious
+		}
+		
+		modifier = {
+			factor = 0.75
+			trait = deceitful
+		}
+		
+		modifier = {
+			factor = 0.75
+			trait = envious
+		}
+	}
+	
+	success = {
+		in_command = yes
+		OR = {
+			trait = veteran_leader_1
+			trait = veteran_leader_2
+			trait = veteran_leader_3
+			trait = veteran_leader_4
+			trait = veteran_leader_5
+		}
+	}
+	
+	abort = {
+		OR = {
+			trait = incapable
+			trait = craven 
+			trait = maimed
+			trait = blinded
+			trait = infirm
+		}
+	}
+	
+	abort_effect = {
+	}
+	
+	effect = {
+		prestige = 25
+		change_martial = 1
+	}
+}
+obj_become_great_general = {
+	type = character
+	
+	allow = {
+		age = 16
+		NOT = { trait = veteran_leader_5 }
+		OR = {
+			trait = veteran_leader_1
+			trait = veteran_leader_2
+			trait = veteran_leader_3
+			trait = veteran_leader_4
+		}
+		NOT = { trait = craven }
+		NOT = { trait = incapable }
+		NOT = { trait = maimed }
+		NOT = { trait = blinded }
+		NOT = { trait = infirm }
+		OR = {
+			trait = warrior_4
+			martial = 12
+		}
+	}
+	chance = {
+		factor = 25
+		
+		modifier = {
+			factor = 2.0
+			trait = zealous
+		}
+		modifier = {
+			factor = 3.0
+			trait = brave
+		}
+		modifier = {
+			factor = 4.0
+			trait = reckless
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2.0
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.5
+			war = no
+		}
+		modifier = {
+			factor = 0.25
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.01
+			is_councillor = yes
+		}
+		modifier = {
+			factor = 1.5
+			trait = warrior_1
+		}
+		modifier = {
+			factor = 2.0
+			trait = warrior_2
+		}
+		modifier = {
+			factor = 3.0
+			trait = warrior_3
+		}
+		modifier = {
+			factor = 5.0
+			trait = warrior_4
+		}
+		modifier = {
+			factor = 10.0
+			mercenary = yes
+		}
+		
+		modifier = {
+			factor = 1.5
+			trait = ambitious
+		}
+		
+		modifier = {
+			factor = 0.75
+			trait = deceitful
+		}
+		
+		modifier = {
+			factor = 0.75
+			trait = envious
+		}
+	}
+	
+	success = {
+		trait = veteran_leader_5
+	}
+	
+	abort = {
+		OR = {
+			trait = incapable
+			trait = craven 
+			trait = maimed
+			trait = blinded
+			trait = infirm
+		}
+	}
+	
+	abort_effect = {
+	}
+	
+	effect = {
+		prestige = 50
+		change_martial = 1
+		change_diplomacy = 1
+		change_intrigue = -1
+	}
+}

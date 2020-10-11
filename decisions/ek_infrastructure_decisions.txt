@@ -1,0 +1,157 @@
+settlement_decisions = { #I originally gave this its own file because I thought I would need multiple decisions. else_if preempted that, though, and I was able to do it with scripted effects.
+	build_infrastructure = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		#is_high_prio = yes #This was a bad idea in retrospect.
+		
+		ai_check_interval = 96
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			has_submenu_open = no
+		}
+		
+		potential = {
+			location = {
+				NOR = {
+					has_province_modifier = infrastructure_4
+					has_province_modifier = infrastructure_construction
+					has_damaged_infrastructure = yes
+				}
+			}
+			owner = {
+				OR = {
+					any_liege = {
+						character = FROM
+					}
+					character = FROM
+				}
+			}
+		}
+		allow = {
+			trigger_if = {
+				limit = { location = { has_infrastructure = no } }
+				FROM = { wealth = 100 }
+			}
+			
+			trigger_else_if = {
+				limit = { location = { has_province_modifier = infrastructure_1 } }
+				FROM = { wealth = 200 }
+			}
+			
+			trigger_else_if = {
+				limit = { location = { has_province_modifier = infrastructure_2 } }
+				FROM = { wealth = 300 }
+			}
+			
+			trigger_else_if = {
+				limit = { location = { has_province_modifier = infrastructure_3 } }
+				FROM = { wealth = 400 }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					location = { has_infrastructure = no }
+				}
+				FROM = { wealth = -100 }
+				build_infrastructure = yes
+			}
+			else_if = {
+				limit = {
+					location = { has_province_modifier = infrastructure_1 }
+				}
+				FROM = { wealth = -200 }
+				build_infrastructure = yes
+			}
+			else_if = {
+				limit = {
+					location = { has_province_modifier = infrastructure_2 }
+				}
+				FROM = { wealth = -300 }
+				build_infrastructure = yes
+			}
+			else_if = {
+				limit = {
+					location = { has_province_modifier = infrastructure_3 }
+				}
+				FROM = { wealth = -400 }
+				build_infrastructure = yes
+			}			
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 0.25
+			modifier = { #Wealthy characters more likely to invest
+				factor = 1.5
+				FROM = { wealth = 600 }
+			}
+			modifier = {
+				factor = 2
+				FROM = { wealth = 800 }
+			}
+			modifier = {
+				factor = 2.5
+				FROM = { wealth = 1000 }
+			}
+			modifier = {
+				factor = 3
+				FROM = { wealth = 1200 }
+			}
+			modifier = {
+				factor = 3.5
+				FROM = { wealth = 1400 }
+			}
+			
+			modifier = { #Harsh climate
+				factor = 1.5
+				location = {
+					climate = severe_winter
+				}
+			}
+			modifier = { #Harsh terrain
+				factor = 1.5
+				location = {
+					OR = {
+						terrain = mountain
+						terrain = jungle
+						terrain = arctic
+						terrain = alikr_desert
+						terrain = valen_woods
+						terrain = mangrove_swamp
+						terrain = argonia
+						terrain = marsh
+						terrain = wasteland
+						terrain = ashlands
+					}
+				}
+			}
+			modifier = { #Thrifty characters more likely to invest
+				factor = 1.2
+				FROM = { stewardship >= 10 }
+			}
+			modifier = {
+				factor = 1.4
+				FROM = { stewardship >= 12 }
+			}
+			modifier = {
+				factor = 1.6
+				FROM = { stewardship >= 14 }
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					OR = {
+						trait = genius
+						trait = quick
+						trait = shrewd
+					}
+				}
+			}
+		}
+	}
+}

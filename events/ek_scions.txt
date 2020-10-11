@@ -1,0 +1,540 @@
+namespace = ekscion
+character_event = {
+	id = ekscion.1
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			true_father_even_if_dead = {
+				OR = {
+					is_daedric_scion = yes
+					is_vampiric_scion = yes
+					is_vampire = yes
+				}
+			}
+			mother_even_if_dead = {
+				OR = {
+					is_daedric_scion = yes
+					is_vampiric_scion = yes
+					is_vampire = yes
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		#Daedric Scion
+		if = {
+			limit = {
+				true_father_even_if_dead = { NOT = { is_daedric_scion = yes } }
+				mother_even_if_dead = { is_daedric_scion = yes }
+			}
+			mother_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					daedric_scion				= { PREV = { add_trait = daedric_scion_g_1 } }
+					daedric_scion_g_1			= { PREV = { add_trait = daedric_scion_g_2 } }
+					daedric_scion_g_2			= { PREV = { add_trait = daedric_scion_g_3 } }
+					daedric_scion_g_3			= { PREV = { random = { chance = 70 add_trait = daedric_scion_g_3 } } }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				mother_even_if_dead = { NOT = { is_daedric_scion = yes } }
+				true_father_even_if_dead = { is_daedric_scion = yes }
+			}
+			true_father_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					daedric_scion				= { PREV = { add_trait = daedric_scion_g_1 } }
+					daedric_scion_g_1			= { PREV = { add_trait = daedric_scion_g_2 } }
+					daedric_scion_g_2			= { PREV = { add_trait = daedric_scion_g_3 } }
+					daedric_scion_g_3			= { PREV = { random = { chance = 70 add_trait = daedric_scion_g_3 } } }
+				}
+			}
+		}
+		else_if = { limit = { OR = { mother_even_if_dead = { trait = daedric_scion } true_father_even_if_dead = { trait = daedric_scion } } } add_trait = daedric_scion_g_1 }
+		else_if = {
+			limit = { mother_even_if_dead = { is_daedric_scion = yes NOT = { trait = daedric_scion } } true_father_even_if_dead = { is_daedric_scion = yes NOT = { trait = daedric_scion } } }
+			set_variable = { which = daedricblood_counter value = 0 }
+			mother_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					daedric_scion_g_1			= { PREV = { change_variable = { which = daedricblood_counter value = 1 } } }
+					daedric_scion_g_2			= { PREV = { change_variable = { which = daedricblood_counter value = 2 } } }
+					daedric_scion_g_3			= { PREV = { change_variable = { which = daedricblood_counter value = 3 } } }
+				}
+			}
+			true_father_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					daedric_scion_g_1			= { PREV = { change_variable = { which = daedricblood_counter value = 1 } } }
+					daedric_scion_g_2			= { PREV = { change_variable = { which = daedricblood_counter value = 2 } } }
+					daedric_scion_g_3			= { PREV = { change_variable = { which = daedricblood_counter value = 3 } } }
+				}
+			}
+			divide_variable = { which = daedricblood_counter value = 2 }
+			if = {
+				limit = { check_variable = { which = daedricblood_counter value = 0 } check_variable = { which = daedricblood_counter value < 2 } }
+				random_list = {
+					5 = { add_trait = daedric_scion }
+					90 = { add_trait = daedric_scion_g_1 }
+					5 = { add_trait = daedric_scion_g_2 }
+				}
+			}
+			else_if = {
+				limit = { check_variable = { which = daedricblood_counter value = 2 } check_variable = { which = daedricblood_counter value < 3 } }
+				random_list = {
+					10 = { add_trait = daedric_scion_g_1 }
+					80 = { add_trait = daedric_scion_g_2 }
+					10 = { add_trait = daedric_scion_g_3 }
+				}
+			}
+			else_if = {
+				limit = { check_variable = { which = daedricblood_counter value = 3 } }
+				random_list = {
+					10 = { add_trait = daedric_scion_g_2 }
+					65 = { add_trait = daedric_scion_g_3 }
+					25 = { health = 0.1 change_learning = 1 } #Loses daedric heritage but gets some small bonus.
+				}
+			}
+		}
+		
+		#Vampiric Scion
+		if = {
+			limit = {
+				OR = {
+					true_father_even_if_dead = { is_vampire = yes }
+					mother_even_if_dead = { is_vampire = yes }
+				}
+			}
+			add_trait = vampiric_scion
+		}
+		else_if = {
+			limit = {
+				true_father_even_if_dead = { NOT = { is_vampiric_scion = yes } }
+				mother_even_if_dead = { is_vampiric_scion = yes }
+			}
+			mother_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					vampiric_scion				= { PREV = { add_trait = vampiric_scion_g_1 } }
+					vampiric_scion_g_1			= { PREV = { add_trait = vampiric_scion_g_2 } }
+					vampiric_scion_g_2			= { PREV = { add_trait = vampiric_scion_g_3 } }
+					vampiric_scion_g_3			= { PREV = { random = { chance = 70 add_trait = vampiric_scion_g_3 } } }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				mother_even_if_dead = { NOT = { is_vampiric_scion = yes } }
+				true_father_even_if_dead = { is_vampiric_scion = yes }
+			}
+			true_father_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					vampiric_scion				= { PREV = { add_trait = vampiric_scion_g_1 } }
+					vampiric_scion_g_1			= { PREV = { add_trait = vampiric_scion_g_2 } }
+					vampiric_scion_g_2			= { PREV = { add_trait = vampiric_scion_g_3 } }
+					vampiric_scion_g_3			= { PREV = { random = { chance = 70 add_trait = vampiric_scion_g_3 } } }
+				}
+			}
+		}
+		else_if = { limit = { OR = { mother_even_if_dead = { trait = vampiric_scion } true_father_even_if_dead = { trait = vampiric_scion } } } add_trait = vampiric_scion_g_1 }
+		else_if = {
+			limit = { mother_even_if_dead = { is_vampiric_scion = yes NOT = { trait = vampiric_scion } } true_father_even_if_dead = { is_vampiric_scion = yes NOT = { trait = vampiric_scion } } }
+			set_variable = { which = vampiricblood_counter value = 0 }
+			mother_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					vampiric_scion_g_1			= { PREV = { change_variable = { which = vampiricblood_counter value = 1 } } }
+					vampiric_scion_g_2			= { PREV = { change_variable = { which = vampiricblood_counter value = 2 } } }
+					vampiric_scion_g_3			= { PREV = { change_variable = { which = vampiricblood_counter value = 3 } } }
+				}
+			}
+			true_father_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					vampiric_scion_g_1			= { PREV = { change_variable = { which = vampiricblood_counter value = 1 } } }
+					vampiric_scion_g_2			= { PREV = { change_variable = { which = vampiricblood_counter value = 2 } } }
+					vampiric_scion_g_3			= { PREV = { change_variable = { which = vampiricblood_counter value = 3 } } }
+				}
+			}
+			divide_variable = { which = vampiricblood_counter value = 2 }
+			if = {
+				limit = { check_variable = { which = vampiricblood_counter value = 0 } check_variable = { which = vampiricblood_counter value < 2 } }
+				random_list = {
+					5 = { add_trait = vampiric_scion }
+					90 = { add_trait = vampiric_scion_g_1 }
+					5 = { add_trait = vampiric_scion_g_2 }
+				}
+			}
+			else_if = {
+				limit = { check_variable = { which = vampiricblood_counter value = 2 } check_variable = { which = vampiricblood_counter value < 3 } }
+				random_list = {
+					10 = { add_trait = vampiric_scion_g_1 }
+					80 = { add_trait = vampiric_scion_g_2 }
+					10 = { add_trait = vampiric_scion_g_3 }
+				}
+			}
+			else_if = {
+				limit = { check_variable = { which = vampiricblood_counter value = 3 } }
+				random_list = {
+					10 = { add_trait = vampiric_scion_g_2 }
+					65 = { add_trait = vampiric_scion_g_3 }
+					25 = { health = 0.1 } #Loses vampiric heritage but has a small health bonus.
+				}
+			}
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				trait = twin
+				OR = {
+					is_daedric_scion = yes
+					is_vampiric_scion = yes
+				}
+			}
+			any_sibling = {
+				limit = {
+					is_twin_of = ROOT
+					OR = {
+						AND = {
+							is_daedric_scion = no
+							ROOT = { is_daedric_scion = yes }
+						}
+						AND = {
+							is_vampiric_scion = no
+							ROOT = { is_vampiric_scion = yes }
+						}
+					}
+				}
+				character_event = { id = ekscion.1 }
+			}
+		}
+		#Heritage is publicly known
+		if = {
+			limit = {
+				OR = { is_daedric_scion = yes is_vampiric_scion = yes }
+				is_father_real_father = yes #If the father isn't publicly known, neither is the child's heritage.
+				true_father_even_if_dead = {
+					OR = {
+						AND = {
+							is_daedric_scion = yes
+							has_public_heritage = yes
+						}
+						AND = {
+							is_vampiric_scion = yes
+							has_public_heritage = yes
+						}
+						is_known_vampire = yes
+						is_daedric_prince = yes
+					}
+				}
+			}
+			set_character_flag = known_heritage_self
+			if = {
+				limit = { is_daedric_scion = yes }
+				set_character_flag = revealed_daedric_heritage
+			}
+			if = {
+				limit = { is_vampiric_scion = yes }
+				set_character_flag = revealed_vampiric_heritage
+			}
+		}
+		else_if = {
+			limit = {
+				OR = { is_daedric_scion = yes is_vampiric_scion = yes }
+				mother_even_if_dead = {
+					OR = {
+						AND = {
+							is_daedric_scion = yes
+							has_public_heritage = yes
+						}
+						AND = {
+							is_vampiric_scion = yes
+							has_public_heritage = yes
+						}
+						is_known_vampire = yes
+						is_daedric_prince = yes
+					}
+				}
+			}
+			set_character_flag = known_heritage_self
+			if = {
+				limit = { is_daedric_scion = yes }
+				set_character_flag = revealed_daedric_heritage
+			}
+			if = {
+				limit = { is_vampiric_scion = yes }
+				set_character_flag = revealed_vampiric_heritage
+			}
+		}
+		if = { limit = { is_vampiric_scion = yes } add_trait = sickly } #Vampiric Scions should always be born sickly.
+	}
+}
+
+#Ancestry Revelation (on_age)
+character_event = {
+	id = ekscion.2
+	hide_window = yes
+	#desc = ekscion.2.d
+	#picture = GFX_evt_daughter_asking_father
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			is_daedric_scion = yes
+			is_vampiric_scion = yes
+		}
+		NOR = {
+			has_character_flag = revealed_daedric_heritage
+			has_character_flag = revealed_vampiric_heritage
+			has_character_flag = known_heritage_self
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				mother_even_if_dead = {
+					is_alive = yes
+					OR = {
+						AND = {
+							OR = {
+								is_daedric_scion = yes
+								is_vampiric_scion = yes
+							}
+							has_character_flag = known_heritage_self
+							NOR = {
+								has_character_flag = revealed_daedric_heritage
+								has_character_flag = revealed_vampiric_heritage
+							}
+						}
+						is_unknown_vampire = yes
+					}
+				}
+			}
+			mother_even_if_dead = { character_event = { id = ekscion.3 } }
+		}
+		else_if = {
+			limit = {
+				true_father_even_if_dead = {
+					is_alive = yes
+					OR = {
+						AND = {
+							OR = {
+								is_daedric_scion = yes
+								is_vampiric_scion = yes
+							}
+							has_character_flag = known_heritage_self
+							NOR = {
+								has_character_flag = revealed_daedric_heritage
+								has_character_flag = revealed_vampiric_heritage
+							}
+						}
+						is_unknown_vampire = yes
+					}
+				}
+			}
+			true_father_even_if_dead = { character_event = { id = ekscion.3 } }
+		}
+		else_if = {
+			limit = {
+				is_father_real_father = no
+				true_father_even_if_dead = { is_daedric_prince = yes }
+			}
+			random = {
+				chance = 10
+				modifier = { #Princes that will more than likely tell a scion of their heritage.
+					factor = 10
+					OR = {
+						trait = molag_bal
+						trait = jyggalag
+						trait = namira
+						trait = sanguine
+					}
+				}
+				modifier = { #Princes that might tell a scion of their heritage.
+					factor = 5
+					OR = {
+						trait = clavicus
+						trait = malacath
+						trait = meridia
+						trait = sheogorath
+					}
+				}
+				modifier = { #Princes that probably won't tell a scion of their heritage.
+					factor = 0.5
+					OR = {
+						trait = azura
+						trait = boethiah
+						trait = hermaeus
+						trait = vaermina
+						trait = nocturnal
+						trait = hircine
+						trait = mehrunes
+						trait = mephala
+						trait = peryite
+					}
+				}
+				character_event = {
+					id = ekscion.5
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekscion.3
+	desc = { trigger = { is_daedric_scion = yes is_vampiric_scion = no is_female = yes } text = ekscion.3.d.daedric picture = GFX_evt_woman_at_window_hf }
+	desc = { trigger = { is_daedric_scion = yes is_vampiric_scion = no is_female = no } text = ekscion.3.d.daedric picture = GFX_evt_noble_in_castle }
+	desc = { trigger = { is_vampiric_scion = yes is_daedric_scion = no is_female = yes } text = ekscion.3.d.vampiric picture = GFX_evt_woman_at_window_hf }
+	desc = { trigger = { is_vampiric_scion = yes is_daedric_scion = no is_female = no } text = ekscion.3.d.vampiric picture = GFX_evt_noble_in_castle }
+	desc = { trigger = { is_vampiric_scion = yes is_daedric_scion = yes } text = ekscion.3.d.both picture = GFX_evt_comet }
+	desc = { trigger = { is_unknown_vampire = yes is_female = yes } text = ekscion.3.d.vampire picture = GFX_evt_woman_at_window_hf }
+	desc = { trigger = { is_unknown_vampire = yes is_female = no } text = ekscion.3.d.vampire picture = GFX_evt_noble_in_castle }
+	desc = { trigger = { is_vampiric_scion = no is_daedric_scion = no } text = ekscion.3.d.somethingwentwrong picture = GFX_evt_comet }
+	picture = GFX_evt_noble_in_castle
+	is_triggered_only = yes
+	
+	option = {
+		name = ekscion.3.opt1 #Tell child of their heritage.
+		
+		custom_tooltip = {
+			text = ekscion.3.opt1.ct
+			FROM = { character_event = { id = ekscion.4 } }
+		}
+		
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 10 trait = honest }
+			modifier = { factor = 2.5 trait = reckless }
+			modifier = { factor = 5 trait = diligent }
+			modifier = { factor = 3 trait = trusting }
+			modifier = { factor = 1.5 trait = kind }
+		}
+	}
+	option = {
+		name = ekscion.3.opt2 #Keep the truth from the child.
+		
+		custom_tooltip = { text = ekscion.3.opt2.ct }
+		
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 10 trait = paranoid }
+			modifier = { factor = 2.5 trait = arbitrary }
+			modifier = { factor = 5 trait = slothful }
+			modifier = { factor = 3 trait = absent_minded }
+			modifier = { factor = 1.5 trait = ruthless }
+		}
+	}
+}
+
+character_event = {
+	id = ekscion.4
+	desc = { text = ekscion.4.d.daedric picture = GFX_evt_daughter_asking_father trigger = { is_daedric_scion = yes } }
+	desc = { text = ekscion.4.d.vampiric picture = GFX_evt_daughter_asking_father trigger = { is_vampiric_scion = yes FROM = { is_vampiric_scion = yes } } }
+	desc = { text = ekscion.4.d.vampire picture = GFX_evt_bad_news_female trigger = { is_vampiric_scion = yes FROM = { is_vampiric_scion = no } } }
+	picture = GFX_evt_daughter_asking_father
+	is_triggered_only = yes
+	
+	option = {
+		name = ekscion.4.opt.positive
+		set_character_flag = known_heritage_self
+		set_character_flag = known_heritage_@FROM
+		opinion = {
+			who = FROM
+			modifier = opinion_parent_heritage_positive
+			years = 100
+		}
+		
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 2 trait = honest }
+			modifier = { factor = 2 trait = gregarious }
+			modifier = { factor = 2 trait = content }
+			modifier = { factor = 2
+				is_vampiric_scion = yes
+				OR = {
+					worships_hermaeus = yes
+					worships_molag = yes
+					worships_namira = yes
+					worships_boethiah = yes
+					worships_nocturnal = yes
+					is_vampire_religion = yes
+				}
+			}
+			modifier = { factor = 2
+				is_daedric_scion = yes
+				is_daedric_religion = yes
+			}
+		}
+	}
+	option = {
+		name = ekscion.4.opt.negative
+		set_character_flag = known_heritage_self
+		set_character_flag = known_heritage_@FROM
+		opinion = {
+			who = FROM
+			modifier = opinion_parent_heritage_negative
+			years = 100
+		}
+		
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 2 trait = paranoid }
+			modifier = { factor = 2 trait = craven }
+			modifier = { factor = 2 trait = proud }
+			modifier = {
+				factor = 3
+				trait = zealous
+				is_daedric_scion = yes
+				is_daedric_religion = no
+			}
+			modifier = {
+				factor = 3
+				is_vampiric_scion = yes
+				is_vampire_religion = no
+			}
+			modifier = {
+				factor = 100
+				is_vampiric_scion = yes
+				worships_meridia = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = ekscion.5
+	desc = ekscion.5.d
+	picture = GFX_evt_bad_news_female
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekscion.5.opt
+		set_character_flag = known_heritage_self
+		if = {
+			limit = {
+				is_daedric_religion = no
+				trait = zealous
+			}
+			random = { chance = 75 add_depressed = yes }
+		}
+		else_if = {
+			limit = {
+				is_daedric_religion = yes
+				trait = zealous
+				NOR = { trait = proud trait = humble }
+			}
+			random = { chance = 50 add_trait = proud }
+		}
+	}
+}

@@ -1,0 +1,2142 @@
+##############################
+# MARSHAL
+#
+# Job: action_advance_mil_tech
+# 	938: Military Accident
+# 	939: Military Secrets Revealed!
+#
+# Job: action_train_troops
+# 	941: Reinforcements Arrives
+# 	942: Marshal tries to train troops, noble interferes
+#
+# Job: action_assist_arrest
+# 	944: Vassal is tipped off: Starts with Marshal
+#
+##############################
+
+
+##############################
+# MARSHAL
+# JOB: action_advance_mil_tech 
+##############################
+
+# 938: Military Accident
+character_event = {
+	id = 938
+	title = EVTNAME938
+	desc = EVTDESC938
+	picture = GFX_evt_bloody_man
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+	
+	trigger = {
+		has_job_action = action_advance_mil_tech
+		NOT = { has_character_modifier = in_seclusion }
+		NOT = { has_character_modifier = bedridden_illness }
+		NOT = { trait = incapable }
+		can_be_maimed_trigger = yes
+		location = {
+			owner = {
+				job_marshal = {
+					character = ROOT
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 0.90
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.98
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 0.98
+			NOT = { martial = 9 }
+		}
+		modifier = {
+			factor = 1.01
+			martial = 11
+		}		
+		modifier = {
+			factor = 1.01
+			martial = 12
+		}	
+		modifier = {
+			factor = 1.01
+			martial = 13
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 14
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 15
+		}
+		modifier = {
+			factor = 1.10
+			martial = 16
+		}
+		modifier = {
+			factor = 1.02
+			martial = 17
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 18
+		}
+		modifier = {
+			factor = 1.05
+			martial = 19
+		}
+		modifier = {
+			factor = 1.05
+			martial = 20
+		}
+		modifier = {
+			factor = 1.05
+			martial = 21
+		}
+		modifier = {
+			factor = 1.05
+			martial = 22
+		}
+		modifier = {
+			factor = 1.05
+			martial = 23
+		}
+		modifier = {
+			factor = 1.03
+			martial = 24
+		}
+		modifier = {
+			factor = 1.01
+			martial = 25
+		}
+		modifier = {
+			factor = 1.5
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.5
+			combat_rating = 45
+		}
+		modifier = {
+			factor = 1.5
+			combat_rating = 60
+		}
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			random_list = {
+				75 = {
+					set_character_flag = marshal_wounded
+				}
+				25 = {
+					modifier = {
+						factor = 0.5
+						combat_rating = 45
+						NOT = { combat_rating = 60 }
+					}
+					modifier = { #Too good in combat to be harmed like this
+						factor = 0
+						combat_rating = 60
+					}
+					set_character_flag = marshal_maimed
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVOPTA938"
+		trigger = {
+			has_character_flag = marshal_wounded 
+		}
+		add_trait = wounded
+		liege = { letter_event = { id = 20380 tooltip = "EVTTOOLTIP20380" } }
+		clr_character_flag = marshal_wounded
+	}
+	option = {
+		name = "EVOPTB938"
+		trigger = { has_character_flag = marshal_maimed }
+		add_maimed_trait_effect = yes
+		liege = { letter_event = { id = 20381 tooltip = "EVTTOOLTIP20380" } }
+		clr_character_flag = marshal_maimed
+	}
+}
+
+#20380: Liege gets a letter about Marshal being wounded
+letter_event = {
+	id = 20380
+	desc = "EVTDESC20380"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20380"
+		tooltip = {
+			FROM = { add_trait = wounded }
+		}
+	}
+}
+
+#20381: Liege gets a letter about Marshal being maimed
+letter_event = {
+	id = 20381
+	desc = "EVTDESC20381"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20381"
+		tooltip = {
+			FROM = { add_maimed_trait_effect = yes }
+		}
+	}
+}
+
+
+# 939: Military Secrets Revealed!
+character_event = {
+	id = 939
+	title = "EVTNAME939"
+	desc = "EVTDESC939"
+	picture = GFX_evt_large_army
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+	
+	trigger = {
+		has_job_action = action_advance_mil_tech
+		NOT = { has_character_modifier = in_seclusion }
+		NOT = { has_character_modifier = bedridden_illness }
+		NOT = { trait = incapable }
+		location = {
+			owner = {
+				job_marshal = {
+					character = ROOT
+				}
+			}
+		}		
+		location = {
+			any_province_lord = {
+				NOT = { is_liege_of = ROOT }
+				martial = 8
+				OR = {
+					trait = gregarious
+					diplomacy = 7
+				}
+				opinion = { who = ROOT value = 30 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 85
+		
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_focus = focus_scholarship
+				liege = { has_focus = focus_scholarship }
+			}
+		}
+		modifier = {
+			factor = 2
+			has_religion_feature = religion_dogmatic
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { opinion = { who = liege value = -100 } }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { opinion = { who = liege value = -75 } }
+		}
+		modifier = {
+			factor = 1.03
+			NOT = { opinion = { who = liege value = -50 } }
+		}
+		modifier = {
+			factor = 1.02
+			NOT = { opinion = { who = liege value = -10 } }
+		}
+		modifier = {
+			factor = 0.98
+			opinion = { who = liege value = 25 }
+		}
+		modifier = {
+			factor = 0.97
+			opinion = { who = liege value = 50 }
+		}
+		modifier = {
+			factor = 0.95
+			opinion = { who = liege value = 75 }
+		}
+		modifier = {
+			factor = 0.85
+			opinion = { who = liege value = 100 }
+		}			
+		modifier = {
+			factor = 1.01
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 1.10
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.02
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 1.02
+			NOT = { martial = 9 }
+		}
+		modifier = {
+			factor = 0.99
+			martial = 11
+		}
+		modifier = {
+			factor = 0.99
+			martial = 12
+		}
+		modifier = {
+			factor = 0.99
+			martial = 13
+		}	
+		modifier = {
+			factor = 0.98
+			martial = 14
+		}	
+		modifier = {
+			factor = 0.98
+			martial = 15
+		}
+		modifier = {
+			factor = 0.90
+			martial = 16
+		}
+		modifier = {
+			factor = 0.98
+			martial = 17
+		}	
+		modifier = {
+			factor = 0.98
+			martial = 18
+		}
+		modifier = {
+			factor = 0.95
+			martial = 19
+		}
+		modifier = {
+			factor = 0.95
+			martial = 20
+		}
+		modifier = {
+			factor = 0.95
+			martial = 21
+		}
+		modifier = {
+			factor = 0.95
+			martial = 22
+		}
+		modifier = {
+			factor = 0.95
+			martial = 23
+		}
+		modifier = {
+			factor = 0.97
+			martial = 24
+		}
+		modifier = {
+			factor = 0.99
+			martial = 25
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA939"
+		location = {
+			random_province_lord = {
+				limit = {
+					NOT = { is_liege_of = ROOT }
+					martial = 8
+					OR = {
+						trait = gregarious
+						diplomacy = 7
+					}
+					opinion = { who = ROOT value = 30 }
+				}
+				character_event = { id = 20390 days = 3 tooltip = "EVTTOOLTIP20390" }
+			}
+		}
+		random_list = {
+			97 = {}
+			2 = { change_martial = 1 }
+			1 = { character_event = { id = eknotify.0 days = 1 } }
+		}
+	}
+}
+
+#20390: Noble helps
+character_event = {
+	id = 20390
+	desc = "EVTDESC20390"
+	picture = GFX_evt_large_army
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20390"
+		ai_chance = {
+			factor = 75
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROM value = 40 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROM value = 50 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROM value = 60 }
+			}
+		}
+		FROM = {
+			character_event = { id = 20391 days = 3 tooltip = "EVTTOOLTIP20391" }
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB20390"
+		ai_chance = { factor = 25 }
+	}
+}
+
+#20391: Marshal
+character_event = {
+	id = 20391
+	desc = "EVTDESC20391"
+	picture = GFX_evt_large_army
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20391"
+		FROM = {
+			reverse_opinion = {
+				modifier = opinion_grateful
+				who = ROOT
+				years = 2
+			}
+		}
+		liege = { letter_event = { id = 20392 tooltip = "EVTTOOLTIP20392" } }
+	}
+}
+
+#20392: Liege
+letter_event = {
+	id = 20392
+	desc = "EVTDESC20392"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20392"
+		military_techpoints = 50
+		FROM = {
+			FROM = {
+				reverse_opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 2
+				}
+			}
+		}
+	}
+}
+
+
+##############################
+# MARSHAL
+# JOB: action_train_troops 
+##############################
+
+# 941: Reinforcements Arrive
+character_event = {
+	id = 941
+	title = EVTNAME941
+	desc = EVTDESC941
+	picture = GFX_evt_large_army
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+	
+	trigger = {
+		has_job_action = action_train_troops
+		NOT = { has_character_modifier = in_seclusion }
+		NOT = { has_character_modifier = bedridden_illness }
+		NOT = { trait = incapable }
+		location = {
+			owner = {
+				job_marshal = {
+					character = ROOT
+				}
+			}
+			NOT = { has_province_modifier = levy_reinforcements }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	
+		modifier = {
+			factor = 1.25
+			NOT = { opinion = { who = liege value = -100 } }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { opinion = { who = liege value = -75 } }
+		}
+		modifier = {
+			factor = 1.03
+			NOT = { opinion = { who = liege value = -50 } }
+		}
+		modifier = {
+			factor = 1.02
+			NOT = { opinion = { who = liege value = -10 } }
+		}
+		modifier = {
+			factor = 0.98
+			opinion = { who = liege value = 25 }
+		}
+		modifier = {
+			factor = 0.97
+			opinion = { who = liege value = 50 }
+		}
+		modifier = {
+			factor = 0.95
+			opinion = { who = liege value = 75 }
+		}
+		modifier = {
+			factor = 0.85
+			opinion = { who = liege value = 100 }
+		}		
+		modifier = {
+			factor = 1.01
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 1.10
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 1.05
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.02
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 1.02
+			NOT = { martial = 9 }
+		}
+		modifier = {
+			factor = 0.99
+			martial = 11
+		}
+		modifier = {
+			factor = 0.99
+			martial = 12
+		}
+		modifier = {
+			factor = 0.99
+			martial = 13
+		}	
+		modifier = {
+			factor = 0.98
+			martial = 14
+		}	
+		modifier = {
+			factor = 0.98
+			martial = 15
+		}
+		modifier = {
+			factor = 0.90
+			martial = 16
+		}
+		modifier = {
+			factor = 0.98
+			martial = 17
+		}	
+		modifier = {
+			factor = 0.98
+			martial = 18
+		}
+		modifier = {
+			factor = 0.95
+			martial = 19
+		}
+		modifier = {
+			factor = 0.95
+			martial = 20
+		}
+		modifier = {
+			factor = 0.95
+			martial = 21
+		}
+		modifier = {
+			factor = 0.95
+			martial = 22
+		}
+		modifier = {
+			factor = 0.95
+			martial = 23
+		}
+		modifier = {
+			factor = 0.97
+			martial = 24
+		}
+		modifier = {
+			factor = 0.99
+			martial = 25
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA941"
+		liege = { letter_event = { id = 20410 tooltip = "EVTTOOLTIP20410" } }
+		random_list = {
+			97 = {}
+			2 = { change_martial = 1 }
+			1 = { character_event = { id = eknotify.0 days = 1 } }
+		}
+	}
+}
+
+# 20410: Liege
+character_event = {
+	id = 20410
+	desc = EVTDESC20410
+	picture = GFX_evt_large_army
+	
+	is_triggered_only = yes
+	
+	notification = yes
+	
+	immediate = {
+		FROM = {
+			location = {
+				add_province_modifier = {
+					name = levy_reinforcements
+					duration = 365
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			custom_tooltip = {
+				text = increase_prosperity_custom_tooltip
+				hidden_tooltip = {
+					FROM = {
+						location = {
+							change_variable = { which = prosperity_value value = 6 }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA20410"
+	}
+}
+
+
+# 942: Marshal tries to train troops, noble interferes
+character_event = {
+	id = 942
+	title = "EVTNAME942"
+	desc = "EVTDESC942"
+	picture = GFX_evt_large_army
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+	
+	trigger = {
+		has_job_action = action_train_troops
+		NOT = { has_character_modifier = in_seclusion }
+		NOT = { has_character_modifier = bedridden_illness }
+		NOT = { trait = incapable }
+		location = {
+			owner = {
+				job_marshal = {
+					character = ROOT
+				}
+			}
+			any_province_lord = {
+				NOT = { 
+					is_liege_of = ROOT
+					character = ROOT
+				}
+				independent = no
+				OR = {
+					trait = ambitious
+					trait = deceitful
+				}
+			}
+			NOT = { has_province_modifier = levy_reinforcements }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+
+		modifier = {
+			factor = 0.85
+			NOT = { opinion = { who = liege value = -100 } }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { opinion = { who = liege value = -75 } }
+		}
+		modifier = {
+			factor = 0.97
+			NOT = { opinion = { who = liege value = -50 } }
+		}
+		modifier = {
+			factor = 0.98
+			NOT = { opinion = { who = liege value = -10 } }
+		}
+		modifier = {
+			factor = 1.02
+			opinion = { who = liege value = 25 }
+		}
+		modifier = {
+			factor = 1.03
+			opinion = { who = liege value = 50 }
+		}
+		modifier = {
+			factor = 1.05
+			opinion = { who = liege value = 75 }
+		}
+		modifier = {
+			factor = 1.25
+			opinion = { who = liege value = 100 }
+		}	
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 0.90
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.98
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 0.98
+			NOT = { martial = 9 }
+		}
+		modifier = {
+			factor = 1.01
+			martial = 11
+		}
+		modifier = {
+			factor = 1.01
+			martial = 12
+		}
+		modifier = {
+			factor = 1.01
+			martial = 13
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 14
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 15
+		}
+		modifier = {
+			factor = 1.10
+			martial = 16
+		}
+		modifier = {
+			factor = 1.02
+			martial = 17
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 18
+		}
+		modifier = {
+			factor = 1.05
+			martial = 19
+		}
+		modifier = {
+			factor = 1.05
+			martial = 20
+		}
+		modifier = {
+			factor = 1.05
+			martial = 21
+		}
+		modifier = {
+			factor = 1.05
+			martial = 22
+		}
+		modifier = {
+			factor = 1.05
+			martial = 23
+		}
+		modifier = {
+			factor = 1.03
+			martial = 24
+		}
+		modifier = {
+			factor = 1.01
+			martial = 25
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA942"
+		location = {
+			random_province_lord = {
+				limit = {
+					NOT = { is_liege_of = ROOT }
+					independent = no
+					OR = {
+						trait = ambitious
+						trait = deceitful
+					}
+				}
+				character_event = { id = 20420 days = 7 tooltip = "EVTTOOLTIP20420" }
+			}
+		}
+	}
+}
+
+#20420: Noble reacts
+character_event = {
+	id = 20420
+	desc = "EVTDESC20420"
+	picture = GFX_evt_council
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20420"
+		ai_chance = { factor = 100 }
+		FROM = {
+			liege = {
+				random = {
+					chance = 50
+					opinion = {
+						modifier = opinion_angry
+						who = ROOT
+						years = 1
+					}
+					letter_event = { id = 20421 tooltip = "EVTTOOLTIP20421" }
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB20420"
+		ai_chance = { factor = 0 }
+	}
+}
+
+#20421: Marshal writes to Liege
+letter_event = {
+	id = 20421
+	desc = "EVTDESC20421"
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA20421"
+		FROM = {
+			FROM = {
+				location = {
+					add_province_modifier = {
+						name = missing_reinforcements
+						duration = 180
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			remove_opinion = {
+				modifier = opinion_angry
+				who = FROM
+			}
+		}
+		opinion = {
+			modifier = opinion_angry
+			who = FROM
+			years = 1
+		}
+	}
+}
+
+##############################
+# MARSHAL
+# JOB: action_organize_raid
+##############################
+
+# 20221: The Marshal has managed to raise an eager force of raiders
+character_event = {
+	id = 20221
+	title = EVTNAME20221
+	desc = EVTDESC20221
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+	
+	trigger = {
+		has_job_action = action_organize_raid
+		NOT = { has_character_modifier = in_seclusion }
+		NOT = { has_character_modifier = bedridden_illness }
+		NOT = { trait = incapable }
+		liege = {
+			is_adult = yes
+			prisoner = no
+			NOT = { trait = incapable }
+			OR = {
+				NOT = { has_character_flag = tribal_organize_raid_troops }
+				had_character_flag = { flag = tribal_organize_raid_troops days = 3650 }
+			}
+			war = no
+		}
+		location = {
+			county = {
+				is_occupied = no
+			}
+			ROOT = {
+				liege = {
+					is_capital = PREVPREV
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			factor = 3.0
+			liege = {
+				tier = count
+			}
+		}
+		modifier = {
+			factor = 0.75
+			liege = {
+				any_owned_bloodline = {
+					has_bloodline_flag = more_raiders_bloodline
+					bloodline_is_active_for = PREV
+				}
+			}
+		}
+		
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			martial = 9
+		}
+		modifier = {
+			factor = 0.75
+			martial = 10
+		}
+		modifier = {
+			factor = 0.75
+			martial= 11
+		}
+		modifier = {
+			factor = 0.75
+			martial = 12
+		}
+		modifier = {
+			factor = 0.75
+			martial = 13
+		}
+	}
+	
+	option = {
+		name = EVTOPTA20221
+		
+		prestige = 50
+		hidden_tooltip  = {
+			liege = { character_event = { id = 20222 } }
+		}
+		random_list = {
+			97 = {}
+			2 = { change_martial = 1 }
+			1 = { character_event = { id = eknotify.0 days = 1 } }
+		}
+	}
+}
+
+# 20222: The liege is informed
+character_event = {
+	id = 20222
+	desc = EVTDESC20222
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		capital_scope = {
+			if = { 
+				limit = {
+					ROOT = { 
+						NOT = {
+							any_owned_bloodline = {
+								has_bloodline_flag = more_raiders_bloodline
+								bloodline_is_active_for = PREV
+							}
+						}
+					}
+				}
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.025
+						match_min = 100
+						match_max = 3000
+						attrition = 1.0
+						cannot_inherit = yes
+						earmark = tribal_organize_raid
+						is_looter = yes
+						can_toggle_looting = no
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.025
+						match_min = 100
+						match_max = 3000
+						attrition = 1.0
+						cannot_inherit = yes
+						earmark = tribal_organize_raid
+						is_looter = yes
+						can_toggle_looting = no
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.025
+						match_min = 100
+						match_max = 3000
+						attrition = 1.0
+						cannot_inherit = yes
+						earmark = tribal_organize_raid
+						is_looter = yes
+						can_toggle_looting = no
+					}
+				}
+			}
+			if = { 
+				limit = {
+					ROOT = { 
+						any_owned_bloodline = {
+							has_bloodline_flag = more_raiders_bloodline
+							bloodline_is_active_for = PREV
+						}
+					}
+				}
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.03
+						match_min = 250
+						match_max = 5000
+						attrition = 1.0
+						cannot_inherit = yes
+						earmark = tribal_organize_raid
+						is_looter = yes
+						can_toggle_looting = no
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.03
+						match_min = 250
+						match_max = 5000
+						attrition = 1.0
+						cannot_inherit = yes
+						earmark = tribal_organize_raid
+						is_looter = yes
+						can_toggle_looting = no
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.03
+						match_min = 250
+						match_max = 5000
+						attrition = 1.0
+						cannot_inherit = yes
+						earmark = tribal_organize_raid
+						is_looter = yes
+						can_toggle_looting = no
+					}
+				}
+			}
+		}
+		
+		clr_character_flag = tribal_organize_raid_troops
+		set_character_flag = tribal_organize_raid_troops
+		
+		character_event = { id = 20223 days = 30 }
+	}
+	
+	option = {
+		name = EVTOPTA20222
+		opinion = {
+			who = FROM
+			modifier = opinion_grateful
+			months = 60
+		}
+		ROOT = {
+			spawn_unit = {
+				province = PREV
+				home = PREV
+				owner = THIS
+				#leader = none
+				match_character = THIS
+				match_mult = 0.025
+				match_min = 100
+				match_max = 3000
+				attrition = 1.0
+				cannot_inherit = yes
+				earmark = tribal_organize_raid
+				is_looter = yes
+				can_toggle_looting = no
+			}
+		}
+	}
+}
+
+# 20223: Hidden ping event to check the status of the raiders
+character_event = {
+	id = 20223
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_earmarked_regiments_not_raiding = tribal_organize_raid
+			}
+			if = {
+				limit = {
+					had_character_flag = { flag = tribal_organize_raid_troops days = 244 }
+				}
+				character_event = { id = 20224 }
+			}
+			if = {
+				limit = {
+					NOT = { had_character_flag = { flag = tribal_organize_raid_troops days = 244 } }
+				}
+				character_event = { id = 20223 days = 30 }
+			}
+		}
+	}
+}
+
+# 20224: The men are displeased and disband
+character_event = {
+	id = 20224
+	desc = EVTDESC20224
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA20224
+		scaled_wealth = -0.5
+		clr_character_flag = tribal_organize_raid_troops
+		disband_event_forces = tribal_organize_raid
+	}
+}
+
+character_event = {
+	id = 124020
+	title = EVTTITLE124020
+	desc = miltheory
+	picture = GFX_evt_legate
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_advance_mil_tech
+		location = {
+			owner = {
+				job_marshal = {
+					character = ROOT
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		
+		modifier = {
+			factor = 2
+			NOT = { opinion = { who = liege value = -100 } }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { opinion = { who = liege value = -75 } }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { opinion = { who = liege value = -50 } }
+		}
+		modifier = {
+			factor = 1.1
+			NOT = { opinion = { who = liege value = -10 } }
+		}
+		modifier = {
+			factor = 0.95
+			opinion = { who = liege value = 25 }
+		}
+		modifier = {
+			factor = 0.9
+			opinion = { who = liege value = 50 }
+		}
+		modifier = {
+			factor = 0.85
+			opinion = { who = liege value = 75 }
+		}
+		modifier = {
+			factor = 0.75
+			opinion = { who = liege value = 100 }
+		}			
+		modifier = {
+			factor = 2
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 2
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 2
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.1
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 1.1
+			NOT = { martial = 9 }
+		}
+		modifier = {
+			factor = 0.95
+			martial = 12
+		}
+		modifier = {
+			factor = 0.95
+			martial = 13
+		}	
+		modifier = {
+			factor = 0.95
+			martial = 14
+		}	
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 16
+		}
+		modifier = {
+			factor = 0.9
+			martial = 17
+		}	
+		modifier = {
+			factor = 0.9
+			martial = 18
+		}
+		modifier = {
+			factor = 0.85
+			martial = 19
+		}
+		modifier = {
+			factor = 0.85
+			martial = 20
+		}
+		modifier = {
+			factor = 0.85
+			martial = 21
+		}
+		modifier = {
+			factor = 0.8
+			martial = 22
+		}
+		modifier = {
+			factor = 0.8
+			martial = 23
+		}
+		modifier = {
+			factor = 0.8
+			martial = 24
+		}
+		modifier = {
+			factor = 0.75
+			martial = 25
+		}
+	}
+	
+	option = {
+		name = EVTOPTA124020
+		liege = { letter_event = { id = 124021 days = 7 random = 3 } }
+		random_list = {
+			97 = {}
+			2 = { change_martial = 1 }
+			1 = { character_event = { id = eknotify.0 days = 1 } }
+		}
+	}
+}
+letter_event = {
+	id = 124021
+	desc = miltheory2
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		military_techpoints = 10
+		FROM = {
+			location = { add_province_modifier = { name = military_theory duration = 1825 } }
+			prestige = 15
+		}
+	}
+}
+
+###Enforce Martial Law
+character_event = {
+	id = 124050
+	title = EVTTITLE124050
+	desc = martiallawenforced
+	picture = GFX_evt_townscene
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_assist_arrest
+		location = {
+			OR = {
+				owner = {
+					job_marshal = {
+						character = ROOT
+					}
+				}
+				owner = {
+					liege = {
+						job_marshal = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 2
+			NOT = { opinion = { who = liege value = -100 } }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { opinion = { who = liege value = -75 } }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { opinion = { who = liege value = -50 } }
+		}
+		modifier = {
+			factor = 1.1
+			NOT = { opinion = { who = liege value = -10 } }
+		}
+		modifier = {
+			factor = 0.95
+			opinion = { who = liege value = 25 }
+		}
+		modifier = {
+			factor = 0.9
+			opinion = { who = liege value = 50 }
+		}
+		modifier = {
+			factor = 0.85
+			opinion = { who = liege value = 75 }
+		}
+		modifier = {
+			factor = 0.75
+			opinion = { who = liege value = 100 }
+		}			
+		modifier = {
+			factor = 2
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 2
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 2
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.1
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 1.1
+			NOT = { martial = 9 }
+		}
+		modifier = {
+			factor = 0.95
+			martial = 12
+		}
+		modifier = {
+			factor = 0.95
+			martial = 13
+		}	
+		modifier = {
+			factor = 0.95
+			martial = 14
+		}	
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 16
+		}
+		modifier = {
+			factor = 0.9
+			martial = 17
+		}	
+		modifier = {
+			factor = 0.9
+			martial = 18
+		}
+		modifier = {
+			factor = 0.85
+			martial = 19
+		}
+		modifier = {
+			factor = 0.85
+			martial = 20
+		}
+		modifier = {
+			factor = 0.85
+			martial = 21
+		}
+		modifier = {
+			factor = 0.8
+			martial = 22
+		}
+		modifier = {
+			factor = 0.8
+			martial = 23
+		}
+		modifier = {
+			factor = 0.8
+			martial = 24
+		}
+		modifier = {
+			factor = 0.75
+			martial = 25
+		}
+	}
+	
+	option = {
+		name = informliege
+		prestige = 5
+		custom_tooltip = {
+			text = EVTOPTA124050TOOLTIPA
+			hidden_tooltip = {
+				liege = {
+					letter_event = { id = 124051 days = 7 random = 4 }
+				}
+			}
+		}
+		random_list = {
+			97 = {}
+			2 = { change_martial = 1 }
+			1 = { character_event = { id = eknotify.0 days = 1 } }
+		}
+	}
+}
+letter_event = {
+	id = 124051
+	desc = EVTDESC124051
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		FROM = {
+			location = {
+				if = {
+					limit = { NOT = { has_province_modifier = enforced_martiallaw } }
+					add_province_modifier = {
+						name = enforced_martiallaw
+						duration = 1825
+					}
+				}
+				if = {
+					limit = { has_province_modifier = goblin_infestation }
+					remove_province_modifier = goblin_infestation
+				}
+				if = {
+					limit = { has_province_modifier = falmer_infestation }
+					remove_province_modifier = falmer_infestation
+				}
+				if = {
+					limit = { has_province_modifier = skeever_infestation }
+					remove_province_modifier = skeever_infestation
+				}
+				if = {
+					limit = { has_province_modifier = undead_infestation }
+					remove_province_modifier = undead_infestation
+				}
+				if = {
+					limit = { has_province_modifier = lycan_infestation }
+					remove_province_modifier = lycan_infestation
+				}
+				if = {
+					limit = { has_province_modifier = vampire_infestation }
+					remove_province_modifier = vampire_infestation
+				}
+				if = {
+					limit = { has_province_modifier = giants }
+					remove_province_modifier = giants
+				}
+				if = {
+					limit = { has_province_modifier = trolls }
+					remove_province_modifier = trolls
+				}
+				if = {
+					limit = { has_province_modifier = adventurers }
+					remove_province_modifier = adventurers
+				}
+				if = {
+					limit = { has_province_modifier = kwama_infestation }
+					remove_province_modifier = kwama_infestation
+				}
+				if = {
+					limit = { has_province_modifier = magical_anomalies }
+					remove_province_modifier = magical_anomalies
+				}
+				if = {
+					limit = { has_province_modifier = propagandist }
+					remove_province_modifier = propagandist
+				}
+				if = {
+					limit = { has_province_modifier = smugglers_ring }
+					remove_province_modifier = smugglers_ring
+				}
+				if = {
+					limit = { has_province_modifier = highway_robber_band }
+					remove_province_modifier = highway_robber_band
+				}
+				
+				if = {
+					limit = { has_province_modifier = thieves_guild }
+					remove_province_modifier = thieves_guild
+				}
+			}
+		}
+	}
+}
+
+#Oppressive Measures piss off peasants
+character_event = {
+	id = 124052
+	title = EVTTITLE124052
+	desc = EVTDESC124052
+	picture = GFX_evt_riots_byzantine
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_assist_arrest
+		location = {
+			OR = {
+				owner = {
+					job_marshal = {
+						character = ROOT
+					}
+				}
+				owner = {
+					liege = {
+						job_marshal = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		
+		modifier = {
+			factor = 0.5
+			NOT = { opinion = { who = liege value = -100 } }
+		}
+		modifier = {
+			factor = 0.65
+			NOT = { opinion = { who = liege value = -75 } }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { opinion = { who = liege value = -50 } }
+		}
+		modifier = {
+			factor = 0.85
+			NOT = { opinion = { who = liege value = -25 } }
+		}
+		modifier = {
+			factor = 1.25
+			opinion = { who = liege value = 25 }
+		}
+		modifier = {
+			factor = 1.5
+			opinion = { who = liege value = 50 }
+		}
+		modifier = {
+			factor = 2
+			opinion = { who = liege value = 75 }
+		}		
+		modifier = {
+			factor = 0.25
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 0.25
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 13
+		}	
+		modifier = {
+			factor = 1.5
+			martial = 14
+		}	
+		modifier = {
+			factor = 1.5
+			martial = 15
+		}
+		modifier = {
+			factor = 1.75
+			martial = 16
+		}
+		modifier = {
+			factor = 1.75
+			martial = 17
+		}	
+		modifier = {
+			factor = 1.75
+			martial = 18
+		}
+		modifier = {
+			factor = 1.75
+			martial = 19
+		}
+		modifier = {
+			factor = 2
+			martial = 20
+		}
+		modifier = {
+			factor = 2
+			martial = 21
+		}
+		modifier = {
+			factor = 2
+			martial = 22
+		}
+		modifier = {
+			factor = 3
+			martial = 23
+		}
+		modifier = {
+			factor = 3
+			martial = 24
+		}
+		modifier = {
+			factor = 3
+			martial = 25
+		}
+	}
+	
+	option = {
+		name = informliege
+		prestige = -5
+		custom_tooltip = {
+			text = EVTOPTA124052TOOLTIPA
+			hidden_tooltip = {
+				liege = {
+					letter_event = { id = 124053 days = 7 random = 4 }
+				}
+			}
+		}
+	}
+}
+letter_event = {
+	id = 124053
+	desc = EVTDESC124053
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		FROM = {
+			location = {
+				add_province_modifier = {
+					name = peasant_unrest
+					duration = 1825
+				}
+			}
+		}
+	}
+}
+
+#Marshal Attacked
+character_event = {
+	id = 124060
+	title = EVTTITLE124060
+	desc = EVTDESC124060
+	picture = GFX_evt_bloody_man
+	
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_job_action = action_assist_arrest
+		location = {
+			OR = {
+				owner = {
+					job_marshal = {
+						character = ROOT
+					}
+				}
+				owner = {
+					liege = {
+						job_marshal = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 1 }
+		}		
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 2 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 4 }
+		}
+		modifier = {
+			factor = 0.90
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 0.95
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.98
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 0.98
+			NOT = { martial = 9 }
+		}
+		modifier = {
+			factor = 1.01
+			martial = 11
+		}		
+		modifier = {
+			factor = 1.01
+			martial = 12
+		}	
+		modifier = {
+			factor = 1.01
+			martial = 13
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 14
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 15
+		}
+		modifier = {
+			factor = 1.10
+			martial = 16
+		}
+		modifier = {
+			factor = 1.02
+			martial = 17
+		}	
+		modifier = {
+			factor = 1.02
+			martial = 18
+		}
+		modifier = {
+			factor = 1.05
+			martial = 19
+		}
+		modifier = {
+			factor = 1.05
+			martial = 20
+		}
+		modifier = {
+			factor = 1.05
+			martial = 21
+		}
+		modifier = {
+			factor = 1.05
+			martial = 22
+		}
+		modifier = {
+			factor = 1.05
+			martial = 23
+		}
+		modifier = {
+			factor = 1.03
+			martial = 24
+		}
+		modifier = {
+			factor = 1.01
+			martial = 25
+		}
+		modifier = {
+			factor = 1.5
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.5
+			combat_rating = 45
+		}
+		modifier = {
+			factor = 1.5
+			combat_rating = 60
+		}
+	}
+	
+	immediate = {
+		hidden_tooltip = {
+			random_list = {
+				75 = {
+					set_character_flag = marshal_wounded
+				}
+				25 = {
+					modifier = {
+						factor = 0.5
+						combat_rating = 45
+						NOT = { combat_rating = 60 }
+					}
+					modifier = { #Too good in combat to be harmed like this
+						factor = 0
+						combat_rating = 60
+					}
+					set_character_flag = marshal_maimed
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVOPTA938
+		trigger = {
+			has_character_flag = marshal_wounded 
+		}
+		add_trait = wounded
+		liege = { letter_event = { id = 124061 tooltip = EVTOPTA124060TOOLTIPA } }
+		clr_character_flag = marshal_wounded
+	}
+	option = {
+		name = EVOPTB938
+		trigger = { has_character_flag = marshal_maimed }
+		liege = { letter_event = { id = 124062 tooltip = EVTOPTB124060TOOLTIPA } }
+		clr_character_flag = marshal_maimed
+		add_maimed_trait_effect = yes
+	}
+}
+
+letter_event = {
+	id = 124061
+	desc = EVTDESC124061
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA20380
+		tooltip = {
+			FROM = { add_trait = wounded }
+		}
+	}
+}
+
+letter_event = {
+	id = 124062
+	desc = EVTDESC124062
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA20381
+	}
+}

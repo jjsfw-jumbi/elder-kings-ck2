@@ -1,0 +1,4078 @@
+### At the moment we have a pretty basic icon system for combat tactics showing
+### the uniticon which has the biggest bonus value in the tactic.
+### This is the sprite number for each unit:
+### 1=LI 2=HI 3=PIKE 4=LC 5=KNIGHTS 6=ARCHERS 7=HORSE ARCH.
+
+### Note from Etienne: This is meant as a WIP and does not reflect final combat tactics. Feel free to use this file to playtest combat tactics in EK.
+
+# Must be first in file. This tactic will be set if anything goes wrong
+no_tactic = {
+	days = 1 # tactic lasts one day
+	sprite = 1 # index of icon
+
+	trigger = {
+		always = no # never use unless set explicitly by code
+	}
+}
+
+generic_skirmish_tactic = {
+	days = 18 # tactic lasts one day
+	sprite = 4 # index of icon
+
+	group = skirmish
+
+	trigger = {
+		phase = skirmish
+	}
+
+	mean_time_to_happen = {
+		days = 3
+	}
+
+}
+
+harass_tactic = {
+	days = 18
+	sprite = 4
+	group = harass
+
+	trigger = {
+		phase = skirmish 
+		light_cavalry = 0.001
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.7
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.6
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.5
+			}
+		}
+	}
+
+	light_cavalry_offensive = 3
+	archers_offensive = -1.5
+	battlemages_offensive = -1.5
+	enemy = {
+		group = swarm
+		factor = 1
+	}
+}
+
+volly_harass_tactic = {
+	days = 18
+	sprite = 4
+	group = harass
+
+	trigger = {
+		phase = skirmish 
+		light_cavalry = 0.01
+		OR = {
+			archers = 0.01
+			battlemages = 0.01
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			OR = {
+				light_troops = { 
+					who = light_cavalry
+					value = 0.7
+				}
+				light_troops = { 
+					who = archers
+					value = 0.3
+				}
+				troops = { 
+					who = battlemages
+					value = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				light_troops = { 
+					who = light_cavalry
+					value = 0.6
+				}
+				light_troops = { 
+					who = archers
+					value = 0.3
+				}
+				troops = { 
+					who = battlemages
+					value = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			OR = {
+				light_troops = { 
+					who = light_cavalry
+					value = 0.5
+				}
+				light_troops = { 
+					who = archers
+					value = 0.3
+				}
+				troops = { 
+					who = battlemages
+					value = 0.3
+				}
+			}
+		}
+	}
+
+	light_cavalry_offensive = 2.4
+	archers_offensive = 0.6
+	battlemages_offensive = 0.6
+	enemy = {
+		group = swarm
+		factor = 1
+	}
+}
+
+volley_tactic = {
+	days = 18
+	sprite = 6
+	group = volley
+
+	trigger = {
+		phase = skirmish  
+		OR = {
+			archers = 0.01
+			battlemages = 0.01
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.7
+				}
+				troops = { 
+					who = battlemages
+					value = 0.7
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.6
+				}
+				troops = { 
+					who = battlemages
+					value = 0.6
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.5
+				}
+				troops = { 
+					who = battlemages
+					value = 0.5
+				}
+			}
+		}
+	}
+
+	light_cavalry_offensive = -1.5
+	archers_offensive = 2
+	battlemages_offensive = 2
+	
+	enemy = {
+		group = harass
+		factor = 1
+	}
+}
+
+swarm_volley_tactic = {
+	days = 18
+	sprite = 6
+	group = volley
+
+	trigger = {
+		phase = skirmish 
+		OR = {
+			archers = 0.01
+			battlemages = 0.01
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = archers
+				value = 0.6
+			}
+			troops = { 
+				who = battlemages
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = archers
+				value = 0.5
+			}
+			troops = { 
+				who = battlemages
+				value = 0.25
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = archers
+				value = 0.4
+			}
+			troops = { 
+				who = battlemages
+				value = 0.2
+			}
+		}	
+	}
+
+	light_cavalry_offensive = -1.8
+	archers_offensive = 1.2	
+	battlemages_offensive = 1.2
+	enemy = {
+		group = harass
+		factor = 1
+	}
+}
+
+swarm_tactic = {
+	days = 18
+	sprite = 7
+	group = swarm
+
+	trigger = {
+		phase = skirmish
+		OR = {
+			light_infantry = 0.01
+			undead_troop = 0.01
+			lesser_daedra = 0.01
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.4
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.4
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.4
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.3
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.3
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.3
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.2
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.2
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.2
+				}
+			}
+		}	
+	}
+
+	light_infantry_offensive = 1.5
+	undead_troop_offensive = 1.5
+	lesser_daedra_offensive = 1.5
+	light_cavalry_offensive = -1.5	
+	archers_offensive = -1.5
+	enemy = {
+		group = volley
+		factor = 1
+	}
+}
+
+disorganised_swarm_tactic = {
+	days = 18
+	sprite = 7
+	group = swarm
+
+	trigger = {
+		phase = skirmish
+		light_infantry = 0.30
+		OR = {
+			flank_has_leader = no
+			NOT = { leader = { martial = 12 } }
+			OR = {
+				light_infantry = 0.5
+				undead_troop = 0.5
+				lesser_daedra = 0.5
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.5
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.5
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.5
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.7
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.7
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.7
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.9
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.9
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.9
+				}
+			}
+		}	
+	}
+
+	light_cavalry_offensive = -1.5
+	light_infantry_offensive = 0.5
+	light_infantry_defensive = -0.75
+	undead_troop_offensive = 0.5
+	undead_troop_defensive = -0.75
+	lesser_daedra_offensive = 0.5
+	lesser_daedra_defensive = -0.75
+	archers_offensive = -1.5
+}
+
+harras_swarm_tactic = {
+	days = 18
+	sprite = 7
+	group = swarm
+
+	trigger = {
+		phase = skirmish 
+		light_infantry = 0.01
+		OR = {
+			NOR = { 
+				light_infantry = 0.35
+				undead_troop = 0.35
+				lesser_daedra = 0.35
+			}
+			AND = {
+				flank_has_leader = yes
+				leader = { martial = 12 }
+				NOR = { 
+					light_infantry = 0.65
+				undead_troop = 0.65
+				lesser_daedra = 0.65
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.2
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.2
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.2
+				}
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.3
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.3
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.3
+				}
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.4
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.4
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.4
+				}
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.3
+			}
+		}
+	}
+
+	light_cavalry_offensive = 0.6
+	light_infantry_offensive = 1.0
+	undead_troop_offensive = 1.0
+	lesser_daedra_offensive = 1.0
+	archers_offensive = -1.8
+	enemy = {
+		group = volley
+		factor = 1
+	}
+}
+
+shieldwall_tactic = {
+	days = 12
+	sprite = 2 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = skirmish
+		OR = {
+			heavy_infantry = 0.2
+			pikemen = 0.2
+			light_infantry = 0.2
+			undead_troop = 0.2
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = { 
+					who = pikemen
+					value = 0.15
+				}
+				light_troops = { 
+					who = light_infantry
+					value = 0.3
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.4
+				}
+				troops = { 
+					who = pikemen
+					value = 0.125
+				}
+				light_troops = { 
+					who = light_infantry
+					value = 0.4
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.4
+				}
+			}
+		}
+	}
+
+	light_infantry_defensive = 1.2
+	undead_troop_defensive = 1.2
+	heavy_infantry_defensive = 3
+	pikemen_defensive = 2.4
+
+	archers_offensive = 0.6
+	battlemages_offensive = 0.6
+	tongues_offensive = 0.6
+
+	light_cavalry_defensive = -0.5
+	knights_defensive = -0.5
+}
+
+fient_tactic = {
+	days = 12
+	sprite = 2 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = skirmish
+		OR = {
+			light_infantry = 0.1
+			undead_troop = 0.1
+		}
+		OR = {
+			archers = 0.1
+			battlemages = 0.1
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.3
+				}
+				troops = { 
+					who = battlemages
+					value = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				light_troops = {
+					who = light_infantry
+					value = 0.4
+				}
+				light_troops = {
+					who = undead_troop
+					value = 0.4
+				}
+				light_troops = {
+					who = lesser_daedra
+					value = 0.4
+				}
+			}
+		}
+	}
+
+	light_infantry_offensive = 1
+	light_infantry_defensive = 0.5
+	undead_troop_offensive = 1
+	undead_troop_defensive = 0.5
+	lesser_daedra_offensive = 1
+	lesser_daedra_defensive = 0.5
+	archers_offensive = 1.5
+	battlemages_offensive = 1.5
+	
+	heavy_infantry_offensive = -0.5
+	heavy_infantry_defensive = -0.5
+	knights_offensive = -0.5
+	knights_defensive = -0.5
+	
+}
+
+
+
+prepare_tactic = {
+	days = 1
+	sprite = 2
+	group = defensive
+		
+	trigger = {
+		phase = skirmish
+		days = 15
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 0.1
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+		}
+		modifier = {
+			factor = 0.1
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+		}
+		modifier = {
+			factor = 0.1
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+		}
+	}
+	
+	change_phase_to = melee
+}
+
+charge_on_undefended_tactic = {
+	days = 2
+	sprite = 5
+	group = charge
+	
+	trigger = {
+		phase = skirmish
+		is_flanking = no
+		days = 3 # duration of combat >= 3 days
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 100
+			enemy = {
+				OR = {
+					troops = { 
+						who = archers
+						value = 0.6
+					}
+					troops = { 
+						who = battlemages
+						value = 0.6
+					}
+				}
+			}
+		}
+	}
+	
+	change_phase_to = melee
+}
+
+charge_of_opportunity_tactic = {
+	days = 6
+	sprite = 5 # index of icon
+	group = charge
+	
+	trigger = {
+		phase = skirmish
+		is_flanking = no
+		days = 10 # duration of combat >= 10 days
+	}
+
+	mean_time_to_happen = {
+		days = 3 # this has nothing to do with days, it just represents relative chance of selecting this tactic, higher is better
+	}
+
+	change_phase_to = melee
+	
+	knights_offensive = 3
+	tongues_offensive = 1.5
+	heavy_infantry_offensive = 1.2
+	dremora_troop_offensive = 1.2
+}
+
+charge_tactic = {
+	days = 6
+	sprite = 5 # index of icon
+	group = charge
+	
+	trigger = {
+		phase = skirmish
+		is_flanking = no
+		days = 10 # duration of combat >= 10 days
+	}
+
+	mean_time_to_happen = {
+		days = 10 # this has nothing to do with days, it just represents relative chance of selecting this tactic, higher is better
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = {
+				who = knights
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = {
+					who = heavy_infantry
+					value = 0.1
+				}
+				troops = {
+					who = dremora_troop
+					value = 0.05
+				}
+			}
+		}
+	}
+
+	change_phase_to = melee
+
+	knights_offensive = 3
+	heavy_infantry_offensive = 1.2
+	dremora_troop_offensive = 1.2
+}
+
+wait_tactic = {
+	days = 1
+	sprite = 2
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+	}
+
+	mean_time_to_happen = {
+		days = 1
+		modifier = {
+			factor = 0.1
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+		}
+		modifier = {
+			factor = 0.1
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+		}
+		modifier = {
+			factor = 0.1
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+		}
+	}
+}
+
+advance_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+			tongues = 0.01
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.15
+				}
+				light_troops = { 
+					who = tongues
+					value = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.2
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.1
+				}
+				troops = { 
+					who = tongues
+					value = 0.07
+				}
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.2
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.1
+				}
+				troops = { 
+					who = tongues
+					value = 0.07
+				}
+			}
+		}
+	}
+	
+	knights_offensive = -1.5
+	heavy_infantry_offensive = 3
+	dremora_troop_offensive = 3
+	tongues_offensive = 3
+	pikemen_offensive = -1.5
+	
+	enemy = {
+		group = stand_fast
+		factor = 3
+	}
+}
+
+awesome_advance_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+			tongues = 0.01
+		}
+		knights = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 9
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.7
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.35
+				}
+				troops = { 
+					who = tongues
+					value = 0.25
+				}
+			}
+			heavy_troops = {
+				who = knights 
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 13
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.6
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.3
+				}
+				troops = { 
+					who = tongues
+					value = 0.2
+				}
+			}
+			heavy_troops = {
+				who = knights 
+				value = 0.3
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 17
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.5
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.25
+				}
+				troops = { 
+					who = tongues
+					value = 0.15
+				}
+			}
+			heavy_troops = {
+				who = knights 
+				value = 0.3
+			}
+		}	
+	}
+
+	knights_offensive = 0.6
+	heavy_infantry_offensive = 2.4
+	dremora_troop_offensive = 2.4
+	tongues_offensive = 2.4
+	pikemen_offensive = -1.8
+	enemy = {
+		group = stand_fast
+		factor = 3
+	}
+}
+
+stand_fast_tactic = {
+	days = 18
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		pikemen = 0.01
+		location = {
+			OR = {
+				terrain = forest
+				terrain = woods
+				terrain = mountain
+				terrain = jungle
+				terrain = valen_woods
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			troops = {
+				who = pikemen 
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = pikemen 
+				value = 0.2
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			troops = {
+				who = pikemen 
+				value = 0.1
+			}
+		}
+	}
+
+	knights_offensive = -1.5
+	heavy_infantry_offensive = -1.5
+	dremora_troop_offensive = -1.5
+	pikemen_offensive = 3
+	enemy = {
+		group = charge
+		factor = 3
+	}
+}
+
+slow_advance_tactic = {
+	days = 18
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		battlemages = 0.01
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+			tongues = 0.01
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			pikemen = 0.2
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.2
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.1
+				}
+				troops = { 
+					who = tongues
+					value = 0.07
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			pikemen = 0.15
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.15
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.075
+				}
+				troops = { 
+					who = tongues
+					value = 0.05
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			pikemen = 0.1
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.1
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.05
+				}
+				troops = { 
+					who = tongues
+					value = 0.033
+				}
+			}
+		}
+	}
+	
+	knights_offensive = -1.8
+	heavy_infantry_offensive = 0.6
+	pikemen_offensive = 2.4
+	enemy = {
+		group = charge
+		factor = 3
+	}
+}
+
+awesome_charge_tactic = {
+	days = 18
+	sprite = 5
+	group = charge
+
+	trigger = {
+		phase = melee
+		knights = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.7
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.6
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.5
+			}
+		}
+	}
+
+	knights_offensive = 3
+	heavy_infantry_offensive = -1.5
+	dremora_troop_offensive = -1.5
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+
+awesomer_charge_tactic = {
+	days = 18
+	sprite = 5
+	group = charge
+
+	trigger = {
+		phase = melee 
+		knights = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 9
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.4
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 13
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.35
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 17
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.3
+			}
+		}
+	}
+
+	knights_offensive = 3
+	heavy_infantry_offensive = -1.8
+	dremora_troop_offensive = -1.8
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+
+barrage_tactic = {
+	days = 6
+	sprite = 6 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = melee
+		OR = {
+			archers = 0.2
+			battlemages = 0.2
+			tongues = 0.2
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = {
+				who = archers
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = {
+				who = tongues
+				value = 0.3
+			}
+		}
+	}
+	
+	archers_offensive = 2.4
+	battlemages_offensive = 2.4
+	tongues_offensive = 2.4
+}
+
+raid_tactic = {
+	days = 6
+	sprite = 1
+	group = defensive
+	
+	trigger = {
+		phase = melee
+		light_cavalry = 0.2
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = light_cavalry
+				value = 0.4
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = light_infantry
+				value = 0.3
+			}
+		}
+	}
+	
+	light_cavalry_offensive = 2.4
+	light_infantry_offensive = 2.4
+}
+
+pursue_tactic = {
+	days = 15
+	sprite = 4
+	group = charge
+	
+	trigger = {
+		phase = pursue
+	}
+
+	mean_time_to_happen = {
+		days = 10
+	}
+}
+
+#########################
+# Combat Flavor Tactics #
+#########################
+
+# Bad Tactics
+
+reckless_charge_tactic = {
+	days = 6
+	sprite = 5 # index of icon
+	group = charge
+	
+	trigger = {
+		phase = skirmish
+		is_flanking = no
+		days = 10 # duration of combat >= 10 days
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = aggressive_leader
+				trait = wroth
+				trait = reckless
+				trait = ambitious
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 10 # this has nothing to do with days, it just represents relative chance of selecting this tactic, higher is better
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			light_troops = {
+				who = light_cavalry
+				value = 0.2
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			heavy_troops = {
+				who = knights
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			OR = {
+				heavy_troops = {
+					who = heavy_infantry
+					value = 0.1
+				}
+				troops = {
+					who = dremora_troop
+					value = 0.05
+				}
+			}
+		}
+	}
+
+	change_phase_to = melee
+
+	knights_defensive = -0.5
+	heavy_infantry_defensive = -0.3
+	dremora_troop_defensive = -0.3
+	
+	knights_offensive = 1.2
+	heavy_infantry_offensive = 0.6
+	dremora_troop_offensive = 0.6
+}
+
+
+timid_advance_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+			tongues = 0.01
+		}
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = craven
+				trait = organizer
+				trait = slothful
+				trait = paranoid
+				trait = lead_from_rear
+				trait = shy
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			OR = {
+				heavy_troops = {
+					who = heavy_infantry
+					value = 0.2
+				}
+				troops = {
+					who = dremora_troop
+					value = 0.1
+				}
+				troops = {
+					who = tongues
+					value = 0.07
+				}
+			}
+		}	
+	}
+
+	knights_offensive = -2.1
+	heavy_infantry_offensive = -2.1
+	dremora_troop_offensive = -2.1
+	tongues_offensive = -2.1
+	pikemen_offensive = 1.2
+	
+	enemy = {
+		group = stand_fast
+		factor = 1.2
+	}
+}
+
+confused_orders_tactic = {
+	days = 18
+	sprite = 6
+	group = volley
+
+	trigger = {
+		phase = skirmish  
+		OR = {
+			archers = 0.01
+			battlemages = 0.01
+		}
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = lisp
+				trait = stutter
+				trait = imbecile
+				trait = slow
+				trait = blinded
+				trait = blind
+				trait = blind_moth
+				trait = mute
+				trait = stressed
+				trait = lunatic
+				trait = dull
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			light_troops = { 
+				who = archers
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			troops = { 
+				who = battlemages
+				value = 0.3
+			}
+		}
+	}
+
+	archers_offensive = -1.2
+	battlemages_offensive = -1.2
+	
+	enemy = {
+		group = charge
+		factor = -1.2
+	}
+}
+
+hesitant_commander_tactic = {
+	days = 18
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = slothful
+				trait = shy
+				trait = slow
+				trait = imbecile
+				trait = craven
+				trait = paranoid
+				trait = absent_minded
+				trait = stressed
+				trait = defensive_leader
+				trait = lead_from_rear
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+		}
+	}
+
+	knights_offensive = -1.5
+	heavy_infantry_offensive = -1.5
+	dremora_troop_offensive = -1.5
+	tongues_offensive = -1.5
+}
+
+charging_own_skirmishers_tactic = {
+	days = 6
+	sprite = 5 # index of icon
+	group = charge
+	
+	trigger = {
+		phase = skirmish
+		is_flanking = no
+		days = 10 # duration of combat >= 10 days
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = cruel
+				trait = ruthless
+				trait = reckless
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 10 # this has nothing to do with days, it just represents relative chance of selecting this tactic, higher is better
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 10 }
+			}
+			heavy_troops = {
+				who = knights
+				value = 0.05
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 10 }
+			}
+			light_troops = {
+				who = light_cavalry
+				value = 0.05
+			}
+		}
+	}
+
+	change_phase_to = melee
+
+	knights_offensive = 3
+	light_cavalry_offensive = 1.8
+	
+	archers_offensive = -4.2
+	archers_defensive = -0.5
+	battlemages_offensive = -3.0
+	battlemages_defensive = -0.35
+}
+
+# Good tactics
+
+inspired_defense_tactic = {
+	days = 12
+	sprite = 2 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = skirmish
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = inspiring_leader
+				trait = defensive_leader
+				trait = lead_from_rear
+				trait = veteran_leader_3
+				trait = veteran_leader_4
+				trait = veteran_leader_5
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+				trait = defensive_leader
+			}
+		}
+	}
+
+	knights_defensive = 1.5
+	heavy_infantry_defensive = 1.5
+	light_infantry_defensive = 1.5
+	light_cavalry_defensive = 1.5
+	archers_defensive = 1.5
+	pikemen_defensive = 1.5
+	battlemages_defensive = 1.5
+	tongues_defensive = 1.5
+	dremora_troop_defensive = 1.5
+	undead_troop_defensive = 1.5
+	lesser_daedra_defensive = 1.5
+	
+	enemy = {
+		group = charge
+		factor = 1.2
+	}
+	enemy = {
+		group = advance
+		factor = 0.6
+	}
+}
+
+heroic_countercharge_tactic = {
+	days = 18
+	sprite = 5
+	group = charge
+
+	trigger = {
+		phase = melee 
+		knights = 0.01
+		light_cavalry = 0.01
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = aggressive_leader
+				trait = brave
+				trait = cavalry_leader
+				trait = lead_from_fore
+				trait = reckless
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.1
+			}
+		}
+	}
+
+	knights_offensive = 3.6
+	light_cavalry_offensive = 3.6
+	heavy_infantry_offensive = 0.6
+	pikemen_offensive = 0.6
+	dremora_troop_offensive = 0.6
+	tongues_offensive = 1.0
+
+	enemy = {
+		group = charge
+		factor = 3
+	}
+}
+
+clever_ambush_tactic = {
+	days = 18
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		light_cavalry = 0.05
+		light_infantry = 0.05
+		battlemages = 0.05
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = trickster
+				trait = quick
+				trait = genius
+				trait = shrewd
+				trait = veteran_leader_5
+				trait = veteran_leader_4
+				trait = veteran_leader_3
+			}
+		}
+		location = {
+			OR = {
+				terrain = hills
+				terrain = mountain
+				terrain = argonia
+				terrain = marsh
+				terrain = mangrove_swamp
+				terrain = islander_terrain
+				terrain = valen_woods
+				terrain = jungle
+				terrain = woods
+				terrain = forest
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+			}
+			troops = {
+				who = light_cavalry
+				value = 0.15
+			}
+			OR = {
+				troops = {
+					who = light_infantry
+					value = 0.15
+				}
+				troops = {
+					who = lesser_daedra
+					value = 0.15
+				}
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+				trait = trickster
+			}
+			troops = { 
+				who = light_cavalry
+				value = 0.1
+			}
+			OR = {
+				troops = {
+					who = light_infantry
+					value = 0.1
+				}
+				troops = {
+					who = lesser_daedra
+					value = 0.1
+				}
+			}
+		}		
+	}
+
+	light_cavalry_offensive = 2.4
+	light_infantry_offensive = 1.2
+	lesser_daedra_offensive = 1.2
+	archers_offensive = 1.2
+	battlemages_offensive = 1.2
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+
+religious_fervour_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		flank_has_leader = yes
+		OR = {
+			leader = {
+				trait = zealous
+				trait = inspiring_leader
+			}
+			leader = { trait = possessed }
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+				trait = possessed
+			}
+		}
+	}
+
+	knights_offensive = 1.5
+	heavy_infantry_offensive = 1.5
+	light_infantry_offensive = 1.5
+	light_cavalry_offensive = 1.5
+	pikemen_offensive = 1.5
+	archers_offensive = 1.5
+	battlemages_offensive = 1.5
+	tongues_offensive = 1.5
+	dremora_troop_offensive = 1.5
+	undead_troop_offensive = 1.5
+	lesser_daedra_offensive = 1.5
+}
+
+############################
+# Culture Specific Tactics #
+############################
+
+# For the heavy infantry-focused cultures
+berserker_charge_tactic = {
+	days = 18
+	sprite = 5
+	group = charge
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			OR = {
+				culture = atmoran
+				culture = nord
+				culture = skaal
+				culture = orsimer
+				culture = kamal
+				culture_group = undead
+				culture_group = daedra
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.15
+				}
+			}
+		}
+	}
+
+	heavy_infantry_offensive = 4
+	dremora_troop_offensive = 4
+	light_infantry_offensive = 2
+	undead_troop_offensive = 2
+	lesser_daedra_offensive = 2
+
+	heavy_infantry_defensive = -0.5
+	dremora_troop_defensive = -0.5
+	light_infantry_defensive = -0.25
+	undead_troop_defensive = -0.25
+	lesser_daedra_defensive = -0.25
+
+	enemy = {
+		group = stand_fast
+		factor = 1
+	}
+}
+
+# For the light infantry-focused cultures
+light_infantry_charge_tactic = {
+	days = 18
+	sprite = 5
+	group = charge
+
+	trigger = {
+		phase = melee
+		OR = {
+			light_infantry = 0.01
+			undead_troop = 0.01
+			lesser_daedra = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			OR = {
+				culture = tangmo
+				culture = quey
+				culture = reachmen
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.3
+				}
+				light_troops = { 
+					who = undead_troop
+					value = 0.3
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.3
+				}
+			}
+		}
+	}
+
+	light_infantry_offensive = 4
+	undead_troop_offensive = 4
+	lesser_daedra_offensive = 4
+	heavy_infantry_offensive = 2
+	dremora_troop_offensive = 2
+	archers_offensive = 1.5
+
+	light_infantry_defensive = -0.5
+	undead_troop_defensive = -0.5
+	lesser_daedra_defensive = -0.5
+	heavy_infantry_defensive = -0.25
+	dremora_troop_defensive = -0.25
+
+	enemy = {
+		group = stand_fast
+		factor = 1
+	}
+}
+
+#Advanced Cavalry Charge for Cavalry Powers
+embolon_charge_formation_tactic = {
+	days = 18
+	sprite = 5
+	group = charge
+
+	trigger = {
+		phase = melee 
+		knights = 0.01
+		flank_has_leader = yes
+		leader = { 
+			OR = {
+				culture = altmer
+				culture = breton
+				culture = colovian
+				culture = imperial
+				culture = nibenean
+				culture_group = yokudan_group
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.5
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.4
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.3
+			}
+		}
+	}
+
+	knights_offensive = 2.8
+	light_cavalry_offensive = 2
+	heavy_infantry_offensive = -0.5
+	dremora_troop_offensive = -0.5
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+
+#Samurai katana charge
+akaviri_katana_charge_tactic = {
+	days = 18
+	sprite = 5
+	group = charge
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			OR = {
+				culture = akaviri
+				culture = tsaesci
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.15
+				}
+			}
+		}
+	}
+
+	heavy_infantry_offensive = 4
+	dremora_troop_offensive = 4
+	light_infantry_offensive = 2
+	undead_troop_offensive = 2
+	lesser_daedra_offensive = 2
+
+	heavy_infantry_defensive = -0.5
+	dremora_troop_defensive = -0.5
+	light_infantry_defensive = -0.25
+	undead_troop_defensive = -0.25
+	lesser_daedra_defensive = -0.25
+
+	enemy = {
+		group = stand_fast
+		factor = 1
+	}
+}
+
+#Tactic for Cultures that like to utilize heavy infantry -and- Mages
+arcane_advance_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+		}
+		battlemages = 0.01
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				culture = ashlander
+				culture = chimer
+				culture = dunmer
+				culture = dwemer
+				culture = falmer
+				culture = maormer
+				culture = breton
+				culture = reachmen
+				culture = potun
+				culture = tsaesci
+				culture_group = daedra
+				culture_group = undead
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 9
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.7
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.35
+				}
+			}
+			troops = {
+				who = battlemages
+				value = 0.15
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 13
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.6
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.3
+				}
+			}
+			troops = {
+				who = battlemages
+				value = 0.125
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 17
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.5
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.25
+				}
+			}
+			troops = {
+				who = battlemages
+				value = 0.1
+			}
+		}
+	}
+
+	battlemages_offensive = 0.75
+	heavy_infantry_offensive = 3
+	dremora_troop_offensive = 3
+	enemy = {
+		group = stand_fast
+		factor = 3
+	}
+}
+
+#Orsimer Halberd Advance
+orsimer_guarded_infantry_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		pikemen = 0.01
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+		}
+		flank_has_leader = yes
+		leader = { culture = orsimer }
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			troops = { 
+				who = pikemen
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.15
+				}
+			}
+		}
+	}
+
+	heavy_infantry_offensive = 3.5
+	dremora_troop_offensive = 3.5
+	light_infantry_offensive = 0.5
+	undead_troop_offensive = 0.5
+	lesser_daedra_offensive = 0.5
+	pikemen_offensive = 2.0
+	
+	enemy = {
+		group = charge
+		factor = 3
+	}
+}
+
+
+#Redguard Swordsmanship
+redguard_advance_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			culture_group = yokudan_group
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.4
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.2
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 15
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.2
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.1
+				}
+			}
+		}
+	}
+	
+	heavy_infantry_offensive = 3.5
+	dremora_troop_offensive = 3.5
+	light_infantry_offensive = 2
+	undead_troop_offensive = 2
+	lesser_daedra_offensive = 2
+	pikemen_offensive = -0.5
+	
+	enemy = {
+		group = stand_fast
+		factor = 3
+	}
+}
+
+#Khajiit Cavalry Ambush Enemy Troops
+khajiit_harass_tactic = {
+	days = 18
+	sprite = 4
+	group = harass
+
+	trigger = {
+		phase = skirmish
+		OR = {
+			light_cavalry = 0.001
+			knights = 0.001
+		}
+		flank_has_leader = yes
+		leader = { 
+			culture_group = khajiit
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.7
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.6
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = light_cavalry
+				value = 0.5
+			}
+		}
+	}
+
+	light_cavalry_offensive = 3.5
+	knights_offensive = 1.5
+	battlemages_offensive = -0.75
+	archers_offensive = -0.75
+	enemy = {
+		group = swarm
+		factor = 1
+	}
+}
+
+#Khajiit Mixed Unit Tactics
+khajiit_synergy_tactic = {
+	days = 12
+	sprite = 2 # index of icon
+	group = advance
+
+	trigger = {
+		phase = melee
+		flank_has_leader = yes
+		leader = {
+			culture_group = khajiit
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 20
+			}
+		}
+	}
+
+	knights_offensive = 1
+	heavy_infantry_offensive = 1
+	light_infantry_offensive = 1
+	light_cavalry_offensive = 1
+	archers_offensive = 1
+	pikemen_offensive = 1
+	battlemages_offensive = 1
+	tongues_offensive = 1
+	dremora_troop_offensive = 1
+	undead_troop_offensive = 1
+	lesser_daedra_offensive = 1
+	
+	enemy = {
+		group = stand_fast
+		factor = 3
+	}
+}
+
+# Snake Magic Ambush
+maormer_ambush_tactic = {
+	days = 18
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		OR = {
+			archers = 0.1
+			battlemages = 0.1
+		}
+		knights = 0.01
+		flank_has_leader = yes
+		leader = { culture = maormer }
+		location = {
+			OR = {
+				terrain = argonia
+				terrain = marsh
+				terrain = mangrove_swamp
+				terrain = islander_terrain
+				terrain = valen_woods
+				terrain = jungle
+				terrain = woods
+				terrain = forest
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.2
+				}
+				troops = { 
+					who = battlemages
+					value = 0.2
+				}
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+				trait = trickster
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.2
+				}
+				troops = { 
+					who = battlemages
+					value = 0.2
+				}
+			}
+			heavy_troops = { 
+				who = knights
+				value = 0.1
+			}
+		}
+	}
+
+	archers_offensive = 1.25
+	battlemages_offensive = 1.25
+	knights_offensive = 1.25
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+
+#Mages Riding in Chariots Sling Spells and Crash into Foes
+potun_chariot_charge_tactic = {
+	days = 18
+	sprite = 5 # index of icon
+	group = charge
+	
+	trigger = {
+		phase = skirmish
+		is_flanking = no
+		days = 10 # duration of combat >= 10 days
+		battlemages = 0.001
+		knights = 0.001
+		flank_has_leader = yes
+		leader = { 
+			culture = potun
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 10 # this has nothing to do with days, it just represents relative chance of selecting this tactic, higher is better
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = {
+				who = knights
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.05
+			}
+		}
+	}
+
+	change_phase_to = melee
+
+	knights_offensive = 1.5
+	battlemages_offensive = 1.5
+}
+
+# Chimeris Silt Strider Howdah Archers
+silt_strider_volley_tactic = {
+	days = 18
+	sprite = 6
+	group = volley
+
+	trigger = {
+		phase = skirmish  
+		archers = 0.01
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				culture = ashlander
+				culture = chimer
+				culture = dunmer
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = archers
+				value = 0.6
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = archers
+				value = 0.5
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = archers
+				value = 0.4
+			}
+		}
+	}
+
+	archers_offensive = 1.75
+	archers_defensive = 1.75
+	
+	enemy = {
+		group = harass
+		factor = 1
+	}
+	enemy = {
+		group = charge
+		factor = 1
+	}
+}
+
+# Bosmer Archer Spam
+massive_longbow_volley_tactic = {
+	days = 18
+	sprite = 6
+	group = volley
+
+	trigger = {
+		phase = skirmish  
+		archers = 0.01
+		flank_has_leader = yes
+		leader = {
+			culture = bosmer
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = archers
+				value = 0.4
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = archers
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = archers
+				value = 0.2
+			}
+		}
+	}
+
+	archers_offensive = 3.5
+	
+	enemy = {
+		group = harass
+		factor = 1
+	}
+	enemy = {
+		group = charge
+		factor = 1
+	}
+}
+
+#Old Elven Mixed Mage/Arrow Tactic
+elven_volley_tactic = {
+	days = 18
+	sprite = 6
+	group = volley
+
+	trigger = {
+		phase = skirmish  
+		archers = 0.01
+		battlemages = 0.01
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				culture = ayleid
+				culture = falmer
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			light_troops = { 
+				who = archers
+				value = 0.2
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			troops = { 
+				who = battlemages
+				value = 0.2
+			}
+		}
+	}
+
+	archers_offensive = 2
+	battlemages_offensive = 0.75
+	
+	enemy = {
+		group = harass
+		factor = 1
+	}
+	enemy = {
+		group = charge
+		factor = 1
+	}
+}
+
+#Armies that use no cavalry whatsoever rely heavily on a wall of spears
+pike_and_shot_tactic = {
+	days = 18
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		pikemen = 0.01
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				culture = bosmer
+				culture = dwemer
+				culture = tangmo
+				culture_group = argonian
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			troops = { 
+				who = pikemen
+				value = 0.3
+			}
+			light_troops = { 
+				who = archers
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = { 
+				who = pikemen
+				value = 0.25
+			}
+			light_troops = { 
+				who = archers
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			troops = { 
+				who = pikemen
+				value = 0.2
+			}
+			light_troops = { 
+				who = archers
+				value = 0.2
+			}
+		}
+	}
+	
+	light_infantry_defensive = 1.25
+	undead_troop_defensive = 1.25
+	lesser_daedra_defensive = 1.25
+	heavy_infantry_defensive = 1.5
+	dremora_troop_defensive = 1.5
+	pikemen_defensive = 3.6
+	archers_defensive = 1
+
+	archers_offensive = 0.6
+	pikemen_offensive = 1.5
+	battlemages_offensive = 0.25
+	
+	enemy = {
+		group = charge
+		factor = 3
+	}
+}
+
+#Akaviri Defensive Tactic
+akaviri_wall_of_steel_tactic = {
+	days = 18
+	sprite = 5
+	group = defensive
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			culture = akaviri
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.15
+				}
+			}
+		}
+	}
+
+	heavy_infantry_defensive = 3.5
+	dremora_troop_defensive = 3.5
+	light_infantry_defensive = 3.5
+	undead_troop_defensive = 3.5
+	lesser_daedra_defensive = 3.5
+	pikemen_defensive = 3.5
+
+	enemy = {
+		group = charge
+		factor = 1
+	}
+	enemy = {
+		group = advance
+		factor = 1
+	}
+}
+
+#Kamal Defensive Tactic
+kamal_unyielding_glacier_tactic = {
+	days = 18
+	sprite = 5
+	group = defensive
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			culture = kamal
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.15
+				}
+			}
+		}
+	}
+
+	heavy_infantry_defensive = 4
+	dremora_troop_defensive = 4
+	light_infantry_defensive = 4
+	undead_troop_defensive = 4
+	lesser_daedra_defensive = 4
+	pikemen_defensive = 4
+	
+	heavy_infantry_offensive = -0.5
+	dremora_troop_offensive = -0.5
+	light_infantry_offensive = -0.5
+	undead_troop_offensive = -0.5
+	lesser_daedra_offensive = -0.5
+	pikemen_offensive = -0.5
+
+	enemy = {
+		group = charge
+		factor = 1
+	}
+	enemy = {
+		group = advance
+		factor = 1
+	}
+}
+
+#Thunderbolts, Super-Powered Mage Tactic
+mage_thunderbolts_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = volley
+
+	trigger = {
+		phase = skirmish
+		battlemages = 0.01
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				culture = altmer
+				culture = ayleid
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.3
+			}
+		}
+	}
+
+	battlemages_offensive = 3.25
+	enemy = {
+		group = harass
+		factor = 3
+	}
+}
+
+#Nord War Cry to disrupt enemy!
+nord_war_cry_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+			tongues = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			OR = {
+				culture = atmoran
+				culture = nord
+				culture = skaal
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = {
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = {
+					who = dremora_troop
+					value = 0.15
+				}
+				troops = {
+					who = tongues
+					value = 0.05
+				}
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = {
+					who = heavy_infantry
+					value = 0.15
+				}
+				troops = {
+					who = dremora_troop
+					value = 0.075
+				}
+				troops = {
+					who = tongues
+					value = 0.05
+				}
+			}
+		}
+	}
+	
+	tongues_offensive = 4
+	tongues_defensive = 4
+	heavy_infantry_offensive = 2
+	dremora_troop_offensive = 2
+	light_infantry_offensive = 2
+	undead_troop_offensive = 1
+	lesser_daedra_offensive = 1
+	light_cavalry_offensive = 1.5
+	
+	enemy = {
+		group = charge
+		factor = 3
+	}
+}
+
+# Argonian Ambush
+argonia_ambush_tactic = {
+	days = 18
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		OR = {
+			archers = 0.1
+			battlemages = 0.1
+		}
+		OR = {
+			light_infantry = 0.1
+			lesser_daedra = 0.1
+		}
+		pikemen = 0.01
+		flank_has_leader = yes
+		leader = { culture_group = argonian }
+		location = { terrain = argonia }
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.2
+				}
+				troops = { 
+					who = battlemages
+					value = 0.2
+				}
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.2
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.2
+				}
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 10
+				trait = trickster
+			}
+			OR = {
+				light_troops = { 
+					who = archers
+					value = 0.2
+				}
+				troops = { 
+					who = battlemages
+					value = 0.2
+				}
+			}
+			OR = {
+				light_troops = { 
+					who = light_infantry
+					value = 0.2
+				}
+				light_troops = { 
+					who = lesser_daedra
+					value = 0.2
+				}
+			}
+		}
+	}
+
+	archers_offensive = 2.5
+	battlemages_offensive = 2.5
+	light_infantry_offensive = 2.5
+	lesser_daedra_offensive = 2.5
+	pikemen_offensive = 2.5
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+
+#Imperial Advance Tactic
+legionnaire_advance_tactic = {
+	days = 18
+	sprite = 2
+	group = advance
+
+	trigger = {
+		phase = melee
+		OR = {
+			heavy_infantry = 0.01
+			dremora_troop = 0.01
+			light_infantry = 0.01
+			undead_troop = 0.01
+		}
+		flank_has_leader = yes
+		leader = { 
+			OR = {
+				culture = colovian
+				culture = imperial
+				culture = nibenean
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.2
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.1
+				}
+				light_troops = {
+					who = light_infantry 
+					value = 0.2
+				}
+				light_troops = {
+					who = undead_troop 
+					value = 0.2
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = { 
+					who = heavy_infantry
+					value = 0.1
+				}
+				troops = { 
+					who = dremora_troop
+					value = 0.05
+				}
+				light_troops = {
+					who = light_infantry 
+					value = 0.1
+				}
+				light_troops = {
+					who = undead_troop 
+					value = 0.1
+				}
+			}
+		}
+	}
+
+	knights_offensive = 0.6
+	heavy_infantry_offensive = 3
+	dremora_troop_offensive = 3
+	light_infantry_offensive = 1.5
+	undead_troop_offensive = 1.5
+	
+	heavy_infantry_defensive = 1.5
+	dremora_troop_defensive = 1.5
+	light_infantry_defensive = 0.75
+	undead_troop_defensive = 0.75
+	
+	enemy = {
+		group = stand_fast
+		factor = 3
+	}
+}
+
+#Quey use improvised canoes for defence
+quey_mantlets_tactic = {
+	days = 12
+	sprite = 2 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = skirmish
+		OR = {
+			heavy_infantry = 0.1
+			dremora_troop = 0.1
+			light_infantry = 0.1
+			undead_troop = 0.1
+			pikemen = 0.1
+		}
+		archers = 0.01
+		flank_has_leader = yes
+		leader = { culture = quey }
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = pikemen
+				value = 0.15
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			OR = {
+				heavy_troops = {
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = {
+					who = dremora_troop
+					value = 0.15
+				}
+				light_troops = {
+					who = undead_troop
+					value = 0.3
+				}
+			}
+		}
+
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			troops = {
+				who = pikemen
+				value = 0.15
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			OR = {
+				heavy_troops = {
+					who = heavy_infantry
+					value = 0.3
+				}
+				troops = {
+					who = dremora_troop
+					value = 0.15
+				}
+				light_troops = {
+					who = undead_troop
+					value = 0.3
+				}
+			}
+		}
+	}
+
+	light_infantry_defensive = 2.5
+	heavy_infantry_defensive = 2.5
+	dremora_troop_defensive = 2.5
+	undead_troop_defensive = 2.5
+	pikemen_defensive = 2.5
+	archers_defensive = 1.5
+	battlemages_defensive = 0.5
+	
+
+	archers_offensive = 0.5
+
+	light_cavalry_defensive = -1.5
+	knights_defensive = -1.5
+}
+
+########################
+######Mage Tactics######
+########################
+
+
+# Restoration - Mages and or battlemages heal fellow troops, but are unable to fight
+
+magic_restoration_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = melee
+		battlemages = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.15
+			}
+		}
+	}
+
+	light_infantry_defensive = 2
+	heavy_infantry_defensive = 2
+	pikemen_defensive = 2
+	archers_defensive = 2
+	light_cavalry_defensive = 2
+	knights_defensive = 2
+	battlemages_defensive = 2
+	tongues_defensive = 2
+	dremora_troop_defensive = 2
+	lesser_daedra_defensive = 2
+
+	battlemages_offensive = -3
+}
+
+# Fireball - Destruction tactic that significantly increases the damage output of mages and battlemages
+
+mage_fireballs_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = volley
+
+	trigger = {
+		phase = skirmish
+		battlemages = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.3
+			}
+		}
+	}
+
+	battlemages_offensive = 2.75
+	enemy = {
+		group = harass
+		factor = 3
+	}
+}
+
+# Ice Storm - Destruction tactic that is especially helpful to archers, but slows down friendly cavalry
+
+mage_icestorm_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = skirmish
+		battlemages = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.3
+			}
+		}
+	}
+	
+	battlemages_offensive = 1.8
+	archers_offensive = 2.5
+	
+	light_cavalry_offensive = -1.4
+	knights_offensive = -1
+	enemy = {
+		group = swarm
+		factor = 1.5
+	}
+	enemy = {
+		group = advance
+		factor = 1.5
+	}
+	enemy = {
+		group = charge
+		factor = 1.5
+	}
+}
+
+# Demoralize - Illusion magic that helps light cavalry inflict serious damage
+
+battlemages_demoralize_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = charge
+
+	trigger = {
+		phase = skirmish
+		battlemages = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = {
+				who = knights
+				value = 0.3
+			}
+		}
+	}
+	
+	change_phase_to = melee
+	
+	heavy_infantry_offensive = 0.75
+	dremora_troop_offensive = 0.75
+	tongues_offensive = 0.75
+	light_cavalry_offensive = 3
+	knights_offensive = 2
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+
+# Dremoras - Conjuration that summons a horde of slow, powerful dremora warriors who clog up the battlefield
+
+battlemages_dremoras_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = advance
+
+	trigger = {
+		phase = melee
+		battlemages = 0.01
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = {
+				who = heavy_infantry
+				value = 0.3
+			}
+		}
+	}
+	
+	heavy_infantry_offensive = 2.5
+	dremora_troop_offensive = 2.5
+	pikemen_offensive = 2.5
+	knights_offensive = -0.5
+	enemy = {
+		group = stand_fast
+		factor = 3
+	}
+}
+
+# Atronachs - Conjuration magic that summons various atronachs to absorb damage to protect ranged fighters
+
+battlemages_atronachs_tactic = {
+	days = 18
+	sprite = 2 # index of icon
+	group = defensive
+
+	trigger = {
+		phase = melee
+		battlemages = 0.1
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			troops = {
+				who = battlemages
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = {
+				who = heavy_infantry
+				value = 0.3
+			}
+		}
+	}
+	
+	battlemages_defensive = 1.7
+	archers_defensive = 1.7
+	
+	dremora_troop_defensive = 1.7
+}
+
+
+
+##########################################################################
+# Siege offensive tactics
+##########################################################################
+# Must be first "siege = attacker"
+no_siege_offense_tactic = {
+	days = 1 # tactic lasts one day
+	sprite = 1 # index of icon
+	
+	siege = attacker	
+	
+	trigger = {
+		always = no # never use unless set explicitly by code
+	}
+}
+
+default_siege_offense_tactic = {
+	days = 5
+	sprite = 1
+
+	siege = attacker	
+
+	trigger = {
+		always = yes
+	}
+
+	mean_time_to_happen = {
+		days = 10
+	}
+
+	# Values are Derived from Skrimish Phase
+	# as this is hardcoded - therefor some modifiers
+	# look odd in here but are ok in Game
+	# Basically they are in the range between skirmish (ranged)
+	# and Meele Phase (Meele) with a few quirks here and there
+	#Offense Values 
+	#light_infantry_offensive = 1.0
+	#heavy_infantry_offensive = 3.0
+
+	#light_cavalry_offensive = -0.66
+	#knights_offensive = 0.0
+	
+	#archers_offensive = -0.33
+	
+	#battlemages_offensive = 0.0
+	
+	#numidium_offensive = 100.0
+	#dragon_offensive = 10.0
+	
+	
+	#Defense Values
+	#light_infantry_defensive = 0.5
+	#heavy_infantry_defensive = 0.25
+
+	#light_cavalry_defensive = -0.6	
+	#knights_defensive = -0.5
+
+	#archers_defensive = 0.0
+	
+	#battlemages_defensive = 0.0
+	
+	#numidium_defensive = 0.0	
+	#dragon_defensive = 0.0
+}
+
+
+##########################################################################
+# Siege defensive tactics
+##########################################################################
+
+# Must be first "siege = defender"
+no_siege_defense_tactic = {
+	days = 1 # tactic lasts one day
+	sprite = 1 # index of icon
+	siege = defender	
+	trigger = {
+		always = no # never use unless set explicitly by code
+	}
+}
+
+default_siege_defense_tactic = {
+	days = 5
+	sprite = 1
+
+	siege = defender
+	
+	trigger = {
+		always = yes
+	}
+
+	mean_time_to_happen = {
+		days = 10
+	}
+	
+	# Values are Derived from Skrimish Phase
+	# as this is hardcoded - therefor some modifiers
+	# look odd in here but are ok in Game
+	# Basically they are in the range between skirmish (ranged)
+	# and Meele Phase (Meele) with a few quirks here and there
+	#Offense Values 
+	#light_infantry_offensive = 1.0
+	#heavy_infantry_offensive = 3.0
+
+	#light_cavalry_offensive = -0.33
+	#knights_offensive = 1.0
+	
+	#archers_offensive = 0.50
+	
+	#battlemages_offensive = 0.0
+	
+	#numidium_offensive = -100.0
+	#dragon_offensive = 0.0
+	
+	
+	#Defense Values
+	#light_infantry_defensive = 1.0
+	#heavy_infantry_defensive = 0.5
+
+	#light_cavalry_defensive = -0.3	
+	#knights_defensive = -0.33
+
+	#archers_defensive = 0.5
+	
+	#battlemages_defensive = 0.5
+	
+	#numidium_defensive = 100.0	
+	#dragon_defensive = 0.0
+}
+
+
+##########################################################################
+# Combat MTTH definitions(do not remove)
+##########################################################################
+
+flank_retreat_odds =
+{
+	# MTTH range is 0-100, if flank morale is below MTTH, flank will retreat
+	mean_time_to_happen = {
+		days = 20
+	}
+}
+
+flank_pursue_odds =
+{
+	# MTTH range is 0-100, chance (in %) of pursuing a fleeing flank
+	mean_time_to_happen = {
+		days = 25
+	}
+}

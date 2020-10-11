@@ -1,0 +1,135 @@
+### Removing Mer racial traits
+remove_mer_traits = {
+	remove_altmer_trait = yes
+	remove_ayleid_trait = yes
+	remove_bosmer_trait = yes
+	remove_chimer_trait = yes
+	remove_dunmer_trait = yes
+	remove_maormer_trait = yes
+	remove_falmer_trait = yes
+	remove_dwemer_trait = yes
+	remove_tsaesci_trait = yes
+}
+remove_altmer_trait = {
+	remove_trait = altmer
+	remove_trait = impure_altmer
+	remove_trait = pure_altmer
+}
+remove_ayleid_trait = {
+	remove_trait = ayleid
+}
+remove_bosmer_trait = {
+	remove_trait = bosmer
+}
+remove_chimer_trait = {
+	remove_trait = chimer
+}
+remove_dunmer_trait = {
+	remove_trait = dunmer
+}
+remove_maormer_trait = {
+	remove_trait = maormer
+}
+remove_falmer_trait = {
+	remove_trait = falmer
+}
+remove_dwemer_trait = {
+	remove_trait = dwemer
+}
+remove_tsaesci_trait = {
+	remove_trait = tsaesci
+}
+
+### Adding Mer racial traits
+add_altmer_trait = {
+	add_trait = altmer
+	
+	update_elven_immortality = yes
+}
+
+add_ayleid_trait = {
+	add_trait = ayleid
+	
+	update_elven_immortality = yes
+}
+add_bosmer_trait = {
+	add_trait = bosmer
+	
+	update_elven_immortality = yes
+}
+add_chimer_trait = {
+	add_trait = chimer
+	
+	update_elven_immortality = yes
+}
+add_dunmer_trait = {
+	add_trait = dunmer
+	
+	update_elven_immortality = yes
+}
+add_maormer_trait = {
+	add_trait = maormer
+	
+	update_elven_immortality = yes
+}
+add_falmer_trait = {
+	add_trait = falmer
+	
+	update_elven_immortality = yes
+}
+add_dwemer_trait = {
+	add_trait = dwemer
+	
+	update_elven_immortality = yes
+}
+add_tsaesci_trait = {
+	add_trait = tsaesci
+	
+	update_elven_immortality = yes
+}
+add_dragon_trait = {
+	remove_trait = dragon_1
+	remove_trait = dragon_2
+	remove_trait = dragon_3
+	
+	if = {
+		limit = { age <= 499 }
+		add_trait = dragon_1
+	}
+	else_if = {
+		limit = {
+			age = 500
+			NOT = { age = 1000 }
+		}
+		add_trait = dragon_2
+	}
+	else_if = {
+		limit = {
+			age >= 1000
+		}
+		add_trait = dragon_3
+	}
+}
+
+# Elven immortality
+update_elven_immortality = {
+	if = {
+		limit = {
+			should_receive_elven_immortality = yes
+			age = 16
+			NOT = { trait = elven_immortality }
+		}
+		add_trait = elven_immortality
+	}
+	
+	if = {
+		limit = {
+			OR = {
+				should_receive_elven_immortality = no
+				NOT = { age = 16 }
+			}
+			trait = elven_immortality
+		}
+		remove_trait = elven_immortality
+	}
+}

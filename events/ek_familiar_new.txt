@@ -1,0 +1,132 @@
+# namespace = ekfamiliars
+
+# #Biannual Horse Market event
+# character_event = {
+	# id = ekfamiliars.0
+	# desc = ekfamiliars0d #The Biannual Horse Market is being held later today, Horse Breeders, Traders and anyone looking for a new beast of burden will be travelling from the surrounding regions for this occassion. While your stable is filled with ordinary chargers and work horses it lacks that something special.
+	# picture = GFX_evt_market
+	
+	# min_age = 17
+	# only_playable = yes
+	# prisoner = no
+	
+	# trigger = {
+		# has_mount = no
+		
+	# }
+	# option = {
+		# name = ekfamiliars0opt1 #Visit the Horse Market
+		# trigger = {
+			# OR = {
+				# any_courtier = { has_minor_title = master_of_horse }
+				# any_vassal = { has_minor_title = master_of_horse }
+			# }
+		# }
+		# hidden_tooltip = {
+			# any_courtier = {
+				# limit = { has_minor_title = master_of_horse }
+				# character_event = { id = ekfamiliars.1 }
+				# break = yes
+			# }
+			# any_vassal = {
+				# limit = { has_minor_title = master_of_horse }
+				# character_event = { id = ekfamiliars.1 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = ekfamiliars0opt1 #Visit the Horse Market
+		# trigger = {
+			# NOR = {
+				# any_courtier = { has_minor_title = master_of_horse }
+				# any_vassal = { has_minor_title = master_of_horse }
+			# }
+		# }
+		# hidden_tooltip = {
+			# character_event = { id = ekfamiliars.3 }
+		# }
+	# }
+	# option = {
+		# name = ekfamiliars0opt2 #What do I care about a Horse Market?
+	# }
+# }
+# #Master of Horse ping
+# character_event = {
+	# id = ekfamiliars.1
+	# desc = ekfamiliars1d #Your liege is planning to visit the biannual Horse Market being held later today to look for new personal mount. As Master of Horse it's only fitting you attend the market with [From.GetTitledFirstName], sharing your knowledge of Hippology with them will surely ingratiate you with your liege.
+	# picture = GFX_evt_market
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = ekfamiliars1opt1 #I shall offer my company to [From.GetTitledFirstName]!
+		# FROM = { set_character_flag = masterofhorseaccompanying character_event = { id = ekfamiliars.2 text = ekfamiliars1opt1et } } #[From.GetTitledFirstName] will be informed of your offer.
+	# }
+	# option = {
+		# name = ekfamiliars1opt2 #Let [From.GetTitledFirstName] find their own horse.
+		# if = {
+			# limit = {
+				# NOT = { trait = slothful }
+			# }
+			# random = {
+				# chance = 1
+				# trait = slothful
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = ekfamiliars.2
+	# desc = {
+		# text = ekfamiliars2d1 #As you prepare to leave for the market your Master of Horse approachs atop their own fine mount. [From.GetTitledFirstName] will accompany you to the market and offer their knowledge should you require it.
+		# trigger = { has_character_flag = masterofhorseaccompanying }
+	# }
+	# desc = {
+		# text = ekfamiliars2d2 #As your carriage withdraws from the courtyard you see your Master of Horse [From.GetTitledFirstName] lazily snoozing by the stables, reclining upon a bale of straw with a single strand clenched between their teeth. [Get.TitledFirstName] waves at you as you pass.
+		# trigger = { NOT = { has_character_flag = masterofhorseaccompanying } }
+	# }
+	# picture = GFX_evt_market
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = excellent
+		# trigger = { has_character_flag = masterofhorseaccompanying }
+		# hidden_tooltip = { character_event = { id = ekfamiliars.3 } }
+	# }
+	# option = {
+		# name = ekfamiliars2opt #That lazy bastard. I'll have to reconsider who my Master of Horse is when I return.
+		# trigger = { NOT = { has_character_flag = masterofhorseaccompanying } }
+		# hidden_tooltip = { character_event = { id = ekfamiliars.3 } }
+	# }
+# }
+# #Visiting the Market
+# character_event = {
+	# id = ekfamiliars.3
+	# desc = ekfamiliars3d #The market is bustling with activity as your carriage draws into it, your driver taking you directly to the heart of the Market where the auctioneers and breeders are shouting prices and hashing out deals left and right. There are literally hundreds of Horses standing around grazing, stomping or being groomed, you see a few possible candidates and far too many half-starved old nags.
+	# picture = GFX_evt_market
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = ekfamiliars3opt1 #Walk the lines and examine the steeds available.
+		# hidden_tooltip = {
+			# character_event = { id = ekfamiliars.4 }
+		# }
+	# }
+	# option = {
+		# name = ekfamiliars3opt2 #Ask for your Master of Horse's experienced advice.
+		# trigger = { has_character_flag = masterofhorseaccompanying }
+		# hidden_tooltip = {
+			# any_courtier = {
+				# limit = { has_minor_title = master_of_horse }
+				# character_event = { id = ekfamiliars.4 }
+				# break = yes
+			# }
+			# any_vassal = {
+				# limit = { has_minor_title = master_of_horse }
+				# character_event = { id = ekfamiliars.4 }
+			# }
+		# }
+	# }
+# }

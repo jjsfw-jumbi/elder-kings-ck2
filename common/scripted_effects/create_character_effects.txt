@@ -1,0 +1,189 @@
+#Primarily for Councillor employment decisions
+chancellor_education_assignment = {
+	hidden_tooltip = {
+		remove_trait = diplomat_1
+		remove_trait = diplomat_2
+		remove_trait = diplomat_3
+		remove_trait = diplomat_4
+		remove_trait = diplomat_5
+	}
+	random_list = {
+		9 = { add_trait = diplomat_2 }
+		7 = { add_trait = diplomat_3 }
+		5 = { add_trait = diplomat_4 }
+	}
+}
+mage_education_assignment = {
+	hidden_tooltip = {
+		remove_trait = mage_1
+		remove_trait = mage_2
+		remove_trait = mage_3
+		remove_trait = mage_4
+		remove_trait = mage_5
+	}
+	random_list = {
+		9 = { add_trait = mage_2 }
+		7 = { add_trait = mage_3 }
+		5 = { add_trait = mage_4 }
+	}
+}
+marshal_education_assignment = {
+	hidden_tooltip = {
+		remove_trait = warrior_1
+		remove_trait = warrior_2
+		remove_trait = warrior_3
+		remove_trait = warrior_4
+		remove_trait = warrior_5
+	}
+	random_list = {
+		9 = { add_trait = warrior_2 }
+		7 = { add_trait = warrior_3 }
+		5 = { add_trait = warrior_4 }
+	}
+}
+spymaster_education_assignment = {
+	hidden_tooltip = {
+		remove_trait = agent_1
+		remove_trait = agent_2
+		remove_trait = agent_3
+		remove_trait = agent_4
+		remove_trait = agent_5
+	}
+	random_list = {
+		9 = { add_trait = agent_2 }
+		7 = { add_trait = agent_3 }
+		5 = { add_trait = agent_4 }
+	}
+}
+steward_education_assignment = {
+	hidden_tooltip = {
+		remove_trait = magistrate_1
+		remove_trait = magistrate_2
+		remove_trait = magistrate_3
+		remove_trait = magistrate_4
+		remove_trait = magistrate_5
+	}
+	random_list = {
+		9 = { add_trait = magistrate_2 }
+		7 = { add_trait = magistrate_3 }
+		5 = { add_trait = magistrate_4 }
+	}
+}
+
+#Legion
+legate_setup = {
+	remove_education_effect = yes
+	marshal_education_assignment = yes
+	random_list = { #Random Specialisation
+		16 = {
+			random_list = {
+				50 = { add_trait = crusader_1 }
+				25 = { add_trait = crusader_2 }
+				10 = { add_trait = crusader_3 }
+			}
+		}
+		24 = {
+			random_list = {
+				50 = { add_trait = knight_1 }
+				25 = { add_trait = knight_2 }
+				10 = { add_trait = knight_3 }
+			}
+		}
+		11 = {
+			random_list = {
+				50 = { add_trait = spellsword_1 }
+				25 = { add_trait = spellsword_2 }
+				10 = { add_trait = spellsword_3 }
+			}
+		}
+		15 = {
+			random_list = {
+				50 = { add_trait = barbarian_1 }
+				25 = { add_trait = barbarian_2 }
+				10 = { add_trait = barbarian_3 }
+			}
+		}
+		15 = {
+			random_list = {
+				50 = { add_trait = scout_1 }
+				25 = { add_trait = scout_2 }
+				10 = { add_trait = scout_3 }
+			}
+		}
+		9 = {
+			random_list = {
+				50 = { add_trait = battlemage_1 }
+				25 = { add_trait = battlemage_2 }
+				10 = { add_trait = battlemage_3 }
+			}
+		}
+		5 = {
+			random_list = {
+				50 = { add_trait = sorcerer_1 }
+				25 = { add_trait = sorcerer_2 }
+				10 = { add_trait = sorcerer_3 }
+			}
+		}
+		5 = {
+			random_list = {
+				50 = { add_trait = bard_1 }
+				25 = { add_trait = bard_2 }
+				10 = { add_trait = bard_3 }
+			}
+		}
+	}
+	while = { limit = { NOT = { martial = 8 } } change_martial = 3 }
+}
+
+### Generate Hagraven & Briarheart
+generate_hagraven = {
+	hidden_tooltip = {
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			female = yes
+		}
+		
+		new_character = {
+			#assign_birthsign = yes
+			assign_racial_trait = yes
+			remove_education_trait = yes
+			mage_education_assignment = yes
+			upgrade_education_effect = yes
+			
+			save_event_target_as = generated_hagraven
+			save_event_target_as = generated_briarheart_hagraven
+			
+			add_trait = hagraven
+			roll_hagraven_appearance = yes
+		}
+	}
+}
+
+generate_briarheart = {
+	hidden_tooltip = {
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			female = no #Oops my bad
+		}
+		
+		new_character = {
+			#assign_birthsign = yes
+			assign_racial_trait = yes
+			remove_education_trait = yes
+			
+			random_list = {
+				1 = { marshal_education_assignment = yes }
+				1 = { mage_education_assignment = yes }
+			}
+			
+			upgrade_education_effect = yes
+			
+			save_event_target_as = generated_briarheart
+			save_event_target_as = generated_briarheart_hagraven
+			
+			add_trait = briarheart
+		}
+	}
+}

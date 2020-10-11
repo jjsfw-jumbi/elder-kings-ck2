@@ -1,0 +1,2319 @@
+# Events relating to the Emperor and members of the Elder Council swaying each other to support the others
+# By jjsfw/jumbi
+
+namespace = ecsway
+
+# Councillor receives request from the Emperor - AI councillor
+letter_event = {
+	id = ecsway.0
+	hide_window = yes
+	picture = GFX_evt_placeholder
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROMFROM = {
+			save_event_target_as = target_ec_swayer
+		}
+		save_event_target_as = target_ec_swayee
+		diplomatic_immunity = yes
+		# Wants foreign overlord replaced
+		if = {
+			limit = {
+				always = no
+				event_target:target_ec_swayer = {
+					ec_is_emperor = yes
+				}
+				NOT = {
+					tier = KING
+				}
+				capital_holding = {
+					kingdom = {
+						ROOT = {
+							culture_scope = {
+								has_flag = native_to_@PREVPREV
+							}
+							liege = {
+								has_landed_title = PREVPREV
+								real_tier = KING
+								culture_scope = {
+									NOT = {
+										has_flag = native_to_@PREVPREVPREV
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			capital_holding = {
+				kingdom = {
+					save_event_target_as = target_ec_sway_kingdom
+					holder_scope = {
+						save_event_target_as = target_ec_sway_third_party
+						diplomatic_immunity = yes
+					}
+				}
+			}
+			event_target:target_ec_swayer = {
+				letter_event = { id = ecsway.21 }
+			}
+		}
+		# Wants elevation
+		else_if = {
+			limit = {
+				# Don't do during war just in case wargoal titles get borked
+				war = no
+				FROMFROM = {
+					war = no
+				}
+				top_liege = { # Only valid within swayer's realm
+					character = FROMFROM
+				}
+				OR = {
+					AND = {
+						real_tier = BARON
+						capital_holding = {
+							county = {
+								can_be_given_away = yes
+								holder_scope = {
+									character = FROMFROM
+									NOT = { # Don't give away your own capital
+										capital_holding = {
+											county = {
+												title = PREVPREVPREV
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					AND = {
+						real_tier = COUNT
+						capital_scope = {
+							duchy = {
+								can_be_given_away = yes
+								FROMFROM = {
+									OR = {
+										completely_controls = PREV
+										has_landed_title = FROM
+									}
+								}
+							}
+						}
+					}
+					AND = {
+						real_tier = DUKE
+						capital_scope = {
+							kingdom = {
+								can_be_given_away = yes
+								FROMFROM = {
+									OR = {
+										completely_controls = PREV
+										has_landed_title = FROM
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					real_tier = BARON
+					capital_holding = {
+						county = {
+							holder_scope = {
+								character = FROMFROM
+							}
+						}
+					}
+				}
+				capital_holding = {
+					county = {
+						save_event_target_as = target_ec_desired_title
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					real_tier = COUNT
+					capital_scope = {
+						duchy = {
+							FROMFROM = {
+								OR = {
+									completely_controls = PREV
+									has_landed_title = FROM
+								}
+							}
+						}
+					}
+				}
+				capital_scope = {
+					duchy = {
+						save_event_target_as = target_ec_desired_title
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					real_tier = DUKE
+					capital_scope = {
+						kingdom = {
+							FROMFROM = {
+								OR = {
+									completely_controls = PREV
+									has_landed_title = FROM
+								}
+							}
+						}
+					}
+				}
+				capital_scope = {
+					kingdom = {
+						save_event_target_as = target_ec_desired_title
+					}
+				}
+			}
+			event_target:target_ec_swayer = {
+				character_event = { id = ecsway.66 }
+			}
+		}
+		# Wants de jure land
+		# else_if = {
+		# 	limit = {
+		# 		# don't do during war just in case wargoal titles get borked
+		# 		war = no
+		# 		fromfrom = {
+		# 			war = no
+		# 		}
+		# 		top_liege = { # only valid within swayer's realm
+		# 			character = fromfrom
+		# 		}
+		# 		fromfrom = {
+		# 			demesne_size = 2
+		# 		}
+		# 		any_demesne_title = {
+		# 			limit = {
+		# 				higher_real_tier_than = baron
+		# 			}
+		# 			any_direct_de_jure_vassal_title = {
+		# 				holder_scope = {
+		# 					character = fromfrom
+		# 				}
+		# 			}
+		# 		}
+		# 	}
+		# 	random_demesne_title = {
+		# 		limit = {
+		# 			higher_real_tier_than = baron
+		# 		}
+		# 		preferred_limit = {
+		# 			tier = king
+		# 		}
+		# 		random_direct_de_jure_vassal_title = {
+		# 			limit = {
+		# 				holder_scope = {
+		# 					character = fromfrom
+		# 				}
+		# 			}
+		# 			preferred_limit = {
+		# 				real_tier = duke
+		# 			}
+		# 			preferred_limit = {
+		# 				real_tier = count
+		# 			}
+		# 			save_event_target_as = target_ec_desired_title
+		# 		}
+		# 	}
+		# 	event_target:target_ec_swayer = {
+		# 		character_event = { id = ecsway.72 }
+		# 	}
+		# }
+		# Wants de jure vassal
+		# Wants de jure title held by non-de jure vassal
+		# e.g. Skyrim asking for duchy of Falkreath when the Colovian Estates hold it
+		# Wants non de jure lord replaced
+		# Wants land (unlanded)
+		else_if = {
+			limit = {
+				# Don't do during war just in case wargoal titles get borked
+				war = no
+				FROMFROM = {
+					war = no
+				}
+				top_liege = { # Only valid within swayer's realm
+					character = FROMFROM
+				}	
+				is_landed = no
+				FROMFROM = {
+					demesne_size = 2
+				}
+			}
+			FROMFROM = {
+				random_demesne_title = {
+					limit = {
+						can_be_given_away = yes
+						NOT = {
+							higher_tier_than = COUNT
+						}
+						event_target:target_ec_swayer = {
+							capital_holding = { # Don't give away your capital county, but you can give away baronies within it
+								OR = {
+									county = {
+										NOT = {
+											title = PREVPREVPREV
+										}
+									}
+									is_capital = no
+								}
+							}
+						}
+					}
+					preferred_limit = {
+						tier = COUNT
+					}
+					save_event_target_as = target_ec_desired_title
+				}
+				event_target:target_ec_swayer = {
+					character_event = { id = ecsway.69 }
+				}
+			}
+		}
+		# Wants province (landed) (?)
+		# Wants prisoners
+		# Wants imperial marriage
+		else_if = {
+			limit = {
+				FROMFROM = {
+					ec_is_emperor = yes
+					OR = {
+						AND = {
+							any_close_relative = {
+								is_female = yes
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+								ROOT = {
+									any_close_relative = {
+										is_female = no
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+									}
+								}
+							}
+						}
+						AND = {
+							any_close_relative = {
+								is_female = no
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+								ROOT = {
+									any_close_relative = {
+										is_female = yes
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+									}
+								}
+							}
+						}
+						AND = {
+							any_close_relative = {
+								is_female = yes
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+								OR = {
+									trait = homosexual
+									trait = bisexual
+								}
+								ROOT = {
+									any_close_relative = {
+										is_female = yes
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+										OR = {
+											trait = homosexual
+											trait = bisexual
+										}
+									}
+								}
+							}
+						}
+						AND = {
+							any_close_relative = {
+								is_female = no
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+								OR = {
+									trait = homosexual
+									trait = bisexual
+								}
+								ROOT = {
+									any_close_relative = {
+										is_female = no
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+										OR = {
+											trait = homosexual
+											trait = bisexual
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = {
+					modifier = {
+						factor = 0
+						NOT = {
+							FROMFROM = {
+								any_close_relative = {
+									is_female = yes
+									is_adult = yes
+									can_marry = yes
+									is_married = no
+									dynasty = PREV
+									NOT = {
+										trait = bastard
+									}
+									ROOT = {
+										any_close_relative = {
+											is_female = no
+											is_adult = yes
+											can_marry = yes
+											NOT = {
+												is_close_relative = PREVPREV
+											}
+											is_married = no
+											dynasty = PREV
+											NOT = {
+												trait = bastard
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					FROMFROM = {
+						random_close_relative = {
+							limit = {
+								is_female = yes
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+							}
+							save_event_target_as = swayer_potential_bride
+							ROOT = {
+								random_close_relative = {
+									limit = {
+										is_female = no
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+									}
+									preferred_limit = {
+										is_child_of = ROOT
+									}
+									preferred_limit = {
+										sibling = ROOT
+									}
+									preferred_limit = {
+										is_nibling_of = ROOT
+									}
+									preferred_limit = {
+										fertility > 0
+									}
+									save_event_target_as = swayee_potential_bride
+									event_target:target_ec_swayer = { character_event = { id = ecsway.63 } }
+								}
+							}
+						}
+					}
+				}
+				25 = {
+					modifier = {
+						factor = 0
+						NOT = {
+							FROMFROM = {
+								any_close_relative = {
+									is_female = no
+									is_adult = yes
+									can_marry = yes
+									is_married = no
+									dynasty = PREV
+									NOT = {
+										trait = bastard
+									}
+									ROOT = {
+										any_close_relative = {
+											is_female = yes
+											is_adult = yes
+											can_marry = yes
+											NOT = {
+												is_close_relative = PREVPREV
+											}
+											is_married = no
+											dynasty = PREV
+											NOT = {
+												trait = bastard
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					FROMFROM = {
+						random_close_relative = {
+							limit = {
+								is_female = no
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+							}
+							save_event_target_as = swayer_potential_bride
+							ROOT = {
+								random_close_relative = {
+									limit = {
+										is_female = yes
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+									}
+									preferred_limit = {
+										is_child_of = ROOT
+									}
+									preferred_limit = {
+										sibling = ROOT
+									}
+									preferred_limit = {
+										is_nibling_of = ROOT
+									}
+									preferred_limit = {
+										fertility > 0
+									}
+									save_event_target_as = swayee_potential_bride
+									event_target:target_ec_swayer = { character_event = { id = ecsway.63 } }
+								}
+							}
+						}
+					}
+				}
+				25 = {
+					modifier = {
+						factor = 0
+						NOT = {
+							FROMFROM = {
+								any_close_relative = {
+									is_female = yes
+									is_adult = yes
+									can_marry = yes
+									is_married = no
+									dynasty = PREV
+									NOT = {
+										trait = bastard
+									}
+									OR = {
+										trait = homosexual
+										trait = bisexual
+									}
+									ROOT = {
+										any_close_relative = {
+											is_female = yes
+											is_adult = yes
+											can_marry = yes
+											NOT = {
+												is_close_relative = PREVPREV
+											}
+											is_married = no
+											dynasty = PREV
+											NOT = {
+												trait = bastard
+											}
+											OR = {
+												trait = homosexual
+												trait = bisexual
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					FROMFROM = {
+						random_close_relative = {
+							limit = {
+								is_female = yes
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+								OR = {
+									trait = homosexual
+									trait = bisexual
+								}
+							}
+							save_event_target_as = swayer_potential_bride
+							ROOT = {
+								random_close_relative = {
+									limit = {
+										is_female = yes
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+										OR = {
+											trait = homosexual
+											trait = bisexual
+										}
+									}
+									preferred_limit = {
+										is_child_of = ROOT
+									}
+									preferred_limit = {
+										sibling = ROOT
+									}
+									preferred_limit = {
+										is_nibling_of = ROOT
+									}
+									preferred_limit = {
+										fertility > 0
+									}
+									save_event_target_as = swayee_potential_bride
+									event_target:target_ec_swayer = { character_event = { id = ecsway.63 } }
+								}
+							}
+						}
+					}
+				}
+				25 = {
+					modifier = {
+						factor = 0
+						NOT = {
+							FROMFROM = {
+								any_close_relative = {
+									is_female = no
+									is_adult = yes
+									can_marry = yes
+									is_married = no
+									dynasty = PREV
+									NOT = {
+										trait = bastard
+									}
+									OR = {
+										trait = homosexual
+										trait = bisexual
+									}
+									ROOT = {
+										any_close_relative = {
+											is_female = no
+											is_adult = yes
+											can_marry = yes
+											NOT = {
+												is_close_relative = PREVPREV
+											}
+											is_married = no
+											dynasty = PREV
+											NOT = {
+												trait = bastard
+											}
+											OR = {
+												trait = homosexual
+												trait = bisexual
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					FROMFROM = {
+						random_close_relative = {
+							limit = {
+								is_female = no
+								is_adult = yes
+								can_marry = yes
+								is_married = no
+								dynasty = PREV
+								NOT = {
+									trait = bastard
+								}
+								OR = {
+									trait = homosexual
+									trait = bisexual
+								}
+							}
+							save_event_target_as = swayer_potential_bride
+							ROOT = {
+								random_close_relative = {
+									limit = {
+										is_female = no
+										is_adult = yes
+										can_marry = yes
+										NOT = {
+											is_close_relative = PREVPREV
+										}
+										is_married = no
+										dynasty = PREV
+										NOT = {
+											trait = bastard
+										}
+										OR = {
+											trait = homosexual
+											trait = bisexual
+										}
+									}
+									preferred_limit = {
+										is_child_of = ROOT
+									}
+									preferred_limit = {
+										sibling = ROOT
+									}
+									preferred_limit = {
+										is_nibling_of = ROOT
+									}
+									preferred_limit = {
+										fertility > 0
+									}
+									save_event_target_as = swayee_potential_bride
+									event_target:target_ec_swayer = { character_event = { id = ecsway.63 } }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		# Wants law
+		# Wants artifact
+		# Wants money
+		else_if = {
+			limit = {
+				OR = {
+					# Greed
+					trait = greedy
+
+					# Poor
+					AND = {
+						is_landed = no
+						wealth < 100
+					}
+					AND = {
+						real_tier = BARON
+						wealth < 150
+					}
+					AND = {
+						real_tier = COUNT
+						OR = {
+							wealth < 300
+							monthly_income < -3
+						}
+					}
+					AND = {
+						real_tier = DUKE
+						OR = {
+							wealth < 500
+							monthly_income < -5
+						}
+					}
+					AND = {
+						real_tier = KING
+						OR = {
+							wealth < 1250
+							monthly_income < -12.5
+						}
+					}
+					AND = {
+						real_tier = EMPEROR
+						OR = {
+							wealth < 2500
+							monthly_income < -25
+						}
+					}
+				}
+			}
+
+			event_target:target_ec_swayer = {
+				letter_event = { id = ecsway.60 }
+			}
+		}
+		# Doesn't want anything
+		else = {
+			event_target:target_ec_swayer = {
+				letter_event = { id = ecsway.20 }
+			}
+		}
+	}
+}
+
+##### Player request options 1-18 #####
+
+# Councillor receives request from the Emperor - player councillor
+letter_event = {
+	id = ecsway.1
+	desc = ecsway.1.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.1.refuse
+	}
+	# TODO:JJ
+}
+
+# Councillor has been swayed successfully
+letter_event = {
+	id = ecsway.19
+	desc = ecsway.19.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.19.accept
+		
+		ec_end_sway = yes
+	}
+}
+
+# Councillor doesn't want anything
+letter_event = {
+	id = ecsway.20
+	desc = ecsway.20.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.20.accept
+
+		ec_end_sway = yes
+	}
+}
+
+##### Assorted sway events, 21+ #####
+
+# TODO:JJ AI weights
+# TODO:JJ inform other affected characters (same culture realm lords, former vassals, etc)
+
+### Foreign overlord replace
+# Swayer will always be the Emperor
+
+##### Wants foreign overlord replaced - Inform swayer
+letter_event = {
+	id = ecsway.21
+	desc = ecsway.21.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.21.accept
+		event_target:target_ec_swayee = {
+			show_scope_change = no
+			impress_cultural_vassals_mild = yes
+		}
+		event_target:target_ec_sway_third_party = {
+			show_scope_change = no
+			disappoint_cultural_vassals = yes
+			hidden_tooltip = {
+				letter_event = { id = ecsway.23 }
+			}
+		}
+	}
+	option = {
+		name = ecsway.21.refuse
+		
+		event_target:target_ec_swayee = {
+			show_scope_change = no
+			disappoint_cultural_vassals_mild = yes
+			hidden_tooltip = {
+				letter_event = { id = ecsway.22 }
+			}
+			ec_end_sway = yes
+		}
+	}
+}
+
+# Wants foreign overlord replaced - Refused, inform swayee
+letter_event = {
+	id = ecsway.22
+	desc = ecsway.22.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.22.accept
+	}
+}
+
+# Wants foreign overlord replaced - Accepted, inform foreign overlord
+letter_event = {
+	id = ecsway.23
+	desc = ecsway.23.desc
+
+	is_triggered_only = yes
+
+	# TODO:JJ Can't refuse if prisoner of the Emperor
+	# TODO:JJ Can use favour to prevent revocation
+
+	option = {
+		name = ecsway.23.accept
+
+		FROM = {
+			letter_event = { id = ecsway.24 }
+		}
+	}
+	option = {
+		name = ecsway.23.reject
+
+		FROM = {
+			letter_event = { id = ecsway.26 }
+		}
+
+		ai_chance = {
+			factor = 100
+		}
+	}
+	option = {
+		name = ecsway.23.favour
+
+		trigger = {
+			holds_favor_on = FROM
+		}
+
+		reverse_remove_favor = FROM
+
+		FROM = {
+			letter_event = { id = ecsway.27 }
+		}
+	}
+	option = {
+		name = ecsway.23.negotiate
+	}
+}
+
+# Wants foreign overlord replaced - Foreign overlord accepts, inform swayer
+letter_event = {
+	id = ecsway.24
+	desc = ecsway.24.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.24.accept
+
+		ec_sway_succeed_major = yes
+
+		event_target:target_ec_swayee = {
+			letter_event = { id = ecsway.25 }
+		}
+	}
+}
+
+# Wants foreign overlord replaced - Foreign overlord accepts, inform swayee
+letter_event = {
+	id = ecsway.25
+	desc = ecsway.25.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.25.accept
+
+		event_target:target_ec_sway_kingdom = {
+			grant_title_no_opinion = ROOT
+			ROOT = {
+				set_character_flag = ec_sway_given_@PREV # TODO:JJ remember what this was going to be for
+			}
+		}
+	}
+}
+
+# Wants foreign overlord replaced - Foreign overlord refuses, inform liege
+letter_event = {
+	id = ecsway.26
+	desc = ecsway.26.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.26.revoke
+
+		hidden_tooltip = {
+			event_target:target_ec_sway_third_party = {
+				# Clear kingdom grant opinion modifiers
+				remove_opinion = { who = ROOT modifier = opinion_granted_kingdom }
+				remove_opinion = { who = ROOT modifier = opinion_granted_kingdom_vice_royalty }
+				remove_opinion = { who = ROOT modifier = opinion_vassal_transfer }
+				letter_event = { id = ecsway.32 }
+			}
+		}
+
+		custom_tooltip = {
+			text = ec_cultural_vassals_may_rebel
+		}
+	}
+	option = {
+		name = ecsway.26.back_down
+
+		ec_sway_fail = yes
+
+		prestige = -500
+
+		add_character_modifier = { name = tamriel_weak_emperor years = 15 stacking = yes }
+
+		event_target:target_ec_swayee = {
+			letter_event = { id = ecsway.28 }
+		}
+	}
+}
+
+# Wants foreign overlord replaced - Foreign overlord uses favour, inform swayer
+letter_event = {
+	id = ecsway.27
+	desc = ecsway.27.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.27.accept
+
+		ec_sway_fail = yes
+
+		event_target:target_ec_swayee = {
+			letter_event = { id = ecsway.28 }
+		}
+	}
+}
+
+# Wants foreign overlord replaced - Swayer backed down for whatever reason, inform swayee
+letter_event = {
+	id = ecsway.28
+	desc = ecsway.28.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.28.accept
+	}
+}
+
+# Wants foreign overlord replaced - Foreign overlord wants to negotiate, inform swayer
+letter_event = {
+	id = ecsway.29
+	desc = ecsway.29.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.29.accept
+	}
+}
+
+# Wants foreign overlord replaced - Swayer accepts negotiation, inform foreign overlord, swaying succeeds
+letter_event = {
+	id = ecsway.30
+	desc = ecsway.30.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.30.accept
+
+		ec_sway_succeed_major = yes
+	}
+}
+
+# Wants foreign overlord replaced - Swayer rejects negotation, inform foreign overlord, swaying fails
+letter_event = {
+	id = ecsway.31
+	desc = ecsway.31.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.31.accept
+
+		ec_sway_fail = yes
+	}
+}
+
+# Swayer demands revocation
+letter_event = {
+	id = ecsway.32
+	desc = ecsway.32.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.32.accept
+
+		ai_chance = {
+			factor = 0
+		}
+	}
+
+	option = {
+		name = ecsway.32.revolt
+
+		custom_tooltip = {
+			text = ec_cultural_call_to_arms
+
+			liege = {
+				any_vassal = {
+					limit = {
+						rebel = no
+						NOT = {
+							tier = BARON
+						}
+						culture = ROOT
+					}
+					letter_event = { id = ecsway.33 }
+				}
+			}
+		}
+
+		custom_tooltip = {
+			text = ec_cultural_vassals_may_rebel
+			event_target:target_ec_swayee = {
+				character_event = { id = ecsway.36 }
+			}
+		}
+
+		event_target:target_ec_swayee = {
+			show_scope_change = no
+			event_target:target_ec_sway_kingdom = {
+				show_scope_change = no
+				add_weak_claim = PREV
+				reverse_unsafe_war = { target = event_target:target_ec_swayee casus_belli = replace_foreign_overlord thirdparty = event_target:target_ec_swayer }
+			}
+			# hidden_tooltip = {
+			# 	# Swayee is the only character whose death invalidates the war - save event targets in them
+			# 	save_persistent_event_target = { name = pet_ec_swayer scope = event_target:target_ec_swayer }
+			# 	save_persistent_event_target = { name = pet_ec_sway_kingdom scope = event_target:target_ec_sway_kingdom }
+			# 	save_persistent_event_target = { name = pet_ec_sway_third_party scope = event_target:target_ec_sway_third_party }
+			# }
+		}
+	}
+}
+
+# Call to arms to cultural allies - overlord
+letter_event = {
+	id = ecsway.33
+	desc = ecsway.33.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.33.accept
+
+		set_defacto_liege = THIS
+		FROM = {
+			show_scope_change = no
+			make_tributary = { who = ROOT tributary_type = tributary_rebel_ally }
+			letter_event = { id = ecsway.34 }
+		}
+
+		ai_chance = {
+			factor = 15
+			# Religion
+			modifier = {
+				factor = 0.1
+				NOT = {
+					religion_group = FROM
+				}
+				religion = event_target:target_ec_swayee
+			}
+			modifier = {
+				factor = 0.5
+				religion_group = FROM
+				NOT = {
+					religion = FROM
+				}
+				religion = event_target:target_ec_swayee
+			}
+			modifier = {
+				factor = 0.33
+				NOT = {
+					religion_group = FROM
+					religion = event_target:target_ec_swayee
+				}
+				religion_group = event_target:target_ec_swayee
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					religion_group = event_target:target_ec_swayee
+				}
+				religion_group = FROM
+			}
+			# Culture
+			modifier = {
+				factor = 0.75
+				culture = event_target:target_ec_swayee
+			}
+			modifier = {
+				factor = 1.25
+				culture_group = event_target:target_ec_swayer
+				NOT = {
+					culture = event_target:target_ec_swayer
+				}
+			}
+			modifier = {
+				factor = 2
+				NOT = {
+					culture_group = event_target:target_ec_swayer
+				}
+			}
+			# Opinion
+			modifier = {
+				factor = 2
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 0
+				is_foe = FROM
+			}
+			modifier = {
+				factor = 0.5
+				is_friend = event_target:target_ec_swayer
+			}
+			modifier = {
+				factor = 3
+				is_foe = event_target:target_ec_swayer
+			}
+			modifier = {
+				factor = 1.5
+				likes_better_than = { who = FROM than = event_target:target_ec_swayee }
+			}
+			modifier = {
+				factor = 2.5
+				likes_better_than = { who = FROM than = event_target:target_ec_swayer }
+			}
+			modifier = {
+				factor = 1.5
+				ec_is_councilist = yes
+			}
+		}
+	}
+
+	option = {
+		name = ecsway.33.reject
+
+		letter_event = { id = ecsway.35 }
+
+		ai_chance = {
+			factor = 20
+			# Religion
+			modifier = {
+				factor = 0.1
+				NOT = {
+					religion_group = event_target:target_ec_swayee
+				}
+				religion = FROM
+			}
+			modifier = {
+				factor = 0.5
+				religion_group = event_target:target_ec_swayee
+				NOT = {
+					religion = event_target:target_ec_swayee
+				}
+				religion = FROM
+			}
+			modifier = {
+				factor = 0.33
+				NOT = {
+					religion_group = event_target:target_ec_swayee
+					religion = FROM
+				}
+				religion_group = FROM
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					religion_group = FROM
+				}
+				religion_group = event_target:target_ec_swayee
+			}
+			# Culture
+			modifier = {
+				factor = 1.5
+				culture = event_target:target_ec_swayee
+			}
+			modifier = {
+				factor = 1.1
+				culture_group = event_target:target_ec_swayer
+			}
+			# Opinion
+			modifier = {
+				factor = 2
+				is_friend = event_target:target_ec_swayee
+			}
+			modifier = {
+				factor = 0
+				is_foe = event_target:target_ec_swayee
+			}
+			modifier = {
+				factor = 1.5
+				likes_better_than = { who = event_target:target_ec_swayee than = FROM }
+			}
+			modifier = {
+				factor = 1.25
+				likes_better_than = { who = event_target:target_ec_swayer than = FROM }
+			}
+			modifier = {
+				factor = 1.5
+				ec_is_councilist = yes
+			}
+		}
+	}
+}
+
+# Call to arms accepted
+letter_event = {
+	id = ecsway.34
+	desc = ecsway.34.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.34.accept
+	}
+}
+
+# Call to arms rejected
+letter_event = {
+	id = ecsway.35
+	desc = ecsway.35.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.35.accept
+	}
+}
+
+# Notify swayee of the war, send calls to arms
+character_event = {
+	id = ecsway.36
+	desc = ecsway.36.desc
+	picture = GFX_evt_placeholder
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.36.accept
+
+		event_target:target_ec_sway_kingdom = {
+			create_title = {
+				tier = KING
+				name = "[Prev.GetOnlyDynastyName] [This.GetName]"
+				base_title = THIS
+				holder = PREV
+			}
+			new_title = {
+				set_title_flag = ec_cultural_kingdom
+			}
+		}
+		set_defacto_liege = FROMFROM
+		FROM = {
+			any_vassal = {
+				limit = {
+					rebel = no
+					NOT = {
+						tier = BARON
+					}
+					capital_holding = {
+						kingdom = {
+							title = event_target:target_ec_sway_kingdom
+						}
+					}
+				}
+				letter_event = { id = ecsway.37 }
+			}
+		}
+	}
+}
+
+# Call to arms to co-vassals - swayee
+letter_event = {
+	id = ecsway.37
+	desc = ecsway.37.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.37.accept
+
+		set_defacto_liege = FROM
+
+		letter_event = { id = ecsway.34 }
+
+		ai_chance = {
+			factor = 10
+			# Coreligionist against same-group liege
+			modifier = {
+				factor = 3
+				NOT = {
+					religion = event_target:target_ec_sway_third_party
+				}
+				religion_group = event_target:target_ec_sway_third_party
+				religion = FROM
+			}
+			# Coreligionist against heathen liege
+			modifier = {
+				factor = 5
+				NOT = {
+					religion_group = event_target:target_ec_sway_third_party
+				}
+				religion = FROM
+			}
+			# Same-group against heathen liege
+			modifier = {
+				factor = 2
+				NOT = {
+					religion_group = event_target:target_ec_sway_third_party
+					religion = FROM
+				}
+				religion_group = FROM
+			}
+			# Same culture against foreigner
+			modifier = {
+				factor = 2
+				NOT = {
+					culture = event_target:target_ec_sway_third_party
+				}
+				culture = FROM
+			}
+			# Same culture group against foreigner - stacks w/ above
+			modifier = {
+				factor = 1.5
+				NOT = {
+					culture_group = event_target:target_ec_sway_third_party
+					culture = FROM
+				}
+				culture_group = FROM
+			}
+			# Religion and culture against foreign heathen - extra bonus
+			modifier = {
+				factor = 10
+				NOT = {
+					religion_group = event_target:target_ec_sway_third_party
+					culture_group = event_target:target_ec_sway_third_party
+				}
+				religion = FROM
+				culture = FROM
+			}
+			# Religion and culture against foreign heathen - partial bonus
+			modifier = {
+				factor = 5
+				NOT = {
+					religion = event_target:target_ec_sway_third_party
+					culture = event_target:target_ec_sway_third_party
+				}
+				# XOR
+				OR = {
+					religion_group = event_target:target_ec_sway_third_party
+					culture_group = event_target:target_ec_sway_third_party
+				}
+				NAND = {
+					religion_group = event_target:target_ec_sway_third_party
+					culture_group = event_target:target_ec_sway_third_party
+				}
+				# /XOR
+				religion = FROM
+				culture = FROM
+			}
+			# Foes
+			modifier = {
+				factor = 0
+				is_foe = FROM
+			}
+			# Friends
+			modifier = {
+				factor = 1.5
+				is_friend = FROM
+			}
+			# Dynasts
+			modifier = {
+				factor = 1.25
+				dynasty = FROM
+			}
+			# Relative opinion
+			modifier = {
+				factor = 1.5
+				likes_better_than = { who = FROM than = event_target:target_ec_sway_third_party }
+			}
+			# Complying with imperial will
+			modifier = {
+				factor = 1.25
+				ec_is_imperialist = yes
+			}
+		}
+	}
+
+	option = {
+		name = ecsway.37.reject
+
+		letter_event = { id = ecsway.35 }
+
+		ai_chance = {
+			factor = 30 # Prefer current liege
+			# Foes
+			modifier = {
+				factor = 0
+				is_foe = event_target:target_ec_sway_third_party
+			}
+			# Same culture group bonus
+			modifier = {
+				factor = 2
+				NOT = {
+					culture = FROM
+				}
+				culture_group = event_target:target_ec_sway_third_party
+			}
+			# Prefer current foreign lord in general
+			modifier = {
+				factor = 1.5
+				NOT = {
+					culture_group = FROM
+				}
+			}
+			# Same culture
+			modifier = {
+				factor = 2
+				NOT = {
+					culture = FROM
+				}
+				culture = event_target:target_ec_sway_third_party
+			}
+			# Religion group
+			modifier = {
+				factor = 3
+				NOT = {
+					religion_group = FROM
+				}
+				religion_group = event_target:target_ec_sway_third_party
+			}
+			# Religion
+			modifier = {
+				factor = 4
+				NOT = {
+					religion_group = FROM
+				}
+				religion = event_target:target_ec_sway_third_party
+			}
+			modifier = {
+				factor = 2
+				NOT = {
+					religion = FROM
+				}
+				religion = event_target:target_ec_sway_third_party
+			}
+			# Friends
+			modifier = {
+				factor = 1.5
+				is_friend = event_target:target_ec_sway_third_party
+			}
+			# Dynasts
+			modifier = {
+				factor = 1.25
+				dynasty = event_target:target_ec_sway_third_party
+			}
+			# Relative opinions
+			modifier = {
+				factor = 1.5
+				likes_better_than = { who = event_target:target_ec_sway_third_party than = FROM }
+			}
+			# Refute imperial will
+			modifier = {
+				factor = 1.25
+				ec_is_councilist = yes
+			}
+		}
+	}
+}
+
+# War invalidated - notify swayer
+# ROOT - swayer
+# FROM - swayee
+# FROMFROM - thirdparty
+# FROMFROMFROM - kingdom
+character_event = {
+	id = ecsway.38
+	desc = ecsway.38
+	picture = GFX_evt_placeholder
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.38.accept
+
+		
+		ec_end_sway = yes
+
+		event_target:target_ec_swayee = {
+			character_event = { id = ecsway.39 }
+		}
+	}
+}
+
+# War invalidated - notify swayee
+character_event = {
+	id = ecsway.39
+	desc = ecsway.39.desc
+	picture = GFX_evt_placeholder
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.39.accept
+	}
+}
+
+# War victorious - ping swayer to align scopes
+character_event = {
+	id = ecsway.40
+	hide_window = yes
+	picture = GFX_evt_placeholder
+	picture = GFX_evt_placeholder
+
+	is_triggered_only = yes
+
+	immediate = {
+		ec_sway_save_postwar_targets_claimant = yes
+
+		event_target:target_ec_swayee = {
+			letter_event = { id = ecsway.41 }
+		}
+	}
+}
+
+# War victorious - notify swayee
+letter_event = {
+	id = ecsway.41
+	desc = ecsway.41.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.41.accept
+
+		FROM = {
+			letter_event = { id = ecsway.42 }
+		}
+	}
+}
+
+# War victorious - notify swayer
+letter_event = {
+	id = ecsway.42
+	desc = ecsway.42.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.42.accept
+
+		ec_sway_succeed_major = yes
+	}
+}
+
+# War stalemate - notify swayee
+# 43
+
+# War stalemate - notify swayer
+# 44
+
+# War defeated - notify swayee
+# 45
+
+# War defeated - notify swayer
+# 46
+
+# War defeated - notify thirdparty
+# 47
+
+##### Wants money - Inform swayer 						###################################################################################################################
+letter_event = {
+	id = ecsway.60
+	desc = ecsway.60.desc
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			# Calculate amount requested
+		
+			set_variable = { which = local_ec_cost_multiplier value = 1 }
+
+			# Society rank
+			if = {
+				limit = {
+					society_rank == 2
+				}
+				change_variable = { which = local_ec_cost_multiplier value = 0.5 }
+			}
+			else_if = {
+				limit = {
+					society_rank == 3
+				}
+				change_variable = { which = local_ec_cost_multiplier value = 1 }
+			}
+			else_if = {
+				limit = {
+					society_rank == 4
+				}
+				change_variable = { which = local_ec_cost_multiplier value = 2 }
+			}
+
+			# Personal council
+			if = {
+				limit = {
+					PREV = {
+						any_voter = {
+							character = PREVPREV
+						}
+					}
+				}
+				multiply_variable = { which = local_ec_cost_multiplier value = 1.25 }
+			}
+
+			# Foreigner
+			if = {
+				limit = {
+					NOT = {
+						top_liege = {
+							character = ROOT
+						}
+						suzerain = {
+							character = ROOT
+						}
+					}
+				}
+				multiply_variable = { which = local_ec_cost_multiplier value = 1.25 }
+			}
+
+			# Landed
+			if = {
+				limit = {
+					is_landed = yes
+				}
+				multiply_variable = { which = local_ec_cost_multiplier value = 1.5 }
+			}
+
+			if = {
+				limit = {
+					OR = {
+						real_tier = EMPEROR
+						any_heir_title = {
+							tier = EMPEROR
+						}
+						any_close_relative = {
+							real_tier = EMPEROR
+						}
+						dynasty_realm_power = 1.5
+						dynastic_prestige = 750
+					}
+				}
+				set_variable = { which = local_ec_cost value = 680 } # min favour cost
+			}
+			else_if = {
+				limit = {
+					OR = {
+						real_tier = KING
+						any_heir_title = {
+							tier = KING
+						}
+						any_close_relative = {
+							real_tier = KING
+						}
+						dynasty_realm_power = 1
+						dynastic_prestige = 500
+					}
+				}
+				set_variable = { which = local_ec_cost value = 400 }
+			}
+			else_if = {
+				limit = {
+					OR = {
+						real_tier = DUKE
+						any_heir_title = {
+							tier = DUKE
+						}
+						any_close_relative = {
+							real_tier = DUKE
+						}
+						dynasty_realm_power = 0.75
+						dynastic_prestige = 300
+					}
+				}
+				set_variable = { which = local_ec_cost value = 200 }
+			}
+			else_if = {
+				limit = {
+					OR = {
+						real_tier = COUNT
+						any_heir_title = {
+							tier = COUNT
+						}
+						any_close_relative = {
+							real_tier = COUNT
+						}
+						dynasty_realm_power = 0.33
+						dynastic_prestige = 100
+					}
+				}
+				set_variable = { which = local_ec_cost value = 80 }
+			}
+			else = {
+				set_variable = { which = local_ec_cost value = 40 }
+			}
+		}
+		multiply_variable = { which = local_ec_cost which = local_ec_cost_multiplier }
+		hidden_tooltip = { # ROOT loses gold
+			multiply_variable = { which = local_ec_cost value = -1 }
+		}
+	}
+
+	option = {
+		name = ecsway.60.accept
+
+		trigger = {
+			wealth = 0
+		}
+
+		wealth = local_ec_cost
+		hidden_tooltip = {
+			# FROM gains gold
+			multiply_variable = { which = local_ec_cost value = -1 }
+
+			FROM = {
+				character_event = { id = ecsway.61 }
+			}
+		}
+
+		ec_sway_succeed_minor = yes
+	}
+	option = {
+		name = {
+			text = ecsway.60.refuse
+
+			trigger = {
+				wealth = 0
+			}
+		}
+		name = {
+			text = ecsway.60.bankrupt
+
+			trigger = {
+				wealth < 0
+			}
+		}
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ecsway.62 }
+			}
+		}
+
+		ec_end_sway = yes
+	}
+}
+
+# Swayer accepted
+letter_event = {
+	id = ecsway.61
+	desc = ecsway.61.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.61.accept
+
+		wealth = local_ec_cost
+	}
+}
+
+# Swayer rejected
+letter_event = {
+	id = ecsway.62
+	desc = ecsway.62.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.62.accept
+	}
+}
+
+##### Wants imperial marriage - Inform swayer 			###################################################################################################################
+letter_event = {
+	id = ecsway.63
+	desc = ecsway.63.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.63.accept
+
+		if = {
+			limit = {
+				event_target:swayee_potential_bride = {
+					is_female = yes
+				}
+			}
+			event_target:swayee_potential_bride = {
+				add_spouse_matrilineal = event_target:swayer_potential_bride
+			}
+		}
+		else = {
+			event_target:swayee_potential_bride = {
+				show_scope_change = no
+				add_spouse = event_target:swayer_potential_bride
+			}
+		}
+		event_target:swayer_potential_bride = {
+			show_portrait = yes
+		}
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ecsway.64 }
+			}
+		}
+
+		ec_sway_succeed_moderate = yes
+	}
+
+	option = {
+		name = ecsway.63.refuse
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ecsway.65 }
+			}
+		}
+
+		ec_end_sway = yes
+	}
+}
+
+# Swayer accepted
+letter_event = {
+	id = ecsway.64
+	desc = ecsway.64.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.64.accept
+	}
+}
+
+# Swayer rejected
+letter_event = {
+	id = ecsway.65
+	desc = ecsway.65.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.65.accept
+	}
+}
+
+##### Wants elevation - Inform swayer 					###################################################################################################################
+# TODO:JJ Prevent giving away capital province (e.g. can't give away kingdom of Cyrodiil if ruling from the Imperial City) (?)
+letter_event = {
+	id = ecsway.66
+	desc = ecsway.66.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.66.accept
+
+		trigger = {
+			event_target:target_ec_desired_title = {
+				OR = {
+					holder_scope = {
+						character = ROOT
+					}
+					AND = {
+						has_holder = no
+						ROOT = {
+							wealth = 0
+						}
+					}
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				event_target:target_ec_desired_title = {
+					has_holder = no
+				}
+			}
+			custom_tooltip = {
+				text = desired_title_will_be_created
+			}
+			if = {
+				limit = {
+					event_target:target_ec_desired_title = {
+						tier = DUKE
+					}
+				}
+				wealth = -100
+			}
+			else_if = {
+				limit = {
+					event_target:target_ec_desired_title = {
+						tier = KING
+					}
+				}
+				wealth = -200
+			}
+		}
+
+		event_target:target_ec_desired_title = {
+			show_scope_change = no
+			hidden_tooltip = {
+				grant_title = ROOT
+			}
+			grant_title = event_target:target_ec_swayee
+		}
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ecsway.67 }
+			}
+		}
+
+		ec_sway_succeed_moderate = yes
+	}
+
+	option = {
+		name = {
+			text = ecsway.66.refuse
+
+			trigger = {
+				OR = {
+					event_target:target_ec_desired_title = {
+						holder_scope = {
+							character = ROOT
+						}
+					}
+					wealth = 0
+				}
+			}
+		}
+
+		name = {
+			text = ecsway.66.bankrupt
+
+			trigger = {
+				event_target:desired_title_will = {
+					holder_scope = {
+						NOT = {
+							character = FROM
+						}
+					}
+				}
+				wealth < 0
+			}
+		}
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ecsway.68 }
+			}
+		}
+
+		ec_end_sway = yes
+	}
+}
+
+# Swayer accepted
+letter_event = {
+	id = ecsway.67
+	desc = ecsway.67.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.67.accept
+	}
+}
+
+# Swayer rejected
+letter_event = {
+	id = ecsway.68
+	desc = ecsway.68.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.68.accept
+	}
+}
+
+##### Wants land (unlanded) - Inform swayer 			###################################################################################################################
+letter_event = {
+	id = ecsway.69
+	desc = ecsway.69.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.69.accept
+
+		event_target:target_ec_desired_title = {
+			show_scope_change = no
+			grant_title = event_target:target_ec_swayee
+		}
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ecsway.70 }
+			}
+		}
+
+		ec_sway_succeed_major = yes
+	}
+
+	option = {
+		name = ecsway.69.refuse
+
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ecsway.71 }
+			}
+		}
+
+		ec_end_sway = yes
+	}
+}
+
+# Swayer accepted
+letter_event = {
+	id = ecsway.70
+	desc = ecsway.70.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.70.accept
+	}
+}
+
+# Swayer rejected
+letter_event = {
+	id = ecsway.71
+	desc = ecsway.71.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = ecsway.71.accept
+	}
+}
+
+##### Wants de jure land - Inform swayer 				###################################################################################################################
+# letter_event = {
+# 	id = ecsway.72
+# 	desc = ecsway.72.desc
+
+# 	is_triggered_only = yes
+
+# 	option = {
+# 		name = ecsway.72.accept
+
+# 		event_target:target_ec_desired_title = {
+# 			show_scope_change = no
+# 			grant_title = event_target:target_ec_swayee
+# 			any_direct_de_jure_vassal_title = { # Give any titles in the subrealm that belong to the swayer to the swayee
+# 				limit = {
+# 					holder_scope = {
+# 						character = ROOT
+# 					}
+# 				}
+# 				grant_title = event_target:target_ec_swayee
+# 			}
+# 		}
+
+# 		hidden_tooltip = {
+# 			FROM = {
+# 				character_event = { id = ecsway.73 }
+# 			}
+# 		}
+
+# 		ec_sway_succeed_major = yes
+# 	}
+
+# 	option = {
+# 		name = ecsway.72.refuse
+
+# 		hidden_tooltip = {
+# 			FROM = {
+# 				character_event = { id = ecsway.73 }
+# 			}
+# 		}
+
+# 		ec_end_sway = yes
+# 	}
+# }
+
+# # Swayer accepted
+# letter_event = {
+# 	id = ecsway.73
+# 	desc = ecsway.73.desc
+
+# 	is_triggered_only = yes
+
+# 	option = {
+# 		name = ecsway.73.accept
+# 	}
+# }
+
+# # Swayer rejected
+# letter_event = {
+# 	id = ecsway.74
+# 	desc = ecsway.74.desc
+
+# 	is_triggered_only = yes
+
+# 	option = {
+# 		name = ecsway.74.accept
+# 	}
+# }
+
+##### Wants de jure vassal - Inform swayer 				###################################################################################################################
+
+##### Wants non de jure lord replaced - Inform swayer 	###################################################################################################################
+
+##### Wants province - Inform swayer 					###################################################################################################################
+
+##### Wants prisoners - Inform swayer 					###################################################################################################################
+
+##### Wants claim - Inform swayer 						###################################################################################################################
+
+##### Wants law - Inform swayer 						###################################################################################################################
+
+##### Wants artifact - Inform swayer 					###################################################################################################################
+
+########## DEBUG 900-999 ##########
+
+# Test capital check
+character_event = {
+	id = ecsway.900
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		c_imperialisle = {
+			can_be_given_away = yes
+			NOT = {
+				higher_tier_than = COUNT
+			}
+			PREV = {
+				capital_holding = { # Don't give away your capital county, but you can give away baronies within it
+					OR = {
+						county = {
+							NOT = {
+								title = PREVPREVPREV
+							}
+						}
+						is_capital = no
+					}
+				}
+			}
+		}
+	}
+}

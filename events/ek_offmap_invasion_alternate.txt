@@ -1,0 +1,1181 @@
+#Alternate offmap resolution events for those lacking Jade Dragon
+
+namespace = ekinvasionresolution
+
+character_event = {
+	id = ekinvasionresolution.30
+	hide_window = yes
+	
+	min_age = 16
+	only_capable = yes
+	
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		NOT = {
+			event_target:major_hero = {
+				is_alive = yes
+			}
+		}
+		is_indisposed = no
+		trait = dragonborn
+		OR = {
+			has_global_flag = oblivion_invasion_azura
+			has_global_flag = oblivion_invasion_boethiah
+			has_global_flag = oblivion_invasion_clavicus
+			has_global_flag = oblivion_invasion_hermaeus
+			has_global_flag = oblivion_invasion_hircine
+			has_global_flag = oblivion_invasion_malacath
+			has_global_flag = oblivion_invasion_mehrunes
+			has_global_flag = oblivion_invasion_mephala
+			has_global_flag = oblivion_invasion_meridia
+			has_global_flag = oblivion_invasion_molag
+			has_global_flag = oblivion_invasion_namira
+			has_global_flag = oblivion_invasion_nocturnal
+			has_global_flag = oblivion_invasion_peryite
+			has_global_flag = oblivion_invasion_sanguine
+			has_global_flag = oblivion_invasion_sheogorath
+			has_global_flag = oblivion_invasion_vaermina
+		}
+		NOR = {		#The hero can't be the person leading the invasion. This would sound obvious but I overlooked it the first time around -Etienne
+			has_character_flag = latent_daedric_herald
+			has_character_flag = daedric_herald
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		save_global_event_target_as = major_hero #This character is going to be sent up against the forces of Oblivion
+		long_character_event = { id = ekinvasionresolution.40 }
+	}
+}
+
+long_character_event = {
+	id = ekinvasionresolution.40
+	picture = GFX_evt_daedric_invasion_city
+	desc = {
+		text = EKOffmapInvasion40A
+		trigger = {
+			prisoner = no
+		}
+	}
+	desc = {
+		text = EKOffmapInvasion40B
+		trigger = {
+			prisoner = yes
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = { NOT = { has_dlc = "Jade Dragon" } }
+	
+	option = { #Character is sent off to save the world
+		name = EKOffmapInvasion40Accept
+		if = {
+			limit = { prisoner = yes }
+			imprison = no
+		}
+		add_trait = on_mission
+		set_character_flag = do_not_disturb
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_azura
+				e_horde_azura = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_azura = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_boethiah
+				e_horde_boethiah = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_boethiah = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_clavicus
+				e_horde_clavicus = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_clavicus = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_hermaeus
+				e_horde_hermaeus = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_hermaeus = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_hircine
+				e_horde_hircine = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_hircine = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_malacath
+				e_horde_malacath = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_malacath = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_mehrunes
+				e_horde_mehrunes = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_mehrunes = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_mephala
+				e_horde_mephala = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_mephala = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_meridia
+				e_horde_meridia = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_meridia = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_molag
+				e_horde_molag = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_molag = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_namira
+				e_horde_namira = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_namira = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_nocturnal
+				e_horde_nocturnal = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_nocturnal = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_peryite
+				e_horde_peryite = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_peryite = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_sanguine
+				e_horde_sanguine = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_sanguine = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_sheogorath
+				e_horde_sheogorath = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_sheogorath = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = oblivion_invasion_vaermina
+				e_horde_vaermina = {
+					holder_scope = {
+						has_character_flag = daedric_herald
+					}
+				}
+			}
+			e_horde_vaermina = {
+				holder_scope = {
+					character_event = { id = ekinvasionresolution.50 days = 20 random = 5 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					e_horde_azura = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_boethiah = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_clavicus = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_hermaeus = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_hircine = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_malacath = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_mehrunes = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_mephala = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_meridia = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_molag = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_namira = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_nocturnal = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_peryite = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_sanguine = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_sheogorath = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+					e_horde_vaermina = {
+						holder_scope = {
+							has_character_flag = daedric_herald
+						}
+					}
+				}
+			}
+			long_character_event = { id = ekinvasionresolution.102 days = 20 random = 5 }
+		}
+	}
+}
+
+character_event = {
+	id = ekinvasionresolution.50
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { long_character_event = { id = ekinvasionresolution.55 } }
+	}
+}
+
+long_character_event = {
+	id = ekinvasionresolution.55
+	desc = EKOffmapInvasion55
+	picture = GFX_evt_daedric_invasion_city
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapInvasion55Accept
+		if = {
+			limit = {
+				NOT = { combat_rating = 16 }
+			}
+			random_list = {
+				50 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				20 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				10 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 16
+				NOT = { combat_rating = 20 }
+			}
+			random_list = {
+				40 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				30 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				10 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 20
+				NOT = { combat_rating = 24 }
+			}
+			random_list = {
+				30 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				35 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				15 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 24
+				NOT = { combat_rating = 28 }
+			}
+			random_list = {
+				25 = { 
+					death = { death_reason = death_battle }
+				}
+				15 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				40 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				20 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 28
+				NOT = { combat_rating = 32 }
+			}
+			random_list = {
+				20 = { 
+					death = { death_reason = death_battle }
+				}
+				10 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				45 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				25 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 32
+				NOT = { combat_rating = 36 }
+			}
+			random_list = {
+				10 = { 
+					death = { death_reason = death_battle }
+				}
+				10 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				45 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				35 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 36
+				NOT = { combat_rating = 40 }
+			}
+			random_list = {
+				5 = { 
+					death = { death_reason = death_battle }
+				}
+				5 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				40 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				50 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 40
+				NOT = { combat_rating = 44 }
+			}
+			random_list = {
+				1 = { 
+					death = { death_reason = death_battle }
+				}
+				9 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				30 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				60 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 44
+				NOT = { combat_rating = 48 }
+			}
+			random_list = {
+				5 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				25 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				70 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 48
+				NOT = { combat_rating = 52 }
+			}
+			random_list = {
+				1 = { 
+					add_maimed_trait_effect = yes
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				19 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				80 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 52
+				NOT = { combat_rating = 56 }
+			}
+			random_list = {
+				10 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				90 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 56
+				NOT = { combat_rating = 60 }
+			}
+			random_list = {
+				5 = { 
+					add_trait = wounded
+					character_event = { id = ekinvasionresolution.60 }
+				}
+				95 = { character_event = { id = ekinvasionresolution.60 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 60
+			}
+			character_event = { id = ekinvasionresolution.60 }
+		}
+	}
+}
+
+character_event = {
+	id = ekinvasionresolution.60
+	desc = EKInvasionResolution60
+	picture = GFX_evt_daedric_invasion_city
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKInvasionResolution60Accept
+		FROMFROM = { character_event = { id = ekinvasionresolution.65 } }
+	}
+}
+
+character_event = {
+	id = ekinvasionresolution.65
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the assassin ambushed the character, the assassin has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				10 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				20 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				10 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				1 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				30 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				15 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				5 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				35 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				15 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				5 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				40 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				20 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				10 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				40 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				25 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				10 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				40 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				30 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				10 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				35 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				35 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				15 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				35 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				40 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				15 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				30 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				40 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				20 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				25 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				35 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				35 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { long_character_event = { id = ekinvasionresolution.70 } } #Herald defeated, no injuries on Hero
+				10 = { long_character_event = { id = ekinvasionresolution.71 } } #Herald defeated, Hero wounded
+				30 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				59 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				10 = { FROM = { long_character_event = { id = ekinvasionresolution.72 } } } #Herald wounded, Hero killed
+				90 = { FROM = { long_character_event = { id = ekinvasionresolution.73 } } } #Herald kills Hero, no injuries
+			}
+		}
+	}
+}
+
+#Fallout for the combat event
+
+#Herald defeated, Hero victorious
+long_character_event = {
+	id = ekinvasionresolution.70
+	desc = EKOffmapInvasion70
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { long_character_event = { id = ekinvasionresolution.75 } } #Notify Hero
+	}
+	
+	option = {
+		name = EKOffmapInvasion70Accept
+		death = { 
+			death_reason = death_duel
+			killer = FROMFROM
+		}
+	}
+}
+
+#Herald defeated, Hero wounded
+long_character_event = {
+	id = ekinvasionresolution.71
+	desc = EKOffmapInvasion71
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { long_character_event = { id = ekinvasionresolution.76 } } #Notify Hero
+	}
+	
+	option = {
+		name = EKOffmapInvasion71Accept
+		death = { 
+			death_reason = death_duel 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Herald victorious, but wounded
+long_character_event = {
+	id = ekinvasionresolution.72
+	desc = EKOffmapInvasion72
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { long_character_event = { id = ekinvasionresolution.77 } } #Notify Herald
+	}
+	
+	option = {
+		name = EKOffmapInvasion72Accept
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Herald victorious and uninjured
+long_character_event = {
+	id = ekinvasionresolution.73
+	desc = EKOffmapInvasion73
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { long_character_event = { id = ekinvasionresolution.78 } } #Notify Herald
+	}
+	
+	option = {
+		name = EKOffmapInvasion73Accept
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Hero notified, no injuries
+long_character_event = {
+	id = ekinvasionresolution.75
+	desc = EKOffmapInvasion75
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapInvasion75Accept
+		long_character_event = { id = ekinvasionresolution.102 }
+	}
+}
+
+#Hero notified, injured
+long_character_event = {
+	id = ekinvasionresolution.76
+	desc = EKOffmapInvasion76
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = EKOffmapInvasion76Accept
+		long_character_event = { id = ekinvasionresolution.102 }
+	}
+}
+
+#Herald defeats Hero, but is injured
+long_character_event = {
+	id = ekinvasionresolution.77
+	desc = EKOffmapInvasion77
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = EKOffmapInvasion77Accept
+	}
+}
+
+#Herald defeats Hero with no injuries
+long_character_event = {
+	id = ekinvasionresolution.78
+	desc = EKOffmapInvasion78
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapInvasion78Accept
+	}
+}
+
+long_character_event = {
+	id = ekinvasionresolution.102
+	desc = EKOffmapInvasion102
+	picture = GFX_evt_comet
+	
+	hide_from = yes
+	show_from_from = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKOffmapInvasion102OptA #Have the Amulet of Kings? Go light the Dragonfires then!
+		trigger = {
+			has_artifact = amulet_of_kings
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 10
+				
+				OR = {
+					true_religion_group = human_pantheon
+					true_religion_group = mer_pantheon
+				}
+				NOR = {
+					trait = cynical
+					trait = zealous
+				}
+			}
+		}
+		set_character_flag = aedric_hero #This flag is important for clearing up do_not_disturb and their on_mission trait
+		character_event = { id = amuletofkings.50 }
+	}
+	option = {
+		name = EKOffmapInvasion102OptB #Don't have the Amulet of Kings? Must find it first!
+		trigger = {
+			NOT = { has_artifact = amulet_of_kings }
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 10
+				
+				OR = {
+					true_religion_group = human_pantheon
+					true_religion_group = mer_pantheon
+				}
+				NOR = {
+					trait = cynical
+					trait = zealous
+				}
+			}
+		}
+		set_character_flag = aedric_hero #This flag is important for clearing up do_not_disturb and their on_mission trait
+		character_event = { id = amuletofkings.10 }
+	}
+}

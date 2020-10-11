@@ -1,0 +1,1230 @@
+namespace = ekevmisc
+
+character_event = { #Tombola - ten years
+	id = ekevmisc.0
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = { #Daedric Whispers
+			10 = { character_event = { id = ekevmisc.1 } }
+			100 = {
+				modifier = { #We want players to get the event less often than the AI.
+					factor = 10 #Players get a more precise version through the Scholarship focus
+					AND = { 
+						ai = no
+						NOT = { has_character_flag = whispers_silenced }
+					}
+				}
+				modifier = {
+					factor = 1.5
+					has_character_flag = whispers_heeded
+				}
+				modifier = {
+					factor = 3
+					has_character_flag = whispers_silenced
+				}
+			}
+		}
+		random_list = { #Find an artifact
+			10 = { character_event = { id = ekevmisc.2 } }
+			100 = {
+				modifier = {
+					factor = 5 #Let's not flood the world with a great deluge of artifact spawns
+					num_of_artifacts >= 4
+				}
+				modifier = { #Let's let players see this a little more often!
+					factor = 0.25
+					ai = no
+				}
+			}
+		}
+	}
+}
+#######
+character_event = { #Daedric Whispers
+	id = ekevmisc.1
+	picture = GFX_evt_bad_news
+	desc = {
+		trigger = { religion_group = daedra }
+		text = EVTDESCekevmisc1a
+	}	
+	desc = {
+		trigger = { NOT = { religion_group = daedra } }
+		text = EVTDESCekevmisc1b
+	}
+	is_triggered_only = yes
+	trigger = {
+		primary_title = {
+			NOR = { 
+				holy_order = yes
+				rebel = yes
+			}
+		}
+		controls_religion = no
+	}
+
+	option = { #Convert
+		name = { #Grass is Greener
+			text = ekevmisc1opta1 
+			trigger = { religion_group = daedra }
+		}
+		
+		name = { #Dark power is enticing...
+			text = ekevmisc1opta2
+			trigger = { NOT = { religion_group = daedra } }
+		}
+		trigger = {
+			NOR = {
+				trait = briarheart #Hagravens and Briarhearts will die if they convert
+				trait = hagraven
+				trait = zealous
+				trait = cynical #Alternatively, remove cynical trait?
+				trait = undead
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 1.20
+				OR = {
+					learning = 15
+					trait = proud #Prideful characters less likely to worship in secrecy
+				}
+			}
+		}
+		clr_character_flag = whispers_silenced
+		set_character_flag = whispers_heeded
+		clear_secret_religion = yes
+		random_daedra_conversion_open = yes
+	}
+
+	option = { #Convert secretly
+		name = { #Grass is Greener, but we fear retribution
+			text = ekevmisc1optb1 
+			trigger = { religion_group = daedra }
+		}
+		
+		name = { #Dark power is enticing but public veneration is risky.
+			text = ekevmisc1optb2
+			trigger = { NOT = { religion_group = daedra } }
+		}
+		
+		trigger = {
+			NOR = { 
+				trait = briarheart #Hagravens and Briarhearts will die if they convert
+				trait = hagraven
+				trait = zealous
+				trait = cynical
+				trait = undead 
+			}		
+		}
+		
+		ai_chance = {
+			factor = 20 # AI should prefer to be sneaky-like if they convert
+			modifier = {
+				factor = 0.80
+				OR = {
+					trait = proud #Prideful characters less likely to worship in secrecy
+					trait = gregarious #Ditto
+				}
+			}
+		}
+		clr_character_flag = whispers_silenced
+		set_character_flag = whispers_heeded
+		random_daedra_conversion_secret = yes 
+	}
+	
+	option = { #Don't convert
+		name = { #Loyal Servant
+			text = ekevmisc1optc1 
+			trigger = { religion_group = daedra }
+		}
+		
+		name = { #Won't be seduced
+			text = ekevmisc1optc2
+			trigger = { NOT = { religion_group = daedra } }
+		}
+		
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 0.4
+				trait = arbitrary #yolo
+			}
+		}
+		clr_character_flag = whispers_heeded
+		set_character_flag = whispers_silenced
+		piety = 100
+	}
+	
+}
+
+### ### ### ### ### ### ###
+# Shiny thing event chain #
+### ### ### ### ### ### ###
+
+#Even the nameplate is sparkly!
+#This is by far the stupidest thing I've ever made.
+
+character_event = { #Character sees shiny thing
+	id = ekevmisc.2
+	desc = EVTDESCekevmisc2
+	picture = GFX_evt_small_falls
+
+	only_playable = yes #No courtiers existing solely to serve as artifact spawners
+	is_triggered_only = yes
+
+	option = { #Character takes shiny thing
+		name = ekevmisc2opt1
+		random_list = {
+			80 = { generate_loot_generic = yes } #Acquire shiny thing
+			20 = { long_character_event = { id = ekevmisc.3 } } #Shiny thing actually a cursed object a la morrowind, Dremora teleports behind you and draws katana.
+			20 = { character_event = { id = ekevmisc.4 } } #Shiny thing actually a nest of magical enchanted hornets. Don't ask.
+		}
+	}
+	option = { #Character ignores shiny thing
+		name = ekevmisc2opt2
+	}
+}
+long_character_event = { #Dremora defends cursed object
+	id = ekevmisc.3
+	desc = EVTDESCekevmisc3
+	picture = GFX_evt_small_falls
+
+	is_triggered_only = yes
+
+	option = { 
+		name = ekevmisc3opt1
+		custom_tooltip = { text = nothingpersonnel }
+		random_list = {
+			40 = {
+				set_character_flag = dremora_defeated
+				modifier = {
+					factor = 0
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 1.25
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 1.5
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 2
+					combat_rating >= 160
+				}
+			}
+			30 = {
+				set_character_flag = dremora_wounded
+				add_trait = wounded
+				modifier = {
+					factor = 3
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 2
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 0.75
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 0.25
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 0
+					combat_rating >= 160
+				}
+			}
+			20 = {
+				set_character_flag = dremora_maimed
+				add_trait = wounded
+				modifier = {
+					factor = 3
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 2
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 0.75
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 0.25
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 0
+					combat_rating >= 160
+				}
+			}
+			10 = {
+				set_character_flag = dremora_killed
+				modifier = {
+					factor = 3
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 2
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 0.75
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 0.25
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 0
+					combat_rating >= 160
+				}
+			}
+		}
+		long_character_event = { id = ekevmisc.5 days = 1 }
+	}
+}
+character_event = { #Character accosted by swarm of bees
+	id = ekevmisc.4
+	desc = EVTDESCekevmisc4
+	picture = GFX_evt_small_falls
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekevmisc4opt1
+		custom_tooltip = { text = notthebees }
+		random_list = {
+			40 = { 
+				set_character_flag = bee_escape 
+				modifier = {
+					factor = 1.2
+					trait = agile
+				}
+			}
+			30 = {
+				set_character_flag = bee_wounded
+				add_trait = wounded
+				modifier = {
+					factor = 3
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 2
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 0.75
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 0.25
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 0
+					combat_rating >= 160
+				}
+				modifier = {
+					factor = 0
+					OR = {
+					trait = undead
+					trait = dremora
+					}
+				}
+				modifier = {
+					factor = 0.25
+					trait = lycan
+				}
+			}
+			20 = {
+				set_character_flag = bee_maimed
+				add_maimed_trait_effect = yes
+				modifier = {
+					factor = 3
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 2
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 0.75
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 0.25
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 0
+					combat_rating >= 160
+				}
+				modifier = {
+					factor = 0
+					OR = {
+					trait = lycan
+					trait = undead
+					trait = dremora
+					}
+				}
+			}
+			5 = {
+				set_character_flag = bee_immune
+				modifier = {
+					factor = 0
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 1.25
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 1.5
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 2
+					combat_rating >= 160
+				}
+				modifier = {
+					factor = 10
+					has_character_flag = immune_to_bees #Applied to those who have gotten this outcome before.
+				}
+			}
+			5 = {
+				set_character_flag = doctor_bees
+				modifier = {
+					factor = 0
+					OR = {
+						AND = {
+							trait = lycan
+							ai = yes
+						}
+						trait = undead
+						trait = dremora
+					}
+				}
+				modifier = { #At least some players should see the easter egg!
+					factor = 3
+					ai = no
+				}
+			}
+			5 = {
+				set_character_flag = bee_death
+				modifier = {
+					factor = 3
+					combat_rating <= 10
+				}
+				modifier = {
+					factor = 2
+					combat_rating <= 20
+				}
+				modifier = {
+					factor = 0.75
+					combat_rating >= 40
+				}
+				modifier = {
+					factor = 0.5
+					combat_rating >= 80
+				}
+				modifier = {
+					factor = 0.25
+					combat_rating >= 120
+				}
+				modifier = {
+					factor = 0
+					combat_rating >= 160
+				}
+				modifier = {
+					factor = 0
+					OR = {
+					trait = lycan
+					trait = undead
+					trait = dremora
+					}
+				}
+			}
+		}
+		long_character_event = { id = ekevmisc.5 days = 1 } # Delay is just to make sure the flags are applied correctly. Just in case.
+	}
+	option = {
+		name = ekevmisc4opt2
+		trigger = {
+			has_thuum = yes
+		}
+		custom_tooltip = { text = yesthebees }
+		generate_loot_magic_ring = yes
+		set_character_flag = shouted_at_bees
+		random_list = {
+			98 = { }
+			2 = { 
+				generate_loot_generic_legendary = yes
+				set_character_flag = bee_loot
+			}
+		}
+		long_character_event = { id = ekevmisc.5 days = 1 }
+	}
+	option = {
+		name = ekevmisc4opt3
+		trigger = {
+			has_artifact = pet_badger
+		}
+		custom_tooltip = { text = badgeringthebees }
+		generate_loot_magic_ring = yes
+		set_character_flag = badgered_the_bees
+		random_list = {
+			98 = { }
+			2 = { 
+				generate_loot_generic_legendary = yes
+				set_character_flag = bee_loot
+			}
+		}
+		long_character_event = { id = ekevmisc.5 days = 1 }
+	}
+}
+long_character_event = { #Aftermath
+	id = ekevmisc.5
+	picture = GFX_evt_small_falls
+
+	desc = {
+		trigger = { has_character_flag = bee_escape }
+		text = EVTDESCekevmisc5a
+	}	
+	desc = {
+		trigger = { has_character_flag = bee_wounded }
+		text = EVTDESCekevmisc5b
+	}	
+	desc = {
+		trigger = { has_character_flag = bee_maimed }
+		text = EVTDESCekevmisc5c
+	}	
+	desc = {
+		trigger = { has_character_flag = bee_death }
+		text = EVTDESCekevmisc5d
+	}	
+	desc = {
+		trigger = { has_character_flag = bee_immune }
+		text = EVTDESCekevmisc5e
+	}	
+	desc = {
+		trigger = { has_character_flag = doctor_bees }
+		text = EVTDESCekevmisc5f
+	}	
+	desc = {
+		trigger = {
+			AND = { 
+				has_character_flag = shouted_at_bees 
+				NOT = { has_character_flag = bee_loot }
+			} 
+		}
+		text = EVTDESCekevmisc5g
+	}
+	desc = {
+		trigger = {
+			AND = { 
+				has_character_flag = shouted_at_bees 
+				has_character_flag = bee_loot 
+			} 
+		}
+		text = EVTDESCekevmisc5h
+	}
+	desc = {
+		trigger = {
+			AND = { 
+				has_character_flag = badgered_the_bees
+				NOT = { has_character_flag = bee_loot }
+			} 
+		}
+		text = EVTDESCekevmisc5i
+	}	
+	desc = {
+		trigger = {
+			AND = { 
+				has_character_flag = badgered_the_bees
+				has_character_flag = bee_loot 
+			} 
+		}
+		text = EVTDESCekevmisc5j
+	}
+	desc = {
+		trigger = { has_character_flag = dremora_defeated }
+		text = EVTDESCekevmisc5k
+	}
+	desc = {
+		trigger = { has_character_flag = dremora_wounded }
+		text = EVTDESCekevmisc5l
+	}
+	desc = {
+		trigger = { has_character_flag = dremora_maimed }
+		text = EVTDESCekevmisc5m
+	}
+	desc = {
+		trigger = { has_character_flag = dremora_killed }
+		text = EVTDESCekevmisc5n
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ekevmisc5opt1
+		trigger = { has_character_flag = bee_escape }
+		prestige = -10
+	}
+	option = {
+		name = ekevmisc5opt2
+		trigger = { has_character_flag = bee_wounded }
+		prestige = -15
+	}
+	option = {
+		name = ekevmisc5opt3
+		trigger = { has_character_flag = bee_maimed }
+		prestige = -20
+	}
+	option = {
+		name = ekevmisc5opt4
+		trigger = { has_character_flag = bee_death }
+	}
+	option = {
+		name = ekevmisc5opt5
+		trigger = { has_character_flag = bee_immune }
+		prestige = 15
+		add_trait = brave
+		set_character_flag = immune_to_bees
+	}
+	option = {
+		name = ekevmisc5opt6
+		trigger = { has_character_flag = doctor_bees }
+		prestige = 25
+		add_artifact = pet_bees
+	}
+	option = {
+		name = ekevmisc5opt7
+		trigger = {
+			AND = { 
+				has_character_flag = shouted_at_bees 
+				NOT = { has_character_flag = bee_loot }
+			} 
+		}
+		prestige = 30
+	}
+	option = {
+		name = ekevmisc5opt8
+		trigger = {
+			AND = { 
+				has_character_flag = shouted_at_bees 
+				has_character_flag = bee_loot 
+			} 
+		}
+		prestige = 30
+	}
+	option = {
+		name = ekevmisc5opt9
+		trigger = {
+			AND = { 
+				has_character_flag = badgered_the_bees
+				NOT = { has_character_flag = bee_loot }
+			} 
+		}
+		prestige = 20
+	}
+	option = {
+		name = ekevmisc5opt10
+		trigger = {
+			AND = { 
+				has_character_flag = badgered_the_bees
+				has_character_flag = bee_loot 
+			} 
+		}
+		prestige = 20
+	}
+	option = {
+		name = ekevmisc5opt11
+		trigger = { has_character_flag = dremora_defeated }
+		prestige = 20
+		add_artifact = weapon_sword_of_edge
+	}
+	option = {
+		name = ekevmisc5opt12
+		trigger = { has_character_flag = dremora_wounded }
+		prestige = 10
+		add_trait = wounded
+	}
+	option = {
+		name = ekevmisc5opt13
+		trigger = { has_character_flag = dremora_maimed }
+		prestige = 5
+		add_maimed_trait_effect = yes
+	}
+	option = {
+		name = ekevmisc5opt14
+		trigger = { has_character_flag = dremora_killed }
+		death = { death_reason = death_edgy }
+	}
+	
+	after = {
+		clr_character_flag = bee_escape 
+		clr_character_flag = bee_wounded 
+		clr_character_flag = bee_maimed 
+		clr_character_flag = bee_death 
+		clr_character_flag = bee_immune 
+		clr_character_flag = doctor_bees 
+		clr_character_flag = shouted_at_bees 
+		clr_character_flag = bee_loot 
+		clr_character_flag = badgered_the_bees 
+		clr_character_flag = bee_loot 
+		clr_character_flag = dremora_defeated 
+		clr_character_flag = dremora_wounded 
+		clr_character_flag = dremora_maimed 
+		clr_character_flag = dremora_killed 
+	}
+}
+
+###
+
+character_event = { #Character purchases study materials
+	id = ekevmisc.6
+	desc = ekevmisc6desc
+	picture = GFX_evt_tome #Library pic
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = evlibraryvisiting
+	}
+	option = { #Yes
+		name = ekevmisc6opta
+		trigger = {	NOT = { has_character_flag = evlibrarystudying } }
+		scaled_wealth = { value = -0.25 min = -100 }
+		set_character_flag = evlibrarystudying
+	}
+	option = {
+		name = ekevmisc6optc
+		trigger = {
+			ai = no #AI should use this decision for stat-padding, not buying books.
+		}
+		character_event = { id = ekevmisc.8 }
+	}
+	option = { #Nevermind
+		name = ekevmisc6optb
+		trigger = {
+			ai = no
+		}
+	}
+	after = {
+		clr_character_flag = evlibraryvisiting
+	}
+}
+character_event = { #Character receives results of studying
+	id = ekevmisc.7
+	desc = {
+		trigger = {
+			NOT = {
+				has_character_flag = evlibraryfailure
+			}
+		}
+		text = ekevmisc7desca
+	}
+	desc = {
+		trigger = {
+			has_character_flag = evlibraryfailure
+		}
+		text = ekevmisc7descb
+	}
+	picture = GFX_evt_tome
+	
+	trigger = {
+		had_character_flag = { flag = evlibrarystudying days = 180 }
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+		modifier = {
+			factor = 2
+			is_long_lived = yes
+		}
+		modifier = {
+			factor = 2
+			is_immortal = yes
+		}
+		modifier = {
+			factor = 0.6
+			trait = genius
+		}
+		modifier = {
+			factor = 0.7
+			trait = quick
+		}
+		modifier = {
+			factor = 0.8
+			trait = shrewd
+		}
+		modifier = {
+			factor = 0.8
+			trait = erudite
+		}
+		modifier = {
+			factor = 0.9
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.3
+			trait = slovenly
+		}
+		modifier = {
+			factor = 0.01
+			has_character_flag = evdebuglibrary
+		}
+	}
+	
+	immediate = { #Roll for results here to get a clean tooltip
+		clr_character_flag = evlibrarystudying
+		random_list = { #2/3 chance of success, 1/3 chance of failure
+			10 = {
+				set_character_flag = evlibrarydiplomacy 
+				modifier = {
+					factor = 0.1
+					diplomacy = 30
+				}
+			}
+			10 = {
+				set_character_flag = evlibrarymartial
+				modifier = {
+					factor = 0.1
+					martial = 30
+				}
+			}
+			10 = {
+				set_character_flag = evlibrarystewardship
+				modifier = {
+					factor = 0.1
+					stewardship = 30
+				}
+			}
+			10 = {
+				set_character_flag = evlibraryintrigue
+				modifier = {
+					factor = 0.1
+					intrigue = 30
+				}
+			}
+			10 = {
+				set_character_flag = evlibrarylearning
+				modifier = {
+					factor = 0.1
+					learning = 30
+				}
+			}
+			25 = {
+				set_character_flag = evlibraryfailure
+				modifier = {
+					factor = 0.75
+					trait = scholar
+				}
+			}
+		}
+	}
+
+	option = { #Success - Study again
+		name = ekevmisc7opta
+		trigger = {
+			NOT = { has_character_flag = evlibraryfailure }
+		}
+		if = {
+			limit = {
+				has_character_flag = evlibrarydiplomacy
+			}
+			change_diplomacy = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibrarymartial
+			}
+			change_martial = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibrarystewardship
+			}
+			change_stewardship = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibraryintrigue
+			}
+			change_intrigue = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibrarylearning
+			}
+			change_learning = 1
+		}
+		scaled_wealth = { value = -0.25 min = -100 }
+		set_character_flag = evlibrarystudying
+	}
+	option = { #Success - Finished studying
+		name = ekevmisc7optb
+		trigger = {
+			NOT = { has_character_flag = evlibraryfailure }
+		}
+		if = {
+			limit = {
+				has_character_flag = evlibrarydiplomacy
+			}
+			change_diplomacy = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibrarymartial
+			}
+			change_martial = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibrarystewardship
+			}
+			change_stewardship = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibraryintrigue
+			}
+			change_intrigue = 1
+		}
+		else_if = {
+			limit = {
+				has_character_flag = evlibrarylearning
+			}
+			change_learning = 1
+		}
+	}
+	option = { #Failure - Study again
+		name = ekevmisc7optc
+		trigger = {
+			has_character_flag = evlibraryfailure
+			scaled_wealth = { value = 0.25 min = 100 }
+		}
+		scaled_wealth = { value = -0.25 min = -100 }
+		set_character_flag = evlibrarystudying
+	}
+	option = { #Failure - Give up
+		name = ekevmisc7optd
+		trigger = {
+			has_character_flag = evlibraryfailure
+		}
+	}
+	
+	after = { #Cleanup
+		clr_character_flag = evlibrarydiplomacy
+		clr_character_flag = evlibrarymartial
+		clr_character_flag = evlibrarystewardship
+		clr_character_flag = evlibraryintrigue
+		clr_character_flag = evlibrarylearning
+		clr_character_flag = evlibraryfailure
+	}
+}
+
+character_event = { #Character buys book
+	id = ekevmisc.8
+	desc = ekevmisc8desc
+	picture = GFX_evt_tome #Library pic
+	
+	is_triggered_only = yes
+	
+	option = { #Purchase book
+		name = ekevmisc8opta
+		trigger = {
+			scaled_wealth = { value = 0.30 min = 150 }
+		}
+		scaled_wealth = { value = -0.30 min = -150 }
+		custom_tooltip = { text = generate_EK_lore_book_text }
+		hidden_tooltip = {
+			generate_EK_lore_book = yes
+		}
+	}
+	option = { #Nevermind
+		name = nevermind
+	}
+}
+
+character_event = { #AI unstupidifier
+	id = ekevmisc.9
+	hide_window = yes
+	is_triggered_only = yes
+	
+	only_playable = yes
+	ai = yes
+	
+	trigger = {
+		NOT = { has_game_rule = { name = ai_lootboxes value = disabled } } #Happy now, Nanaki? :p
+		primary_title = {
+			higher_real_tier_than = COUNT
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			100 = { modifier = { factor = 0 has_game_rule = { name = ai_lootboxes value = masochist } } }
+			50 = { wealth = 100 modifier = { factor = 0 has_game_rule = { name = ai_lootboxes value = masochist } } modifier = { factor >= 0.5 wealth = 2000 } modifier >= { factor = 0.4 wealth = 3000 } modifier >= { factor = 0.2 wealth = 4000 } modifier >= { factor = 0.1 wealth = 5000 } }
+			25 = { wealth = 175 modifier = { factor >= 0.5 wealth = 2000 } modifier >= { factor = 0.4 wealth = 3000 } modifier >= { factor = 0.2 wealth = 4000 } modifier >= { factor = 0.1 wealth = 5000 } }
+			10 = { wealth = 250 modifier = { factor = 2.5 has_game_rule = { name = ai_lootboxes value = masochist } } modifier = { factor >= 0.5 wealth = 2000 } modifier >= { factor = 0.4 wealth = 3000 } modifier >= { factor = 0.2 wealth = 4000 } modifier >= { factor = 0.1 wealth = 5000 } }
+			1 = { wealth = 500 modifier = { factor = 25 has_game_rule = { name = ai_lootboxes value = masochist } } modifier = { factor >= 0.5 wealth = 2000 } modifier >= { factor = 0.4 wealth = 3000 } modifier >= { factor = 0.2 wealth = 4000 } modifier >= { factor = 0.1 wealth = 5000 } }
+		}
+		random_list = {
+			200 = { modifier = { factor = 0 has_game_rule = { name = ai_lootboxes value = masochist } } }
+			30 = { culture_techpoints = 10 modifier = { factor = 0 has_game_rule = { name = ai_lootboxes value = masochist } } }
+			30 = { military_techpoints = 10 modifier = { factor = 0 has_game_rule = { name = ai_lootboxes value = masochist } } }
+			30 = { economy_techpoints = 10 modifier = { factor = 0 has_game_rule = { name = ai_lootboxes value = masochist } } }
+			20 = { culture_techpoints = 20 }
+			20 = { military_techpoints = 20 }
+			20 = { economy_techpoints = 20 }
+			10 = { culture_techpoints = 30 }
+			10 = { military_techpoints = 30 }
+			10 = { economy_techpoints = 30 }
+			50 = { culture_techpoints = 50 modifier = { factor = 0 NOT = { has_game_rule = { name = ai_lootboxes value = masochist } } } }
+			50 = { military_techpoints = 50 modifier = { factor = 0 NOT = { has_game_rule = { name = ai_lootboxes value = masochist } } } }
+			50 = { economy_techpoints = 50 modifier = { factor = 0 NOT = { has_game_rule = { name = ai_lootboxes value = masochist } } } }
+		}
+	}
+}
+
+character_event = { #IT WORKS
+	id = ekevmisc.10
+	desc = ekevmisc10desc
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	only_playable = yes
+	ai = no
+	
+	immediate = {
+		set_character_flag = plotoptioneventopen
+	}
+	
+	option = { #No plot invites!
+		name = {
+			text = ekevmisc10opt1a
+			trigger = { NOT = { has_character_flag = declineplotsall } }
+		}
+		name = {
+			text = ekevmisc10opt1b
+			trigger = { has_character_flag = declineplotsall }
+		}
+		if = {
+			limit = { has_character_flag = declineplotsall }
+			clr_character_flag = declineplotsall
+		}
+		else = {
+			set_character_flag = declineplotsall
+		}
+	}
+	option = { #No artifact stealing!
+		name = {
+			text = ekevmisc10opt2a
+			trigger = { NOT = { has_character_flag = declineplotssteal } }
+		}
+		name = {
+			text = ekevmisc10opt2b
+			trigger = { has_character_flag = declineplotssteal }
+		}
+		if = {
+			limit = { has_character_flag = declineplotssteal }
+			clr_character_flag = declineplotssteal
+		}
+		else = {
+			set_character_flag = declineplotssteal
+		}
+	}
+	option = { #No kidnapping!
+		name = {
+			text = ekevmisc10opt3a
+			trigger = { NOT = { has_character_flag = declineplotskidnap } }
+		}
+		name = {
+			text = ekevmisc10opt3b
+			trigger = { has_character_flag = declineplotskidnap }
+		}
+		if = {
+			limit = { has_character_flag = declineplotskidnap }
+			clr_character_flag = declineplotskidnap
+		}
+		else = {
+			set_character_flag = declineplotskidnap
+		}
+	}
+	
+	after = {
+		clr_character_flag = plotoptioneventopen
+	}
+}
+
+character_event = { #Hard Reset!
+	id = ekevmisc.11
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		any_character = {
+			while = {
+				limit = {
+					wealth >= 2000
+				}
+				wealth = -500
+			}
+		}
+	}
+}
+
+character_event = { #Save-game-law-fixer-resettlement
+	id = ekevmisc.12
+	hide_window = yes
+	is_triggered_only = yes
+	only_playable = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				is_landed = yes
+				NOR = {
+					has_law = resettlement_0
+					has_law = resettlement_1
+					has_law = resettlement_2
+				}
+			}
+			if = {
+				limit = {
+					top_liege = { has_law = resettlement_0 }
+				}
+				add_law = { law = resettlement_0 cooldown = no opinion_effect = no }
+			}
+			else_if = {
+				limit = {
+					top_liege = { has_law = resettlement_1 }
+				}
+				add_law = { law = resettlement1 cooldown = no opinion_effect = no }
+			}
+			else_if = {
+				limit = {
+					top_liege = { has_law = resettlement_2 }
+				}
+				add_law = { law = resettlement2 cooldown = no opinion_effect = no }
+			}
+			else = {
+				add_law = { law = resettlement1 cooldown = no opinion_effect = no }
+			}
+		}
+	}
+}
+
+character_event = { #vassal_titular_kings maintenance
+	id = ekevmisc.13
+	hide_window = yes
+	is_triggered_only = yes
+	only_playable = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				is_landed = yes
+			}
+			if = { #Adds law if you are missing the law
+				limit = {
+					OR = {
+						higher_real_tier_than = KING
+						#top_liege = {
+						#	higher_real_tier_than = KING
+						#}
+					}
+					NOR = {
+						has_law = vassal_titular_kings_0
+						has_law = vassal_titular_kings_1
+					}
+				}
+				add_law = { law = vassal_titular_kings_1 cooldown = no opinion_effect = no }
+			}
+			#if = { #Corrects law if vassal-liege mismatch
+			#	limit = {
+			#		OR = {
+			#			#higher_real_tier_than = KING
+			#			top_liege = {
+			#				higher_real_tier_than = KING
+			#			}
+			#		}
+			#		AND = {
+			#			has_law = vassal_titular_kings_0
+			#			top_liege = {
+			#				has_law = vassal_titular_kings_1
+			#			}
+			#		}
+			#	}
+			#	revoke_law = vassal_titular_kings_0
+			#	add_law = { law = vassal_titular_kings_1 cooldown = no opinion_effect = no }
+			#}
+			#else_if = { #Corrects law if vassal-liege mismatch
+			#	limit = {
+			#		OR = {
+			#			#higher_real_tier_than = KING
+			#			top_liege = {
+			#				higher_real_tier_than = KING
+			#			}
+			#		}
+			#		AND = {
+			#			has_law = vassal_titular_kings_1
+			#			top_liege = {
+			#				has_law = vassal_titular_kings_0
+			#			}
+			#		}
+			#	}
+			#	revoke_law = vassal_titular_kings_1
+			#	add_law = { law = vassal_titular_kings_0 cooldown = no opinion_effect = no }
+			#}
+		}
+	}
+}

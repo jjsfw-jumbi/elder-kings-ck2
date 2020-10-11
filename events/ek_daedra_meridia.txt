@@ -1,0 +1,260 @@
+####Etienne's Daedric Events - Meridia####
+
+namespace = meridia
+
+### Meridia rallies zealots to do battle with Necromancers, Vampires, or Worm Cult ###
+
+long_character_event = {
+	id = meridia.1
+	desc = Meridia1
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	prisoner = no
+	capable_only = yes
+	religion = daedra_meridia
+	
+	trigger = {
+		NOT = { has_character_modifier = meridia_army }
+		NOT = { trait = necromancer }
+		is_undead = no
+		any_war = {
+			defender = { 
+				character = ROOT
+			}
+			attacker = {
+				OR = {
+					trait = necromancer
+					is_undead = yes
+					is_necromancy_religion = yes
+				}
+				NOT = { religion = ideal_masters }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 1.5
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+	}
+	
+	option = {
+		name = "Meridia1Acknowledge"
+		hidden_tooltip = {
+			add_character_modifier = { name = meridia_army months = 3 hidden = yes }
+			capital_scope = {
+					ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.05
+						match_min = 100
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.05
+						match_min = 100
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.05
+						match_min = 100
+						attrition = 1
+						disband_on_peace = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+#Meridia's Special - Extra Zealots vs Ideal Masters
+
+long_character_event = {
+	id = meridia.2
+	desc = Meridia2
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	prisoner = no
+	capable_only = yes
+	religion = daedra_meridia
+	
+	trigger = {
+		NOT = { trait = necromancer }
+		NOT = { has_character_modifier = meridia_army }
+		any_war = {
+			defender = { 
+				character = ROOT
+			}
+			attacker = {
+				religion = ideal_masters
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+		
+		modifier = {
+			factor = 1.5
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+	}
+	
+	option = {
+		name = "Meridia2Acknowledge"
+		hidden_tooltip = {
+			add_character_modifier = { name = meridia_army months = 2 hidden = yes }
+			capital_scope = {
+					ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.05
+						match_min = 100
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.05
+						match_min = 100
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.05
+						match_min = 100
+						attrition = 1
+						disband_on_peace = yes
+					}
+				}	
+			}
+		}
+	}
+}
+
+#Meridia's Grand Bane of the Undead
+character_event = {
+	id = meridia.10
+	desc = Meridia10
+	picture = GFX_evt_two_moon_aurora
+	
+	has_dlc = "Jade Dragon"
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Meridia10Accept
+		clr_character_flag = meridia_deal
+		any_realm_character = {
+			limit = { is_undead = yes }
+			long_character_event = { id = meridia.15 }
+		}
+		any_realm_province = {
+			limit = { culture_group = undead }
+			province_event = { id = meridia.12 }
+		}
+	}
+}
+province_event = {
+	id = meridia.12
+	desc = Meridia12
+	picture = GFX_evt_two_moon_aurora
+	
+	has_dlc = "Jade Dragon"
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Meridia12Accept
+		add_province_modifier = {
+			name = depopulated_province
+			days = -1
+		}
+	}
+}
+
+long_character_event = {
+	id = meridia.15
+	desc = {
+		text = Meridia15A
+		trigger = {
+			is_unknown_vampire = no
+		}
+	}
+	desc = {
+		text = Meridia15B
+		trigger = {
+			is_unknown_vampire = yes
+		}
+	}
+	picture = GFX_evt_bad_news
+	
+	has_dlc = "Jade Dragon"
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Meridia15AcceptA
+		trigger = { is_unknown_vampire = no }
+		add_character_modifier = {
+			name = meridia_grand_bane_undead months = 60
+		}
+	}
+	option = {
+		name = Meridia15AcceptB
+		trigger = { is_unknown_vampire = yes }
+		add_trait = known_vampire
+		add_character_modifier = {
+			name = meridia_grand_bane_undead months = 60
+		}
+		hidden_tooltip = {
+			liege = {
+				character_event = { id = vamp.260 }
+			}
+		}
+	}
+}

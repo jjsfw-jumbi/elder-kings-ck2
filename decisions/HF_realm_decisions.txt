@@ -1,0 +1,88 @@
+
+decisions = {
+	hold_great_tribal_festival = {
+		only_playable = yes
+		ai_check_interval = 100
+		potential = {
+			has_dlc = "Holy Fury"
+			has_submenu_open = no
+			is_playable = yes
+			age = 12
+			prisoner = no
+			is_tribal = yes
+			NOT = { has_character_modifier = held_great_tribal_festival_cooldown }
+			NOT = {	has_character_flag = flag_holding_great_tribal_festival }
+			higher_real_tier_than = COUNT
+			independent = yes
+		}
+		allow = {
+			war = no
+			prisoner = no
+			NOT = { trait = incapable }
+			NOT = { is_inaccessible_trigger = yes }
+			custom_tooltip = {
+				text = is_not_busy_trigger_tooltip
+				hidden_tooltip = { NOT = { has_character_flag = do_not_disturb } }
+			}
+			trigger_if = {
+				limit = {
+					ai = no
+				}
+				wealth = 50
+			}
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				wealth = -50
+			}
+			set_character_flag = flag_holding_great_tribal_festival
+			hidden_tooltip = {
+				character_event = { id = HF.23800 days = 300 } # Full cleanup event, in case something goes wrong.
+			}
+			custom_tooltip = {
+				text = tooltip_preparations_great_tribal_festival
+				hidden_tooltip = {
+					character_event = { id = HF.23806 }
+					add_character_modifier = {
+						name = held_great_tribal_festival_cooldown
+						years = 15
+						hidden = yes
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						capital_scope = {
+							change_variable = { which = prosperity_value value = 4 }
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.01
+				NOT = {
+					wealth = 150
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = shy
+			}
+			modifier = {
+				factor = 1.5
+				trait = gregarious
+			}
+		}
+	}
+}

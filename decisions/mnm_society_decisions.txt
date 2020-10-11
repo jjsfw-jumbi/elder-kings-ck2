@@ -1,0 +1,358 @@
+###########################################
+#
+# Society decisions for Monks and Mystics
+#
+# Hermetic/mystic
+# Secret religious cults
+# Monastic orders
+# Assassins
+# Devil worshipers
+#
+###########################################
+
+
+# General
+society_decisions = { # Society decisions are only evaluated by members of societies	
+	request_to_rank_up_within_society = {
+		#only_playable = yes #Some society members are not playable (i.e. landless heirs)
+
+		hide_in_decisions_list = yes # This is shown in the Society View
+		
+		ai_check_interval = 24
+		
+		potential = {
+			hidden_tooltip = {
+				is_in_society = yes
+				OR = {
+					AND = {
+						society_rank < 2
+						is_in_society = yes
+						is_member_society_3_ranks = yes
+					}
+					AND = {
+						society_rank < 3
+						is_in_society = yes
+						is_member_society_4_ranks = yes
+					}
+					AND = {
+						society_rank < 4
+						is_member_society_5_ranks = yes
+					}
+					AND = {
+						society_rank < 5
+						is_member_society_6_ranks = yes
+					}
+					AND = {
+						society_rank < 6
+						is_member_society_7_ranks = yes
+					}
+				}
+				days_in_society > 365
+				#has_dlc = "Mystics"
+				OR = { #Players can always rank up (if they have the power)
+					ai = no
+					AND = {
+						ai = yes
+						society_can_rank_up = yes
+					}
+				}
+			}
+		}
+
+		allow = {
+			# They need to be able to request a rank up in the first place
+			trigger_if = {
+				limit = {
+					OR = {
+						AND = {
+							society_rank < 2
+							is_in_society = yes
+							is_member_society_3_ranks = yes
+						}
+						AND = {
+							society_rank < 3
+							is_in_society = yes
+							is_member_society_4_ranks = yes
+						}
+						AND = {
+							society_rank < 4
+							is_member_society_5_ranks = yes
+						}
+						AND = {
+							society_rank < 5
+							is_member_society_6_ranks = yes
+						}
+						AND = {
+							society_rank < 6
+							is_member_society_7_ranks = yes
+						}
+					}
+				}
+				# Rank requirements. IMPORTANT!!! If you change the requirements, the customizable loc keys "GetSocietyRankUpTooltip" 1, 2, 3, and 4 must be updated, as it displays these requirements.
+				# Short-lived: Base
+				# Long-lived: *3
+				# Immortal: *5
+				custom_tooltip = { # Sufficient currency
+					text = request_to_rank_up_within_society_currency_tt
+					OR = {
+						AND = {
+							is_six_off_max_rank = yes
+							
+							OR = {
+								AND = {
+									is_immortal = yes
+									society_currency >= 1250
+								}
+								
+								AND = {
+									is_long_lived = yes
+									society_currency >= 750
+								}
+								
+								AND = {
+									is_short_lived = yes
+									society_currency >= 250
+								}
+							}
+						}
+						
+						AND = {
+							is_five_off_max_rank = yes
+							
+							OR = {
+								AND = {
+									is_immortal = yes
+									society_currency >= 2500
+								}
+								
+								AND = {
+									is_long_lived = yes
+									society_currency >= 1500
+								}
+								
+								AND = {
+									is_short_lived = yes
+									society_currency >= 500
+								}
+							}
+						}
+						
+						AND = {
+							is_four_off_max_rank = yes
+							
+							OR = {
+								AND = {
+									is_immortal = yes
+									society_currency >= 3750
+								}
+								
+								AND = {
+									is_long_lived = yes
+									society_currency >= 2250
+								}
+								
+								AND = {
+									is_short_lived = yes
+									society_currency >= 750
+								}
+							}
+						}
+						
+						AND = {
+							is_three_off_max_rank = yes
+							
+							OR = {
+								AND = {
+									is_immortal = yes
+									society_currency >= 5000
+								}
+								
+								AND = {
+									is_long_lived = yes
+									society_currency >= 3000
+								}
+								
+								AND = {
+									is_short_lived = yes
+									society_currency >= 1000
+								}
+							}
+						}
+						
+						AND = {
+							is_two_off_max_rank = yes
+							
+							OR = {
+								AND = {
+									is_immortal = yes
+									society_currency >= 7500
+								}
+								
+								AND = {
+									is_long_lived = yes
+									society_currency >= 4500
+								}
+								
+								AND = {
+									is_short_lived = yes
+									society_currency >= 1500
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			trigger_else = {
+				custom_tooltip = {
+					text = request_to_rank_up_within_society_wrong_rank_tt
+					always = no
+				}
+			}
+
+			custom_tooltip = {
+				text = must_not_have_sent_request_already_tooltip
+				NOT = { has_character_flag = has_sent_request_to_rank_up }
+			}
+
+			custom_tooltip = {
+				text = must_be_allowed_to_rank_up_tooltip
+				days_at_current_society_rank >= 1095 #IMPORTANT! Update tooltip.
+			}
+
+			custom_tooltip = {
+				text = must_have_grandmaster_tooltip #You must have a grand master
+				any_society_member = {
+					is_society_grandmaster = yes
+					same_society_as = ROOT
+				}
+			}
+
+			# custom_tooltip = {
+				# text = must_have_multiple_rank_4 #Society must allow multiple characters at Rank 4
+			# }
+			
+			custom_tooltip = {
+				text = must_have_not_failed_companions
+				NOT = { has_character_modifier = companions_beast_blood_timer }
+			}
+		}
+
+		effect = {
+			#Rank up cost
+			# TODO: rework this with else blocks
+			if = {
+				limit = { is_six_off_max_rank = yes }
+				
+				if = {
+					limit = { is_immortal = yes }
+					change_society_currency = -1250
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					change_society_currency = -750
+				}
+				
+				else = {
+					change_society_currency = -250
+				}
+			}
+			
+			else_if = {
+				limit = { is_five_off_max_rank = yes }
+				
+				if = {
+					limit = { is_immortal = yes }
+					change_society_currency = -2500
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					change_society_currency = -1500
+				}
+				
+				else = {
+					change_society_currency = -500
+				}
+			}
+			
+			else_if = {
+				limit = { is_four_off_max_rank = yes }
+				
+				if = {
+					limit = { is_immortal = yes }
+					change_society_currency = -3750
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					change_society_currency = -2250
+				}
+				
+				else = {
+					change_society_currency = -750
+				}
+			}
+			
+			else_if = {
+				limit = { is_three_off_max_rank = yes }
+				
+				if = {
+					limit = { is_immortal = yes }
+					change_society_currency = -5000
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					change_society_currency = -3000
+				}
+				
+				else = {
+					change_society_currency = -1000
+				}
+			}
+			
+			else_if = {
+				limit = { is_two_off_max_rank = yes }
+				
+				if = {
+					limit = { is_immortal = yes }
+					change_society_currency = -7500
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					change_society_currency = -4500
+				}
+				
+				else = {
+					change_society_currency = -1500
+				}
+			}
+
+			#Perform rank up
+			hidden_tooltip = {
+				save_event_target_as = rank_up_target
+				set_character_flag = has_sent_request_to_rank_up
+				character_event = { id = MNM.10002 days = 20 random = 10 } # sends hidden delayed event to self, which then sends request to Leader of the society
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+
+			modifier = {
+				factor = 0.5 #Slow down
+			}
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+		}
+	}
+}

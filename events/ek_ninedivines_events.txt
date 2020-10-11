@@ -1,0 +1,292 @@
+##### Events for the Nine Divines #####
+
+namespace = ninedivines
+
+character_event = {
+	id = ninedivines.1
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	
+	trigger = {
+		event_target:tamriel_founder = {
+			always = yes
+			character = ROOT
+		}
+		has_landed_title = e_tamriel
+		religion = eight_divines
+	}
+	
+	immediate = {
+		set_global_flag = nine_divines_founded
+		religion = nine_divines
+		religion_authority = {
+			modifier = ninth_divine_booster
+		}
+		give_nickname = nick_the_ascended
+		if = { #If it's Tiber Septim, then the Septim bloodline reigns supreme
+			limit = { dynasty = 1 }
+			create_bloodline = {
+				type = bloodline_tiber
+				religion = nine_divines
+			}
+			# if = {
+				# limit = { NOT = { has_dlc = "Holy Fury" } }
+				# add_trait = bloodline_tiber
+				# any_child_even_if_dead = { add_trait = bloodline_tiber }
+				# any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_tiber } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_tiber  } } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_tiber } } } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_tiber } } } } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_tiber } } } } } }
+			# }
+		}
+		if = { #Otherwise, generic Divine Bloodline takes root
+			limit = { NOT = { dynasty = 1 } }
+			create_bloodline = {
+				type = bloodline_divine
+				religion = nine_divines
+			}
+			# if = {
+				# limit = { NOT = { has_dlc = "Holy Fury" } }
+				# add_trait = bloodline_divine
+				# any_child_even_if_dead = { add_trait = bloodline_divine }
+				# any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_divine } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_divine  } } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_divine } } } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_divine } } } } }
+				# any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { any_child_even_if_dead = { add_trait = bloodline_divine } } } } } }
+			# }
+		}
+		capital_scope = {
+			religion = nine_divines #Capital will always shift to your religion
+		}
+		any_demesne_province = {
+			limit = { NOT = { religion = nine_divines } }
+			random = {
+				chance = 25
+				modifier = { factor = 2.5 religion_group = human_pantheon }
+				modifier = { factor = 2.0 religion_group = atmoran_pantheon }
+				modifier = { factor = 1.5 religion_group = yokudan_pantheon }
+				religion = nine_divines
+			}
+		}
+		
+		activate_title = { title = d_ninedivines status = yes }
+		create_character = {
+			random_traits = yes
+			religion = nine_divines
+			culture = ROOT
+			dynasty = NONE
+			age = 35
+			trait = mage_3
+			trait = priest_3
+			trait = zealous
+		}
+		new_character = {
+			d_ninedivines = {
+				grant_title = PREV
+			}
+			set_defacto_liege = ROOT
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		
+		e_tamriel = {
+			holder_scope = {
+				narrative_event = { id = ninedivines.2 }
+				any_realm_character = {
+					narrative_event = { id = ninedivines.2 }
+				}
+			}
+		}
+		any_independent_ruler = {
+			limit = { NOT = { has_landed_title = e_tamriel } }
+			narrative_event = { id = ninedivines.2 }
+			any_realm_character = {
+				narrative_event = { id = ninedivines.2 }
+			}
+		}
+	}
+}
+
+# Rulers - Accept the Ninth Divine? #
+
+narrative_event = {
+	id = ninedivines.2
+	title = areformation.1.title
+	desc = ascension1
+	picture = GFX_evt_heretic
+	border = GFX_event_narrative_frame_religion	
+	
+	is_triggered_only = yes
+	show_ROOT = yes
+	hide_new = yes
+	
+	option = {
+		name = ascension1.accept #Accept conversion
+		trigger = {
+			religion = eight_divines
+		}
+		religion = nine_divines
+		if = {
+			limit = { is_landed = yes }
+			capital_scope = { religion = nine_divines }
+		}
+		any_demesne_province = {
+			limit = { NOT = { religion = nine_divines } }
+			random = {
+				chance = 8
+				modifier = { factor = 12 religion_group = human_pantheon }
+				modifier = { factor = 10 religion_group = atmoran_pantheon }
+				modifier = { factor = 5 religion_group = yokudan_pantheon }
+				modifier = { factor = 2 culture = ROOT }
+				modifier = { factor = 1.25 culture = akaviri }
+				modifier = { factor = 1.5 culture_group = nedic }
+				modifier = { factor = 1.25 culture = lhotunic }
+				religion = nine_divines
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					is_ruler = yes
+					primary_title = { higher_tier_than = COUNT }
+				}
+				religion_authority = {
+					modifier = ruler_converted_to
+				}
+				eight_divines = {
+					religion_authority = {
+						modifier = ruler_converted_from
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 11
+			modifier = {
+				factor = 2.5
+				event_target:tamriel_founder = {
+					dynasty = ROOT
+				}
+			}
+			modifier = {
+				factor = 2.5
+				any_spouse = {
+					event_target:tamriel_founder = {
+						dynasty = PREV
+					}
+				}
+			}
+			modifier = {
+				factor = 2.5
+				any_close_relative = {
+					event_target:tamriel_founder = {
+						dynasty = PREV
+					}
+				}
+			}
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = trusting
+			}
+			modifier = {
+				factor = 2.0
+				event_target:tamriel_founder = {
+					culture = ROOT
+				}
+			}
+			modifier = {
+				factor = 1.5
+				event_target:tamriel_founder = {
+					culture_group = ROOT
+				}
+			}
+			modifier = {
+				factor = 3.0
+				event_target:tamriel_founder = {
+					dynasty = 1 #Tiber's dynasty
+				}
+			}
+			modifier = {
+				factor = 2.0
+				event_target:tamriel_founder = {
+					dynasty = 2 #Reman's dynasty
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:tamriel_founder = {
+					dynasty = 500002 #Alessia's dynasty
+				}
+			}
+		}
+	}
+	option = {
+		name = ascension1.refuse #Refuse conversion
+		trigger = {
+			religion = eight_divines
+		}
+		piety = 100
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 25.0
+				trait = zealous
+			}
+			modifier = {
+				factor = 2.0
+				trait = absent_minded
+			}
+			modifier = {
+				factor = 5.0
+				trait = envious
+			}
+			modifier = {
+				factor = 2.0
+				trait = stubborn
+			}
+			modifier = {
+				factor = 3.0
+				OR = { trait = monk trait = nun }
+			}
+			modifier = {
+				factor = 3.0
+				is_monk_education = yes
+			}
+			modifier = {
+				factor = 3.0
+				is_priest_education = yes
+			}
+			modifier = {
+				factor = 2.0
+				trait = theologian
+			}
+			modifier = {
+				factor = 3.0
+				trait = content
+			}
+			modifier = {
+				factor = 3.0
+				event_target:tamriel_founder = {
+					any_dynasty_member = {
+						any_rival = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ascension1.others
+		trigger = { NOR = { religion = eight_divines religion = nine_divines } }
+	}
+}

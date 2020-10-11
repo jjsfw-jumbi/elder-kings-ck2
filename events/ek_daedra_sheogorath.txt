@@ -1,0 +1,1009 @@
+####Etienne's Daedric Events - Sheogorath ####
+
+namespace = sheogorath
+
+#### Chance to gain Arbitrary ####
+
+character_event = {
+	id = sheogorath.1
+	desc = Sheogorath1
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age =  16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_sheogorath
+		NOT = {
+			trait = arbitrary
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+	}
+	
+	option = {
+		name = "Sheogorath1Acknowledge"
+		random = {
+			chance = 33
+			add_trait = arbitrary
+		}
+	}
+}
+
+#### Chance to gain Paranoid ####
+
+character_event = {
+	id = sheogorath.2
+	desc = Sheogorath2
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age =  16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		is_ruler = yes
+		religion = daedra_sheogorath
+		NOT = {
+			trait = paranoid
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+	}
+	
+	option = {
+		name = "Sheogorath2Acknowledge"
+		random = {
+			chance = 33
+			add_trait = paranoid
+		}
+	}
+}
+
+#### Chance to gain Lunatic ####
+
+character_event = {
+	id = sheogorath.3
+	desc = Sheogorath3
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age =  16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_sheogorath
+		NOT = {
+			trait = lunatic
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 720
+	}
+	
+	option = {
+		name = "Sheogorath3Acknowledge"
+		random = {
+			chance = 33
+			add_trait = lunatic
+			set_character_flag = permanent_lunatic
+		}
+	}
+}
+
+#### Random Event - The Woman who could tie her shoes ####
+
+character_event = {
+	id = sheogorath.4
+	desc = Sheogorath4
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age =  16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_sheogorath
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+	}
+	
+	option = {
+		name = "Sheogorath4Accept"
+		prestige = 5
+		piety = 1
+		scaled_wealth = -0.05
+	}
+	
+	option = {
+		name = "Sheogorath4Decline"
+		prestige = 1
+	}
+	
+	option = {
+		name = "Sheogorath4EatShoes"
+		trigger = {
+			trait = lunatic
+		}
+		prestige = 10
+		add_character_modifier = { name = best_meal_in_ages months = 6 }
+		random = {
+			chance = 10
+			add_trait = wounded
+		}
+	}
+}
+
+#### Random Event - Tripping up the steps is the latest craze ####
+
+character_event = {
+	id = sheogorath.5
+	# desc = Sheogorath5
+	# picture = GFX_evt_two_moon_aurora
+	hide_window = yes
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		is_adult = yes
+		religion = daedra_sheogorath
+		NOT = { has_character_flag = sheogorath_fallguy }
+		liege = {
+			religion = daedra_sheogorath
+			NOT = { trait = incapable }
+			is_adult = yes
+		}
+		ai = yes
+	}
+	
+	mean_time_to_happen = {
+		months = 720
+		
+		modifier = {
+			factor = 0.9
+			trait = lunatic
+		}
+	}
+	
+	immediate = {
+		save_event_target_as = sheogorath_fallguy
+		set_character_flag = sheogorath_fallguy
+		liege = {
+			
+			character_event = { id = sheogorath.6 }
+		}
+	}
+}
+
+#### The Liege responds ####
+
+character_event = {
+	id = sheogorath.6
+	desc = Sheogorath6
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Sheogorath6OptionOne
+		prestige = 15
+		event_target:sheogorath_fallguy = {
+			opinion = {
+				modifier = opinion_gained_respect
+				who = ROOT
+				years = 5
+			}
+			prestige = 25
+		}
+	}
+	
+	option = {
+		name = Sheogorath6OptionTwo
+		prestige = 1
+	}
+	
+	option = {
+		name = Sheogorath6OptionThree
+		trigger = {
+			trait = lunatic
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = slovenly
+					trait = vain
+				}
+			}
+			random = {
+				chance = 33
+				add_trait = vain
+			}
+		}
+		if = {
+			limit = {
+				trait = slovenly
+			}
+			random = {
+				chance = 33
+				remove_trait = slovenly
+			}
+		}
+		event_target:sheogorath_fallguy = {
+			opinion = {
+				modifier = opinion_gained_respect
+				who = ROOT
+				years = 1
+			}
+			prestige = 10
+		}
+	}
+}
+
+#### Is it raining apples again? ####
+
+province_event = {
+	id = sheogorath.25
+	desc = Sheogorath25
+	picture = GFX_evt_two_moon_aurora
+	
+	trigger = {
+		owner = {
+			is_ruler = yes
+			higher_tier_than = BARON
+			religion = daedra_sheogorath
+		}
+		NOT = { has_province_modifier = raining_apples }
+		NOT = { has_province_modifier = adventurers }
+	}
+	
+	mean_time_to_happen = {
+		months = 960
+	}
+	
+	option = {
+		name = Sheogorath25Acknowledge
+		add_province_modifier = {
+			name = raining_apples
+			duration = 730
+		}
+		random = {
+			chance = 15
+			add_province_modifier = {
+				name = adventurers
+				duration = 3650
+			}
+		}
+	}
+}
+
+#### Adventurers show up for no particular reason ####
+
+province_event = {
+	id = sheogorath.26
+	desc = Sheogorath26
+	picture = GFX_evt_two_moon_aurora
+	
+	trigger = {
+		owner = {
+			is_ruler = yes
+			higher_tier_than = BARON
+			religion = daedra_sheogorath
+		}
+		NOT = { has_province_modifier = adventurers }
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+	}
+	
+	option = {
+		name = Sheogorath26Acknowledge
+		add_province_modifier = {
+			name = adventurers
+			duration = 365
+		}
+	}
+}
+
+#### Peasants enraged with the high price of doilies ####
+
+province_event = {
+	id = sheogorath.27
+	desc = Sheogorath27
+	picture = GFX_evt_two_moon_aurora
+	
+	trigger = {
+		owner = {
+			is_ruler = yes
+			higher_tier_than = BARON
+			religion = daedra_sheogorath
+		}
+		NOT = { has_province_modifier = expensive_doilies }
+		NOT = { has_province_modifier = doilies_crackdown }
+		religion = daedra_sheogorath
+	}
+	
+	mean_time_to_happen = {
+		months = 1440
+	}
+	
+	option = {
+		name = Sheogorath27Acknowledge
+		add_province_modifier = {
+			name = expensive_doilies
+			duration = 2100
+		}
+	}
+	option = {
+		name = Sheogorath27Crackdown
+		add_province_modifier = {
+			name = expensive_doilies
+			duration = 365
+		}
+		add_province_modifier = {
+				name = doilies_crackdown
+				duration = 2100
+			}
+		owner = {
+			scaled_wealth = -0.75
+		}
+		
+	}
+	option = {
+		name = Sheogorath27BuyDoilies
+		add_province_modifier = {
+			name = expensive_doilies
+			duration = 2100
+		}
+		owner = {
+			scaled_wealth = -1
+			add_character_modifier = {
+				name = owns_doilies
+				months = 36
+			}
+		}
+	}
+}
+
+##### Wabbajack Events #####
+
+#A Madman#
+
+character_event = {
+	id = sheogorath.50
+	desc = Sheogorath50
+	picture = GFX_evt_two_moon_aurora
+	
+	min_age =  16
+	prisoner = no
+	capable_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		has_artifact = weapon_wabbajack
+	}
+	
+	mean_time_to_happen = {
+		months = 150
+	}
+	
+	option = {
+		name = "Sheogorath50Accept"
+		character_event = { id = sheogorath.51 days = 3 }
+	}
+	option = {
+		name = "Sheogorath50Decline"
+		prestige = 5
+	}
+}
+
+character_event = {
+	id = sheogorath.51
+	desc = Sheogorath51
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Sheogorath51Accept"
+		custom_tooltip = {
+			text = Sheogorath51Wabbajack
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = sheogorath.52 days = 3 } } #A Dremora
+					20 = { character_event = { id = sheogorath.53 days = 3 } } #A Chicken
+					20 = { character_event = { id = sheogorath.54 days = 3 } } #A Khajiiti Skooma Addict
+					20 = { character_event = { id = sheogorath.55 days = 3 } } #An Attractive Pirate
+					20 = { character_event = { id = sheogorath.56 days = 3 } } #A Sweetroll - Delicious!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Sheogorath51Decline"
+		piety = -5
+	}
+}
+
+#Wabbajack Wabbajack Wabbajack!#
+
+character_event = {
+	id = sheogorath.52
+	desc = Sheogorath52
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = no
+			age = 30
+			religion = ROOT
+			culture = dremora
+			trait = dremora
+			trait = brave
+			trait = ruthless
+			trait = wroth
+			trait = reckless
+			trait = cruel
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			random_list = {
+				10 = {add_trait = warrior_3}
+				10 = {add_trait = warrior_4}
+				10 = {add_trait = mage_3}
+				10 = {add_trait = mage_4}
+			}
+		}
+	}
+	
+	option = {
+		name = Sheogorath52Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.53
+	desc = Sheogorath53
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = no
+			age = 30
+			religion = ROOT
+			culture = ROOT
+			trait = agent_1
+			trait = polymorph_chicken
+			trait = craven
+			trait = feeble
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			change_intrigue = 10
+		}
+	}
+	
+	option = {
+		name = Sheogorath53Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.54
+	desc = Sheogorath54
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = no
+			age = 30
+			religion = ROOT
+			culture = anequinan
+			trait = hedonist
+			trait = skooma_addiction
+			trait = greedy
+			trait = cynical
+			trait = mage_2
+			attributes = {
+				learning = 5
+			}
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			random_list = {
+				10 = {add_trait = priest_1}
+				10 = {add_trait = priest_2}
+				10 = {add_trait = monk_1}
+				10 = {add_trait = monk_2}
+				10 = {add_trait = wayfarer_1}
+				10 = {add_trait = wayfarer_2}
+				10 = {add_trait = healer_1}
+				10 = {add_trait = healer_2}
+			}
+		}
+	}
+	
+	option = {
+		name = Sheogorath54Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.55
+	desc = Sheogorath55
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = no
+			age = 30
+			religion = ROOT
+			culture = ROOT
+			trait = fair
+			trait = one_eyed
+			trait = greedy
+			trait = lustful
+			trait = honest
+			trait = warrior_2
+			trait = pirate
+		}
+		new_character = {
+			add_artifact = weapon_sword_silver
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			random_list = {
+				10 = {add_trait = rogue_2}
+				10 = {add_trait = rogue_3}
+				10 = {add_trait = bard_2}
+				10 = {add_trait = bard_3}
+				10 = {add_trait = thief_2}
+				10 = {add_trait = thief_3}
+				10 = {add_trait = assassin_2}
+				10 = {add_trait = assassin_3}
+			}
+		}
+	}
+	
+	option = {
+		name = Sheogorath55Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.56
+	desc = Sheogorath56
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Sheogorath56Acknowledge
+		prestige = 10
+		if = {
+			limit = {
+				trait = stressed
+			}
+			random = {
+				chance = 25
+				remove_trait = stressed
+			}
+		}
+	}
+}
+
+#A Madwoman#
+
+character_event = {
+	id = sheogorath.60
+	desc = Sheogorath60
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age =  16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_artifact = weapon_wabbajack
+	}
+	
+	mean_time_to_happen = {
+		months = 150
+	}
+	
+	option = {
+		name = "Sheogorath60Accept"
+		character_event = { id = sheogorath.61 days = 3 }
+	}
+	option = {
+		name = "Sheogorath60Decline"
+		prestige = 5
+	}
+}
+
+character_event = {
+	id = sheogorath.61
+	desc = Sheogorath61
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Sheogorath61Accept"
+		custom_tooltip = {
+			text = Sheogorath61Wabbajack
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = sheogorath.62 days = 3 } } #A Dremora
+					20 = { character_event = { id = sheogorath.63 days = 3 } } #A Chicken
+					20 = { character_event = { id = sheogorath.64 days = 3 } } #A Khajiiti Skooma Addict
+					20 = { character_event = { id = sheogorath.65 days = 3 } } #An Attractive Pirate
+					20 = { character_event = { id = sheogorath.66 days = 3 } } #A Sweetroll - Delicious!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Sheogorath61Decline"
+		piety = -5
+	}
+}
+
+#Wabbajack Wabbajack Wabbajack!#
+
+character_event = {
+	id = sheogorath.62
+	desc = Sheogorath62
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = yes
+			age = 30
+			religion = ROOT
+			culture = dremora
+			trait = dremora
+			trait = brave
+			trait = ruthless
+			trait = wroth
+			trait = reckless
+			trait = cruel
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			random_list = {
+				10 = {add_trait = warrior_3}
+				10 = {add_trait = warrior_4}
+				10 = {add_trait = mage_3}
+				10 = {add_trait = mage_4}
+			}
+		}
+	}
+	
+	option = {
+		name = Sheogorath62Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.63
+	desc = Sheogorath63
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = yes
+			age = 30
+			religion = ROOT
+			culture = ROOT
+			trait = agent_1
+			trait = polymorph_chicken
+			trait = craven
+			trait = feeble
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			change_intrigue = 10
+		}
+	}
+	
+	option = {
+		name = Sheogorath63Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.64
+	desc = Sheogorath64
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = yes
+			age = 30
+			religion = ROOT
+			culture = anequinan
+			trait = necromancer
+			trait = kind
+			trait = trusting
+			trait = gregarious
+			trait = socializer
+			trait = mage_2
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			random_list = {
+				10 = {add_trait = priest_1}
+				10 = {add_trait = priest_2}
+				10 = {add_trait = monk_1}
+				10 = {add_trait = monk_2}
+				10 = {add_trait = wayfarer_1}
+				10 = {add_trait = wayfarer_2}
+				10 = {add_trait = healer_1}
+				10 = {add_trait = healer_2}
+			}
+		}
+	}
+	
+	option = {
+		name = Sheogorath64Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.65
+	desc = Sheogorath65
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			dynasty = NONE
+			female = yes
+			age = 30
+			religion = ROOT
+			culture = ROOT
+			trait = fair
+			trait = one_eyed
+			trait = greedy
+			trait = lustful
+			trait = honest
+			trait = warrior_2
+			trait = pirate
+		}
+		new_character = {
+			add_artifact = weapon_sword_silver
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			random_list = {
+				10 = {add_trait = rogue_2}
+				10 = {add_trait = rogue_3}
+				10 = {add_trait = bard_2}
+				10 = {add_trait = bard_3}
+				10 = {add_trait = thief_2}
+				10 = {add_trait = thief_3}
+				10 = {add_trait = assassin_2}
+				10 = {add_trait = assassin_3}
+			}
+		}
+	}
+	
+	option = {
+		name = Sheogorath65Acknowledge
+	}
+}
+
+character_event = {
+	id = sheogorath.66
+	desc = Sheogorath66
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Sheogorath56Acknowledge
+		prestige = 10
+	}
+}
+
+#The Gifts of Madness
+long_character_event = {
+	id = sheogorath.100
+	desc = {
+		text = Sheogorath100A
+		trigger = { has_character_flag = sheogorath_apples_everywhere }
+	}
+	desc = {
+		text = Sheogorath100B
+		trigger = { has_character_flag = sheogorath_cheese_everywhere }
+	}
+	desc = {
+		text = Sheogorath100C1
+		trigger = { 
+			has_character_flag = sheogorath_basking_shark
+			NOT = { combat_rating = 48 }
+		}
+	}
+	desc = {
+		text = Sheogorath100C2
+		trigger = { 
+			has_character_flag = sheogorath_basking_shark
+			combat_rating = 48
+		}
+	}
+	desc = {
+		text = Sheogorath100D
+		trigger = { has_character_flag = sheogorath_polymorph_all }
+	}
+	desc = {
+		text = Sheogorath100E
+		trigger = { has_character_flag = sheogorath_toolbox }
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	immediate = {
+		random_list = {
+			10 = { set_character_flag = sheogorath_apples_everywhere }
+			10 = { set_character_flag = sheogorath_cheese_everywhere }
+			10 = { set_character_flag = sheogorath_basking_shark }
+			10 = { set_character_flag = sheogorath_polymorph_all }
+			10 = { set_character_flag = sheogorath_toolbox }
+		}
+	}
+	
+	option = {
+		name = Sheogorath100OptA
+		trigger = {
+			has_character_flag = sheogorath_apples_everywhere
+		}
+		clr_character_flag = sheogorath_apples_everywhere
+		clr_character_flag = sheogorath_deal
+		any_realm_province = {
+			add_province_modifier = {
+				name = raining_apples
+				duration = 730
+			}
+		}
+	}
+	option = {
+		name = Sheogorath100OptB
+		trigger = {
+			has_character_flag = sheogorath_cheese_everywhere
+		}
+		clr_character_flag = sheogorath_cheese_everywhere
+		clr_character_flag = sheogorath_deal
+		any_realm_province = {
+			add_province_modifier = {
+				name = cheese_everywhere
+				duration = 365
+			}
+		}
+	}
+	option = {
+		name = Sheogorath100OptC1
+		trigger = {
+			has_character_flag = sheogorath_basking_shark
+			NOT = { combat_rating = 48 }
+		}
+		clr_character_flag = sheogorath_basking_shark
+		clr_character_flag = sheogorath_deal
+		death = {
+			death_reason = death_basking_shark
+		}
+	}
+	option = {
+		name = Sheogorath100OptC2
+		trigger = {
+			has_character_flag = sheogorath_basking_shark
+			combat_rating = 48
+		}
+		clr_character_flag = sheogorath_basking_shark
+		clr_character_flag = sheogorath_deal
+		add_character_modifier = { name = best_meal_in_ages months = 12 }
+		wealth = 15
+	}
+	option = { #Based on EK Magicka polymorphism
+		name = Sheogorath100OptD
+		trigger = {
+			has_character_flag = sheogorath_polymorph_all
+		}
+		clr_character_flag = sheogorath_polymorph_all
+		clr_character_flag = sheogorath_deal
+		add_trait = polymorph_chicken
+		character_event = {
+			id = 126567
+			days = 365
+		}
+		hidden_tooltip = {
+			any_realm_character = {
+				limit = {
+					NOT = { trait = polymorph_chicken }
+				}
+				character_event = { id = sheogorath.105 }
+			}
+		}
+	}
+	option = { #Based on EK Magicka polymorphism
+		name = Sheogorath100OptE
+		trigger = {
+			has_character_flag = sheogorath_toolbox
+		}
+		clr_character_flag = sheogorath_toolbox
+		clr_character_flag = sheogorath_deal
+		random_list = {
+			33 = { military_techpoints = 30 }
+			33 = { economy_techpoints = 30 }
+			33 = { culture_techpoints = 30 }
+		}
+	}
+}
+character_event = {
+	id = sheogorath.105
+	desc = Sheogorath105
+	picture = GFX_evt_bad_news
+	
+	has_dlc = "Jade Dragon"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Sheogorath105Accept
+		add_trait = polymorph_chicken
+		character_event = {
+			id = 126567
+			days = 365
+		}
+	}
+}

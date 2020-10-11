@@ -1,0 +1,3069 @@
+#Tribunal Temple offmap events - REQUIRE JADE DRAGON#
+
+namespace = ektribunal
+
+#Ping the character donating
+character_event = {
+	id = ektribunal.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		religion_head = { character_event = { id = ektribunal.11 } }
+	}
+}
+#Donating to the Tribunal Temple - Ping Archcanon
+character_event = {
+	id = ektribunal.11
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		FROM = { letter_event = { id = ektribunal.15 } }
+	}
+}
+letter_event = {
+	id = ektribunal.15
+	desc = EKTribunal15
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	option = {
+		name = EKTribunal15Accept
+		piety = 25
+		if = {
+			limit = {
+				tribunal_almalexia = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_almalexia
+				value = 75
+			}
+		}
+		if = {
+			limit = {
+				tribunal_sothasil = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_sothasil
+				value = 75
+			}
+		}
+		if = {
+			limit = {
+				tribunal_vivec = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_vivec
+				value = 75
+			}
+		}
+	}
+}
+
+#Mural commissioned
+character_event = {
+	id = ektribunal.25
+	desc = EKTribunal25
+	picture = GFX_evt_almsivi_vivec_arrival
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	option = {
+		name = EKTribunal25Accept
+		character_event = { id = ektribunal.27 days = 14 random = 7 }
+	}
+}
+#The artists arrive, work begins
+character_event = {
+	id = ektribunal.27
+	desc = EKTribunal27
+	picture = GFX_evt_almsivi_vivec_arrival
+	
+	hide_from = yes
+	show_from_from = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	option = { #Use cheap materials
+		name = EKTribunal27OptA
+		scaled_wealth = { value = 0.5 min = 15 }
+		set_character_flag = tribunal_cheap_materials
+		character_event = { id = ektribunal.29 days = 90 random = 30 }
+	}
+	option = { #Use normal materials
+		name = EKTribunal27OptB
+		set_character_flag = tribunal_normal_materials
+		character_event = { id = ektribunal.29 days = 90 random = 30 }
+	}
+	option = { #Use expensive materials
+		name = EKTribunal27OptC
+		trigger = {
+			scaled_wealth = { value = 2.5 min = 25 }
+		}
+		scaled_wealth = { value = -2.5 min = -25 }
+		set_character_flag = tribunal_excellent_materials
+		character_event = { id = ektribunal.29 days = 90 random = 30 }
+	}
+}
+#Mural is nearly done - Master painter offers to add finishing touches?
+character_event = {
+	id = ektribunal.29
+	desc = EKTribunal29
+	picture = GFX_evt_almsivi_vivec_arrival
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	option = { #NOT necessary
+		name = EKTribunal29OptA
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = painter
+			}
+		}
+		long_character_event = { id = ektribunal.30 }
+	}
+	option = { #Yes, let's hire her!
+		name = EKTribunal29OptB
+		trigger = {
+			scaled_wealth = { value = 1.5 min = 20 }
+		}
+		scaled_wealth = { value = -1.5 min = -20 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				trait = painter
+			}
+		}
+		set_character_flag = tribunal_mural_boosted
+		long_character_event = { id = ektribunal.30 days = 45 random = 30 }
+	}
+	option = { #Use expensive materials
+		name = EKTribunal29OptC
+		trigger = {
+			trait = painter
+		}
+		ai_chance = {
+			factor = 1000
+		}
+		set_character_flag = tribunal_mural_boosted
+		long_character_event = { id = ektribunal.30 days = 45 random = 30 }
+	}
+}
+#Mural completed and unveiled!
+long_character_event = {
+	id = ektribunal.30
+	desc = {
+		text = EKTribunal30A1
+		trigger = { 
+			has_character_modifier = almsivi_mural_almalexia_commissioned
+			has_character_flag = tribunal_cheap_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30A2
+		trigger = { 
+			has_character_modifier = almsivi_mural_almalexia_commissioned
+			has_character_flag = tribunal_normal_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30A3
+		trigger = { 
+			has_character_modifier = almsivi_mural_almalexia_commissioned
+			has_character_flag = tribunal_excellent_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30B1
+		trigger = { 
+			has_character_modifier = almsivi_mural_sothasil_commissioned
+			has_character_flag = tribunal_cheap_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30B2
+		trigger = { 
+			has_character_modifier = almsivi_mural_sothasil_commissioned
+			has_character_flag = tribunal_normal_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30B3
+		trigger = { 
+			has_character_modifier = almsivi_mural_sothasil_commissioned
+			has_character_flag = tribunal_excellent_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30C1
+		trigger = { 
+			has_character_modifier = almsivi_mural_vivec_commissioned
+			has_character_flag = tribunal_cheap_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30C2
+		trigger = { 
+			has_character_modifier = almsivi_mural_vivec_commissioned
+			has_character_flag = tribunal_normal_mural
+		}
+	}
+	desc = {
+		text = EKTribunal30C3
+		trigger = { 
+			has_character_modifier = almsivi_mural_vivec_commissioned
+			has_character_flag = tribunal_excellent_mural
+		}
+	}
+	picture = GFX_evt_almsivi_vivec_arrival
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		random_list = {
+			25 = {
+				modifier = {
+					factor = 0
+					has_character_flag = tribunal_excellent_materials
+				}
+				modifier = {
+					factor = 0
+					has_character_flag = tribunal_mural_boosted
+				}
+				modifier = {
+					factor = 2.5
+					has_character_flag = tribunal_cheap_materials
+				}
+				set_character_flag = tribunal_cheap_mural
+			}
+			25 = {
+				modifier = {
+					factor = 0
+					has_character_flag = tribunal_excellent_materials
+				}
+				modifier = {
+					factor = 2.5
+					has_character_flag = tribunal_normal_materials
+				}
+				set_character_flag = tribunal_normal_mural
+			}
+			25 = {
+				modifier = {
+					factor = 0
+					has_character_flag = tribunal_cheap_materials
+				}
+				modifier = {
+					factor = 2.5
+					has_character_flag = tribunal_mural_boosted
+				}
+				modifier = {
+					factor = 2.5
+					has_character_flag = tribunal_excellent_materials
+				}
+				set_character_flag = tribunal_excellent_mural
+			}
+		}
+	}
+	
+	option = { #Ardor gain is assessed based on previous choices
+		name = EKTribunal30Accept
+		if = {
+			limit = {
+				has_character_modifier = almsivi_mural_almalexia_commissioned
+			}
+			remove_character_modifier = almsivi_mural_almalexia_commissioned
+			add_character_modifier = {
+				modifier = almsivi_mural_almalexia_completed
+				duration = -1
+			}
+			if = {
+				limit = { has_character_flag = tribunal_normal_mural }
+				add_offmap_currency = {
+					offmap = tribunal_almalexia
+					value = 150
+				}
+			}
+			if = {
+				limit = { has_character_flag = tribunal_excellent_mural }
+				add_offmap_currency = {
+					offmap = tribunal_almalexia
+					value = 250
+				}
+			}
+			if = {
+				limit = { has_character_flag = tribunal_mural_boosted }
+				add_offmap_currency = {
+					offmap = tribunal_almalexia
+					value = 250
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_modifier = almsivi_mural_sothasil_commissioned
+			}
+			remove_character_modifier = almsivi_mural_sothasil_commissioned
+			add_character_modifier = {
+				modifier = almsivi_mural_sothasil_completed
+				duration = -1
+			}
+			if = {
+				limit = { has_character_flag = tribunal_normal_mural }
+				add_offmap_currency = {
+					offmap = tribunal_sothasil
+					value = 150
+				}
+			}
+			if = {
+				limit = { has_character_flag = tribunal_excellent_mural }
+				add_offmap_currency = {
+					offmap = tribunal_sothasil
+					value = 250
+				}
+			}
+			if = {
+				limit = { has_character_flag = tribunal_mural_boosted }
+				add_offmap_currency = {
+					offmap = tribunal_sothasil
+					value = 250
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_character_modifier = almsivi_mural_vivec_commissioned
+			}
+			remove_character_modifier = almsivi_mural_vivec_commissioned
+			add_character_modifier = {
+				modifier = almsivi_mural_vivec_completed
+				duration = -1
+			}
+			if = {
+				limit = { has_character_flag = tribunal_normal_mural }
+				add_offmap_currency = {
+					offmap = tribunal_vivec
+					value = 150
+				}
+			}
+			if = {
+				limit = { has_character_flag = tribunal_excellent_mural }
+				add_offmap_currency = {
+					offmap = tribunal_vivec
+					value = 250
+				}
+			}
+			if = {
+				limit = { has_character_flag = tribunal_mural_boosted }
+				add_offmap_currency = {
+					offmap = tribunal_vivec
+					value = 250
+				}
+			}
+		}
+		clr_character_flag = tribunal_cheap_materials
+		clr_character_flag = tribunal_normal_materials
+		clr_character_flag = tribunal_excellent_materials
+		clr_character_flag = tribunal_mural_boosted
+		clr_character_flag = tribunal_cheap_mural
+		clr_character_flag = tribunal_normal_mural
+		clr_character_flag = tribunal_excellent_mural
+	}
+}
+
+#Show Trial - fired on prisoner
+long_character_event = {
+	id = ektribunal.50
+	desc = EKTribunal50
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	option = {
+		name = EKTribunal50Accept
+		opinion = {
+			modifier = opinion_show_trial_defendant
+			who = FROMFROM
+		}
+		clr_character_flag = tribunal_show_trial_defendant
+		prisoner = no
+		FROMFROM = {
+			long_character_event = { id = ektribunal.52 }
+		}
+	}
+}
+long_character_event = {
+	id = ektribunal.52
+	desc = EKTribunal52
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	option = {
+		name = EKTribunal52Accept
+		if = {
+			limit = {
+				FROMFROM = {
+					is_offmap_tag = tribunal_almalexia
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_almalexia
+				value = local_third_party_score
+			}
+		}
+		if = {
+			limit = {
+				FROMFROM = {
+					is_offmap_tag = tribunal_sothasil
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_sothasil
+				value = local_third_party_score
+			}
+		}
+		if = {
+			limit = {
+				FROMFROM = {
+					is_offmap_tag = tribunal_vivec
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_vivec
+				value = local_third_party_score
+			}
+		}
+	}
+}
+
+#The Temple defeats negative province modifiers
+narrative_event = {
+	id = ektribunal.305
+	title = EKTribunal305Title
+	desc = EKTribunal305
+	picture = GFX_evt_almsivi_fields_of_kummu
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		if = {
+			limit = { FROM = { is_offmap_tag = tribunal_almalexia } }
+			tribunal_almalexia = {
+				offmap_ruler = {
+					save_event_target_as = tribune_peacemaker
+				}
+			}
+		}
+		if = {
+			limit = { FROM = { is_offmap_tag = tribunal_sothasil } }
+			tribunal_sothasil = {
+				offmap_ruler = {
+					save_event_target_as = tribune_peacemaker
+				}
+			}
+		}
+		if = {
+			limit = { FROM = { is_offmap_tag = tribunal_vivec } }
+			tribunal_vivec = {
+				offmap_ruler = {
+					save_event_target_as = tribune_peacemaker
+				}
+			}
+		}
+	}
+	
+	portrait = event_target:tribune_peacemaker
+	
+	option = {
+		name = EKTribunal305Accept
+		custom_tooltip = {
+			text = Tribunal305Clearance
+			hidden_tooltip = {
+				any_demesne_province = {
+					if = {
+						limit = { has_province_modifier = goblin_infestation }
+						remove_province_modifier = goblin_infestation
+					}
+					if = {
+						limit = { has_province_modifier = falmer_infestation }
+						remove_province_modifier = falmer_infestation
+					}
+					if = {
+						limit = { has_province_modifier = skeever_infestation }
+						remove_province_modifier = skeever_infestation
+					}
+					if = {
+						limit = { has_province_modifier = kwama_infestation }
+						remove_province_modifier = kwama_infestation
+					}
+					if = {
+						limit = { has_province_modifier = undead_infestation }
+						remove_province_modifier = undead_infestation
+					}
+					if = {
+						limit = { has_province_modifier = lycan_infestation }
+						remove_province_modifier = lycan_infestation
+					}
+					if = {
+						limit = { has_province_modifier = vampire_infestation }
+						remove_province_modifier = vampire_infestation
+					}
+					if = {
+						limit = { has_province_modifier = highway_robber_band }
+						remove_province_modifier = highway_robber_band
+					}
+					if = {
+						limit = { has_province_modifier = trolls }
+						remove_province_modifier = trolls
+					}
+					if = {
+						limit = { has_province_modifier = giants }
+						remove_province_modifier = giants
+					}
+				}
+				clr_character_flag = tribunal_decision_pending
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = ektribunal.310
+	title = EKTribunal310Title
+	desc = EKTribunal310
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		k_almsivi = {
+			holder_scope = { save_event_target_as = almsivi_archcanon }
+		}
+	}
+	
+	portrait = event_target:almsivi_archcanon
+	
+	option = {
+		name = EKTribunal310Accept
+		custom_tooltip = {
+			text = EKTribunal310Clearance
+			hidden_tooltip = {
+				any_demesne_province = {
+					add_province_modifier = { 
+						name = tribunal_ordinators 
+						duration = 3650 
+					}
+				}
+				if = {
+					limit = {
+						any_realm_character = {
+							is_landed = yes
+							higher_tier_than = BARON
+							religion = almsivi
+						}
+					}
+					any_realm_character = {
+						limit = {
+							is_landed = yes
+							higher_tier_than = BARON
+							religion = almsivi
+						}
+						narrative_event = { id = ektribunal.311 }
+					}
+				}
+				clr_character_flag = tribunal_decision_pending
+			}
+		}
+	}
+}
+narrative_event = {
+	id = ektribunal.311
+	title = EKTribunal311Title
+	desc = EKTribunal311
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	option = {
+		name = EKTribunal311Accept
+		custom_tooltip = {
+			text = EKTribunal311Clearance
+			hidden_tooltip = {
+				any_demesne_province = {
+					add_province_modifier = { 
+						name = tribunal_ordinators 
+						duration = 3650 
+					}
+				}
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = ektribunal.325
+	title = EKTribunal325Title
+	desc = EKTribunal325
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		if = {
+			limit = { FROM = { is_offmap_tag = tribunal_almalexia } }
+			tribunal_almalexia = {
+				offmap_ruler = {
+					save_event_target_as = tribune_crusader
+				}
+			}
+		}
+		if = {
+			limit = { FROM = { is_offmap_tag = tribunal_sothasil } }
+			tribunal_sothasil = {
+				offmap_ruler = {
+					save_event_target_as = tribune_crusader
+				}
+			}
+		}
+		if = {
+			limit = { FROM = { is_offmap_tag = tribunal_vivec } }
+			tribunal_vivec = {
+				offmap_ruler = {
+					save_event_target_as = tribune_crusader
+				}
+			}
+		}
+	}
+	
+	portrait = event_target:tribune_crusader
+	
+	option = {
+		name = EKTribunal325Accept
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_10
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_9
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_8
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_7
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_6
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_5
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_4
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_3
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_2
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_almalexia }
+				tribunal_almalexia = {
+					has_status = tribunal_1
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_10
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_9
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_8
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_7
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_6
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_5
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_4
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_3
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_2
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_sothasil }
+				tribunal_sothasil = {
+					has_status = tribunal_1
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_10
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.25
+						match_min = 500
+						match_max = 2500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_9
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.225
+						match_min = 475
+						match_max = 2375
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_8
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.2
+						match_min = 450
+						match_max = 2250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_7
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.175
+						match_min = 425
+						match_max = 2125
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_6
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.15
+						match_min = 400
+						match_max = 2000
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_5
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.125
+						match_min = 375
+						match_max = 1875
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_4
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.1
+						match_min = 350
+						match_max = 1750
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_3
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.075
+						match_min = 325
+						match_max = 1625
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_2
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.05
+						match_min = 300
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = tribunal_vivec }
+				tribunal_vivec = {
+					has_status = tribunal_1
+				}
+			}
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						troops = {
+							light_infantry = { 10 10 }
+							heavy_infantry = { 5 5 }
+							pikemen = { 5 5 }
+							archers = { 5 5 }
+							light_cavalry = { 3 3 }
+							knights = { 1 1 }
+							battlemages = { 3 3 }
+						}
+						match_mult = 0.025
+						match_min = 250
+						match_max = 1250
+						attrition = 1
+						disband_on_peace = yes
+						can_toggle_looting = no
+						earmark = temple_crusaders
+					}
+				}	
+			}
+		}		
+		clr_character_flag = tribunal_decision_pending
+	}
+}
+
+narrative_event = {
+	id = ektribunal.340
+	title = EKTribunal340Title
+	desc = EKTribunal340
+	picture = GFX_evt_dunmer_almalexia
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		tribunal_almalexia = {
+			offmap_ruler = {
+				save_event_target_as = almalexia_here
+			}
+		}
+	}
+	
+	portrait = event_target:almalexia_here
+	
+	option = {
+		name = EKTribunal340Accept
+		if = { 
+			limit = { trait = depressed } 
+			remove_trait = depressed
+		}
+		if = { 
+			limit = { trait = stressed } 
+			remove_trait = stressed
+		}
+		if = { 
+			limit = { trait = lunatic } 
+			remove_trait = lunatic
+		}
+		if = { 
+			limit = { trait = possessed } 
+			remove_trait = possessed
+		}
+		clr_character_flag = tribunal_decision_pending
+	}
+}
+
+narrative_event = {
+	id = ektribunal.345
+	title = EKTribunal345Title
+	desc = EKTribunal345
+	picture = GFX_evt_almsivi_fields_of_kummu
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		tribunal_sothasil = {
+			offmap_ruler = {
+				save_event_target_as = sothasil_here
+			}
+		}
+	}
+	
+	portrait = event_target:sothasil_here
+	
+	option = {
+		name = EKTribunal345Accept
+		add_character_modifier = { name = tribunal_sotha_mirror months = 120 }
+		clr_character_flag = tribunal_decision_pending
+	}
+}
+
+narrative_event = {
+	id = ektribunal.350
+	title = EKTribunal350Title
+	desc = EKTribunal350
+	picture = GFX_evt_almsivi_fields_of_kummu
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+	}
+	
+	immediate = {
+		tribunal_vivec = {
+			offmap_ruler = {
+				save_event_target_as = vivec_here
+			}
+		}
+	}
+	
+	portrait = event_target:vivec_here
+	
+	option = {
+		name = EKTribunal350Accept
+		custom_tooltip = {
+			text = EKTribunal350Tooltip
+			hidden_tooltip = {
+				remove_disease_trait_effect = yes
+				remove_treatment_modifiers_effect = yes
+				remove_disease_flags_effect = yes
+				clr_character_flag = tribunal_decision_pending
+			}
+		}
+	}
+}

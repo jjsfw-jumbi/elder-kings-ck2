@@ -1,0 +1,1334 @@
+#by EvilCatInTheHat and jjsfw and Amauri
+namespace = eso
+
+# On death of Hidellith
+character_event = {
+	id = eso.1
+	hide_window = yes
+	only_rulers = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = hidellith
+		has_landed_title = k_summerset
+		year = 3493
+		NOT = { year = 3518 }
+	}
+	immediate = {
+		give_nickname = nick_the_magnificent
+		c_36007 = {
+			character_event = { id = eso.2}
+		}
+	}
+}
+
+character_event = {
+	id = eso.2
+	title = eso.title.1
+	desc = eso.desc.1
+	picture = GFX_evt_k_eldercouncil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.opt.1
+		trigger = {
+			is_alive = yes
+			has_character_flag = theunforeseenqueen
+		}
+		character_event = { id = eso.7 days = 1 }
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = { 
+					capital_scope = { region = nirn_tamriel }
+					NOT = { 
+						has_character_flag = naemon
+						has_character_flag = estre
+					}
+				}
+				narrative_event = { id = eso.6 days = 6 }
+			}
+		}
+		c_36009 = { #Dummy Ayrenn
+				dynasty = none
+				set_father = 0
+				set_mother = 0
+		}
+		c_36007 = { #Real Ayrenn
+				set_name = "Ayreen"
+				dynasty = 120007
+				give_nickname = nick_the_unforeseen
+				bloodline_hidellith = { ROOT = { add_to_bloodline = PREV } }
+				remove_trait = celibate
+				religion = auriel
+		}
+		c_36001 = { ROOT = { set_father = PREV } } #Hidelith
+		c_36406 = { ROOT = { set_mother = PREV } } #Tuinden
+		c_36008 = { character_event = { id = eso.3 days = 2 } }
+	}
+	option = {
+		name = eso.opt.0
+		trigger = {
+			is_alive = no
+		}
+	}
+}
+
+character_event = { #Naemon's response
+	id = eso.3
+	title = eso.title.2
+	picture = GFX_evt_k_eldercouncil
+	desc = eso.desc.2
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.opt.2 #How dare she do this to me!
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				OR = {
+					trait = ambitious
+					trait = deceitful
+					trait = wroth
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_stole_throne
+			who = FROM
+			months = 240
+		}
+		any_spouse = {
+			character_event = { id = eso.4 days = 2 }
+		}
+		random = {
+			chance = 50
+			add_trait = ambitious
+			add_trait = ruthless
+			remove_trait = just
+		}
+		primary_title = {
+			gain_title = { target = FROM type = faction_demand }
+		}
+	}
+	option = {
+		name = eso.opt.3 #Live and let live
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				OR = {
+					trait = content
+					trait = patient
+				}
+			}
+		}
+		random = {
+			chance = 50
+			remove_trait = ambitious
+		}
+		any_spouse = {
+			character_event = { id = eso.5 days = 2 }
+		}
+		primary_title = {
+			gain_title = { target = FROM type = faction_demand }
+		}
+	}
+}
+character_event = { #Spouse response, Naemon's mad
+	id = eso.4
+	title = eso.title.3
+	picture = GFX_evt_k_eldercouncil
+	desc = eso.desc.3
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.opt.4 #That throne is rightfully ours!
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				OR = {
+					trait = ambitious
+					trait = deceitful
+					trait = wroth
+					has_character_flag = estre
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_stole_throne
+			who = FROMFROM
+			months = 240
+		}
+		opinion = {
+			modifier = opinion_in_agreement
+			who = FROM
+			months = 120
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_in_agreement
+				who = ROOT
+				months = 120
+			}
+		}
+		random = {
+			chance = 50
+			add_trait = ambitious
+			add_trait = ruthless
+			remove_trait = just
+		}
+	}
+	option = {
+		name = eso.opt.5 #Sorry, I really don't care
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				OR = {
+					trait = content
+					trait = patient
+				}
+			}
+		}
+		FROM = {
+			opinion = {
+			modifier = opinion_disappointed
+			who = ROOT
+			months = 60
+			}
+		}
+		random = {
+			chance = 50
+			remove_trait = ambitious
+		}
+	}
+}
+character_event = { #Spouse response, Naemon's cool with it
+	id = eso.5
+	title = eso.title.4
+	picture = GFX_evt_k_eldercouncil
+	desc = eso.desc.4
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.opt.6 #He is a fool!
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				OR = {
+					trait = ambitious
+					trait = deceitful
+					trait = wroth
+					has_character_flag = estre
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_stole_throne
+			who = FROMFROM
+			months = 120
+		}
+		opinion = {
+			modifier = opinion_disappointed
+			who = FROM
+			months = 60
+		}
+		random = {
+			chance = 50
+			add_trait = ambitious
+			add_trait = ruthless
+			remove_trait = just
+		}
+	}
+	option = {
+		name = eso.opt.7 #If he doesn't care, neither do I
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				OR = {
+					trait = content
+					trait = patient
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_in_agreement
+			who = FROM
+			months = 120
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_in_agreement
+				who = ROOT
+				months = 120
+			}
+		}
+		random = {
+			chance = 50
+			remove_trait = ambitious
+		}
+	}
+}
+narrative_event = { #Event to everyone
+	id = eso.6
+	title = eso.title.5
+	desc = eso.desc.5
+	picture = GFX_evt_standingproud
+	only_rulers = yes
+	major = yes
+	
+	trigger = { 
+		NOR = { 
+			has_global_flag = ayrennreturns
+			has_character_flag = theunforeseenqueen
+			has_character_flag = naemon
+		}
+	}
+	immediate = {
+		set_global_flag = ayrennreturns
+	}
+	is_triggered_only = yes
+	option = {
+		name = eso.opt.8 #All hail High Queen Ayreen, the Unforeseen Queen!
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 5
+				OR = {
+					trait = content
+					trait = just
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_approves
+			who = FROM
+			months = 120
+		}
+	}
+	option = {
+		name = eso.opt.9 #She is no Queen of mine!
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 5
+				OR = {
+					trait = ambitious
+					trait = zealous
+					NOR = {
+						culture = altmer
+						is_altmer = yes
+					}
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_disapprove
+			who = FROM
+			months = 120
+		}
+	}
+	option = {
+		name = eso.opt.10 #She will be one to look out for
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 3
+				OR = {
+					trait = patient
+					trait = deceitful
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = eso.7
+	title = eso.title.1
+	desc = eso.desc.1
+	picture = GFX_evt_k_eldercouncil
+	
+	is_triggered_only = yes
+	option = {
+		name = eso.opt.1
+	}
+}
+
+### An Imperial Imposter! (Fake Clivia dies)
+character_event = {
+	id = eso.50
+	hide_window = yes
+	only_rulers = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = molag_kena
+		year = 3499
+	}
+	
+	immediate = {
+		# That's the Imperial Isle
+		1 = {
+			province_event = { id = eso.52 days = 2 }
+		}
+	}
+}
+
+# The world gets the news
+narrative_event = {
+	id = eso.51
+	title = eso.51.title
+	desc = eso.51.desc
+	picture = GFX_evt_daedric_invasion_city
+	is_triggered_only = yes
+	
+	option = {
+		name = "eso.51.opt1"
+		trigger = { NOT = { religion = daedra_molag } }
+	}
+	
+	option = {
+		name = "eso.51.opt2"
+		trigger = { religion = daedra_molag }
+	}
+}
+
+# Molag Kena?!
+province_event = {
+	id = eso.52
+	hide_window = yes
+	only_rulers = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			clr_character_flag = molag_kena
+			set_name = "Molag"
+			remove_special_character_title = empress_regent
+			set_graphical_culture = dremora
+			add_trait = dremora
+			remove_trait = imperial
+			culture = dremora
+			set_father = 0
+			set_mother = 0
+			dynasty = 500055
+			disband_event_forces = yes
+			c_3628 = {
+				set_name = "Clivia"
+				dynasty = 90422
+				set_father = 3600
+				set_mother = 3610
+				death = { death_reason = death_missing }
+			}
+			c_6123 = {
+				set_mother = 3628
+			}
+			c_3600 = {
+				add_depressed = yes
+			}
+		}
+		
+		any_playable_ruler = {
+			narrative_event = { id = eso.51 }
+		}
+	}
+}
+
+#Varen presents ultimatum?
+narrative_event = {
+	id = eso.91
+	title = eso.91.title
+	desc = eso.91.desc
+	picture = GFX_evt_cyrodiil
+	is_triggered_only = yes
+	
+	#Send ultimatum!
+	option = {
+		name = eso.91.opt1
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		random_playable_ruler = {
+			limit = { has_character_flag = leovic_longhouse has_landed_title = e_cyrodiil }
+			narrative_event = { id = eso.92 days = 2 }
+		}
+	}
+	
+	#Forget that non-sense
+	option = {
+		name = eso.91.opt2
+		
+	}
+}
+
+#Leovic accepts ultimatum?
+narrative_event = {
+	id = eso.92
+	title = eso.92.title
+	desc = eso.92.desc
+	picture = GFX_evt_cyrodiil
+	is_triggered_only = yes
+	
+	#Never!
+	option = {
+		name = eso.92.opt1
+		
+		ai_chance = {
+			factor = 90
+		}
+		
+		any_playable_ruler = {
+			limit = { ai = no }
+			narrative_event = { id = eso.95 }
+		}
+		
+		any_playable_ruler = {
+			limit = { 
+				OR = {
+					liege = { character = ROOT }
+					independent = yes
+				}
+				NOR = { 
+					character = FROM
+					has_character_flag = carolus_aquilarios
+					has_character_flag = ephrem_benirus
+					has_character_flag = fortunata_ap_dugal
+				}
+				OR = {
+					religion = eight_divines
+					culture = colovian
+				}
+			}
+			character_event = { id = eso.93 days = 2 } #Join Varen's?
+		}
+		
+		reverse_unsafe_war = {
+			target = FROM
+			casus_belli = claim_on_liege
+			thirdparty_title = e_cyrodiil
+			infamy = 0
+		}
+		
+		k_anvil = { 
+			holder_scope = {
+				if = {
+					limit = { has_character_flag = ephrem_benirus }
+					join_defender_wars = ROOT
+				}
+			}
+		}	
+	}
+	
+	#Sounds reasonable, sure
+	option = {
+		name = eso.92.opt2
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		gain_title = k_thereach
+		gain_title = c_markarth
+		
+		any_playable_ruler = {
+			limit = { ai = no }
+			narrative_event = { id = eso.96 }
+		}
+		
+		any_realm_lord = {
+			limit = { 
+				is_landed = yes
+				higher_tier_than = BARON
+				liege = { character = ROOT }
+				OR = {
+					culture = reachmen
+					religion_group = reach_faiths
+					religion_group = daedra
+				}
+				NOR = { 
+					capital_scope = { region = nirn_tamriel_cyrodiil }
+					capital_scope = { region = nirn_tamriel_elsweyr }
+				}
+			}
+			set_character_flag = follow_leovic
+		}
+		
+		any_realm_lord = {
+				limit = { 
+				is_landed = yes
+				higher_tier_than = BARON
+				liege = { character = ROOT }
+				OR = {
+					culture = reachmen
+					religion_group = reach_faiths
+					religion_group = daedra
+				}
+				OR = {
+					capital_scope = { region = nirn_tamriel_cyrodiil }
+					capital_scope = { region = nirn_tamriel_elsweyr }
+				}
+			}
+			set_defacto_liege = THIS
+		}
+		
+		FROM = { 
+			gain_title = e_cyrodiil 
+			gain_title = c_imperialisle
+			gain_title = b_whitegold
+			capital = b_whitegold
+		}
+		
+		any_title_under = {
+			limit = {
+				owner = { character = ROOT }
+				OR = { 
+					capital_scope = { region = nirn_tamriel_cyrodiil }
+					capital_scope = { region = nirn_tamriel_elsweyr }
+				}
+			}
+			FROM = { gain_title = PREV }
+		}
+		
+		c_3600 = { character_event = { id = eso.102 days = 2 } }
+		
+		set_defacto_liege = THIS
+		
+	}
+	
+	after = {
+		any_playable_ruler = {
+			limit = { has_character_flag = follow_leovic }
+			set_defacto_liege = ROOT
+			clr_character_flag = follow_leovic
+		}
+	}
+			
+}
+
+#Join Varen?
+character_event = {
+	id = eso.93
+	desc = eso.93.desc
+	picture = GFX_evt_cyrodiil
+	is_triggered_only = yes
+	
+	#Yes
+	option = {
+		name = eso.93.opt1
+		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				likes_better_than = {
+					who = FROMFROM
+					than = FROM
+				}
+			}
+			modifier = {
+				factor = 10
+				culture = breton
+			}
+			modifier = {
+				factor = 10
+				culture = nord
+			}
+			modifier = {
+				factor = 20
+				trait = ambitious
+			}
+			modifier = {
+				factor = 20
+				trait = just
+			}
+			modifier = {
+				factor = 30
+				society_member_of = elder_council
+			}
+			modifier = {
+				factor = 50
+				culture = colovian
+			}
+			modifier = {
+				factor = 50
+				trait = zealous
+			}
+			modifier = {
+				factor = 10000
+				has_landed_title = d_blades
+			}
+			
+		}
+		
+		join_attacker_wars = FROMFROM
+		
+		if = {
+			limit = { liege = { character = FROM } }
+			set_defacto_liege = FROMFROM
+		}
+		
+		FROM = { 
+			character_event = { id = eso.94 days = 1 } 
+		}
+	}
+	
+	#Flat no!
+	option = {
+		name = eso.93.opt2
+		
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				likes_better_than = {
+					who = FROM
+					than = FROMFROM
+				}
+			}
+			modifier = {
+				factor = 20
+				culture = nibenean
+			}
+			modifier = {
+				factor = 20
+				trait = content
+			}
+			modifier = {
+				factor = 20
+				trait = cynical
+			}
+			modifier = {
+				factor = 20
+				trait = cruel
+			}
+			modifier = {
+				factor = 100
+				capital_scope = { NOT = { region = nirn_tamriel_cyrodiil } }
+			}
+			modifier = {
+				factor = 200
+				higher_tier_than = KING
+			}
+			modifier = {
+				factor = 500
+				dynasty	= 90422 #Tharn
+			}
+			modifier = {
+				factor = 1000
+				OR = {
+					culture	= reachmen
+					religion_group = reach_faiths
+					religion_group = daedra
+					primary_title = { temporary = yes }
+					primary_title = { mercenary = yes }
+				}
+			}
+		}
+		
+	}
+}
+
+#Leovic learns of a new rebel
+character_event = {
+	id = eso.94
+	desc = eso.94.desc
+	picture = GFX_evt_cyrodiil
+	is_triggered_only = yes
+	
+	#Fools!
+	option = {
+		add_claim = FROM
+		name = eso.94.opt1
+	}
+}
+
+#Leovic refused the ultimatum
+narrative_event = {
+	id = eso.95
+	title = eso.92.title
+	desc = eso.desc.95
+	picture = GFX_evt_standingproud
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.95.opt1
+
+	}
+	option = {
+		name = eso.95.opt2
+	
+	}
+}
+
+narrative_event = { #Leovic accepted the ultimatum
+	id = eso.96
+	title = eso.92.title
+	desc = eso.desc.96
+	picture = GFX_evt_standingproud
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.96.opt1
+
+	}
+	option = {
+		name = eso.96.opt2
+	
+	}
+}
+
+#Varen's Rebellion Ends
+character_event = {
+	id = eso.100
+	hide_window = yes
+	only_rulers = yes
+	is_triggered_only = yes
+	 
+	trigger = {
+		year = 3496
+		has_character_flag = varen_aquilarios
+		FROM = { title = e_cyrodiil }
+		FROMFROM = { has_character_flag = leovic_longhouse }
+	}
+	
+	immediate = {
+		character_event = { id = eso.101 days = 2 }
+	}
+}
+
+#What to do with Leovic?
+character_event = {
+	id = eso.101
+	desc = eso.101.desc
+	picture = GFX_evt_cyrodiil
+	is_triggered_only = yes
+	
+	#Execute Leovic
+	option = {
+		name = eso.101.opt1
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		prestige = 500
+		c_imperialisle = { usurp_title_plus_barony_if_unlanded = ROOT }
+		capital = b_whitegold
+		d_imperialisle = { usurp_title = ROOT }
+		create_bloodline = { type = bloodline_varen }
+		hidden_tooltip = {
+			any_realm_lord = {
+				limit = { 
+					OR ={
+						religion_group = reach_faiths
+						religion_group = daedra
+					}
+					culture = reachmen
+					higher_tier_than = BARON
+					NOR = {
+						capital_scope = { region = nirn_tamriel_cyrodiil }
+						capital_scope = { region = nirn_tamriel_elsweyr }
+					}
+				}
+				set_defacto_liege = FROMFROMFROM
+			}
+			FROMFROMFROM = {
+				death = { 
+					death_reason = death_execution 
+					killer = ROOT 
+				}
+			}
+			add_weak_claim = k_anvil
+			k_thereach = { set_defacto_liege = THIS }
+			k_skingrad = { holder_scope = { set_defacto_liege = ROOT } }
+			if = {
+				limit = { k_kvatch = { holder_scope = { war = no is_close_relative = ROOT } } }
+				k_kvatch = { holder_scope = { set_defacto_liege = ROOT } }
+			}
+			if = {
+				limit = { 
+					c_3600 = { is_alive = yes }
+					c_3628 = { is_alive = yes }
+				}
+				c_3600 = { character_event = { id = eso.102 days = 2 } }
+			}
+		}
+	}
+	
+	#Don't execute Leovic
+	option = {
+		name = eso.101.opt2
+		
+		piety = 150
+		c_imperialisle = { usurp_title_plus_barony_if_unlanded = ROOT }
+		capital = b_whitegold
+		d_imperialisle = { usurp_title = ROOT }
+		create_bloodline = { type = bloodline_varen }
+		hidden_tooltip = {
+			any_realm_lord = {
+				limit = { 
+					religion_group = reach_faiths
+					culture = reachmen
+					higher_tier_than = BARON
+				}
+				random_list = {
+					75 = { set_defacto_liege = FROMFROMFROM }
+					25 = { set_defacto_liege = THIS }
+				}
+			}
+			add_weak_claim = k_anvil
+			k_thereach = { set_defacto_liege = THIS }
+			k_skingrad = { holder_scope = { set_defacto_liege = ROOT } }
+			if = {
+				limit = { k_kvatch = { holder_scope = { war = no is_close_relative = ROOT } } }
+				k_kvatch = { holder_scope = { set_defacto_liege = ROOT } }
+			}
+		}
+		c_3600 = { character_event = { id = eso.102 days = 2 } }
+	}
+}
+
+#Abnur's decision
+character_event = {
+	id = eso.102
+	picture = GFX_evt_cyrodiil
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { c_18044 = { is_alive = no } }
+		text = eso.102.desc1
+	}
+	
+	desc = {
+		trigger = { c_18044 = { is_alive = yes } }
+		text = eso.102.desc2
+	}
+	
+	#Offer Clivia
+	option = {
+		name = eso.102.opt1
+		
+		trigger = {
+			c_3628 = { is_alive = yes is_married = no }
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		set_character_flag = offered_clivia
+		
+		c_6103 = { character_event = { id = eso.103 days = 2 } }
+	}
+	
+	#Independence 
+	option = {
+		name = eso.102.opt2
+		
+		primary_title = { FROM = { add_claim = PREV } }
+		set_defacto_liege = THIS
+		c_6103 = { character_event = { id = eso.103 days = 2 } }
+	}
+	
+	#Nothing 
+	option = {
+		name = eso.102.opt3
+		c_6103 = { character_event = { id = eso.103 days = 2 } }
+	}
+}
+
+#Varen's decision
+character_event = {
+	id = eso.103
+	picture = GFX_evt_cyrodiil
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			FROM = { has_character_flag = offered_clivia }
+			c_3628 = { is_alive = yes }
+			FROM = { independent = no }
+		}
+		text = eso.103.desc1
+	}
+	
+	desc = {
+		trigger = {
+			OR = {
+				FROM = { NOT = { has_character_flag = offered_clivia } }
+				c_3628 = { is_alive = no }
+			}
+			FROM = { independent = no }
+		}
+		text = eso.103.desc2
+	}
+	
+	desc = {
+		trigger = {
+			FROM = { independent = yes }
+		}
+		text = eso.103.desc3
+	}
+	
+	#Marry Clivia
+	option = {
+		name = eso.103.opt1
+		
+		ai_chance = {
+			factor = 100
+		}
+	
+		trigger = {
+			FROM = { has_character_flag = offered_clivia }
+			c_3628 = { is_alive = yes }
+			FROM = { independent = no }
+		}
+		
+		hidden_tooltip = {
+			any_realm_character = {
+				limit = { 
+					liege = { character = ROOT }
+					OR = {
+						culture = colovian
+						culture = nord
+					}
+				}
+				opinion = { modifier = opinion_hypocrit_ruler who = ROOT years = 5 }
+			}
+			any_realm_character = {
+				limit = { 
+					liege = { character = ROOT }
+					culture = nibenean
+				}
+				opinion = { modifier = opinion_pleased who = ROOT years = 5 }
+			}
+		}
+		
+		remove_spouse = yes
+		c_3628 = { add_spouse = ROOT }
+		FROM = { 
+			character_event = { id = eso.104 days = 1 }
+			clr_character_flag = offered_clivia
+		}
+	}
+	
+	#Execute Abnur
+	option = {
+		name = eso.103.opt2
+		
+		trigger = { FROM = { independent = no } }
+		
+		hidden_tooltip = {
+			any_society_member = {
+				limit = { society_member_of = elder_council }
+				opinion = { modifier = opinion_outraged who = ROOT years = 5 }
+			}
+			any_realm_character = {
+				limit = { 
+					liege = { character = ROOT }
+					NOT = { society_member_of = elder_council }
+					culture = nibenean
+				}
+				opinion = { modifier = opinion_tyrant who = ROOT years = 10 }
+			}
+			any_realm_character = {
+				limit = { 
+					liege = { character = ROOT }
+					OR = {
+						culture = colovian
+						culture = nord
+					}
+				}
+				opinion = { modifier = opinion_pleased who = ROOT years = 5 }
+			}
+		}
+		
+		FROM = {
+			death = { 
+				death_reason = death_execution 
+				killer = ROOT 
+			}
+		}
+	}
+	
+	#Nothing 
+	option = {
+		name = eso.103.opt3
+		trigger = { FROM = { independent = no } }
+	}
+	
+	#Fool 
+	option = {
+		name = eso.103.opt4
+		trigger = { FROM = { independent = yes } }
+	}
+}
+
+#Marriage
+character_event = {
+	id = eso.104
+	desc = eso.104.desc
+	picture = GFX_evt_colovian_govt
+	is_triggered_only = yes
+	
+	#Spend a lot
+	option = {
+		name = eso.104.opt1
+		
+		prestige = 300
+		piety = 100
+		scaled_wealth = { value = -1 min = -300 }
+	}
+	
+	#Spend a bit 
+	option = {
+		name = eso.104.opt2
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		prestige = 100
+		piety = 50
+		scaled_wealth = { value = -0.5 min = -100 }
+	}
+}
+
+#Fortunata's Conquest
+character_event = {
+	id = eso.110
+	hide_window = yes
+	only_rulers = yes
+	is_triggered_only = yes
+	 
+	trigger = {
+		year = 3496
+		has_character_flag = fortunata_ap_dugal
+		FROM = { title = k_anvil }
+		FROMFROM = { has_character_flag = ephrem_benirus }
+	}
+	
+	immediate = {
+		character_event = { id = eso.111 days = 2 }
+	}
+}
+
+character_event = {
+	id = eso.111
+	desc = eso.111.desc
+	picture = GFX_evt_colovian_govt
+	is_triggered_only = yes
+	
+	#Negotiate with Kvatch
+	option = {
+		name = eso.111.opt1
+		
+		trigger = {
+			k_kvatch = { holder_scope = { independent = yes } }
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+	
+		give_nickname = nick_the_pirate_queen
+		set_special_character_title = governor
+		c_anvil = { usurp_title = ROOT }
+		FROMFROMFROM = {
+			remove_claim = k_kvatch
+			death = { 
+				death_reason = death_execution 
+				killer = ROOT 
+			}
+		}
+		k_kvatch = { holder_scope = { character_event = { id = eso.112 days = 2 } } }
+	}
+	
+	#Invade Kvatch
+	option = {
+		name = eso.111.opt2
+		
+		trigger = {
+			k_kvatch = { holder_scope = { independent = yes } } 
+		}
+		
+		give_nickname = nick_the_pirate_queen
+		set_special_character_title = governor
+		c_anvil = { usurp_title = ROOT }
+		FROMFROMFROM = {
+			remove_claim = k_kvatch
+			death = { 
+				death_reason = death_execution 
+				killer = ROOT 
+			}
+		}
+		hidden_tooltip = {
+			add_weak_claim = k_kvatch
+			k_kvatch = {
+				holder_scope = {
+					reverse_unsafe_war = { 
+						target = ROOT 
+						casus_belli = claim 
+						thirdparty_title = PREV
+					}
+				}
+			}
+		}	
+	}
+	
+	#Kvatch is not independent
+	option = {
+		name = eso.111.opt3
+		
+		trigger = {
+			k_kvatch = { holder_scope = { independent = no } }
+		}
+		
+		prestige = 500
+		give_nickname = nick_the_pirate_queen
+		set_special_character_title = governor
+		c_anvil = { usurp_title = ROOT }
+		FROMFROMFROM = {
+			remove_claim = k_kvatch
+			death = { 
+				death_reason = death_execution 
+				killer = ROOT 
+			}
+		}
+	}
+}
+
+character_event = {
+	id = eso.112
+	desc = eso.112.desc
+	picture = GFX_evt_colovian_govt
+	is_triggered_only = yes
+	
+	#Accept Vassalization
+	option = {
+		name = eso.112.opt1
+		
+		trigger = { independent = yes }
+		
+		destroy_landed_title = k_kvatch
+		set_defacto_liege = FROM
+		FROM = { character_event = { id = eso.113 } }
+	}
+	
+	#Refuse Vassalization
+	option = {
+		name = eso.112.opt2
+	
+		ai_chance = {
+			factor = 0
+		}
+		
+		FROM = { character_event = { id = eso.114 } }
+	}
+}
+
+character_event = {
+	id = eso.113
+	desc = eso.113.desc
+	picture = GFX_evt_colovian_govt
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.113.opt1
+
+		prestige = 500
+		hidden_tooltip = {
+			e_cyrodiil = { holder_scope = { d_dirich = { holder_scope = { set_defacto_liege = PREVPREV } } } }
+			d_linchal = { holder_scope = { set_defacto_liege = ROOT } }
+			add_weak_claim = d_dirich
+		}
+	}
+	
+}
+
+character_event = {
+	id = eso.114
+	desc = eso.114.desc
+	picture = GFX_evt_colovian_govt
+	is_triggered_only = yes
+	
+	option = {
+		name = eso.114.opt1
+		
+		prestige = -200
+		add_weak_claim = k_kvatch
+		add_weak_claim = d_kvatch
+	}
+}
+
+#Ephrem's Conquest
+character_event = {
+	id = eso.120
+	hide_window = yes
+	only_rulers = yes
+	is_triggered_only = yes
+	 
+	trigger = {
+		year = 3496
+		has_character_flag = ephrem_benirus
+		FROM = { title = k_kvatch }
+		FROMFROM = { has_character_flag = carolus_aquilarios }
+	}
+	
+	immediate = {
+		character_event = { id = eso.121 days = 2 }
+	}
+}
+
+character_event = {
+	id = eso.121
+	desc = eso.121.desc
+	picture = GFX_evt_colovian_govt
+	is_triggered_only = yes
+	
+	#Submit back to the Empire
+	option = {
+		name = eso.121.opt1
+		
+		trigger = {
+			e_cyrodiil = { holder_scope = { NOT = { has_character_flag = varen_aquilarios } } }
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+	
+		c_kvatch = { usurp_title = ROOT }
+		d_kvatch = { usurp_title = ROOT }
+		FROMFROMFROM = {
+			death = { 
+				death_reason = death_execution 
+				killer = ROOT 
+			}
+		}
+		e_cyrodiil = { holder_scope = { ROOT = { set_defacto_liege = PREV } } }
+	}
+	
+	#Proclaim Independence
+	option = {
+		name = eso.121.opt2
+		
+		prestige = 500
+		c_kvatch = { usurp_title = ROOT }
+		d_kvatch = { usurp_title = ROOT }
+		FROMFROMFROM = {
+			death = { 
+				death_reason = death_execution 
+				killer = ROOT 
+			}
+		}
+		set_defacto_liege = ROOT
+	}
+}

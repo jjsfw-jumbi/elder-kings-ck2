@@ -1,0 +1,253 @@
+oblivion_mephala = {
+	name = mephala_mephala
+	window_name = domestic_offmaps_window
+	button_name = icon_offmaps_entry
+	currency_name = TXT_ARDOR
+	currency_gain = monthly_ardor
+	currency_reset_on_dynasty_change = yes
+	holder_title = title_oblivion_mephala			# minor title used to identify a character as holder of this offmap power
+	governor_title = e_cult_mephala
+	tier = emperor
+	non_aggression_modifier = peace_deal_with_china
+	coa_religion = daedra_mephala
+	government = confucian_bureaucracy
+	beginning_of_history = 1.1.1
+	sound = china_interaction_interface
+	display_trigger = {
+		has_dlc = "Jade Dragon"
+		FROM = {
+			worships_mephala = yes
+		}
+	}
+	policies = {
+		oblivion_isolationist
+		oblivion_interactive
+		oblivion_interventionist
+	}
+	statuses = {
+		oblivion_normal
+		oblivion_apogee
+		oblivion_convalescing
+		oblivion_cataclysm
+	}
+	buttons = {
+		offmap_gifts = {
+			is_active_trigger = {
+				always = yes
+			}
+		}
+		offmap_boons = {
+			is_active_trigger = {
+				oblivion_mephala_boon_decisions_enabled_trigger = yes
+			}
+		}
+		offmap_hostility = {
+			is_active_trigger = {
+				#china_offmap_hostile_decisions_enabled_trigger = yes
+			}
+			display_trigger = {
+				always = no
+			}
+		}
+		offmap_hostility2 = {
+			display_trigger = {
+				always = no
+			}
+		}
+	}
+	
+	#These conditions only effect the appearance of the button, it does not actually disable them from being clickable. The same triggers are used in all tribute/boon decisions respectively
+	
+	icon_triggers = {
+	}
+	
+	monthly_currency_gain = {
+		offmap_openly_worship = {
+			value = 2.5
+			FROM = { likes_daedra_mephala = yes }
+		}
+		offmap_secretly_worship = {
+			value = 1.25
+			FROM = { likes_secretly_daedra_mephala = yes }
+		}
+		offmap_pantheon_worship = {
+			value = 0.5
+			FROM = { likes_patron_mephala = yes }
+		}
+		offmap_offering = {
+			value = 5.0
+			FROM = { likes_sacrifice_mephala = yes }
+		}
+		offmap_likes_dunmer = {
+			value = 0.5
+			FROM = { likes_dunmer = yes }
+		}
+		offmap_likes_chimer = {
+			value = 0.5
+			FROM = { likes_chimer = yes }
+		}
+		offmap_likes_gregarious = {
+			value = 0.25
+			FROM = { likes_gregarious = yes }
+		}
+		offmap_likes_ruthless = {
+			value = 0.25
+			FROM = { likes_ruthless = yes }
+		}
+		offmap_likes_deceitful = {
+			value = 0.25
+			FROM = { likes_deceitful = yes }
+		}
+		offmap_likes_lustful = {
+			value = 0.25
+			FROM = { likes_lustful = yes }
+		}
+		offmap_likes_patient = {
+			value = 0.25
+			FROM = { likes_patient = yes }
+		}
+		offmap_likes_zealous = {
+			value = 0.25
+			FROM = { likes_zealous = yes }
+		}
+		offmap_likes_poets = {
+			value = 0.25
+			FROM = { likes_poets = yes }
+		}
+		offmap_likes_duelists = {
+			value = 0.25
+			FROM = { likes_duelists = yes }
+		}
+		offmap_likes_saboteurs = {
+			value = 0.25
+			FROM = { likes_saboteurs = yes }
+		}
+		offmap_likes_gladiators = {
+			value = 0.25
+			FROM = { likes_gladiators = yes }
+		}
+		offmap_likes_schemers = {
+			value = 0.25
+			FROM = { likes_schemers = yes }
+		}
+		offmap_likes_seducers = {
+			value = 0.25
+			FROM = { likes_seducers = yes }
+		}
+		offmap_likes_seductresses = {
+			value = 0.25
+			FROM = { likes_seductresses = yes }
+		}
+		offmap_likes_likes_socializers = {
+			value = 0.25
+			FROM = { likes_socializers = yes }
+		}
+		offmap_likes_hedonists = {
+			value = 0.25
+			FROM = { likes_hedonists = yes }
+		}
+		offmap_likes_gamers = {
+			value = 0.25
+			FROM = { likes_gamers = yes }
+		}
+		offmap_likes_painters = {
+			value = 0.25
+			FROM = { likes_painters = yes }
+		}
+		offmap_likes_musicians = {
+			value = 0.25
+			FROM = { likes_musicians = yes }
+		}
+		offmap_likes_dragonborns = {
+			value = 5.0
+			FROM = { likes_dragonborns = yes }
+		}
+		
+		#Negative
+		offmap_likes_celibate = {
+			value = -0.25
+			FROM = { likes_celibate = yes }
+		}
+		offmap_likes_chaste = {
+			value = -0.25
+			FROM = { likes_chaste = yes }
+		}
+		offmap_likes_cynical = {
+			value = -0.25
+			FROM = { likes_cynical = yes }
+		}
+		offmap_likes_honest = {
+			value = -0.25
+			FROM = { likes_honest = yes }
+		}
+		offmap_likes_kind = {
+			value = -0.25
+			FROM = { likes_kind = yes }
+		}
+		offmap_likes_reckless = {
+			value = -0.25
+			FROM = { likes_reckless = yes }
+		}
+		offmap_likes_shy = {
+			value = -0.25
+			FROM = { likes_shy = yes }
+		}
+		
+		# offmap_ = {
+			# FROM = {  = yes }
+		# }
+	}
+	
+	temple_names = {
+		{ # Founder names
+			Mephala
+		}
+		{ # Successor names
+			Mephala
+		}
+	}
+	holder_succession = {
+		is_female = {					# chances of getting a female holder, as a percentage: if the total is >= 100, the new holder will always be female. If the total is <= 0, the new holder will always be male
+			value = 75
+		}
+		culture = {
+			daedric = {
+				value = 100
+			}
+		}
+
+		graphical_culture = { 
+			FROM = {
+				value = 100
+			}
+		}
+
+		religion = {
+			daedra_mephala = {
+				value = 100
+			}
+		}
+
+		dynasty = {
+			FROM = {
+				value = 100
+			}
+		}
+		
+		likes = {
+			likes_dragonborns = {
+				value = 250
+			}
+		}
+		
+		dislikes = {
+			likes_almsivi = {
+				value = 100
+			}
+		}
+	}
+	
+	diplomatic_range = { #Already includes the western governor's "normal" diplo range
+		worships_mephala = yes
+	}
+}

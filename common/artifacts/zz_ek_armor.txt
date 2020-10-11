@@ -1,0 +1,2559 @@
+###
+#Three item quality levels: Normal, Superior, Flawless. Flawless should in general be notably better than Normal with Superior as a middleground between the two.
+#Numbers and scale will be tweaked as needed - the normal versions are the artifacts as they currently exist in the SVN as of Revision nr. 1582 except where noted otherwise
+#Sorry if I accidentally un-nerfed anything too hard with respect to the above, Nanaki!
+
+#Note: I wrote most of this while exhausted from work and on a ton of (legal and properly-dosed) painkillers.
+#If you (other devs or players who snoop - that's how I started) see any potential oversights or have balance questions,
+#or have any comments or concerns, go ahead and ask in the EK discord, or DM me personally! - Ev.
+
+#Unique armors
+armor_of_the_old_gods = {
+	martial = 2
+	learning = 3
+	health = 0.25
+	combat_rating = 9
+	command_modifier = {
+		defence = 0.0125
+		morale_offence = 0.0125
+	}
+	
+	active = {
+		religion = old_gods
+		can_wear_light_armor = yes
+	}
+	
+	picture = "GFX_armor_of_the_old_gods"
+	stacking = yes
+	slot = torso
+	quality = 3
+	flags = {
+		armor
+		no_theft
+		unique
+		light_armor
+		no_inherit
+	}
+}
+###
+armor_tester = {
+	diplomacy = 10
+	martial = 10
+	stewardship = 10
+	intrigue = 10
+	learning = 10
+	health = 10
+	
+	combat_rating = 50
+	command_modifier = {
+		defence = 0.25
+	}
+	
+	filthy_cheater = 1
+	
+	picture = "GFX_armor_glass"
+	stacking = yes
+	slot = torso
+
+	allowed_gift = {
+		always = no
+	}
+	
+	quality = 15
+	
+	flags = {
+		unique
+		armor
+		medium_armor
+		theft_dr_impossible
+		no_inherit
+	}
+}
+###
+armor_snow_prince = { #TODO: Special battle death event
+	martial = 4
+	learning = 2
+	health = 0.50
+	monthly_character_prestige = 0.3
+	
+	falmer_opinion = 10
+	general_opinion = 5
+	
+	combat_rating = 16
+	command_modifier = {
+		morale_defence = 0.15 #The Snow-Prince is come! Doom is at hand!
+		defence = -0.075
+	}
+	
+	picture = "GFX_armor_snow_prince"
+	stacking = yes
+	slot = torso
+	quality = 7
+	indestructible = yes 
+		
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		unique
+		quality_legendary
+	}
+}
+###
+armor_saintaralor = { #Todo: Event where you'll randomly gain or lose base health?
+	monthly_character_prestige = 0.25
+	monthly_character_piety = 0.25
+	
+	health = 0.75
+	learning = 1
+	combat_rating = 1
+	
+	tribunal_opinion = 3
+	
+	picture = "GFX_armor_shrouded"
+	stacking = yes
+	slot = torso
+	indestructible = yes
+	
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		unique
+		armor
+		light_armor
+		theft_dr_hard
+		quality_legendary
+	}
+}
+###
+armor_wraithguard = {
+	monthly_character_prestige = 0.25
+	
+	health = 0.2
+	learning = 1
+	martial = 2
+	combat_rating = 2
+	
+	dwemer_opinion = 5
+	nerevarine_opinion = 10
+	
+	picture = "GFX_armor_wraithguard"
+	stacking = no
+	slot = gloves
+	indestructible = yes
+	
+	active = {
+		custom_tooltip = {
+			text = wraithguard_training_tt
+			has_character_flag = wraithguard_training
+		}
+	}
+	
+	quality = 10
+	
+	flags = {
+		unique
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_legendary
+		kt_wraithguard
+	}
+}
+
+armor_orgnum = {
+	monthly_character_prestige = 0.5
+	martial = 1
+	learning = 2
+	combat_rating = 15
+	health = 0.5
+	command_modifier = {
+		defence = 0.02
+		morale_defence = 0.02
+	}
+	
+	indestructible = yes
+	
+	heal_wounds_modifier = 1
+	
+	active = {
+		trigger_if = {
+			limit = {
+				character = 39000
+			}
+			custom_tooltip = {
+				text = ORGNUM_ARTIFACT_HELD_ORGNUM_CT
+				always = yes
+			}
+		}
+		
+		trigger_else = {
+			AND = {
+				custom_tooltip = {
+					text = HAS_ORGNUM_GODSLAYER_BLOODLINE_CT
+					any_owned_bloodline = {
+						OR = {
+							has_bloodline_flag = bloodline_orgnum
+							has_bloodline_flag = godslayer_bloodline
+						}
+					}
+				}
+				learning = 30
+				martial = 30
+			}
+			
+			can_wear_heavy_armor = yes
+		}
+	}
+	
+	picture = "GFX_armor_lordsmail"
+	stacking = no
+	slot = torso
+	quality = 10
+	flags = {
+		unique
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_legendary
+	}
+}
+
+###
+
+#
+##	
+###
+# Non-Uniques
+###
+##
+#
+
+armor_legate = { #3rd Era, Tamrielic Empire Legate
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.15
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.015
+		morale_defence = 0.015
+		center = 0.05
+		heavy_infantry = 0.05
+		cavalry = 0.05
+	}
+	quality = 4
+	
+	picture = "GFX_armor_legate"
+	stacking = yes
+	slot = torso
+	
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_legate_superior = {
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.20
+	combat_rating = 12
+	command_modifier = {
+		defence = 0.015
+		morale_defence = 0.015
+		center = 0.05
+		heavy_infantry = 0.05
+		cavalry = 0.05
+	}
+	quality = 5
+	
+	picture = "GFX_armor_legate"
+	stacking = yes
+	slot = torso
+	
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_legate_flawless = {
+	martial = 4
+	health = 0.25
+	monthly_character_prestige = 0.30
+	combat_rating = 14
+	command_modifier = {
+		defence = 0.015
+		morale_defence = 0.015
+		center = 0.05
+		heavy_infantry = 0.05
+		cavalry = 0.05
+	}
+	quality = 6
+	
+	picture = "GFX_armor_legate"
+	stacking = yes
+	slot = torso
+	
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_2e_legate = { #2nd Era/Cyrodiilic Empire Legate
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.15
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.015
+		morale_defence = 0.015
+		center = 0.05
+		heavy_infantry = 0.05
+		cavalry = 0.05
+	}
+	quality = 3
+	
+	picture = "GFX_armor_2e_legate"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_2e_legate_superior = {
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.20
+	combat_rating = 12
+	command_modifier = {
+		defence = 0.015
+		morale_defence = 0.015
+		center = 0.05
+		heavy_infantry = 0.05
+		cavalry = 0.05
+	}
+	quality = 4
+	
+	picture = "GFX_armor_2e_legate"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_2e_legate_flawless = {
+	martial = 4
+	health = 0.25
+	monthly_character_prestige = 0.30
+	combat_rating = 14
+	command_modifier = {
+		defence = 0.015
+		morale_defence = 0.015
+		center = 0.05
+		heavy_infantry = 0.05
+		cavalry = 0.05
+	}
+	quality = 5
+	
+	picture = "GFX_armor_2e_legate"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_skaal_coat = {
+	martial = 2
+	health = 0.35
+	combat_rating = 3
+	command_modifier = {
+		winter_combat = 0.1
+		terrain = arctic
+	}
+	quality = 2
+	
+	picture = "GFX_armor_skaal_coat"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_skaal_coat_superior = {
+	martial = 2
+	health = 0.35
+	combat_rating = 5
+	command_modifier = {
+		winter_combat = 0.15
+		terrain = arctic
+	}
+	quality = 3
+	
+	picture = "GFX_armor_skaal_coat"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_skaal_coat_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 3
+	health = 0.35
+	combat_rating = 7
+	command_modifier = {
+		winter_combat = 0.2
+		terrain = arctic
+	}
+	quality = 4
+	
+	picture = "GFX_armor_skaal_coat"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_mithril = {
+	martial = 3
+	health = 0.35
+	monthly_character_prestige = 0.1
+	quality = 4
+	
+	combat_rating = 6
+	command_modifier = {
+		defence = 0.0125
+	}
+	
+	picture = "GFX_armor_mithril"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_mithril_superior = {
+	martial = 3
+	health = 0.35
+	monthly_character_prestige = 0.15
+	quality = 5
+	
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.0125
+	}
+	
+	picture = "GFX_armor_mithril"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_mithril_flawless = {
+	martial = 4
+	health = 0.35
+	monthly_character_prestige = 0.25
+	quality = 6
+	
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.0125
+	}
+	
+	picture = "GFX_armor_mithril"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_imperial = {
+	martial = 3
+	health = 0.25
+	combat_rating = 4
+	command_modifier = {
+		defence = 0.01
+	}
+	
+	picture = "GFX_armor_imperial"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_imperial_superior = {
+	martial = 3
+	health = 0.25
+	combat_rating = 6
+	command_modifier = {
+		defence = 0.01
+	}
+	
+	picture = "GFX_armor_imperial"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_imperial_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 4
+	health = 0.25
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.01
+	}
+	
+	picture = "GFX_armor_imperial"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_ancient_nord = {
+	martial = 2
+	health = 0.25
+	combat_rating = 5
+	command_modifier = {
+		defence = 0.01
+		winter_combat = 0.05
+	}
+	
+	picture = "GFX_armor_ancient_nord"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_ancient_nord_superior = {
+	martial = 2
+	health = 0.25
+	combat_rating = 7
+	command_modifier = {
+		defence = 0.01
+		winter_combat = 0.05
+	}
+	
+	picture = "GFX_armor_ancient_nord"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_ancient_nord_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 3
+	health = 0.25
+	combat_rating = 9
+	command_modifier = {
+		defence = 0.01
+		winter_combat = 0.05
+	}
+	
+	picture = "GFX_armor_ancient_nord"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 5
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_elven = {
+	martial = 2
+	health = 0.25
+	monthly_character_prestige = 0.05
+	
+	combat_rating = 9
+	command_modifier = {
+		defence = 0.015
+	}
+	
+	picture = "GFX_armor_elven"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_elven_superior = {
+	martial = 2
+	health = 0.25
+	monthly_character_prestige = 0.1
+	
+	combat_rating = 11
+	command_modifier = {
+		defence = 0.015
+	}
+	
+	picture = "GFX_armor_elven"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 5
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_elven_flawless = {
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.20
+	
+	combat_rating = 13
+	command_modifier = {
+		defence = 0.015
+	}
+	
+	picture = "GFX_armor_elven"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 7
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_shrouded = {
+	martial = 1
+	intrigue = 2
+	health = 0.3
+	
+	quality = 2
+	
+	combat_rating = 7
+	
+	picture = "GFX_armor_shrouded"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_shrouded_superior = {
+	martial = 1
+	intrigue = 2
+	health = 0.4
+	
+	quality = 4
+	
+	combat_rating = 9
+	
+	picture = "GFX_armor_shrouded"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_shrouded_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 2
+	intrigue = 2
+	health = 0.5
+	
+	quality = 5
+	
+	combat_rating = 11
+	
+	picture = "GFX_armor_shrouded"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_akaviri = {
+	martial = 2
+	health = 0.25
+	combat_rating = 4
+	command_modifier = {
+		defence = 0.0125
+	}
+	
+	picture = "GFX_armor_akaviri"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_akaviri_superior = {
+	martial = 2
+	health = 0.30
+	combat_rating = 6
+	command_modifier = {
+		defence = 0.0125
+	}
+	
+	picture = "GFX_armor_akaviri"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_akaviri_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 3
+	health = 0.35
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.0125
+	}
+	
+	picture = "GFX_armor_akaviri"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_dwarven = {
+	martial = 1
+	health = 0.25
+	monthly_character_prestige = 0.1
+	
+	combat_rating = 9 #2/13/18 Ev: modified 1 -> 2, 1 felt a bit low for Dwemeri craft.
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_dwarven"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 5
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_dwarven_superior = {
+	martial = 1
+	health = 0.30
+	monthly_character_prestige = 0.15
+	
+	combat_rating = 11
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_dwarven"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 6
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_dwarven_flawless = {
+	martial = 1
+	health = 0.25
+	monthly_character_prestige = 0.1
+	
+	combat_rating = 13
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_dwarven"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 7
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_bonemold = {
+	martial = 1
+	health = 0.25
+	monthly_character_prestige = 0.05
+	
+	combat_rating = 7
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_bonemold"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_bonemold_superior = {
+	martial = 1
+	health = 0.25
+	monthly_character_prestige = 0.10
+	
+	combat_rating = 9
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_bonemold"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_bonemold_flawless = {
+	martial = 2
+	health = 0.35
+	monthly_character_prestige = 0.20
+	
+	combat_rating = 11
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_bonemold"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+	}
+}
+###
+armor_glass = {
+	martial = 2
+	health = 0.25
+	monthly_character_prestige = 0.15
+	
+	combat_rating = 14
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_glass"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 6
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard #2/14/18 Ev: modified average -> hard, too easy to steal for its value
+		quality_normal
+	}
+}
+armor_glass_superior = {
+	martial = 2
+	health = 0.25
+	monthly_character_prestige = 0.20
+	
+	combat_rating = 16
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_glass"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 7
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_glass_flawless = {
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.30
+	
+	combat_rating = 18
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_glass"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+
+	quality = 8
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_akaviri_metal = {
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.2
+	
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_akaviri_metal"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_akaviri_metal_superior = {
+	martial = 3
+	health = 0.35
+	monthly_character_prestige = 0.25
+	
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_akaviri_metal"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_akaviri_metal_flawless = {
+	martial = 4
+	health = 0.50
+	monthly_character_prestige = 0.35
+	
+	combat_rating = 12
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_akaviri_metal"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_blades = { #@Etienne: I'll look at rebalancing these again if we ever make a Blades society. - Ev
+	martial = 4
+	health = 0.3
+	monthly_character_prestige = 0.15
+	
+	combat_rating = 7 #This feels a little low for heavy armor but I suppose combat_rating is mostly in weapons and stat boosts are in armor.
+	#Eventually I want to look at every single combat check and multiply them by a factor of about 2.5 so I can be a bit less restricted with combat_rating in artifacts.
+	#Then again, maybe my weird artifact fixation will pass by that time and it will be unnecessary.
+	#Still, food for thought...
+	
+	command_modifier = {
+		defence = 0.0175
+		morale_defence = 0.01
+	}
+	
+	picture = "GFX_armor_blades"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_blades_superior = {
+	martial = 4
+	intrigue = 1 #what's this?! a bonus stat?!
+	health = 0.35
+	monthly_character_prestige = 0.20
+	
+	combat_rating = 9
+	command_modifier = {
+		defence = 0.0175
+		morale_defence = 0.01
+	}
+	
+	picture = "GFX_armor_blades"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_blades_flawless = {
+	martial = 4
+	intrigue = 2 #why yes, it is a bonus stat! 
+	health = 0.45
+	monthly_character_prestige = 0.30
+	
+	combat_rating = 11
+	command_modifier = {
+		defence = 0.0175
+		morale_defence = 0.01
+	}
+	
+	picture = "GFX_armor_blades"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 6
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_ancient_falmer = {
+	martial = 3 #2/15/18 Ev: modified 2 -> 3
+	health = 0.25
+	monthly_character_prestige = 0.2
+	
+	general_opinion = 3 #2/14/18 Ev: modified 0 -> 3, to match weapon counterpart
+	
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.025
+		morale_defence = 0.01
+	}
+	
+	picture = "GFX_armor_ancient_falmer"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_ancient_falmer_superior = {
+	martial = 3
+	health = 0.30
+	monthly_character_prestige = 0.25
+	
+	general_opinion = 4
+	
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.030
+		morale_defence = 0.015
+	}
+	
+	picture = "GFX_armor_ancient_falmer"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 5
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_ancient_falmer_flawless = {
+	martial = 4
+	health = 0.40
+	monthly_character_prestige = 0.35
+	
+	general_opinion = 5
+	
+	combat_rating = 12
+	command_modifier = {
+		defence = 0.025
+		morale_defence = 0.01
+	}
+	
+	picture = "GFX_armor_ancient_falmer"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 6
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_chitin = {
+	martial = 1
+	health = 0.25
+	combat_rating = 3
+	command_modifier = {
+		defence = 0.02
+	}
+	
+	picture = "GFX_armor_chitin"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 1
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_chitin_superior = {
+	martial = 1
+	health = 0.30
+	combat_rating = 5
+	command_modifier = {
+		defence = 0.03
+	}
+	
+	picture = "GFX_armor_chitin"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_chitin_flawless = {
+	monthly_character_prestige = 0.10
+	martial = 2
+	health = 0.40
+	combat_rating = 7
+	command_modifier = {
+		defence = 0.04
+	}
+	
+	picture = "GFX_armor_chitin"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_orcish = {
+	martial = 3
+	health = 0.25
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_orcish"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_orcish_superior = {
+	martial = 3
+	health = 0.30
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_orcish"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_orcish_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 4
+	health = 0.40
+	combat_rating = 12
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_orcish"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_steel = {
+	martial = 1 #2/16/18 Ev: modified 2 -> 1 to keep a reasonable tier progression
+	health = 0.25
+	monthly_character_prestige = 0.05
+	combat_rating = 6
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_steel"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 1
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_steel_superior = {
+	martial = 1
+	health = 0.25
+	monthly_character_prestige = 0.10
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_steel"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_steel_flawless = {
+	martial = 2
+	health = 0.25
+	monthly_character_prestige = 0.20
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.025
+	}
+	
+	picture = "GFX_armor_steel"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_nord_carved = {
+	martial = 3
+	health = 0.25
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.02
+		winter_combat = 0.1
+	}
+	
+	picture = "GFX_armor_nord_carved"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_nord_carved_superior = {
+	martial = 3
+	health = 0.25
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.02
+		winter_combat = 0.1
+	}
+	
+	picture = "GFX_armor_nord_carved"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 5
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_nord_carved_flawless = {
+	monthly_character_prestige = 0.10
+	martial = 4
+	health = 0.25
+	combat_rating = 12
+	command_modifier = {
+		defence = 0.02
+		winter_combat = 0.1
+	}
+	
+	picture = "GFX_armor_nord_carved"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 6
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+armor_nord_carved_heroic = {
+	monthly_character_prestige = 0.125
+	martial = 5
+	health = 0.35
+	combat_rating = 14
+	command_modifier = {
+		defence = 0.03
+		winter_combat = 0.125
+		morale_defence = 0.01
+	}
+	
+	picture = "GFX_armor_nord_carved"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 7
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_ebony = {
+	martial = 3 #2/16/18 Ev: modified 2 -> 3 to keep a reasonable tier progression
+	health = 0.25
+	monthly_character_prestige = 0.2
+	
+	combat_rating = 16
+	command_modifier = {
+		defence = 0.03
+	}
+	
+	picture = "GFX_armor_ebony"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 5
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_ebony_superior = {
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.25
+	
+	combat_rating = 18
+	command_modifier = {
+		defence = 0.03
+	}
+	
+	picture = "GFX_armor_ebony"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 7
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_ebony_flawless = {
+	martial = 4
+	health = 0.25
+	monthly_character_prestige = 0.35
+	
+	combat_rating = 20
+	command_modifier = {
+		defence = 0.03
+	}
+	
+	picture = "GFX_armor_ebony"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 9
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_dragonbone = {
+	martial = 3 #2/16/18 Ev: modified 1 -> 3 to keep a reasonable tier progression
+	health = 0.3 #Ditto, 0.25 -> 0.3
+	monthly_character_prestige = 0.2
+	
+	combat_rating = 19
+	command_modifier = {
+		defence = 0.03
+	}
+	
+	picture = "GFX_armor_dragonbone"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 8
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_dragonbone_superior = {
+	martial = 3
+	health = 0.4
+	monthly_character_prestige = 0.25
+	
+	combat_rating = 21
+	command_modifier = {
+		defence = 0.03
+	}
+	
+	picture = "GFX_armor_dragonbone"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 9
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_dragonbone_flawless = {
+	martial = 4
+	health = 0.5
+	monthly_character_prestige = 0.35
+	
+	combat_rating = 23
+	command_modifier = {
+		defence = 0.03
+	}
+	
+	picture = "GFX_armor_dragonbone"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 10 #Daedric Frame
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_daedric = {
+	martial = 3 #2/16/18 Ev: modified 1 -> 3 to keep a reasonable tier progression
+	health = 0.25
+	monthly_character_prestige = 0.1
+	
+	combat_rating = 20
+	command_modifier = {
+		defence = 0.035
+		morale_offence = 0.015
+	}
+	
+	picture = "GFX_armor_daedric"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 8
+	
+	flags = {
+		armor
+		daedric_artifact
+		heavy_armor
+		theft_dr_extreme
+		quality_normal
+	}
+}
+armor_daedric_superior = {
+	martial = 3
+	health = 0.25
+	monthly_character_prestige = 0.15
+	
+	combat_rating = 22
+	command_modifier = {
+		defence = 0.035
+		morale_offence = 0.015
+	}
+	
+	picture = "GFX_armor_daedric"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 9
+	
+	flags = {
+		armor
+		daedric_artifact
+		heavy_armor
+		theft_dr_extreme
+		quality_superior
+	}
+}
+armor_daedric_flawless = {
+	martial = 4
+	health = 0.25
+	monthly_character_prestige = 0.25
+	
+	combat_rating = 24
+	command_modifier = {
+		defence = 0.035
+		morale_offence = 0.015
+	}
+	
+	picture = "GFX_armor_daedric"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 10 #Daedric Frame
+	
+	flags = {
+		armor
+		daedric_artifact
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_breton = {
+	martial = 2
+	health = 0.25
+	combat_rating = 8
+	command_modifier = {
+		morale_defence = 0.025
+		defence = 0.025
+		cavalry = 0.025
+	}
+	
+	picture = "GFX_armor_breton"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_breton_superior = {
+	martial = 2
+	health = 0.25
+	combat_rating = 10
+	command_modifier = {
+		morale_defence = 0.025
+		defence = 0.025
+		cavalry = 0.025
+	}
+	
+	picture = "GFX_armor_breton"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_breton_flawless = {
+	monthly_character_prestige = 0.10
+	martial = 3
+	health = 0.25
+	combat_rating = 12
+	command_modifier = {
+		morale_defence = 0.025
+		defence = 0.025
+		cavalry = 0.025
+	}
+	
+	picture = "GFX_armor_breton"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_heavy_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		heavy_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_yokudan = {
+	martial = 2 
+	health = 0.25
+	combat_rating = 8
+	
+	#No command modifier, this armor will emphasize single combat.
+	
+	picture = "GFX_armor_yokudan"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_yokudan_superior = {
+	martial = 2
+	health = 0.25
+	combat_rating = 10
+	
+	#No command modifier, this armor will emphasize single combat.
+	
+	picture = "GFX_armor_yokudan"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_yokudan_flawless = {
+	monthly_character_prestige = 0.10
+	martial = 3
+	health = 0.25
+	combat_rating = 12
+	
+	#No command modifier, this armor will emphasize single combat.
+	
+	picture = "GFX_armor_yokudan"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_ayleid = {
+	martial = 1
+	learning = 1
+	health = 0.30
+	monthly_character_prestige = 0.08
+	
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.015
+	}
+	
+	picture = "GFX_armor_ayleid"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_ayleid_superior = {
+	martial = 1
+	learning = 1
+	health = 0.35
+	monthly_character_prestige = 0.15
+	
+	combat_rating = 10
+	command_modifier = {
+		defence = 0.015
+	}
+	
+	picture = "GFX_armor_ayleid"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_ayleid_flawless = {
+	martial = 2
+	learning = 1
+	health = 0.5
+	monthly_character_prestige = 0.25
+	
+	combat_rating = 12
+	command_modifier = {
+		defence = 0.015
+	}
+	
+	picture = "GFX_armor_ayleid"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_medium_armor = yes
+	}
+	
+	quality = 5
+	
+	flags = {
+		armor
+		medium_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_bosmer = {
+	martial = 1
+	health = 0.25
+	combat_rating = 8
+	
+	command_modifier = { #Another case of 'making this not absolutely suck' - I don't want any culturals to be a downgrade of the basic steel armor.
+		defence = 0.025 #Plus this might help avert the consistent Valenwood steamroll.
+		speed = 0.025 #Will run a few test games once the overhaul is complete.
+	}
+	
+	picture = "GFX_armor_bosmer"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_bosmer_superior = {
+	martial = 1
+	health = 0.25
+	combat_rating = 10
+	
+	command_modifier = {
+		defence = 0.025 
+		speed = 0.025
+	}
+	
+	picture = "GFX_armor_bosmer"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_bosmer_flawless = {
+	monthly_character_prestige = 0.10
+	martial = 2
+	health = 0.25
+	combat_rating = 12
+	
+	command_modifier = {
+		defence = 0.025 
+		speed = 0.025
+	}
+	
+	picture = "GFX_armor_bosmer"
+	stacking = yes
+	slot = torso
+		
+	active = {
+		can_wear_light_armor = yes
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}
+###
+armor_khajiit = {
+	martial = 1
+	intrigue = 1
+	health = 0.25
+	combat_rating = 4
+	
+	command_modifier = {
+		speed = 0.05
+	}
+	
+	picture = "GFX_armor_khajiiti"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_light_armor = yes
+		trait = khajiit #armor designed for beast races won't fit others so well.
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_normal
+	}
+}
+armor_khajiit_superior = {
+	martial = 1
+	intrigue = 1
+	health = 0.25
+	combat_rating = 6
+	
+	command_modifier = {
+		speed = 0.05
+	}
+	
+	picture = "GFX_armor_khajiiti"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_light_armor = yes
+		trait = khajiit #armor designed for beast races won't fit others so well.
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_superior
+	}
+}
+armor_khajiit_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 2
+	intrigue = 1
+	health = 0.25
+	combat_rating = 8
+	
+	command_modifier = {
+		speed = 0.05
+	}
+	
+	picture = "GFX_armor_khajiiti"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		can_wear_light_armor = yes
+		trait = khajiit #armor designed for beast races won't fit others so well.
+	}
+	
+	quality = 4
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_extreme
+		quality_flawless
+	}
+}
+###
+armor_argonian = {
+	martial = 1
+	health = 0.25
+	combat_rating = 4
+	command_modifier = {
+		defence = 0.025
+		speed = 0.025
+		terrain = argonia
+	}
+	
+	picture = "GFX_armor_argonian"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		trait = argonian
+		can_wear_light_armor = yes
+	}
+	
+	quality = 1
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_normal
+	}
+}
+armor_argonian_superior = {
+	martial = 1
+	health = 0.25
+	combat_rating = 6
+	command_modifier = {
+		defence = 0.025
+		speed = 0.025
+		terrain = argonia
+	}
+	
+	picture = "GFX_armor_argonian"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		trait = argonian
+		can_wear_light_armor = yes
+	}
+	
+	quality = 2
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_average
+		quality_superior
+	}
+}
+armor_argonian_flawless = {
+	monthly_character_prestige = 0.1
+	martial = 2
+	health = 0.25
+	combat_rating = 8
+	command_modifier = {
+		defence = 0.025
+		speed = 0.025
+		terrain = argonia
+	}
+	
+	picture = "GFX_armor_argonian"
+	stacking = yes
+	slot = torso
+			
+	active = {
+		trait = argonian
+		can_wear_light_armor = yes
+	}
+	
+	quality = 3
+	
+	flags = {
+		armor
+		light_armor
+		theft_dr_hard
+		quality_flawless
+	}
+}

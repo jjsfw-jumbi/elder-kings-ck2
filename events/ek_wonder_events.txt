@@ -1,0 +1,1954 @@
+namespace = ekwonder
+
+#Famous Blacksmith attracted by Skyforge
+#Setup Event (Blacksmith, or Engineer?)
+letter_event = {
+	id = ekwonder.0
+	hide_window = yes
+	is_triggered_only = yes
+	
+	only_independent = yes
+	in_command = no
+	prisoner = no
+	war = no
+	
+	trigger = {
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		any_realm_wonder = {
+			has_wonder_upgrade = upgrade_skyforge_master
+			is_active = yes
+		}
+		NOT = { has_character_modifier = sfb_timer }
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		create_character = {
+			female = 40
+			culture = random
+			religion = random
+			dynasty = random
+			trait = warrior_2
+			trait = trader_2
+		}
+		new_character = {
+			random_list = {
+				40 = { add_trait = engineer }
+				60 = { add_trait = blacksmith }
+			}
+			random_list = {
+				25 = { add_trait = battlemage_1 }
+				25 = { add_trait = savant_1 }
+				25 = { add_trait = bard_1 }
+				25 = { add_trait = nightblade_1 }
+			}
+			assign_birthsign = yes
+			assign_racial_trait = yes
+			if = { limit = { is_mer = yes age < 175 } add_age = 75 }
+			else_if = { limit = { is_mer = no age < 30} add_age = 15 }
+			save_event_target_as = generated_forgemaster
+		}
+		add_character_modifier = {
+			name = sfb_timer
+			years = 15
+			hidden = yes
+		}
+		character_event = { id = ekwonder.1 }
+	}
+}
+character_event = {
+	id = ekwonder.1
+	desc = ekwonder.1.d
+	picture = GFX_evt_weaponsmith
+	hide_from = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.1.opt1
+		if = {
+			limit = { has_assigned_minor_title = title_skyforge_master }
+			any_courtier_or_vassal = {
+				show_portrait = yes
+				limit = { has_minor_title = title_skyforge_master }
+				opinion = {
+					modifier = opinion_disappointed
+					who = ROOT
+					years = 10
+				}
+				remove_title = title_skyforge_master
+			}
+			event_target:generated_forgemaster = {
+				give_minor_title = title_skyforge_master
+				opinion = {
+					modifier = opinion_pleased
+					who = ROOT
+					years = 15
+				}
+			}
+		}
+		else = {
+			event_target:generated_forgemaster = {
+				give_minor_title = title_skyforge_master
+				opinion = {
+					modifier = opinion_pleased
+					who = ROOT
+					years = 15
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.1.opt2
+		trigger = { has_assigned_minor_title = title_skyforge_master }
+		event_target:generated_forgemaster = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 3
+			}
+		}
+		transfer_scaled_wealth = { to = event_target:generated_forgemaster value = 0.1 }
+	}
+	option = {
+		name = ekwonder.1.opt3
+		event_target:generated_forgemaster = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+			random_playable_ruler = {
+				limit = { NOT = { character = ROOT } religion = PREV }
+				save_event_target_as = new_court
+			}
+			move_character = event_target:new_court
+		}
+	}
+}
+
+# Forge something at the Skyforge
+character_event = {
+	id = ekwonder.5
+	desc = ekwonder.5.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.5.optA
+		
+		custom_tooltip = { text = skyforge_forge_sword_axe_ct }
+		
+		character_event = { id = ekwonder.6 days = 7 random = 3 }
+	}
+	
+	option = {
+		name = ekwonder.5.optB
+		
+		custom_tooltip = { text = skyforge_forge_armor_shield_ct }
+		
+		character_event = { id = ekwonder.7 days = 7 random = 3 }
+	}
+	
+	option = {
+		name = ekwonder.5.optC
+		
+		custom_tooltip = { text = skyforge_forge_amulet_ct }
+		
+		character_event = { id = ekwonder.8 days = 7 random = 3 }
+	}
+	
+	option = {
+		name = ekwonder.5.optD
+		
+		clr_character_flag = used_skyforge_recently
+	}
+}
+
+# Weapon: Sword/Axe
+character_event = {
+	id = ekwonder.6
+	desc = ekwonder.6.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.6.optA
+		
+		custom_tooltip = { text = skyforge_forge_sword_ct }
+		
+		set_character_flag = skyforge_wants_nord_sword
+		character_event = { id = ekwonder.9 days = 20 random = 7 }
+	}
+	
+	option = {
+		name = ekwonder.6.optB
+		
+		custom_tooltip = { text = skyforge_forge_axe_ct }
+		
+		set_character_flag = skyforge_wants_nord_axe
+		character_event = { id = ekwonder.9 days = 20 random = 7 }
+	}
+}
+	
+# Armor: Nord Carved/Shield
+character_event = {
+	id = ekwonder.7
+	desc = ekwonder.7.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.7.optA
+		
+		custom_tooltip = { text = skyforge_forge_armor_ct }
+		
+		set_character_flag = skyforge_wants_nord_carved
+		character_event = { id = ekwonder.9 days = 20 random = 7 }
+	}
+	
+	option = {
+		name = ekwonder.7.optB
+		
+		custom_tooltip = { text = skyforge_forge_shield_ct }
+		
+		set_character_flag = skyforge_wants_nord_shield
+		character_event = { id = ekwonder.9 days = 20 random = 7 }
+	}
+}
+
+# Amulet: Ancient Nord Amulet
+character_event = {
+	id = ekwonder.8
+	desc = ekwonder.8.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.8.optA
+		
+		scaled_wealth = { value = -1 min = -25 max = -100 }
+		
+		add_artifact = amulet_of_nord
+	}
+	
+	option = {
+		name = ekwonder.8.optB
+		
+		scaled_wealth = { value = -1 min = -25 max = -100 }
+		
+		add_artifact = amulet_of_skaal
+	}
+}
+
+## Event 1: Material quality
+character_event = {
+	id = ekwonder.9
+	desc = ekwonder.9.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_variable = { which = artifact_quality value = 1 }
+	}
+	
+	option = {
+		name = ekwonder.9.optA
+		
+		scaled_wealth = { value = -2 min = -100 max = -1000 }
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_RAISE_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = 1 }
+			}
+		}
+	}
+	
+	option = {
+		name = ekwonder.9.optB
+		
+		scaled_wealth = { value = -1 min = -50 max = -500 }
+	}
+	
+	option = {
+		name = ekwonder.9.optC
+		
+		scaled_wealth = { value = -0.1 min = -10 max = -100 }
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_LOWER_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = -1 }
+			}
+		}
+	}
+	
+	option = {
+		name = ekwonder.9.optD
+		
+		tooltip_info_custom = is_trader_tooltip_info
+		trigger = { is_trader = yes }
+		
+		scaled_wealth = { value = -1.5 min = -75 max = -750 }
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_RAISE_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = 1 }
+			}
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = ekwonder.10 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.11 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.19 days = 20 random = 7 } }
+			}
+		}
+	}
+}
+
+## Event 2: Work through injury?
+character_event = {
+	id = ekwonder.10
+	desc = ekwonder.10.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.10.optA
+		
+		add_trait_wounded_effect = yes
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_RAISE_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = 1 }
+			}
+		}
+	}
+	
+	option = {
+		name = ekwonder.10.optB
+	}
+	
+	option = {
+		name = ekwonder.10.optC
+		
+		tooltip_info_custom = is_strong_tooltip_info
+		trigger = { is_strong_trigger = yes }
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_RAISE_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = 1 }
+			}
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = ekwonder.11 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.12 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.19 days = 20 random = 7 } }
+			}
+		}
+	}
+}
+
+## Event 3: Mistake during forging
+character_event = {
+	id = ekwonder.11
+	desc = ekwonder.11.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.11.optA
+		
+		scaled_wealth = { value = -1 min = -50 max = -500 }
+	}
+	
+	option = {
+		name = ekwonder.11.optB
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_LOWER_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = -1 }
+			}
+		}
+	}
+	
+	option = {
+		name = ekwonder.11.optC
+		
+		tooltip_info_custom = is_blacksmith_tooltip_info
+		trigger = { trait = blacksmith }
+		
+		scaled_wealth = { value = -0.25 min = -10 max = -100 }
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = ekwonder.12 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.13 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.19 days = 20 random = 7 } }
+			}
+		}
+	}
+}
+
+## Event 4: Mage offers to enchant
+character_event = {
+	id = ekwonder.12
+	desc = ekwonder.12.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.12.optA
+		
+		scaled_wealth = { value = -2 min = -100 max = -1000 }
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_RAISE_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = 1 }
+			}
+		}
+	}
+	
+	option = {
+		name = ekwonder.12.optB
+	}
+	
+	option = {
+		name = ekwonder.12.optC
+		
+		tooltip_info = learning
+		trigger = { is_spellcaster = yes learning = 20 }
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_RAISE_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = 1 }
+			}
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = ekwonder.13 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.14 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.19 days = 20 random = 7 } }
+			}
+		}
+	}
+}
+
+## Event 5: Skyforge damaged
+character_event = {
+	id = ekwonder.13
+	desc = ekwonder.13.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.13.optA
+		
+		set_character_flag = skyforged_was_damaged
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = ekwonder.14 days = 20 random = 7 } }
+				#33 = { character_event = { id = ekwonder.15 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.19 days = 20 random = 7 } }
+			}
+		}
+	}
+}
+
+## Event 6: Lack of blueprints and previous examples
+character_event = {
+	id = ekwonder.14
+	desc = ekwonder.14.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ekwonder.14.optA
+		
+		scaled_wealth = { value = -1 min = -50 max = -500 }
+	}
+	
+	option = {
+		name = ekwonder.14.optB
+		
+		custom_tooltip = {
+			text = SKYFORGE_CRAFTING_LOWER_QUALITY_CT
+			hidden_tooltip = {
+				change_variable = { which = artifact_quality value = -1 }
+			}
+		}
+	}
+	
+	option = {
+		name = ekwonder.14.optC
+		
+		tooltip_info_custom = is_part_warrior_guild_tooltip_info
+		trigger = { is_member_martial_guild = yes }
+		
+		detract_society_currency_medium_effect = yes
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				#33 = { character_event = { id = ekwonder.15 days = 20 random = 7 } }
+				#33 = { character_event = { id = ekwonder.16 days = 20 random = 7 } }
+				33 = { character_event = { id = ekwonder.19 days = 20 random = 7 } }
+			}
+		}
+	}
+}
+
+## Final Event: Get the artifact
+character_event = {
+	id = ekwonder.19
+	desc = ekwonder.19.d
+	picture = GFX_evt_weaponsmith
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = { check_variable = { which = artifact_quality value <= 0 } }
+		name = ekwonder.19.optA
+		
+		custom_tooltip = { text = skyforge_no_artifact_ct }
+		
+		prestige = -50
+	}
+	
+	option = {
+		trigger = { check_variable = { which = artifact_quality value == 1 } }
+		name = ekwonder.19.optB
+		
+		trigger_switch = {
+			on_trigger = has_character_flag
+			skyforge_wants_nord_sword	= { add_artifact = weapon_sword_nord }
+			skyforge_wants_nord_axe		= { add_artifact = weapon_axe_nord }
+			skyforge_wants_nord_shield	= { add_artifact = shield_nord }
+			skyforge_wants_nord_carved	= { add_artifact = armor_nord_carved }
+		}
+			
+	}
+	
+	option = {
+		trigger = { check_variable = { which = artifact_quality value == 2 } }
+		name = ekwonder.19.optC
+		
+		trigger_switch = {
+			on_trigger = has_character_flag
+			skyforge_wants_nord_sword	= { add_artifact = weapon_sword_nord_superior }
+			skyforge_wants_nord_axe		= { add_artifact = weapon_axe_nord_superior }
+			skyforge_wants_nord_shield	= { add_artifact = shield_nord_superior }
+			skyforge_wants_nord_carved	= { add_artifact = armor_nord_carved_superior }
+		}
+			
+	}
+	
+	option = {
+		#trigger = { check_variable = { which = artifact_quality value == 3 } }
+		trigger = { check_variable = { which = artifact_quality value >= 3 } }
+		name = ekwonder.19.optD
+		
+		trigger_switch = {
+			on_trigger = has_character_flag
+			skyforge_wants_nord_sword	= { add_artifact = weapon_sword_nord_flawless }
+			skyforge_wants_nord_axe		= { add_artifact = weapon_axe_nord_flawless }
+			skyforge_wants_nord_shield	= { add_artifact = shield_nord_flawless }
+			skyforge_wants_nord_carved	= { add_artifact = armor_nord_carved_flawless }
+		}
+			
+	}
+	
+	option = {
+		trigger = { check_variable = { which = artifact_quality value >= 4 } always = no }
+		name = ekwonder.19.optE
+		
+		trigger_switch = {
+			on_trigger = has_character_flag
+			skyforge_wants_nord_sword	= { add_artifact = weapon_sword_nord_heroic }
+			skyforge_wants_nord_axe		= { add_artifact = weapon_axe_nord_heroic }
+			skyforge_wants_nord_shield	= { add_artifact = shield_nord_heroic }
+			skyforge_wants_nord_carved	= { add_artifact = armor_nord_carved_heroic }
+		}
+			
+	}
+	
+	after = {
+		clr_character_flag = skyforge_wants_nord_sword
+		clr_character_flag = skyforge_wants_nord_axe
+		clr_character_flag = skyforge_wants_nord_shield
+		clr_character_flag = skyforge_wants_nord_carved
+	}
+}
+
+#Alcoholic Beverages
+character_event = {
+	id = ekwonder.20
+	desc = ekwonder.20.d
+	picture = GFX_evt_emissary
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				any_realm_wonder_upgrade = {
+					count > 3
+					has_wonder_upgrade_flag = produces_alcohol
+					is_active = yes
+				}
+			}
+			if = {
+				limit = { is_wine_culture = yes }
+				set_variable = { which = alcohol_marker value = 1 }
+			}
+			else_if = {
+				limit = { is_mead_culture = yes }
+				set_variable = { which = alcohol_marker value = 2 }
+			}
+			else_if = {
+				limit = { is_sake_culture = yes }
+				set_variable = { which = alcohol_marker value = 3 }
+			}
+			else_if = {
+				limit = { is_arrack_culture = yes }
+				set_variable = { which = alcohol_marker value = 4 }
+			}
+			else_if = {
+				limit = { is_kumis_culture = yes }
+				set_variable = { which = alcohol_marker value = 5 }
+			}
+		}
+	}
+	
+	option = { name = ekwonder.20.opt.7 }
+	option = {
+		name = ekwonder.20.opt.1 #Ale
+		trigger = {
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = produces_alcohol
+				is_active = yes
+				wonder_upgrade = upgrade_brewery
+			}
+		}
+		event_target:alcohol_recipient = {
+			if = {
+				limit = {
+					OR = {
+						trait = temperate
+						AND = {
+							true_religion = green_pact
+							event_target:alcohol_giver = { NOR = { true_religion = green_pact religion = green_pact } }
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_disrespects_me
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						trait = drunkard
+						trait = hedonist
+						true_religion = daedra_sanguine
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol_drunkard
+				}
+			}
+			else = {
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.20.opt.2 #Wine
+		trigger = {
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = produces_alcohol
+				is_active = yes
+				wonder_upgrade = upgrade_vineyard
+			}
+			NOR = { religion = green_pact true_religion = green_pact }
+			OR = {
+				any_realm_wonder_upgrade = {
+					count < 4
+					has_wonder_upgrade_flag = produces_alcohol
+					is_active = yes
+				}
+				is_wine_culture = yes
+				event_target:alcohol_recipient = { is_wine_culture = yes }
+			}
+		}
+		event_target:alcohol_recipient = {
+			if = {
+				limit = {
+					OR = {
+						trait = temperate
+						true_religion = green_pact
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_disrespects_me
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						trait = drunkard
+						trait = hedonist
+						true_religion = daedra_sanguine
+						is_wine_culture = yes
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol_drunkard
+				}
+			}
+			else = {
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.20.opt.3 #Mead
+		trigger = {
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = produces_alcohol
+				is_active = yes
+				wonder_upgrade = upgrade_meadery
+			}
+			NOR = { religion = green_pact true_religion = green_pact }
+			OR = {
+				any_realm_wonder_upgrade = {
+					count < 4
+					has_wonder_upgrade_flag = produces_alcohol
+					is_active = yes
+				}
+				is_mead_culture = yes
+				event_target:alcohol_recipient = { is_mead_culture = yes }
+			}
+		}
+		event_target:alcohol_recipient = {
+			if = {
+				limit = {
+					OR = {
+						trait = temperate
+						true_religion = green_pact
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_disrespects_me
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						trait = drunkard
+						trait = hedonist
+						true_religion = daedra_sanguine
+						is_mead_culture = yes
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol_drunkard
+				}
+			}
+			else = {
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.20.opt.4 #Sake
+		trigger = {
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = produces_alcohol
+				is_active = yes
+				wonder_upgrade = upgrade_rice_field
+			}
+			NOR = { religion = green_pact true_religion = green_pact }
+			OR = {
+				any_realm_wonder_upgrade = {
+					count < 4
+					has_wonder_upgrade_flag = produces_alcohol
+					is_active = yes
+				}
+				is_sake_culture = yes
+				event_target:alcohol_recipient = { is_sake_culture = yes }
+			}
+		}
+		event_target:alcohol_recipient = {
+			if = {
+				limit = {
+					OR = {
+						trait = temperate
+						true_religion = green_pact
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_disrespects_me
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						trait = drunkard
+						trait = hedonist
+						true_religion = daedra_sanguine
+						is_sake_culture = yes
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol_drunkard
+				}
+			}
+			else = {
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.20.opt.5 #Arrack
+		trigger = {
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = produces_alcohol
+				is_active = yes
+				wonder_upgrade = upgrade_coconut_orchard
+			}
+			event_target:alcohol_recipient = {
+				NOR = {
+					religion = green_pact
+					true_religion = green_pact
+				}
+			}
+			NOR = { religion = green_pact true_religion = green_pact }
+			OR = {
+				any_realm_wonder_upgrade = {
+					count < 4
+					has_wonder_upgrade_flag = produces_alcohol
+					is_active = yes
+				}
+				is_arrack_culture = yes
+				event_target:alcohol_recipient = { is_arrack_culture = yes }
+			}
+		}
+		event_target:alcohol_recipient = {
+			if = {
+				limit = {
+					OR = {
+						trait = temperate
+						true_religion = green_pact
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_disrespects_me
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						trait = drunkard
+						trait = hedonist
+						true_religion = daedra_sanguine
+						is_arrack_culture = yes
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol_drunkard
+				}
+			}
+			else = {
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.20.opt.6 #Kumis
+		trigger = {
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = produces_alcohol
+				is_active = yes
+				wonder_upgrade = upgrade_dairy_brewer
+			}
+			OR = {
+				any_realm_wonder_upgrade = {
+					count < 4
+					has_wonder_upgrade_flag = produces_alcohol
+					is_active = yes
+				}
+				is_kumis_culture = yes
+				event_target:alcohol_recipient = { is_kumis_culture = yes }
+			}
+		}
+		event_target:alcohol_recipient = {
+			if = {
+				limit = {
+					OR = {
+						trait = temperate
+						AND = {
+							true_religion = green_pact
+							event_target:alcohol_giver = { NOR = { true_religion = green_pact religion = green_pact } }
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_disrespects_me
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						trait = drunkard
+						trait = hedonist
+						true_religion = daedra_sanguine
+						is_kumis_culture = yes
+					}
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol_drunkard
+				}
+			}
+			else = {
+				opinion = {
+					who = FROM
+					modifier = opinion_gifted_alcohol
+				}
+			}
+		}
+	}
+	
+	after = {
+		event_target:alcohol_giver = {
+			add_character_modifier = {
+				name = recently_sent_alcohol_gift
+				duration = 365
+				hidden = yes	
+			}
+		}
+		event_target:alcohol_recipient = {
+			add_character_modifier = {
+				name = recently_recieved_alcohol_gift
+				duration = 365
+				hidden = yes	
+			}
+		}
+	}
+}
+
+#Meditative Retreat
+character_event = {
+	id = ekwonder.25
+	desc = ekwonder.25.d
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.25.opt
+		add_character_modifier = {
+			name = enlightened_meditation
+			years = 3
+		}
+	}
+}
+#Recruit Surgeon
+character_event = {
+	id = ekwonder.26
+	desc = {
+		text = ekwonder.26.barber
+		trigger = { event_target:invited_character = { has_nickname = nick_the_barber } }
+		picture = GFX_evt_emissary_indo_aryan_group
+	}
+	desc = {
+		text = ekwonder.26.alienist
+		trigger = { event_target:invited_character = { has_nickname = nick_the_alienist } }
+		picture = GFX_evt_uncomfortable
+	}
+	desc = {
+		text = ekwonder.26.phylogenist
+		trigger = { event_target:invited_character = { has_nickname = nick_the_phylogenist } }
+		picture = GFX_evt_scientist
+	}
+	desc = {
+		text = ekwonder.26.chemist
+		trigger = { event_target:invited_character = { has_nickname = nick_the_chemist } }
+		picture = GFX_evt_alchemy
+	}
+	desc = {
+		text = ekwonder.26.sawbones
+		trigger = { event_target:invited_character = { has_nickname = nick_the_sawbones } }
+		picture = GFX_evt_bloody_tools
+	}
+	desc = {
+		text = ekwonder.26
+		trigger = {
+			event_target:invited_character = {
+				NOR = {
+					has_nickname = nick_the_sawbones
+					has_nickname = nick_the_chemist
+					has_nickname = nick_the_phylogenist
+					has_nickname = nick_the_alienist
+					has_nickname = nick_the_barber
+				}
+			}
+		}
+		picture = GFX_evt_emissary
+	}
+	picture = GFX_evt_emissary
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.26.opt1
+		if = {
+			limit = { has_assigned_minor_title = title_court_physician }
+			any_courtier_or_vassal = {
+				show_portrait = yes
+				limit = { has_minor_title = title_court_physician }
+				opinion = {
+					modifier = opinion_disappointed
+					who = ROOT
+					years = 10
+				}
+				remove_title = title_court_physician
+			}
+			event_target:invited_character = {
+				give_minor_title = title_court_physician
+				opinion = {
+					modifier = opinion_pleased
+					who = ROOT
+					years = 15
+				}
+			}
+		}
+		else = {
+			event_target:invited_character = {
+				give_minor_title = title_court_physician
+				opinion = {
+					modifier = opinion_pleased
+					who = ROOT
+					years = 15
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.26.opt2
+		transfer_scaled_wealth = { to = event_target:invited_character value = 0.15 }
+	}
+	option = {
+		name = EVTOPTB_NE_1
+		event_target:invited_character = {
+			opinion = {
+				modifier = opinion_disappointed
+				who = ROOT
+				years = 10
+			}
+			custom_tooltip = {
+				text = leaves_court_tt
+				hidden_tooltip = {
+					random_playable_ruler = {
+						limit = { NOT = { character = ROOT } religion = PREV }
+						save_event_target_as = new_court
+					}
+					move_character = event_target:new_court
+				}
+			}
+		}
+	}
+}
+
+#on_action events
+character_event = {
+	id = ekwonder.30
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			OR = {
+				has_wonder_upgrade = upgrade_imperial_chapel
+				has_wonder_upgrade = upgrade_shrines_divines
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				religion = eight_divines
+				FROM = { has_wonder_upgrade = upgrade_imperial_chapel }
+			}
+			religion_authority = {
+				modifier = constructed_imperial_chapel
+			}
+		}
+		else_if = {
+			limit = {
+				religion = nine_divines
+				FROM = { has_wonder_upgrade = upgrade_imperial_chapel }
+			}
+			religion_authority = {
+				modifier = constructed_imperial_chapel
+			}
+		}
+		else_if = {
+			limit = {
+				religion = eight_divines
+				FROM = { has_wonder_upgrade = upgrade_shrines_divines }
+			}
+			religion_authority = {
+				modifier = constructed_divine_shrine
+			}
+		}
+		else_if = {
+			limit = {
+				religion = nine_divines
+				FROM = { has_wonder_upgrade = upgrade_shrines_divines }
+			}
+			religion_authority = {
+				modifier = constructed_divine_shrine
+			}
+		}
+	}
+}
+
+#Black Market
+character_event = {
+	id = ekwonder.50
+	desc = ekwonder.50.d #The Black Market isn't quite what you expected. It resembles a fairly ordinary market, one inside an apparently abandoned building and selling all manner of ordinary and illicit goods. Your disguise seems to be working, no one has recognised you and you are free to wander the market.
+	picture = GFX_evt_market
+	is_triggered_only = yes
+	
+	immediate = {
+		ROOT = { save_event_target_as = bm_shopper }
+		random = { chance = 1 set_character_flag = mudcrab_merchant_flag }
+		#Rival is given opportunity to kidnap shopper
+		if = {
+			limit = { num_of_rivals > 1 any_rival = { wealth > 100 } }
+			random_rival = {
+				limit = { wealth > 100 }
+				random = {
+					chance = 3
+					modifier = { factor = 0.25 ai = no }
+					modifier = { factor = 3 at_location = ROOT }
+					modifier = { factor = 1.25 trait = perceptive }
+					modifier = { factor = 1.25 trait = ruthless }
+					modifier = { factor = 1.25 trait = quick }
+					modifier = { factor = 1.25 is_assassin = yes }
+					modifier = { factor = 1.25 is_nightblade = yes }
+					modifier = { factor = 3 job_spymaster = { at_location = ROOT } }
+					save_event_target_as = black_market_rival
+					e_container = {
+						create_character = {
+							random_traits = no
+							trait = deceitful
+							trait = uncouth
+							trait = criminal_boss
+							culture = random
+							religion = random
+							female = 30
+						}
+						new_character = {
+							assign_birthsign = yes
+							assign_racial_trait = yes
+							if = { limit = { trait = argonian } religion = hist }
+							random = { chance = 5 add_trait = homosexual } random = { chance = 4 add_trait = bisexual }
+							random_list = { 25 = { add_trait = greedy } 25 = { add_trait = lustful } 25 = { add_trait = drunkard } 25 = { add_trait = skooma_addiction } }
+							random_list = { 25 = { add_trait = robust } 25 = { add_trait = strong } 25 = { add_trait = shrewd } 25 = { add_trait = quick } }
+							random_list = { 25 = { add_trait = reckless } 25 = { add_trait = ambitious } 25 = { add_trait = brave } 25 = { add_trait = zealous } }
+							random_list = { 25 = { add_trait = arbitrary } 25 = { add_trait = absent_minded } 25 = { add_trait = slothful } 25 = { add_trait = paranoid } }
+							random_list = { 25 = { add_trait = cruel } 25 = { add_trait = ruthless } 25 = { add_trait = paranoid } 25 = { add_trait = wroth } }
+							random_list = { 20 = { add_trait = smuggler } 20 = { add_trait = schemer } 20 = { add_trait = hedonist } 20 = { add_trait = gambler } 20 = { add_trait = pirate } }
+							save_event_target_as = black_market_kidnapper
+							event_target:black_market_rival = { letter_event = { id = ekwonder.90 } }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ekwonder.50.opt1 #Visit the Arms Dealer
+		custom_tooltip = {
+			text = ekwonder.50.opt1.tt #A Merchant of exotic Arms and Armour.
+		}
+	}
+	option = {
+		name = ekwonder.50.opt2 #Visit the Sorcerer's Bazaar
+		custom_tooltip = {
+			text = ekwonder.50.opt2.tt #A place to purchase forbidden tomes and magical paraphernalia outlawed by the Mages Guild.
+		}
+	}
+	option = {
+		name = ekwonder.50.opt3 #Visit the Thieves Den
+		custom_tooltip = {
+			text = ekwonder.50.opt3.tt #A Fence who sells random items at discounted rates.
+		}
+	}
+	option = {
+		name = ekwonder.50.opt4 #Visit the Mudcrab Merchant
+		trigger = { has_character_flag = mudcrab_merchant_flag }
+		custom_tooltip = {
+			text = ekwonder.50.opt4.tt #A friendly talking Mudcrab with wares to sell...
+		}
+	}
+	after = {
+		random = { chance = 5 character_event = { id = ekwonder.85 } }
+	}
+}
+
+character_event = {
+	id = ekwonder.85
+	desc = {
+		text = ekwonder.85.d.1
+		picture = GFX_evt_guardian
+		trigger = { has_character_flag = pickpocket_1 }
+	}
+	desc = {
+		text = ekwonder.85.d.2
+		picture = GFX_evt_scandal
+		trigger = { has_character_flag = pickpocket_2 }
+	}
+	desc = {
+		text = ekwonder.85.d.3
+		picture = GFX_evt_counting_khajiit
+		trigger = { has_character_flag = pickpocket_3 }
+	}
+	desc = {
+		text = ekwonder.85.d.4
+		picture = GFX_evt_cat
+		trigger = { has_character_flag = pickpocket_4 }
+	}
+	picture = GFX_evt_market
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = pickpocket_1
+		clr_character_flag = pickpocket_2
+		clr_character_flag = pickpocket_3
+		clr_character_flag = pickpocket_4
+		random_list = {
+			35 = { set_character_flag = pickpocket_1 }
+			30 = { set_character_flag = pickpocket_2 }
+			25 = { set_character_flag = pickpocket_3 }
+			10 = { set_character_flag = pickpocket_4 }
+		}
+	}
+	
+	option = {
+		name = ekwonder.85.opt1
+		trigger = { has_character_flag = pickpocket_2 }
+		hidden_tooltip = {
+			random_list = {
+				25 = { character_event = { id = ekwonder.86 } }
+				75 = { clr_character_flag = pickpocket_2 }
+			}
+		}
+	}
+	option = {
+		name = ekwonder.85.opt5
+		trigger = { has_character_flag = pickpocket_3 }
+		hidden_tooltip = {
+			random_list = {
+				75 = { character_event = { id = ekwonder.86 } }
+				25 = { clr_character_flag = pickpocket_3 }
+			}
+		}
+	}
+	option = {
+		name = ekwonder.85.opt2
+		wealth = -1
+		trigger = { has_character_flag = pickpocket_1 }
+		hidden_tooltip = {
+			random_list = {
+				3 = { character_event = { id = ekwonder.86 } }
+				97 = { clr_character_flag = pickpocket_1 }
+			}
+		}
+	}
+	option = {
+		name = ekwonder.85.opt3
+		trigger = { has_character_flag = pickpocket_1 }
+		hidden_tooltip = {
+			random_list = {
+				75 = { character_event = { id = ekwonder.86 } }
+				25 = { clr_character_flag = pickpocket_1 }
+			}
+		}
+	}
+	option = {
+		name = ekwonder.85.opt4
+		trigger = { has_character_flag = pickpocket_4 }
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = ekwonder.86 } }
+				25 = { character_event = { id = ekwonder.87 } }
+				25 = { clr_character_flag = pickpocket_4 }
+			}
+		}
+	}
+}
+character_event = {
+	id = ekwonder.86
+	desc = {
+		text = ekwonder.86.d.1
+		trigger = { has_character_flag = pickpocket_1 }
+		picture = GFX_evt_bad_news
+	}
+	desc = {
+		text = ekwonder.86.d.2
+		trigger = { has_character_flag = pickpocket_2 }
+		picture = GFX_evt_bad_news
+	}
+	desc = {
+		text = ekwonder.86.d.3
+		trigger = { has_character_flag = pickpocket_3 }
+		picture = GFX_evt_bad_news
+	}
+	desc = {
+		text = ekwonder.86.d.4
+		trigger = { has_character_flag = pickpocket_4 }
+		picture = GFX_evt_bad_news
+	}
+	picture = GFX_evt_bad_news
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.86.opt1
+		trigger = { has_character_flag = pickpocket_1 }
+		scaled_wealth = { value = -0.1 min = -3 max = -30 }
+	}
+	option = {
+		name = ekwonder.86.opt2
+		trigger = { has_character_flag = pickpocket_2 }
+		scaled_wealth = { value = -0.25 min = -5 max = -50 }
+	}
+	option = {
+		name = ekwonder.86.opt3
+		trigger = { has_character_flag = pickpocket_3 }
+		scaled_wealth = { value = -0.35 min = -15 max = -75 }
+	}
+	option = {
+		name = ekwonder.86.opt4
+		trigger = { has_character_flag = pickpocket_4 }
+		scaled_wealth = { value = -0.5 min = -25 max = -100 }
+	}
+	after = {
+		clr_character_flag = pickpocket_1
+		clr_character_flag = pickpocket_2
+		clr_character_flag = pickpocket_3
+		clr_character_flag = pickpocket_4
+	}
+}
+character_event = {
+	id = ekwonder.87
+	desc = ekwonder.86.d
+	picture = GFX_evt_bad_news
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.87.opt
+		hidden_tooltip = { random = { chance = 50 set_character_flag = vampire_disease } }
+	}
+	after = {
+		clr_character_flag = pickpocket_1
+		clr_character_flag = pickpocket_2
+		clr_character_flag = pickpocket_3
+		clr_character_flag = pickpocket_4
+	}
+}
+letter_event = {
+	id = ekwonder.90
+	desc = ekwonder.90.d
+	is_triggered_only = yes
+	
+	immediate = {
+		if = { limit = { ai = yes } wealth = 150 }
+	}
+	
+	option = {
+		name = ekwonder.90.opt1
+		scaled_wealth = { value = -1 min = 100 max = 300 }
+		custom_tooltip = {
+			text = ekwonder.90.opt1.tt
+			event_target:bm_shopper = {
+				set_character_flag = bm_kidnap_attempt
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = { factor = 5 trait = ruthless }
+			modifier = { factor = 10 trait = reckless }
+			modifier = { factor = 5 trait = schemer }
+			modifier = { factor = 8 trait = trusting }
+			modifier = { factor = 5 trait = craven }
+			modifier = { factor = 5 trait = deceitful }
+		}
+	}
+	option = {
+		name = ekwonder.90.opt2
+		trigger = { wealth > 150 }
+		scaled_wealth = { value = -1.5 min = 150 max = 450 }
+		custom_tooltip = {
+			text = ekwonder.90.opt1.tt
+			event_target:bm_shopper = {
+				set_character_flag = bm_murder_attempt
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = { factor = 10 trait = wroth }
+			modifier = { factor = 5 trait = reckless }
+			modifier = { factor = 5 trait = impaler }
+			modifier = { factor = 8 trait = zealous }
+			modifier = { factor = 5 trait = craven }
+			modifier = { factor = 5 trait = deceitful }
+		}
+	}
+	option = {
+		name = ekwonder.90.opt3
+		custom_tooltip = {
+			text = ekwonder.90.opt1.tt
+			event_target:bm_shopper = {
+				random = { chance = 3 set_character_flag = bm_kidnap_attempt }
+			}
+		}
+		ai_chance = {
+			factor = 5
+			modifier = { factor = 5 trait = kind }
+			modifier = { factor = 5 trait = just }
+		}
+	}
+}
+#Motalion Burials
+character_event = {
+	id = ekwonder.100
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		religion_group = yokudan_pantheon
+		any_wonder = {
+			has_wonder_upgrade = upgrade_crypt_virtuous_maidens
+			is_active = yes
+		}
+	}
+	
+	#TODO:
+	#Add tomb of blessed interment for overseers and rich/prestigious nobles.
+	#Add generic burial for everyone else.
+	
+	immediate = {
+		save_event_target_as = target_dead_ruler
+		
+    	any_realm_character = {
+    		limit = { opinion = { who = ROOT value = 20 } }
+    		set_character_flag = liked_dead_ruler_@ROOT
+    	}
+    	any_realm_character = {
+    		limit = { opinion = { who = ROOT value < -50 } } 
+    		set_character_flag = hated_dead_ruler_@ROOT
+    	}
+		
+		if = {
+			limit = {
+				is_female = yes
+				religion_group = yokudan_pantheon
+				any_realm_wonder = {
+					is_active = yes
+					has_wonder_upgrade = upgrade_crypt_virtuous_maidens
+				}
+				OR = {
+					piety > 1000
+					AND = {
+						NOT = { trait = cynical }
+						piety > 100
+						has_children = no
+						is_married = no
+					}
+					AND = {
+						OR = {
+							is_monk_education = yes
+							is_priest_education = yes
+							trait = monk
+							trait = nun
+						}
+						piety > 100
+					}
+				}
+			}
+			any_wonder = {
+				limit = {
+					has_wonder_upgrade = upgrade_crypt_virtuous_maidens
+					is_active = yes
+				}
+				wonder_owner = {
+					character_event = { id = ekwonder.101 }
+				}
+			}
+		}
+	}
+}
+
+#Crypt of Virtuous Maidens
+character_event = {
+	id = ekwonder.101
+	desc = {
+		trigger = {
+			FROM = { piety > 500 is_married = no has_children = no }
+		}
+		text = ekwonder.101.desc1
+	}
+	desc = {
+		trigger = {
+			FROM = { piety > 1000 }
+		}
+		text = ekwonder.101.desc1a
+	}
+	desc = {
+		trigger = {
+			FROM = { is_married = no has_children = no }
+		}
+		text = ekwonder.101.desc2
+	}
+	desc = {
+		trigger = {
+			FROM = {
+				OR = {
+					is_monk_education = yes
+					is_priest_education = yes
+					trait = monk
+					trait = nun
+				}
+				piety > 150
+				NOT = { trait = cynical }
+			}
+		}
+		text = ekwonder.101.desc3
+	}
+	picture = GFX_evt_bad_news
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_alive = yes
+		is_inaccessible_trigger = no
+		realm_wonder_or_upgrade_has_flag_burial_ground_trigger = yes
+	}
+	
+	immediate = {
+		random_realm_wonder = {
+			limit = {
+				is_active = yes
+				has_wonder_flag = burial_ground
+				has_wonder_upgrade = upgrade_crypt_virtuous_maidens
+			}
+			save_event_target_as = target_wonder
+		}
+	}
+	
+	option = {
+		name = ekwonder.101.opt0
+		trigger = { scaled_wealth = { value = 0.5 min = 100 } }
+		custom_tooltip = {
+			text = ekwonder.101.opt0_tt
+			set_character_flag = big_burial
+			long_character_event = { id = ekwonder.102 }
+		}
+		scaled_wealth = { value = -0.5 min = -200 max = -500 }
+	}
+	option = {
+		name = ekwonder.101.opt1
+		custom_tooltip = {
+			text = ekwonder.101.opt1_tt
+			set_character_flag = normal_burial
+			long_character_event = { id = ekwonder.102 }
+		}
+		scaled_wealth = { value = -0.25 min = -50 max = -175 }
+	}
+	option = {
+		name = ekwonder.101.opt2
+		trigger = {
+			event_target:target_wonder = {
+				has_wonder_upgrade = upgrade_crypt_of_the_forgotten
+			}
+			NOT = { trait = kind }
+		}
+		if = { #Lose less piety since at least you're putting them in the Necropolis.
+			limit = { trait = zealous }
+			piety = -50
+		}
+		else = {
+			piety = -25
+		}
+		custom_tooltip = {
+			text = ekwonder.101.opt2_tt
+			any_realm_character = {
+				limit = { has_character_flag = liked_dead_ruler_@FROM }
+				opinion = {
+					modifier = opinion_did_not_honor_the_dead
+					who = ROOT
+				}
+			}
+			any_realm_character = {
+				limit = { has_character_flag = hated_dead_ruler_@FROM }
+				opinion = {
+					modifier = opinion_did_not_honor_hated_ruler
+					who = ROOT
+				}
+			}
+			FROM = {
+				any_close_relative = {
+					limit = { NOT = { has_character_flag = hated_dead_ruler_@FROM } }
+					if = {
+						limit = { OR = { is_long_lived = yes is_immortal = yes } }
+						opinion = {
+							modifier = opinion_hate
+							who = ROOT
+							years = 100
+						}
+					}
+					else = {
+						opinion = {
+							modifier = opinion_hate
+							who = ROOT
+							years = 50
+						}
+					}
+				}
+				if = {
+					limit = { has_lover = yes }
+					any_lover = {
+						add_rival = ROOT
+						opinion = {
+							modifier = opinion_hate
+							who = ROOT
+							years = 1000
+						}
+					}
+				}
+				else_if = {
+					limit = { has_children = yes }
+					random_child = {
+						limit = { religion_group = yokudan_pantheon NOT = { has_character_flag = hated_dead_ruler_@FROM } }
+						add_rival = ROOT
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = ekwonder.101.opt3
+		trigger = {
+			NOT = { trait = kind }
+		}
+		if = {
+			limit = { trait = zealous }
+			piety = -100
+		}
+		else = {
+			piety = -50
+		}
+		custom_tooltip = {
+			text = ekwonder.101.opt3_tt
+			any_realm_character = {
+				limit = { has_character_flag = liked_dead_ruler_@FROM }
+				opinion = {
+					modifier = opinion_did_not_honor_the_dead
+					who = ROOT
+				}
+			}
+			any_realm_character = {
+				limit = { has_character_flag = hated_dead_ruler_@FROM }
+				opinion = {
+					modifier = opinion_did_not_honor_hated_ruler
+					who = ROOT
+				}
+			}
+			FROM = {
+				any_dynasty_member = {
+					limit = { NOT = { has_character_flag = hated_dead_ruler_@FROM } }
+					opinion = {
+						modifier = disrespects_dynasty
+						who = ROOT
+						years = 25
+					}
+				}
+			}
+		}
+	}
+}
+long_character_event = {
+	id = ekwonder.102
+	desc = {
+		trigger = { has_character_flag = big_burial }
+		text = ekwonder.102.descA
+	}
+	desc = {
+		trigger = { has_character_flag = normal_burial }
+		text = ekwonder.102.descB
+	}
+	
+	is_triggered_only = yes
+	
+	picture = GFX_evt_feast_arabic
+
+	option = {
+		name = ekwonder.102.opt1 #Long will it be remembered how I honor the dead...
+		custom_tooltip = { text = ekwonder.102.opt1_tt } #...and perhaps one day I too shall be so honored.
+		if = {
+			limit = { has_character_flag = big_burial }
+			prestige = 150
+			piety = 100
+			FROMFROM = { any_dynasty_member = { prestige = 25 } add_trait = motalion_burial }
+			hidden_effect = {
+				any_realm_character = {
+					limit = { has_character_flag = liked_dead_ruler_@FROMFROM }
+					opinion = {
+						modifier = opinion_did_honor_the_dead
+						who = ROOT
+					}
+				}
+				any_realm_character = {
+					limit = { has_character_flag = hated_dead_ruler_@FROMFROM }
+					opinion = {
+						modifier = opinion_did_honor_hated_ruler
+						who = ROOT
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { has_character_flag = normal_burial }
+			prestige = 50
+			piety = 25
+			FROMFROM = { any_dynasty_member = { prestige = 10 } add_trait = motalion_burial }
+			hidden_effect = {
+				any_realm_character = {
+					limit = { has_character_flag = liked_dead_ruler_@FROMFROM }
+					opinion = {
+						modifier = opinion_did_honor_the_dead
+						who = ROOT
+						years = 1
+					}
+				}
+				any_realm_character = {
+					limit = { has_character_flag = hated_dead_ruler_@FROMFROM }
+					opinion = {
+						modifier = opinion_did_honor_hated_ruler
+						who = ROOT
+						years = 1
+					}
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = ekwonder.103
+	desc = ekwonder.103.desc
+	picture = GFX_evt_ritual_scroll
+	is_triggered_only = yes
+	
+	option = {
+		name = ekwonder.103.opt
+		motalion_burial = { set_character_flag = view_dead }
+	}
+	after = {
+		motalion_burial = { clr_character_flag = view_dead }
+	}
+}
+
+### Inviting a Gladiator from the Imperial Arena
+long_character_event = {
+	id = ekwonder.150
+	picture = GFX_evt_ic_arena
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_breton_knight } }
+		text = ekwonder.150.d.bretonKnight
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_altmer_outcast } }
+		text = ekwonder.150.d.altmerOutcast
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_argonian_pirate } }
+		text = ekwonder.150.d.argonianPirate
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_khajiit_caravaner } }
+		text = ekwonder.150.d.khajiitCaravaner
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { is_female = yes has_character_flag = gladiator_orsimer_renegade } }
+		text = ekwonder.150.d.orsimerRenegadeF
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { is_female = no has_character_flag = gladiator_orsimer_renegade } }
+		text = ekwonder.150.d.orsimerRenegadeM
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_bosmer_blind } }
+		text = ekwonder.150.d.bosmerBlind
+	}	
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_redguard_gladiator } }
+		text = ekwonder.150.d.redguardGladiator
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_generic_guildsworn } }
+		text = ekwonder.150.d.genericGuildsworn
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_imperial_monk } }
+		text = ekwonder.150.d.imperialMonk
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_dunmer_houseless } }
+		text = ekwonder.150.d.dunmerHouseless
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_nord_berserker } }
+		text = ekwonder.150.d.nordBerserker
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_generic_heretic } }
+		text = ekwonder.150.d.genericHeretic
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_generic_criminal } }
+		text = ekwonder.150.d.genericCriminal
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_atmoran_champion } }
+		text = ekwonder.150.d.atmoranChampion
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_yokudan_swordsinger } }
+		text = ekwonder.150.d.yokudanSwordsinger
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_humanakaviri_refugee } }
+		text = ekwonder.150.d.akaviriRefugee
+	}
+	
+	desc = {
+		trigger = { event_target:gladiator_recruited = { has_character_flag = gladiator_quey_plaguing_kings } }
+		text = ekwonder.150.d.queyPlaguingKings
+	}
+	
+	option = {
+		name = ekwonder.150.optA #Join me
+	}
+	
+	option = {
+		name = ekwonder.150.optB #Join me, Champion
+		event_target:gladiator_recruited = { set_special_character_title = champion }
+	}
+	
+	option = {
+		name = ekwonder.150.optC #OFF WITH HIS HEAD!
+		trigger = {
+			OR = {
+				trait = impaler
+				trait = wroth
+				trait = cruel
+				trait = lunatic
+				trait = envious
+			}
+		}
+		event_target:gladiator_recruited = { death = { death_reason = death_execution killer = ROOT } }
+	}
+	
+	option = {
+		name = ekwonder.150.optD #Not Impressed, next
+		hidden_tooltip = { event_target:gladiator_recruited = { death = { death_reason = death_vanished } } }
+	}
+}

@@ -1,0 +1,185 @@
+is_veteran_leader = {
+	OR = {
+		trait = veteran_leader_1
+		trait = veteran_leader_2
+		trait = veteran_leader_3
+		trait = veteran_leader_4
+		trait = veteran_leader_5
+	}
+}
+is_inspiring_leader = {
+	OR = {
+		trait = inspiring_leader
+		trait = inspiring_leader_2
+		trait = inspiring_leader_3
+	}
+}
+is_siege_leader = {
+	OR = {
+		trait = siege_leader
+		trait = siege_leader_2
+		trait = siege_leader_3
+	}
+}
+is_narrow_flank_leader = {
+	OR = {
+		trait = narrow_flank_leader
+		trait = narrow_flank_leader_2
+		trait = narrow_flank_leader_3
+	}
+}
+is_flanker = {
+	OR = {
+		trait = flanker
+		trait = flanker_2
+		trait = flanker_3
+	}
+}
+is_trickster = {
+	OR = {
+		trait = trickster
+		trait = trickster_2
+		trait = trickster_3
+	}
+}
+is_organizer = {
+	OR = {
+		trait = organizer
+		trait = organizer_2
+		trait = organizer_3
+	}
+}
+is_defensive_leader = {
+	OR = {
+		trait = defensive_leader
+		trait = defensive_leader_2
+		trait = defensive_leader_3
+	}
+}
+is_aggressive_leader = {
+	OR = {
+		trait = aggressive_leader
+		trait = aggressive_leader_2
+		trait = aggressive_leader_3
+	}
+}
+is_experimenter = {
+	OR = {
+		trait = experimenter
+		trait = experimenter_2
+		trait = experimenter_3
+	}
+}
+is_light_foot_leader = {
+	OR = {
+		trait = light_foot_leader
+		trait = light_foot_leader_2
+		trait = light_foot_leader_3
+	}
+}
+is_cavalry_leader = {
+	OR = {
+		trait = cavalry_leader
+		trait = cavalry_leader_2
+		trait = cavalry_leader_3
+	}
+}
+is_heavy_infantry_leader = {
+	OR = {
+		trait = heavy_infantry_leader
+		trait = heavy_infantry_leader_2
+		trait = heavy_infantry_leader_3
+	}
+}
+leadership_max_terrain = {
+	calc_true_if = {
+		amount = 2
+		trait = flat_terrain_leader
+		trait = rough_terrain_leader
+		trait = mountain_terrain_leader
+		trait = desert_terrain_leader
+		trait = jungle_terrain_leader
+		trait = swamp_terrain_leader
+		trait = extreme_terrain_leader
+	}
+	#Characters shouldn't have more than 2 terrain leadership traits.
+}
+leadership_max_type = {
+	calc_true_if = {
+		amount = 1
+		is_heavy_infantry_leader = yes
+		is_light_foot_leader = yes
+		is_cavalry_leader = yes
+	}
+}
+leadership_max_total = {
+	OR = {
+		AND = {
+			is_mage = yes
+			leader_traits = 0 #Mages get no leadership traits.
+		}
+		AND = {
+			is_diplomat = yes
+			leader_traits = 1
+		}
+		AND = {
+			is_magistrate = yes
+			leader_traits = 2
+		}
+		AND = {
+			is_agent = yes
+			leader_traits = 3
+		}
+		AND = {
+			trait = warrior_1
+			leader_traits = 3
+		}
+		AND = {
+			trait = warrior_2
+			leader_traits = 4
+		}
+		AND = {
+			trait = warrior_3
+			leader_traits = 5
+		}
+		AND = {
+			trait = warrior_4
+			leader_traits = 6
+		}
+		AND = {
+			trait = warrior_5
+			leader_traits = 7
+		}
+	}
+	
+	#Class based leadership trait total
+}
+
+has_leadership_trait = {
+	OR = {
+		is_light_foot_leader = yes
+		is_heavy_infantry_leader = yes
+		is_cavalry_leader = yes
+		is_flanker = yes
+		is_inspiring_leader = yes
+		is_trickster = yes
+		is_organizer = yes
+		is_defensive_leader = yes
+		is_experimenter = yes
+		is_aggressive_leader = yes
+		is_siege_leader = yes
+		is_narrow_flank_leader = yes
+		trait = unyielding_leader
+		trait = flat_terrain_leader
+		trait = rough_terrain_leader
+		trait = mountain_terrain_leader
+		trait = desert_terrain_leader
+		trait = jungle_terrain_leader
+		trait = swamp_terrain_leader
+		trait = extreme_terrain_leader
+		trait = holy_warrior
+		trait = winter_soldier
+		trait = lead_from_rear
+		trait = lead_from_fore
+	}
+}

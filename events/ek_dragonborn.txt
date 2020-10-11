@@ -1,0 +1,983 @@
+namespace = dragonborn
+
+###New Dragonborn System#
+#on_adulthood; almost everyone has a very low chance of being tagged as a potential doom-driven or dragonborn
+character_event = {
+	id = dragonborn.0
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		#year = 3450
+		#NOT = { year = 4435 } #No more dragonborn candidates can be born after
+		
+		NOR = { #No "Special" traits prior to becoming dragonborn.
+			is_undead = yes
+			is_vampire = yes
+			is_unknown_vampire = yes
+			is_lycan = yes
+			is_disease_immune = yes
+			culture_group = undead
+			culture_group = daedra
+			trait = clone
+			is_dragonblood = yes #Descedants of dragonborns cannot become candidates as they technically already are.
+			has_character_flag = daedric_herald #This person leads a Daedric invasion of Nirn, not exactly someone who'd be favored by the Divines
+			is_daedric_scion = yes
+			is_vampiric_scion = yes
+			trait = hero
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			20 = {}
+			45 = { #Doom-Driven
+				modifier = {
+					factor = 2
+					OR = {
+						has_global_flag = daedric_invasion_of_tamriel
+						has_global_flag = daedric_invasion_of_akavir
+						has_global_flag = daedric_invasion_of_atmora
+					}
+				}
+				random_list = {
+					90 = {} #Nothing
+					10 = {
+						modifier = { is_strong_trigger = yes factor = 1.1 }
+						modifier = { is_tall_trigger = yes factor = 1.1 }
+						modifier = { is_smart_trigger = yes factor = 1.1 }
+						modifier = { is_agile_trigger = yes factor = 1.1 }
+						modifier = { is_attractive_trigger = yes factor = 1.1 }
+						modifier = { has_positive_voice_trigger = yes factor = 1.1 }
+						modifier = { trait = lucky factor = 1.5 }
+						modifier = { has_bloodline = yes factor = 3 }
+						modifier = { ai = no factor = 1.25 }
+						modifier = { has_negative_congenital_trigger = yes factor = 0.5 }
+						modifier = { has_disease_trigger = yes factor = 0.5 }
+						modifier = { has_disability_trigger = yes factor = 0.5 }
+						modifier = { mother_even_if_dead = { trait = hero } factor = 1.1 }
+						modifier = { father_even_if_dead = { trait = hero } factor = 1.1 }
+						modifier = { prisoner = yes factor = 1.1 }
+						add_trait = hero
+					}
+				}
+			}
+			35 = { #Dragonborn
+				modifier = { factor = 0 year > 4435 }
+				modifier = {
+					factor = 2.0
+					OR = {
+						has_global_flag = daedric_invasion_of_tamriel
+						has_global_flag = daedric_invasion_of_akavir
+						has_global_flag = daedric_invasion_of_atmora
+					}
+				}
+				modifier = { factor = 1.25 any_dynasty_member = { trait = hero	} }
+				random_list = {
+					1 = {
+					#Certain races get a bonus chance
+						modifier = {
+							is_human = yes
+							factor = 1.1
+						}
+						modifier = {
+							is_beast = yes
+							factor = 0.5
+						}
+						modifier = {
+							OR = {
+								trait = breton
+								trait = nord
+								trait = reachman
+								trait = imperial
+								trait = redguard
+							}
+							factor = 1.5
+						}
+						modifier = {
+							is_mer = yes
+							factor = 0.75
+						}
+					#Mortals get a bonus
+						modifier = {
+							is_mortal_race = yes
+							factor = 1.25
+						}
+						modifier = {
+							is_long_lived = yes
+							factor = 0.75
+						}
+					#Certain religions get a bonus
+						modifier = {
+							OR = {
+								religion = eight_divines
+								religion = nine_divines
+							}
+							factor = 1.25
+						}
+						modifier = {
+							OR = {
+								religion_group = yokudan_pantheon
+								religion_group = atmoran_pantheon
+							}
+							factor = 1.15
+						}
+						modifier = {
+							OR = {
+								religion_group = mer_pantheon
+								religion_group = khajiit_pantheon
+							}
+							factor = 1.1
+						}
+						modifier = {
+							religion_group = hist_group
+							factor = 0.5
+						}
+						modifier = {
+							OR = {
+								religion_group = oblivion_religions
+								religion_group = old_faith
+								religion_group = reach_faiths
+								religion_group = daedra
+								religion_group = tribunal
+							}
+							factor = 0.75
+						}
+					#Bloodlines get a bonus
+						modifier = {
+							has_bloodline = yes
+							factor = 2
+						}
+						modifier = {
+							is_divine_bloodline = yes
+							factor = 10
+						}
+					#Negative Congenitals
+						modifier = {
+							OR = {
+								trait = imbecile
+								trait = inbred
+								trait = hunchback
+								trait = harelip
+								trait = clubfooted
+							}
+							factor = 0.1
+						}
+						modifier = {
+							OR = {
+								trait = slow
+								trait = weak
+								trait = stutter
+								trait = lisp
+								trait = mute
+								trait = deaf
+								trait = wrymouth
+								trait = feeble
+								trait = dull
+							}
+							factor = 0.5
+						}
+						modifier = {
+							trait = dwarf
+							factor = 0.95
+						}
+					#Positive Congenitals
+						modifier = {
+							OR = {
+								trait = fortitude
+								trait = perceptive
+								trait = agile
+								trait = genius
+								trait = quick
+								trait = raht
+								trait = strong
+								trait = robust
+								trait = shrewd
+							}
+							factor = 1.2
+						}
+						modifier = {
+							trait = lucky
+							factor = 2
+						}
+						modifier = {
+							trait = powerful_voice
+							factor = 1.25
+						}
+					#Player characters get a bonus
+						modifier = {
+							ai = no
+							factor = 1.25
+						}
+						modifier = {
+							ai = no
+							mother_even_if_dead = {
+								NOR = { has_character_flag = dragonborn_candidate is_dragonblood = yes }
+							}
+							true_father_even_if_dead = {
+								NOR = { has_character_flag = dragonborn_candidate is_dragonblood = yes }
+							}
+							factor = 1.25
+						}
+						set_character_flag = dragonborn_candidate
+					}
+					99 = { } #Do nothing
+				}
+			}
+		}
+	}
+}
+###Dragonborn Descendents are now "levelled", the closer your descent to a dragonborn the higher your level of dragonblood.
+#on_birth
+character_event = {
+	id = dragonborn.2
+	hide_window = yes
+	
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			true_father_even_if_dead = {
+				is_dragonblood = yes
+			}
+			mother_even_if_dead = {
+				is_dragonblood = yes
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { true_father_even_if_dead = { NOT = { is_dragonblood = yes } } mother_even_if_dead = { is_dragonblood = yes } }
+			mother_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					dragonborn				= { PREV = { add_trait = dragonborn_g_1 } }
+					dragonborn_g_1			= { PREV = { add_trait = dragonborn_g_2 } }
+					dragonborn_g_2			= { PREV = { add_trait = dragonborn_g_3 } }
+					dragonborn_g_3			= { PREV = { add_trait = dragonborn_g_4 } }
+					dragonborn_g_4			= { PREV = { add_trait = dragonborn_g_5 } }
+					dragonborn_g_5			= { PREV = { add_trait = dragonborn_descendant } }
+					dragonborn_descendant	= { PREV = { add_trait = dragonborn_descendant } }
+				}
+			}
+		}
+		else_if = {
+			limit = { mother_even_if_dead = { NOT = { is_dragonblood = yes } } true_father_even_if_dead = { is_dragonblood = yes } }
+			true_father_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					dragonborn				= { PREV = { add_trait = dragonborn_g_1 } }
+					dragonborn_g_1			= { PREV = { add_trait = dragonborn_g_2 } }
+					dragonborn_g_2			= { PREV = { add_trait = dragonborn_g_3 } }
+					dragonborn_g_3			= { PREV = { add_trait = dragonborn_g_4 } }
+					dragonborn_g_4			= { PREV = { add_trait = dragonborn_g_5 } }
+					dragonborn_g_5			= { PREV = { add_trait = dragonborn_descendant } }
+					dragonborn_descendant	= { PREV = { add_trait = dragonborn_descendant } }
+				}
+			}
+		}
+		else_if = { limit = { OR = { mother_even_if_dead = { trait = dragonborn } true_father_even_if_dead = { trait = dragonborn } } } add_trait = dragonborn_g_1 }
+		else_if = {
+			limit = { mother_even_if_dead = { is_dragonblood = yes NOT = { trait = dragonborn } } true_father_even_if_dead = { is_dragonblood = yes NOT = { trait = dragonborn } } }
+			set_variable = { which = dragonblood_counter value = 0 }
+			mother_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					dragonborn_g_1			= { PREV = { change_variable = { which = dragonblood_counter value = 1 } } }
+					dragonborn_g_2			= { PREV = { change_variable = { which = dragonblood_counter value = 2 } } }
+					dragonborn_g_3			= { PREV = { change_variable = { which = dragonblood_counter value = 3 } } }
+					dragonborn_g_4			= { PREV = { change_variable = { which = dragonblood_counter value = 4 } } }
+					dragonborn_g_5			= { PREV = { change_variable = { which = dragonblood_counter value = 5 } } }
+					dragonborn_descendant	= { PREV = { change_variable = { which = dragonblood_counter value = 6 } } }
+				}
+			}
+			true_father_even_if_dead = {
+				trigger_switch = {
+					on_trigger = trait
+					dragonborn_g_1			= { PREV = { change_variable = { which = dragonblood_counter value = 1 } } }
+					dragonborn_g_2			= { PREV = { change_variable = { which = dragonblood_counter value = 2 } } }
+					dragonborn_g_3			= { PREV = { change_variable = { which = dragonblood_counter value = 3 } } }
+					dragonborn_g_4			= { PREV = { change_variable = { which = dragonblood_counter value = 4 } } }
+					dragonborn_g_5			= { PREV = { change_variable = { which = dragonblood_counter value = 5 } } }
+					dragonborn_descendant	= { PREV = { change_variable = { which = dragonblood_counter value = 6 } } }
+				}
+			}
+			divide_variable = { which = dragonblood_counter value = 2 }
+			if = { limit = { check_variable = { which = dragonblood_counter value = 0 } check_variable = { which = dragonblood_counter value < 2 } } add_trait = dragonborn_g_1 }
+			else_if = { limit = { check_variable = { which = dragonblood_counter value = 2 } check_variable = { which = dragonblood_counter value < 3 } } add_trait = dragonborn_g_2 }
+			else_if = { limit = { check_variable = { which = dragonblood_counter value = 3 } check_variable = { which = dragonblood_counter value < 4 } } add_trait = dragonborn_g_3 }
+			else_if = { limit = { check_variable = { which = dragonblood_counter value = 4 } check_variable = { which = dragonblood_counter value < 5 } } add_trait = dragonborn_g_4 }
+			else_if = { limit = { check_variable = { which = dragonblood_counter value = 5 } check_variable = { which = dragonblood_counter value < 6 } } add_trait = dragonborn_g_5 }
+			else_if = { limit = { check_variable = { which = dragonblood_counter value = 6 } } add_trait = dragonborn_descendant }
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				trait = twin
+				is_dragonblood = yes
+			}
+			any_sibling = {
+				limit = {
+					is_twin_of = ROOT
+					is_dragonblood = no
+				}
+				character_event = { id = dragonborn.2 }
+			}
+		}
+	}
+}
+##########
+##########Dragonborn Candidate Childhood Events, dragonborn.100 to 199
+##########
+####Gently boost dragonborn candidates. If someone wants to fluff these up with descriptions and event chains, feel free.
+####For now I'm just doing hidden events.
+#Childhood Prodigy, Martial
+character_event = {
+	id = dragonborn.100
+	hide_window = yes
+	is_triggered_only = yes
+	
+	min_age = 8
+	
+	trigger = {
+		OR = {
+			is_dragonblood = yes
+			has_character_flag = dragonborn_candidate
+		}
+	}
+	
+	immediate = {
+		if = { limit = { trait = feeble } remove_trait = feeble }
+		else_if = { limit = { NOT = { trait = robust } } random = { chance = 10 add_trait = robust } }
+		if = { limit = { trait = dull } remove_trait = dull }
+		else_if = { limit = { NOT = { trait = shrewd } } random = { chance = 10 add_trait = shrewd } }
+		if = {
+			limit = { martial < 10 }
+			while = {
+				limit = { martial < 10 }
+				random_list = {
+					25 = { change_martial = 1 }
+					25 = { change_martial = 2 }
+					25 = { change_martial = 3 }
+					25 = { change_martial = 4 }
+				}
+			}
+		}
+		if = {
+			limit = { learning < 10 }
+			while = {
+				limit = { learning < 10 }
+				random_list = {
+					25 = { change_learning = 1 }
+					25 = { change_learning = 2 }
+					25 = { change_learning = 3 }
+					25 = { change_learning = 4 }
+				}
+			}
+		}
+		if = {
+			limit = { stewardship < 10 }
+			while = {
+				limit = { stewardship < 10 }
+				random_list = {
+					25 = { change_stewardship = 1 }
+					25 = { change_stewardship = 2 }
+					25 = { change_stewardship = 3 }
+					25 = { change_stewardship = 4 }
+				}
+			}
+		}
+		if = {
+			limit = { intrigue < 10 }
+			while = {
+				limit = { intrigue < 10 }
+				random_list = {
+					25 = { change_intrigue = 1 }
+					25 = { change_intrigue = 2 }
+					25 = { change_intrigue = 3 }
+					25 = { change_intrigue = 4 }
+				}
+			}
+		}
+		if = {
+			limit = { diplomacy < 10 }
+			while = {
+				limit = { diplomacy < 10 }
+				random_list = {
+					25 = { change_diplomacy = 1 }
+					25 = { change_diplomacy = 2 }
+					25 = { change_diplomacy = 3 }
+					25 = { change_diplomacy = 4 }
+				}
+			}
+		}
+		if = {
+			limit = { health < 7.5 }
+			while = {
+				limit = { health < 7.5 }
+				random_list = {
+					25 = { health = 0.1 }
+					25 = { health = 0.25 }
+					25 = { health = 0.5 }
+					25 = { health = 0.75 }
+				}
+			}
+		}
+	}
+}
+
+#Dragonborn Manifests
+character_event = {
+	id = dragonborn.150
+	desc = dragonborn.1.desc
+	picture = GFX_evt_dragonborn
+	
+	min_age = 16
+	capable_only = yes
+	
+	trigger = {
+		AND = {
+			OR = {
+				is_dragonblood = yes
+				has_character_flag = dragonborn_candidate
+			}
+			NOT = { trait = dragonborn }
+		}
+		NOR = { #No "Special" traits prior to becoming dragonborn.
+			is_undead = yes
+			is_vampire = yes
+			is_unknown_vampire = yes
+			is_lycan = yes
+			is_disease_immune = yes
+			culture_group = undead
+			culture_group = daedra
+			trait = clone
+			trait = dragonborn
+			has_character_flag = daedric_herald #This person leads a Daedric invasion of Nirn, not exactly someone who'd be favored by the Divines
+		}
+		OR = {
+			NOT = {
+				event_target:current_dragonborn = {
+					is_alive = yes
+				}
+			}
+			event_target:current_dragonborn = {
+				is_alive = yes
+				OR = { #If Dragonborn becomes immortal, there should be a chance for another to arise. See Miraak and the Last Dragonborn (Skyrim:Dragonborn DLC)
+					is_undead = yes
+					is_vampire = yes
+					is_unknown_vampire = yes
+					trait = hagraven
+					trait = briarheart
+					trait = clone
+					trait = immortal
+					trait = soulless_clavicus
+					has_character_flag = daedric_herald #If a Dragonborn pulls a Miraak and goes rogue, a new one will show up.
+				}
+			}
+		}
+		OR = { #Ensures that Dragonborn spawns in the right place if a major Daedric invasion is going on
+			NOR = {
+				has_global_flag = daedric_invasion_of_tamriel
+				has_global_flag = daedric_invasion_of_akavir
+				has_global_flag = daedric_invasion_of_atmora
+			}
+			AND = {
+				OR = { 
+					location = { region = nirn_yokuda }
+				location = { region = nirn_tamriel }
+				}
+				has_global_flag = daedric_invasion_of_tamriel
+			}
+			AND = {
+				location = { region = nirn_akavir }
+				has_global_flag = daedric_invasion_of_akavir
+			}
+			AND = {
+				OR = {
+				location = { region = nirn_atmora }
+					location = { region = nirn_roscrea }
+				}					
+				has_global_flag = daedric_invasion_of_atmora
+			}
+		}
+		# OR = { #Note: Until we get more crises, this is out for the time being
+			# has_global_flag = major_story_crisis #This is a placeholder
+			# has_global_flag = oblivion_invasion_azura
+			# has_global_flag = oblivion_invasion_boethiah
+			# has_global_flag = oblivion_invasion_clavicus
+			# has_global_flag = oblivion_invasion_hermaeus
+			# has_global_flag = oblivion_invasion_hircine
+			# has_global_flag = oblivion_invasion_malacath
+			# has_global_flag = oblivion_invasion_mehrunes
+			# has_global_flag = oblivion_invasion_mephala
+			# has_global_flag = oblivion_invasion_meridia
+			# has_global_flag = oblivion_invasion_molag
+			# has_global_flag = oblivion_invasion_namira
+			# has_global_flag = oblivion_invasion_nocturnal
+			# has_global_flag = oblivion_invasion_peryite
+			# has_global_flag = oblivion_invasion_sanguine
+			# has_global_flag = oblivion_invasion_sheogorath
+			# has_global_flag = oblivion_invasion_vaermina
+		# }
+	}
+	
+	mean_time_to_happen = {
+		years = 1000
+		
+		modifier = { #In times of great crisis, a greater Dragonborn may be revealed
+			factor = 0.1
+			OR = {
+				has_global_flag = oblivion_invasion_azura
+				has_global_flag = oblivion_invasion_boethiah
+				has_global_flag = oblivion_invasion_clavicus
+				has_global_flag = oblivion_invasion_hermaeus
+				has_global_flag = oblivion_invasion_hircine
+				has_global_flag = oblivion_invasion_malacath
+				has_global_flag = oblivion_invasion_mehrunes
+				has_global_flag = oblivion_invasion_mephala
+				has_global_flag = oblivion_invasion_meridia
+				has_global_flag = oblivion_invasion_molag
+				has_global_flag = oblivion_invasion_namira
+				has_global_flag = oblivion_invasion_nocturnal
+				has_global_flag = oblivion_invasion_peryite
+				has_global_flag = oblivion_invasion_sanguine
+				has_global_flag = oblivion_invasion_sheogorath
+				has_global_flag = oblivion_invasion_vaermina
+			}
+		}
+		modifier = {
+			factor = 5
+			NOT = { combat_rating = 20 }
+		}
+		modifier = {
+			factor = 0.5
+			combat_rating = 40
+		}
+		modifier = {
+			factor = 0.5
+			combat_rating = 60
+		}
+		modifier = {
+			factor = 0.5
+			combat_rating = 80
+		}
+		modifier = {
+			factor = 0.5
+			combat_rating = 100
+		}
+	}
+	
+	option = {
+		name = dragonborn.1.1
+		hidden_tooltip = {
+			remove_trait = dragonborn_g_1
+			remove_trait = dragonborn_g_2
+			remove_trait = dragonborn_g_3
+			remove_trait = dragonborn_g_4
+			remove_trait = dragonborn_g_5
+			remove_trait = dragonborn_descendant
+		}
+		add_trait = dragonborn
+		save_global_event_target_as = current_dragonborn #Because there's ONE Dragonborn who should be hanging around
+		hidden_tooltip = {
+			any_child_even_if_dead = {
+				limit = { 
+					NOR = { 
+						trait = bastard 
+						trait = dragonborn
+					}
+				}
+				add_trait = dragonborn_g_1
+				any_child_even_if_dead = {
+					limit = { 
+						NOR = { 
+							trait = bastard 
+							trait = legit_bastard
+							trait = dragonborn
+							trait = dragonborn_g_1
+						} 
+					}
+					add_trait = dragonborn_g_2
+					any_child_even_if_dead = {
+						limit = { 
+							NOR = {
+								trait = bastard 
+								trait = legit_bastard
+								trait = dragonborn
+								trait = dragonborn_g_1
+								trait = dragonborn_g_2
+							} 
+						}
+						add_trait = dragonborn_g_3
+						any_child_even_if_dead = {
+							limit = { 
+								NOR = {
+									trait = bastard 
+									trait = legit_bastard
+									trait = dragonborn
+									trait = dragonborn_g_1
+									trait = dragonborn_g_2
+									trait = dragonborn_g_3
+								} 
+							}
+							add_trait = dragonborn_g_4
+							any_child_even_if_dead = {
+								limit = { 
+									NOR = {
+										trait = bastard 
+										trait = legit_bastard
+										trait = dragonborn
+										trait = dragonborn_g_1
+										trait = dragonborn_g_2
+										trait = dragonborn_g_3
+										trait = dragonborn_g_4
+									} 
+								}
+								add_trait = dragonborn_g_5
+								any_child_even_if_dead = {
+									limit = { 
+										NOR = {
+											trait = bastard 
+											trait = legit_bastard
+											trait = dragonborn
+											trait = dragonborn_g_1
+											trait = dragonborn_g_2
+											trait = dragonborn_g_3
+											trait = dragonborn_g_4
+											trait = dragonborn_g_5
+										} 
+									}
+									add_trait = dragonborn_descendant
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		narrative_event = { id = dragonborn.1 }
+	}
+}
+
+#Ye Olde Dragonborn System
+#character_event = {
+#	id = dragonborn.0
+	#desc = dragonborn.1.desc
+	#picture = GFX_evt_dragonborn
+	
+#	min_age = 16
+	#capable_only = yes
+	
+	#trigger = {
+	#	NOR = { #No "Special" traits prior to becoming dragonborn.
+	#		is_undead = yes
+	#		is_vampire = yes
+	#		is_unknown_vampire = yes
+	#		is_lycan = yes
+	#		is_disease_immune = yes
+	#		culture_group = undead
+	#		culture_group = daedra
+	#		trait = clone
+	#		trait = dragonborn
+	#		has_character_flag = daedric_herald #This person leads a Daedric invasion of Nirn, not exactly someone who'd be favored by the Divines
+	#	}
+	#	NOT = {
+	#		dragonborn = {
+	#			is_alive = yes
+	#			NOR = { #If Dragonborn becomes immortal, there should be a chance for another to arise. See Miraak and the Last Dragonborn (Skyrim:Dragonborn DLC)
+	#				is_undead = yes
+	#				is_vampire = yes
+	#				is_unknown_vampire = yes
+	#				trait = hagraven
+	#				trait = briarheart
+	#				trait = clone
+	#				trait = immortal
+	#				trait = soulless_clavicus
+	#				has_character_flag = daedric_herald #If a Dragonborn pulls a Miraak and goes rogue, a new one will show up.
+	#			}
+	#		}
+	#	}
+	#	OR = { #Ensures that Dragonborn spawns in the right place if a major Daedric invasion is going on
+	#		NOR = {
+	#			has_global_flag = daedric_invasion_of_tamriel
+	#			has_global_flag = daedric_invasion_of_akavir
+	#			has_global_flag = daedric_invasion_of_atmora
+	#		}
+	#		AND = {
+	#			location = { region = nirn_tamriel }
+	#			has_global_flag = daedric_invasion_of_tamriel
+	#		}
+	#		AND = {
+	#			location = { region = nirn_akavir }
+	#			has_global_flag = daedric_invasion_of_akavir
+	#		}
+	#		AND = {
+	#			location = { region = nirn_atmora }
+	#			has_global_flag = daedric_invasion_of_atmora
+	#		}
+	#	}
+	#	OR = { #A useless nobody being Dragonborn doesn't help with Daedric Heralds
+	#		NOR = {
+				#has_global_flag = oblivion_invasion_azura
+				#has_global_flag = oblivion_invasion_boethiah
+				#has_global_flag = oblivion_invasion_clavicus
+				#has_global_flag = oblivion_invasion_hermaeus
+#				has_global_flag = oblivion_invasion_hircine
+#				has_global_flag = oblivion_invasion_malacath
+#				has_global_flag = oblivion_invasion_mehrunes
+#				has_global_flag = oblivion_invasion_mephala
+#				has_global_flag = oblivion_invasion_meridia
+#				has_global_flag = oblivion_invasion_molag
+#				has_global_flag = oblivion_invasion_namira
+#				has_global_flag = oblivion_invasion_nocturnal
+#				has_global_flag = oblivion_invasion_peryite
+#				has_global_flag = oblivion_invasion_sanguine
+#				has_global_flag = oblivion_invasion_sheogorath
+#				has_global_flag = oblivion_invasion_vaermina
+#			}
+#			combat_rating = 48
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		years = 5000
+#		modifier = { #In times of great crisis, a greater Dragonborn may be revealed
+#			factor = 0.33
+#			OR = {
+#				has_global_flag = oblivion_invasion_azura
+#				has_global_flag = oblivion_invasion_boethiah
+#				has_global_flag = oblivion_invasion_clavicus
+#				has_global_flag = oblivion_invasion_hermaeus
+#				has_global_flag = oblivion_invasion_hircine
+#				has_global_flag = oblivion_invasion_malacath
+#				has_global_flag = oblivion_invasion_mehrunes
+#				has_global_flag = oblivion_invasion_mephala
+#				has_global_flag = oblivion_invasion_meridia
+#				has_global_flag = oblivion_invasion_molag
+#				has_global_flag = oblivion_invasion_namira
+#				has_global_flag = oblivion_invasion_nocturnal
+#				has_global_flag = oblivion_invasion_peryite
+#				has_global_flag = oblivion_invasion_sanguine
+#				has_global_flag = oblivion_invasion_sheogorath
+#				has_global_flag = oblivion_invasion_vaermina
+#			}
+#			combat_rating = 60
+#		}
+#		modifier = { #In times of great crisis, a greater Dragonborn may be revealed
+#			factor = 0.5
+#			OR = {
+#				has_global_flag = oblivion_invasion_azura
+#				has_global_flag = oblivion_invasion_boethiah
+#				has_global_flag = oblivion_invasion_clavicus
+#				has_global_flag = oblivion_invasion_hermaeus
+#				has_global_flag = oblivion_invasion_hircine
+#				has_global_flag = oblivion_invasion_malacath
+#				has_global_flag = oblivion_invasion_mehrunes
+#				has_global_flag = oblivion_invasion_mephala
+#				has_global_flag = oblivion_invasion_meridia
+#				has_global_flag = oblivion_invasion_molag
+#				has_global_flag = oblivion_invasion_namira
+#				has_global_flag = oblivion_invasion_nocturnal
+#				has_global_flag = oblivion_invasion_peryite
+#				has_global_flag = oblivion_invasion_sanguine
+#				has_global_flag = oblivion_invasion_sheogorath
+#				has_global_flag = oblivion_invasion_vaermina
+#			}
+#			combat_rating = 48
+#			NOT = { combat_rating = 60 }
+#		}
+#		modifier = {
+#			factor = 0.5
+#			OR = {
+#				culture = nord
+#				culture = breton
+#			}
+#		}
+#		modifier = {
+#			factor = 0.65
+#			OR = {
+#				culture = skaal
+#				culture = colovian
+#			}
+#		}
+#		modifier = {
+#			factor = 0.75
+#			culture = imperial
+#		}
+#		modifier = {
+#			factor = 3
+#			OR = {
+#				culture = yokudan
+#				culture = orsimer
+#			}
+#		}
+#		modifier = {
+#			factor = 12
+#			OR = {
+#				culture = ashlander
+#				culture = bosmer
+#			}
+#		}
+#		modifier = {
+#			factor = 15
+#			OR = {
+#				culture = dunmer
+#				culture = ayleid
+#			}
+#		}
+#		modifier = {
+#			factor = 20
+#			culture = altmer
+#		}
+#		modifier = {
+#			factor = 25
+#			OR = {
+#				culture_group = argonian
+#				culture_group = khajiit
+#			}
+#		}
+#		modifier = {
+#			factor = 100
+#			OR = {
+#				culture_group = islander_group
+#				culture_group = tsaesci_group
+#				culture_group = kamal_group
+#				culture_group = tangmo_group
+#				culture_group = potun_group
+#				culture = maormer
+#				culture = chimer
+#				culture = dwemer
+#				culture = falmer
+#			}
+#		}
+#		modifier = {
+#			factor = 2
+#			age = 35
+#		}
+#		modifier = {
+#			factor = 3
+#			age = 40
+#		}
+#		modifier = {
+#			factor = 4
+#			age = 50
+#		}
+#		modifier = {
+#			factor = 5
+#			age = 60
+#		}
+#		modifier = {
+#			factor = 6
+#			age = 70
+#		}
+#		modifier = {
+#			factor = 7
+#			age = 80
+#		}
+#		modifier = {
+#			factor = 8
+#			age = 90
+#		}
+#		modifier = {
+#			factor = 9
+#			age = 100
+#		}
+#		modifier = {
+#			factor = 10
+#			age = 120
+#		}
+#		modifier = { # Elder Scrolls heroes are always prisoners!
+#			factor = 0.15
+#			prisoner = yes
+#		}
+#		#Bloodlines less likely to get dragonborn
+#		modifier = {
+#			factor = 1.5
+#			has_bloodline = yes
+#		}
+#		#Negative congenital traits
+#		modifier = { factor = 10 trait = imbecile }
+#		modifier = { factor = 8 trait = inbred }
+#		modifier = { factor = 6 trait = slow }
+#		modifier = { factor = 3 trait = weak }
+#		modifier = { factor = 2 trait = dwarf }
+#		modifier = { factor = 2 trait = stutter }
+#		modifier = { factor = 2 trait = lisp }
+#		modifier = { factor = 5 trait = hunchback }
+#		modifier = { factor = 2 trait = harelip }
+#		modifier = { factor = 4 trait = clubfooted }
+#		modifier = { factor = 2 trait = mute }
+#		modifier = { factor = 3 trait = deaf }
+#		modifier = { factor = 4 trait = blind }
+#		modifier = { factor = 2 trait = wrymouth }
+#		modifier = { factor = 3 trait = feeble }
+#		modifier = { factor = 2 trait = dull }
+#		#Positive Congenital Traits
+#		modifier = { factor = 0.9 trait = fortitude }
+#		modifier = { factor = 0.85 trait = perceptive }
+#		modifier = { factor = 0.9 trait = powerful_voice }
+#		modifier = { factor = 0.85 trait = agile }
+#		modifier = { factor = 0.8 trait = genius }
+#		modifier = { factor = 0.85 trait = quick }
+#		modifier = { factor = 0.75 OR = { trait = raht trait = strong } }
+#		modifier = { factor = 0.8 trait = robust }
+#		modifier = { factor = 0.8 trait = lucky }
+#		modifier = { factor = 0.85 trait = shrewd }
+#		#Other Traits
+#		modifier = { factor = 0.95 is_veteran_leader = yes }
+#		modifier = { factor = 0.9 is_inspiring_leader = yes }
+#		modifier = { factor = 3 trait = dragonborn_descendant }
+#		modifier = { factor = 0.95 trait = proud }
+#		modifier = { factor = 0.95 trait = brave }
+#		modifier = { factor = 0.95 trait = impaler }
+#		modifier = { factor = 0.95 trait = duelist }
+#		modifier = { factor = 0.95 trait = hunter }
+#		modifier = { factor = 0.95 trait = gladiator }
+#		modifier = { factor = 0.95 trait = adventurer }
+#		modifier = { factor = 2 trait = necromancer }
+#		modifier = { factor = 0.95 trait = mystic }
+#		modifier = { factor = 0.97 trait = falconer }
+#		modifier = { factor = 1.5 trait = slothful }
+#		modifier = { factor = 1.1 trait = humble }
+#		modifier = { factor = 2 trait = craven }
+#		modifier = { factor = 1.1 trait = shy }
+#		modifier = { factor = 0.95 trait = gregarious }
+#		modifier = { factor = 0.95 trait = ambitious }
+	#	modifier = { factor = 1.1 trait = content }
+	#	modifier = { # at least some players should have the thrill
+#			factor = 0.025
+#			ai = no
+#		}
+#	}
+	
+#	immediate = {
+#		add_trait = dragonborn
+#		any_child_even_if_dead = {
+#			limit = { NOT = { trait = bastard } }
+#			add_trait = dragonborn_descendant
+#			any_child_even_if_dead = {
+#				limit = { NOR = { trait = bastard trait = legit_bastard } }
+#				add_trait = dragonborn_descendant
+#			}
+#		}
+#	}
+#	option = {
+#		name = dragonborn.1.1
+#		narrative_event = { id = dragonborn.1 days = 1 }
+#	}
+#}
+narrative_event = {
+	id = dragonborn.1
+	major = yes
+	only_rulers = yes
+	title = dragonborn.2.title
+	desc = dragonborn.2.desc
+	picture = GFX_evt_dragonborn
+	is_triggered_only = yes
+	option = {
+		name = dragonborn.2.1
+	}
+}

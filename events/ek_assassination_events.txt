@@ -1,0 +1,6777 @@
+#Events dealing with the sending of various types of assassins to stamp out those who oppose you
+#Written by jjsfw/jumbi and Etienne
+
+namespace = assassination
+
+###DB - 30 - 59
+###MT - 60 - 89
+###Hired Goons - 90 - 119
+
+##### Assassination Selection - Pick your Poison #####
+character_event = {
+	id = assassination.1
+	desc = assassination.desc.1
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		save_event_target_as = murder_client
+		FROM = { save_event_target_as = murder_target }
+		
+		##### Which assassin guild can be used?
+		##### At any given time, only ONE assassin guild can be contracted (religious and region blocks)
+		##### So we can just pick the one here and roll with it for the rest of the event chain!
+		
+		### Dark Brotherhood?
+		if = {
+			limit = {
+				is_dunmer_great_house = no
+				NOR = {
+					religion = almsivi
+					religion = nerevarine
+					religion = almsivi_old_velothi
+					religion = reclamationist
+					religion = daedra_mephala
+					religion = sixth_house
+					
+					## The religion discount is applied in the immediate now
+					#religion = sithis
+				}
+				location = { #No DB abroad
+					region = nirn_tamriel
+				}
+				FROM = { #No DB abroad, can't be in the DB, and can't exceed assassination threshold
+					location = {
+						region = nirn_tamriel
+					}
+					NOR = { 
+						society_member_of = dark_brotherhood_tamriel
+						has_character_flag = defeated_db_5
+					}
+				}
+				any_society_member = {
+					society_member_of = dark_brotherhood_tamriel
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+					has_any_quest = no
+				}
+			}
+			
+			dark_brotherhood_tamriel = { save_event_target_as = murder_guild }
+		}
+		
+		### Morag Tong?
+		if = {
+			limit = {
+				OR = {
+					religion = almsivi
+					religion = nerevarine
+					religion = almsivi_old_velothi
+					religion = reclamationist
+					is_dunmer_great_house = yes
+					
+					## The religion discount is applied in the immediate now
+					#religion = daedra_mephala
+				}
+				location = { #No MT abroad
+					region = nirn_tamriel
+				}
+				FROM = { #No MT abroad, can't be in the MT, and can't exceed assassination threshold
+					location = {
+						region = nirn_tamriel
+					}
+					NOR = { 
+						society_member_of = morag_tong_tamriel
+						has_character_flag = defeated_mt_5
+					}
+				}
+				any_society_member = {
+					society_member_of = morag_tong_tamriel
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+					has_any_quest = no
+				}
+			}
+			
+			morag_tong_tamriel = { save_event_target_as = murder_guild }
+		}
+		
+		### Order of the Pale Mist?
+		if = {
+			limit = {
+				location = { #No OPM abroad
+					region = nirn_akavir
+				}
+				FROM = { #No OPM abroad, can't be in the OPM, and can't exceed assassination threshold
+					location = {
+						region = nirn_akavir
+					}
+					NOR = { 
+						society_member_of = assassin_guild_akavir
+						has_character_flag = defeated_opm_5
+					}
+				}
+				any_society_member = {
+					society_member_of = assassin_guild_akavir
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+					has_any_quest = no
+				}
+			}
+			
+			assassin_guild_akavir = { save_event_target_as = murder_guild }
+		}
+		
+		##### Calculate the cost
+		### Base due to the rank of the target
+		# Personal rank
+		if = {
+			limit = { event_target:murder_target = { is_landed = yes } }
+			event_target:murder_target = {
+				trigger_switch = {
+					on_trigger = tier
+					emperor = { event_target:murder_client = { set_variable = { which = local_assassination_price value = 1250 } } }
+					king 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 1000 } } }
+					duke 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 750 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 500 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 250 } } }
+					baron 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 200 } } }
+				}
+			}
+		}
+		
+		# Highest rank of a close relative
+		else_if = {
+			limit = { event_target:murder_target = { highest_ranked_relative = { is_landed = yes } } }
+			event_target:murder_target = { highest_ranked_relative = { save_event_target_as = highest_rank } }
+			event_target:highest_rank = {
+				trigger_switch = {
+					on_trigger = tier
+					emperor = { event_target:murder_client = { set_variable = { which = local_assassination_price value = 1000 } } }
+					king 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 800 } } }
+					duke 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 600 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 400 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 200 } } }
+					baron 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 160 } } }
+				}
+			}
+		}
+		
+		# If unlanded, quite cheap
+		else = {
+			event_target:murder_client = { set_variable = { which = local_assassination_price value = 150 } }
+		}
+		
+		### The cost is then adjusted due to the client's religion and the guild contracted (only in tooltip)
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						event_target:murder_client = { religion = sithis }
+						event_target:murder_guild = { is_society = dark_brotherhood_tamriel }
+					}
+					
+					AND = {
+						event_target:murder_client = { religion = daedra_mephala }
+						event_target:murder_guild = { is_society = morag_tong_tamriel }
+					}
+				}
+			}
+			multiply_variable = { which = local_assassination_price value = 0.8 }
+		}
+		
+		### Discount for doing it yourself
+		set_variable = { which = local_assassination_price_self which = local_assassination_price }
+		multiply_variable = { which = local_assassination_price_self value = 0.24 }
+		
+		### Discount for hiring goons
+		set_variable = { which = local_assassination_price_goons which = local_assassination_price }
+		multiply_variable = { which = local_assassination_price_goons value = 0.5 }
+	}
+	
+	option = {
+		name = assassination.1.opta #Hire the assassin guild
+		
+		trigger = {
+			event_target:murder_guild = {
+				society_is_active = yes
+				NOT = { ROOT = { society_member_of = PREV } }
+			}
+			
+			wealth = local_assassination_price
+		}
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		custom_tooltip = { text = ASSASSINATION_COST_GUILD_CT }
+		
+		character_event = { id = assassination.30 }
+	}
+	
+	option = {
+		name = assassination.1.opta2 #When you want things done right...do them yourself! Part of the assassin guild
+		
+		trigger = {
+			event_target:murder_guild = {
+				society_is_active = yes
+				ROOT = { society_member_of = PREV }
+			}
+			
+			wealth = local_assassination_price_self
+		}
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		custom_tooltip = { text = ASSASSINATION_COST_YOURSELF_CT }
+		
+		society_quest_event = { id = assassination.350 }
+	}
+	
+	option = {
+		name = assassination.1.optOther #Hire some goons! - Anyone can do this
+		trigger = {
+			wealth = local_assassination_price_goons
+		}
+		
+		ai_chance = {
+			factor = 1
+		}
+		
+		custom_tooltip = { text = ASSASSINATION_COST_GOONS_CT }
+		
+		character_event = { id = assassination.90 }
+	}
+	
+	option = {
+		name = assassination.2.decline
+		ai_chance = {
+			factor = 0 #AI chance handled in decision
+		}
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+		clr_character_flag = ek_assassins_hired
+	}
+}
+
+##### Assassination System #####
+
+#The assassin guild awaits your command!
+character_event = {
+	id = assassination.30
+	picture = GFX_evt_shadow
+	
+	desc = {
+		trigger = {
+			event_target:murder_guild = { is_society = dark_brotherhood_tamriel }
+		}
+		text = assassination.30.descDB
+	}
+	
+	desc = {
+		trigger = { event_target:murder_guild = { NOT = { is_society = dark_brotherhood_tamriel } } }
+		text = assassination.30.descOther
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		save_event_target_as = murder_client
+		
+		##### Calculate the cost
+		
+		### Base due to the rank of the target
+		# Personal rank
+		if = {
+			limit = { event_target:murder_target = { is_landed = yes } }
+			event_target:murder_target = {
+				trigger_switch = {
+					on_trigger = tier
+					emperor = { event_target:murder_client = { set_variable = { which = local_assassination_price value = 1250 } } }
+					king 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 1000 } } }
+					duke 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 750 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 500 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 250 } } }
+				}
+			}
+		}
+		
+		# Highest rank of a close relative
+		else_if = {
+			limit = { event_target:murder_target = { highest_ranked_relative = { is_landed = yes } } }
+			event_target:murder_target = { highest_ranked_relative = { save_event_target_as = highest_rank } }
+			event_target:highest_rank = {
+				trigger_switch = {
+					on_trigger = tier
+					emperor = { event_target:murder_client = { set_variable = { which = local_assassination_price value = 1000 } } }
+					king 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 800 } } }
+					duke 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 600 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 400 } } }
+					count 	= { event_target:murder_client = { set_variable = { which = local_assassination_price value = 200 } } }
+				}
+			}
+		}
+		
+		# If unlanded, quite cheap
+		else = {
+			event_target:murder_client = { set_variable = { which = local_assassination_price value = 150 } }
+		}
+		
+		### The cost is then adjusted due to the client's religion and the guild contracted
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						event_target:murder_client = { religion = sithis }
+						event_target:murder_guild = { is_society = dark_brotherhood_tamriel }
+					}
+					
+					AND = {
+						event_target:murder_client = { religion = daedra_mephala }
+						event_target:murder_guild = { is_society = morag_tong_tamriel }
+					}
+				}
+			}
+			multiply_variable = { which = local_assassination_price value = 0.8 }
+		}
+		
+		### Oh yeah, it's a cost so it has to be negative
+		set_variable = { which = local_assassination_cost which = local_assassination_price }
+		multiply_variable = { which = local_assassination_cost value = -1 }
+	}
+	
+	# Hire the assassins!
+	option = {
+		name = {
+			text = assassination.aDB.30
+			
+			trigger = { event_target:murder_guild = { is_society = dark_brotherhood_tamriel } }
+		}
+		
+		name = {
+			text = assassination.aOther.30
+			
+			trigger = { NOT = { event_target:murder_guild = { is_society = dark_brotherhood_tamriel } } }
+		}
+		
+		event_target:murder_client = { wealth = local_assassination_cost }
+		
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:murder_guild
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+					has_any_quest = no
+				}
+				society_quest_event = { id = assassination.300 }
+			}
+		}
+		clr_character_flag = ek_assassins_hired
+	}
+	
+	# Actually, no
+	option = {
+		name = assassination.b.30
+		ai_chance = {
+			factor = 0 #AI chance handled in decision
+		}
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+		}
+		clr_character_flag = ek_assassins_hired
+	}
+}
+
+##### Hired Goons Assassination System #####
+
+#Hired Goons await your command!
+character_event = {
+	id = assassination.90
+	desc = assassination.desc.90
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_variable = { which = local_assassination_cost which = local_assassination_price_goons }
+		multiply_variable = { which = local_assassination_cost value = -1 }
+	}
+	
+	option = {
+		name = assassination.a.90
+		
+		wealth = local_assassination_cost
+		
+		FROMFROM = {
+			character_event = { id = assassination.91 days = 3 }
+		}
+		
+		clr_character_flag = ek_assassins_hired
+	}
+	option = { #Don't hire Goons
+		name = assassination.b.90
+		ai_chance = {
+			factor = 0 #AI chance handled in decision
+		}
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+		}
+		clr_character_flag = ek_assassins_hired
+	}
+}
+
+#Hidden intrigue calculation
+
+character_event = {
+	id = assassination.91
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		#The ability of hired goons to kill a target is contingent on the target's Personal Combat Skill
+		#Hired goons tend to not be subtle about their work, and also are ineffective against moderately-skilled fighters
+		#However, even somewhat powerful characters may be wounded
+		#If you have a powerful court assassin, consider sending them instead!
+		if = {
+			limit = {
+				NOT = { intrigue = 1 }
+			}
+			FROM = {
+				character_event = { id = assassination.92 } #Successful Infiltration - The assassination attempt is made
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 1
+				NOT = { intrigue = 2 }
+			}
+			FROM = {
+				random_list = {
+					96 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					4 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 2
+				NOT = { intrigue = 3 }
+			}
+			FROM = {
+				random_list = {
+					92 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					7 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					1 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 3
+				NOT = { intrigue = 4 }
+			}
+			FROM = {
+				random_list = {
+					88 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					10 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					2 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 4
+				NOT = { intrigue = 5 }
+			}
+			FROM = {
+				random_list = {
+					84 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					13 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					3 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 5
+				NOT = { intrigue = 6 }
+			}
+			FROM = {
+				random_list = {
+					80 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					16 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					4 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 6
+				NOT = { intrigue = 7 }
+			}
+			FROM = {
+				random_list = {
+					75 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					20 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					5 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 7
+				NOT = { intrigue = 8 }
+			}
+			FROM = {
+				random_list = {
+					70 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					24 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					6 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 8
+				NOT = { intrigue = 9 }
+			}
+			FROM = {
+				random_list = {
+					65 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					28 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					7 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 9
+				NOT = { intrigue = 10 }
+			}
+			FROM = {
+				random_list = {
+					60 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					32 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					8 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 10
+				NOT = { intrigue = 11 }
+			}
+			FROM = {
+				random_list = {
+					55 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					36 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					9 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 11
+				NOT = { intrigue = 12 }
+			}
+			FROM = {
+				random_list = {
+					50 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					40 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					10 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 12
+				NOT = { intrigue = 13 }
+			}
+			FROM ={
+				random_list = {
+					45 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					40 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					15 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 13
+				NOT = { intrigue = 14 }
+			}
+			FROM = {
+				random_list = {
+					40 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					40 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					20 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 14
+				NOT = { intrigue = 15 }
+			}
+			FROM = {
+				random_list = {
+					35 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					40 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					25 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 15
+				NOT = { intrigue = 16 }
+			}
+			FROM = {
+				random_list = {
+					30 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					40 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					30 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 16
+				NOT = { intrigue = 17 }
+			}
+			FROM = {
+				random_list = {
+					25 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					35 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					40 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 17
+				NOT = { intrigue = 18 }
+			}
+			FROM = {
+				random_list = {
+					20 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					30 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					50 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 18
+				NOT = { intrigue = 19 }
+			}
+			FROM = {
+				random_list = {
+					15 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					25 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					60 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 19
+				NOT = { intrigue = 20 }
+			}
+			FROM = {
+				random_list = {
+					10 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					20 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					70 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 20
+				NOT = { intrigue = 21 }
+			}
+			FROM = {
+				random_list = {
+					5 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					15 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					80 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+		if = {
+			limit = {
+				intrigue = 21
+			}
+			FROM = {
+				random_list = {
+					5 = { character_event = { id = assassination.92 } } #Successful Infiltration - The assassination attempt is made
+					10 = { character_event = { id = assassination.93 } } #Unsuccessful Infiltration - Not discovered
+					85 = { character_event = { id = assassination.94 } } #Unsuccessful Infiltration - Discovered
+				}
+			}
+		}
+	}
+}
+
+#Successful Infiltration - Pings the attacker
+character_event = {
+	id = assassination.92
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = assassination.100 }
+		}
+	}
+}
+
+#Failed infiltration - No Discovery - Ping the attacker
+
+character_event = {
+	id = assassination.93
+	desc = assassination.desc.93
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = assassination.95 } #Notify the Target
+		}
+	}
+	
+	option = {
+		name = assassination.a.93
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+	}
+}
+
+#Failed infiltration - Discovery
+
+character_event = {
+	id = assassination.94
+	desc = assassination.desc.94
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = {
+			character_event = { id = assassination.96 } #Notify the Target
+		}
+	}
+	
+	option = {
+		name = assassination.a.94
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+	}
+}
+
+#Failed infiltration on target - No Discovery
+
+character_event = {
+	id = assassination.95
+	desc = assassination.desc.95
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination.a.95
+	}
+}
+
+#Failed infiltration on target - Discovery
+
+character_event = {
+	id = assassination.96
+	desc = assassination.desc.96
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		save_event_target_as = target_victim
+		FROM = {
+			character_event = { id = 11 }
+		}
+		clear_event_target = target_victim
+	}
+
+	option = {
+		name = "assassination.a.96"
+		
+		if = {
+			limit = {
+				host = { NOT = { character = FROM } }
+				job_spymaster = {
+					NOT = { character = FROM }
+				}
+			}
+			hidden_tooltip = { host = { character_event = { id = 40020 days = 5 }  } }
+		}
+	}
+}
+
+#Hidden assassination calculation
+character_event = {
+	id = assassination.100
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		#The ability of assassination guilds to kill a target is contingent on the target's Personal Combat Skill
+		#Extremely powerful characters are VERY difficult to successfully assassinate
+		#However, even powerful characters may be wounded
+		#If you have a powerful court assassin, consider sending them instead!
+		if = {
+			limit = {
+				NOT = { combat_rating = 4 }
+			}
+			FROM = {
+				random_list = {
+					50 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					50 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 4
+				NOT = { combat_rating = 8 }
+			}
+			FROM = {
+				random_list = {
+					46 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					46 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					4 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					4 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 8
+				NOT = { combat_rating = 12 }
+			}
+			FROM = {
+				random_list = {
+					42 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					42 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					4 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					4 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					4 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					4 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 12
+				NOT = { combat_rating = 16 }
+			}
+			FROM = {
+				random_list = {
+					38 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					38 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					6 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					6 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					6 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					6 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 16
+				NOT = { combat_rating = 20 }
+			}
+			FROM = {
+				random_list = {
+					34 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					34 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					8 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					8 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					8 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					8 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 20
+				NOT = { combat_rating = 24 }
+			}
+			FROM = {
+				random_list = {
+					30 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					30 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					10 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					10 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					10 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					10 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 24
+				NOT = { combat_rating = 28 }
+			}
+			FROM = {
+				random_list = {
+					25 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					25 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					10 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					10 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					15 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					15 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 28
+				NOT = { combat_rating = 32 }
+			}
+			FROM = {
+				random_list = {
+					20 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					20 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					10 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					10 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					20 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					20 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 32
+				NOT = { combat_rating = 36 }
+			}
+			FROM = {
+				random_list = {
+					15 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					15 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					10 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					10 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					25 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					25 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 36
+				NOT = { combat_rating = 40 }
+			}
+			FROM = {
+				random_list = {
+					12 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					12 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					8 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					8 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					30 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					30 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 40
+				NOT = { combat_rating = 44 }
+			}
+			FROM = {
+				random_list = {
+					10 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					10 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					7 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					7 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					33 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					33 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 44
+				NOT = { combat_rating = 48 }
+			}
+			FROM = {
+				random_list = {
+					9 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					9 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					6 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					6 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					35 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					35 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 48
+				NOT = { combat_rating = 52 }
+			}
+			FROM = {
+				random_list = {
+					8 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					8 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					5 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					5 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					37 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					37 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 52
+				NOT = { combat_rating = 56 }
+			}
+			FROM = {
+				random_list = {
+					7 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					7 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					5 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					5 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					38 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					38 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 56
+				NOT = { combat_rating = 60 }
+			}
+			FROM = {
+				random_list = {
+					6 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					6 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					5 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					5 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					39 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					39 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 60
+				NOT = { combat_rating = 64 }
+			}
+			FROM = {
+				random_list = {
+					5 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					5 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					5 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					5 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					40 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					40 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 64
+				NOT = { combat_rating = 68 }
+			}
+			FROM = {
+				random_list = {
+					4 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					4 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					4 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					4 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					42 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					42 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 68
+				NOT = { combat_rating = 72 }
+			}
+			FROM = {
+				random_list = {
+					3 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					3 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					3 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					3 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					44 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					44 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 72
+				NOT = { combat_rating = 76 }
+			}
+			FROM = {
+				random_list = {
+					2 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					2 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					2 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					2 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					46 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					46 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 76
+				NOT = { combat_rating = 80 }
+			}
+			FROM = {
+				random_list = {
+					1 = { character_event = { id = assassination.101 } } #Assassinated, no discovery
+					1 = { character_event = { id = assassination.102 } } #Assassinated, discovery is made
+					1 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					1 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					48 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					48 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 80
+				NOT = { combat_rating = 84 }
+			}
+			FROM = {
+				random_list = {
+					1 = { character_event = { id = assassination.103 } } #Wounded, no discovery
+					1 = { character_event = { id = assassination.104 } } #Wounded, discovery is made
+					49 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					49 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 84
+				NOT = { combat_rating = 88 }
+			}
+			FROM = {
+				random_list = {
+					50 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					50 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 88
+				NOT = { combat_rating = 92 }
+			}
+			FROM = {
+				random_list = {
+					25 = { character_event = { id = assassination.105 } } #Assassination fails outright, no discovery
+					75 = { character_event = { id = assassination.106 } } #Assassination fails outright, discovery is made
+				}
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 92
+			}
+			character_event = { id = assassination.106 } #Assassination fails outright, discovery is made
+		}
+	}
+}
+
+#Successful Assassination, NO Discovery - Notify the Attacker
+character_event = {
+	id = assassination.101
+	desc = assassination.desc.101
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.110 } }
+	}
+	
+	option = {
+		name = assassination.a.101
+	}
+}
+
+#Successful Assassination, Discovery - Notify the Attacker
+character_event = {
+	id = assassination.102
+	desc = assassination.desc.102
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.111 } }
+	}
+	
+	option = {
+		name = assassination.a.102
+	}
+}
+
+#Wound Target, NO Discovery - Notify the Attacker
+character_event = {
+	id = assassination.103
+	desc = assassination.desc.103
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.112 } }
+	}
+	
+	option = {
+		name = assassination.a.103
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+	}
+}
+
+#Wound Target, Discovery - Notify the Attacker
+character_event = {
+	id = assassination.104
+	desc = assassination.desc.104
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.113 } }
+	}
+	
+	option = {
+		name = assassination.a.104
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+	}
+}
+
+#No Damage, NO Discovery - Notify the Attacker
+character_event = {
+	id = assassination.105
+	desc = assassination.desc.105
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.114 } }
+	}
+	
+	option = {
+		name = assassination.a.105
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+	}
+}
+
+#No Damage, Discovery - Notify the Attacker
+character_event = {
+	id = assassination.106
+	desc = assassination.desc.106
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.115 } }
+	}
+	
+	option = {
+		name = assassination.a.106
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+	}
+}
+
+############
+
+#Successful Assassination, NO Discovery - Notify the Target
+character_event = {
+	id = assassination.110
+	desc = assassination.desc.110
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = "assassination.a.111"
+		death = {
+			death_reason = death_murder_unknown
+			killer = FROM
+		}
+	}	
+}
+
+#successful Assassination, Discovery - Notify the Target
+character_event = {
+	id = assassination.111
+	desc = assassination.desc.111
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		save_event_target_as = target_victim
+		FROM = {
+			character_event = { id = 10 }
+		}
+		clear_event_target = target_victim
+		
+		if = {
+			limit = {
+				employer = {
+					NOT = { character = FROM }
+					NOT = { character = ROOT }
+					job_spymaster = {
+						NOT = { character = FROM }
+					}
+				}
+			}
+			FROM = { set_character_flag = we_are_evil_assasinator }
+			employer = { character_event = { id = 40020 days = 5 } }
+		}
+	}
+
+	option = {
+		name = assassination.a.110
+		death = {
+			death_reason = death_murder
+			killer = FROM
+		}
+	}
+}
+
+#Wound Target, No Discovery - Notify the Target
+character_event = {
+	id = assassination.112
+	desc = assassination.desc.112
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination.a.112
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+}
+
+#Wound Target, Discovery - Notify the Target
+character_event = {
+	id = assassination.113
+	desc = assassination.desc.113
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		save_event_target_as = target_victim
+		FROM = {
+			character_event = { id = 11 }
+		}
+		clear_event_target = target_victim
+	}
+
+	option = {
+		name = assassination.a.113
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+		if = {
+			limit = {
+				host = { NOT = { character = FROM } }
+				job_spymaster = {
+					NOT = { character = FROM }
+				}
+			}
+			hidden_tooltip = { host = { character_event = { id = 40020 days = 5 }  } }
+		}
+	}
+}
+
+#No Damage, No Discovery - Notify the Target
+character_event = {
+	id = assassination.114
+	desc = assassination.desc.114
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination.a.114
+	}
+}
+
+#No Damage, Discovery - Notify the Target
+character_event = {
+	id = assassination.115
+	desc = assassination.desc.115
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		save_event_target_as = target_victim
+		FROM = {
+			character_event = { id = 11 }
+		}
+		clear_event_target = target_victim
+	}
+
+	option = {
+		name = assassination.a.115
+		
+		if = {
+			limit = {
+				host = { NOT = { character = FROM } }
+				job_spymaster = {
+					NOT = { character = FROM }
+				}
+			}
+			hidden_tooltip = { host = { character_event = { id = 40020 days = 5 }  } }
+		}
+	}
+}
+
+# Assassin guild Character Assassination
+society_quest_event = {
+	id = assassination.300
+	title = quest_major_assassination
+	desc = assassination300
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination300accept
+		event_target:murder_target = {
+			set_quest_target = {
+				id = quest_major_assassination
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = assassination.305 days = 5 } 
+			}
+		}
+	}
+}
+
+#Intrigue Check: Target vs Assassin (sent to target)
+character_event = {
+	id = assassination.305
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			25 = { #Sucessful repulsion by target - Target captures assassin
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.310 } }
+			}
+			75 = { #Successful infiltration by assassin - Assassination Launched
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.320 } }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = assassination.310
+	desc = assassination310
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination310accept
+		clr_quest = {
+			id = quest_major_assassination
+			failure = yes
+		}
+		imprison = FROM
+		FROM = { character_event = { id = assassination.312 } }
+		event_target:murder_client = { character_event = { id = assassination.314 } }
+	}
+}
+
+character_event = {
+	id = assassination.312
+	desc = assassination312
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination312accept
+		opinion = {
+			modifier = scheming_bastard
+			who = FROM
+			years = 10			
+		}
+	}
+}
+
+character_event = {
+	id = assassination.314
+	desc = assassination314
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination314accept
+		clear_event_target = murder_client
+		hidden_tooltip = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+			FROMFROM = { clear_event_target = murder_target }
+		}
+	}
+}
+
+character_event = {
+	id = assassination.320
+	desc = assassination320
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination320accept
+		FROM = { character_event = { id = assassination.322 } }
+	}
+}
+
+#Hidden assassination combat event, fired on target
+character_event = {
+	id = assassination.322
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the assassin ambushed the character, the assassin has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				20 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				10 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				1 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				20 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				25 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				20 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				25 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				35 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = assassination.325 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.326 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				59 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				10 = { FROM = { character_event = { id = assassination.327 } } } #Target wounded, assassin killed
+				90 = { FROM = { character_event = { id = assassination.328 } } } #Target kills assassin
+			}
+		}
+	}
+}
+
+#Character dies
+character_event = {
+	id = assassination.325
+	desc = assassination325
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.330 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination325accept
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Character dies, assassin wounded
+character_event = {
+	id = assassination.326
+	desc = assassination326
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.331 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination326accept
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Assassin killed, character wounded
+character_event = {
+	id = assassination.327
+	desc = assassination327
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.332 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination327accept
+		clr_quest = {
+			id = quest_major_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+		hidden_tooltip = {
+			event_target:murder_client = {
+				character_event = { id = assassination.341 }
+			}
+		}
+	}
+}
+
+#Assassin killed, character is fine
+character_event = {
+	id = assassination.328
+	desc = assassination328
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.333 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination328accept
+		clr_quest = {
+			id = quest_major_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+		hidden_tooltip = {
+			event_target:murder_client = {
+				character_event = { id = assassination.342 }
+			}
+		}
+	}
+}
+
+#Killer notified, no injuries
+character_event = {
+	id = assassination.330
+	desc = assassination330
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination330accept
+		character_event = { id = assassination.335 }
+	}
+}
+
+#Killer notified, injured
+character_event = {
+	id = assassination.331
+	desc = assassination331
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination331accept
+		character_event = { id = assassination.335 }
+	}
+}
+
+#Target survives the assassination, wounded 
+character_event = {
+	id = assassination.332
+	desc = assassination332
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination332accept
+
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = defeated_assassin_1
+					has_character_flag = defeated_assassin_2
+					has_character_flag = defeated_assassin_3
+					has_character_flag = defeated_assassin_4
+					has_character_flag = defeated_assassin_5
+				}
+			}
+			set_character_flag = defeated_assassin_1
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_1
+			}
+			clr_character_flag = defeated_assassin_1
+			set_character_flag = defeated_assassin_2
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_2
+			}
+			clr_character_flag = defeated_assassin_2
+			set_character_flag = defeated_assassin_3
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_3
+			}
+			clr_character_flag = defeated_assassin_3
+			set_character_flag = defeated_assassin_4
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_4
+			}
+			clr_character_flag = defeated_assassin_4
+			set_character_flag = defeated_assassin_5
+			break = yes
+		}
+	}
+}
+
+#Target survives the assassination, wounded 
+character_event = {
+	id = assassination.333
+	desc = assassination333
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination333accept
+		
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = defeated_assassin_1
+					has_character_flag = defeated_assassin_2
+					has_character_flag = defeated_assassin_3
+					has_character_flag = defeated_assassin_4
+					has_character_flag = defeated_assassin_5
+				}
+			}
+			set_character_flag = defeated_assassin_1
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_1
+			}
+			clr_character_flag = defeated_assassin_1
+			set_character_flag = defeated_assassin_2
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_2
+			}
+			clr_character_flag = defeated_assassin_2
+			set_character_flag = defeated_assassin_3
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_3
+			}
+			clr_character_flag = defeated_assassin_3
+			set_character_flag = defeated_assassin_4
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_assassin_4
+			}
+			clr_character_flag = defeated_assassin_4
+			set_character_flag = defeated_assassin_5
+			break = yes
+		}
+	}
+}
+
+#Assassin success follow-up; mission cleared
+character_event = {
+	id = assassination.335
+	desc = assassination335
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination335accept
+		clr_quest = quest_db_major_assassination
+		add_society_currency_major_effect = yes
+		
+		set_variable = { which = local_assassination_payment which = local_assassination_price }
+		multiply_variable = { which = local_assassination_payment value = 0.4 }
+		
+		wealth = local_assassination_payment
+		
+		random_society_member = {
+			limit = {
+				is_society_grandmaster = yes
+				society_member_of = event_target:murder_guild
+			}
+			wealth = local_assassination_payment
+		}
+		
+		hidden_tooltip = {
+			event_target:murder_client = {
+				character_event = { id = assassination.340 }
+			}
+		}
+	}
+}
+
+#Assassination success! Client notification event
+character_event = {
+	id = assassination.340
+	desc = assassination340
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination340accept
+		clear_event_target = murder_client
+	}
+}
+
+#Assassination failure! Target injured, client notification
+character_event = {
+	id = assassination.341
+	desc = assassination341
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination341accept
+		clear_event_target = murder_client
+		hidden_tooltip = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+			FROMFROM = { clear_event_target = murder_target }
+		}
+	}
+}
+
+#Assassination failure! Target uninjured, client notification
+character_event = {
+	id = assassination.342
+	desc = assassination342
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination342accept
+		clear_event_target = murder_client
+		hidden_tooltip = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+			FROMFROM = { clear_event_target = murder_target }
+		}
+	}
+}
+
+#Dark Brotherhood Personal Character Assassination
+society_quest_event = {
+	id = assassination.350
+	title = quest_db_personal_assassination
+	desc = assassination350
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_variable = { which = local_assassination_cost which = local_assassination_price_self }
+		multiply_variable = { which = local_assassination_cost value = -1 }
+	}
+		
+	
+	option = {
+		name = assassination350accept
+		ai_chance = {
+			factor = 1
+		}
+		
+		wealth = local_assassination_cost
+		
+		event_target:murder_target = {
+			set_quest_target = {
+				id = quest_personal_assassination
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = assassination.355 days = 10 } 
+			}
+		}
+		clr_character_flag = ek_assassins_hired
+	}
+	
+	option = {
+		name = assassination350decline
+		ai_chance = {
+			factor = 0
+		}
+		clr_character_flag = ek_assassins_hired
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+		}
+		event_target:murder_target = {
+			hidden_effect = {
+				character_event = { id = assassination.352 } 
+			}
+		}
+	}
+}
+
+#Clear-up event for target if mission is declined
+character_event = {
+	id = assassination.352
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = murder_target
+	}
+}
+
+#Intrigue Check: Target vs Assassin (sent to target)
+character_event = {
+	id = assassination.355
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			25 = { #Sucessful repulsion by target - Target captures assassin
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.360 } }
+			}
+			75 = { #Successful infiltration by assassin - Assassination Launched
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.370 } }
+			}
+		}
+	}
+}
+
+#Assassin Caught! Then send event to target.
+character_event = {
+	id = assassination.360
+	desc = assassination360
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination360accept
+		clr_quest = {
+			id = quest_personal_assassination
+			failure = yes
+		}
+		imprison = FROM
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+		FROM = { character_event = { id = assassination.312 } }
+	}
+}
+
+character_event = {
+	id = assassination.370
+	desc = assassination370
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination370accept
+		FROM = { character_event = { id = assassination.372 } }
+	}
+}
+
+#Hidden assassination combat event, fired on target
+character_event = {
+	id = assassination.372
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the assassin ambushed the character, the assassin has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				20 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				10 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				1 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				20 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				25 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				20 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				25 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				35 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = assassination.375 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.376 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				59 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				10 = { FROM = { character_event = { id = assassination.377 } } } #Target wounded, assassin killed
+				90 = { FROM = { character_event = { id = assassination.378 } } } #Target kills assassin
+			}
+		}
+	}
+}
+
+#Character dies
+character_event = {
+	id = assassination.375
+	desc = assassination375
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.380 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination375accept
+		clear_event_target = murder_target
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Character dies, assassin wounded
+character_event = {
+	id = assassination.376
+	desc = assassination376
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.381 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination376accept
+		clear_event_target = murder_target
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Assassin killed, character wounded
+character_event = {
+	id = assassination.377
+	desc = assassination377
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.382 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination377accept
+		clr_quest = {
+			id = quest_personal_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Assassin killed, character is fine
+character_event = {
+	id = assassination.378
+	desc = assassination378
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.383 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination378accept
+		clr_quest = {
+			id = quest_personal_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Killer notified, no injuries
+character_event = {
+	id = assassination.380
+	desc = assassination380
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination380accept
+		character_event = { id = assassination.385 }
+	}
+}
+
+#Killer notified, injured
+character_event = {
+	id = assassination.381
+	desc = assassination381
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination381accept
+		character_event = { id = assassination.385 }
+	}
+}
+
+#Target survives the assassination, wounded 
+character_event = {
+	id = assassination.382
+	desc = assassination382
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination382accept
+		clear_event_target = murder_target
+	}
+}
+
+#Target survives the assassination, uninjured 
+character_event = {
+	id = assassination.383
+	desc = assassination383
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination383accept
+		clear_event_target = murder_target
+	}
+}
+
+#Assassin success follow-up; mission cleared
+character_event = {
+	id = assassination.385
+	desc = assassination385
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination385accept
+		clr_quest = quest_personal_assassination
+		add_society_currency_medium_effect = yes
+	}
+}
+
+#
+#
+#
+#Morag Tong Version
+#
+#
+#
+
+#Morag Tong Character Assassination
+society_quest_event = {
+	id = assassination.400
+	title = quest_mt_major_assassination
+	desc = assassination400
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination400accept
+		event_target:mt_murder_target = {
+			set_quest_target = {
+				id = quest_mt_major_assassination
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = assassination.405 days = 5 } 
+			}
+		}
+	}
+}
+
+#Intrigue Check: Target vs Assassin (sent to target)
+character_event = {
+	id = assassination.405
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			25 = { #Sucessful repulsion by target - Target captures assassin
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.410 } }
+			}
+			75 = { #Successful infiltration by assassin - Assassination Launched
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.420 } }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = assassination.410
+	desc = assassination410
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination410accept
+		clr_quest = {
+			id = quest_mt_major_assassination
+			failure = yes
+		}
+		imprison = FROM
+		FROM = { character_event = { id = assassination.412 } }
+		event_target:mt_murder_client = { character_event = { id = assassination.414 } }
+	}
+}
+
+character_event = {
+	id = assassination.412
+	desc = assassination412
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination412accept
+		opinion = {
+			modifier = scheming_bastard
+			who = FROM
+			years = 10			
+		}
+	}
+}
+
+character_event = {
+	id = assassination.414
+	desc = assassination414
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination414accept
+		clear_event_target = mt_murder_client
+		hidden_tooltip = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+			FROMFROM = { clear_event_target = mt_murder_target }
+		}
+	}
+}
+
+character_event = {
+	id = assassination.420
+	desc = assassination420
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination420accept
+		FROM = { character_event = { id = assassination.422 } }
+	}
+}
+
+#Hidden assassination combat event, fired on target
+character_event = {
+	id = assassination.422
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the assassin ambushed the character, the assassin has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				20 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				10 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				1 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				20 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				25 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				20 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				25 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				35 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = assassination.425 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.426 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				59 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				10 = { FROM = { character_event = { id = assassination.427 } } } #Target wounded, assassin killed
+				90 = { FROM = { character_event = { id = assassination.428 } } } #Target kills assassin
+			}
+		}
+	}
+}
+
+#Character dies
+character_event = {
+	id = assassination.425
+	desc = assassination425
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.430 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination425accept
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Character dies, assassin wounded
+character_event = {
+	id = assassination.426
+	desc = assassination426
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.431 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination426accept
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Assassin killed, character wounded
+character_event = {
+	id = assassination.427
+	desc = assassination427
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.432 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination427accept
+		clr_quest = {
+			id = quest_mt_major_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+		hidden_tooltip = {
+			event_target:mt_murder_client = {
+				character_event = { id = assassination.441 }
+			}
+		}
+	}
+}
+
+#Assassin killed, character is fine
+character_event = {
+	id = assassination.428
+	desc = assassination428
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.433 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination428accept
+		clr_quest = {
+			id = quest_mt_major_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+		hidden_tooltip = {
+			event_target:mt_murder_client = {
+				character_event = { id = assassination.442 }
+			}
+		}
+	}
+}
+
+#Killer notified, no injuries
+character_event = {
+	id = assassination.430
+	desc = assassination430
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination430accept
+		character_event = { id = assassination.435 }
+	}
+}
+
+#Killer notified, injured
+character_event = {
+	id = assassination.431
+	desc = assassination431
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination431accept
+		character_event = { id = assassination.435 }
+	}
+}
+
+#Target survives the assassination, wounded 
+character_event = {
+	id = assassination.432
+	desc = assassination432
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination432accept
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = defeated_mt_1
+					has_character_flag = defeated_mt_2
+					has_character_flag = defeated_mt_3
+					has_character_flag = defeated_mt_4
+					has_character_flag = defeated_mt_5
+				}
+			}
+			set_character_flag = defeated_mt_1
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_1
+			}
+			clr_character_flag = defeated_mt_1
+			set_character_flag = defeated_mt_2
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_2
+			}
+			clr_character_flag = defeated_mt_2
+			set_character_flag = defeated_mt_3
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_3
+			}
+			clr_character_flag = defeated_mt_3
+			set_character_flag = defeated_mt_4
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_4
+			}
+			clr_character_flag = defeated_mt_4
+			set_character_flag = defeated_mt_5
+			break = yes
+		}
+	}
+}
+
+#Target survives the assassination, wounded 
+character_event = {
+	id = assassination.433
+	desc = assassination433
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination433accept
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = defeated_mt_1
+					has_character_flag = defeated_mt_2
+					has_character_flag = defeated_mt_3
+					has_character_flag = defeated_mt_4
+					has_character_flag = defeated_mt_5
+				}
+			}
+			set_character_flag = defeated_mt_1
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_1
+			}
+			clr_character_flag = defeated_mt_1
+			set_character_flag = defeated_mt_2
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_2
+			}
+			clr_character_flag = defeated_mt_2
+			set_character_flag = defeated_mt_3
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_3
+			}
+			clr_character_flag = defeated_mt_3
+			set_character_flag = defeated_mt_4
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = defeated_mt_4
+			}
+			clr_character_flag = defeated_mt_4
+			set_character_flag = defeated_mt_5
+			break = yes
+		}
+	}
+}
+
+#Assassin success follow-up; mission cleared
+character_event = {
+	id = assassination.435
+	desc = assassination435
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination435accept
+		clr_quest = quest_mt_major_assassination
+		add_society_currency_major_effect = yes
+		if = {
+			limit = {
+				has_character_flag = owed_1250
+			}
+			wealth = 500
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 500
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_1000
+			}
+			wealth = 400
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 400
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_800
+			}
+			wealth = 320
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 320
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_750
+			}
+			wealth = 300
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 300
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_600
+			}
+			wealth = 240
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 240
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_500
+			}
+			wealth = 200
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 200
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_400
+			}
+			wealth = 160
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 160
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_250
+			}
+			wealth = 100
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 100
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_200
+			}
+			wealth = 80
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 80
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_150
+			}
+			wealth = 60
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 60
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_120
+			}
+			wealth = 48
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 48
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_640
+			}
+			wealth = 256
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 256
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_480
+			}
+			wealth = 192
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 192
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_320
+			}
+			wealth = 128
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 128
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_160
+			}
+			wealth = 64
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 64
+			}
+			hidden_tooltip = {
+				event_target:mt_murder_client = {
+					character_event = { id = assassination.440 }
+				}
+			}
+		}
+	}
+}
+
+#Assassination success! Client notification event
+character_event = {
+	id = assassination.440
+	desc = assassination440
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination440accept
+		clear_event_target = mt_murder_client
+	}
+}
+
+#Assassination failure! Target injured, client notification
+character_event = {
+	id = assassination.441
+	desc = assassination441
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination441accept
+		clear_event_target = mt_murder_client
+		hidden_tooltip = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+			FROMFROM = { clear_event_target = mt_murder_target }
+		}
+	}
+}
+
+#Assassination failure! Target uninjured, client notification
+character_event = {
+	id = assassination.442
+	desc = assassination442
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination442accept
+		clear_event_target = mt_murder_client
+		hidden_tooltip = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+			FROMFROM = { clear_event_target = mt_murder_target }
+		}
+	}
+}
+
+#Morag Tong Personal Character Assassination
+society_quest_event = {
+	id = assassination.450
+	title = quest_mt_personal_assassination
+	desc = assassination450
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination450accept
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				event_target:mt_murder_target = {
+					tier = emperor
+				}
+			}
+			wealth = -300
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					tier = king
+				}
+			}
+			wealth = -240
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					tier = duke
+				}
+			}
+			wealth = -180
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					tier = count
+				}
+			}
+			wealth = -120
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					tier = baron
+				}
+			}
+			wealth = -60
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					NOR = {
+						tier = emperor
+						tier = king
+						tier = duke
+						tier = count
+						tier = baron
+						any_close_relative = {
+							is_landed = yes
+						}
+					}
+				}
+			}
+			wealth = -36
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					any_close_relative = {
+						tier = emperor
+					}
+				}
+			}
+			wealth = -240
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					any_close_relative = {
+						tier = king
+					}
+				}
+			}
+			wealth = -192
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					any_close_relative = {
+						tier = duke
+					}
+				}
+			}
+			wealth = -144
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					any_close_relative = {
+						tier = count
+					}
+				}
+			}
+			wealth = -96
+		}
+		else_if = {
+			limit = {
+				event_target:mt_murder_target = {
+					any_close_relative = {
+						tier = baron
+					}
+				}
+			}
+			wealth = -48
+		}
+		event_target:mt_murder_target = {
+			set_quest_target = {
+				id = quest_mt_personal_assassination
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = assassination.455 days = 10 } 
+			}
+		}
+		clr_character_flag = ek_assassins_hired
+	}
+	
+	option = {
+		name = assassination450decline
+		ai_chance = {
+			factor = 0
+		}
+		event_target:mt_murder_target = {
+			hidden_effect = {
+				character_event = { id = assassination.452 } 
+			}
+		}
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROMFROM
+			}
+		}
+		clr_character_flag = ek_assassins_hired
+	}
+}
+
+#Clear-up event for target if mission is declined
+character_event = {
+	id = assassination.452
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = mt_murder_target
+	}
+}
+
+#Intrigue Check: Target vs Assassin (sent to target)
+character_event = {
+	id = assassination.455
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			25 = { #Sucessful repulsion by target - Target captures assassin
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.460 } }
+			}
+			75 = { #Successful infiltration by assassin - Assassination Launched
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				FROM = { character_event = { id = assassination.470 } }
+			}
+		}
+	}
+}
+
+#Assassin Caught! Then send event to target.
+character_event = {
+	id = assassination.460
+	desc = assassination460
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination460accept
+		clr_quest = {
+			id = quest_mt_personal_assassination
+			failure = yes
+		}
+		imprison = FROM
+		hidden_effect = {
+			remove_opinion = {
+				modifier = opinion_employed_assassins_against
+				who = FROM
+			}
+		}
+		FROM = { character_event = { id = assassination.412 } }
+	}
+}
+
+character_event = {
+	id = assassination.470
+	desc = assassination470
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = assassination470accept
+		FROM = { character_event = { id = assassination.472 } }
+	}
+}
+
+#Hidden assassination combat event, fired on target
+character_event = {
+	id = assassination.472
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the assassin ambushed the character, the assassin has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				20 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				10 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				1 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				15 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				5 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				20 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				25 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				40 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				10 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				35 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				15 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				30 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				40 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				20 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				25 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				35 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				35 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = assassination.475 } } #Target eliminated, no fallout
+				10 = { character_event = { id = assassination.476 } } #Target eliminated, assassin wounded
+				30 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				59 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				10 = { FROM = { character_event = { id = assassination.477 } } } #Target wounded, assassin killed
+				90 = { FROM = { character_event = { id = assassination.478 } } } #Target kills assassin
+			}
+		}
+	}
+}
+
+#Character dies
+character_event = {
+	id = assassination.475
+	desc = assassination475
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.480 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination475accept
+		clear_event_target = mt_murder_target
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Character dies, assassin wounded
+character_event = {
+	id = assassination.476
+	desc = assassination476
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = { character_event = { id = assassination.481 } } #Notify killer
+	}
+	
+	option = {
+		name = assassination476accept
+		clear_event_target = mt_murder_target
+		death = { 
+			death_reason = death_murder_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Assassin killed, character wounded
+character_event = {
+	id = assassination.477
+	desc = assassination477
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.482 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination477accept
+		clr_quest = {
+			id = quest_mt_personal_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Assassin killed, character is fine
+character_event = {
+	id = assassination.478
+	desc = assassination478
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { character_event = { id = assassination.483 } } #Notify assassination target
+	}
+	
+	option = {
+		name = assassination478accept
+		clr_quest = {
+			id = quest_mt_personal_assassination
+			failure = yes
+		}
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Killer notified, no injuries
+character_event = {
+	id = assassination.480
+	desc = assassination480
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination480accept
+		character_event = { id = assassination.485 }
+	}
+}
+
+#Killer notified, injured
+character_event = {
+	id = assassination.481
+	desc = assassination481
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination481accept
+		character_event = { id = assassination.485 }
+	}
+}
+
+#Target survives the assassination, wounded 
+character_event = {
+	id = assassination.482
+	desc = assassination482
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = assassination482accept
+		clear_event_target = mt_murder_target
+	}
+}
+
+#Target survives the assassination, uninjured 
+character_event = {
+	id = assassination.483
+	desc = assassination483
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination483accept
+		clear_event_target = mt_murder_target
+	}
+}
+
+#Assassin success follow-up; mission cleared
+character_event = {
+	id = assassination.485
+	desc = assassination485
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination485accept
+		clr_quest = quest_mt_personal_assassination
+		add_society_currency_medium_effect = yes
+	}
+}
+
+##### Assassination Clean-Up #####
+#DB Clean-up - Major & Personal Assassination
+character_event = {
+	id = assassination.510
+	desc = assassination510
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_db_major_assassination
+	}
+	
+	option = {
+		name = assassination510accept
+		clr_quest = quest_db_major_assassination
+		add_society_currency_major_effect = yes
+		if = {
+			limit = {
+				has_character_flag = owed_1250
+			}
+			wealth = 500
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 500
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_1000
+			}
+			wealth = 400
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 400
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_800
+			}
+			wealth = 320
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 320
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_750
+			}
+			wealth = 300
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 300
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_600
+			}
+			wealth = 240
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 240
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_500
+			}
+			wealth = 200
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 200
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_400
+			}
+			wealth = 160
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 160
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_250
+			}
+			wealth = 100
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 100
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_200
+			}
+			wealth = 80
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 80
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_150
+			}
+			wealth = 60
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 60
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_120
+			}
+			wealth = 48
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 48
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_640
+			}
+			wealth = 256
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 256
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_480
+			}
+			wealth = 192
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 192
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_320
+			}
+			wealth = 128
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 128
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_160
+			}
+			wealth = 64
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = dark_brotherhood_tamriel
+				}
+				wealth = 64
+			}
+			event_target:db_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.511 } }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = assassination.511
+	desc = assassination511
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination511accept
+		hidden_effect = {
+			clear_event_target = db_murder_client
+		}
+	}
+}
+
+character_event = {
+	id = assassination.514
+	desc = assassination514
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_db_major_assassination
+	}
+	
+	option = {
+		name = assassination514accept
+		clr_quest = {
+			id = quest_db_major_assassination
+			failure = yes
+		}
+		clear_assassination_payment_flags = yes
+		# hidden_effect = {
+			# any_opinion_modifier_target = {
+				# limit = {
+					# has_opinion_modifier = {
+						# who = ROOT
+						# modifier = opinion_db_hire
+					# }
+				# }
+				# character_event = { id = assassination.511 }
+			# }
+		# }
+	}
+}
+
+character_event = {
+	id = assassination.516
+	desc = assassination516
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_db_personal_assassination
+	}
+	
+	option = {
+		name = assassination516accept
+		clr_quest = quest_db_personal_assassination
+		add_society_currency_medium_effect = yes
+	}
+}
+
+character_event = {
+	id = assassination.518
+	desc = assassination518
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_db_personal_assassination
+	}
+	
+	option = {
+		name = assassination518accept
+		clr_quest = {
+			id = quest_db_personal_assassination
+			failure = yes
+		}
+	}
+}
+
+#MT Clean-up - Major & Personal Assassination
+character_event = {
+	id = assassination.520
+	desc = assassination520
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_mt_major_assassination
+	}
+	
+	option = {
+		name = assassination520accept
+		clr_quest = quest_mt_major_assassination
+		add_society_currency_major_effect = yes
+		if = {
+			limit = {
+				has_character_flag = owed_1250
+			}
+			wealth = 500
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 500
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_1000
+			}
+			wealth = 400
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 400
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_800
+			}
+			wealth = 320
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 320
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_750
+			}
+			wealth = 300
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 300
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_600
+			}
+			wealth = 240
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 240
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_500
+			}
+			wealth = 200
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 200
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_400
+			}
+			wealth = 160
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 160
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_250
+			}
+			wealth = 100
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 100
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_200
+			}
+			wealth = 80
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 80
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_150
+			}
+			wealth = 60
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 60
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_120
+			}
+			wealth = 48
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 48
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_640
+			}
+			wealth = 256
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 256
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_480
+			}
+			wealth = 192
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 192
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_320
+			}
+			wealth = 128
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 128
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_flag = owed_160
+			}
+			wealth = 64
+			clear_assassination_payment_flags = yes
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = morag_tong_tamriel
+				}
+				wealth = 64
+			}
+			event_target:mt_murder_client = {
+				hidden_tooltip = { character_event = { id = assassination.521 } }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = assassination.521
+	desc = assassination521
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination521accept
+		hidden_effect = {
+			clear_event_target = mt_murder_client
+		}
+	}
+}
+
+character_event = {
+	id = assassination.524
+	desc = assassination524
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_mt_major_assassination
+	}
+	
+	option = {
+		name = assassination524accept
+		clr_quest = {
+			id = quest_mt_major_assassination
+			failure = yes
+		}
+		clear_assassination_payment_flags = yes
+		# any_opinion_modifier_target = {
+			# limit = {
+				# has_opinion_modifier = {
+					# who = ROOT
+					# modifier = opinion_mt_hire
+				# }
+			# }
+			# hidden_tooltip = { character_event = { id = assassination.521 } }
+		# }
+	}
+}
+
+character_event = {
+	id = assassination.526
+	desc = assassination526
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_mt_personal_assassination
+	}
+	
+	option = {
+		name = assassination526accept
+		clr_quest = quest_mt_personal_assassination
+		add_society_currency_medium_effect = yes
+	}
+}
+
+character_event = {
+	id = assassination.528
+	desc = assassination528
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_quest = quest_mt_personal_assassination
+	}
+	
+	option = {
+		name = assassination528accept
+		clr_quest = {
+			id = quest_mt_personal_assassination
+			failure = yes
+		}
+	}
+}
+character_event = {
+	id = assassination.550
+	desc = assassination550
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = assassination550accept
+	}
+}

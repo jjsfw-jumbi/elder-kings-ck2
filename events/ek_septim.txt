@@ -1,0 +1,569 @@
+namespace = septim
+
+# Spawns Tiber
+province_event = {
+	id = septim.0
+	hide_window = yes
+	
+	trigger = {
+		province_id = 1 # Imperial Isle
+		NOT = { has_global_flag = septim_spawned }
+		
+		# Time - depends on the game rules
+		# Based on the mongol spawn event
+		OR = {
+			year = 3763
+			AND = {
+				has_game_rule = {
+					name = tiber_septim
+					value = random
+				}
+				total_years_played = 50
+			}
+		}
+		NOR = { 
+			year = 3766
+			has_game_rule = {
+				name = tiber_septim
+				value = off
+			}
+		}
+		
+		# In a King or Emperor in Cyrodiil
+		any_independent_ruler = {
+			realm_size = 75
+			NOT = { has_character_flag = no_septim }
+			primary_title = {
+				OR = {
+					real_tier = KING
+					real_tier = EMPEROR
+				}
+			}
+			OR = {
+				capital_scope = { kingdom = { title = k_cyrodiil } }
+				has_landed_title = k_colovia
+				has_landed_title = k_cyrodiil
+				has_landed_title = e_cyrodiil
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+		
+		modifier = {
+			factor = 0.8
+			year = 3764
+		}
+		modifier = {
+			factor = 0.8
+			year = 3765
+		}
+		
+		# Set to historical - Has to spawn
+		modifier = {
+			factor = 0.01
+			has_game_rule = {
+				name = tiber_septim
+				value = historical
+			}
+		}
+		
+		# Set to random, delay it a bit
+		modifier = {
+			factor = 2
+			has_game_rule = {
+				name = tiber_septim
+				value = random
+			}
+			NOT = { total_years_played = 100 }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = septim_spawned
+		
+		random_independent_ruler = {
+			limit = {
+				realm_size = 75
+				NOT = { has_character_flag = no_septim }
+				primary_title = {
+					OR = {
+						real_tier = KING
+						real_tier = EMPEROR
+					}
+				}
+				OR = {
+					capital_scope = { kingdom = { title = k_cyrodiil } }
+					has_landed_title = k_colovia
+					has_landed_title = k_cyrodiil
+					has_landed_title = e_cyrodiil
+				}
+			}
+			create_character = {
+				random_traits = no
+				dynasty = 70445
+				religion = eight_divines
+				culture = breton
+				age = 16
+				trait = warrior_4
+				trait = breton
+				trait = dragonborn
+				trait = strong
+				trait = powerful_voice
+				trait = genius
+				trait = brave
+				trait = ambitious
+				trait = proud
+				trait = gregarious
+				trait = ruthless
+				trait = thuum_3
+				trait = p_akatosh
+				trait = inspiring_leader
+				trait = siege_leader
+				# The one and only
+				trait = tiber_portrait
+				attributes = {
+					diplomacy = 16
+					martial = 17
+					stewardship = 15
+					intrigue = 10
+					learning = 8
+				}
+			}
+			new_character = {
+				set_name = Hjalti
+				set_character_flag = tiber_septim
+				set_character_flag = dragonborn_candidate
+				health = 5
+				culture = nord
+				#assign_birthsign = yes
+				save_global_event_target_as = current_dragonborn #Because there's ONE Dragonborn who should be hanging around
+			}
+			
+			character_event = { id = septim.1 days = 3 }
+		}
+	}
+}
+
+# Tiber arrives at your court
+character_event = {
+	id = septim.1
+	desc = EVTDESC_SEPTIM_1
+	picture = GFX_evt_dragonborn
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# That's Tiber
+		random_courtier = {
+			limit = { has_character_flag = tiber_septim }
+			save_event_target_as = char_to_banish
+		}
+		
+		clear_event_target = char_target
+		# Save the ruler Tiber will eventually be banished to
+		random_independent_ruler = {
+			limit = {
+				realm_size = 75
+				NOT = { has_character_flag = no_septim }
+				NOT = { character = ROOT }
+				primary_title = {
+					OR = {
+						real_tier = KING
+						real_tier = EMPEROR
+					}
+				}
+				OR = {
+					capital_scope = { kingdom = { title = k_cyrodiil } }
+					has_landed_title = k_colovia
+					has_landed_title = k_cyrodiil
+					has_landed_title = e_cyrodiil
+				}
+			}
+			
+			save_event_target_as = char_target
+		}
+		
+		clear_event_target = char_target_2
+		# Save a random ruler in Cyrodiil/HighRock/Skyrim, just in case...
+		random_playable_ruler = {
+			limit = {
+				higher_real_tier_than = COUNT
+				NOT = { character = ROOT }
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel_cyrodiil
+						region = nirn_tamriel_skyrim
+						region = nirn_tamriel_highrock
+					}
+				}
+				ai = yes
+			}
+			
+			save_event_target_as = char_target_2
+		}
+	}
+	
+	option = {
+		name = EVTDESC_SEPTIM_1A
+		ai_chance = { factor = 1 }
+		
+		any_independent_ruler = {
+			limit = { ai = no }
+			narrative_event = { id = septim.10 days = 1 }
+		}
+	}
+	
+	option = {
+		name = EVTDESC_SEPTIM_1B
+		ai_chance = { factor = 0 }
+		prestige = -500
+		set_character_flag = no_septim
+		
+		custom_tooltip = {
+			text = BANISH_TIBER_SEPTIM
+			
+			# There is at least one independent ruler left
+			if = {
+				limit = {
+					event_target:char_target = { is_alive = yes }
+				}
+				
+				event_target:char_target = {
+					event_target:char_to_banish = { move_character = event_target:char_target }
+					
+					character_event = { id = septim.1 days = 3 }
+				}
+			}
+			
+			# There are no independent ruler left => Tiber will just usurp the throne of a random human ruler somewhere (AI please)
+			else_if = {
+				limit = {
+					event_target:char_target_2 = { is_alive = yes }
+				}
+				
+				event_target:char_target_2 = {
+					event_target:char_to_banish = { move_character = event_target:char_target_2 }
+					
+					event_target:char_target_2 = { abdicate_to = event_target:char_to_banish }
+				}
+			}
+		}
+	}
+}
+
+# Tiber's liege is going to die...
+long_character_event = {
+	id = septim.2
+	picture = GFX_evt_emissary
+	
+	desc = {
+		text = EVTDESC_SEPTIM_2_1
+		trigger = { has_character_flag = tiber_assassination_himself }
+	}
+	
+	desc = {
+		text = EVTDESC_SEPTIM_2_2
+		trigger = { has_character_flag = tiber_assassination_nightblades }
+	}
+	
+
+	trigger = {
+		has_character_flag = tiber_septim
+		NOT = { has_character_flag = seized_throne }
+		has_character_flag = battle_sancre_tor
+		independent = no
+		liege = {
+			OR = {
+				capital_scope = { kingdom = { title = k_cyrodiil } }
+				has_landed_title = k_colovia
+				has_landed_title = k_cyrodiil
+				has_landed_title = e_cyrodiil
+			}
+		}
+	}
+	
+	immediate = {
+		# But how?
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 2
+					trait = ruthless
+				}
+				modifier = {
+					factor = 2
+					trait = ambitious
+				}
+				modifier = {
+					factor = 2
+					NOT = { liege = { reverse_opinion = { who = ROOT value = 0 } } }
+				}
+				
+				# Tiber does it himself
+				set_character_flag = tiber_assassination_himself
+			}
+			
+			50 = {
+				modifier = {
+					factor = 2
+					trait = content
+				}
+				modifier = {
+					factor = 2
+					trait = kind
+				}
+				modifier = {
+					factor = 2
+					liege = { reverse_opinion = { who = ROOT value = 0 } }
+				}
+				
+				# Nightblades!
+				set_character_flag = tiber_assassination_nightblades
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+	
+	option = {
+		name = ai_opt
+		set_character_flag = seized_throne
+		
+		liege = {
+			long_character_event = { id = septim.3 }
+		}
+	}
+}
+
+# The liege gets assassinated, and Tiber takes their place
+long_character_event = {
+	id = septim.3
+	picture = GFX_evt_rome_falls
+	
+	desc = {
+		text = EVTDESC_SEPTIM_3_1
+		trigger = { FROM = { has_character_flag = tiber_assassination_himself } }
+	}
+	
+	desc = {
+		text = EVTDESC_SEPTIM_3_2
+		trigger = {
+			OR = {
+				ai = no
+				FROM = { has_character_flag = tiber_assassination_nightblades }
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { diplomatic_immunity = yes }
+	}
+	
+	option = {
+		name = EVTDESC_SEPTIM_3A
+		
+		# News of the assassination
+		any_independent_ruler = {
+			limit = { ai = no }
+			narrative_event = { id = septim.11 days = 1 }
+		}
+		
+		### If Tiber coups a King, we create the Empire of Cyrodiil (that will help Tiber) - Historical outcome, as Cuhlecain was going to be crowned Emperor
+		if = {
+			limit = {
+				e_cyrodiil = { has_holder = no }
+				tier = KING
+			}
+			primary_title = {
+				e_cyrodiil = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+				}
+				k_cyrodiil = { de_jure_liege = e_cyrodiil }
+				if = {
+					limit = { k_skyrim = { has_holder = no } }
+					k_skyrim = { de_jure_liege = e_cyrodiil }
+				}
+				if = {
+					limit = { k_highrock = { has_holder = no } }
+					k_highrock = { de_jure_liege = e_cyrodiil }
+				}
+			}
+		}
+		
+		any_independent_ruler = {
+			limit = { de_jure_liege_or_above = ROOT }
+			opinion = {
+				modifier = opinion_loyal_vassal
+				who = FROM
+				years = 100
+			}
+		}
+		primary_title = { succession = primogeniture }
+		
+		# Aftermath of the assassination, Tiber seizes control!
+		FROM = {
+			dynasty = ROOT
+			inherit = ROOT
+			prestige = 250
+			
+			wealth = 500
+			
+			add_trait = warlord
+			add_trait = throat_slit
+			
+			if = { limit = { trait = thuum_1 } remove_trait = thuum_1 }
+			if = { limit = { trait = thuum_2 } remove_trait = thuum_2 }
+			if = { limit = { trait = thuum_3 } remove_trait = thuum_3 }
+			
+			remove_trait = powerful_voice
+			
+			set_name = Tiber
+			dynasty = 1
+			
+			diplomatic_immunity = no
+			
+			### Empires - Give claim on Cyrodiil
+			if = {
+				limit = { e_cyrodiil = { has_holder = yes } FROM = { NOT = { has_landed_title = e_cyrodiil } } }
+				e_cyrodiil = { add_claim = FROM }
+			}
+			### De Jure Kingdoms - Give claims
+			# Cyrodiil is awarded if not already existing
+			k_cyrodiil = {
+				grant_title = ROOT
+				copy_title_laws = PREV
+			}
+			# If it already exists, give a strong claim
+			if = {
+				limit = { k_cyrodiil = { has_holder = yes } FROM = { NOT = { has_landed_title = k_cyrodiil } } }
+				k_cyrodiil = { add_claim = FROM }
+			}
+			## Skyrim and High Rock are not given, but claims are gained
+			if = {
+				limit = { FROM = { NOT = { has_landed_title = k_skyrim } } }
+				k_skyrim = { add_claim = FROM }
+			}
+			if = {
+				limit = { FROM = { NOT = { has_landed_title = k_highrock } } }
+				k_highrock = { add_claim = FROM }
+			}
+			
+			## Titular Kingdoms, claims are given if they already exist
+			if = {
+				limit = { k_nibenay = { has_holder = yes } FROM = { NOT = { has_landed_title = k_nibenay } } }
+				k_nibenay = { add_claim = FROM }
+			}
+			if = {
+				limit = { k_colovia = { has_holder = yes } FROM = { NOT = { has_landed_title = k_colovia } } }
+				k_colovia = { add_claim = FROM }
+			}
+			if = {
+				limit = { k_heartlands = { has_holder = yes } FROM = { NOT = { has_landed_title = k_heartlands } } }
+				k_heartlands = { add_claim = FROM }
+			}
+		}
+		
+		# The liege dies
+		death = { 
+			death_reason = death_murder_unknown
+			killer = FROM
+		}
+	}
+}
+
+# Battle of Sancre Tor, Tiber gets the amulet of king!
+character_event = {
+	id = septim.4
+	desc = EVTDESC_SEPTIM_4
+	picture = GFX_evt_emissary
+
+	trigger = {
+		has_character_flag = tiber_septim
+		NOT = { has_character_flag = battle_sancre_tor }
+	}
+	
+	mean_time_to_happen = {
+		years = 16
+		modifier = {
+			year = 3772
+			factor = 0.1
+		}
+	}
+	
+	option = {
+		name = EVTDESC_SEPTIM_4A
+		set_character_flag = battle_sancre_tor
+		wealth = 500
+		prestige = 250
+		any_independent_ruler = {
+			limit = { ai = no }
+			narrative_event = { id = septim.12 days = 1 }
+		}
+		if = {
+			limit = { NOT = { has_global_flag = amulet_of_kings_active } }
+			prestige = 500
+			add_amulet_of_kings = yes
+			#set_global_flag = amulet_of_kings_active
+		}
+	}
+}
+
+# TODO: Aftermath of the King/Emperor death, if Tiber is a King he's crowned Emperor of Cyrodiil
+
+narrative_event = {
+	id = septim.10
+	major = yes
+	only_rulers = yes
+	title = EVTNAME_SEPTIM_10
+	desc = EVTDESC_SEPTIM_10
+	picture = GFX_evt_dragonborn
+	is_triggered_only = yes
+	option = {
+		name = EVTDESC_SEPTIM_10A
+	}
+}
+
+narrative_event = {
+	id = septim.11
+	major = yes
+	only_rulers = yes
+	show_from_from = yes
+	
+	title = {
+		text = EVTNAME_SEPTIM_11 # A Dragonborn on the Ruby Throne!
+		trigger = { FROM = { controls = 1 } }
+	}
+	
+	title = {
+		text = EVTNAME_SEPTIM_11_B # A Dragonborn [From.GetRulerTitle]!
+		trigger = { NOT = { FROM = { controls = 1 } } }
+	}
+	
+	desc = EVTDESC_SEPTIM_11
+	
+	picture = GFX_evt_rome_falls
+	is_triggered_only = yes
+	option = {
+		name = EVTDESC_SEPTIM_11A
+	}
+}
+
+narrative_event = {
+	id = septim.12
+	major = yes
+	only_rulers = yes
+	title = EVTNAME_SEPTIM_12
+	desc = EVTDESC_SEPTIM_12
+	picture = GFX_evt_castle_construction
+	is_triggered_only = yes
+	option = {
+		name = EVTDESC_SEPTIM_12A
+	}
+}

@@ -1,0 +1,3944 @@
+#Events for decision-based artifact theft
+#Written by Etienne, based on assassination events co-written with jjsfw/jumbi and decision with help from Ratel/Korba
+
+namespace = ekthieving
+
+character_event = {
+	id = ekthieving.1
+	desc = ekthieving1
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		### Thieves Guild?
+		if = {
+			limit = {
+				location = { region = nirn_tamriel }
+				
+				NAND = {
+					location = { region = nirn_tamriel_morrowind }
+					OR = {
+						culture = dunmer
+						culture = ashlander
+						culture = chimer
+					}
+				}
+				
+				event_target:ek_theft_target_owner = { #No TG abroad, can't be in the TG
+					location = { region = nirn_tamriel }
+					NOT = {  society_member_of = thieves_guild_tamriel }
+				}
+				any_society_member = {
+					society_member_of = thieves_guild_tamriel
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+					has_any_quest = no
+				}
+			}
+			
+			thieves_guild_tamriel = { save_event_target_as = thieves_guild }
+		}
+		
+		### Camonna Tong?
+		if = {
+			limit = {
+				# Will only accept contracts from Dunmer(/Ashlander/Chimer) currently living in Morrowind
+				location = { region = nirn_tamriel_morrowind }
+				OR = {
+					culture = dunmer
+					culture = ashlander
+					culture = chimer
+				}
+				
+				event_target:ek_theft_target_owner = { #No CT abroad, can't be in the CT
+					# The CT operates in all of Tamriel
+					location = { region = nirn_tamriel }
+					NOT = {  society_member_of = camonna_tong_tamriel }
+				}
+				any_society_member = {
+					society_member_of = camonna_tong_tamriel
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+					has_any_quest = no
+				}
+			}
+			
+			camonna_tong_tamriel = { save_event_target_as = thieves_guild }
+		}
+		
+		### Silent Moons?
+		if = {
+			limit = {
+				location = { region = nirn_akavir }
+				
+				event_target:ek_theft_target_owner = { #No SM abroad, can't be in the SM
+					location = { region = nirn_akavir }
+					NOT = {  society_member_of = thieves_guild_akavir }
+				}
+				any_society_member = {
+					society_member_of = thieves_guild_akavir
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+					has_any_quest = no
+				}
+			}
+			
+			thieves_guild_akavir = { save_event_target_as = thieves_guild }
+		}
+	}
+	
+	option = {
+		name = ekthieving1opta #Hire a guild
+		trigger = {
+			event_target:thieves_guild = {
+				society_is_active = yes
+				NOT = { ROOT = { society_member_of = PREV } }
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		character_event = { id = ekthieving.30 }
+	}
+	
+	option = {
+		name = ekthieving1optb #As the member of a guild, you can take care of it yourself
+		trigger = {
+			event_target:thieves_guild = {
+				society_is_active = yes
+				ROOT = { society_member_of = PREV }
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		society_quest_event = { id = ekthieving.250 }
+	}
+	
+	option = {
+		name = ekthieving1optc #Hire some goons! - Anyone can do this
+		ai_chance = {
+			factor = 1
+		}
+		character_event = { id = ekthieving.90 }
+	}
+	
+	option = {
+		name = ekthieving1decline
+		ai_chance = {
+			factor = 0 #AI chance handled in decision
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_target_owner = {
+			character_event = { id = ekthieving.35 }
+		}
+	}
+}
+
+#Thieves Guild awaits your command!
+character_event = {
+	id = ekthieving.30
+	desc = ekthieving30
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving30opta
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		save_event_target_as = ek_theft_client
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:thieves_guild
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+				}
+				society_quest_event = { id = ekthieving.200 }
+			}
+		}
+	}
+	option = { #Don't hire TG
+		name = ekthieving30optb
+		ai_chance = {
+			factor = 0 #AI chance handled in decision
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_target_owner = {
+			character_event = { id = ekthieving.35 }
+		}
+	}
+}
+
+#Cleanup event for theft target
+character_event = {
+	id = ekthieving.35
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = ek_theft_target_owner
+	}
+}
+
+#Camonna Tong awaits your command!
+character_event = {
+	id = ekthieving.60
+	desc = ekthieving60
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving60opta
+		
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		
+		save_event_target_as = ek_theft_client
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = camonna_tong_tamriel
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = { trait = incapable }
+					is_society_grandmaster = no
+				}
+				society_quest_event = { id = ekthieving.300 }
+			}
+		}
+	}
+	option = { #Don't hire CT
+		name = ekthieving60optb
+		ai_chance = {
+			factor = 0 #AI chance handled in decision
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_target_owner = {
+			character_event = { id = ekthieving.65 }
+		}
+	}
+}
+
+#Cleanup event for theft target
+character_event = {
+	id = ekthieving.65
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = ek_theft_target_owner
+	}
+}
+
+
+#Independent Thieves await your command!
+character_event = {
+	id = ekthieving.90
+	desc = ekthieving90
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving90accept
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		hidden_tooltip = {
+			event_target:ek_theft_target_owner = {
+				character_event = { id = ekthieving.91 }
+			}
+		}
+	}
+	option = { #Don't hire Freelancers
+		name = ekthieving90decline
+		ai_chance = {
+			factor = 0 #AI chance handled in decision
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_target_owner = {
+			character_event = { id = ekthieving.93 }
+		}
+	}
+}
+
+character_event = {
+	id = ekthieving.91
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		#Freelance thieves excel against targets with poor intrigue, but even those with average intrigue will catch them more often than not
+		#If caught, they WILL reveal who sent them
+		random_list = {
+			50 = { #Target defeats theft
+				modifier = { #Equipped armor is VERY difficult to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						has_artifact_flag = armor
+					}
+					factor = 5
+				}
+				modifier = { #Equipped items that are not armor are slightly tougher to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						NOT = { has_artifact_flag = armor }
+					}
+					factor = 1.25
+				}
+				character_event = { id = ekthieving.95 }
+			}
+			50 = { #Successful theft
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_low
+					}
+					NOR = {
+						any_artifact = {
+							has_artifact_flag = antitheft_medium
+						}
+						any_artifact = {
+							has_artifact_flag = antitheft_hard
+						}
+						any_artifact = {
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.9
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_medium
+					}
+					NOR = {
+						any_artifact = {
+							has_artifact_flag = antitheft_hard
+						}
+						any_artifact = {
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.75
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_hard
+					}
+					NOT = {
+						any_artifact = {
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.5
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_impossible
+					}
+					factor = 0
+				}
+				modifier = {
+					intrigue = 15
+					factor = 0
+				}
+				modifier = {
+					intrigue = 14
+					NOT = { intrigue = 15 }
+					factor = 0.10
+				}
+				modifier = {
+					intrigue = 13
+					NOT = { intrigue = 14 }
+					factor = 0.15
+				}
+				modifier = {
+					intrigue = 12
+					NOT = { intrigue = 13 }
+					factor = 0.20
+				}
+				modifier = {
+					intrigue = 11
+					NOT = { intrigue = 12 }
+					factor = 0.25
+				}
+				modifier = {
+					intrigue = 10
+					NOT = { intrigue = 11 }
+					factor = 0.30
+				}
+				modifier = {
+					intrigue = 9
+					NOT = { intrigue = 10 }
+					factor = 0.40
+				}
+				modifier = {
+					intrigue = 8
+					NOT = { intrigue = 9 }
+					factor = 0.50
+				}
+				modifier = {
+					intrigue = 7
+					NOT = { intrigue = 8 }
+					factor = 0.60
+				}
+				modifier = {
+					intrigue = 6
+					NOT = { intrigue = 7 }
+					factor = 0.70
+				}
+				modifier = {
+					intrigue = 5
+					NOT = { intrigue = 6 }
+					factor = 0.80
+				}
+				modifier = {
+					intrigue = 4
+					NOT = { intrigue = 5 }
+					factor = 0.90
+				}
+				modifier = {
+					intrigue = 3
+					NOT = { intrigue = 4 }
+					factor = 0.95
+				}
+				modifier = {
+					intrigue = 2
+					NOT = { intrigue = 3 }
+					factor = 1.0
+				}
+				modifier = {
+					intrigue = 1
+					NOT = { intrigue = 2 }
+					factor = 1.05
+				}
+				modifier = {
+					NOT = { intrigue = 1 }
+					factor = 1.25
+				}
+				character_event = { id = ekthieving.100 }
+			}
+		}
+	}
+}
+
+#Cleanup event for theft target
+character_event = {
+	id = ekthieving.93
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = ek_theft_target_owner
+	}
+}
+
+#Theft target finds out who sent the criminals
+character_event = {
+	id = ekthieving.95
+	desc = ekthieving95
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ekthieving95accept
+		opinion = {
+			modifier = scheming_bastard
+			who = FROMFROM
+			years = 10			
+		}
+		hidden_tooltip = {
+			FROMFROM = {
+				character_event = { id = ekthieving.96 days = 3 }
+			}
+		}
+	}
+}
+#Theft client alerted
+character_event = {
+	id = ekthieving.96
+	desc = ekthieving96
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ekthieving96accept
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+	}
+}
+#Theft target is robbed!
+character_event = {
+	id = ekthieving.100
+	desc =  {
+		text = ekthieving100a #Item not equipped
+		trigger = {
+			has_character_flag = steal_normal_item
+		}
+	}
+	desc =  {
+		text = ekthieving100b #Item is equipped
+		trigger = {
+			has_character_flag = steal_equipped_item
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	show_from_from = no
+
+	immediate = {
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = no
+				}
+			}
+			set_character_flag = steal_normal_item
+		}
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = yes
+				}
+			}
+			set_character_flag = steal_equipped_item
+		}
+	}
+
+	option = {
+		name = ekthieving100accept
+		hidden_tooltip = {
+			event_target:ek_theft_target_object = {
+				transfer_artifact = {
+					from = ROOT
+					to = FROMFROM
+				}
+				set_artifact_flag = stolen_artifact
+			}
+			FROMFROM = {
+				character_event = { id = ekthieving.101 days = 3 }
+			}
+			clr_character_flag = steal_normal_item
+			clr_character_flag = steal_equipped_item
+		}
+	}
+}
+#Theft client alerted to success
+character_event = {
+	id = ekthieving.101
+	desc = ekthieving101
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ekthieving101accept
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+	}
+}
+
+#
+#
+#
+#
+#
+#Thieves Guild
+#
+#
+#
+#
+#
+
+#Thieves Guild Special Theft
+society_quest_event = {
+	id = ekthieving.200
+	title = quest_tg_major_theft
+	desc = ekthieving200
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving200accept
+		event_target:ek_theft_target_owner = {
+			set_quest_target = {
+				id = quest_tg_major_theft
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = ekthieving.205 } 
+			}
+		}
+	}
+}
+#Theft event that is fired on the owner of the artifact
+character_event = {
+	id = ekthieving.205
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			50 = { #Sucessful repulsion by target - Target captures thief
+				modifier = { #Equipped armor is VERY difficult to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						has_artifact_flag = armor
+					}
+					factor = 5
+				}
+				modifier = { #Equipped items that are not armor are slightly tougher to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						NOT = { has_artifact_flag = armor }
+					}
+					factor = 1.25
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { long_character_event = { id = ekthieving.210 } }
+			}
+			50 = { #Successful infiltration by thief - Object Stolen
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_low
+						NOR = {
+							has_artifact_flag = antitheft_medium
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.9
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_medium
+						NOR = {
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.75
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_hard
+						NOT = {
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.5
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_impossible
+					}
+					factor = 0
+				}
+				modifier = { #Easy objects easier to steal
+					event_target:ek_theft_target_object = {
+						OR = {
+							has_artifact_flag = theft_dr_easy
+							NOR = {
+								has_artifact_flag = theft_dr_easy
+								has_artifact_flag = theft_dr_average
+								has_artifact_flag = theft_dr_hard
+								has_artifact_flag = theft_dr_extreme
+							}
+						}
+					}
+					factor = 2
+				}
+				modifier = { #Hard objects more difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_hard
+					}
+					factor = 0.75
+				}
+				modifier = { #Extreme objects very difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_extreme
+					}
+					factor = 0.33
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				character_event = { id = ekthieving.220 }
+			}
+		}
+	}
+}
+#Critical Theft Failure, jailed by artifact owner
+long_character_event = {
+	id = ekthieving.210
+	desc =  {
+		text = ekthieving210a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving210b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = ekthieving210accept
+		clr_quest = {
+			id = quest_tg_major_theft
+			failure = yes
+		}
+		imprison = FROM
+		FROM = { character_event = { id = ekthieving.212 } }
+		event_target:ek_theft_client = { character_event = { id = ekthieving.214 } }
+	}
+}
+character_event = {
+	id = ekthieving.212
+	desc =  {
+		text = ekthieving212a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving212b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving312accept
+		opinion = {
+			modifier = scheming_bastard
+			who = FROM
+			years = 10			
+		}
+	}
+}
+#TG Theft Client gets the news of failure
+character_event = {
+	id = ekthieving.214
+	desc = ekthieving214
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = ekthieving214accept
+		clear_event_target = ek_theft_client
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+		hidden_tooltip = {
+			FROMFROM = { clear_event_target = ek_theft_target_owner }
+		}
+	}
+}
+#Theft target has their artifact stolen!
+character_event = {
+	id = ekthieving.220
+	desc =  {
+		text = ekthieving220a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving220b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	show_from_from = no
+	
+	immediate = {
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = no
+				}
+			}
+			FROMFROM = { set_character_flag = steal_normal_item }
+		}
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = yes
+				}
+			}
+			FROMFROM = { set_character_flag = steal_equipped_item }
+		}
+		FROMFROM = { character_event = { id = ekthieving.230 } } #Notify the thief
+	}
+	
+	option = {
+		name = ekthieving220accept
+		hidden_tooltip = {
+			event_target:ek_theft_target_object = {
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_theft_client
+				}
+			}
+		}
+	}
+}
+#Thief notified on mission success!
+character_event = {
+	id = ekthieving.230
+	desc =  {
+		text = ekthieving230a #Item not equipped
+		trigger = {
+			has_character_flag = steal_normal_item
+		}
+	}
+	desc =  {
+		text = ekthieving230b #Item is equipped
+		trigger = {
+			has_character_flag = steal_equipped_item
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving230accept
+		clr_character_flag = steal_normal_item
+		clr_character_flag = steal_equipped_item
+		hidden_tooltip = {
+			event_target:ek_theft_client = {
+				character_event = { id = ekthieving.235 }
+			}
+		}
+	}
+}
+#Client notified on mission success! They gain the artifact
+character_event = {
+	id = ekthieving.235
+	desc = ekthieving235
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving235accept
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+		hidden_tooltip = {
+			FROMFROM = { clear_event_target = ek_theft_target_owner }
+			FROM = {
+				character_event = { id = ekthieving.240 days = 3 }
+			}
+		}
+	}
+}
+
+#Thief success follow-up; mission cleared
+character_event = {
+	id = ekthieving.240
+	desc = ekthieving240
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving240accept
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						has_character_flag = wants_easy_artifact
+						NOR = {
+							has_character_flag = wants_easy_artifact
+							has_character_flag = wants_average_artifact
+							has_character_flag = wants_hard_artifact
+							has_character_flag = wants_extreme_artifact
+						}
+					}
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = event_target:thieves_guild
+				}
+				wealth = 20
+			}
+			wealth = 20
+			clr_quest = quest_tg_major_theft
+			add_society_currency_minor_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_character_flag = wants_average_artifact
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = event_target:thieves_guild
+				}
+				wealth = 50
+			}
+			wealth = 50
+			clr_quest = quest_tg_major_theft
+			add_society_currency_medium_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_character_flag = wants_hard_artifact
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = event_target:thieves_guild
+				}
+				wealth = 100
+			}
+			wealth = 100
+			clr_quest = quest_tg_major_theft
+			add_society_currency_major_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_character_flag = wants_extreme_artifact
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = event_target:thieves_guild
+				}
+				wealth = 400
+			}
+			wealth = 400
+			clr_quest = quest_tg_major_theft
+			add_society_currency_major_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+	}
+}
+
+#####Thieves Guild Personal Theft######
+society_quest_event = {
+	id = ekthieving.250
+	title = quest_tg_personal_theft
+	desc = ekthieving250
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving250accept
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		event_target:ek_theft_target_owner = {
+			set_quest_target = {
+				id = quest_tg_personal_theft
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = ekthieving.255 days = 10 } 
+			}
+		}
+	}
+	
+	option = {
+		name = ekthieving250decline
+		ai_chance = {
+			factor = 0
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_target_owner = {
+			hidden_effect = {
+				character_event = { id = ekthieving.252 } 
+			}
+		}
+	}
+}
+
+#Clear-up event for target if mission is declined
+character_event = {
+	id = ekthieving.252
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = ek_theft_target_owner
+	}
+}
+#Theft event that is fired on the owner of the artifact
+character_event = {
+	id = ekthieving.255
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			50 = { #Sucessful repulsion by target - Target captures thief
+				modifier = { #Equipped armor is VERY difficult to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						has_artifact_flag = armor
+					}
+					factor = 5
+				}
+				modifier = { #Equipped items that are not armor are slightly tougher to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						NOT = { has_artifact_flag = armor }
+					}
+					factor = 1.25
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { long_character_event = { id = ekthieving.260 } }
+			}
+			50 = { #Successful infiltration by thief - Object Stolen
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_low
+						NOR = {
+							has_artifact_flag = antitheft_medium
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.9
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_medium
+						NOR = {
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.75
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_hard
+						NOT = {
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.5
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_impossible
+					}
+					factor = 0
+				}
+				modifier = { #Easy objects easier to steal
+					event_target:ek_theft_target_object = {
+						OR = {
+							has_artifact_flag = theft_dr_easy
+							NOR = {
+								has_artifact_flag = theft_dr_easy
+								has_artifact_flag = theft_dr_average
+								has_artifact_flag = theft_dr_hard
+								has_artifact_flag = theft_dr_extreme
+							}
+						}
+					}
+					factor = 2
+				}
+				modifier = { #Hard objects more difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_hard
+					}
+					factor = 0.75
+				}
+				modifier = { #Extreme objects very difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_extreme
+					}
+					factor = 0.33
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				character_event = { id = ekthieving.270 }
+			}
+		}
+	}
+}
+#Critical Theft Failure, jailed by artifact owner
+long_character_event = {
+	id = ekthieving.260
+	desc =  {
+		text = ekthieving260a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving260b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = ekthieving260accept
+		clr_quest = {
+			id = quest_tg_personal_theft
+			failure = yes
+		}
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+		imprison = FROM
+		FROM = { character_event = { id = ekthieving.262 } }
+	}
+}
+character_event = {
+	id = ekthieving.262
+	desc =  {
+		text = ekthieving262a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving262b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving362accept
+		opinion = {
+			modifier = scheming_bastard
+			who = FROM
+			years = 10			
+		}
+	}
+}
+#Theft target has their artifact stolen!
+character_event = {
+	id = ekthieving.270
+	desc =  {
+		text = ekthieving270a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving270b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	show_from_from = no
+	
+	immediate = {
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = no
+				}
+			}
+			FROMFROM = { set_character_flag = steal_normal_item }
+		}
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = yes
+				}
+			}
+			FROMFROM = { set_character_flag = steal_equipped_item }
+		}
+		FROMFROM = { character_event = { id = ekthieving.280 } } #Notify the thief
+	}
+	
+	option = {
+		name = ekthieving270accept
+		hidden_tooltip = {
+			event_target:ek_theft_target_object = {
+				transfer_artifact = {
+					from = ROOT
+					to = FROMFROM
+				}
+			}
+		}
+	}
+}
+#Thief notified on mission success!
+character_event = {
+	id = ekthieving.280
+	desc =  {
+		text = ekthieving280a #Item not equipped
+		trigger = {
+			has_character_flag = steal_normal_item
+		}
+	}
+	desc =  {
+		text = ekthieving280b #Item is equipped
+		trigger = {
+			has_character_flag = steal_equipped_item
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving280accept
+		clr_character_flag = steal_normal_item
+		clr_character_flag = steal_equipped_item
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_tg_major_theft
+			add_society_currency_trivial_effect = yes
+		}
+		if = {
+			limit = { has_character_flag = wants_average_artifact }
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_tg_major_theft
+			add_society_currency_minor_effect = yes
+		}
+		if = {
+			limit = { has_character_flag = wants_hard_artifact }
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_tg_major_theft
+			add_society_currency_medium_effect = yes
+		}
+		if = {
+			limit = { has_character_flag = wants_extreme_artifact }
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_tg_major_theft
+			add_society_currency_medium_effect = yes
+		}
+	}
+}
+#If the target dies, the guild fails
+character_event = {
+	id = ekthieving.290
+	desc = ekthieving290
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving290accept
+		clr_quest = {
+			id = quest_tg_major_theft
+			failure = yes
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_client = {
+			hidden_tooltip = { character_event = { id = ekthieving.292 } }
+		}
+	}
+}
+#Personal theft version of failure
+character_event = {
+	id = ekthieving.291
+	desc = ekthieving291
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving291accept
+		clr_quest = {
+			id = quest_tg_personal_theft
+			failure = yes
+		}
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+	}
+}
+#Notifies the client
+character_event = {
+	id = ekthieving.292
+	desc = ekthieving292
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving292accept
+		clear_event_target = ek_theft_client
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+	}
+}
+
+#
+#
+#
+#
+#
+# Camonna Tong
+#
+#
+#
+#
+#
+
+#Camonna Tong Special Theft
+society_quest_event = {
+	id = ekthieving.300
+	title = quest_ct_major_theft
+	desc = ekthieving300
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving300accept
+		event_target:ek_theft_target_owner = {
+			set_quest_target = {
+				id = quest_ct_major_theft
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = ekthieving.305 } 
+			}
+		}
+	}
+}
+#Theft event that is fired on the owner of the artifact
+character_event = {
+	id = ekthieving.305
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			50 = { #Sucessful repulsion by target - Target captures thief
+				modifier = { #Equipped armor is VERY difficult to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						has_artifact_flag = armor
+					}
+					factor = 5
+				}
+				modifier = { #Equipped items that are not armor are slightly tougher to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						NOT = { has_artifact_flag = armor }
+					}
+					factor = 1.25
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { long_character_event = { id = ekthieving.310 } }
+			}
+			50 = { #Successful infiltration by thief - Object Stolen
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_low
+						NOR = {
+							has_artifact_flag = antitheft_medium
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.9
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_medium
+						NOR = {
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.75
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_hard
+						NOT = {
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.5
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_impossible
+					}
+					factor = 0
+				}
+				modifier = { #Easy objects easier to steal
+					event_target:ek_theft_target_object = {
+						OR = {
+							has_artifact_flag = theft_dr_easy
+							NOR = {
+								has_artifact_flag = theft_dr_easy
+								has_artifact_flag = theft_dr_average
+								has_artifact_flag = theft_dr_hard
+								has_artifact_flag = theft_dr_extreme
+							}
+						}
+					}
+					factor = 2
+				}
+				modifier = { #Hard objects more difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_hard
+					}
+					factor = 0.75
+				}
+				modifier = { #Extreme objects very difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_extreme
+					}
+					factor = 0.33
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				character_event = { id = ekthieving.320 }
+			}
+		}
+	}
+}
+#Critical Theft Failure, jailed by artifact owner
+long_character_event = {
+	id = ekthieving.310
+	desc =  {
+		text = ekthieving310a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving310b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = ekthieving310accept
+		clr_quest = {
+			id = quest_ct_major_theft
+			failure = yes
+		}
+		imprison = FROM
+		FROM = { character_event = { id = ekthieving.312 } }
+		event_target:ek_theft_client = { character_event = { id = ekthieving.314 } }
+	}
+}
+character_event = {
+	id = ekthieving.312
+	desc =  {
+		text = ekthieving312a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving312b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving312accept
+		opinion = {
+			modifier = scheming_bastard
+			who = FROM
+			years = 10			
+		}
+	}
+}
+#TG Theft Client gets the news of failure
+character_event = {
+	id = ekthieving.314
+	desc = ekthieving314
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = ekthieving314accept
+		clear_event_target = ek_theft_client
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+		hidden_tooltip = {
+			FROMFROM = { clear_event_target = ek_theft_target_owner }
+		}
+	}
+}
+#Theft target has their artifact stolen!
+character_event = {
+	id = ekthieving.320
+	desc =  {
+		text = ekthieving320a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving320b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	show_from_from = no
+	
+	immediate = {
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = no
+				}
+			}
+			FROMFROM = { set_character_flag = steal_normal_item }
+		}
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = yes
+				}
+			}
+			FROMFROM = { set_character_flag = steal_equipped_item }
+		}
+		FROMFROM = { character_event = { id = ekthieving.330 } } #Notify the thief
+	}
+	
+	option = {
+		name = ekthieving320accept
+		hidden_tooltip = {
+			event_target:ek_theft_target_object = {
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_theft_client
+				}
+			}
+		}
+	}
+}
+#Thief notified on mission success!
+character_event = {
+	id = ekthieving.330
+	desc =  {
+		text = ekthieving330a #Item not equipped
+		trigger = {
+			has_character_flag = steal_normal_item
+		}
+	}
+	desc =  {
+		text = ekthieving330b #Item is equipped
+		trigger = {
+			has_character_flag = steal_equipped_item
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving330accept
+		clr_character_flag = steal_normal_item
+		clr_character_flag = steal_equipped_item
+		hidden_tooltip = {
+			event_target:ek_theft_client = {
+				character_event = { id = ekthieving.335 }
+			}
+		}
+	}
+}
+#Client notified on mission success! They gain the artifact
+character_event = {
+	id = ekthieving.335
+	desc = ekthieving335
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving335accept
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+		hidden_tooltip = {
+			FROMFROM = { clear_event_target = ek_theft_target_owner }
+			FROM = {
+				character_event = { id = ekthieving.340 days = 3 }
+			}
+		}
+	}
+}
+
+#Thief success follow-up; mission cleared
+character_event = {
+	id = ekthieving.340
+	desc = ekthieving340
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving340accept
+		if = {
+			limit = {
+				FROM = {
+					OR = {
+						has_character_flag = wants_easy_artifact
+						NOR = {
+							has_character_flag = wants_easy_artifact
+							has_character_flag = wants_average_artifact
+							has_character_flag = wants_hard_artifact
+							has_character_flag = wants_extreme_artifact
+						}
+					}
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = camonna_tong_tamriel
+				}
+				wealth = 20
+			}
+			wealth = 20
+			clr_quest = quest_ct_major_theft
+			add_society_currency_minor_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_character_flag = wants_average_artifact
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = camonna_tong_tamriel
+				}
+				wealth = 50
+			}
+			wealth = 50
+			clr_quest = quest_ct_major_theft
+			add_society_currency_medium_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_character_flag = wants_hard_artifact
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = camonna_tong_tamriel
+				}
+				wealth = 100
+			}
+			wealth = 100
+			clr_quest = quest_ct_major_theft
+			add_society_currency_major_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_character_flag = wants_extreme_artifact
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					society_member_of = camonna_tong_tamriel
+				}
+				wealth = 400
+			}
+			wealth = 400
+			clr_quest = quest_ct_major_theft
+			add_society_currency_major_effect = yes
+			hidden_tooltip = {
+				FROM = { 
+					clear_event_target = ek_theft_client
+					clear_artifact_theft_flags = yes
+				}
+			}
+			break = yes
+		}
+	}
+}
+
+#Camonna Tong Personal Theft
+society_quest_event = {
+	id = ekthieving.350
+	title = quest_ct_personal_theft
+	desc = ekthieving350
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving350accept
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			scaled_wealth = { value = -1 min = -25 max = -50 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_average_artifact
+			}
+			scaled_wealth = { value = -1 min = -75 max = -150 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_hard_artifact
+			}
+			scaled_wealth = { value = -1 min = -150 max = -250 }
+		}
+		if = {
+			limit = {
+				has_character_flag = wants_extreme_artifact
+			}
+			scaled_wealth = { value = -1 min = -500 max = -750 }
+		}
+		event_target:ek_theft_target_owner = {
+			set_quest_target = {
+				id = quest_ct_personal_theft
+				holder = ROOT
+			}
+			hidden_effect = {
+				character_event = { id = ekthieving.355 days = 10 } 
+			}
+		}
+	}
+	
+	option = {
+		name = ekthieving350decline
+		ai_chance = {
+			factor = 0
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_target_owner = {
+			hidden_effect = {
+				character_event = { id = ekthieving.352 } 
+			}
+		}
+	}
+}
+
+#Clear-up event for target if mission is declined
+character_event = {
+	id = ekthieving.352
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = ek_theft_target_owner
+	}
+}
+#Theft event that is fired on the owner of the artifact
+character_event = {
+	id = ekthieving.355
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			50 = { #Sucessful repulsion by target - Target captures thief
+				modifier = { #Equipped armor is VERY difficult to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						has_artifact_flag = armor
+					}
+					factor = 5
+				}
+				modifier = { #Equipped items that are not armor are slightly tougher to steal
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = yes
+						NOT = { has_artifact_flag = armor }
+					}
+					factor = 1.25
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 1
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 2
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 3
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 4
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 5
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 6
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 7
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 8
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 9
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 10
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 11
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 12
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 13
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 14
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 15
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 16
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 17
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 18
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 19
+						}
+					}
+					factor = 0.8
+				}
+				modifier = {
+					FROM = {
+						attribute_diff = {
+						  character = ROOT
+						  attribute = intrigue
+						  value = 20
+						}
+					}
+					factor = 0.8
+				}
+				FROM = { long_character_event = { id = ekthieving.360 } }
+			}
+			50 = { #Successful infiltration by thief - Object Stolen
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_low
+						NOR = {
+							has_artifact_flag = antitheft_medium
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.9
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_medium
+						NOR = {
+							has_artifact_flag = antitheft_hard
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.75
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_hard
+						NOT = {
+							has_artifact_flag = antitheft_impossible
+						}
+					}
+					factor = 0.5
+				}
+				modifier = { #Special containers can defeat theft attempts
+					event_target:ek_theft_target_object = {
+						is_artifact_equipped = no
+					}
+					any_artifact = {
+						has_artifact_flag = antitheft_impossible
+					}
+					factor = 0
+				}
+				modifier = { #Easy objects easier to steal
+					event_target:ek_theft_target_object = {
+						OR = {
+							has_artifact_flag = theft_dr_easy
+							NOR = {
+								has_artifact_flag = theft_dr_easy
+								has_artifact_flag = theft_dr_average
+								has_artifact_flag = theft_dr_hard
+								has_artifact_flag = theft_dr_extreme
+							}
+						}
+					}
+					factor = 2
+				}
+				modifier = { #Hard objects more difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_hard
+					}
+					factor = 0.75
+				}
+				modifier = { #Extreme objects very difficult to steal
+					event_target:ek_theft_target_object = {
+						has_artifact_flag = theft_dr_extreme
+					}
+					factor = 0.33
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 1
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 2
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 3
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 4
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 5
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 6
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 7
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 8
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 9
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 10
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 11
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 12
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 13
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 14
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 15
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 16
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 17
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 18
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 19
+					}
+					factor = 0.8
+				}
+				modifier = {
+					attribute_diff = {
+					  character = FROM
+					  attribute = intrigue
+					  value = 20
+					}
+					factor = 0.8
+				}
+				character_event = { id = ekthieving.370 }
+			}
+		}
+	}
+}
+#Critical Theft Failure, jailed by artifact owner
+long_character_event = {
+	id = ekthieving.360
+	desc =  {
+		text = ekthieving360a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving360b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	hide_FROM = yes
+	
+	option = {
+		name = ekthieving360accept
+		clr_quest = {
+			id = quest_ct_personal_theft
+			failure = yes
+		}
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+		imprison = FROM
+		FROM = { character_event = { id = ekthieving.362 } }
+	}
+}
+character_event = {
+	id = ekthieving.362
+	desc =  {
+		text = ekthieving362a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving362b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving362accept
+		opinion = {
+			modifier = scheming_bastard
+			who = FROM
+			years = 10			
+		}
+	}
+}
+#Theft target has their artifact stolen!
+character_event = {
+	id = ekthieving.370
+	desc =  {
+		text = ekthieving370a #Item not equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = no
+			}
+		}
+	}
+	desc =  {
+		text = ekthieving370b #Item is equipped
+		trigger = {
+			event_target:ek_theft_target_object = {
+				is_artifact_equipped = yes
+			}
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	show_from_from = no
+	
+	immediate = {
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = no
+				}
+			}
+			FROMFROM = { set_character_flag = steal_normal_item }
+		}
+		if = {
+			limit = {
+				event_target:ek_theft_target_object = {
+					is_artifact_equipped = yes
+				}
+			}
+			FROMFROM = { set_character_flag = steal_equipped_item }
+		}
+		FROMFROM = { character_event = { id = ekthieving.380 } } #Notify the thief
+	}
+	
+	option = {
+		name = ekthieving370accept
+		hidden_tooltip = {
+			event_target:ek_theft_target_object = {
+				transfer_artifact = {
+					from = ROOT
+					to = FROMFROM
+				}
+			}
+		}
+	}
+}
+#Thief notified on mission success!
+character_event = {
+	id = ekthieving.380
+	desc =  {
+		text = ekthieving380a #Item not equipped
+		trigger = {
+			has_character_flag = steal_normal_item
+		}
+	}
+	desc =  {
+		text = ekthieving380b #Item is equipped
+		trigger = {
+			has_character_flag = steal_equipped_item
+		}
+	}
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving380accept
+		clr_character_flag = steal_normal_item
+		clr_character_flag = steal_equipped_item
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = wants_easy_artifact
+					NOR = {
+						has_character_flag = wants_easy_artifact
+						has_character_flag = wants_average_artifact
+						has_character_flag = wants_hard_artifact
+						has_character_flag = wants_extreme_artifact
+					}
+				}
+			}
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_ct_major_theft
+			add_society_currency_trivial_effect = yes
+		}
+		if = {
+			limit = { has_character_flag = wants_average_artifact }
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_ct_major_theft
+			add_society_currency_minor_effect = yes
+		}
+		if = {
+			limit = { has_character_flag = wants_hard_artifact }
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_ct_major_theft
+			add_society_currency_medium_effect = yes
+		}
+		if = {
+			limit = { has_character_flag = wants_extreme_artifact }
+			clear_artifact_theft_flags = yes
+			clr_quest = quest_ct_major_theft
+			add_society_currency_medium_effect = yes
+		}
+	}
+}
+character_event = {
+	id = ekthieving.390
+	desc = ekthieving390
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving390accept
+		clr_quest = {
+			id = quest_ct_major_theft
+			failure = yes
+		}
+		clear_artifact_theft_flags = yes
+		event_target:ek_theft_client = {
+			hidden_tooltip = { character_event = { id = ekthieving.392 } }
+		}
+	}
+}
+#Personal theft version of failure
+character_event = {
+	id = ekthieving.391
+	desc = ekthieving391
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving391accept
+		clr_quest = {
+			id = quest_ct_personal_theft
+			failure = yes
+		}
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+	}
+}
+#Notifies the client
+character_event = {
+	id = ekthieving.392
+	desc = ekthieving392
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekthieving392accept
+		clear_event_target = ek_theft_client
+		clear_artifact_theft_flags = yes
+		add_character_modifier = { name = theft_plot_spam_block duration = 365 }
+	}
+}

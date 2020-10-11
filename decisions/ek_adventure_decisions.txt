@@ -1,0 +1,137 @@
+decisions = {
+	
+	adventure_setup_camp = {
+		is_high_prio = yes
+	
+		potential = {
+			has_character_flag = adventure_allow_camp
+		}
+		allow = {
+			#check_variable = { which = advprov value > 0 }
+		}
+		effect = {
+			if = {
+				limit = {
+					has_character_flag = adv_plot_timer
+				}
+				set_character_flag = adv_plot_timer_paused
+				clr_character_flag = adv_plot_timer
+			}
+			#if = {
+			#	limit = {
+			#		has_character_flag = adventure_allow_generic
+			#	}
+			#	set_character_flag = adventure_allow_generic_paused
+			#	clr_character_flag = adventure_allow_generic
+			#}
+			set_character_flag = adv_in_camp
+		}
+	}
+	
+	adventure_leave_camp = {
+		is_high_prio = yes
+	
+		potential = {
+			has_character_flag = adv_in_camp
+		}
+		allow = {
+			NOR = {
+				has_character_flag = adv_camp_foraging
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_character_flag = adv_plot_timer_paused
+				}
+				clr_character_flag = adv_plot_timer_paused
+				set_character_flag = adv_plot_timer
+			}
+			if = {
+				limit = {
+					has_character_flag = adventure_allow_generic_paused
+				}
+				clr_character_flag = adventure_allow_generic_paused
+				set_character_flag = adventure_allow_generic
+			}
+			clr_character_flag = adv_in_camp
+		}
+	}
+	
+	adventure_forage = {
+		potential = {
+			has_character_flag = adv_in_camp
+			NOR = {
+				has_character_flag = adv_camp_foraging
+				has_character_flag = adv_camp_resting
+			}
+		}
+		effect = {
+			set_character_flag = adv_camp_foraging
+		}
+	}
+	adventure_stop_forage = {
+		potential = {
+			has_character_flag = adv_camp_foraging
+		}
+		effect = {
+			clr_character_flag = adv_camp_foraging
+		}
+	}
+	
+	adventure_rest = {
+		potential = {
+			has_character_flag = adv_in_camp
+			NOR = {
+				has_character_flag = adv_camp_foraging
+				has_character_flag = adv_camp_resting
+			}
+		}
+		effect = {
+			set_character_flag = adv_camp_resting
+		}
+	}
+	adventure_stop_rest = {
+		potential = {
+			has_character_flag = adv_camp_resting
+		}
+		effect = {
+			clr_character_flag = adv_camp_resting
+		}
+	}
+
+	adventure_snowprince = {
+		potential = {
+			ai = no #Subject to change.
+			has_character_flag = adventuring_open
+			NOT = { has_global_flag = jolgeirr_barrow_discovered }
+			OR = {
+				has_artifact = book_fall_of_the_snow_prince
+				OR = {
+					is_falmer = yes
+					culture = falmer
+				}
+			}
+			NOR = {
+				culture_group = undead
+				culture_group = daedra
+			}
+		}
+		allow = {
+			prestige = 1000
+			wealth = 500 #This is mostly an anti-idiot measure.
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			is_away = no
+		}
+		effect = {
+			character_event = { id = ekadventure.100 }
+			custom_tooltip = { text = adventurearrangements }
+			wealth = -100 #Flat making-arrangements fee, certain supplies, etc - non-refundable
+			prestige = 25
+			k_solstheim = {
+				save_event_target_as = adventure_target
+			}
+		}
+	}
+}

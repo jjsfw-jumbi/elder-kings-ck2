@@ -1,0 +1,1010 @@
+decisions = {
+	convert_from_feudal_to_proper = {
+		is_high_prio = yes
+		potential = {
+			has_submenu_open = no
+			is_feudal = yes
+			lower_tier_than = DUKE
+			controls_religion = no
+			capital_holding = {
+				OR = {
+					holding_type = temple
+					holding_type = city
+					holding_type = tribal
+				}
+			}
+		}
+		allow = {
+			scaled_wealth = 1
+		}
+		
+		effect = {
+			scaled_wealth = -1
+			
+			if = {
+				limit = {
+					capital_holding = {
+						holding_type = temple
+					}
+				}
+				set_government_type = theocracy_government
+			}
+			
+			if = {
+				limit = {
+					capital_holding = {
+						holding_type = city
+					}
+				}
+				set_government_type = republic_government
+			}
+			
+			if = {
+				limit = {
+					capital_holding = {
+						holding_type = tribal
+					}
+				}
+				set_government_type = tribal_government
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	claim_cyrodiil = {
+		is_high_prio = yes
+		potential = {
+			is_feudal = yes
+			independent = yes
+			NOT = { has_landed_title = k_cyrodiil }
+			any_realm_lord = {
+				AND = {
+					ai = yes
+					has_landed_title = k_cyrodiil
+				}
+			}
+			OR = {
+				primary_title = { title = e_cyrodiil }
+				primary_title = { title = e_tamriel }
+				primary_title = { title = e_potentate }
+			}
+			
+			has_submenu_open = no
+		}
+		allow = {
+			NOT = { has_landed_title = k_cyrodiil }
+			any_realm_lord = { has_landed_title = k_cyrodiil }
+		}
+		effect = {
+			ROOT = {
+				k_cyrodiil = {	usurp_title = PREV }
+			}
+			primary_title = {
+				k_cyrodiil = { copy_title_laws = PREV }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	claim_imperialisle = {
+		is_high_prio = yes
+		potential = {
+			is_feudal = yes
+			independent = yes
+			NOT = { has_landed_title = c_imperialisle }
+			any_realm_lord = {
+				AND = {
+					ai = yes
+					has_landed_title = c_imperialisle
+				}
+			}
+			OR = {
+				primary_title = { title = k_heartlands }
+				primary_title = { title = k_cyrodiil }
+				primary_title = { title = e_cyrodiil }
+				primary_title = { title = e_tamriel }
+				primary_title = { title = e_potentate }
+			}
+			
+			has_submenu_open = no
+		}
+		allow = {
+			NOT = { has_landed_title = c_imperialisle }
+			any_realm_lord = { has_landed_title = c_imperialisle }
+			any_realm_lord = { has_landed_title = b_whitegold }
+		}
+		effect = {
+			ROOT = {
+				c_imperialisle = {
+					usurp_title_plus_barony_if_unlanded_and_vassals = PREV
+				}
+				b_whitegold = {	usurp_title = PREV }
+			}
+			b_whitegold = { province_capital = yes }
+			b_whitegold = { ROOT = { capital = PREV } }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	claim_whitegoldtower = {
+		is_high_prio = yes
+		potential = {
+			is_feudal = yes
+			independent = yes
+			has_landed_title = c_imperialisle
+			NOT = { has_landed_title = b_whitegold }
+			any_realm_lord = {
+				AND = {
+					ai = yes
+					has_landed_title = b_whitegold
+				}
+			}
+			OR = {
+				primary_title = { title = k_heartlands }
+				primary_title = { title = k_cyrodiil }
+				primary_title = { title = e_cyrodiil }
+				primary_title = { title = e_tamriel }
+				primary_title = { title = e_potentate }
+			}
+			
+			has_submenu_open = no
+		}
+		allow = {
+			NOT = { has_landed_title = b_whitegold }
+			any_realm_lord = { has_landed_title = b_whitegold }
+		}
+		effect = {
+			ROOT = {
+				b_whitegold = {	usurp_title = PREV }
+			}
+			b_whitegold = { province_capital = yes }
+			b_whitegold = { ROOT = { capital = PREV } }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	#Begin the establishment of Orsinium
+	break_ground_k_orsinium = {
+		only_playable = yes
+		
+		ai_check_interval = 12
+		
+		potential = {
+			culture = orsimer
+			k_orsinium = { has_holder = no }
+			NOT = { has_character_flag = establish_orsinium_decision }
+			OR = {
+				independent = yes
+				NOT = {
+					any_liege = { culture = orsimer }
+				}
+			}
+			has_submenu_open = no
+			is_landed = yes
+		}
+		allow = {
+			war = no
+			primary_title = { higher_tier_than = COUNT }
+			age = 16
+			wealth = 250
+			prestige = 250
+			#ruled_years = 10
+		}
+		effect = {
+			wealth = -250
+			prestige = -100
+			long_character_event = { id = orsimer.1 days = 1095 random = 120 tooltip = breakgroundprelude }
+			hidden_tooltip = {
+				set_character_flag = establish_orsinium_decision
+				random = {
+					chance = 50
+					character_event = { id = orsimer.10 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.11 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.12 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.13 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.14 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.15 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.16 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.17 days = 547 random = 365 }
+				}
+				random = {
+					chance = 50
+					character_event = { id = orsimer.18 days = 547 random = 365 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	
+	create_k_orsinium = {
+		is_high_prio = yes
+		ai_check_interval = 12
+		
+		potential = {
+			is_landed = yes
+			culture = orsimer
+			k_orsinium = { has_holder = no }
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			capital_scope = {
+				culture = orsimer
+			}
+			primary_title = { higher_tier_than = COUNT }
+			age = 16
+			wealth = 250
+			prestige = 250
+			OR = {
+				capital_scope = {
+					has_province_modifier = orsimer_settler_surge
+				}
+				any_demesne_title = {
+					OR = {
+						title = d_dorven
+						title = d_kambria
+						title = d_orsinium
+					}
+				}
+			}
+		}
+		effect = {
+			wealth = -250
+			prestige = 250
+			custom_tooltip = {
+				text = createorsiniumtooltip
+				hidden_tooltip = {
+					k_orsinium = {
+						grant_title = ROOT
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+
+	#Government Conversion events
+	
+	convert_confederacy = {
+		
+		potential = {
+			ai = no
+			government = feudal_government
+			has_character_flag = title_open
+		}
+		allow = {
+			war = no
+			primary_title = {
+				higher_tier_than = duke
+				has_law = centralization_0
+				NOT = { has_law = army_law_1 }
+			}
+			wealth = 250
+		}
+		effect = {
+			wealth = -250
+			set_government_type = confederacy_government
+			primary_title = {
+				set_flag = confederacy
+				succession = {
+					base_type = feudal_elective
+					voting_rules = confederacy_elective
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	convert_confed_to_feu = {
+		
+		potential = {
+			ai = no
+			government = confederacy_government
+			has_character_flag = title_open
+		}
+		allow = {
+			war = no
+			primary_title = {
+				higher_tier_than = duke
+				OR = { #Require some centralization to go Feudal.
+					has_law = centralization_2
+					has_law = centralization_3
+					has_law = centralization_4
+				}
+				NOT = { has_law = army_law_1 }
+			}
+			wealth = 250
+		}
+		effect = {
+			wealth = -250
+			set_government_type = feudal_government
+			primary_title = {
+				clr_flag = confederacy
+				add_law = {
+					law = succ_tanistry
+					cooldown = no
+					opinion_effect = no
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+# DO NOT RE-ENABLE: SOURCE OF THE "RAIDING BUG" 10/28/19
+#	#Willingly become a subject of the Temple (Almsivi rulers only)
+#	almsivi_become_tributary = {
+#		
+#		only_playable = yes
+#		is_high_prio = yes
+#		
+#		ai_check_interval = 12
+#		
+#		potential = {
+#			religion = almsivi
+#			is_tributary = no
+#			independent = yes
+#			is_landed = yes
+#			is_title_active = k_almsivi
+#			has_submenu_open = no
+#			NOR = {
+#				any_tributary = {
+#					has_landed_title = k_almsivi
+#				}
+#				any_vassal = {
+#					has_landed_title = k_almsivi
+#				}
+#			}
+#		}
+#		allow = {
+#			war = no
+#			prestige = 100
+#			k_almsivi = {
+#				holder_scope = {
+#					war = no
+#				}
+#			}
+#		}
+#		effect = {
+#			prestige = -100
+#			
+#			k_almsivi = {
+#				holder_scope = {
+#					make_tributary = {
+#						who = ROOT
+#						tributary_type = tribunal_temple
+#					}
+#				}
+#			}
+#		}
+#	
+#		revoke_allowed = {
+#			always = no
+#		}
+#		ai_will_do = {
+#			factor = 1
+#			
+#			modifier = { #Rulers who are low rank are more likely to join the Temple
+#				factor = 5
+#				lower_tier_than = KING
+#			}
+#			modifier = { #Weak rulers much more likely to join the Temple
+#				factor = 10
+#				NOT = { realm_size = 25 }
+#			}
+#			modifier = {
+#				factor = 0.25 #Slow down
+#			}
+#			modifier = {
+#				factor = 0
+#				k_almsivi = {
+#					holder_scope = {
+#						reverse_has_opinion_modifier = { who = ROOT modifier = opinion_temple_refused_to_tribute }
+#					}
+#				}
+#			}
+#		}
+#	}
+
+	#Abdication (merged over from ek_abdication)
+	ev_abdication = {
+		potential = { #Considering replacing the individual trait checks with triggers
+			ai = no #AI doesn't suffer from the frustration that players do of having a stupid character and no control over their heir.
+			has_character_flag = title_open
+			prisoner = no #Cheese avoidance
+			
+			#calc_true_if = { #Conditions for allow start here - we want players to have at least an idea of what they can do to abdicate without it being omnipresent. Commented out this bit because of the new submenu.
+			#	amount = 2
+			#	OR = { #Old Age
+			#		AND = {
+			#			age = 60
+			#			is_long_lived = no
+			#		}
+			#		AND = {
+			#			age = 240
+			#			is_long_lived = yes
+			#		}
+			#	}
+			#	calc_true_if = { #Being a dumbass
+			#		amount = 3
+			#		diplomacy <= 8
+			#		martial <= 8
+			#		stewardship <= 8
+			#		intrigue <= 8
+			#		learning <= 8
+			#	}
+			#	is_incapacitated = yes
+			#	is_batshit_crazy = yes
+			#	is_maimed = yes #and thus ended the reign of King Simon the Legless
+			#	OR = { #Various disabilities that might be undesirable
+			#		trait = clubfooted
+			#		trait = hunchback
+			#		trait = dwarf
+			#		trait = weak
+			#		trait = blind
+			#		trait = deaf
+			#		trait = mute
+			#		trait = wrymouth
+			#	}
+			#	OR = { #Being a dumbass Pt. 2: Congenital Boogaloo
+			#		trait = imbecile
+			#		trait = inbred
+			#		trait = slow
+			#	}
+			#	OR = {
+			#		trait = stressed
+			#		trait = depressed
+			#	}
+			#}
+		}
+		
+		
+		allow = { #Should always match the potential
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif3 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 3
+				OR = {
+					AND = {
+						age = 50
+						is_long_lived = no
+					}
+					AND = {
+						age = 200
+						is_long_lived = yes
+					}
+				}
+				calc_true_if = {
+					NOT = { custom_tooltip = { text = calctrueif2 } }
+					amount = 2
+					diplomacy <= 8
+					martial <= 8
+					stewardship <= 8
+					intrigue <= 8
+					learning <= 8
+				}
+				is_incapacitated = yes
+				is_batshit_crazy = yes
+				is_maimed = yes	
+				OR = { #Physically impaired
+					trait = clubfooted
+					trait = hunchback
+					trait = dwarf
+					trait = weak
+					trait = blind
+					trait = deaf
+					trait = mute
+					trait = wrymouth
+					trait = feeble
+				}
+				OR = { #Mentally impaired
+					trait = imbecile
+					trait = inbred
+					trait = slow
+					trait = dull
+				}
+				trait = stressed #Removed OR = { } block because these two traits are additive and making them both count the same makes little sense to me.
+				trait = depressed
+			}
+		}
+		
+		effect = {
+			#abdicate = yes
+			current_heir = {
+				save_event_target_as = target_abdicate_heir
+			}
+			any_artifact = {
+				limit = { NOT = { has_artifact_flag = no_inherit } }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:target_abdicate_heir
+				}
+			}
+			current_heir = {
+				inherit = ROOT
+				wealth = ROOT
+				clear_event_target = target_abdicate_heir
+			}
+			clear_wealth = yes
+		}
+		
+
+		ai_will_do = { #failsafe
+			factor = 0
+		}
+	
+	}
+	
+	#Abandon Claim decisions (merged over from ek_abandon_claim_decisions)
+	Sora_EK_abandon_claim_empire_des = {
+		potential = {
+			##Submenu Managment
+
+			has_character_flag = title_open
+
+			##End
+
+			NOT = { trait = ambitious }
+			age = 16
+			
+			any_claim = {
+				tier = EMPEROR
+			}
+		}
+		
+		allow = {}
+		
+		ai_will_do = {
+			factor = 0
+		}
+		
+		effect = {
+			character_event = { id = Sora_EK_abandon_claim.3}
+		}
+	}
+
+	Sora_EK_abandon_claim_kingdom_des = {
+		potential = {
+			##Submenu Managment
+
+			has_character_flag = title_open
+
+			##End
+			
+			any_claim = {
+				tier = KING
+			}
+		}
+		
+		allow = {
+			NOT = { trait = ambitious }
+			age = 16
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}		
+		
+		effect = {
+			character_event = { id = Sora_EK_abandon_claim.2}
+		}
+	}
+	
+	Sora_EK_abandon_claim_duchy_des = {
+		potential = {
+			##Submenu Managment
+
+			has_character_flag = title_open
+
+			##End
+			
+			any_claim = {
+				tier = DUKE
+			}		
+		}
+		
+		allow = {
+			NOT = { trait = ambitious }
+			age = 16
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}		
+		
+		effect = {
+			character_event = { id = Sora_EK_abandon_claim.1}
+		}
+	}
+
+	Sora_EK_abandon_claim_county_des = {
+		potential = {
+			##Submenu Managment
+
+			has_character_flag = title_open
+
+			##End
+		
+			any_claim = {
+				tier = COUNT
+			}	
+		}
+		
+		allow = {
+			NOT = { trait = ambitious }
+			age = 16
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}		
+		
+		effect = {
+			character_event = { id = Sora_EK_abandon_claim.0}
+		}
+	}
+
+	Sora_EK_abandon_claim_barony_des = {
+		potential = {
+			##Submenu Managment
+
+			has_character_flag = title_open
+
+			##End
+			
+			any_claim = {
+				tier = BARON
+			}
+		}
+		
+		allow = {
+			NOT = { trait = ambitious }
+			age = 16
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}		
+		
+		effect = {
+			character_event = { id = Sora_EK_abandon_claim.4}
+		}
+	}
+
+	#Imperial special decisions (merged from ek_imperial_decisions)
+	
+	imperial_bureaucracy_decision = {
+		only_playable = yes
+		only_rulers = yes
+		
+		ai_check_interval = 48
+		
+		potential = {
+			OR = {
+				culture = colovian
+				culture = imperial
+				culture = nibenean
+			}
+			NOR = {
+				has_character_modifier = imperial_bureaucracy_diplomacy_count
+				has_character_modifier = imperial_bureaucracy_diplomacy_duke
+				has_character_modifier = imperial_bureaucracy_diplomacy_king
+				has_character_modifier = imperial_bureaucracy_diplomacy_emperor
+				has_character_modifier = imperial_bureaucracy_martial_count
+				has_character_modifier = imperial_bureaucracy_martial_duke
+				has_character_modifier = imperial_bureaucracy_martial_king
+				has_character_modifier = imperial_bureaucracy_martial_emperor
+				has_character_modifier = imperial_bureaucracy_stewardship_count
+				has_character_modifier = imperial_bureaucracy_stewardship_duke
+				has_character_modifier = imperial_bureaucracy_stewardship_king
+				has_character_modifier = imperial_bureaucracy_stewardship_emperor
+				has_character_modifier = imperial_bureaucracy_intrigue_count
+				has_character_modifier = imperial_bureaucracy_intrigue_duke
+				has_character_modifier = imperial_bureaucracy_intrigue_king
+				has_character_modifier = imperial_bureaucracy_intrigue_emperor
+				has_character_modifier = imperial_bureaucracy_learning_count
+				has_character_modifier = imperial_bureaucracy_learning_duke
+				has_character_modifier = imperial_bureaucracy_learning_king
+				has_character_modifier = imperial_bureaucracy_learning_emperor
+			}
+			NOT = { has_character_flag = bureaucracy_decision }
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			any_demesne_title = {
+				NOT = { higher_tier_than = count }
+				is_occupied = no
+			}
+			#Simply using any_demesne_title with is_occupied generates an error in the error log, despite it appearing as such in vanilla.
+			scaled_wealth = 0.5
+			prisoner = no
+		}
+		effect = {
+			set_character_flag = bureaucracy_decision
+			character_event = { id = imperials.1 days = 3 }
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0.1
+				NOT = {
+					scaled_wealth = 2
+				}
+			}
+		}
+	}
+
+	reform_imperial_commune_decision = { #Reforming the Imperial Commune into the Imperial Republic
+		only_independent = yes
+		is_high_prio = yes
+		
+		potential = {
+			is_playable = yes
+			independent = yes
+			government = imperial_commune_government
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			OR = {
+				completely_controls_region = nirn_tamriel_cyrodiil
+				realm_size = 150 #Trial value
+			}
+			# Controls at least half of Cyrodiil
+			regional_percentage = {
+				region = nirn_tamriel_cyrodiil
+				percentage = 0.5
+				owner = { same_realm = ROOT }
+			}
+			# At least a third of Cyrodiil is prosperous
+			regional_percentage = {
+				region = nirn_tamriel_cyrodiil
+				percentage = 0.34
+				OR = {
+					has_province_modifier = prosperity_modifier_1
+					has_province_modifier = prosperity_modifier_2
+					has_province_modifier = prosperity_modifier_3
+				}
+			}
+			
+			trigger_if = {
+				limit = { ai = yes }
+				wealth = 250
+			}
+			
+			trigger_else = {
+				wealth = 1000
+				prestige = 1500
+				
+				primary_title = {
+					OR = {
+						has_law = ze_administration_laws_1 # Late Feudal Administration
+						has_law = ze_administration_laws_2 # Imperial Administration
+					}
+					OR = {
+						has_law = centralization_3 # High Centralization
+						has_law = centralization_4 # Centralized
+					}
+				}
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					ai = yes
+				}
+				wealth = -250
+			}
+			else = {
+				wealth = -1000
+			}
+			long_character_event = { id = custgovts.397 }
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	abandon_imperial_commune_decision = { #Abandoning the Imperial Commune and turning into a Confederacy
+		only_independent = yes
+		is_high_prio = yes
+		
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			independent = yes
+			government = imperial_commune_government
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			completely_controls_region = nirn_tamriel_heartlands
+			#regional_percentage = {
+			#	region = nirn_tamriel_heartlands
+			#	percentage = 0.34
+			#	OR = {
+			#		has_province_modifier = prosperity_modifier_1
+			#		has_province_modifier = prosperity_modifier_2
+			#		has_province_modifier = prosperity_modifier_3
+			#	}
+			#}
+			wealth = 1000
+			prestige = 1000
+			primary_title = {
+				OR = {
+					has_law = centralization_0 # Decentralized
+					has_law = centralization_1 # Low centralization
+					has_law = centralization_2 # Medium Centralization
+				}
+			}
+		}
+		
+		effect = {
+			wealth = -1000
+			prestige = -1000
+			set_government_type = confederacy_government
+			set_flag = confederacy
+			succession = {
+				base_type = feudal_elective
+				voting_rules = confederacy_elective
+			}
+			clr_global_flag = imperial_commune_active
+		}
+		
+		ai_will_do = {
+			factor = 0.15
+		}
+	}
+	
+	form_imperial_commune_decision = { #Reform the Imperial Commune as a feudal ruler
+		only_independent = yes
+		is_high_prio = yes
+		
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			independent = yes
+			government = feudal_government
+			has_submenu_open = no
+			ai = no #For now
+			primary_title = {
+				OR = {
+					title = k_heartlands
+					title = d_imperialisle
+					title = c_imperialisle
+				}
+			}
+			NOT = { has_global_flag = imperial_commune_active }
+			
+			society_member_of = elder_council
+		}
+		allow = {
+			war = no
+			completely_controls_region = nirn_tamriel_heartlands
+			prestige = 250
+			primary_title = {
+				OR = {
+					title = k_heartlands
+					title = d_imperialisle
+					title = c_imperialisle
+				}
+			}
+			NOT = { trait = warlord }
+		}
+		
+		effect = {
+			prestige = -250
+			set_global_flag = imperial_commune_active
+			set_government_type = imperial_commune_government
+			succession = {
+				base_type = feudal_elective
+				voting_rules = imperial_commune_elective
+			}
+		}
+	}
+	
+	#Misc
+	
+	formal_duchy_claim = { #If a duchy's owner doesn't control any counties in your capital duchy and you control all of them, you gain an automatic strong claim.
+		is_high_prio = yes
+		
+		only_playable = yes
+		
+		ai_check_interval = 1
+		
+		potential = {
+			OR = {
+				is_feudal = yes
+				is_tribal = yes
+			}
+			NOR = { #You can't claim your own title
+				primary_title = {
+					dejure_liege_title = {
+						holder_scope = { character = ROOT }
+					}
+				}
+				primary_title = { #You can't claim the title if you've already claimed it
+					dejure_liege_title = {
+						ROOT = { has_claim = PREV }
+					}
+				}
+				primary_title = {
+					dejure_liege_title = {
+						higher_tier_than = DUKE
+					}
+				}
+			}
+			independent = no
+			has_submenu_open = no
+		}
+		allow = {
+			scaled_wealth = 2.5
+			primary_title = {
+				dejure_liege_title = {
+					ROOT = {
+						completely_controls = PREV
+					}
+				}
+			}
+		}
+		effect = {
+			scaled_wealth = -2.5
+			primary_title = {
+				dejure_liege_title = {
+					add_claim = ROOT
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

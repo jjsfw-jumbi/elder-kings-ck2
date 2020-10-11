@@ -1,0 +1,1700 @@
+namespace = ekadventure
+#Reserve 0-99 for system functions!!!
+
+#TODO: Random Encounter spitter.
+#TODO: Foraging/resting events.
+#TODO: Adventurize the loot generation effects?
+#TODO: Handle adventurer death.
+
+### Preparation events ###
+## Reserve: 0-9
+#
+
+#Use character flags per adventure in an after = {} block to continue the event chain after preparations.
+#I.E.
+#after = {
+#	if = {
+#		limit = {
+#			has_character_flag = adventure_snowprince
+#		}
+#		character_event = { id = ekadventure.101 }
+#	}
+#}
+#You can also feel free to add more stages of preparation if you'd like and restrict them per adventure, but if it's something that you think will only be used once, use an event in your adventure's ID allotment for it
+
+character_event = { #Buy provisions
+	id = ekadventure.0
+	desc = ekadventure0desc
+	title = adventureprovisions
+	picture = GFX_evt_townscene
+	
+	is_triggered_only = yes
+	
+	#Provision costs: 25 gold per unit.
+	#Characters should be capped to 15 units.
+	
+	option = { #Buy 5
+		name = ekadventure0opta
+		trigger = { 
+			wealth = 125
+			check_variable = { which = advprov value <= 10 }
+		}
+		change_variable = { which = advprov value = 5}
+		wealth = -125
+	}
+	option = { #Buy 10
+		name = ekadventure0optb
+		trigger = { 
+			wealth = 250
+			check_variable = { which = advprov value <= 5 }
+		}
+		change_variable = { which = advprov value = 10}
+		wealth = -250
+	}
+	option = { #Buy 15
+		name = ekadventure0optc
+		trigger = {
+			wealth = 375
+			check_variable = { which = advprov value == 0 }
+		}
+		change_variable = { which = advprov value = 15}
+		wealth = -375
+	}
+	option = { #Buy none - provisioned
+		name = ekadventure0optd #Our current provisions should suffice
+		trigger = { NOT = { check_variable = { which = advprov value == 0 } } }
+		custom_tooltip = { text = adventurenoprovisions}
+	}
+	option = { #Buy none - unprovisioned
+		name = ekadventure0opte
+		trigger = { check_variable = { which = advprov value == 0 } }
+		change_variable = { which = partymorale value = -1 }
+	}
+	after = {
+		character_event = { id = ekadventure.1 }
+	}
+}
+
+character_event = { #Hire ancillaries
+	id = ekadventure.1
+	desc = ekadventure1desc
+	title = adventuremercenaries
+	picture = GFX_evt_townscene
+	
+	is_triggered_only = yes
+	
+	#Guide costs 100 gold and helps avoid bad non-combat events, protection costs 200 gold and helps avoid bad combat events, both increase the chance of using provisions.
+	option = { #Hire guide
+		name = ekadventure1opta
+		trigger = { wealth = 100 }
+		wealth = -100
+		set_character_flag = adventure_hired_guide
+	}
+	option = { #Hire mercenaries
+		name = ekadventure1optb
+		trigger = { wealth = 200 }
+		wealth = -200
+		set_character_flag = adventure_hired_mercenaries
+	}
+	option = { #Hire both
+		name = ekadventure1optc
+		trigger = { wealth = 300}
+		wealth = -300
+		set_character_flag = adventure_hired_mercenaries
+		set_character_flag = adventure_hired_guide
+	}
+	option = { #Hire none
+		name = ekadventure1optd
+	}
+	
+	after = {
+		character_event = { id = ekadventure.2 }
+	}
+}
+
+character_event = { #Hire transportation
+	id = ekadventure.2
+	desc = ekadventure2desc
+	title = adventuretransport
+	picture = GFX_evt_townscene
+	
+	is_triggered_only = yes
+	
+	option = { #Hire mage's guild guide - expensive and reliable in a pinch
+		name = ekadventure2opta
+		trigger = { wealth = 200 }
+		wealth = -200
+		set_character_flag = adventure_transportation_guildguide
+	}
+	option = { #Hire conventional transportation - middleground, but not easily accessible in the case of emergency.
+		name = ekadventure2optb
+		trigger = { wealth = 100 }
+		wealth = -100
+		set_character_flag = adventure_transportation_conventional
+	}
+	option = { #Catch a ride - delayed return and low chance of escape.
+		name = ekadventure2optc
+		trigger = { wealth = 50 }
+		wealth = -50
+		prestige = -25
+		set_character_flag = adventure_transportation_hitchhiking
+	}
+	option = { #Hire nobody - non-mages. Very delayed return and very low chance of escape.
+		name = ekadventure2optd
+		trigger = {
+			NOR = {
+				trait = mage_3
+				trait = mage_4
+				trait = mage_5
+			}
+		}
+		change_variable = { which = partymorale value = -1 }
+		change_variable = { which = partyfatigue value = 1 }
+	}
+	option = { #Hire nobody - mages
+		name = ekadventure2opte
+		trigger = {
+			OR = {
+				trait = mage_3
+				trait = mage_4
+				trait = mage_5
+			}
+		}
+	}
+	after = {
+		if = {
+			limit = { has_character_flag = adventure_snowprince }
+			character_event = { id = ekadventure.101 }
+		}
+	}
+}
+### System Events ###
+## Reserve: 10-29
+character_event = { #Food consumption
+	id = ekadventure.10
+	desc = ekadventure10desc
+	picture = GFX_evt_placeholder
+	
+	trigger = {
+		has_character_flag = adventure_allow_generic #Don't set this flag until AFTER the preparation events!
+		check_variable = { which = provisions value >= 0 }
+		OR = {
+			NOT = {
+				has_character_flag = adv_prov_timer
+			}
+			had_character_flag = { flag = adv_prov_timer days = 30 } 
+		}
+	}
+	mean_time_to_happen = {
+		months = 2
+		modifier = {
+			factor = 0.9
+			has_character_flag = adventure_hired_guide
+		}
+		modifier = {
+			factor = 0.8
+			has_character_flag = adventure_hired_mercenaries
+		}
+		modifier = {
+			factor = 1.5
+			adv_is_excellent_magistrate = yes
+		}
+		modifier = {
+			factor = 1.25
+			adv_is_superior_magistrate = yes
+		}
+		modifier = {
+			factor = 1.05
+			adv_is_average_magistrate = yes
+		}
+		modifier = {
+			factor = 0.9
+			adv_is_poor_magistrate = yes
+		}
+		modifier = {
+			factor = 0.8
+			is_dumb_trigger = yes
+		}
+	}
+	
+	immediate = { #clean tooltip and timer reset
+		clr_character_flag = adv_prov_timer
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = adventure_hired_guide
+					has_character_flag = adventure_hired_mercenaries
+				}
+			}
+			random = {
+				chance = 40
+				modifier = {
+					factor = 2
+					AND = {
+						has_character_flag = adventure_hired_guide
+						has_character_flag = adventure_hired_mercenaries
+					}
+				}
+				modifier = {
+					factor = 1.5
+					check_variable = { which = partystarvation value >= 1 }
+				}
+				set_character_flag = adv_eat_two
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { which = partystarvation value >= 1 }
+			}
+			change_variable = { which = partystarvation value = -1 }
+		}
+	}
+	
+	option = { #High Provisions
+		trigger = { check_variable = { which = provisions value > 5 } }
+		name = ekadventure10opta
+		if = {
+			limit = {
+				has_character_flag = adv_eat_two
+			}
+			change_variable = { which = provisions value = -2 }
+		}
+		else = {
+			change_variable = { which = provisions value = -1 }
+		}
+	}
+	option = { #Low Provisions
+		trigger = { check_variable = { which = provisions value <= 5 } }
+		name = ekadventure10optb
+		if = {
+			limit = {
+				has_character_flag = adv_eat_two
+			}
+			change_variable = { which = provisions value = -2 }
+		}
+		else = {
+			change_variable = { which = provisions value = -1 }
+		}
+	}
+	after = {
+		clr_character_flag = adv_eat_two
+		set_character_flag = adv_prov_timer
+	}
+}
+
+character_event = { #You have died of dysentery. (Starvation)
+	id = ekadventure.11
+	desc = ekadventure11desc
+	title = "Starvation!"
+	picture = GFX_evt_placeholder
+	
+	trigger = {
+		has_character_flag = adventure_allow_generic
+		check_variable = { which = provisions value <= 0 }
+		OR = {
+			had_character_flag = { flag = adv_starv_timer days = 7 }
+			NOT = { has_character_flag = adv_starv_timer }
+		}
+	}
+	mean_time_to_happen = {
+		days = 14
+	}
+	immediate = {
+		random_list = {
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						has_character_flag = adventure_hired_mercenaries
+					}
+				}
+				set_character_flag = adv_mercs_starve
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						has_character_flag = adventure_hired_guide
+					}
+				}
+				set_character_flag = adv_guide_starves
+			}
+			40 = { }
+		}
+		change_variable = { which = partystarvation value = 1 }
+	}
+	option = {
+		name = ekadventure11opta
+		random_list = {
+			90 = {
+				change_variable = { which = partymorale value = -1 }
+				change_variable = { which = partyfatigue value = 1 }
+			}
+			10 = {
+				death = { death_reason = death_vanish_wilderness }
+				modifier = {
+					factor = 1.5
+					check_variable = { which = partystarvation value > 1 }
+				}
+				modifier = {
+					factor = 2
+					check_variable = { which = partystarvation value > 2 }
+				}
+				modifier = {
+					factor = 2.5
+					check_variable = { which = partystarvation value > 3 }
+				}
+				modifier = {
+					factor = 3
+					check_variable = { which = partystarvation value > 4 }
+				}
+				modifier = {
+					factor = 3.5
+					check_variable = { which = partystarvation value > 5 }
+				}
+				modifier = {
+					factor = 4
+					check_variable = { which = partystarvation value > 6 }
+				}
+			}
+		}
+	}
+	after = {
+		if = {
+			limit = {
+				has_character_flag = adv_guide_starves
+			}
+			clr_character_flag = adventure_hired_guide
+			clr_character_flag = adv_guide_starves
+			custom_tooltip = { text = adventure_guide_starves}
+			prestige = -25
+		}
+		if = {
+			limit = {
+				has_character_flag = adv_mercs_starve
+			}
+			clr_character_flag = adventure_hired_mercenaries
+			clr_character_flag = adv_mercs_starve
+			custom_tooltip = { text = adventure_mercenaries_starve}
+			prestige = -25
+		}
+	}
+}
+
+#Foraging event
+
+#Resting event
+
+character_event = { #Mutiny Event
+	id = ekadventure.14
+	desc = ekadventure14desc
+	title = "Mutiny!"
+	picture = GFX_evt_placeholder
+	
+	trigger = {
+		has_character_flag = adventure_allow_generic
+		OR = {
+			has_character_flag = adventure_hired_mercenaries
+			has_character_flag = adventure_hired_guide
+		}
+		check_variable = { which = partymorale value <= 5 }
+	}
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.8
+			check_variable = { which = partymorale value <= 4 }
+		}
+		modifier = {
+			factor = 0.7
+			check_variable = { which = partymorale value <= 3 }
+		}
+		modifier = {
+			factor = 0.6
+			check_variable = { which = partymorale value <= 2 }
+		}
+		modifier = {
+			factor = 0.5
+			check_variable = { which = partymorale value <= 1 }
+		}
+		modifier = {
+			factor = 0.1
+			check_variable = { which = partymorale value <= 0 }
+		}
+		modifier = {
+			factor = 1.2
+			trait = lucky
+		}
+		modifier = {
+			factor = 2
+			adv_is_excellent_diplomat = yes
+		}
+		modifier = {
+			factor = 1.5
+			adv_is_superior_diplomat = yes
+		}
+		modifier = {
+			factor = 0.75
+			adv_is_poor_diplomat = yes
+		}
+	}
+	
+	option = { #Try to convince them to stay
+		name = ekadventure14opta
+		character_event = { id = ekadventure.15 }
+	}
+	option = { #Let them leave
+		name = ekadventure14optb
+		clr_character_flag = adventure_hired_mercenaries
+		clr_character_flag = adventure_hired_guide
+	}
+}
+
+character_event = { #Mutiny II
+	id = ekadventure.15
+	desc = ekadventure15desc
+	picture = GFX_evt_placeholder
+	is_triggered_only = yes
+	
+	option = { #Negotiate
+	}
+	option = { #Threaten - Combat
+	}
+	option = { #Let them leave
+		name = ekadventure15optc
+		clr_character_flag = adventure_hired_mercenaries
+		clr_character_flag = adventure_hired_guide
+	}
+}
+
+### Encounters ###
+#Four main difficulties: Easy, Normal, Hard, Extreme
+#Difficulty rating of an encounter will be different depending on how you approach it.
+#Difficulties should be applied into ek_adventuring_triggers by adding the encounter flag to the block (except normal, of course)
+#You of course may make an encounter even more difficult by further reducing the success chance with a modifier block.
+
+character_event = { #Basic bandit encounter - primarily an example event for y'all.
+	id = ekadventure.20
+	desc = ekadventure20desc
+	title = "Bandits!"
+	picture = GFX_evt_adventurer_encounter
+	
+	is_triggered_only = yes #Etienne's note: This is a failsafe measure. Feel free to delete this whenever you please - this is just to clean the error log
+	
+	trigger = {
+		has_character_flag = adventure_allow_generic
+		OR = {
+			had_character_flag = { flag = adv_bandit_timer days = 30 }
+			NOT = {
+				has_character_flag = adv_encounter_timer
+			}
+		}
+	}
+	immediate = {
+		clr_character_flag = adv_encounter_timer
+		set_character_flag = adv_encounter_bandits
+	}
+	
+	option = { #Talk - hard 
+		name = ekadventure20opta
+		custom_tooltip = { text = adventure_difficulty_hard }
+		character_event = { id = ekadventure.21 }
+	}
+	option = { #Fight - normal
+		name = ekadventure20optb
+		custom_tooltip = { text = adventure_difficulty_normal }
+		character_event = { id = ekadventure.22 }
+	}
+	option = { #Sneak - normal
+		name = ekadventure20optc
+		custom_tooltip = { text = adventure_difficulty_normal }
+		character_event = { id = ekadventure.23 }
+	}
+	option = { #Run - easy
+		name = ekadventure20optd
+		custom_tooltip = { text = adventure_difficulty_easy }
+		character_event = { id = ekadventure.24 }
+	}
+	
+	after = { set_character_flag = adv_encounter_timer }
+}
+
+## Encounter Result Events ##
+# Use flags and custom description triggers for unique encounters
+character_event = { # Encounter Negotiations
+	id = ekadventure.21
+	picture = GFX_evt_chimer_meeting
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure21banditvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure21banditdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure21berserkervictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure21berserkerdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure21werewolvesvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure21werewolvesdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure21nordwarriorsvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure21nordwarriorsdefeat
+	}
+	
+	immediate = { #Roll for success
+		random_list = {
+			70 = { #Success 
+				set_character_flag = adv_encounter_victory
+				#Skill + Misc modifiers#
+				modifier = {
+					factor = 1.5
+					adv_is_excellent_diplomat = yes
+				}
+				modifier = {
+					factor = 1.3
+					adv_is_superior_diplomat = yes
+				}
+				modifier = {
+					factor = 1.1
+					adv_is_average_diplomat = yes
+				}
+				modifier = {
+					factor = 0.8
+					adv_is_poor_diplomat = yes
+				}
+				modifier = { #Intimidation
+					factor = 1.1
+					has_character_flag = adventure_hired_mercenaries
+				}
+				modifier = {
+					factor = 1.1
+					trait = lucky
+				}
+			}
+			30 = {
+				set_character_flag = adv_encounter_defeat
+				#Base difficulty modifiers#
+				modifier = {
+					factor = 3
+					adv_negotiation_extreme = yes
+				}
+				modifier = {
+					factor = 1.5
+					adv_negotiation_hard = yes
+				}
+				modifier = {
+					factor = 0.75
+					adv_negotiation_easy = yes
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 1 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 2 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 3 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 4 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 5 }
+				}
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = { #Success
+		name = excellent
+		trigger = {
+			has_character_flag = adv_encounter_victory
+		}
+		change_variable = { which = encountersuccesses value = 1 }
+		if = {
+			limit = {
+				NOT = { has_character_flag = adv_encounter_noloot }
+			}
+			generate_encounter_loot = yes
+		}
+		prestige = 10
+	}
+	
+	option = { #Failure
+		name = damn
+		trigger = {
+			has_character_flag = adv_encounter_defeat
+		}
+		change_variable = { which = encounterdefeats value = 1 }
+		prestige = -25
+		random = {
+			chance = 25
+			modifier = {
+				factor = 5
+				has_character_flag = instant_kill_on_failure
+			}
+			adventure_wound_effect = yes
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_vampires
+				}
+				roll_for_vampirism = yes
+			}
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_werewolves
+				}
+				roll_for_lycanthropy = yes
+			}
+		}
+	}
+	after = {
+		clear_encounter_flags = yes
+	}
+}
+character_event = { # Encounter Combat
+	id = ekadventure.22
+	picture = GFX_evt_battle
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure22banditvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure22banditdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure22berserkervictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure22berserkerdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure22werewolvesvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure22werewolvesdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure22nordwarriorsvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure22nordwarriorsdefeat
+	}
+	
+	immediate = { #Roll for success
+		random_list = {
+			70 = { #Success 
+				set_character_flag = adv_encounter_victory
+				random = {
+					chance = 30
+					modifier = {
+						factor = 0.5
+						adv_is_excellent_combatant = yes
+					}
+					modifier = {
+						factor = 0.75
+						adv_is_superior_combatant = yes
+					}
+					modifier = {
+						factor = 1.25
+						adv_is_poor_combatant = yes
+					}
+					modifier = {
+						factor = 0.8
+						trait = lucky
+					}
+					adventure_wound_effect = yes
+					if = {
+						limit = {
+							has_character_flag = adv_encounter_vampires
+						}
+						roll_for_vampirism = yes
+					}
+					if = {
+						limit = {
+							has_character_flag = adv_encounter_werewolves
+						}
+						roll_for_lycanthropy = yes
+					}
+				}
+				#Skill + Misc modifiers#
+				modifier = {
+					factor = 1.5
+					adv_is_excellent_combatant = yes
+				}
+				modifier = {
+					factor = 1.3
+					adv_is_superior_combatant = yes
+				}
+				modifier = {
+					factor = 1.1
+					adv_is_average_combatant = yes
+				}
+				modifier = {
+					factor = 0.5
+					adv_is_poor_combatant = yes
+				}
+				modifier = {
+					factor = 1.2
+					has_character_flag = adventure_hired_mercenaries
+				}
+				modifier = {
+					factor = 1.05
+					has_character_flag = adventure_hired_guide
+				}
+				modifier = {
+					factor = 1.1
+					trait = lucky
+				}
+			}
+			30 = {
+				set_character_flag = adv_encounter_defeat
+				#Base difficulty modifiers#
+				modifier = {
+					factor = 3
+					adv_combat_extreme = yes
+				}
+				modifier = {
+					factor = 1.5
+					adv_combat_hard = yes
+				}
+				modifier = {
+					factor = 0.75
+					adv_combat_easy = yes
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 1 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 2 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 3 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 4 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 5 }
+				}
+				#Other difficulty modifiers
+				modifier = {
+					factor = 5
+					AND = {
+						adv_resist_normal_weapons_encounter = yes
+						NOR = {
+							adventurer_has_non_normal_weapon = yes
+							is_mage = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = { #Success
+		name = excellent
+		trigger = {
+			has_character_flag = adv_encounter_victory
+		}
+		change_variable = { which = encountersuccesses value = 1 }
+		if = {
+			limit = {
+				NOT = { has_character_flag = adv_encounter_noloot }
+			}
+			generate_encounter_loot = yes
+		}
+		prestige = 10
+	}
+	
+	option = { #Failure
+		name = damn
+		trigger = {
+			has_character_flag = adv_encounter_defeat
+		}
+		change_variable = { which = encounterdefeats value = 1 }
+		prestige = -25
+		random = {
+			chance = 70
+			modifier = {
+				factor = 5
+				has_character_flag = instant_kill_on_failure
+			}
+			adventure_wound_effect = yes
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_vampires
+				}
+				roll_for_vampirism = yes
+			}
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_werewolves
+				}
+				roll_for_lycanthropy = yes
+			}
+		}
+	}
+	after = {
+		clear_encounter_flags = yes
+	}
+}
+character_event = { # Encounter Stealth
+	id = ekadventure.23
+	picture = GFX_evt_thieves
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure23banditvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure23banditdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure23berserkervictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure23berserkerdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure23werewolvesvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure23werewolvesdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure23nordwarriorsvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure23nordwarriorsdefeat
+	}
+	
+	immediate = { #Roll for success
+		random_list = {
+			70 = { #Success 
+				set_character_flag = adv_encounter_victory
+				#Skill + Misc modifiers#
+				modifier = {
+					factor = 1.5
+					adv_is_excellent_agent = yes
+				}
+				modifier = {
+					factor = 1.3
+					adv_is_superior_agent = yes
+				}
+				modifier = {
+					factor = 1.1
+					adv_is_average_agent = yes
+				}
+				modifier = {
+					factor = 0.8
+					adv_is_poor_agent = yes
+				}
+				modifier = {
+					factor = 0.8
+					has_character_flag = adventure_hired_mercenaries
+				}
+				modifier = {
+					factor = 1.1
+					trait = lucky
+				}
+			}
+			30 = {
+				set_character_flag = adv_encounter_defeat
+				#Base difficulty modifiers#
+				modifier = {
+					factor = 3
+					adv_stealth_extreme = yes
+				}
+				modifier = {
+					factor = 1.5
+					adv_stealth_hard = yes
+				}
+				modifier = {
+					factor = 0.75
+					adv_stealth_easy = yes
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 1 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 2 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 3 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 4 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 5 }
+				}
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = { #Success
+		name = excellent
+		trigger = {
+			has_character_flag = adv_encounter_victory
+		}
+		change_variable = { which = encountersuccesses value = 1 }
+		if = {
+			limit = {
+				NOT = { has_character_flag = adv_encounter_noloot }
+			}
+			generate_encounter_loot = yes
+		}
+		prestige = 10
+	}
+	
+	option = { #Failure
+		name = damn
+		trigger = {
+			has_character_flag = adv_encounter_defeat
+		}
+		change_variable = { which = encounterdefeats value = 1 }
+		prestige = -30
+		random = {
+			chance = 30
+			modifier = {
+				factor = 5
+				has_character_flag = instant_kill_on_failure
+			}
+			adventure_wound_effect = yes
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_vampires
+				}
+				roll_for_vampirism = yes
+			}
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_werewolves
+				}
+				roll_for_lycanthropy = yes
+			}
+		}
+	}
+	after = {
+		clear_encounter_flags = yes
+	}
+}
+character_event = { # Encounter Retreat
+	id = ekadventure.24
+	picture = GFX_evt_adventurers_rest
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure24banditvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_bandits
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure24banditdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure24berserkervictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_berserker
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure24berserkerdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure24werewolvesvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_werewolves
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure24werewolvesdefeat
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_victory
+		}
+		text = ekadventure24nordwarriorsvictory
+	}
+	desc = {
+		trigger = {
+			has_character_flag = adv_encounter_nordwarriors
+			has_character_flag = adv_encounter_defeat
+		}
+		text = ekadventure24nordwarriorsdefeat
+	}
+	
+	immediate = { #Roll for success
+		random_list = {
+			70 = { #Success 
+				set_character_flag = adv_encounter_victory
+				#Skill + Misc modifiers#
+				modifier = {
+					factor = 1.5
+					trait = agile
+				}
+				modifier = {
+					factor = 1.1
+					has_character_flag = adventure_hired_guide
+				}
+				modifier = {
+					factor = 0.8
+					has_character_flag = adventure_hired_mercenaries
+				}
+				modifier = {
+					factor = 1.1
+					trait = lucky
+				}
+			}
+			30 = {
+				set_character_flag = adv_encounter_defeat
+				#Base difficulty modifiers#
+				modifier = {
+					factor = 3
+					adv_retreat_extreme = yes
+				}
+				modifier = {
+					factor = 1.5
+					adv_retreat_hard = yes
+				}
+				modifier = {
+					factor = 0.75
+					adv_retreat_easy = yes
+				}
+				modifier = {
+					factor = 0.25
+					has_character_flag = adventure_transportation_guildguide
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 1 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 2 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 3 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 4 }
+				}
+				modifier = {
+					factor = 1.1
+					check_variable = { which = partyfatigue value = 5 }
+				}
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = { #Success
+		name = excellent
+		trigger = {
+			has_character_flag = adv_encounter_victory
+		}
+		change_variable = { which = encountersuccesses value = 1 }
+		#if = { #Fleeing gets no loot.
+		#	limit = {
+		#		NOT = { has_character_flag = adv_encounter_noloot }
+		#	}
+		#	generate_encounter_loot = yes
+		#}
+		prestige = -10
+	}
+	
+	option = { #Failure
+		name = damn
+		trigger = {
+			has_character_flag = adv_encounter_defeat
+		}
+		change_variable = { which = encounterdefeats value = 1 }
+		prestige = -75
+		random = {
+			chance = 60
+			modifier = {
+				factor = 5
+				has_character_flag = instant_kill_on_failure
+			}
+			adventure_wound_effect = yes
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_vampires
+				}
+				roll_for_vampirism = yes
+			}
+			if = {
+				limit = {
+					has_character_flag = adv_encounter_werewolves
+				}
+				roll_for_lycanthropy = yes
+			}
+		}
+	}
+	after = {
+		clear_encounter_flags = yes
+	}
+}
+### Snow Prince Adventure ###
+character_event = { #Snowprince initial - prototype adventure and proof of concept. 
+	id = ekadventure.100
+	desc = ekadventure100desc
+	title = "The Search For The Snow Prince"
+	picture = GFX_evt_townscene
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		prepareadventure = yes
+		set_character_flag = adventure_snowprince
+	}
+	
+	option = { #Prepare for adventure
+		name = ekadventure100opta
+		character_event = { id = ekadventure.0 }
+	}
+	option = { #Cancel adventure
+		name = nevermind
+		endadventure = yes
+		prestige = -25
+	}
+}
+
+character_event = { #Confirm adventure after preparations
+	id = ekadventure.101
+	desc = ekadventure101desc
+	title = "Cast Off"
+	picture = GFX_evt_seas
+	
+	is_triggered_only = yes
+	
+	option = { #Set off!
+		name = ekadventure101opta
+		set_character_flag = adventure_starting
+	}
+	option = { #lol nevermind
+		name = ekadventure101optb
+		adventurerefund = yes
+		#endadventure = yes #Moved to the after block to ensure everything is refunded properly.
+	}
+	after = {
+		if = {
+			limit = { NOT = { has_character_flag = adventure_starting } }
+			endadventure = yes
+		}
+	}
+}
+
+character_event = { #Arrive on Solstheim
+	id = ekadventure.102
+	desc = ekadventure102desc
+	title = "The Arrival"
+	picture = GFX_evt_solstheim
+	
+	trigger = {
+		has_character_flag = adventure_snowprince
+		has_character_flag = adventure_starting
+	}
+	
+	immediate = {
+		clr_character_flag = adventure_starting
+		set_character_flag = adventure_allow_camp
+	}
+	
+	mean_time_to_happen = {
+		months = 8
+		modifier = {
+			factor = 0.20
+			has_character_flag = adventure_transportation_guildguide
+		}
+		modifier = {
+			factor = 0.50
+			has_character_flag = adventure_transportation_conventional
+		}
+		modifier = {
+			factor = 0.8
+			has_character_flag = adventure_transportation_hitchhiking
+		}
+		modifier = {
+			factor = 1.1
+			trait = lucky
+		}
+		modifier = {
+			factor = 0.9
+			trait = unlucky
+		}
+	}
+	
+	option = {
+		name = onwards
+		set_character_flag = adventure_allow_generic
+		set_character_flag = adventure_enemies_solstheim
+		set_character_flag = adv_plot_timer
+		set_variable = { which = adventurechapter value = 1 }
+		prestige = 25
+	}
+}
+
+character_event = { #Arrive at Thirsk and seek information
+	id = ekadventure.103
+	desc = ekadventure103desc
+	title = "Thirsk"
+	picture = GFX_evt_thirsk
+	
+	trigger = {
+		had_character_flag = { flag = adv_plot_timer days = 180 }
+		check_variable = { which = adventurechapter value == 1 }
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 1.5
+			AND = {
+				trait = temperate
+				NOT = { trait = scholar }
+			}
+		}
+		modifier = {
+			factor = 1.2
+			is_dumb_trigger = yes
+		}
+		modifier = {
+			factor = 0.8
+			has_character_flag = adventure_hired_guide
+		}
+		modifier = {
+			factor = 0.6
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.4
+			OR = {
+				culture = nord
+				culture = skaal
+				culture = atmoran
+			}
+		}
+	}
+	
+	immediate = {
+		change_variable = { which = adventurechapter value = 1 }
+		clr_character_flag = adv_plot_timer
+	}
+	option = { #Ask around
+		name = ekadventure103opta
+		random_list = {
+			10 = { set_character_flag = thirsk_found_information } #Find Information
+			5 = { set_character_flag = thirsk_started_fight } #Start Fight
+		}
+		character_event = { id = ekadventure.104 }
+	}
+	after = {
+		set_character_flag = adv_plot_timer
+	}
+}
+
+character_event = { #Meet a scholar or piss off a Berserker
+	id = ekadventure.104
+	picture = GFX_evt_greathall
+	desc = {
+		trigger = { has_character_flag = thirsk_found_information }
+		text = ekadventure104desca
+	}
+	desc = {
+		trigger = { has_character_flag = thirsk_started_fight }
+		text = ekadventure104desca
+	}
+	
+	is_triggered_only = yes
+	
+	option = { #Talk - extreme - berserkers don't exactly do diplomacy.
+		trigger = { has_character_flag = thirsk_started_fight }
+		name = ekadventure104opta
+		custom_tooltip = { text = adventure_difficulty_extreme }
+		character_event = { id = ekadventure.21 }
+	}
+	option = { #Fight - hard
+		trigger = { has_character_flag = thirsk_started_fight }
+		name = ekadventure104optb
+		custom_tooltip = { text = adventure_difficulty_hard }
+		character_event = { id = ekadventure.22 }
+	}
+	#option = { #Sneak - easy #You've already aggroed him. You can't simply sneak away.
+	#	trigger = { has_character_flag = thirsk_started_fight }
+	#	name = ekadventure104optc
+	#	custom_tooltip = { text = adventure_difficulty_easy }
+	#	character_event = { id = ekadventure.23 }
+	#}
+	option = { #Run - hard
+		trigger = { has_character_flag = thirsk_started_fight }
+		name = ekadventure104optd
+		custom_tooltip = { text = adventure_difficulty_easy }
+		character_event = { id = ekadventure.24 }
+	}
+	###
+	option = {
+		trigger = { has_character_flag = thirsk_found_information }
+		name = ekadventure104opte
+		prestige = 10
+	}
+}
+
+character_event = { #Meet with the Skaal
+	id = ekadventure.105
+	desc = ekadventure105desc
+	title = "The Skaal Village"
+	picture = GFX_evt_skaal_village
+	
+	trigger = {
+		had_character_flag = { flag = adv_plot_timer days = 30 }
+		check_variable = { which = adventurechapter value == 2 }
+	}
+	mean_time_to_happen = {
+		months = 3
+		modifier = {
+			factor = 0.75
+			has_character_flag = thirsk_found_information
+		}
+		modifier = {
+			factor = 0.75
+			OR = {
+				culture = nord
+				culture = skaal
+				culture = atmoran
+			}
+		}
+		modifier = {
+			factor = 0.75
+			has_character_flag = adventure_hired_guide
+		}
+	}
+	immediate = {
+		change_variable = { which = adventurechapter value = 1 }
+		clr_character_flag = adv_plot_timer
+		random_list = {
+			65 = {
+				set_character_flag = skaal_refused_to_help
+			}
+			35 = {
+				set_character_flag = skaal_village_attacked
+			}
+		}
+	}
+	
+	option = { #Leave
+		name = ekadventure105opta
+		trigger = { has_character_flag = skaal_refused_to_help }
+	}
+	###
+	option = { #Help the Skaal!
+		name = ekadventure105optb
+		trigger = {
+			has_character_flag = skaal_village_attacked
+			OR = {
+				NOT = { trait = lycan }
+				AND = {
+					trait = lycan
+					trait = known_lycan_benevolent
+				}
+			}
+		}
+		set_character_flag = helped_skaal
+		set_character_flag = adv_encounter_werewolves
+		character_event = { id = ekadventure.22 }
+	}
+	option = { #Flee from the village! - Extreme
+		name = ekadventure105optc
+		trigger = { has_character_flag = skaal_village_attacked }
+		set_character_flag = refused_to_help_skaal
+		set_character_flag = adv_encounter_werewolves
+		character_event = { id = ekadventure.24 }
+	}
+	option = { #Attack the village! - Normal
+		name = ekadventure105optd
+		trigger = {
+			has_character_flag = skaal_village_attacked
+			trait = lycan
+		}
+		if = {
+			limit = {
+				trait = known_lycan_benevolent
+			}
+			remove_trait = known_lycan_benevolent
+			add_trait = known_lycan
+		}
+		set_character_flag = attacked_skaal
+		set_character_flag = adv_encounter_nordwarriors
+		character_event = { id = ekadventure.22 }
+	}
+	
+	after = {
+		set_character_flag = adv_plot_timer
+		character_event = { id = ekadventure.106 days = 7 }
+	}
+}
+
+character_event = { #Aftermath
+	id = ekadventure.106
+	#desc = ekadventure106desc
+	title = "Aftermath"
+	picture = GFX_evt_s_snowforest
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = {
+			has_character_flag = helped_skaal
+		}
+		text = ekadventure106desca
+	}
+	desc = {
+		trigger = {
+			has_character_flag = refused_to_help_skaal
+		}
+		text = ekadventure106descb
+	}
+	desc = {
+		trigger = {
+			has_character_flag = skaal_refused_to_help
+		}
+		text = ekadventure106descc
+	}
+	desc = {
+		trigger = {
+			has_character_flag = attacked_skaal
+		}
+		text = ekadventure106descd
+	}
+	
+	option = {
+		trigger = {
+			has_character_flag = helped_skaal
+		}
+		name = ekadventure106opta
+		prestige = 100
+		custom_tooltip = {
+			text = ekadventure106optactt #If you don't have any Mercenaries, Skaal warriors will join your party. If you do, they will offer you some money as a reward.
+			if = {
+				limit = {
+					NOT = {
+						has_character_flag = adventure_hired_mercenaries
+					}
+				}
+				set_character_flag = adventure_hired_mercenaries
+			}
+			else = {
+				wealth = 75
+			}
+		}
+	}
+	option = {
+		trigger = {
+			has_character_flag = refused_to_help_skaal
+		}
+		name = ekadventure106optb
+		prestige = -25
+	}
+	option = {
+		trigger = {
+			has_character_flag = skaal_refused_to_help
+		}
+		name = ekadventure106optc
+	}
+	option = {
+		trigger = {
+			has_character_flag = attacked_skaal
+		}
+		name = ekadventure106optd
+		set_character_flag = adv_skaal_enemy #This flag will enable additional encounters with Nord Warriors.
+	}
+}
+
+character_event = { #Now we're getting somewhere! Also I ran out of ideas for how to elongate this.
+	id = ekadventure.107
+	desc = ekadventure107desc #Needs two descriptions for character flags
+	title = "The Barrow"
+	picture = GFX_evt_placeholder
+	
+	
+	trigger = {
+		had_character_flag = { flag = adv_plot_timer days = 30 }
+		check_variable = { which = adventurechapter value == 3 }
+	}
+	mean_time_to_happen = {
+		months = 6
+		modifier = {
+			factor = 0.5
+			has_character_flag = helped_skaal #If you help Skaal, Skaal will help you.
+		}
+		modifier = {
+			factor = 1.25
+			has_character_flag = attacked_skaal #If you attack the Skaal they will actively impede your efforts.
+		}
+		modifier = {
+			factor = 0.75
+			OR = {
+				culture = nord
+				culture = skaal
+				culture = atmoran
+			}
+		}
+		modifier = {
+			factor = 0.75
+			has_character_flag = adventure_hired_guide
+		}
+	}
+	immediate = {
+		change_variable = { which = adventurechapter value = 1 }
+		clr_character_flag = adv_plot_timer
+		random_list = {
+			50 = { set_character_flag = adv_graverobbers}
+			50 = { set_character_flag = adv_}
+		}
+	}
+	
+	option = {
+		name = ekadventure107opta #DontMakeEventsWithoutOptions #TheEventWasNotCalledAnywhereAndThusCouldNotFireButThanksKorbahIReallyAppreciateTheHelp
+	}
+}

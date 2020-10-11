@@ -1,0 +1,385 @@
+# Code of Malacath decisions
+# By jjsfw/jumbi
+
+targetted_decisions = {
+	orsimer_leadership_duel_decision = {
+		# Close relative challenges leader to duel
+		is_high_prio = yes
+		filter = close_relatives
+		ai_target_filter = close_relatives
+
+		diplomacy_icon = GFX_duel_decision
+
+		from_potential = {
+			OR = {
+				has_dlc = "Way of Life"
+				has_dlc = "Holy Fury"
+			}
+			#government = orsimer_government
+			is_female = no
+			is_adult = yes
+			is_close_relative = ROOT
+			OR = {
+				prisoner = no
+				# Prisoners can challenge right to rule
+				AND = {
+					prisoner = yes
+					host = {
+						character = ROOT
+					}
+				}
+			}
+			has_submenu_open = no
+		}
+
+		potential = {
+			government = orsimer_government
+			is_adult = yes
+			higher_real_tier_than = BARON
+		}
+
+		allow = {
+			NOT = {
+				ROOT = {
+					is_inaccessible_trigger = yes
+				}
+			}
+			FROM = {
+				NOT = {
+					is_inaccessible_trigger = yes
+				}
+			}
+			OR = {
+				higher_real_tier_than = FROM
+				FROM = {
+					is_landed = no
+				}
+			}
+			ROOT = { # Just to make the tooltip more clear
+				OR = {
+					# Older (ai weights give more colour)
+					age = 30
+					# Child/Sibling
+					OR = {
+						is_parent_of = FROM
+						sibling = FROM
+					}
+					# Unworthy
+					has_character_modifier = orsimer_unproven_ruler
+					has_character_modifier = orsimer_cowardly_ruler
+					has_character_modifier = malacath_weak_chief
+				}
+			}
+
+			#Both are healthy
+			custom_tooltip = {
+				text = duel_tooltip_sickness
+				FROM = {
+					NOR = { #Not in sickly in bed, but sick if well treated is okay
+						has_character_modifier = bedridden_illness
+						has_character_modifier = severe_illness
+						trait = incapable
+					}
+				}
+				ROOT = {
+					NOR = { #Not in sickly in bed, but sick if well treated is okay
+						has_character_modifier = bedridden_illness
+						has_character_modifier = severe_illness
+						trait = incapable
+					}
+				}
+			}
+			
+			custom_tooltip = {
+				text = duel_tooltip_pregnant
+				FROM = { is_pregnant = no }
+				ROOT = { is_pregnant = no }
+			}
+
+			####### You won't want to fight someone who is badly injured, and if you are hurt yourself, you will want to wait...
+			custom_tooltip = {
+				text = duel_tooltip_recent_duel
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_modifier = recent_duel_timer } }
+					NOT = { has_character_modifier = recent_duel_timer }
+					NOT = {
+						has_character_modifier = declined_prestige_duel_timer
+					}
+				}
+			}
+
+			#############################################################################
+
+			custom_tooltip = {
+				text = duel_tooltip_no_war
+				hidden_tooltip = {
+					FROM = {
+						NOT = { war = yes }
+					}
+					NOT = { war = yes }
+				}
+			}
+		}
+
+		effect = {
+			#REQUIRED event targets for setting up duel evaluation!
+			FROM = { save_event_target_as = combatant_1 } #the person issuing the duel...
+			save_event_target_as = combatant_2 #the target of the duel...
+
+			apply_degree_of_dishonorable_duel_effect = yes #checks a bunch of age and health statuses...
+			apply_any_applicable_harsh_penalties_effect = yes
+			
+			FROM = {
+				pacifists_lose_piety_effect = yes
+				add_character_modifier = {
+					modifier = recent_duel_timer
+					duration = 90
+					hidden = yes
+				}
+			}
+			hidden_tooltip = {
+				character_event = { id = custgovts.100 } #Duel evaluation (hidden) + result event as follow-up.
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # Slow down
+			}
+			modifier = {
+				factor = 0
+				has_character_modifier = declined_prestige_duel_timer #if the target has already declined a duel, AI's won't attempt to duel them while the timer is still
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { potentially_interested_in_rivaling_root_trigger = yes }
+			}
+			# More likely to challenge older rulers
+			modifier = {
+				factor = 0.1
+				age < 30
+			}
+			modifier = {
+				factor = 0.33
+				age = 30
+				NOT = { age = 35 }
+			}
+			modifier = {
+				factor = 0.75
+				age = 35
+				NOT = { age = 40 }
+			}
+			modifier = {
+				factor = 2
+				age = 45
+				NOT = { age = 50 }
+			}
+			modifier = {
+				factor = 3
+				age = 50
+			}
+			# Chief modifiers
+			modifier = {
+				factor = 0.33
+				has_character_modifier = malacath_strong_chief
+			}
+			modifier = {
+				factor = 3
+				has_character_modifier = malacath_weak_chief
+			}
+			modifier = {
+				factor = 5
+				has_character_modifier = orsimer_cowardly_ruler
+			}
+			modifier = {
+				factor = 1.2
+				trait = content
+			}
+			# Don't be suicidal
+			modifier = {
+				factor = 0
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = -10 }
+						trait = reckless
+					}
+				}
+			}
+			# Maybe a *little* suicidal
+			modifier = {
+				factor = 0
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = -10 }
+					}
+				}
+				FROM = {
+					trait = reckless
+				}
+			}
+			# Combat rating check
+			modifier = {
+				factor = 0.1
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -10 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.125
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -9 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.15
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -8 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.175
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -7}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.2
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -6 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.225
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -5 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -4 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.3
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -3 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.4
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -2 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value == -1 }
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				combat_rating_diff = { who = ROOT value = 5 }
+				combat_rating_diff = { who = ROOT value < 10 }
+			}
+			modifier = {
+				factor = 2
+				combat_rating_diff = { who = ROOT value = 10 }
+				combat_rating_diff = { who = ROOT value < 15 }
+			}
+			modifier = {
+				factor = 2.5
+				combat_rating_diff = { who = ROOT value = 15 }
+				combat_rating_diff = { who = ROOT value < 20 }
+			}
+			modifier = {
+				factor = 10
+				combat_rating_diff = { who = ROOT value = 20 }
+			}
+			# Traits
+			modifier = {
+				factor = 1.85
+				FROM = {
+					trait = ambitious
+				}
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					trait = reckless
+				}
+			}
+			modifier = {
+				factor = 0.66
+				FROM = {
+					trait = patient
+				}
+			}
+			# Education/lifestyle
+			modifier = {
+				factor = 1.25
+				FROM = {
+					has_education_martial_trigger = yes
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {
+					has_education_martial_trigger = no
+				}
+			}
+			modifier = {
+				factor = 1.75
+				FROM = {
+					has_lifestyle_martial_trigger = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					trait = craven
+				}
+			}
+			# Friends/rivals
+			modifier = {
+				factor = 0.05
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 1.25
+				is_foe = FROM
+			}
+			# Has a weapon
+			modifier = {
+				factor = 0.5
+				FROM = {
+					any_artifact = {
+						is_dueling_weapon_artifact_and_equipped = no
+					}
+				}
+			}
+		}
+	}
+}

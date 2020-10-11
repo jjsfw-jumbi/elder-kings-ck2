@@ -1,0 +1,319 @@
+offmap_thras = {
+	name = thras_thras
+	window_name = domestic_offmaps_window
+	button_name = icon_offmaps_entry
+	currency_name = TXT_INFLUENCE
+	currency_gain = monthly_influence
+	currency_reset_on_dynasty_change = yes
+	holder_title = title_offmap_thras			# minor title used to identify a character as holder of this offmap power
+	governor_title = e_thras_embassy
+	tier = emperor
+	non_aggression_modifier = peace_deal_with_thras
+	coa_religion = ideal_masters
+	government = feudal_government
+	beginning_of_history = 1.1.1
+	sound = china_interaction_interface
+	display_trigger = {
+		has_dlc = "Jade Dragon"
+		FROM = {
+			OR = {
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel_summerset
+						region = nirn_tamriel_pyandonea
+						region = nirn_yokuda
+					}
+					port = yes
+				}
+				top_liege = {
+					has_landed_title = e_thras_embassy
+				}
+				top_liege = {
+					suzerain = {
+						has_landed_title = e_thras_embassy
+					}
+				}
+				any_neighbor_independent_ruler = {
+					OR = {
+						top_liege = {
+							has_landed_title = e_thras_embassy
+						}
+						top_liege = {
+							suzerain = {
+								has_landed_title = e_thras_embassy
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	policies = {
+		thras_open
+		thras_isolationist
+		thras_expansionist
+	}
+	statuses = {
+		thras_stable
+		thras_booming
+		thras_recovering
+		thras_invaded
+		thras_internal_war
+	}
+	buttons = {
+		offmap_gifts = {
+			is_active_trigger = {
+				always = yes
+			}
+		}
+		offmap_boons = {
+			is_active_trigger = {
+				offmap_thras_boon_decisions_enabled_trigger = yes
+			}
+		}
+		offmap_hostility = {
+			is_active_trigger = {
+				#china_offmap_hostile_decisions_enabled_trigger = yes
+			}
+			display_trigger = {
+				always = no
+			}
+		}
+		offmap_hostility2 = {
+			display_trigger = {
+				always = no
+			}
+		}
+	}
+	
+	#These conditions only effect the appearance of the button, it does not actually disable them from being clickable. The same triggers are used in all tribute/boon decisions respectively
+	
+	icon_triggers = {
+	}
+	
+	monthly_currency_gain = {
+		offmap_war_with_me = {
+			value = -10
+			war_with = FROM
+		}
+		offmap_likes_vassal = {
+			value = 1
+			FROM = {
+				liege = { has_landed_title = e_thras_embassy }
+			}
+		}
+		offmap_likes_benefactor = {
+			value = 1.5
+			FROM = {
+				is_tributary = {
+					type = sload_benefactor
+				}
+			}
+		}
+		offmap_likes_protectorate = {
+			value = 4
+			FROM = {
+				is_tributary = {
+					type = sload_protectorate
+				}
+			}
+		}
+		offmap_likes_sload = {
+			value = 2.5
+			FROM = { likes_sload = yes }
+		}
+		offmap_likes_undead = {
+			value = 1.0
+			FROM = {
+				NOT = { trait = sload }
+				AND = {
+					is_undead = yes
+					is_unknown_vampire = no
+				}
+			}
+		}
+		offmap_likes_religious_unity = {
+			value = 1
+			offmap_ruler = {
+				religion = FROM
+			}
+			is_within_diplo_range = FROM
+		}
+		offmap_likes_ambitious = {
+			value = 0.25
+			FROM = { likes_ambitious = yes }
+		}
+		offmap_likes_cruel = {
+			value = 0.25
+			FROM = { likes_cruel = yes }
+		}
+		offmap_likes_cynical = {
+			value = 0.25
+			FROM = { likes_cynical = yes }
+		}
+		offmap_likes_deceitful = {
+			value = 0.25
+			FROM = { likes_deceitful = yes }
+		}
+		offmap_likes_envious = {
+			value = 0.25
+			FROM = { likes_envious = yes }
+		}
+		offmap_likes_greedy = {
+			value = 0.25
+			FROM = { likes_greedy = yes }
+		}
+		offmap_likes_patient = {
+			value = 0.25
+			FROM = { likes_patient = yes }
+		}
+		offmap_likes_ruthless = {
+			value = 0.25
+			FROM = { likes_ruthless = yes }
+		}
+		offmap_likes_administrators = {
+			value = 0.25
+			FROM = { likes_administrators = yes }
+		}
+		offmap_likes_gamers = {
+			value = 0.25
+			FROM = { likes_gamers = yes }
+		}
+		offmap_likes_impalers = {
+			value = 0.25
+			FROM = { likes_impalers = yes }
+		}
+		offmap_likes_magicians = {
+			value = 0.25
+			FROM = { likes_magicians = yes }
+		}
+		offmap_likes_musicians = {
+			value = 0.25
+			FROM = { likes_musicians = yes }
+		}
+		offmap_likes_painters = {
+			value = 0.25
+			FROM = { likes_painters = yes }
+		}
+		offmap_likes_poets = {
+			value = 0.25
+			FROM = { likes_poets = yes }
+		}
+		offmap_likes_saboteurs = {
+			value = 0.25
+			FROM = { likes_saboteurs = yes }
+		}
+		offmap_likes_slavers = {
+			value = 0.25
+			FROM = { likes_slavers = yes }
+		}
+		offmap_likes_necromancers = {
+			value = 2.5
+			FROM = { likes_necromancers = yes }
+		}
+		offmap_likes_dragonborns = {
+			value = 2.5
+			FROM = { likes_dragonborns = yes }
+		}
+	}
+	
+	temple_names = {
+		{ # Founder names
+			N'Gasta J'Ath Um'Aski T'Veskisan Nrij T'Urn N'Fash Thr'Ranys M'Lil Y'Rax Nfir
+			Gyb Zhas Rakil Zh'En G'Tin Zrun M'Ad T'Bur Th'Shyz Per'Rur N'Sony Augh'Mor
+			Therkor G'Rum Y'Hny Xncha S'Sal Mor'Job D'Hiv N'Rann N'Tanri M'Juj Rash
+			Glom Ngha Age'Hor Tham Tas'Arna Ther'Em R'Ansa Mor'Chal H'Dim T'Goz Muntk
+			H'Rilada S'Vini N'Endsa D'Us N'Kara J'Ubba M'Ama Ar'Arba R'Otta V'Ogga B'Orvo
+			D'Reddon S'Oregg G'Olga P'Opara Nem'Ro Z'Iro Z'Irchos J'Ool G'Rubo Z'Ordo Ya'Rella
+			Gr'Ondo
+		}
+		{ # Successor names
+			N'Gasta J'Ath Um'Aski T'Veskisan Nrij T'Urn N'Fash Thr'Ranys M'Lil Y'Rax Nfir
+			Gyb Zhas Rakil Zh'En G'Tin Zrun M'Ad T'Bur Th'Shyz Per'Rur N'Sony Augh'Mor
+			Therkor G'Rum Y'Hny Xncha S'Sal Mor'Job D'Hiv N'Rann N'Tanri M'Juj Rash
+			Glom Ngha Age'Hor Tham Tas'Arna Ther'Em R'Ansa Mor'Chal H'Dim T'Goz Muntk
+			H'Rilada S'Vini N'Endsa D'Us N'Kara J'Ubba M'Ama Ar'Arba R'Otta V'Ogga B'Orvo
+			D'Reddon S'Oregg G'Olga P'Opara Nem'Ro Z'Iro Z'Irchos J'Ool G'Rubo Z'Ordo Ya'Rella
+			Gr'Ondo
+		}
+	}
+	holder_succession = {
+		is_female = {					# chances of getting a female holder, as a percentage: if the total is >= 100, the new holder will always be female. If the total is <= 0, the new holder will always be male
+			value = 50
+		}
+		culture = {
+			sload = {
+				value = 100
+			}
+		}
+
+		graphical_culture = { 
+			FROM = {
+				value = 100
+			}
+		}
+
+		religion = {
+			ideal_masters = {
+				value = 100
+			}
+		}
+
+		dynasty = {
+			FROM = {
+				value = 100
+			}
+		}
+		
+		likes = {
+			likes_sload = {
+				value = 500
+			}
+			likes_necromancers = {
+				value = 500
+			}
+		}
+		
+		dislikes = {
+			likes_altmer = {
+				value = 500
+			}
+			likes_maormer = {
+				value = 300
+			}
+		}
+	}
+	
+	diplomatic_range = { #Already includes the western governor's "normal" diplo range
+		OR = {
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel_summerset
+					region = nirn_tamriel_pyandonea
+					region = nirn_yokuda
+				}
+				port = yes
+			}
+			top_liege = {
+				has_landed_title = e_thras_embassy
+			}
+			top_liege = {
+				suzerain = {
+					has_landed_title = e_thras_embassy
+				}
+			}
+			any_neighbor_independent_ruler = {
+				OR = {
+					top_liege = {
+						has_landed_title = e_thras_embassy
+					}
+					top_liege = {
+						suzerain = {
+							has_landed_title = e_thras_embassy
+						}
+					}
+				}
+			}
+		}
+	}
+}

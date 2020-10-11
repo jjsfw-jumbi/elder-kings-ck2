@@ -1,0 +1,4253 @@
+#Society/Guild quest events
+
+namespace = ekguildquests
+
+society_quest_event = {
+	id = ekguildquests.10
+	title = quest_fighters_goblins
+	desc = EKGuildQuests10
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_goblins
+		character_event = { id = ekguildquests.11 days = 3 }
+		
+		roll_easy_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.15 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.11
+	desc = EKGuildQuests11
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests11Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.14 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.12 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.12 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.12 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.12
+	desc = EKGuildQuests12
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests12Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.15 }
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_goblins
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.14
+	desc = EKGuildQuests14
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests14Accept
+		remove_province_modifier = goblin_infestation
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.15
+	desc = EKGuildQuests15
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests15Accept
+		remove_province_modifier = goblin_infestation
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+
+#Goblins, self version
+society_quest_event = {
+	id = ekguildquests.16
+	title = quest_fighters_goblins_self
+	desc = EKGuildQuests16
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_goblins_self
+		character_event = { id = ekguildquests.17 days = 3 }
+		roll_easy_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.17
+	desc = EKGuildQuests17
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests17Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.18 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.18 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.18 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.18
+	desc = EKGuildQuests18
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests18Accept
+		scaled_wealth = 0.15
+		FROMFROMFROM = {
+			remove_province_modifier = goblin_infestation
+		}
+		clr_quest = quest_fighters_goblins_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+#Falmer
+society_quest_event = {
+	id = ekguildquests.20
+	title = quest_fighters_falmer
+	desc = EKGuildQuests20
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_falmer
+		character_event = { id = ekguildquests.21 days = 3 }
+		roll_medium_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.25 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.21
+	desc = EKGuildQuests21
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests21Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.24 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.22 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.22 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.22 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.22
+	desc = EKGuildQuests22
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests22Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.25 }
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_falmer
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.24
+	desc = EKGuildQuests24
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests24Accept
+		remove_province_modifier = falmer_infestation
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.25
+	desc = EKGuildQuests25
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests25Accept
+		remove_province_modifier = falmer_infestation
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Falmer self version
+society_quest_event = {
+	id = ekguildquests.26
+	title = quest_fighters_falmer_self
+	desc = EKGuildQuests26
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_falmer_self
+		character_event = { id = ekguildquests.27 days = 3 }
+		roll_medium_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.27
+	desc = EKGuildQuests27
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests27Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.28 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.28 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.28 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.28
+	desc = EKGuildQuests28
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests28Accept
+		scaled_wealth = 0.15
+		FROMFROMFROM = {
+			remove_province_modifier = falmer_infestation
+		}
+		clr_quest = quest_fighters_falmer_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+
+#Skeevers
+society_quest_event = {
+	id = ekguildquests.30
+	title = quest_fighters_skeevers
+	desc = EKGuildQuests30
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_skeevers
+		character_event = { id = ekguildquests.31 days = 3  }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.35 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.31
+	desc = EKGuildQuests31
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests31Accept
+		roll_trivial_pcs = yes
+		character_event = { id = ekguildquests.32 }
+	}
+}
+character_event = {
+	id = ekguildquests.32
+	desc = EKGuildQuests32
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests32Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.35 }
+		}
+		clr_quest = quest_fighters_skeevers
+		add_society_currency_minor_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.35
+	desc = EKGuildQuests35
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests35Accept
+		remove_province_modifier = skeever_infestation
+		owner = {
+			wealth = -25
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 15
+				}
+			}
+		}
+		FROM = {
+			wealth = 15
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 5
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 5
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 5
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 5
+				}
+			}
+		}
+	}
+}
+
+#Skeevers self version
+society_quest_event = {
+	id = ekguildquests.36
+	title = quest_fighters_skeevers_self
+	desc = EKGuildQuests36
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_skeevers_self
+		character_event = { id = ekguildquests.37 days = 3  }
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.37
+	desc = EKGuildQuests37
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests37Accept
+		roll_trivial_pcs = yes
+		character_event = { id = ekguildquests.38 }
+	}
+}
+character_event = {
+	id = ekguildquests.38
+	desc = EKGuildQuests38
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests38Accept
+		FROMFROMFROM = {
+			remove_province_modifier = skeever_infestation
+		}
+		clr_quest = quest_fighters_skeevers_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+
+#Kwama
+society_quest_event = {
+	id = ekguildquests.40
+	title = quest_merchants_kwama
+	desc = EKGuildQuests40
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_merchants_kwama
+		character_event = { id = ekguildquests.41 days = 3  }
+		roll_easy_stewardship = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.45 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.41
+	desc = EKGuildQuests41
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests41Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.43 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.42 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.42
+	desc = EKGuildQuests42
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests42Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.45 }
+		}
+		clr_quest = quest_merchants_kwama
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.43
+	desc = EKGuildQuests43
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests42Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.44 }
+		}
+		clr_quest = quest_merchants_kwama
+		add_society_currency_minor_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.44
+	desc = EKGuildQuests44
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests44Accept
+		remove_province_modifier = kwama_infestation
+		add_province_modifier = {
+			name = egg_mines
+			duration = 4450
+		}
+		owner = {
+			wealth = -25
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 15
+				}
+			}
+		}
+		FROM = {
+			wealth = 10
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.45
+	desc = EKGuildQuests45
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests45Accept
+		remove_province_modifier = kwama_infestation
+		add_province_modifier = {
+			name = egg_mines
+			duration = 8900
+		}
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Kwama self version
+society_quest_event = {
+	id = ekguildquests.46
+	title = quest_merchants_kwama_self
+	desc = EKGuildQuests46
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_merchants_kwama_self
+		character_event = { id = ekguildquests.47 days = 3  }
+		roll_easy_stewardship = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.47
+	desc = EKGuildQuests47
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests47Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.49 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.48 days = 7 }
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.48
+	desc = EKGuildQuests48
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests48Accept
+		FROMFROMFROM = {
+			remove_province_modifier = kwama_infestation
+			add_province_modifier = {
+				name = egg_mines
+				duration = 8900
+			}
+		}
+		clr_quest = quest_merchants_kwama_self
+		add_society_currency_minor_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.49
+	desc = EKGuildQuests49
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests49Accept
+		FROMFROMFROM = {
+			remove_province_modifier = kwama_infestation
+			add_province_modifier = {
+				name = egg_mines
+				duration = 4450
+			}
+		}
+		clr_quest = quest_merchants_kwama_self
+		add_society_currency_trivial_effect = yes
+	}
+}
+
+
+#Trolls
+society_quest_event = {
+	id = ekguildquests.50
+	title = quest_fighters_trolls
+	desc = EKGuildQuests50
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_trolls
+		character_event = { id = ekguildquests.51 days = 3  }
+		roll_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.55 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.51
+	desc = EKGuildQuests51
+	picture = GFX_evt_trolls
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests51Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.54 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.52 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.52 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.52 }
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.52
+	desc = EKGuildQuests52
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests52Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.55 }
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_trolls
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.54
+	desc = EKGuildQuests54
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests54Accept
+		remove_province_modifier = trolls
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.55
+	desc = EKGuildQuests55
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests55Accept
+		remove_province_modifier = trolls
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Trolls self version
+society_quest_event = {
+	id = ekguildquests.56
+	title = quest_fighters_trolls_self
+	desc = EKGuildQuests56
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_trolls_self
+		character_event = { id = ekguildquests.57 days = 3  }
+		roll_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.57
+	desc = EKGuildQuests57
+	picture = GFX_evt_trolls
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests57Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.58 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.58 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.58 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.58
+	desc = EKGuildQuests58
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests58Accept
+		FROMFROMFROM = {
+			remove_province_modifier = trolls
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_trolls_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+
+#Giants
+society_quest_event = {
+	id = ekguildquests.60
+	title = quest_fighters_giants
+	desc = EKGuildQuests60
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_giants
+		character_event = { id = ekguildquests.61 days = 3  }
+		roll_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.65 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.61
+	desc = EKGuildQuests61
+	picture = GFX_evt_giants
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests61Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.64 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.62 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.62 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.62 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.62
+	desc = EKGuildQuests62
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests62Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.65 }
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_giants
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.64
+	desc = EKGuildQuests64
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests64Accept
+		remove_province_modifier = giants
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.65
+	desc = EKGuildQuests65
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests65Accept
+		remove_province_modifier = giants
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Giants self version
+society_quest_event = {
+	id = ekguildquests.66
+	title = quest_fighters_giants_self
+	desc = EKGuildQuests66
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_giants_self
+		character_event = { id = ekguildquests.67 days = 3  }
+		roll_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.67
+	desc = EKGuildQuests67
+	picture = GFX_evt_giants
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests67Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.68 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.68 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.68 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.68
+	desc = EKGuildQuests68
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests68Accept
+		FROMFROMFROM = {
+			remove_province_modifier = giants
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_giants_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+#Lycanthropes
+society_quest_event = {
+	id = ekguildquests.70
+	title = quest_fighters_lycans
+	desc = EKGuildQuests70
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_lycans
+		character_event = { id = ekguildquests.71 days = 3  }
+		roll_very_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.75 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.71
+	desc = EKGuildQuests71
+	picture = GFX_evt_werewolfblood
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests71Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.74 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.73 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.73 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.72 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.72
+	desc = EKGuildQuests72
+	picture = GFX_evt_werewolfblood
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests72Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.75 }
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_lycans
+		add_society_currency_major_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.73
+	desc = EKGuildQuests73
+	picture = GFX_evt_werewolfblood
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		roll_for_lycanthropy = yes
+	}
+	
+	option = {
+		name = {
+			text = Lycan7Infection
+			trigger = { has_character_flag = lycan_disease }
+		}
+		
+		name = {
+			text = Lycan7Infection
+			trigger = { 
+				is_disease_immune = no
+				NOT = { has_character_flag = lycan_disease }
+			}
+		}
+		
+		name = {
+			text = Lycan7Infection
+			trigger = { is_disease_immune = yes }
+		}
+		
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.75 }
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_lycans
+		add_society_currency_major_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.74
+	desc = EKGuildQuests74
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests74Accept
+		remove_province_modifier = lycan_infestation
+		owner = {
+			wealth = -75
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 50
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.75
+	desc = EKGuildQuests75
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests75Accept
+		remove_province_modifier = lycan_infestation
+		owner = {
+			wealth = -75
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 50
+				}
+			}
+		}
+		FROM = {
+			wealth = 45
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+		}
+	}
+}
+
+#Lycanthropes self version
+society_quest_event = {
+	id = ekguildquests.76
+	title = quest_fighters_lycans_self
+	desc = EKGuildQuests76
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_lycans_self
+		character_event = { id = ekguildquests.77 days = 3  }		
+		roll_very_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.77
+	desc = EKGuildQuests77
+	picture = GFX_evt_werewolfblood
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests77Accept
+
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.79 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.79 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.78 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.78
+	desc = EKGuildQuests78
+	picture = GFX_evt_werewolfblood
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests78Accept
+		FROMFROMFROM = {
+			remove_province_modifier = lycan_infestation
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_lycans_self
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.79
+	desc = EKGuildQuests79
+	picture = GFX_evt_werewolfblood
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		roll_for_lycanthropy = yes
+	}
+	
+	option = {
+		name = {
+			text = Lycan7Infection
+			trigger = { has_character_flag = lycan_disease }
+		}
+		
+		name = {
+			text = Lycan7Infection
+			trigger = { 
+				is_disease_immune = no
+				NOT = { has_character_flag = lycan_disease }
+			}
+		}
+		
+		name = {
+			text = Lycan7Infection
+			trigger = { is_disease_immune = yes }
+		}
+		
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.75 }
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_lycans
+		add_society_currency_major_effect = yes
+	}
+}
+
+
+
+#Undead
+society_quest_event = {
+	id = ekguildquests.80
+	title = quest_fighters_undead
+	desc = EKGuildQuests80
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_undead
+		character_event = { id = ekguildquests.81 days = 3  }
+		roll_medium_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.85 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.81
+	desc = EKGuildQuests81
+	picture = GFX_evt_undead
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests81Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.84 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.82 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.82 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.82 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.82
+	desc = EKGuildQuests82
+	picture = GFX_evt_undead
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests82Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.85 }
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_undead
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.84
+	desc = EKGuildQuests84
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests84Accept
+		remove_province_modifier = undead_infestation
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.85
+	desc = EKGuildQuests85
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests85Accept
+		remove_province_modifier = undead_infestation
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Undead self version
+society_quest_event = {
+	id = ekguildquests.86
+	title = quest_fighters_undead_self
+	desc = EKGuildQuests80
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_undead_self
+		character_event = { id = ekguildquests.87 days = 3  }
+		roll_medium_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.87
+	desc = EKGuildQuests87
+	picture = GFX_evt_undead
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests87Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.88 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.88 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.88 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.88
+	desc = EKGuildQuests88
+	picture = GFX_evt_undead
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests88Accept
+		FROMFROMFROM = {
+			remove_province_modifier = undead_infestation
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_undead_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+
+#Highway Robbers
+society_quest_event = {
+	id = ekguildquests.90
+	title = quest_fighters_bandits
+	desc = EKGuildQuests90
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_bandits
+		character_event = { id = ekguildquests.91 days = 3  }
+		roll_easy_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.95 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.91
+	desc = EKGuildQuests91
+	picture = GFX_evt_adventurers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests91Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.94 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.92 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.92 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.92 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.92
+	desc = EKGuildQuests92
+	picture = GFX_evt_adventurers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests92Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.95 }
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_bandits
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.94
+	desc = EKGuildQuests94
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests94Accept
+		remove_province_modifier = highway_robber_band
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.95
+	desc = EKGuildQuests95
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests95Accept
+		remove_province_modifier = highway_robber_band
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Bandits self version
+society_quest_event = {
+	id = ekguildquests.96
+	title = quest_fighters_bandits_self
+	desc = EKGuildQuests96
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_bandits_self
+		character_event = { id = ekguildquests.97 days = 3  }		
+		roll_easy_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.97
+	desc = EKGuildQuests97
+	picture = GFX_evt_adventurers
+	
+	is_triggered_only = yes
+	option = {
+		name = EKGuildQuests97Accept
+
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.98 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.98 }
+		}
+		
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.98 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.98
+	desc = EKGuildQuests98
+	picture = GFX_evt_adventurers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests98Accept
+		FROMFROMFROM = {
+			remove_province_modifier = highway_robber_band
+		}
+		scaled_wealth = 0.15
+		clr_quest = quest_fighters_bandits_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+
+#Independent Smugglers
+society_quest_event = {
+	id = ekguildquests.100
+	title = quest_thieves_smugglers
+	desc = EKGuildQuests100
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_thieves_smugglers
+		character_event = { id = ekguildquests.101 days = 3  }
+		roll_easy_diplomacy = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.105 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.101
+	desc = EKGuildQuests101
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests101Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.103 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.102 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.102
+	desc = EKGuildQuests102
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests102Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.105 }
+		}
+		clr_quest = quest_thieves_smugglers
+		scaled_wealth = 0.25
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.103
+	desc = EKGuildQuests103
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests102Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.105 }
+		}
+		clr_quest = quest_thieves_smugglers
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.105
+	desc = EKGuildQuests105
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests105Accept
+		remove_province_modifier = smugglers_ring
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = thieves_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = thieves_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = camonna_tong_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = camonna_tong_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Smugglers self version
+society_quest_event = {
+	id = ekguildquests.106
+	title = quest_thieves_smugglers_self
+	desc = EKGuildQuests106
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_thieves_smugglers_self
+		character_event = { id = ekguildquests.107 days = 3  }
+		roll_easy_diplomacy = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.107
+	desc = EKGuildQuests107
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests107Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.109 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.108 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.108
+	desc = EKGuildQuests108
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests108Accept
+		FROMFROMFROM = {
+			remove_province_modifier = smugglers_ring
+		}
+		clr_quest = quest_thieves_smugglers_self
+		scaled_wealth = 0.25
+		add_society_currency_minor_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.109
+	desc = EKGuildQuests109
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests109Accept
+		FROMFROMFROM = {
+			remove_province_modifier = smugglers_ring
+		}
+		clr_quest = quest_thieves_smugglers_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+#Independent Thieves
+society_quest_event = {
+	id = ekguildquests.110
+	title = quest_thieves_indie
+	desc = EKGuildQuests110
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_thieves_indie
+		character_event = { id = ekguildquests.111 days = 3  }
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.115 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.111
+	desc = EKGuildQuests111
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests111Accept
+		
+		roll_trivial_pcs = yes
+		character_event = { id = ekguildquests.112 }
+	}
+}
+character_event = {
+	id = ekguildquests.112
+	desc = EKGuildQuests112
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests112Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.115 }
+		}
+		clr_quest = quest_thieves_indie
+		add_society_currency_medium_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.115
+	desc = EKGuildQuests115
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests115Accept
+		remove_province_modifier = thieves_guild
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = thieves_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = thieves_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = camonna_tong_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = camonna_tong_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Independent thieves self version
+society_quest_event = {
+	id = ekguildquests.116
+	title = quest_thieves_indie_self
+	desc = EKGuildQuests116
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_thieves_indie_self
+		character_event = { id = ekguildquests.117 days = 3  }
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.117
+	desc = EKGuildQuests117
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests117Accept
+		roll_trivial_pcs = yes
+		character_event = { id = ekguildquests.118 }
+	}
+}
+character_event = {
+	id = ekguildquests.118
+	desc = EKGuildQuests118
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests118Accept
+		FROMFROMFROM = {
+			remove_province_modifier = thieves_guild
+		}
+		clr_quest = quest_thieves_indie_self
+		add_society_currency_minor_effect = yes
+	}
+}
+
+
+#Homelessness
+society_quest_event = {
+	id = ekguildquests.120
+	title = quest_merchants_homeless
+	desc = EKGuildQuests120
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_merchants_homeless
+		character_event = { id = ekguildquests.121 days = 3  }
+		roll_easy_stewardship = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.125 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.121
+	desc = EKGuildQuests121
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests121Accept
+		
+		send_quest_result_stat = yes
+
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.123 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.122 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.122
+	desc = EKGuildQuests122
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests122Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.125 }
+		}
+		clr_quest = quest_merchants_homeless
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.123
+	desc = EKGuildQuests123
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests122Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.124 }
+		}
+		clr_quest = quest_merchants_homeless
+		add_society_currency_minor_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.124
+	desc = EKGuildQuests124
+	picture = GFX_evt_peasants
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests124Accept
+		remove_province_modifier = harbour_the_homeless
+		add_province_modifier = {
+			name = harbour_the_homeless
+			duration = 1095
+		}
+		owner = {
+			wealth = -40
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 30
+				}
+			}
+		}
+		FROM = {
+			wealth = 10
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.125
+	desc = EKGuildQuests125
+	picture = GFX_evt_peasants
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests125Accept
+		remove_province_modifier = harbour_the_homeless
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Homeless self version
+society_quest_event = {
+	id = ekguildquests.126
+	title = quest_merchants_homeless_self
+	desc = EKGuildQuests126
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_merchants_homeless_self
+		character_event = { id = ekguildquests.127 days = 3  }
+		roll_easy_stewardship = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.127
+	desc = EKGuildQuests127
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests127Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.129 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.128 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.128
+	desc = EKGuildQuests128
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests128Accept
+		FROMFROMFROM = {
+			remove_province_modifier = harbour_the_homeless
+		}
+		clr_quest = quest_merchants_homeless_self
+		add_society_currency_minor_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.129
+	desc = EKGuildQuests129
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests129Accept
+		FROMFROMFROM = {
+			remove_province_modifier = harbour_the_homeless
+		}
+		clr_quest = quest_merchants_homeless_self
+		add_society_currency_trivial_effect = yes
+	}
+}
+
+
+
+#Economy Ruined
+society_quest_event = {
+	id = ekguildquests.150
+	title = quest_merchants_economy
+	desc = EKGuildQuests150
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_merchants_economy
+		character_event = { id = ekguildquests.151 days = 3  }
+		
+		roll_easy_stewardship = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.155 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.151
+	desc = EKGuildQuests151
+	picture = GFX_evt_diplomatic_greeting
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests151Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.153 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.152 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.152
+	desc = EKGuildQuests152
+	picture = GFX_evt_market
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests152Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.155 }
+		}
+		clr_quest = quest_merchants_economy
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.153
+	desc = EKGuildQuests153
+	picture = GFX_evt_stressed_ruler
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests152Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.155 }
+		}
+		clr_quest = quest_merchants_economy
+		add_society_currency_minor_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.155
+	desc = EKGuildQuests155
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests155Accept
+		remove_province_modifier = ruined_economy
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = mercantile_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mercantile_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Economy ruined self version
+society_quest_event = {
+	id = ekguildquests.156
+	title = quest_merchants_economy_self
+	desc = EKGuildQuests156
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_merchants_economy_self
+		character_event = { id = ekguildquests.157 days = 3  }
+		roll_easy_stewardship = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.157
+	desc = EKGuildQuests157
+	picture = GFX_evt_diplomatic_greeting
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests157Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.159 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.158 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.158
+	desc = EKGuildQuests158
+	picture = GFX_evt_market
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests158Accept
+		FROMFROMFROM = {
+			remove_province_modifier = ruined_economy
+		}
+		clr_quest = quest_merchants_economy_self
+		add_society_currency_minor_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.159
+	desc = EKGuildQuests159
+	picture = GFX_evt_stressed_ruler
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests159Accept
+		FROMFROMFROM = {
+			remove_province_modifier = ruined_economy
+		}
+		clr_quest = quest_merchants_economy_self
+		add_society_currency_trivial_effect = yes
+	}
+}
+
+
+
+#Vampires
+society_quest_event = {
+	id = ekguildquests.180
+	title = quest_fighters_vampires
+	desc = EKGuildQuests180
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_vampires
+		character_event = { id = ekguildquests.181 days = 3  }
+		
+		roll_very_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.185 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.181
+	desc = EKGuildQuests181
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests181Accept
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+			hidden_tooltip = {
+				FROMFROM = {
+					province_event = { id = ekguildquests.184 days = 150 random = 30 }
+				}
+			}
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.183 } #Roll for vampirism
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.183 } #Roll for vampirism
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.182 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.182
+	desc = EKGuildQuests182
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests182Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.185 }
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_vampires
+		add_society_currency_major_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.183
+	desc = EKGuildQuests183
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		roll_for_vampirism = yes
+	}
+	
+	option = {
+		name = {
+			text = Vamp7Infection
+			trigger = { has_character_flag = vampire_disease }
+		}
+		
+		name = {
+			text = Vamp7Infection
+			trigger = { 
+				is_disease_immune = no
+				NOT = { has_character_flag = vampire_disease }
+			}
+		}
+		
+		name = {
+			text = Vamp7Infection
+			trigger = { is_disease_immune = yes }
+		}
+		
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.185 }
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_vampires
+		add_society_currency_major_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.184
+	desc = EKGuildQuests184
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests184Accept
+		remove_province_modifier = vampire_infestation
+		owner = {
+			wealth = -75
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 50
+				}
+			}
+		}
+	}
+}
+
+province_event = {
+	id = ekguildquests.185
+	desc = EKGuildQuests185
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests185Accept
+		remove_province_modifier = vampire_infestation
+		owner = {
+			wealth = -75
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 50
+				}
+			}
+		}
+		FROM = {
+			wealth = 45
+			if = {
+				limit = {
+					society_member_of = fighters_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = fighters_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = fighters_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = companions_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = ansei_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = ansei_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 20
+				}
+			}
+		}
+	}
+}
+
+#Vampire infestation self version
+society_quest_event = {
+	id = ekguildquests.186
+	title = quest_fighters_vampires_self
+	desc = EKGuildQuests186
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_fighters_vampires_self
+		character_event = { id = ekguildquests.187 days = 3  }
+		
+		roll_very_hard_pcs = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.187
+	desc = EKGuildQuests187
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests187Accept
+		
+		send_quest_result_pcs = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			death = { death_reason = death_battle }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_maimed }
+			add_maimed_trait_effect = yes
+			character_event = { id = ekguildquests.189 } #Roll for vampirism
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_wounded }
+			add_trait = wounded
+			character_event = { id = ekguildquests.189 } #Roll for vampirism
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.188 }
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.188
+	desc = EKGuildQuests188
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests188Accept
+		FROMFROMFROM = {
+			remove_province_modifier = vampire_infestation
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_vampires_self
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.189
+	desc = EKGuildQuests183
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		roll_for_vampirism = yes
+	}
+	
+	option = {
+		name = {
+			text = Vamp7Infection
+			trigger = { has_character_flag = vampire_disease }
+		}
+		
+		name = {
+			text = Vamp7Infection
+			trigger = { 
+				is_disease_immune = no
+				NOT = { has_character_flag = vampire_disease }
+			}
+		}
+		
+		name = {
+			text = Vamp7Infection
+			trigger = { is_disease_immune = yes }
+		}
+		
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.185 }
+		}
+		scaled_wealth = 0.35
+		clr_quest = quest_fighters_vampires
+		add_society_currency_major_effect = yes
+	}
+}
+
+#Magical anomaly
+society_quest_event = {
+	id = ekguildquests.190
+	title = quest_magical_anomalies
+	desc = EKGuildQuests190
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_magical_anomalies
+		character_event = { id = ekguildquests.191 days = 3  }
+		
+		roll_easy_learning = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.195 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.191
+	desc = EKGuildQuests191
+	picture = GFX_evt_diplomatic_greeting
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests191Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.193 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.192 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.192
+	desc = EKGuildQuests192
+	picture = GFX_evt_market
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests192Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.195 }
+		}
+		clr_quest = quest_magical_anomalies
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.193
+	desc = EKGuildQuests193
+	picture = GFX_evt_stressed_ruler
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests193Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.195 }
+		}
+		clr_quest = quest_magical_anomalies
+		add_society_currency_minor_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.195
+	desc = EKGuildQuests195
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests195Accept
+		remove_province_modifier = magical_anomalies
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = mages_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mages_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = mages_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = mages_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Magical anomalies self version
+society_quest_event = {
+	id = ekguildquests.196
+	title = quest_magical_anomalies_self
+	desc = EKGuildQuests196
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_magical_anomalies_self
+		character_event = { id = ekguildquests.197 days = 3  }
+		roll_easy_learning = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.197
+	desc = EKGuildQuests197
+	picture = GFX_evt_diplomatic_greeting
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests197Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.199 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.198 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.198
+	desc = EKGuildQuests198
+	picture = GFX_evt_market
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests198Accept
+		FROMFROMFROM = {
+			remove_province_modifier = magical_anomalies
+		}
+		clr_quest = quest_magical_anomalies_self
+		add_society_currency_minor_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.199
+	desc = EKGuildQuests199
+	picture = GFX_evt_stressed_ruler
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests199Accept
+		FROMFROMFROM = {
+			remove_province_modifier = magical_anomalies
+		}
+		clr_quest = quest_magical_anomalies_self
+		add_society_currency_trivial_effect = yes
+	}
+}
+
+#Propagandist
+society_quest_event = {
+	id = ekguildquests.200
+	title = quest_propagandist
+	desc = EKGuildQuests200
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_propagandist
+		character_event = { id = ekguildquests.201 days = 3  }
+		
+		roll_easy_diplomacy = yes
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = EKGuildQuestsDeclineTooltip }
+		ai_chance = {
+			factor = 0
+		}
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+		hidden_tooltip = {
+			FROM = {
+				province_event = { id = ekguildquests.205 days = 60 random = 30 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.201
+	desc = EKGuildQuests201
+	picture = GFX_evt_diplomatic_greeting
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests201Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.203 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.202 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.202
+	desc = EKGuildQuests202
+	picture = GFX_evt_market
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests202Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.205 }
+		}
+		clr_quest = quest_propagandist
+		add_society_currency_medium_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.203
+	desc = EKGuildQuests203
+	picture = GFX_evt_stressed_ruler
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests203Accept
+		FROMFROMFROM = {
+			province_event = { id = ekguildquests.205 }
+		}
+		clr_quest = quest_propagandist
+		add_society_currency_minor_effect = yes
+	}
+}
+
+province_event = {
+	id = ekguildquests.205
+	desc = EKGuildQuests205
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests205Accept
+		remove_province_modifier = propagandist
+		owner = {
+			wealth = -50
+		}
+		hidden_tooltip = {
+			owner = {
+				if = {
+					limit = { ai = yes }
+					wealth = 35
+				}
+			}
+		}
+		FROM = {
+			wealth = 30
+			if = {
+				limit = {
+					society_member_of = scenarist_guild_tamriel
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = scenarist_guild_tamriel
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+			if = {
+				limit = {
+					society_member_of = scenarist_guild_akavir
+				}
+				random_society_member = {
+					limit = {
+						society_member_of = scenarist_guild_akavir
+						is_society_grandmaster = yes
+						is_inaccessible_trigger = no
+					}
+					wealth = 10
+				}
+			}
+		}
+	}
+}
+
+#Propagandist self version
+society_quest_event = {
+	id = ekguildquests.206
+	title = quest_propagandist_self
+	desc = EKGuildQuests206
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_propagandist_self
+		character_event = { id = ekguildquests.207 days = 3  }
+		roll_easy_diplomacy = yes
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = ekguildquests.207
+	desc = EKGuildQuests207
+	picture = GFX_evt_diplomatic_greeting
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests207Accept
+		
+		send_quest_result_stat = yes
+		
+		if = {
+			limit = { has_character_flag = guild_quest_fail }
+			character_event = { id = ekguildquests.209 days = 7 }
+		}
+		
+		else_if = {
+			limit = { has_character_flag = guild_quest_success }
+			character_event = { id = ekguildquests.208 days = 7 }
+		}
+	}
+}
+character_event = {
+	id = ekguildquests.208
+	desc = EKGuildQuests208
+	picture = GFX_evt_market
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests208Accept
+		FROMFROMFROM = {
+			remove_province_modifier = propagandist
+		}
+		clr_quest = quest_propagandist_self
+		add_society_currency_minor_effect = yes
+	}
+}
+character_event = {
+	id = ekguildquests.209
+	desc = EKGuildQuests209
+	picture = GFX_evt_stressed_ruler
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKGuildQuests209Accept
+		FROMFROMFROM = {
+			remove_province_modifier = propagandist
+		}
+		clr_quest = quest_propagandist_self
+		add_society_currency_trivial_effect = yes
+	}
+}

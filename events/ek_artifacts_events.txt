@@ -1,0 +1,1193 @@
+#General artifacts events for EK
+#Please reserve 0-100 for system functions. Specific artifact events can go beyond that.
+
+namespace = ekartifacts 
+
+#EKartifacts.5 and EKartifacts.10 are special on_death events
+#EKartifacts.15 is an event for destroying regular artifacts on death not tied to the Daedric system.
+
+#A character holding a Daedric artifact has DIED - clear artifact (vanilla)
+#Based on JD artifact destruction event
+character_event = {
+	id = ekartifacts.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		OR = {
+			has_artifact = amulet_of_charitymad
+			has_artifact = armor_saviors_hide
+			has_artifact = armor_ebonymail
+			has_artifact = book_oghma_infinium
+			has_artifact = masque_of_clavicus_vile
+			has_artifact = ring_of_hircine
+			has_artifact = ring_of_khajiiti
+			has_artifact = ring_of_namira
+			has_artifact = weapon_mehrunes_razor
+			has_artifact = weapon_mace_molag
+			has_artifact = weapon_goldbrand
+			has_artifact = weapon_ebonyblade
+			has_artifact = weapon_dawnbreaker
+			has_artifact = weapon_sword_jyggalag
+			has_artifact = weapon_umbra
+			has_artifact = weapon_forkh
+			has_artifact = weapon_mace_scourge
+			has_artifact = weapon_eltonbrand
+			has_artifact = weapon_sanguinerose
+			has_artifact = weapon_skull_of_corruption
+			has_artifact = weapon_wabbajack
+			has_artifact = weapon_volendrung
+			has_artifact = shield_spellbreaker
+			has_artifact = azuras_star
+			has_artifact = skeleton_key
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_artifact = amulet_of_charitymad }
+			unsafe_destroy_artifact = amulet_of_charitymad
+			clr_global_flag = amulet_of_charitymad_granted
+		}
+		if = {
+			limit = { has_artifact = armor_saviors_hide }
+			unsafe_destroy_artifact = armor_saviors_hide
+			clr_global_flag = armor_saviors_hide_granted
+		}
+		if = {
+			limit = { has_artifact = armor_ebonymail }
+			unsafe_destroy_artifact = armor_ebonymail
+			clr_global_flag = armor_ebonymail_granted
+		}
+		if = {
+			limit = { has_artifact = book_oghma_infinium }
+			unsafe_destroy_artifact = book_oghma_infinium
+			clr_global_flag = oghma_infinium_granted
+		}
+		if = {
+			limit = { has_artifact = masque_of_clavicus_vile }
+			unsafe_destroy_artifact = masque_of_clavicus_vile
+			clr_global_flag = masque_of_clavicus_vile_granted
+		}
+		if = {
+			limit = { has_artifact = ring_of_hircine }
+			unsafe_destroy_artifact = ring_of_hircine
+			clr_global_flag = ring_of_hircine_granted
+		}
+		if = {
+			limit = { has_artifact = ring_of_khajiiti }
+			unsafe_destroy_artifact = ring_of_khajiiti
+			clr_global_flag = ring_of_khajiiti_granted
+		}
+		if = {
+			limit = { has_artifact = ring_of_namira }
+			unsafe_destroy_artifact = ring_of_namira
+			clr_global_flag = ring_of_namira_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_mehrunes_razor }
+			unsafe_destroy_artifact = weapon_mehrunes_razor
+			clr_global_flag = weapon_mehrunes_razor_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_mace_molag }
+			unsafe_destroy_artifact = weapon_mace_molag
+			clr_global_flag = weapon_mace_molag_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_goldbrand }
+			unsafe_destroy_artifact = weapon_goldbrand
+			clr_global_flag = weapon_goldbrand_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_ebonyblade }
+			unsafe_destroy_artifact = weapon_ebonyblade
+			clr_global_flag = weapon_ebonyblade_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_dawnbreaker }
+			unsafe_destroy_artifact = weapon_dawnbreaker
+			clr_global_flag = weapon_dawnbreaker_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_sword_jyggalag }
+			unsafe_destroy_artifact = weapon_sword_jyggalag
+			clr_global_flag = weapon_sword_jyggalag_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_umbra }
+			unsafe_destroy_artifact = weapon_umbra
+			clr_global_flag = weapon_umbra_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_forkh }
+			unsafe_destroy_artifact = weapon_forkh
+			clr_global_flag = weapon_forkh_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_mace_scourge }
+			unsafe_destroy_artifact = weapon_mace_scourge
+			clr_global_flag = weapon_mace_scourge_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_eltonbrand }
+			unsafe_destroy_artifact = weapon_eltonbrand
+			clr_global_flag = weapon_eltonbrand_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_sanguinerose }
+			unsafe_destroy_artifact = weapon_sanguinerose
+			clr_global_flag = weapon_sanguinerose_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_skull_of_corruption }
+			unsafe_destroy_artifact = weapon_skull_of_corruption
+			clr_global_flag = weapon_skull_of_corruption_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_wabbajack }
+			unsafe_destroy_artifact = weapon_wabbajack
+			clr_global_flag = weapon_wabbajack_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_volendrung }
+			unsafe_destroy_artifact = weapon_volendrung
+			clr_global_flag = weapon_volendrung_granted
+		}
+		if = {
+			limit = { has_artifact = shield_spellbreaker }
+			unsafe_destroy_artifact = shield_spellbreaker
+			clr_global_flag = shield_spellbreaker_granted
+		}
+		if = {
+			limit = { has_artifact = azuras_star }
+			unsafe_destroy_artifact = azuras_star
+			clr_global_flag = azuras_star_granted
+		}
+		if = {
+			limit = { has_artifact = skeleton_key }
+			unsafe_destroy_artifact = skeleton_key
+			clr_global_flag = skeleton_key_granted
+		}
+	}
+}
+
+#Daedric artifacts sent back to their Prince - the Jade Dragon version
+#Again, based loosely on JD artifact destruction event
+character_event = {
+	id = ekartifacts.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+		OR = {
+			has_artifact = amulet_of_charitymad
+			has_artifact = armor_saviors_hide
+			has_artifact = armor_ebonymail
+			has_artifact = book_oghma_infinium
+			has_artifact = masque_of_clavicus_vile
+			has_artifact = ring_of_hircine
+			has_artifact = ring_of_khajiiti
+			has_artifact = ring_of_namira
+			has_artifact = weapon_mehrunes_razor
+			has_artifact = weapon_mace_molag
+			has_artifact = weapon_goldbrand
+			has_artifact = weapon_ebonyblade
+			has_artifact = weapon_dawnbreaker
+			has_artifact = weapon_sword_jyggalag
+			has_artifact = weapon_umbra
+			has_artifact = weapon_forkh
+			has_artifact = weapon_mace_scourge
+			has_artifact = weapon_eltonbrand
+			has_artifact = weapon_sanguinerose
+			has_artifact = weapon_skull_of_corruption
+			has_artifact = weapon_wabbajack
+			has_artifact = weapon_volendrung
+			has_artifact = shield_spellbreaker
+			has_artifact = azuras_star
+			has_artifact = skeleton_key
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_artifact = azuras_star }
+			oblivion_azura = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_azura
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = azuras_star }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_azura
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = armor_ebonymail }
+			oblivion_boethiah = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_boethiah
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = armor_ebonymail }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_boethiah
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_goldbrand }
+			oblivion_boethiah = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_boethiah
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_goldbrand }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_boethiah
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_eltonbrand }
+			oblivion_boethiah = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_boethiah
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_eltonbrand }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_boethiah
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = masque_of_clavicus_vile }
+			oblivion_clavicus = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_clavicus
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = masque_of_clavicus_vile }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_clavicus
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_umbra }
+			oblivion_clavicus = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_clavicus
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_umbra }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_clavicus
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = book_oghma_infinium }
+			oblivion_hermaeus = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_hermaeus
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = book_oghma_infinium }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_hermaeus
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = armor_saviors_hide }
+			oblivion_hircine = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_hircine
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = armor_saviors_hide }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_hircine
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = ring_of_hircine }
+			oblivion_hircine = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_hircine
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = ring_of_hircine }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_hircine
+				}
+			}
+		}
+		if = { #Jyggalag is a special case; he's not incorporated as an offmap right now
+			limit = { has_artifact = weapon_sword_jyggalag }
+			unsafe_destroy_artifact = weapon_sword_jyggalag
+			clr_global_flag = weapon_sword_jyggalag_granted
+		}
+		if = {
+			limit = { has_artifact = weapon_mace_scourge }
+			oblivion_malacath = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_malacath
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_mace_scourge }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_malacath
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_volendrung }
+			oblivion_malacath = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_malacath
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_volendrung }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_malacath
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = ring_of_khajiiti }
+			oblivion_mephala = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_mephala
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = ring_of_khajiiti }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_mephala
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_ebonyblade }
+			oblivion_mephala = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_mephala
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_ebonyblade }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_mephala
+				}
+			}
+		}
+		
+		if = {
+			limit = { has_artifact = weapon_mehrunes_razor }
+			oblivion_mehrunes = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_mehrunes
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_mehrunes_razor }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_mehrunes
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_dawnbreaker }
+			oblivion_meridia = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_meridia
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_dawnbreaker }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_meridia
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_mace_molag }
+			oblivion_molag = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_molag
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_mace_molag }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_molag
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = ring_of_namira }
+			oblivion_namira = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_namira
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = ring_of_namira }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_namira
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = skeleton_key }
+			oblivion_nocturnal = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_nocturnal
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = skeleton_key }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_nocturnal
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = shield_spellbreaker }
+			oblivion_peryite = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_peryite
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = shield_spellbreaker }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_peryite
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_sanguinerose }
+			oblivion_sanguine = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_sanguine
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_sanguinerose }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_sanguine
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = amulet_of_charitymad }
+			oblivion_sheogorath = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_sheogorath
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = amulet_of_charitymad }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_sheogorath
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_forkh }
+			oblivion_sheogorath = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_sheogorath
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_forkh }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_sheogorath
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_wabbajack }
+			oblivion_sheogorath = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_sheogorath
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_wabbajack }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_sheogorath
+				}
+			}
+		}
+		if = {
+			limit = { has_artifact = weapon_skull_of_corruption }
+			oblivion_vaermina = {
+				offmap_ruler = {
+					save_event_target_as = ek_artifact_return_vaermina
+				}
+			}
+			random_artifact = {
+				limit = { artifact_type = weapon_skull_of_corruption }
+				transfer_artifact = {
+					from = ROOT
+					to = event_target:ek_artifact_return_vaermina
+				}
+			}
+		}
+	}
+}
+
+character_event = { #Clearing non-daedric artifacts that aren't supposed to be inherited
+	id = ekartifacts.15
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+        any_artifact = {
+            has_artifact_flag = no_inherit
+			NAND = {
+				has_artifact_flag = unique
+				OR = {
+					has_artifact_flag = daedric_artifact
+					has_artifact_flag = aedric_artifact
+					has_artifact_flag = tribunal_artifact
+				}
+			}
+        }
+    }
+
+    immediate = {
+		#Special flags for special things
+		if = {
+			limit = { has_artifact = mount_horse_shadowmere }
+			clr_global_flag = shadowmere_active
+		}
+		if = {
+			limit = { has_artifact = weapon_redeagle }
+			clr_global_flag = weapon_redeagle_granted
+		}
+		if = {
+			limit = { has_artifact = armor_of_the_old_gods }
+			clr_global_flag = armor_of_the_old_gods_granted
+		}
+		
+        any_artifact = {
+            limit = {
+				has_artifact_flag = no_inherit
+				NAND = {
+					has_artifact_flag = unique
+					OR = {
+						has_artifact_flag = daedric_artifact
+						has_artifact_flag = aedric_artifact
+						has_artifact_flag = tribunal_artifact
+					}
+				}
+			}
+            unsafe_destroy_artifact = yes
+        }
+    }
+}
+
+character_event = { #Clearing excess non-active artifacts
+	id = ekartifacts.20
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	min_age = 16 #Adults only
+	
+	trigger = {
+        num_of_artifacts >= 5
+        any_artifact = {
+            is_artifact_active = no
+            is_indestructible = no
+            NOR = {
+                has_artifact_flag = no_inherit
+                has_artifact_flag = unique
+                has_artifact_flag = daedric_artifact
+            }
+        }
+    }
+
+    immediate = {
+        any_artifact = {
+            limit = {
+				is_artifact_active = no
+				is_indestructible = no
+				NOR = {
+					has_artifact_flag = no_inherit
+					has_artifact_flag = unique
+					has_artifact_flag = daedric_artifact
+					has_artifact_flag = pet
+					has_artifact_flag = mount
+				}
+			}
+			random = {
+				chance = 70
+				set_artifact_flag = force_sell
+			}
+        }
+    }
+}
+#Destroy any artifacts belonging to unrelated, unlanded courtiers in player courts on death.
+character_event = {
+	id = ekartifacts.6
+	hide_window = yes
+	
+	ai = yes
+	
+	trigger = {
+		num_of_artifacts > 0
+		is_ruler = no
+		liege = {
+			ai = no
+			NOR = {
+				is_close_relative = ROOT
+				dynasty = ROOT
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		while = {
+			limit = {
+				any_artifact = {
+					count > 0
+					NOR = {
+						has_artifact_flag = unique
+						is_indestructible = yes
+					}
+				}
+			}
+			random_artifact = {
+				limit = {
+					NOR = {
+						has_artifact_flag = unique
+						is_indestructible = yes
+					}
+				}
+				destroy_artifact = yes
+			}
+		}
+	}
+	after = {
+		#Give any remaining artifacts away to a non-player relative
+		if = {
+			limit = { num_of_artifacts > 0 any_dynasty_member = { ai = yes is_alive = yes prisoner = no } }
+			while = {
+				limit = { num_of_artifacts > 0 any_dynasty_member = { ai = yes is_alive = yes prisoner = no } }
+				random_dynasty_member = {
+					limit = { ai = yes is_alive = yes prisoner = no }
+					save_event_target_as = recipient
+				}
+				random_artifact = {
+					transfer_artifact = {
+						from = ROOT
+						to = event_target:recipient
+					}
+				}
+			}
+		}
+		else_if = { #Or to a random if there are none.
+			limit = { num_of_artifacts > 0 NOT = { any_dynasty_member = { ai = yes is_alive = yes prisoner = no } } }
+			while = {
+				limit = { num_of_artifacts > 0 NOT = { any_dynasty_member = { ai = yes is_alive = yes prisoner = no } } }
+				random_independent_ruler = {
+					limit = { ai = yes is_alive = yes prisoner = no }
+					random_courtier = {
+						limit = { ai = yes is_alive = yes prisoner = no }
+						save_event_target_as = recipient
+					}
+				}
+				random_artifact = {
+					transfer_artifact = {
+						from = ROOT
+						to = event_target:recipient
+					}
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekartifacts.7
+	hide_window = yes
+	
+	ai = yes
+	
+	trigger = {
+		num_of_artifacts > 0
+		is_ruler = no
+		liege = {
+			ai = no
+			OR = {
+				is_close_relative = ROOT
+				dynasty = ROOT
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		while = {
+			limit = {
+				any_artifact = {
+					count > 3
+					NOR = {
+						has_artifact_flag = unique
+						is_indestructible = yes
+					}
+				}
+			}
+			random_artifact = {
+				limit = {
+					NOR = {
+						has_artifact_flag = unique
+						is_indestructible = yes
+					}
+				}
+				destroy_artifact = yes
+			}
+		}
+	}
+	after = {
+		#Give any remaining artifacts away to a non-player relative
+		if = {
+			limit = { num_of_artifacts > 0 any_dynasty_member = { is_alive = yes prisoner = no } }
+			while = {
+				limit = { num_of_artifacts > 0 any_dynasty_member = { is_alive = yes prisoner = no } }
+				random_dynasty_member = {
+					limit = { is_alive = yes prisoner = no }
+					save_event_target_as = recipient
+				}
+				if = {
+					limit = { event_target:recipient = { ai = no } any_dynasty_member = { ai = yes } }
+					random = {
+						chance = 50
+						random_dynasty_member = {
+							limit = { ai = yes is_alive = yes prisoner = no }
+							save_event_target_as = recipient
+						}
+					}
+				}
+				else = {
+					random = {
+						chance = 50
+						random_independent_ruler = {
+							limit = { ai = yes is_alive = yes prisoner = no }
+							random_courtier = {
+								limit = { ai = yes is_alive = yes prisoner = no }
+								save_event_target_as = recipient
+							}
+						}
+					}
+				}
+				random_artifact = {
+					transfer_artifact = {
+						from = ROOT
+						to = event_target:recipient
+					}
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekartifacts.50
+	desc = EKArtifacts50
+	picture = GFX_evt_loot
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKArtifacts50Accept
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 1
+				}
+			}
+			wealth = 10
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 2
+				}
+			}
+			wealth = 25
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 3
+				}	
+			}
+			wealth = 50
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 4
+				}
+			}
+			wealth = 100
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 5
+				}
+			}
+			wealth = 150
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 6
+				}
+			}
+			wealth = 225
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 7
+				}
+			}
+			wealth = 350
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality == 8
+				}
+			}
+			wealth = 500
+		}
+		if = {
+			limit = {
+				FROMFROMFROM = {
+					quality >= 9
+				}
+			}
+			wealth = 750
+		}
+		FROMFROMFROM = {
+			destroy_artifact = yes
+		}
+		clr_character_flag = selling_artifact_at_market
+	}
+	option = {
+		name = EKArtifacts50Decline
+		ai_chance = {
+			factor = 0
+		}
+		FROMFROMFROM = {
+			clr_artifact_flag = artifact_is_being_destroyed
+		}
+		clr_character_flag = selling_artifact_at_market
+	}
+}
+
+ ###	*	*	*	###
+### Specific artifact events ###
+ ###	*	*	*	###
+
+character_event = { #Ring of Sunfire kills Vampire or Vampire kills Ring of Sunfire
+	id = ekartifacts.101
+	desc = ekartifacts101desc
+	picture = GFX_evt_burning_skeleton
+	
+	mean_time_to_happen = {
+		days = 7 #Paradox, please add an on_artifact_equipped on-action. Thanks.
+	}
+	
+	trigger = {
+		any_artifact = {
+			AND = {
+				is_artifact_equipped = yes
+				artifact_type = ring_of_sunfire
+			}
+		}
+		is_vampire = yes
+	}
+	option = { #Darkness envelops me.
+		trigger = {
+			OR = {
+				ai = no
+				AND = {
+					ai = yes
+					NOR = {
+						trait = stubborn
+						trait = diligent
+						trait = brave
+						trait = ruthless
+						trait = ambitious
+						trait = proud
+						trait = perceptive
+						trait = genius
+						trait = quick
+					}
+				}
+			}
+		}
+		name = ekartifacts101opta
+		death = { death_reason = death_vampire_sunlight }
+		if = {
+			limit = {
+				NOR = {
+					trait = known_vampire
+					trait = known_vampire_benevolent
+				}
+			}
+			add_trait = known_vampire
+		}
+		ai_chance = {
+			factor = 0.10
+			modifier = {
+				factor = 20
+				trait = depressed
+			}
+			modifier = {
+				factor = 10
+				trait = stressed
+			}
+		}
+	}
+	option = { #Destroy it! Cast it into the fire!
+		name = ekartifacts101optb
+		destroy_artifact = ring_of_sunfire
+		random = {
+			chance = 50
+			add_trait_wounded_effect = yes
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				trait = perceptive
+			}
+			modifier = {
+				factor = 2
+				trait = quick
+			}
+			modifier = {
+				factor = 2
+				trait = agile
+			}
+		}
+	}
+}
+
+# character_event = { #Ring of Happiness removes depression/stress
+	# id = ekartifacts.102
+	# desc = ekartifacts102desc
+	# picture = GFX_evt_lunatic
+	
+	# mean_time_to_happen = {
+		# days = 7 #Paradox, please add an on_artifact_equipped on-action. Thanks.
+	# }
+	
+	# trigger = {
+		# any_artifact = {
+			# AND = {
+				# is_artifact_equipped = yes
+				# artifact_type = ring_happiness
+			# }
+		# }
+		# OR = {
+			# trait = stressed
+			# trait = depressed
+		# }
+	# }
+	# option = {
+		# name = ekartifacts102opta
+		# ring_happiness_effect = yes
+	# }
+# }
+
+###Remove Orgnum's Coffer
+long_character_event = {
+	id = ekartifacts.103
+	desc = ekartifacts.103.d
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	trigger = {
+		NOR = {
+			character = 39000
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_orgnum
+				bloodline_is_active_for = PREV
+			}
+			#Why no godslayer bloodline? This isn't highlander, you aren't absorbing orgnum's power and you aren't mantling him either.
+		}
+		any_artifact = { artifact_type = orgnums_coffer }
+		OR = {
+			wealth > 1200
+			yearly_income > 600
+			monthly_income > 50
+			trait = unlucky
+			trait = absent_minded
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = { factor = 1.5 trait = greedy } modifier = { factor = 1.5 trait = envious }
+		modifier = { factor = 2.0 trait = unlucky } modifier = { factor = 0.5 trait = lucky }
+		modifier = { factor = 1.5 trait = absent_minded } modifier = { factor = 1.5 trait = reckless }
+		modifier = { factor = 1.5 trait = slothful }
+		modifier = { factor = 2.0 ai = no } modifier = { factor = 0.5 ai = yes }
+		modifier = { factor = 0.95 wealth < 750 } modifier = { factor = 0.95 wealth < 700 }
+		modifier = { factor = 0.95 wealth < 650 } modifier = { factor = 0.95 wealth < 600 }
+		modifier = { factor = 0.95 wealth < 550 } modifier = { factor = 0.95 wealth < 500 }
+		modifier = { factor = 1.25 wealth > 800 } modifier = { factor = 1.25 wealth > 850 }
+		modifier = { factor = 1.25 wealth > 900 } modifier = { factor = 1.25 wealth > 950 }
+		modifier = { factor = 1.25 wealth > 1000 }
+		modifier = { factor = 1.1 yearly_income > 24 } modifier = { factor = 1.1 yearly_income > 52 }
+		modifier = { factor = 1.1 yearly_income > 28 } modifier = { factor = 1.1 yearly_income > 56 }
+		modifier = { factor = 1.1 yearly_income > 32 } modifier = { factor = 1.1 yearly_income > 60 }
+		modifier = { factor = 1.1 yearly_income > 36 } modifier = { factor = 1.1 yearly_income > 64 }
+		modifier = { factor = 1.1 yearly_income > 40 } modifier = { factor = 1.1 yearly_income > 68 }
+		modifier = { factor = 1.1 yearly_income > 44 } modifier = { factor = 1.1 yearly_income > 72 }
+		modifier = { factor = 1.1 yearly_income > 48 } modifier = { factor = 1.1 yearly_income > 76 }
+		modifier = { factor = 1.1 yearly_income > 80 }
+		modifier = { factor = 1.1 monthly_income > 12 } modifier = { factor = 1.1 monthly_income > 26 }
+		modifier = { factor = 1.1 monthly_income > 14 } modifier = { factor = 1.1 monthly_income > 28 }
+		modifier = { factor = 1.1 monthly_income > 16 } modifier = { factor = 1.1 monthly_income > 30 }
+		modifier = { factor = 1.1 monthly_income > 18 } modifier = { factor = 1.1 monthly_income > 32 }
+		modifier = { factor = 1.1 monthly_income > 20 } modifier = { factor = 1.1 monthly_income > 34 }
+		modifier = { factor = 1.1 monthly_income > 22 } modifier = { factor = 1.1 monthly_income > 36 }
+		modifier = { factor = 1.1 monthly_income > 24 } modifier = { factor = 1.1 monthly_income > 38 }
+		modifier = { factor = 1.1 monthly_income > 40 }
+	}
+	
+	immediate = {
+		#Find a new home for the Coffer
+		if = {
+			limit = {
+				any_independent_ruler = {
+					NOR = {
+						character = ROOT
+						any_realm_character = { character = ROOT }
+					}
+				}
+			}
+			random_independent_ruler  = {
+				limit = {
+					NOR = {
+						character = ROOT
+						any_realm_character = { character = ROOT }
+					}
+				}
+				random_realm_character = {
+					limit = {
+						is_offmap_ruler = no
+						is_adult = yes
+						NOT = { any_spouse = { character = ROOT } }
+					}
+					save_event_target_as = chosen_coffer_target
+				}
+			}
+		}
+		else = {
+			random_independent_ruler = {
+				random_realm_character = {
+					limit = {
+						NOR = {
+							character = ROOT
+							any_spouse = { character = ROOT }
+						}
+						is_offmap_ruler = no
+					}
+					save_event_target_as = chosen_coffer_target
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ekartifacts.103.o
+		custom_tooltip = {
+			text = ekartifacts.103.o.tt
+		}
+	}
+	
+	after = {
+		random_artifact = {
+			limit = { artifact_type = orgnums_coffer }
+			transfer_artifact = {
+				from = ROOT
+				to = event_target:chosen_coffer_target
+			}
+		}
+		add_artifact = container_lockbox
+		wealth = 250 #Last bit of wealth to take away some of the pain of losing the box :P
+		add_character_modifier = {
+			name = orgnums_coffer_timer
+			hidden = yes
+			years = 25
+		}
+	}
+}

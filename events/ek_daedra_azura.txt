@@ -1,0 +1,189 @@
+####Etienne's Daedric Events - Azura####
+
+namespace = azura
+
+###Azura Blesses Army### 
+long_character_event = {
+	id = azura.1
+	desc = "Azura1"
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		religion = daedra_azura
+		NOR = { 
+			trait = cynical
+			has_character_modifier = azura_inspirational
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 276
+		
+		modifier = {
+			factor = 0.8
+			culture = ashlander
+		}
+		modifier = {
+			factor = 0.8
+			culture = chimer
+		}
+		modifier = {
+			factor = 0.8
+			culture = dunmer
+		}
+		modifier = {
+			factor = 0.8
+			culture_group = khajiit
+		}
+		modifier = {
+			factor = 1.5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			trait = content
+		}
+		modifier = {
+			factor = 0.9
+			trait = zealous
+		}
+	}
+	
+	option = {
+		name = "Azura1Acknowledge"
+		add_character_modifier = { name = azura_inspirational months = 60 }
+	}
+}
+
+#Lost Azura army blessing
+
+character_event = {
+	id = azura.4
+	hide_window = yes
+	
+	trigger = {
+		has_character_modifier = azura_inspirational
+		NOT = { 
+			religion = daedra_azura
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		remove_character_modifier = azura_inspirational
+	}
+}
+
+#Azura soothes the mind of a stressed or depressed ruler
+
+character_event = {
+	id = azura.5
+	desc = "Azura5"
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		religion = daedra_azura
+		OR = {
+			trait = stressed
+			trait = depressed
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 0.8
+			culture = ashlander
+		}
+		modifier = {
+			factor = 0.8
+			culture = chimer
+		}
+		modifier = {
+			factor = 0.8
+			culture = dunmer
+		}
+		modifier = {
+			factor = 0.8
+			culture_group = khajiit
+		}
+		modifier = {
+			factor = 1.5
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			trait = content
+		}
+		modifier = {
+			factor = 0.9
+			trait = zealous
+		}
+	}
+	
+	option = {
+		name = "Azura5CureBoth"
+		if = {
+			limit = {
+				trait = depressed
+			}
+			remove_trait = depressed
+		}
+		if = {
+			limit = {
+				trait = stressed
+			}
+			remove_trait = stressed
+		}
+	}
+}
+
+long_character_event = {
+	id = azura.10
+	desc = Azura10
+	picture = GFX_evt_two_moon_aurora
+	
+	has_dlc = "Jade Dragon"
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Azura10Accept
+		if = {
+			limit = {
+				trait = depressed
+			}
+			remove_trait = depressed
+		}
+		if = {
+			limit = {
+				trait = stressed
+			}
+			remove_trait = stressed
+		}
+		if = {
+			limit = {
+				trait = paranoid
+			}
+			remove_trait = paranoid
+		}
+		clr_character_flag = azura_deal
+	}
+}

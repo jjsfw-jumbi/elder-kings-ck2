@@ -1,0 +1,1034 @@
+#Renamed china effects, for Thras!
+#Note: Thras, like other offmaps, requires Jade Dragon for functionality.
+
+# Utilizes thras_war_minimum_commander_martial variable on the current scope to spawn characters with at least that amount of martial skill.
+thras_spawn_commander_effect = {
+	create_random_soldier = {
+		random_traits = yes
+		religion = liege
+		culture = sload
+		dynasty = none
+		female = 50
+		age = 150
+	}
+	new_character = {
+		unsafe_give_minor_title = title_commander
+		
+		set_variable = {
+			which = thras_war_minimum_commander_martial
+			which = PREV
+		}
+		if = {
+			limit = {
+				NOT = { trait = warrior_4 }
+			}
+			remove_trait = warrior_1
+			remove_trait = warrior_2
+			remove_trait = warrior_3
+			add_trait = warrior_3
+			# Make sure they have a tier 3 or tier 4 education
+		}
+	}
+}
+
+thras_war_spawn_troops_effect = {
+	# Requires the current things to function properly:
+	# event_target:spawn_province
+	# variable: thras_war_troop_quality
+	# variable: thras_war_troop_quantity
+	while = {
+		limit = {
+			check_variable = {
+				which = thras_war_troop_quantity
+				value = 1
+			}
+		}
+		change_variable = {	
+			which = thras_war_troop_quantity
+			value = -1
+		}
+		
+		random_list = { # Not really random but decent flow control
+			10 = {
+				trigger = {
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 2
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 25 25 }
+						sorcerers = { 10 10 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 25 25 }
+						sorcerers = { 10 10 }
+						archers = { 75 75 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 250 250 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 2
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 3
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 30 30 }
+						sorcerers = { 12 12 }
+						archers = { 85 85 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 235 235 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 25 25 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 3
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 4
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 35 35 }
+						sorcerers = { 15 15 }
+						archers = { 100 100 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 215 215 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 35 35 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 4
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 5
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 40 40 }
+						sorcerers = { 18 18 }
+						archers = { 100 100 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 205 205 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 35 35 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 10 10 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 5
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 6
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 45 45 }
+						sorcerers = { 21 21 }
+						archers = { 90 90 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 195 195 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 35 35 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 15 15 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 6
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 7
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 50 50 }
+						sorcerers = { 25 25 }
+						archers = { 85 85 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 190 190 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 30 30 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 30 30 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 7
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 65 65 }
+						sorcerers = { 35 35 }
+						archers = { 80 80 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 175 175 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 25 25 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 50 50 }
+					}
+					#attrition = 1
+					disband_on_peace = yes
+					merge = yes
+				}
+			}
+		}
+	}
+}
+
+thras_war_spawn_troops_no_disband_effect = {
+	# Requires the current things to function properly:
+	# event_target:spawn_province
+	# variable: thras_war_troop_quality
+	# variable: thras_war_troop_quantity
+	while = {
+		limit = {
+			check_variable = {
+				which = thras_war_troop_quantity
+				value = 1
+			}
+		}
+		change_variable = {	
+			which = thras_war_troop_quantity
+			value = -1
+		}
+		
+		random_list = { # Not really random but decent flow control
+			10 = {
+				trigger = {
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 2
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 25 25 }
+						sorcerers = { 10 10 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 25 25 }
+						sorcerers = { 10 10 }
+						archers = { 75 75 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 250 250 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 2
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 3
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 30 30 }
+						sorcerers = { 12 12 }
+						archers = { 85 85 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 235 235 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 25 25 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 3
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 4
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 35 35 }
+						sorcerers = { 15 15 }
+						archers = { 100 100 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 215 215 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 35 35 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 4
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 5
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 40 40 }
+						sorcerers = { 18 18 }
+						archers = { 100 100 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 205 205 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 35 35 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 10 10 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 5
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 6
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 45 45 }
+						sorcerers = { 21 21 }
+						archers = { 90 90 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 195 195 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 35 35 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 15 15 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 6
+					}
+					NOT = {
+						check_variable = {
+							which = thras_war_troop_quality
+							value = 7
+						}
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 50 50 }
+						sorcerers = { 25 25 }
+						archers = { 85 85 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 190 190 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 30 30 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 30 30 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+			}
+			10 = {
+				trigger = {
+					check_variable = {
+						which = thras_war_troop_quality
+						value = 7
+					}
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						pikemen = { 65 65 }
+						sorcerers = { 35 35 }
+						archers = { 80 80 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						undead_troop = { 175 175 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						lesser_daedra = { 25 25 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+				spawn_unit = {
+					owner = THIS
+					province = event_target:spawn_province
+					home = event_target:spawn_province
+					troops = {
+						dremora_troop = { 50 50 }
+					}
+					attrition = 0.5
+					disband_on_peace = no
+					merge = yes
+				}
+			}
+		}
+	}
+}
+
+thras_war_modify_variables_by_status_effect = {
+	# variable: thras_war_troop_quality
+	# variable: thras_war_troop_quantity
+	# variable: thras_war_minimum_commander_martial
+	# variable: thras_war_target_match_mult
+	
+	random_list = {
+		1 = {
+			trigger = {
+				offmap_thras = { has_status = thras_stable }
+			}
+			change_variable = { which = thras_war_troop_quality value = 1 }
+			change_variable = { which = thras_war_minimum_commander_martial value = 3 }
+		}
+		1 = {
+			trigger = {
+				offmap_thras = { has_status = thras_recovering }
+			}
+			change_variable = { which = thras_war_troop_quantity value = -6 }
+			change_variable = { which = thras_war_target_match_mult value = -0.15 }
+		}
+		1 = {
+			trigger = {
+				offmap_thras = { has_status = thras_internal_war }
+			}
+			change_variable = { which = thras_war_troop_quantity value = -6 }
+			change_variable = { which = thras_war_target_match_mult value = -0.25 }
+			change_variable = { which = thras_war_troop_quality value = -1 }
+			change_variable = { which = thras_war_minimum_commander_martial value = -6 }
+		}
+		1 = {
+			trigger = {
+				offmap_thras = { has_status = thras_invaded }
+			}
+			change_variable = { which = thras_war_troop_quantity value = -7 }
+			change_variable = { which = thras_war_target_match_mult value = -0.4 }
+			change_variable = { which = thras_war_troop_quality value = -1 }
+			change_variable = { which = thras_war_minimum_commander_martial value = -2 }
+		}
+		1 = {
+			trigger = {
+				offmap_thras = { has_status = thras_booming }
+			}
+			change_variable = { which = thras_war_target_match_mult value = 0.65 }
+			change_variable = { which = thras_war_troop_quality value = 2 }
+			change_variable = { which = thras_war_minimum_commander_martial value = 5 }
+		}
+	}
+}
+
+
+#Checks whether the Emperor likes target and shows tooltips (used in event JD.10010)
+check_likes_or_dislikes_THIS_effect = {
+ 	if = {  #If the current Emperor LIKES target
+        limit = {
+            is_liked_by_Thras_trigger = yes
+        }
+        offmap_thras = {
+			show_scope_change = no
+            custom_tooltip = { text = emperor_likes_THIS_tt }
+        }
+    }
+
+    if = { #If the current Emperor DISLIKES target
+        limit = {
+           is_disliked_by_Thras_trigger = yes
+        }
+        offmap_thras = {
+			show_scope_change = no
+			custom_tooltip = { text = emperor_dislikes_THIS_tt }
+        }
+    }
+
+    if = { #If the current Emperor LIKES *and* DISLIKES target
+        limit = {
+            is_liked_and_disliked_by_Thras = yes
+        }
+        offmap_thras = {
+			show_scope_change = no
+            custom_tooltip = { text = emperor_has_ambiguous_feelings_of_THIS_tt }
+        }
+    }
+}
+
+print_thras_status_update_effect = {
+	log = "----------------"
+	log = "Thras Logging:"
+	log = "Thras' status of [This.GetPrevStatus] ended after [global_temp_status_years.GetValue] years."
+	log = "Thras' new status is [This.GetStatus]."
+	log = "----------------"
+	set_variable = {
+		which = global_temp_status_years
+		value = 0
+	}
+	random_list = {
+		10 = {
+			trigger = {
+				has_status = thras_stable
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_stable
+				value = 1
+			}
+		}
+		10 = {
+			trigger = {
+				has_status = thras_recovering
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_recovering
+				value = 1
+			}
+		}
+		10 = {
+			trigger = {
+				has_status = thras_internal_war
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_internal_war
+				value = 1
+			}
+		}
+		10 = {
+			trigger = {
+				has_status = thras_invaded
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_invaded
+				value = 1
+			}
+		}
+		10 = {
+			trigger = {
+				has_status = thras_booming
+				NOT = { has_policy = thras_expansionist }
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_booming
+				value = 1
+			}
+		}
+		10 = {
+			trigger = {
+				has_status = thras_booming
+				has_policy = thras_expansionist
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_booming_expansionist
+				value = 1
+			}
+		}
+	}
+}
+
+print_thras_policy_update_effect = {
+	log = "----------------"
+	log = "Thras Logging:"
+	log = "Thras' policy of [This.GetPrevPolicy] ended after [global_temp_policy_years.GetValue] years."
+	log = "Thras' new policy is [This.GetPolicy]."
+	log = "----------------"
+	set_variable = {
+		which = global_temp_policy_years
+		value = 0
+	}
+	random_list = {
+		10 = {
+			trigger = {
+				has_policy = thras_open
+			}
+		}
+		10 = {
+			trigger = {
+				has_policy = thras_isolationist
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_isolationist_policy
+				value = 1
+			}
+		}
+		10 = {
+			trigger = {
+				has_policy = thras_expansionist
+			}
+			change_variable = {
+				which = global_amount_of_times_thras_expansionist_policy
+				value = 1
+			}
+		}
+	}
+}
+
+
+# china_war_modify_variables_by_century_effect = {
+# }
+
+print_thras_ruler_update_effect = {
+	log = "----------------"
+	log = "Ruler of Thras died at the age of [From.GetAgeYears]."
+	log = "New Ruler of Thras is [Root.GetBestName] ([From.GetCulture], From.GetReligion])."
+	log = "----------------"
+}

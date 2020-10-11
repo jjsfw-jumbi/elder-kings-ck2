@@ -1,0 +1,97 @@
+# Marshal
+action_advance_mil_tech = {
+	attribute = martial
+	
+	potential = {
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		technology_can_spread = yes
+	}
+	
+	tech_growth_modifier_military = 0.05
+	
+	events = { 938 939 124020 }
+}
+
+action_train_troops = {
+	attribute = martial
+	
+	potential = {
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+	}
+	
+	levy_size = 0.025
+	levy_reinforce_rate = 0.05
+	
+	events = { 941 942 20221 }
+}
+
+action_assist_arrest = {
+	attribute = martial
+	
+	potential = {
+	}
+	
+	trigger = {
+		any_province_lord = {
+			OR = {
+				character = FROM
+				is_liege_or_above = FROM
+			}
+		}
+	}
+	
+	display_on_map = {
+		tooltip = JOB_ASSIST_ARREST_INFESTATION
+		trigger = {
+			OR = {
+				has_province_modifier = goblin_infestation
+				has_province_modifier = falmer_infestation
+				has_province_modifier = skeever_infestation
+				has_province_modifier = undead_infestation
+				has_province_modifier = lycan_infestation
+				has_province_modifier = vampire_infestation
+				has_province_modifier = giants
+				has_province_modifier = trolls
+				has_province_modifier = adventurers
+				has_province_modifier = kwama_infestation
+				has_province_modifier = magical_anomalies
+				has_province_modifier = propagandist
+				has_province_modifier = smugglers_ring
+				has_province_modifier = highway_robber_band
+				has_province_modifier = thieves_guild
+			}
+		}
+		color = { 0 0 0 }
+	}
+	
+	arrest_chance_modifier = 0.01
+	local_revolt_risk = -0.01
+	
+	events = { 124050 124052 124060 }
+}
+
+action_organize_army = {
+	attribute = martial
+
+	potential = {
+		has_dlc = Mystics
+	}
+
+	offmap = yes
+	
+	liege_modifier = organize_army_liege_mod
+	
+	attribute_cap = 25
+	
+	events = { MNM.70010 MNM.70012 MNM.70015 } 
+}

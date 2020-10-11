@@ -1,0 +1,134 @@
+##Koomu Alezer'i
+#Last Seed 11th
+#Koomu Alezer'i means simply "We Acknowledge" in old Redguard, and it has been a tradition in Sentinel for thousands of years. No matter the harvest, the people of Sentinel solemnly thank the gods for their bounty, and pray to be worthy of the graces of the gods. 
+
+namespace = catfish
+# TODO:JJPERF
+province_event = {
+	id = catfish.1
+	desc = EVTDESC_CATFISH_1
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+ 
+	trigger = {
+	month = 7
+		county = { title = c_sentinel }
+		religion = alikr
+		owner = {
+			NOT = {
+				religion = alikr
+				OR = {
+					has_character_modifier = koomu_alezeri_holiday
+					has_character_modifier = ban_holiday_sentinel
+				}
+			}
+		}
+	}
+       
+	mean_time_to_happen = {
+		days = 15
+	}
+	option = {
+		name = EVTOPTA_CATFISH_1
+		trigger = {
+			NOT = { owner = { trait = zealous } }
+		}
+		owner = { 
+				wealth = -25
+				add_character_modifier = {
+				name = koomu_alezeri_holiday
+				duration = 150
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_CATFISH_1
+		trigger = {
+			NOT = { owner = { trait = zealous } }
+		}
+		add_province_modifier = {
+			name = peasant_unrest_sentinel
+				duration = 365
+		}
+		owner = { add_character_modifier = {
+				name = koomu_alezeri_holiday
+				duration = 150
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_CATFISH_1
+		trigger = {
+			NOT = { owner = { trait = cynical } }
+		}
+		owner = { add_character_modifier = {
+				name = ban_holiday_sentinel
+				duration = 3650
+			}
+		}
+	}
+}
+ 
+province_event = {
+	id = catfish.2
+	desc = EVTDESC_CATFISH_2
+	picture = GFX_evt_comet
+	border = GFX_event_normal_frame_religion
+ 
+	trigger = {
+		month = 7
+		county = { title = c_sentinel }
+		owner = {
+			religion = alikr
+			NOT = {
+				OR = {
+					has_character_modifier = dontaskmeagainsentinel
+					has_character_modifier = koomu_alezeri_holiday
+				}
+			}
+		}
+		religion = alikr
+	}
+ 
+	mean_time_to_happen = {
+		days = 15
+	}
+	option = {
+		name = EVTOPTA_CATFISH_2
+		trigger = {
+			NOT = { owner = { trait = cynical } }
+		}
+		owner = {
+								wealth = -25
+				piety = 50
+				add_character_modifier = {
+				name = koomu_alezeri_holiday
+				duration = 150
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_CATFISH_2
+		trigger = {
+			NOT = { owner = { trait = zealous } }
+		}
+		owner = {       piety = -25
+				add_character_modifier = {
+				name = koomu_alezeri_holiday
+				duration = 150
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_CATFISH_2
+		trigger = {
+			NOT = { owner = { trait = zealous } }
+		}
+		owner = {
+			add_character_modifier = {
+				name = dontaskmeagainsentinel
+				duration = 500000
+			}
+		}
+	}
+}

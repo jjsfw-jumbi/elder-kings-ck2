@@ -1,0 +1,999 @@
+##### Events for the Khajiit Mane #####
+### Based on events by Korba, Novacat and Amauri ###
+
+namespace = mane
+
+character_event = {
+	id = mane.0
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = mane
+		has_landed_title = d_riddle
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				create_character = {
+					random_traits = yes
+					trait = mane
+					dynasty = ROOT
+					culture = anequinan
+					religion = riddlethar
+					age = 0
+					female = no
+					flag = ai_flag_refuse_conversion
+				}
+				new_character = {
+					#assign_birthsign = yes
+					#assign_racial_trait = yes
+				}
+			}
+			50 = {
+				create_character = {
+					random_traits = yes
+					trait = mane
+					dynasty = ROOT
+					culture = pellitinian
+					religion = riddlethar
+					age = 0
+					female = no
+					flag = ai_flag_refuse_conversion
+				}
+			}
+		}
+		new_character = {
+			inherit = ROOT
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			any_vassal = {
+				limit = { culture_group = khajiit }
+				opinion = {
+					modifier = opinion_loyal_vassal
+					who = PREV
+					years = 16
+				}
+			}
+			character_event = { id = mane.2 }
+		}
+		
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				OR = {
+					culture_group = khajiit
+					religion = riddlethar
+					capital_scope = { region = nirn_tamriel_elsweyr }
+				}
+			}
+			character_event = { id = mane.2 }
+		}
+	}
+}
+
+# character_event = {
+	# id = mane.1
+	# desc = EVTDESC149501
+	# picture = GFX_evt_comet
+	
+	# only_rulers = yes
+	
+	# trigger = {
+		# d_riddle = { has_holder = no }
+		# OR = {
+			# graphical_culture = anequinagfx
+			# graphical_culture = pellitinegfx
+		# }
+		# NOT = { mane = { is_alive = yes } }
+		# NOT = { trait = mane }
+	# }
+	
+	# mean_time_to_happen = {
+		# months = 12
+	# }
+	# immediate = {
+		# random_list = {
+			# 50 = {
+				# create_character = {
+					# random_traits = yes
+					# trait = mane
+					# dynasty = 500006
+					# culture = anequinan
+					# religion = riddlethar
+					# age = 0
+					# female = no
+					# flag = ai_flag_refuse_conversion
+				# }
+				# new_character = {
+					# #assign_birthsign = yes
+					# #assign_racial_trait = yes
+				# }
+			# }
+			# 50 = {
+				# create_character = {
+					# random_traits = yes
+					# trait = mane
+					# dynasty = 500006
+					# culture = pellitinian
+					# religion = riddlethar
+					# age = 0
+					# female = no
+					# flag = ai_flag_refuse_conversion
+				# }
+				# new_character = {
+					# #assign_birthsign = yes
+					# #assign_racial_trait = yes
+				# }
+			# }
+		# }
+	# }
+	# option = {
+		# name = EVTOPTA149501
+	# }
+# }
+
+# Mane Death Notification
+character_event = {
+	id = mane.2
+	title = EVTNAME149503
+	desc = EVTDESC149503
+	picture = GFX_evt_death
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA149503
+		trigger = { religion = riddlethar }
+	}
+	
+	option = {
+		name = EVTOPTA149504
+		trigger = { 
+			OR = {
+				NOT = { religion = riddlethar }
+				trait = cynical
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA149505
+	}
+
+}
+
+#Removes Mane title from non-Manes
+character_event = {
+	id = mane.3
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	only_rulers = yes
+	
+	trigger = {
+		ROOT = { NOT = { trait = mane } }
+		FROM = { title = d_riddle }
+	}
+	
+	immediate = {
+		d_riddle = { destroy_landed_title = yes }
+	}
+}
+
+#This event only exists to call mane.5 but mane.5 doesn't exist, also this event is never called from anywhere?
+# character_event = {
+	# id = mane.4
+	
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# NOT = { trait = mane }
+		# has_landed_title = d_riddle
+	# }
+	
+	# immediate = {
+		# character_event = { id = mane.5 days = 1 }
+	# }
+# }
+
+#When the Mane reaches adulthood: What kind of Mane is he?
+
+character_event = {
+	id = mane.10
+	picture = GFX_evt_mane_sitting
+	desc = {
+		text = Mane10A
+		picture = GFX_evt_bishop_khajiit
+		trigger = {
+			has_character_flag = become_traditional_mane
+		}
+	}
+	desc = {
+		text = Mane10B
+		picture = GFX_evt_powerful_mane
+		trigger = {
+			has_character_flag = become_powerful_mane
+		}
+	}
+	desc = {
+		text = Mane10C
+		picture = GFX_evt_weak_mane
+		trigger = {
+			has_character_flag = become_weak_mane
+		}
+	}
+	
+	min_age = 16
+	
+	trigger = {
+		trait = mane
+		NOR = { 
+			trait = powerful_mane
+			trait = traditional_mane
+			trait = weak_mane
+		}	
+	}
+	
+	#mean_time_to_happen = {
+	#	days = 1
+	#}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			50 = { #A plurality of Manes are traditional
+				#Personality traits
+				modifier = { factor = 1.1 trait = brave }
+				modifier = { factor = 1.5 trait = charitable }
+				modifier = { factor = 1.1 trait = diligent }
+				modifier = { factor = 1.5 trait = erudite }
+				modifier = { factor = 1.1 trait = gluttonous }
+				modifier = { factor = 1.5 trait = gregarious }
+				modifier = { factor = 1.5 trait = just }
+				modifier = { factor = 1.1 trait = kind }
+				modifier = { factor = 1.25 trait = lustful }
+				modifier = { factor = 1.25 trait = patient }
+				modifier = { factor = 1.1 trait = vain }
+				modifier = { factor = 1.1 trait = zealous }
+				
+				#Other traits
+				modifier = { factor = 1.1 trait = agile }
+				modifier = { factor = 1.1 trait = fair }
+				modifier = { factor = 1.1 trait = fortitude }
+				modifier = { factor = 1.1 trait = genius }
+				modifier = { factor = 1.1 trait = melodious_voice }
+				modifier = { factor = 1.1 trait = perceptive }
+				modifier = { factor = 1.1 trait = powerful_voice }
+				modifier = { factor = 1.1 trait = quick }
+				modifier = { factor = 1.1 trait = raht }
+				modifier = { factor = 1.1 trait = robust }
+				modifier = { factor = 1.1 trait = shrewd }
+				modifier = { factor = 1.1 trait = strong }
+				modifier = { factor = 1.1 trait = tall }
+				
+				modifier = { factor = 1.1 learning = 8 }
+				modifier = { factor = 1.1 learning = 9 }
+				modifier = { factor = 1.1 learning = 10 }
+				modifier = { factor = 1.1 learning = 11 }
+				modifier = { factor = 1.1 learning = 12 }
+				modifier = { factor = 1.1 learning = 13 }
+				modifier = { factor = 1.1 learning = 14 }
+				modifier = { factor = 1.1 stewardship = 8 }
+				modifier = { factor = 1.1 stewardship = 9 }
+				modifier = { factor = 1.1 stewardship = 10 }
+				modifier = { factor = 1.1 stewardship = 11 }
+				modifier = { factor = 1.1 stewardship = 12 }
+				modifier = { factor = 1.1 stewardship = 13 }
+				modifier = { factor = 1.1 stewardship = 14 }
+				
+				modifier = {
+					factor = 1.5
+						OR = {
+						trait = diplomat_3
+						is_master_diplomat = yes
+						trait = mage_3
+						is_master_mage = yes
+						trait = magistrate_3
+						is_master_magistrate = yes
+					}
+				}
+				modifier = {
+					factor = 1.1
+						OR = {
+						trait = sign_apprentice
+						trait = sign_tower
+						trait = sign_shadow
+						trait = sign_mage
+						trait = sign_lord
+						trait = sign_atronach
+					}
+				}
+				
+				set_character_flag = become_traditional_mane
+			}
+			25 = { #Fewer Manes are powerful
+				#Personality traits
+				modifier = { factor = 2.5 trait = ambitious }
+				modifier = { factor = 2.5 trait = brave }
+				modifier = { factor = 1.1 trait = cruel }
+				modifier = { factor = 1.1 trait = deceitful }
+				modifier = { factor = 1.1 trait = diligent }
+				modifier = { factor = 1.1 trait = envious }
+				modifier = { factor = 1.1 trait = greedy }
+				modifier = { factor = 1.1 trait = gregarious }
+				modifier = { factor = 1.1 trait = lustful }
+				modifier = { factor = 1.1 trait = paranoid }
+				modifier = { factor = 2.5 trait = proud }
+				modifier = { factor = 2.5 trait = ruthless }
+				modifier = { factor = 2.5 trait = wroth }
+				modifier = { factor = 2.5 trait = zealous }
+				
+				#Other traits
+				modifier = { factor = 1.1 trait = agile }
+				modifier = { factor = 10 trait = dragonborn }
+				modifier = { factor = 1.1 trait = fair }
+				modifier = { factor = 1.1 trait = fortitude }
+				modifier = { factor = 1.1 trait = genius }
+				modifier = { factor = 1.1 trait = kinslayer }
+				modifier = { factor = 1.1 trait = melodious_voice }
+				modifier = { factor = 1.1 trait = perceptive }
+				modifier = { factor = 1.1 trait = powerful_voice }
+				modifier = { factor = 1.1 trait = quick }
+				modifier = { factor = 1.1 trait = raht }
+				modifier = { factor = 1.1 trait = robust }
+				modifier = { factor = 1.1 trait = shrewd }
+				modifier = { factor = 1.1 trait = strong }
+				modifier = { factor = 1.1 trait = tall }
+				
+				modifier = { factor = 1.1 martial = 8 }
+				modifier = { factor = 1.1 martial = 9 }
+				modifier = { factor = 1.1 martial = 10 }
+				modifier = { factor = 1.1 martial = 11 }
+				modifier = { factor = 1.1 martial = 12 }
+				modifier = { factor = 1.1 martial = 13 }
+				modifier = { factor = 1.1 martial = 14 }
+				modifier = { factor = 1.1 intrigue = 8 }
+				modifier = { factor = 1.1 intrigue = 9 }
+				modifier = { factor = 1.1 intrigue = 10 }
+				modifier = { factor = 1.1 intrigue = 11 }
+				modifier = { factor = 1.1 intrigue = 12 }
+				modifier = { factor = 1.1 intrigue = 13 }
+				modifier = { factor = 1.1 intrigue = 14 }
+				
+				modifier = {
+					factor = 1.5
+						OR = {
+						trait = agent_3
+						is_master_agent = yes
+						trait = warrior_3
+						is_master_warrior = yes
+					}
+				}
+				modifier = {
+					factor = 1.1
+						OR = {
+						trait = sign_serpent
+						trait = sign_warrior
+						trait = sign_steed
+					}
+				}
+				
+				set_character_flag = become_powerful_mane
+			}
+			25 = { #Fewer Manes are weak
+				modifier = { factor = 1.1 trait = absent_minded }
+				modifier = { factor = 1.1 trait = arbitrary }
+				modifier = { factor = 1.1 trait = chaste }
+				modifier = { factor = 1.5 trait = content }
+				modifier = { factor = 5 trait = craven }
+				modifier = { factor = 1.1 trait = cynical }
+				modifier = { factor = 1.1 trait = honest }
+				modifier = { factor = 1.1 trait = humble }
+				modifier = { factor = 2.5 trait = reckless }
+				modifier = { factor = 2.5 trait = shy }
+				modifier = { factor = 2.5 trait = slothful }
+				modifier = { factor = 1.1 trait = temperate }
+				modifier = { factor = 2.5 trait = trusting }
+				
+				#Other traits
+				modifier = { factor = 1.1 trait = depressed }
+				modifier = { factor = 1.1 trait = disfigured }
+				modifier = { factor = 5 trait = infirm }
+				modifier = { factor = 10 trait = incapable }
+				modifier = { factor = 2.5 trait = lunatic }
+				modifier = { factor = 1.1 trait = mangled }
+				modifier = { factor = 1.1 trait = one_eyed }
+				modifier = { factor = 1.1 trait = one_handed }
+				modifier = { factor = 1.1 trait = one_legged }
+				modifier = { factor = 5 trait = possessed }
+				modifier = { factor = 1.1 trait = severely_injured }
+				modifier = { factor = 1.1 trait = stressed }
+				modifier = { factor = 1.5 is_blinded_trigger = yes }
+				modifier = { factor = 1.5 has_disease_trigger = yes }
+				
+				modifier = {
+					factor = 10
+					NOR = {
+						diplomacy = 5
+						martial = 5
+						stewardship = 5
+						intrigue = 5
+						learning = 5
+					}
+				}
+				
+				modifier = {
+					factor = 1.1
+						OR = {
+						trait = agent_1
+						trait = diplomat_1
+						trait = mage_1
+						trait = magistrate_1
+						trait = warrior_1
+					}
+				}
+				
+				set_character_flag = become_weak_mane
+			}
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = become_traditional_mane }
+		name = Mane10AcknowledgeA
+		add_trait = traditional_mane
+		clr_character_flag = become_traditional_mane
+	}
+	option = {
+		trigger = { has_character_flag = become_powerful_mane }
+		name = Mane10AcknowledgeB
+		add_trait = powerful_mane
+		clr_character_flag = become_powerful_mane
+	}
+	option = {
+		trigger = { has_character_flag = become_weak_mane }
+		name = Mane10AcknowledgeC
+		add_trait = weak_mane
+		clr_character_flag = become_weak_mane
+	}
+	
+	after = {
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				OR = {
+					culture_group = khajiit
+					religion = riddlethar
+					capital_scope = { region = nirn_tamriel_elsweyr }
+				}
+			}
+			narrative_event = { id = mane.11 }
+		}
+	}
+}
+
+narrative_event = {
+	id = mane.11
+	title = EVTNAME149503
+	
+	desc = { #Mane seemed shy and overshadowed by his councilors
+		text = mane.11.d.1
+		picture = GFX_evt_weak_mane
+		trigger = { FROM = { trait = weak_mane } }
+	}
+	
+	desc = { #Mane vowed to respect the traditions of his people and those left by his predecessors
+		text = mane.11.d.2
+		picture = GFX_evt_bishop_khajiit
+		trigger = { FROM = { trait = traditional_mane } }
+	}
+	
+	desc = { #Mane seemed assertive and willing to fight
+		text = mane.11.d.3
+		picture = GFX_evt_powerful_mane
+		trigger = { FROM = { trait = powerful_mane } }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = mane.11.optA
+	}
+}
+
+#Is there actually a Mane?
+character_event = {
+	id = mane.18
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		
+		if = {
+			limit = { any_character = { trait = mane } }
+			random_character = {
+				limit = { trait = mane }
+				if = {
+					limit = { ai = yes }
+					any_title = { abdicate = yes }
+				}
+				save_event_target_as = target.mane
+			}
+			character_event = { id = mane.20 }
+		}
+		
+		else = {
+			character_event = { id = mane.19 }
+		}
+	}
+}
+
+#Find new Mane
+character_event = {
+	id = mane.19
+	desc = khajiit.19.desc
+	picture = "GFX_evt_bishop_khajiit"
+	border = "GFX_event_normal_frame_religion"
+	is_triggered_only = yes
+	
+	option = {
+		name = khajiit.19.anequinan
+		
+		create_character = {
+			random_traits = yes
+			trait = mane
+			dynasty = 500006
+			culture = anequinan
+			religion = riddlethar
+			age = 0
+			female = no
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			save_event_target_as = target.mane
+		}
+	}
+	
+	option = {
+		name = khajiit.19.pellitinian
+		
+		create_character = {
+			random_traits = yes
+			trait = mane
+			dynasty = 500006
+			culture = pellitinian
+			religion = riddlethar
+			age = 0
+			female = no
+			flag = ai_flag_refuse_conversion
+		}
+		new_character = {
+			save_event_target_as = target.mane
+		}
+	}
+	
+	after = { character_event = { id = mane.20 } }
+}
+
+#Restore the Mane
+character_event = {
+	id = mane.20
+	desc = khajiit.20.desc
+	picture = "GFX_evt_bishop_khajiit"
+	border = "GFX_event_normal_frame_religion"
+	is_triggered_only = yes
+	
+	option = {
+		name = khajiit.20.mylands.torval
+
+		trigger = {
+			OR = {
+				AND = {
+					has_landed_title = c_torval
+					has_landed_title = b_starhill
+				}
+				AND = {
+					has_landed_title = c_torval
+					event_target:target.mane = { has_landed_title = b_starhill }
+				}
+				AND = {
+					event_target:target.mane = { has_landed_title = c_torval }
+					has_landed_title = b_starhill
+				}
+				AND = {
+					event_target:target.mane = { has_landed_title = c_torval }
+					event_target:target.mane = { has_landed_title = b_starhill }
+				}
+			}
+		}
+		
+		event_target:target.mane = {
+			gain_title = d_riddle
+			gain_title = c_torval
+			gain_title = b_starhill
+			opinion = {
+				modifier = opinion_granted_county
+				who = ROOT
+				years = 5
+			}
+		}
+		
+	}
+	
+	option = {
+		name = khajiit.20.notmylands.torval
+
+		trigger = {
+			OR = {
+				OR = {
+					has_landed_title = c_torval
+					event_target:target.mane = { has_landed_title = c_torval }
+				}
+				any_realm_character = { has_landed_title = c_torval }
+			}
+			OR = {
+				OR = {
+					has_landed_title = b_starhill
+					event_target:target.mane = { has_landed_title = b_starhill }
+				}
+				any_realm_character = { has_landed_title = b_starhill }
+			}
+			NOT = {
+				has_landed_title = c_torval
+				has_landed_title = b_starhill
+			}
+			NOT = {
+				event_target:target.mane = { has_landed_title = c_torval }
+				event_target:target.mane = { has_landed_title = b_starhill }
+			}
+		}
+		
+		if = {
+			limit = { 
+				NOT = { 
+					has_landed_title = c_torval
+					event_target:target.mane = { has_landed_title = c_torval }
+				} 
+			}
+			
+			c_torval = { 
+				holder_scope = { 
+					opinion = {
+						modifier = opinion_revoked_my_title
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = { 
+				NOT = { 
+					has_landed_title = b_starhill
+					b_starhill = { holder_scope = { is_theocracy = yes religion = riddlethar } }
+					event_target:target.mane = { has_landed_title = b_starhill }
+				} 
+			}
+			
+			b_starhill = { 
+				holder_scope = { 
+					opinion = {
+						modifier = opinion_revoked_my_title
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+		
+		event_target:target.mane = {
+			gain_title = d_riddle
+			gain_title = c_torval
+			gain_title = b_starhill
+			opinion = {
+				modifier = opinion_granted_county
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = khajiit.20.mylands.khenarthi
+
+		trigger = {
+			OR = {
+				AND = {
+					has_landed_title = c_khenarthi
+					has_landed_title = b_crescent_moon_temple
+				}
+				AND = {
+					has_landed_title = c_khenarthi
+					event_target:target.mane = { has_landed_title = b_crescent_moon_temple }
+				}
+				AND = {
+					event_target:target.mane = { has_landed_title = c_khenarthi }
+					has_landed_title = b_crescent_moon_temple
+				}
+				AND = {
+					event_target:target.mane = { has_landed_title = c_khenarthi }
+					event_target:target.mane = { has_landed_title = b_crescent_moon_temple }
+				}
+			}
+		}
+		
+		event_target:target.mane = {
+			gain_title = d_riddle
+			gain_title = c_khenarthi
+			gain_title = b_crescent_moon_temple
+			opinion = {
+				modifier = opinion_granted_county
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = khajiit.20.notmylands.khenarthi
+
+		trigger = {
+			OR = {
+				OR = {
+					has_landed_title = c_khenarthi
+					event_target:target.mane = { has_landed_title = c_khenarthi }
+				}
+				any_realm_character = { has_landed_title = c_khenarthi }
+			}
+			OR = {
+				OR = {
+					has_landed_title = b_crescent_moon_temple
+					event_target:target.mane = { has_landed_title = b_crescent_moon_temple }
+				}
+				any_realm_character = { has_landed_title = b_crescent_moon_temple }
+			}
+			NOT = {
+				has_landed_title = c_khenarthi
+				has_landed_title = b_crescent_moon_temple
+			}
+			NOT = {
+				event_target:target.mane = { has_landed_title = c_khenarthi }
+				event_target:target.mane = { has_landed_title = b_crescent_moon_temple }
+			}
+		}
+		
+		if = {
+			limit = { 
+				NOT = { 
+					has_landed_title = c_khenarthi
+					event_target:target.mane = { has_landed_title = c_khenarthi }
+				}  
+			}
+			
+			c_khenarthi = { 
+				holder_scope = { 
+					opinion = {
+						modifier = opinion_revoked_my_title
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = { 
+				NOT = { 
+					has_landed_title = b_crescent_moon_temple
+					b_crescent_moon_temple = { holder_scope = { is_theocracy = yes religion = riddlethar } }
+					event_target:target.mane = { has_landed_title = b_crescent_moon_temple }
+				} 
+			}
+			
+			b_crescent_moon_temple = { 
+				holder_scope = { 
+					opinion = {
+						modifier = opinion_revoked_my_title
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+		
+		event_target:target.mane = {
+			gain_title = d_riddle
+			gain_title = c_khenarthi
+			gain_title = b_crescent_moon_temple
+			opinion = {
+				modifier = opinion_granted_county
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = khajiit.20.mylands.verkarthh
+
+		trigger = {
+			OR = {
+				AND = {
+					has_landed_title = c_verkarthh
+					has_landed_title = b_two_moons_dance
+				}
+				AND = {
+					has_landed_title = c_verkarthh
+					event_target:target.mane = { has_landed_title = b_two_moons_dance }
+				}
+				AND = {
+					event_target:target.mane = { has_landed_title = c_verkarthh }
+					has_landed_title = b_two_moons_dance
+				}
+				AND = {
+					event_target:target.mane = { has_landed_title = c_verkarthh }
+					event_target:target.mane = { has_landed_title = b_two_moons_dance }
+				}
+			}
+		}
+		
+		event_target:target.mane = {
+			gain_title = d_riddle
+			gain_title = c_verkarthh
+			gain_title = b_two_moons_dance
+			opinion = {
+				modifier = opinion_granted_county
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = khajiit.20.notmylands.verkarthh
+
+		trigger = {
+			OR = {
+				OR = {
+					has_landed_title = c_verkarthh
+					event_target:target.mane = { has_landed_title = c_verkarthh }
+				}		
+				any_realm_character = { has_landed_title = c_verkarthh }
+			}
+			OR = {
+				OR = {
+					has_landed_title = b_two_moons_dance
+					event_target:target.mane = { has_landed_title = b_two_moons_dance }
+				}
+				any_realm_character = { has_landed_title = b_two_moons_dance }
+			}
+			NOT = {
+				has_landed_title = c_verkarthh
+				has_landed_title = b_two_moons_dance
+			}
+			NOT = {
+				event_target:target.mane = { has_landed_title = c_verkarthh }
+				event_target:target.mane = { has_landed_title = b_two_moons_dance }
+			}
+		}
+		
+		if = {
+			limit = { 
+				NOT = { 
+					has_landed_title = c_verkarthh
+					event_target:target.mane = { has_landed_title = c_verkarthh }
+				} 
+			}
+			
+			c_verkarthh = { 
+				holder_scope = { 
+					opinion = {
+						modifier = opinion_revoked_my_title
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = { 
+				NOT = { 
+					has_landed_title = b_two_moons_dance
+					b_two_moons_dance = { holder_scope = { is_theocracy = yes religion = riddlethar } }
+					event_target:target.mane = { has_landed_title = b_two_moons_dance }
+				} 
+			}
+			
+			b_two_moons_dance = { 
+				holder_scope = { 
+					opinion = {
+						modifier = opinion_revoked_my_title
+						who = ROOT
+						years = 5
+					}
+				}
+			}
+		}
+		
+		event_target:target.mane = {
+			gain_title = d_riddle
+			gain_title = c_verkarthh
+			gain_title = b_two_moons_dance
+			opinion = {
+				modifier = opinion_granted_county
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	
+	after = {
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				OR = {
+					culture_group = khajiit
+					religion = riddlethar
+					capital_scope = { region = nirn_tamriel_elsweyr }
+				}
+			}
+			narrative_event = { id = mane.21 days = 2 }
+		}
+		event_target:target.mane = { set_government_type = mane_government }
+	}
+}
+
+narrative_event = {
+	id = mane.21
+	title = mane.21.title
+	is_triggered_only = yes
+	
+	desc = { #Torval Mane
+		text = mane.21.torvalmane
+		picture = GFX_evt_bishop_khajiit
+		trigger = { event_target:target.mane = { has_landed_title = c_torval } }
+	}
+	
+	desc = { #Khenarthi Mane
+		text = mane.21.khenarthimane
+		picture = GFX_evt_bishop_khajiit
+		trigger = { event_target:target.mane = { has_landed_title = c_khenarthi } }
+	}
+	
+	desc = { #Verkarth Mane
+		text = mane.21.verkarthhmane
+		picture = GFX_evt_bishop_khajiit
+		trigger = { event_target:target.mane = { has_landed_title = c_verkarthh } }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = mane.21.zealous
+		trigger = { religion = riddlethar }
+	}
+	
+	option = {
+		name = EVTOPTA149504
+		trigger = { 
+			OR = {
+				NOT = { religion = riddlethar }
+				trait = cynical
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA149505
+	}
+}

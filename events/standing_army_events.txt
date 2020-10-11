@@ -1,0 +1,1369 @@
+# stand.1 --> stand.17
+
+namespace=stand
+
+character_event = {
+	id = stand.1
+	picture = GFX_evt_placeholder
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			10 = {
+				FROMFROM = {
+					character_event = { id = stand.2}
+				}
+			}
+			90 = {
+				character_event = { id = stand.3 } #Flag clearing event for old merc captain
+			}
+		}
+	}
+}
+
+character_event = {
+	id = stand.2
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_diplomacy
+	desc = STAND2EVENTDESC
+	
+	is_triggered_only = yes
+
+	option = {
+		name = STAND2EVENTRESPONSE
+		custom_tooltip = {
+			text = STAND2EVENTRESPONSE
+		}
+		hidden_tooltip = {
+			random_demesne_province = {
+				limit = {
+					NOT = {
+						has_province_modifier = highway_robber_band
+					}
+				}
+				add_province_modifier = {
+					modifier = highway_robber_band
+					duration = -1
+				}
+			}
+			random_demesne_province = {
+				limit = {
+					NOT = {
+						has_province_modifier = highway_robber_band
+					}
+				}
+				add_province_modifier = {
+					modifier = highway_robber_band
+					duration = -1
+				}
+			}
+			random_demesne_province = {
+				limit = {
+					NOT = {
+						has_province_modifier = highway_robber_band
+					}
+				}
+				add_province_modifier = {
+					modifier = highway_robber_band
+					duration = -1
+				}
+			}
+			FROM = {
+				character_event = { id = stand.3} #Flag clearing event for old merc captain
+			}
+		}
+	}
+}
+
+# flag clearing event for merc captains, the destroyer of worlds
+character_event = {
+	id = stand.3
+	picture = GFX_evt_placeholder
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		any_mercenary_band = {
+			limit = { 
+				holder_scope = { character = ROOT }
+			}
+			activate_title = { title = THIS status = no }
+			destroy_landed_title = THIS
+		}
+	}
+}
+
+# Troop Composition
+character_event = {
+	id = stand.5
+	picture = GFX_evt_placeholder
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			character_event = { id = stand.6 }
+		}
+	}
+}
+
+character_event = {
+	id = stand.6
+	picture = GFX_evt_large_army
+	desc = STAND6EVENTDESC
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_23101
+		ai_chance = {
+			factor = 50
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			change_mercenary_composition = {
+				from = light_infantry
+				change = 50
+				type = heavy_infantry
+			}
+		}
+		wealth = -50
+	}
+	option = {
+		name = EVTOPTB_ZE_23101
+		ai_chance = {
+			factor = 30
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			change_mercenary_composition = {
+				from = light_infantry
+				type = pikemen
+				change = 50
+			}
+		}
+		wealth = -50
+	}
+	option = {
+		name = EVTOPTC_ZE_23101
+		ai_chance = {
+			factor = 20
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			change_mercenary_composition = {
+				from = light_cavalry
+				type = knights
+				change = 50
+			}
+		}
+		wealth = -50
+	}
+	option = {
+		name = EVTOPTD_ZE_23101
+	}
+}
+
+# Send Troops
+character_event = {
+	id = stand.7
+	picture = GFX_evt_placeholder
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			character_event = { id = stand.8 }
+		}
+	}
+}
+
+character_event = {
+	id = stand.8
+	picture = GFX_evt_large_army
+	desc = STAND8EVENTDESC
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZE_23106
+		ai_chance = {
+			factor = 50
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			change_mercenary_composition = {
+				type = light_infantry
+				change = 100
+			}
+			change_variable = { which = army_size value = 1 }
+		}
+		wealth = -50
+		top_liege = {
+			any_realm_province = {
+				add_province_modifier = {
+					modifier = standing_army_recruiting
+					stacking = yes
+					months = 6
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_ZE_23106
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					OR = {
+						culture = reachmen
+						culture = orsimer
+						culture = kamal
+						culture = quey
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				ROOT = {
+					OR = {
+						culture_group = argonian
+						culture_group = khajiit
+						culture_group = tangmo_group
+					}
+				}
+			}
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			change_mercenary_composition = {
+				type = light_cavalry
+				change = 100
+			}
+			change_variable = { which = army_size value = 1 }
+		}
+		wealth = -50
+		top_liege = {
+			any_realm_province = {
+				add_province_modifier = {
+					modifier = standing_army_recruiting
+					stacking = yes
+					months = 6
+				}
+			}
+		}
+	}
+	option = {
+		name = send_archers_text
+		ai_chance = {
+			factor = 30
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			change_mercenary_composition = {
+				type = archers
+				change = 100
+			}
+			change_variable = { which = army_size value = 1 }
+		}
+		wealth = -50
+		top_liege = {
+			any_realm_province = {
+				add_province_modifier = {
+					modifier = standing_army_recruiting
+					stacking = yes
+					months = 6
+				}
+			}
+		}
+	}
+	option = {
+		name = STAND8OP4
+#		trigger = {
+#			OR = {
+#				culture_group = altaic
+#				culture_group = arabic
+#				culture_group = magyar
+#				culture_group = dravidian_group
+#				culture_group = indo_aryan_group
+#				culture_group = byzantine
+#				ai = no
+#			}
+#			wealth = 100
+#		}	
+#		ai_chance = {
+#			factor = 1
+#			modifier = {
+#				factor = 20
+#				ROOT = {
+#					OR = {
+#						culture_group = altaic
+#						culture = alan
+#					}
+#				}
+#			}
+#			modifier = {
+#				factor = 5
+#				ROOT = {
+#					OR = {
+#						culture_group = arabic
+#						culture_group = magyar
+#						culture = greek
+#						culture = armenian
+#						culture = georgian
+#					}
+#				}
+#			}
+#			modifier = {
+#				factor = 10
+#				ROOT = {
+#					OR = {
+#						culture_group = dravidian_group
+#						culture_group = indo_aryan_group
+#					}
+#				}
+#			}
+#		}
+#		character_event = { id = stand.17 }
+	}
+}
+# character_event = {
+	# id = stand.17
+	# picture = GFX_evt_large_army
+	# desc = STAND8EVENTDESC
+
+	# is_triggered_only = yes
+
+	# option = {
+		# name = send_horse_archers
+		# trigger = {
+			# OR = {
+				# culture_group = altaic
+				# culture_group = byzantine
+				# culture_group = magyar
+				# culture_group = arabic
+				# ai = no
+			# }
+		# }
+		# ai_chance = {
+			# factor = 50
+		# }	
+		# any_mercenary_band = {
+			# limit = {
+				# holder_scope = { character = FROMFROM }
+			# }
+			# change_mercenary_composition = {
+				# type = horse_archers
+				# change = 100
+			# }
+			# change_variable = { which = army_size value = 1 }
+		# }
+		# wealth = -100
+		# top_liege = {
+			# any_realm_province = {
+				# add_province_modifier = {
+					# modifier = standing_army_recruiting
+					# stacking = yes
+					# months = 6
+				# }
+			# }
+		# }
+	# }
+
+	# option = {
+		# name = send_camels
+		# trigger = {
+			# OR = {
+				# culture_group = arabic
+				# ai = no
+			# }
+		# }
+		# ai_chance = {
+			# factor = 50
+		# }
+		# any_mercenary_band = {
+			# limit = {
+				# holder_scope = { character = FROMFROM }
+			# }
+			# change_mercenary_composition = {
+				# type = camel_cavalry
+				# change = 100
+			# }
+			# change_variable = { which = army_size value = 1 }
+		# }
+		# wealth = -100
+		# top_liege = {
+			# any_realm_province = {
+				# add_province_modifier = {
+					# modifier = standing_army_recruiting
+					# stacking = yes
+					# months = 6
+				# }
+			# }
+		# }
+	# }
+
+	# option = {
+		# name = send_elephants
+		# trigger = {
+			# OR = {
+				# culture_group = dravidian_group
+				# culture_group = indo_aryan_group
+				# ai = no
+			# }
+		# }
+		# ai_chance = {
+			# factor = 100
+		# }
+		# any_mercenary_band = {
+			# limit = {
+				# holder_scope = { character = FROMFROM }
+			# }
+			# change_mercenary_composition = {
+				# type = war_elephants
+				# change = 50
+			# }
+			# change_variable = { which = army_size value = 1 }
+		# }
+		# wealth = -100
+		# top_liege = {
+			# any_realm_province = {
+				# add_province_modifier = {
+					# modifier = standing_army_recruiting
+					# stacking = yes
+					# months = 6
+				# }
+			# }
+		# }
+	# }
+
+	# option = {
+		# name = STAND17NEVERMIND
+		# ai_chance = {
+			# factor = 0
+		# }
+	# }
+# }
+
+
+character_event = {
+	id = stand.9
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_diplomacy
+	desc = "[From.From.GetFullName] wishes to replace me as commander of the army. What shall I do?"
+
+	is_triggered_only = yes
+
+	option = { # Accept being replaced
+		name = "I will accept my liege's decision."
+		ai_chance = {
+			factor = 99
+		}
+		FROMFROM = { character_event = { id = stand.10 } }
+	}
+	option = { # Refuse your liege and declare a war of tyrrany
+		name = "I refuse to give up command of my liege, and will fight my liege if necessary!"
+		trigger = {
+			prisoner = no
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0.1
+				trait = craven
+			}
+			modifier = {
+				factor = 2
+				realm_levy_diff = { who = FROMFROM value = -1000 }
+			}
+			modifier = {
+				factor = 5
+				realm_levy_diff = { who = FROMFROM value = 0 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { opinion = { who = FROMFROM value = 0 } }
+			}
+			modifier = {
+				factor = 5
+				NOT = { opinion = { who = FROMFROM value = -25 } }
+			}
+			modifier = {
+				factor = 0
+				opinion = { who = FROMFROM value = 25 }
+			}
+		}
+		hidden_tooltip = {
+			event_target:replacement_general = {
+				clr_character_flag = standing_army_replacement
+			}
+		}
+		FROMFROM = { letter_event = { id = stand.16 days = 2 } }
+	}
+
+}
+
+letter_event = {
+	id = stand.16
+	desc = "I refuse to bow down to your tyrrany! If you wish to rid me of my command, you had better meet me on the battlefield. There you will see that these men are mine, and not yours, to command!"
+
+	is_triggered_only = yes
+
+	option = {
+		name = "A war it is."
+		reverse_war = {
+			target = FROM
+			casus_belli = overthrow_ruler
+		}
+	}
+}
+
+character_event = {
+	id = stand.10
+	picture = GFX_evt_courtiers_talking
+	border = GFX_event_normal_frame_diplomacy
+	desc = "General [From.GetFullName] has agreed to step down from his post as general of the army. [replacement_general.GetFullName] will now assume command."
+	
+	is_triggered_only = yes
+
+	option = { # army slot 1 is full
+		name = 	"Excellent."
+
+		wealth = -100
+		event_target:replacement_general = {
+			wealth = 100
+			clr_character_flag = standing_army_replacement
+			opinion = {
+				modifier = opinion_army_general
+				who = ROOT
+			}
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_army_revoke_general
+				who = ROOT
+			}
+			any_demesne_title = {
+				limit = {
+					OR = {
+						has_title_flag = standing_army_1
+						has_title_flag = standing_army_2
+						has_title_flag = standing_army_3
+						has_title_flag = standing_army_4
+						has_title_flag = standing_army_5
+					}
+				}
+				gain_title = event_target:replacement_general
+				succession = open_elective
+			}
+		}
+	}
+}
+
+character_event = {
+	id = stand.11 # yearly maintenance (currently the cost is the same)
+	is_triggered_only = yes
+	desc = "Veterans have grown old and retired, several recruits have been injured, and the soldiers are looking for a bonus. Some additional funds are needed to maintain the legion."
+	picture = GFX_evt_merchant_caravan
+	border = GFX_event_normal_frame_economy
+	
+	trigger = {
+		any_mercenary_band = {
+			AND  = {
+				holder_scope = { character = ROOT }
+				OR = {
+					has_title_flag = standing_army_1
+					has_title_flag = standing_army_2
+					has_title_flag = standing_army_3
+					has_title_flag = standing_army_4
+					has_title_flag = standing_army_5
+				}
+			}
+		}
+	}
+
+	immediate = {
+		# Calculate the ammount to be paid
+		ROOT = {
+			any_demesne_title = {
+				limit = { 
+					OR = {
+						has_title_flag = standing_army_1
+						has_title_flag = standing_army_2
+						has_title_flag = standing_army_3
+						has_title_flag = standing_army_4
+						has_title_flag = standing_army_5
+					}
+				}
+				set_variable = { which = local_upkeep_cost which = army_size }
+				multiply_variable = { which = local_upkeep_cost value = 0.36 }
+				trigger_switch = {
+					on_trigger = has_title_flag
+					understaffed_1 = { multiply_variable = { which = local_upkeep_cost value = 0.8 } }
+					understaffed_2 = { multiply_variable = { which = local_upkeep_cost value = 0.6 } }
+					understaffed_3 = { multiply_variable = { which = local_upkeep_cost value = 0.4 } }
+					understaffed_4 = { multiply_variable = { which = local_upkeep_cost value = 0.2 } }
+				}
+				set_variable = { which = local_upkeep_value which = local_upkeep_cost }
+				multiply_variable = { which = local_upkeep_cost value = -1 }
+				
+				if = { 
+					limit = { check_variable = { which = army_size value = 100 } }
+					ROOT = { set_character_flag = upkeep_size_6 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 50 } }
+					ROOT = { set_character_flag = upkeep_size_5 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 25 } }
+					ROOT = { set_character_flag = upkeep_size_4 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 10 } }
+					ROOT = { set_character_flag = upkeep_size_3 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 5 } }
+					ROOT = { set_character_flag = upkeep_size_2 }
+				}
+				else = {
+					ROOT = { set_character_flag = upkeep_size_1 }
+				}
+			}
+		}
+	}		
+
+	option = { # pay
+		name = "I will pay the cost of their upkeep"
+		trigger = {
+			top_liege = {
+				OR = {
+					has_law = ze_administration_laws_2
+					has_law = imperial_administration
+				}
+			}
+			wealth = local_upkeep_value
+		}
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+		}
+		hidden_tooltip = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				upkeep_size_1 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size1
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_2 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size2
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_3 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size3
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_4 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size4
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_5 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size5
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_6 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size6
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+			}
+			clr_character_flag = upkeep_size_1
+			clr_character_flag = upkeep_size_2
+			clr_character_flag = upkeep_size_3
+			clr_character_flag = upkeep_size_4
+			clr_character_flag = upkeep_size_5
+			clr_character_flag = upkeep_size_6
+		}
+		wealth = local_upkeep_cost
+	}
+
+	option = { # ask liege to pay
+		name = "My liege should support the legion."
+		trigger = {
+			top_liege = {
+				OR = {
+					has_law = ze_administration_laws_2
+					has_law = imperial_administration
+				}
+			}
+			AND = {
+				independent = no
+				liege = { wealth = local_upkeep_value }
+			}
+		}
+		ai_chance = {
+			factor = 9
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+		}
+		liege = {
+			character_event = { id = stand.12 }
+		}
+	}
+	
+	option = { # don't pay
+		name = "I can't afford to maintain this legion."
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				OR = {
+					trait = slothful
+					trait = arbitrary
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				NOT = {
+					top_liege = {
+						OR = {
+							has_law = ze_administration_laws_2
+							has_law = imperial_administration
+						}
+					}
+				}
+				NOR = {
+					liege = { wealth = local_upkeep_value }
+					wealth = local_upkeep_value
+				}
+			}
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = ROOT }
+			}
+			change_title_army_size = -0.2
+			if = {
+				limit = { 
+					NOR = { 
+						has_title_flag = understaffed_1
+						has_title_flag = understaffed_2
+						has_title_flag = understaffed_3
+					}
+				}
+				set_title_flag = understaffed_1
+				break = yes
+			}
+			if = { 
+				limit = { has_title_flag = understaffed_1 } 
+				clr_title_flag = understaffed_1
+				set_title_flag = understaffed_2
+				break = yes
+			}
+			if = { 
+				limit = { has_title_flag = understaffed_2 } 
+				clr_title_flag = understaffed_2
+				set_title_flag = understaffed_3
+				break = yes
+			}
+			if = { 
+				limit = { has_title_flag = understaffed_3 } 
+				clr_title_flag = understaffed_3
+				set_title_flag = understaffed_4
+				break = yes
+			}
+		}
+	}
+	option = { # don't pay (since at the limit of understaffing, will disband)
+		name = "This legion costs more than it's worth."
+		ai_chance = {
+			factor = 0
+		}
+		trigger = {
+			ROOT = { 
+				AND = {
+					any_demesne_title = {
+						has_title_flag = understaffed_4
+					}
+					NOR = { 
+						wealth = local_upkeep_value
+						liege = { wealth = local_upkeep_value }
+					}
+				}
+			}
+		}
+		character_event = { id = stand.3 }
+	}
+}
+
+character_event = {
+	id = stand.12 # yearly maintenance liege pays (currently the cost is the same)
+	is_triggered_only = yes
+	desc = "Veterans have grown old and retired, several recruits have been injured, and the soldiers are looking for a bonus. Some additional funds are needed to maintain the legion. Your appointed general wishes you to provide the funds."
+	picture = GFX_evt_merchant_caravan
+	border = GFX_event_normal_frame_economy
+	
+
+	option = { # pay
+		name = "We can't let the army grow weak at a time like this!"
+		trigger = {
+			wealth = local_upkeep_value
+		}
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+		}
+		hidden_tooltip = {
+			FROM = {
+				trigger_switch = {
+					on_trigger = has_character_flag
+					upkeep_size_1 = {
+						top_liege = {
+							any_realm_province = {
+								add_province_modifier = {
+									modifier = standing_army_recruiting_size1
+									stacking = yes
+									months = 6
+								}
+							}
+						}
+					}
+					upkeep_size_2 = {
+						top_liege = {
+							any_realm_province = {
+								add_province_modifier = {
+									modifier = standing_army_recruiting_size2
+									stacking = yes
+									months = 6
+								}
+							}
+						}
+					}
+					upkeep_size_3 = {
+						top_liege = {
+							any_realm_province = {
+								add_province_modifier = {
+									modifier = standing_army_recruiting_size3
+									stacking = yes
+									months = 6
+								}
+							}
+						}
+					}
+					upkeep_size_4 = {
+						top_liege = {
+							any_realm_province = {
+								add_province_modifier = {
+									modifier = standing_army_recruiting_size4
+									stacking = yes
+									months = 6
+								}
+							}
+						}
+					}
+					upkeep_size_5 = {
+						top_liege = {
+							any_realm_province = {
+								add_province_modifier = {
+									modifier = standing_army_recruiting_size5
+									stacking = yes
+									months = 6
+								}
+							}
+						}
+					}
+					upkeep_size_6 = {
+						top_liege = {
+							any_realm_province = {
+								add_province_modifier = {
+									modifier = standing_army_recruiting_size6
+									stacking = yes
+									months = 6
+								}
+							}
+						}
+					}
+				}
+				clr_character_flag = upkeep_size_1
+				clr_character_flag = upkeep_size_2
+				clr_character_flag = upkeep_size_3
+				clr_character_flag = upkeep_size_4
+				clr_character_flag = upkeep_size_5
+				clr_character_flag = upkeep_size_6
+			}
+		}
+		wealth = local_upkeep_cost
+	}
+
+	option = { # order the general to pay
+		name = "How dare he demand such a thing! If he can pay, he will!"
+		trigger = {
+			FROM = { wealth = local_upkeep_value }
+		}
+		ai_chance = {
+			factor = 9
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+		}
+		FROM = {
+			character_event = { id = stand.13 }
+		}
+	}
+	
+	option = { # don't pay
+		name = "The legion is too big to begin with, it could use some trimming down."
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				OR = {
+					trait = slothful
+					trait = arbitrary
+				}
+			}
+		}
+		trigger = {
+			FROM = {
+				NOT = {
+					any_demesne_title = {
+						has_title_flag = understaffed_4
+					}
+				}
+			}
+		}
+		FROM = {
+			character_event = { id = stand.14 }
+		}
+		any_mercenary_band = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			change_title_army_size = -0.2
+			if = {
+				limit = { 
+					NOR = { 
+						has_title_flag = understaffed_1
+						has_title_flag = understaffed_2
+						has_title_flag = understaffed_3
+					}
+				}
+				set_title_flag = understaffed_1
+				holder_scope = { set_character_flag = ut_1 }
+				break = yes
+			}
+			if = { 
+				limit = { has_title_flag = understaffed_1 } 
+				clr_title_flag = understaffed_1
+				set_title_flag = understaffed_2
+				holder_scope = { set_character_flag = ut_2 }
+				break = yes
+			}
+			if = { 
+				limit = { has_title_flag = understaffed_2 } 
+				clr_title_flag = understaffed_2
+				set_title_flag = understaffed_3
+				holder_scope = { set_character_flag = ut_3 }
+				break = yes
+			}
+			if = { 
+				limit = { has_title_flag = understaffed_3 } 
+				clr_title_flag = understaffed_3
+				set_title_flag = understaffed_4
+				holder_scope = { set_character_flag = ut_4 }
+				break = yes
+			}
+		}
+	}
+
+	option = { # don't pay (since at the limit of understaffing, will disband)
+		name = "This legion costs more than it's worth."
+		ai_chance = {
+			factor = 0
+		}
+		trigger = {
+			FROM = {
+				any_demesne_title = {
+					has_title_flag = understaffed_4
+				}
+			}
+		}
+		FROM = {
+			character_event = { id = stand.15 }
+		}
+	}
+}
+
+character_event = {
+	id = stand.13 # yearly maintenance (currently the cost is the same)
+	is_triggered_only = yes
+	desc = "Your liege has refused to help support the legion. You must pay the cost of the upkeep."
+	picture = GFX_evt_merchant_caravan
+	border = GFX_event_normal_frame_economy
+
+	option = { # pay
+		name = "I'll find a way to get back at my liege."
+		wealth = local_upkeep_cost
+		hidden_tooltip = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				upkeep_size_1 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size1
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_2 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size2
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_3 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size3
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_4 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size4
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_5 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size5
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_6 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size6
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+			}
+			clr_character_flag = upkeep_size_1
+			clr_character_flag = upkeep_size_2
+			clr_character_flag = upkeep_size_3
+			clr_character_flag = upkeep_size_4
+			clr_character_flag = upkeep_size_5
+			clr_character_flag = upkeep_size_6
+		}
+	}
+}
+
+character_event = {
+	id = stand.14 #
+	is_triggered_only = yes
+	desc = "Your liege has decided to reduce the size of the legion in order to cut back on expenses."
+	picture = GFX_evt_merchant_caravan
+	border = GFX_event_normal_frame_economy
+
+	option = { # acknowledge (for debugging)
+		name = "Ok."
+	}
+}
+
+character_event = {
+	id = stand.15 # 
+	is_triggered_only = yes
+	desc = "Your liege has decided to disband the struggling legion."
+	picture = GFX_evt_merchant_caravan
+	border = GFX_event_normal_frame_economy
+
+	option = { # acknowledge (for debugging)
+		name = "Ok."
+		character_event = { id = stand.3 }
+	}
+}
+
+character_event = {
+	id = stand.18
+	is_triggered_only = yes
+	desc = STAND18EVENTDESC
+	picture = GFX_evt_placeholder
+	immediate = {
+		# Calculate the ammount to be paid
+		FROM = {
+			any_demesne_title = {
+				limit = { 
+					OR = {
+						has_title_flag = standing_army_1
+						has_title_flag = standing_army_2
+						has_title_flag = standing_army_3
+						has_title_flag = standing_army_4
+						has_title_flag = standing_army_5
+					}
+				}
+				set_variable = { which = local_upkeep_cost which = army_size }
+				multiply_variable = { which = local_upkeep_cost value = 0.36 }
+				trigger_switch = {
+					on_trigger = has_title_flag
+					understaffed_1 = { multiply_variable = { which = local_upkeep_cost value = 0.8 } }
+					understaffed_2 = { multiply_variable = { which = local_upkeep_cost value = 0.6 } }
+					understaffed_3 = { multiply_variable = { which = local_upkeep_cost value = 0.4 } }
+					understaffed_4 = { multiply_variable = { which = local_upkeep_cost value = 0.2 } }
+				}
+				multiply_variable = { which = local_upkeep_cost value = 2 }
+				set_variable = { which = local_upkeep_value which = local_upkeep_cost }
+				multiply_variable = { which = local_upkeep_cost value = -1 }
+
+				if = { 
+					limit = { check_variable = { which = army_size value = 100 } }
+					ROOT = { set_character_flag = upkeep_size_6 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 50 } }
+					ROOT = { set_character_flag = upkeep_size_5 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 25 } }
+					ROOT = { set_character_flag = upkeep_size_4 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 10 } }
+					ROOT = { set_character_flag = upkeep_size_3 }
+				}
+				else_if = {
+					limit = { check_variable = { which = army_size value = 5 } }
+					ROOT = { set_character_flag = upkeep_size_2 }
+				}
+				else = {
+					ROOT = { set_character_flag = upkeep_size_1 }
+				}
+			}
+		}
+	}
+
+	option = { # Pay the cost of upkeep
+		name = STAND18EVENTOP1
+		trigger = {
+			wealth = local_upkeep_value
+		}
+		ai_chance = {
+			factor = 100
+		}
+		wealth = local_upkeep_cost
+		hidden_tooltip = {
+			FROM = { 
+				any_demesne_title = {
+					limit = {
+						OR = {
+							has_title_flag = standing_army_1
+							has_title_flag = standing_army_2
+							has_title_flag = standing_army_3
+							has_title_flag = standing_army_4
+							has_title_flag = standing_army_5
+						}
+					}
+					trigger_switch = {
+						on_trigger = has_title_flag
+						understaffed_1  = {
+							clr_title_flag = understaffed_1
+						}
+						understaffed_2  = {
+							clr_title_flag = understaffed_2
+							set_title_flag = understaffed_1
+						}
+						understaffed_3  = {
+							clr_title_flag = understaffed_3
+							set_title_flag = understaffed_2
+						}
+						understaffed_4  = {
+							clr_title_flag = understaffed_4
+							set_title_flag = understaffed_3
+						}
+					}
+				}
+			}
+			trigger_switch = {
+				on_trigger = has_character_flag
+				upkeep_size_1 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size1
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_2 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size2
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_3 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size3
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_4 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size4
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_5 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size5
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+				upkeep_size_6 = {
+					top_liege = {
+						any_realm_province = {
+							add_province_modifier = {
+								modifier = standing_army_recruiting_size6
+								stacking = yes
+								months = 6
+							}
+						}
+					}
+				}
+			}
+			clr_character_flag = upkeep_size_1
+			clr_character_flag = upkeep_size_2
+			clr_character_flag = upkeep_size_3
+			clr_character_flag = upkeep_size_4
+			clr_character_flag = upkeep_size_5
+			clr_character_flag = upkeep_size_6
+		}
+	}
+	option = { # Don't pay
+		name = STAND18EVENTOP2
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+		

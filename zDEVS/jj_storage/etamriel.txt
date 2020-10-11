@@ -1,0 +1,153 @@
+#Events for Tamriel custom govt
+#Written by jjsfw/jumbi
+
+namespace = etamriel
+###GENERIC EVENTS###
+###CORONATION EVENTS###
+
+###GENERIC EVENTS### 1-99
+#Give emperor trait to emperor
+character_event = {
+	id = etamriel.1
+	desc = etamriel.desc.1
+	
+	is_triggered_only = yes
+	
+	trigger=  {
+		government = tamriel_government
+		not = {
+			trait = tamriel_emperor
+		}
+	}
+	option = {
+		name = etamriel.a.1
+		
+		add_trait = tamriel_emperor
+		add_character_modifier = { name = tamriel_uncrowned_emperor duration = -1 }
+		
+		hidden_tooltip = {
+			tamriel_emperor = { # Remove previous Emperor if still alive
+				remove_trait = tamriel_emperor
+				remove_character_modifier = failed_to_light_dragonfires
+				remove_character_modifier = tamriel_uncrowned_emperor
+			}
+		}
+		if = {
+			limit = {
+				1 = {
+					county = {
+						holder = {
+							top_liege = {
+								government = tamriel_government
+							}
+						}
+					}
+				}
+			}
+			1 = {
+				remove_province_modifier = dragonfires_lit
+				add_province_modifier = { name = dragonfires_unlit duration = -1 }
+			}
+		}
+		
+		
+	}
+}
+
+###CORONATION EVENTS### 100-199
+#Preparations begin
+character_event = {
+	id = etamriel.100
+	desc = etamriel.desc.100
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = etamriel.a.100
+		
+		hidden_tooltip = {
+			character_event = { id = etamriel.101 days = 30 }
+		}
+	}
+}
+
+#Check for Amulet
+character_event = {
+	id = etamriel.101
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	
+	immediate = {
+		if = {
+			limit = {
+				war = yes
+			}
+			character_event = { id = etamriel.102 }
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = amulet_of_kings
+			}
+			narrative_event = { id = etamriel.103 }
+			break = yes
+		}
+		narrative_event = { id = etamriel.104 }
+	}
+}
+
+#War disruption
+character_event = {
+	id = etamriel.102
+	desc = etamriel.desc.102
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = etamriel.a.102
+		
+		wealth = 500
+		clr_character_flag = etamriel_coronation
+	}
+}
+
+#Crowned!
+narrative_event = {
+	id = etamriel.103
+	desc = etamriel.desc.103
+	title = etamriel.title.103
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = etamriel.a.103
+		
+		prestige = 500
+		piety = 250
+		1 = {
+			remove_province_modifier = dragonfires_unlit
+			add_province_modifier = { name = dragonfires_lit duration = -1 }
+		}
+		remove_character_modifier = tamriel_uncrowned_emperor
+	}
+}
+
+#No Amulet - Cannot light Dragonfires
+narrative_event = {
+	id = etamriel.104
+	desc = etamriel.desc.104
+	title = etamriel.title.104
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = etamriel.a.104
+		
+		prestige = -50
+		piety = -25
+		remove_character_modifier = tamriel_uncrowned_emperor
+		add_character_modifier = { name = failed_to_light_dragonfires duration = -1 }
+	}
+}

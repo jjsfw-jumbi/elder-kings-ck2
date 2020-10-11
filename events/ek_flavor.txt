@@ -1,0 +1,927 @@
+namespace = aflavor
+################################################
+#
+# Generic Multicultural aflavor Events
+#
+#################################################
+
+# CORONATION
+
+# Preparation
+character_event = {
+	id = aflavor.2
+	desc = aflavor.2.desc
+	picture = GFX_evt_jugglers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.2.religious_head
+
+		trigger = {
+			NOT = {
+				trait = excommunicated
+				has_character_flag = no_religious_coronation
+				religion_group = daedra
+				religion_group = reach_faiths
+			}
+			rightful_religious_head_scope = {
+				NOT = { war_with = ROOT }
+			}
+		}
+		hidden_tooltip = {
+			rightful_religious_head_scope = {
+				letter_event = { id = aflavor.3 }
+			}
+		}
+	}
+
+	# option = {
+	# 	name = aflavor.2.elder_council
+
+	# 	trigger = {
+	# 		ec_is_emperor = yes
+	# 		# Make sure there actually is a High Chancellor
+	# 		elder_council = {
+	# 			any_society_member = {
+	# 				is_society_grandmaster = yes
+	# 			}
+	# 		}
+	# 	}
+
+	# 	# TODO:JJ event chain
+	# }
+
+	option = {
+		name = aflavor.2.self
+		narrative_event = { id = aflavor.7 days = 60 } # Self Coronation
+	}
+}
+
+# Asking the religious head
+letter_event = {
+	id = aflavor.3
+	desc = aflavor.3.desc
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.3.accept
+		wealth = 100
+		FROM = {
+			letter_event = { id = aflavor.4 }
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2.0
+				liege = { character = FROM }
+			}
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					opinion = {
+						who = FROM
+						value = 20
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					opinion = {
+						who = FROM
+						value = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 2.0
+				FROM = { trait = zealous }
+			}
+			modifier = {
+				factor = 2.0
+				FROM = { any_owned_bloodline = { has_bloodline_flag = bloodline_tiber } }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { piety = 400 }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { piety = 600 }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { piety = 800 }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { piety = 1000 }
+			}
+		}
+	}
+        
+    option = {
+		name = aflavor.3.refuse # Reject
+		trigger = {
+			NOT = { liege = { character = FROM } }
+		}
+		FROM = {
+			letter_event = { id = aflavor.5 }
+		}
+		FROM = {
+			set_character_flag = no_religious_coronation
+		}
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0.01
+				ROOT = {
+					opinion = {
+						who = FROM
+						value = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					NOT = {
+						opinion = {
+							who = FROM
+							value = -99
+						}
+					}
+				}
+			}			
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					NOT = {
+						opinion = {
+							who = FROM
+							value = -79
+						}
+					}
+				}
+			}			
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					NOT = {
+						opinion = {
+							who = FROM
+							value = -59
+						}
+					}
+				}
+			}			
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					NOT = {
+						opinion = {
+							who = FROM
+							value = -39
+						}
+					}
+				}
+			}			
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					NOT = {
+						opinion = {
+							who = FROM
+							value = -19
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				ROOT = {
+					NOT = {
+						opinion = {
+							who = FROM
+							value = 0
+						}
+					}
+				}
+			}			
+			modifier = {
+				factor = 2.0
+				FROM = { trait = lunatic }
+			}
+			modifier = {
+				factor = 3.0
+				FROM = { trait = kinslayer }
+			}
+			modifier = {
+				factor = 2.0
+				FROM = { trait = bastard }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { trait = legit_bastard }
+			}
+			modifier = {
+				factor = 2.0
+				FROM = { trait = cynical }
+			}
+			modifier = {
+				factor = 2.0
+				NOT = { piety = 0 }
+			}
+		}
+	}
+}
+
+# Religious Head accepts it
+letter_event = {
+	id = aflavor.4
+	desc = aflavor.4.desc
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.4.opta
+		hidden_tooltip = {
+			narrative_event = { id = aflavor.6 days = 60 } # Religious Coronation
+		}
+	}
+}
+
+# Religious Head won't do it
+letter_event = {
+	id = aflavor.5
+	desc = aflavor.5.desc
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.5.self_coronation
+		narrative_event = { id = aflavor.7 days = 60 } # Self Coronation
+	}
+	option = {
+		name = aflavor.5.abandon
+		clr_character_flag = wants_coronation
+	}
+}
+
+# Religious Coronation
+narrative_event = {
+	id = aflavor.6
+	title = aflavor.6.title
+
+	desc = {
+		trigger = {
+			trait = akaviri
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_china_golden_age
+	}
+	desc = {
+		trigger = {
+			is_altmer = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_altmer
+	}
+	desc = {
+		trigger = {
+			trait = argonian
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_throne_room_mesoamerican
+	}
+	desc = {
+		trigger = {
+			is_ayleid = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_ayleid
+	}
+	desc = {
+		trigger = {
+			is_bosmer = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_bosmer
+	}
+	desc = {
+		trigger = {
+			is_chimer = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_chimer
+	}
+	desc = {
+		trigger = {
+			is_dunmer = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_dunmer
+	}
+	desc = {
+		trigger = {
+			is_falmer = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_falmer
+	}
+	desc = {
+		trigger = {
+			trait = khajiit
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_khajiit
+	}
+	desc = {
+		trigger = {
+			is_maormer = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_maormer
+	}
+	desc = {
+		trigger = {
+			trait = orsimer
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_orsimer_crowning
+	}
+	desc = {
+		trigger = {
+			trait = potun
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation_potun
+	}
+	desc = {
+		trigger = {
+			trait = quey
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_throne_room_indo_aryan_group
+	}
+	desc = {
+		trigger = {
+			is_tsaesci = yes
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_throne_room_tsaesci
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				trait = akaviri
+				is_altmer = yes
+				trait = argonian
+				is_ayleid = yes
+				is_bosmer = yes
+				is_chimer = yes
+				is_dunmer = yes
+				is_falmer = yes
+				trait = khajiit
+				is_maormer = yes
+				trait = orsimer
+				trait = potun
+				trait = quey
+				is_tsaesci = yes
+			}
+		}
+
+		text = aflavor.6.desc
+		picture = GFX_evt_coronation
+	}
+
+	border = GFX_event_narrative_frame_religion
+	#sound = church_bells
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.6.finish
+		set_character_flag = crowned_emperor
+		prestige = 200
+		piety = 150
+		hidden_tooltip = {
+			rightful_religious_head_scope = {
+				reverse_opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					months = 60
+				}
+			}
+			clr_character_flag = wants_coronation
+		}
+	}
+	option = {
+		name = aflavor.6.dragonfires
+		trigger = {
+			NOT ={ religion_group = daedra }
+			NOT = { event_target:lit_dragonfires = { is_alive = yes } }
+		}
+		set_character_flag = crowned_emperor
+		prestige = 200
+		piety = 150
+		hidden_tooltip = {
+			rightful_religious_head_scope = {
+				reverse_opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					months = 60
+				}
+			}
+			hidden_tooltip = {
+				#clr_character_flag = wants_coronation - Keep this flag so that it matches up with new Amulet/Dragonfires events
+				ROOT = { character_event = { id = aflavor.8 } }
+			}
+		}
+	}
+}
+
+# Self Coronation
+narrative_event = {
+	id = aflavor.7
+	title = aflavor.7.title
+	desc = aflavor.7.desc
+	picture = GFX_evt_jugglers
+	border = GFX_event_narrative_frame_religion
+	#sound = church_bells
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.7.finish
+		set_character_flag = crowned_emperor
+		prestige = 150
+		piety = 50
+		hidden_tooltip = {
+			clr_character_flag = wants_coronation
+		}
+	}
+	option = {
+		name = aflavor.7.dragonfires
+		trigger = {
+			NOT ={ religion_group = daedra }
+			NOT = { event_target:lit_dragonfires = { is_alive = yes } }
+		}
+		set_character_flag = crowned_emperor
+		prestige = 150
+		piety = 50
+		hidden_tooltip = {
+			#clr_character_flag = wants_coronation - Keep this flag so that it matches up with new Amulet/Dragonfires events
+			ROOT = { character_event = { id = aflavor.8 } }
+		}
+	}
+}
+
+# Light the Dragonfires
+character_event = {
+	id = aflavor.8
+	desc = try_dragonfires_desc
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = {
+			text = aflavor.8.not_dragonblood.no_amulet
+
+			trigger = {
+				NOR = {
+					is_former_emperor_bloodline = yes
+					is_dragonblood = yes
+					AND = {
+						is_potential_emperor_bloodline = yes
+						has_landed_title = e_tamriel
+					}
+				}
+				NOT = { has_artifact = amulet_of_kings }
+			}
+		}
+		name = {
+			text = aflavor.8.not_dragonblood.amulet
+
+			trigger = {
+				NOR = {
+					is_former_emperor_bloodline = yes
+					is_dragonblood = yes
+					AND = {
+						is_potential_emperor_bloodline = yes
+						has_landed_title = e_tamriel
+					}
+				}
+				has_artifact = amulet_of_kings
+			}
+		}
+		name = {
+			text = aflavor.8.dragonblood.no_amulet
+
+			trigger = {
+				OR = {
+					is_former_emperor_bloodline = yes
+					is_dragonblood = yes
+					AND = {
+						is_potential_emperor_bloodline = yes
+						has_landed_title = e_tamriel
+					}
+				}
+				NOT = { has_artifact = amulet_of_kings }
+			}
+		}
+
+		hidden_tooltip = {
+			character_event = { id = aflavor.10 }
+		}
+	}
+
+	option = {
+		name = aflavor.8.dragonblood.amulet
+		trigger = {
+			OR = {
+				is_former_emperor_bloodline = yes
+				is_dragonblood = yes
+				AND = {
+					is_potential_emperor_bloodline = yes
+					has_landed_title = e_tamriel
+				}
+			}
+			has_artifact = amulet_of_kings
+		}
+		hidden_tooltip = {
+			set_character_flag = lighting_dragonfires
+			character_event = { id = aflavor.9 }
+		}
+	}
+}
+
+#Dragonfires burn!
+character_event = {
+	id = aflavor.9
+	desc = dragonfire_work_desc
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.9.opta
+		save_global_event_target_as = lit_dragonfires #Mass Daedric invasions CANNOT happen while this character lives
+		add_character_modifier = { name = ignited_the_dragonfires duration = -1 }
+		prestige = 200
+		piety = 100
+		clr_character_flag = lighting_dragonfires
+		if = {
+			limit = {
+				has_character_flag = aedric_hero
+				OR = {
+					has_global_flag = oblivion_invasion_azura
+					has_global_flag = oblivion_invasion_boethiah
+					has_global_flag = oblivion_invasion_clavicus
+					has_global_flag = oblivion_invasion_hermaeus
+					has_global_flag = oblivion_invasion_hircine
+					has_global_flag = oblivion_invasion_malacath
+					has_global_flag = oblivion_invasion_mehrunes
+					has_global_flag = oblivion_invasion_mephala
+					has_global_flag = oblivion_invasion_meridia
+					has_global_flag = oblivion_invasion_molag
+					has_global_flag = oblivion_invasion_namira
+					has_global_flag = oblivion_invasion_nocturnal
+					has_global_flag = oblivion_invasion_peryite
+					has_global_flag = oblivion_invasion_sanguine
+					has_global_flag = oblivion_invasion_sheogorath
+					has_global_flag = oblivion_invasion_vaermina
+				}
+			}
+			remove_trait = on_mission
+			clr_character_flag = do_not_disturb
+			
+			custom_tooltip = {
+				text = DRAGONFIRE_ENDS_DAEDRIC_INVASION_CT
+			}
+			
+			create_bloodline = { type = bloodline_world_saver_alternate }
+		}
+		if = {
+			limit = { has_dlc = "Jade Dragon" }
+			light_dragonfires_offmap_effect = yes
+		}
+		if = {
+			limit = { NOT = { has_dlc = "Jade Dragon" } }
+			light_dragonfires_alternate_effect = yes
+		}
+		if = { #Chance that you're actually Dragonborn - nice work!
+			limit = {
+				AND = {
+					OR = {
+						is_dragonblood = yes
+						has_character_flag = dragonborn_candidate
+					}
+					NOT = { trait = dragonborn }
+				}
+				NOR = { #No "Special" traits prior to becoming dragonborn.
+					is_undead = yes
+					is_vampire = yes
+					is_unknown_vampire = yes
+					is_lycan = yes
+					is_disease_immune = yes
+					culture_group = undead
+					culture_group = daedra
+					trait = clone
+					trait = dragonborn
+					has_character_flag = daedric_herald #This person leads a Daedric invasion of Nirn, not exactly someone who'd be favored by the Divines
+				}
+				NOT = {
+					dragonborn = {
+						is_alive = yes
+						NOR = { #If Dragonborn becomes immortal, there should be a chance for another to arise. See Miraak and the Last Dragonborn (Skyrim:Dragonborn DLC)
+							is_undead = yes
+							is_vampire = yes
+							is_unknown_vampire = yes
+							trait = hagraven
+							trait = briarheart
+							trait = clone
+							trait = immortal
+							trait = soulless_clavicus
+							has_character_flag = daedric_herald #If a Dragonborn pulls a Miraak and goes rogue, a new one will show up.
+						}
+					}
+				}
+			}
+			random = {
+				chance = 2
+				character_event = { id = dragonborn.150 }
+			}
+		}
+	}
+}
+
+#Dragonfires don't burn!
+character_event = {
+	id = aflavor.10
+	desc = dragonfire_no_work_desc
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.10.opta
+		prestige = -50
+		piety = -100
+	}
+}
+
+## Founding the Empire of Tamriel
+narrative_event = {
+	id = aflavor.20
+	desc = aflavor.20.d
+	title = aflavor.20.t
+	
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aflavor.20.optA
+		
+		prestige = 1000
+		
+		custom_tooltip = { text = START_THIRD_ERA_CT }
+		
+		custom_tooltip = { text = EMPEROR_OF_TAMRIEL_GENERAL_PERKS_CT }
+		
+		if = {
+			limit = { religion = eight_divines }
+			custom_tooltip = {
+				text = EMPEROR_OF_TAMRIEL_NINTH_DIVINE_CT
+			}
+		}
+	}
+}
+
+## Dragons sighted in Tamriel
+narrative_event = {
+	id = aflavor.30
+	desc = aflavor.30.d
+	title = aflavor.30.t
+	
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	major = yes	
+	
+	immediate = { set_global_flag = dragons_sighted_tamriel }
+	
+	option = {
+		trigger = { NOT = { religion_can_summon_dragons = yes } }
+		name = aflavor.30.optA
+	}
+	
+	option = {
+		trigger = { religion_can_summon_dragons = yes }
+		name = aflavor.30.optB
+	}
+}
+
+## Dragons flying around White-Gold Tower
+# TODO:JJPERF
+narrative_event = {
+	id = aflavor.31
+	desc = aflavor.31.d
+	title = aflavor.31.t
+	
+	picture = GFX_evt_cyrodiil
+	
+	major = yes
+
+	only_rulers = yes
+	
+	trigger = {
+		NOT = { has_global_flag = dragons_flying_whitegold }
+		religion_can_summon_dragons = yes
+		capital_scope = { province = 1 }
+		
+		# Can ride Dragons, as done in Dragonborn
+		is_dragonblood = yes
+		OR = {
+			# Bend Will
+			trait = thuum_3
+			# Dragons follow natural leaders
+			prestige = 10000
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 7
+	}
+	
+	immediate = { set_global_flag = dragons_flying_whitegold }
+	
+	option = {
+		trigger = { NOT = { religion_can_summon_dragons = yes } }
+		name = aflavor.31.optA
+	}
+	
+	option = {
+		trigger = { religion_can_summon_dragons = yes }
+		name = aflavor.31.optB
+	}
+}
+
+### Eating corpses after a battle ends - For religions where cannibalism is part of the tenets
+character_event = {
+	id = aflavor.40
+	desc = aflavor.40.d
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		religion_ritual_cannibalism = yes
+		
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = zealous
+		}
+		modifier = {
+			factor = 2
+			trait = cannibal_trait
+		}
+	}
+	
+	option = {
+		name = aflavor.40.optA
+		
+		hidden_tooltip = {
+			cannibal_eat_raw_meat_disease_effect = yes
+		}
+				
+		if = {
+			limit = { NOT = { trait = cannibal_trait } }
+			piety = 25
+			
+			random = {
+				chance = 25
+				add_trait = cannibal_trait
+				character_event = { id = 38325 }
+			}
+		}
+		
+		else = {
+			piety = 50
+			prestige = 25
+		}
+		
+		if = {
+			limit = { trait = temperate }
+			random = {
+				chance = 25
+				remove_trait = temperate
+			}
+		}
+		
+		if = {
+			limit = { has_artifact = ring_of_namira }
+			add_character_modifier = { name = ron_cannibalism_healthboost duration = 365 }
+		}
+		
+		ai_chance = {
+        	factor = 0.5
+        	modifier = { trait = zealous factor = 1.25 }
+        	modifier = { trait = cannibal_trait factor = 2 }
+        }
+	}
+	
+	option = {
+		name = aflavor.40.optB
+		
+		if = {
+			limit = { NOT = { trait = temperate } }
+			random = {
+				chance = 25
+				add_trait = temperate
+			}
+		}
+		
+		if = {
+			limit = { trait = zealous }
+			random = {
+				chance = 25
+				remove_trait = zealous
+			}
+		}
+		
+		ai_chance = {
+        	factor = 0.5
+        	modifier = { trait = temperate factor = 1.25 }
+        }
+	}
+}
+
+### Gaining/losing a new lover while following an hedonistic religion
+# Gaining
+character_event = {
+	id = aflavor.50
+	desc = aflavor.50.d
+	picture = GFX_evt_lovers
+	notification = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_hedonistic_religion = yes
+	}
+	
+	immediate = {
+		update_lover_hedonistic_bonus = yes
+		piety = 15
+	}
+	
+	option = {
+		name = "OK"
+	}
+}
+# Losing
+character_event = {
+	id = aflavor.51
+	desc = aflavor.51.d
+	picture = GFX_evt_lovers
+	notification = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_hedonistic_religion = yes
+	}
+	
+	immediate = {
+		update_lover_hedonistic_bonus = yes
+		piety = -15
+	}
+	
+	option = {
+		name = "OK"
+	}
+}

@@ -1,0 +1,286 @@
+namespace = esmtrait
+
+#Remove Warlord if no longer compatible with Ambition
+character_event = {
+	id = esmtrait.1
+	desc = esmtrait.1.desc
+	picture = GFX_evt_adventurers_rest
+	
+	min_age = 16
+	capable_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		trait = warlord
+		
+		OR = {
+			# Traits
+			OR = {
+				trait = incapable
+				trait = greybeard
+				
+				trait = content
+				trait = craven
+				trait = humble
+				trait = kind
+				trait = slothful
+			}
+			
+			# Age
+			OR = {
+				AND = {
+					age = 70
+					NOT = { has_character_flag = tiber_septim }
+					is_immortal = no
+					is_long_lived = no
+				}
+				AND = {
+					age = 200
+					NOT = { has_character_flag = tiber_septim }
+					is_immortal = no
+					is_long_lived = yes
+				}
+				AND = {
+					age = 500
+					NOT = { has_character_flag = tiber_septim }
+					is_immortal = yes
+				}
+			}
+			
+			# Culture
+			culture_group = undead
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			trait = craven
+			factor = 0.5
+		}
+		modifier = {
+			trait = absent_minded
+			factor = 0.75
+		}
+		modifier = {
+			trait = content
+			factor = 0.1
+		}
+		modifier = {
+			trait = trusting
+			factor = 0.85
+		}
+		modifier = {
+			trait = kind
+			factor = 0.5
+		}
+		modifier = {
+			trait = temperate
+			factor = 0.75
+		}
+		modifier = {
+			trait = charitable
+			factor = 0.5
+		}
+		modifier = {
+			trait = humble
+			factor = 0.85
+		}
+		modifier = {
+			trait = shy
+			factor = 0.5
+		}
+		modifier = {
+			trait = ruthless
+			factor = 1.25
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = ambitious
+			factor = 2
+		}
+		modifier = {
+			trait = greedy
+			factor = 1.5
+		}
+		modifier = {
+			trait = just
+			factor = 0.85
+		}
+		modifier = {
+			trait = arbitrary
+			factor = 1.25
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				trait = hero
+				trait = dragonborn
+			}
+		}
+	}
+	
+	option = {
+		name = esmtrait.1.opta
+		if = {
+			limit = { NOT = { trait = content } }
+			random = {
+				chance = 25
+				add_trait = content
+			}
+		}
+		remove_trait = warlord
+	}
+}
+#No longer landed
+character_event = {
+	id = esmtrait.2
+	desc = AI_evt_d
+	picture = GFX_evt_adventurers_rest
+	
+	trigger = {
+		is_landed = no
+		trait = warlord
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = {
+		name = AI_evt_opt
+		remove_trait = warlord
+	}
+}
+
+#Hagravens and Briarhearts can't change religion!
+character_event = {
+	id = esmtrait.3
+
+	desc = {
+		text = esmtrait.3.briarheart
+		trigger = { trait = briarheart }
+	}
+
+	desc = {
+		text = esmtrait.3.hagraven
+		trigger = { trait = hagraven }
+	}
+	
+	picture = GFX_evt_briarheart
+
+	trigger = {
+		OR = {
+			trait = briarheart
+			trait = hagraven
+		}
+		
+		NOT = { religion = forsworn_heresy }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		trigger = { ai = no }
+
+		name = esmtrait.3.death
+		death = { death_reason = death_sacrificed }
+	}
+
+	option = {
+		trigger = { NOT = { has_character_flag = turned_away_from_hagravens } }
+		name = esmtrait.3.conversion
+
+		religion = forsworn_heresy
+
+		if = {
+			limit = { ai = no }
+			prestige = -100
+			piety = -100
+
+			set_character_flag = turned_away_from_hagravens
+		}
+	}
+}
+#Remove "hero" trait
+character_event = {
+	id = esmtrait.10
+	hide_window = yes
+	
+	trigger = {
+		trait = hero
+		OR = {
+			AND = {
+				is_ruler = yes
+				is_long_lived = no
+				NOT = { has_character_flag = tiber_septim }
+				age = 75
+			}
+			AND = {
+				is_ruler = yes
+				is_long_lived = yes
+				NOT = { has_character_flag = tiber_septim }
+				age = 300
+			}
+			AND = {
+				is_ruler = yes
+				has_character_flag = tiber_septim
+				age = 100
+			}
+			is_ruler = no
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+		
+		modifier = {
+			factor = 2.5
+			tier = emperor
+		}
+		modifier = {
+			factor = 2
+			tier = king
+		}
+		modifier = {
+			factor = 1.5
+			tier = duke
+		}
+		modifier = {
+			factor = 0.1
+			lower_tier_than = DUKE
+		}
+	}
+	
+	immediate = {
+		remove_trait = hero
+	}
+}
+
+# Remove warlord trait if a vassal
+character_event = {
+	id = esmtrait.11
+	hide_window = yes
+
+	only_rulers = yes
+	min_age = 16
+
+	trigger = {
+		trait = warlord
+		independent = no
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	immediate = {
+		remove_trait = warlord
+	}
+}

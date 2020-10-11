@@ -1,0 +1,73 @@
+namespace = ayleid_flavour
+
+### Imperial City controlled by an Ayleid ruler
+narrative_event = {
+	id = ayleid_flavour.1
+	desc = ayleid_flavour.1.d
+	title = ayleid_flavour.1.t
+	
+	picture = GFX_evt_cyrodiil
+
+	only_playable = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		1 = {
+			owner = {
+				character = ROOT
+				is_ayleid = yes
+			}
+		}
+		NOT = { has_global_flag = ayleid_ic_flag }
+	}
+	
+	immediate = {
+		set_global_flag = ayleid_ic_flag
+	}
+	
+	option = {
+		name = ayleid_flavour.1.optA
+		
+		prestige = 100
+		piety = 50
+	}
+}
+
+### Reclaimed Ald-Cyrod
+narrative_event = {
+	id = ayleid_flavour.10
+	desc = ayleid_flavour.10.d
+	title = ayleid_flavour.10.t
+	picture = GFX_evt_ayleid
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ayleid_flavour.10.optA
+		
+		prestige = 500
+		piety = 250
+		
+		any_playable_ruler = {
+			limit = {
+				ai = no
+				NOT = { character = ROOT }
+			}
+			narrative_event = { id = ayleid_flavour.11 days = 2 }
+		}
+	}
+}
+
+narrative_event = {
+	id = ayleid_flavour.11
+	desc = ayleid_flavour.11.d
+	title = ayleid_flavour.10.t
+	picture = GFX_evt_ayleid
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ayleid_flavour.11.optA
+	}
+}

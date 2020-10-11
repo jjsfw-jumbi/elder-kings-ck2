@@ -1,0 +1,458 @@
+#PATRON TRAIT#
+
+remove_patron_deity = {
+	custom_tooltip = {
+		text = REMOVE_PATRON_DEITY_CT
+		hidden_tooltip = {
+			remove_trait = p_akatosh
+			remove_trait = p_arkay
+			remove_trait = p_dibella
+			remove_trait = p_julianos
+			remove_trait = p_kynareth
+			remove_trait = p_mara
+			remove_trait = p_stendarr
+			remove_trait = p_talos
+			remove_trait = p_lorkhan
+			remove_trait = p_zenithar
+			remove_trait = p_auriel
+			remove_trait = p_jephre
+			remove_trait = p_magnus
+			remove_trait = p_phynaster
+			remove_trait = p_syrabane
+			remove_trait = p_xarxes
+			remove_trait = p_baandar
+			remove_trait = p_hermamora
+			remove_trait = p_yffre
+			remove_trait = p_zen
+			remove_trait = p_alkosh
+			remove_trait = p_azurah
+			remove_trait = p_khenarthi
+			remove_trait = p_srendarr
+			remove_trait = p_kmara
+			remove_trait = p_lorkhanj
+			remove_trait = p_rajhin
+			remove_trait = p_merrunz
+			remove_trait = p_skoomacat
+			remove_trait = p_riddlethar
+			remove_trait = p_odibella
+			remove_trait = p_omara
+			remove_trait = p_oazura
+			remove_trait = p_ohircine
+			remove_trait = p_operyite
+			remove_trait = p_omolag
+			remove_trait = p_onamira
+			remove_trait = p_ruptga
+			remove_trait = p_diagna
+			remove_trait = p_satakal
+			remove_trait = p_zeht
+			remove_trait = p_tava
+			remove_trait = p_onsi
+			remove_trait = p_morwha
+			remove_trait = p_leki
+			remove_trait = p_tuwhacca
+			remove_trait = p_sep
+			remove_trait = p_vivec
+			remove_trait = p_almalexia
+			remove_trait = p_sotha
+			remove_trait = p_azura
+			remove_trait = p_boethiah
+			remove_trait = p_mephala
+			remove_trait = p_nerevar
+			remove_trait = p_stvivec
+			remove_trait = p_stsotha
+			remove_trait = p_stalmalexia
+			remove_trait = p_veloth
+			remove_trait = p_sul
+			remove_trait = p_orgnum
+			remove_trait = p_pauriel
+			remove_trait = p_panuiel
+			remove_trait = p_pxarxes
+			remove_trait = p_pmagnus
+			remove_trait = p_psyrabane
+			remove_trait = p_pmeridia
+			remove_trait = p_phircine
+			remove_trait = p_pdragons
+			remove_trait = p_storgnum
+			remove_trait = p_summer
+			remove_trait = p_elder
+			remove_trait = p_winter
+			remove_trait = p_spring
+			remove_trait = p_autumn
+			remove_trait = p_zivamo
+			remove_trait = p_zambumo
+			remove_trait = p_summo
+			remove_trait = p_ugramo
+			remove_trait = p_kavimo
+			remove_trait = p_ayutamo
+			remove_trait = p_bhut
+			remove_trait = p_shani
+			remove_trait = p_whale
+			remove_trait = p_moth
+			remove_trait = p_dragon
+			remove_trait = p_wolf
+			remove_trait = p_eagle
+			remove_trait = p_bear
+			remove_trait = p_qhermamora
+			remove_trait = p_qmephala
+			remove_trait = p_qnocturnal
+			remove_trait = p_qsheogorath
+			clr_character_flag = set_patron_deity
+			
+			# Some patron deities have an impact on your religious features
+			character_event = { id = relbeh.0 }
+		}
+	}
+}
+
+#DAEDRA WORSHIP#
+
+become_relevant_daedric_religion = {
+	random_list = { #Base chance multiplied by 3 for closely aligned religions, otherwise 1.5 for fitting into at least one of the same archetypes as that religion
+		10 = {
+			modifier = {
+				factor = 3
+				OR = {
+					religion_group = reach_faiths
+					religion_group = tribunal
+					religion_group = khajiit_pantheon
+				}
+			}
+			religion = daedra_azura 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				religion_group = tribunal
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = tribunal }
+				OR = {
+					is_clandestine_religion = yes
+					is_selfish_religion = yes
+					is_slavery_religion = yes
+					is_warlike_religion = yes
+				}
+			}
+			religion = daedra_boethiah 
+		}
+		10 = {
+			modifier = {
+				factor = 1.5
+				OR = {
+					is_hedonistic_religion = yes
+					is_selfish_religion = yes
+				}
+			}
+			religion = daedra_clavicus 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				OR = {
+					religion = green_pact
+					religion = blacksap
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOR = {
+					religion = green_pact
+					religion = blacksap
+				}
+				OR = {
+					is_clandestine_religion = yes
+					is_selfish_religion = yes
+					is_slavery_religion = yes
+				}
+			}
+			religion = daedra_hermaeus 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				religion_group = reach_faiths
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = reach_faiths }
+				is_warlike_religion = yes
+			}
+			religion = daedra_hircine 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				religion_group = tribunal
+			}
+			modifier = { #Special case since Malacath worship is so ingrained upon Orc culture
+				factor = 1.5
+				culture = orsimer
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = tribunal }
+				OR = {
+					is_antislavery_religion = yes
+					is_honest_religion = yes
+					is_selfish_religion = yes
+					is_warlike_religion = yes
+				}
+			}
+			religion = daedra_malacath 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				OR = {
+					religion_group = tribunal
+					religion_group = khajiit_pantheon
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOR = { 
+					religion_group = tribunal
+					religion_group = khajiit_pantheon 
+				}
+				OR = {
+					is_clandestine_religion = yes
+					is_selfish_religion = yes
+					is_slavery_religion = yes
+					is_warlike_religion = yes
+				}
+			}
+			religion = daedra_mehrunes 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				religion_group = tribunal
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = tribunal }
+				OR = {
+					is_clandestine_religion = yes
+					is_hedonistic_religion = yes
+					is_selfish_religion = yes
+					is_warlike_religion = yes
+				}
+			}
+			religion = daedra_mephala 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				religion_group = maormer_religion
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = maormer_religion }
+				is_anti_necromancy_religion = yes
+			}
+			religion = daedra_meridia 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				OR = {
+					religion_group = reach_faiths
+					religion_group = tribunal
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOR = {
+					religion_group = reach_faiths
+					religion_group = tribunal
+				}
+				OR = {
+					is_clandestine_religion = yes
+					is_hedonistic_religion = yes
+					is_necromancy_religion = yes
+					is_selfish_religion = yes
+					is_slavery_religion = yes
+					is_warlike_religion = yes
+				}
+			}
+			religion = daedra_molag 
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				religion_group = reach_faiths
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = reach_faiths }
+				OR = {
+					is_clandestine_religion = yes
+					is_hedonistic_religion = yes
+					is_necromancy_religion = yes
+					is_slavery_religion = yes
+				}
+			}
+			religion = daedra_namira
+		}
+		10 = { 
+			modifier = {
+				factor = 1.5
+				OR = {
+					is_clandestine_religion = yes
+					is_selfish_religion = yes
+				}
+			}
+			religion = daedra_nocturnal
+		}
+		10 = { 
+			modifier = {
+				factor = 3
+				religion_group = reach_faiths
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { religion_group = reach_faiths }
+				is_slavery_religion = yes
+			}
+			religion = daedra_peryite 
+		}
+		10 = {
+			modifier = {
+				factor = 1.5
+				OR = {
+					is_hedonistic_religion = yes
+					is_selfish_religion = yes
+					is_slavery_religion = yes
+				}
+			}
+			religion = daedra_sanguine
+		}
+		10 = {
+			modifier = {
+				factor = 3
+				OR = {
+					religion_group = tribunal
+					religion_group = khajiit_pantheon
+				}
+			}
+			modifier = { #Lacking special classification, crazy owners increase the chances
+				factor = 1.5
+				NOR = { 
+					religion_group = tribunal
+					religion_group = khajiit_pantheon 
+				}
+				owner = { is_batshit_crazy = yes }
+			}
+			religion = daedra_sheogorath
+		}
+		10 = {
+			modifier = {
+				factor = 1.5
+				is_clandestine_religion = yes
+			}
+			religion = daedra_vaermina
+		}
+	}
+}
+
+#SYBIL OF DIBELLA#
+
+generate_sybil_of_dibella = {
+	random_character = {
+		limit = {
+			#Not already a Sybil
+			NOT = { has_character_modifier = sybil_of_dibella }
+			#Is a theocratic female ruler
+			is_female = yes
+			is_ruler = yes
+			is_theocracy = yes
+			#Follows a Dibellan religion
+			OR = {
+				religion = eight_divines
+				religion = nine_divines
+				religion = old_gods
+			}
+			#Is not ugly, deformed, incapable or unsexy
+			NOR = {
+				trait = leper
+				trait = maimed
+				trait = incapable
+				trait = eunuch
+				trait = diarrhea
+				trait = one_eyed
+				trait = one_handed
+				trait = one_legged
+				trait = disfigured
+				trait = mangled
+				trait = dysentery
+				trait = has_knahaten_flu
+				trait = clubfooted
+				trait = harelip
+				trait = hunchback
+				trait = lisp
+				trait = ugly
+				trait = dwarf
+				trait = wrymouth
+			}
+			OR = {
+				AND = {
+					is_immortal = yes 
+					age > 15
+					age < 125
+				}
+				AND = {
+					is_immortal = no
+					age > 15
+					age < 35
+				}
+			}
+		}
+		
+		trigger_switch = {
+			on_trigger = religion
+			eight_divines = { add_trait = p_dibella }
+			nine_divines = { add_trait = p_dibella }
+			old_gods = { add_trait = p_odibella }
+		}
+		set_special_character_title = sybil
+		add_character_modifier = {
+			modifier = sybil_of_dibella
+			duration = -1
+		}
+	}
+}
+
+#SECRET CULTS#
+
+#Etienne's note: effects formerly listed here are now located in the 00_scripted_effects file. This is to maintain consistency with vanilla
+
+# Thanks Etienne, now we can add more stuff
+
+pyandoneaic_update_gods = {
+	pyandoneaic = {
+		remove_god_names = yes
+		add_god_name = GOD_ORGNUM
+		add_god_name = GOD_AURIEL
+		add_god_name = GOD_ANUI_EL
+		add_god_name = GOD_XARXES
+		add_god_name = GOD_MAGNUS
+		add_god_name = GOD_SYRABANE
+		add_god_name = GOD_THE_ANCESTORS
+		
+		if = {
+			limit = { NOT = { has_global_flag = meridia_removed_pyandoneaic_pantheon } }
+			add_god_name = GOD_MERIDIA
+		}
+		
+		if = {
+			limit = { has_global_flag = hircine_worship_pyandoneaic_pantheon }
+			add_god_name = GOD_HIRCINE
+		}
+		
+		if = {
+			limit = { has_global_flag = dragon_worship_pyandoneaic_pantheon }
+			add_god_name = GOD_THE_DRAGONS
+		}
+	}
+}

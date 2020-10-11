@@ -1,0 +1,7612 @@
+fighters_guild_tamriel = {
+	primary_attribute = martial
+	society_ranks_gfx = fighters_society_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = fighters_guild_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		martial = 8
+		OR = {
+			is_warrior = yes
+			AND = {
+				has_acceptable_fighters_specialisation = yes
+				martial = 10
+			}
+			AND = {
+				combat_rating = 75
+				martial = 30
+			}
+			AND = {
+				OR = {
+					is_mage = yes
+					is_agent = yes
+				}
+				martial = 25
+			}
+			trait = dragonborn
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = fighters_guild_tamriel
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	#Associate > Protector > Defender > Warder > Guardian > Champion > Master
+	society_rank = {
+		level = 1
+		limit = 80
+		startup_limit = 40
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			enable_quests_decision
+			study_specialization
+		}
+		powers = {
+			warrior_training
+			infestation_fighter
+		}
+		custom_tooltip = QUEST_DIFFICULTY_1_7_CT
+	}
+	society_rank = {
+		level = 2
+		limit = 60
+		startup_limit = 30
+		modifier = {
+			monthly_character_prestige = 0.025
+		}
+		decisions = {
+			strengthen_body_fighter
+		}
+		custom_tooltip = QUEST_DIFFICULTY_2_7_CT
+	}
+	society_rank = {
+		level = 3
+		limit = 48
+		startup_limit = 24
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+		}
+		powers = {
+			fighter_buy_techpoints
+		}
+		custom_tooltip = QUEST_DIFFICULTY_3_7_CT
+	}
+	society_rank = {
+		level = 4
+		limit = 36
+		startup_limit = 18
+		modifier = {
+			monthly_character_prestige = 0.1
+		}
+		decisions = {
+		}
+		custom_tooltip = QUEST_DIFFICULTY_4_7_CT
+	}
+	society_rank = {
+		level = 5
+		limit = 12
+		startup_limit = 6
+		modifier = {
+			monthly_character_prestige = 0.15
+			build_cost_castle_modifier = -0.1
+			build_cost_tribal_modifier = -0.1
+		}
+		decisions = {
+			fighter_lifestyle
+		}
+		custom_tooltip = QUEST_DIFFICULTY_5_7_CT
+	}
+	society_rank = {
+		level = 6
+		limit = 6
+		startup_limit = 2
+		modifier = {
+			monthly_character_prestige = 0.25
+			build_cost_castle_modifier = -0.15
+			build_cost_tribal_modifier = -0.15
+		}
+		decisions = {
+			request_grandmaster_retire
+		}
+		custom_tooltip = QUEST_DIFFICULTY_6_7_CT
+	}
+	society_rank = {
+		level = 7
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			build_cost_castle_modifier = -0.2
+			build_cost_tribal_modifier = -0.2
+		}
+		decisions = {
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_fighters_guild_tamriel
+		
+		per_attribute = {
+    		name = martial
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.0
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.0
+			trait = brave
+		}
+		has_trait = {
+			value = 0.5
+			trait = patient
+		}
+		has_trait = {
+			value = 0.5
+			trait = temperate
+		}
+		has_trait = {
+			value = 1.25
+			trait = just
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		has_trait = {
+			value = 1
+			trait = duelist
+		}
+		has_trait = {
+			value = 0.25
+			trait = hunter
+		}
+		has_trait = {
+			value = 1.25
+			trait = adventurer
+		}
+		has_trait = {
+			value = 1
+			trait = gladiator
+		}
+		has_trait = {
+			value = 0.25
+			trait = equestrian
+		}
+		has_trait = {
+			value = 0.25
+			trait = blacksmith
+		}
+		#Congenital Traits
+		has_trait = {
+			value = 0.5
+			trait = strong
+		}
+		has_trait = {
+			value = 0.5
+			trait = raht
+		}
+		has_trait = {
+			value = 0.5
+			trait = fortitude
+		}
+		has_trait = {
+			value = 0.5
+			trait = robust
+		}
+		has_trait = {
+			value = 0.5
+			trait = agile
+		}
+		has_trait = {
+			value = 0.25
+			trait = perceptive
+		}
+		has_trait = {
+			value = 0.25
+			trait = shrewd
+		}
+		has_trait = {
+			value = 0.25
+			trait = powerful_voice
+		}
+		has_trait = {
+			value = 0.25
+			trait = lucky
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = warrior_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = warrior_4
+		}
+		has_trait = {
+			value = 2
+			trait = warrior_5
+		}
+		has_trait = {
+			value = 1
+			trait = mage_4
+		}
+		has_trait = {
+			value = 1.5
+			trait = mage_5
+		}
+		has_trait = {
+			value = 1
+			trait = agent_4
+		}
+		has_trait = {
+			value = 1.5
+			trait = agent_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 4
+			value = 0.5
+		}
+		society_rank = {
+			rank = 5
+			value = 1.0
+		}
+		society_rank = {
+			rank = 6
+			value = 2.5
+		}
+		society_rank = {
+			rank = 7
+			value = 5
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = { 
+			factor = 1.25
+			combat_rating = 5 
+			NOT = { combat_rating = 10 } 
+		}
+		modifier = { 
+			factor = 1.5
+			combat_rating = 10
+			NOT = { combat_rating = 15 } 
+		}
+		modifier = { 
+			factor = 2.0
+			combat_rating = 15
+			NOT = { combat_rating = 20 } 
+		}
+		modifier = { 
+			factor = 2.5
+			combat_rating = 20
+			NOT = { combat_rating = 30 } 
+		}
+		modifier = { factor = 3.0 combat_rating >= 30 }
+		modifier = { factor = 2.0 trait = diligent }
+		modifier = { factor = 2.5 trait = just }
+		modifier = { factor = 1.5 trait = brave }
+		modifier = { factor = 1.5 trait = patient }
+		modifier = { factor = 1.5 trait = temperate }
+		modifier = { factor = 2.0 trait = strategist }
+		modifier = { factor = 1.5 trait = adventurer }
+		modifier = { factor = 1.1 trait = alchemist }
+		modifier = { factor = 1.5 trait = administrator }
+		modifier = { factor = 1.5 trait = duelist }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 1.5 trait = blacksmith }
+		modifier = { factor = 1.75 trait = gladiator }
+		modifier = { factor = 1.25 trait = equestrian }
+		modifier = { factor = 1.1 trait = saboteur }
+		modifier = { factor = 1.15 trait = smuggler }
+		modifier = { factor = 1.25 is_strong_trigger = yes }
+		modifier = { factor = 1.25 trait = fortitude }
+		modifier = { factor = 1.25 trait = agile }
+		modifier = { factor = 1.25 is_smart_trigger = yes }
+		modifier = { factor = 1.25 trait = warrior_3 }
+		modifier = { factor = 1.5 trait = warrior_4 }
+		modifier = { factor = 2.0 trait = warrior_5 }
+		modifier = { factor = 1.25 trait = agent_4 }
+		modifier = { factor = 1.5 trait = agent_5 }
+		modifier = { factor = 1.25 trait = mage_5 }
+		modifier = { factor = 1.5 is_assassin = yes }
+		modifier = { factor = 1.2 is_scout = yes }
+		modifier = { factor = 1.5 is_battlemage = yes }
+		modifier = { factor = 1.75 is_spellsword = yes }
+		modifier = { factor = 2.0 is_knight = yes }
+		modifier = { factor = 1.25 is_witchhunter = yes }
+		modifier = { factor = 2.0 is_crusader = yes }
+		modifier = { factor = 2.0 is_barbarian = yes }
+		modifier = { factor = 2.0 is_ansei = yes }
+		modifier = { factor = 2.0 is_swordsinger = yes }
+		modifier = { factor = 2.5 trait = dragonborn }
+		modifier = { factor = 2.0 is_dragonblood = yes }
+		modifier = { factor = 1.25 has_bloodline = yes }
+		#Negatives
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = { factor = 0.75 is_dumb_trigger = yes }
+		modifier = { factor = 0.85 is_weak_trigger = yes }
+		modifier = { factor = 0.95 trait = dwarf }
+		modifier = { factor = 0.95 trait = hunchback }
+		modifier = { factor = 0.95 trait = clubfooted }
+		modifier = { factor = 0.95 trait = unlucky }
+		modifier = { factor = 0.95 OR = { trait = blinded trait = blind trait = blind_moth } }
+		modifier = { factor = 0.95 trait = deaf }
+		modifier = { factor = 0.95 has_severe_disability_trigger = yes }
+		modifier = { factor = 0.95 is_maimed_trigger = yes }
+		modifier = { factor = 0.95 has_mental_disorder_trigger = yes }
+		modifier = { factor = 0.99 trait = arbitrary }
+		modifier = { factor = 0.99 trait = absent_minded }
+		modifier = { factor = 0.98 trait = slothful }
+		modifier = { factor = 0.99 trait = ruthless }
+		modifier = { factor = 0.95 trait = cruel }
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			martial = 10
+			OR = {
+				is_warrior = yes
+				AND = {
+					has_acceptable_fighters_specialisation = yes
+					martial = 15
+				}
+				AND = {
+					combat_rating = 75
+					martial = 30
+				}
+				AND = {
+					OR = {
+						is_mage = yes
+						is_agent = yes
+					}
+					martial = 25
+				}
+				trait = dragonborn
+			}
+			OR = {
+				is_landed = yes
+				AND = {
+					is_landed = no
+					martial = 15
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel
+								region = nirn_yokuda
+							}
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+fighters_guild_akavir = {
+	primary_attribute = martial
+	society_ranks_gfx = fighters_society_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = fighters_guild_akavir
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		martial = 8
+		OR = {
+			is_warrior = yes
+			AND = {
+				has_acceptable_fighters_specialisation = yes
+				martial = 10
+			}
+			AND = {
+				combat_rating = 75
+				martial = 30
+			}
+			AND = {
+				OR = {
+					is_mage = yes
+					is_agent = yes
+				}
+				martial = 25
+			}
+			trait = dragonborn
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_akavir
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = fighters_guild_akavir
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	#Associate > Protector > Defender > Warder > Guardian > Champion > Master
+	society_rank = {
+		level = 1
+		limit = 80
+		startup_limit = 40
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			enable_quests_decision
+			study_specialization
+		}
+		powers = {
+			warrior_training
+			infestation_fighter
+		}
+		custom_tooltip = QUEST_DIFFICULTY_1_7_CT
+	}
+	society_rank = {
+		level = 2
+		limit = 60
+		startup_limit = 30
+		modifier = {
+			monthly_character_prestige = 0.025
+		}
+		decisions = {
+			strengthen_body_fighter
+		}
+		custom_tooltip = QUEST_DIFFICULTY_2_7_CT
+	}
+	society_rank = {
+		level = 3
+		limit = 48
+		startup_limit = 24
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+		}
+		powers = {
+			fighter_buy_techpoints
+		}
+		custom_tooltip = QUEST_DIFFICULTY_3_7_CT
+	}
+	society_rank = {
+		level = 4
+		limit = 36
+		startup_limit = 18
+		modifier = {
+			monthly_character_prestige = 0.1
+		}
+		decisions = {
+		}
+		custom_tooltip = QUEST_DIFFICULTY_4_7_CT
+	}
+	society_rank = {
+		level = 5
+		limit = 12
+		startup_limit = 6
+		modifier = {
+			monthly_character_prestige = 0.15
+			build_cost_castle_modifier = -0.1
+			build_cost_tribal_modifier = -0.1
+		}
+		decisions = {
+			fighter_lifestyle
+		}
+		custom_tooltip = QUEST_DIFFICULTY_5_7_CT
+	}
+	society_rank = {
+		level = 6
+		limit = 6
+		startup_limit = 2
+		modifier = {
+			monthly_character_prestige = 0.25
+			build_cost_castle_modifier = -0.15
+			build_cost_tribal_modifier = -0.15
+		}
+		decisions = {
+			request_grandmaster_retire
+		}
+		custom_tooltip = QUEST_DIFFICULTY_6_7_CT
+	}
+	society_rank = {
+		level = 7
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			build_cost_castle_modifier = -0.2
+			build_cost_tribal_modifier = -0.2
+		}
+		decisions = {
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_fighters_guild_akavir
+		
+		per_attribute = {
+    		name = martial
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 0.75
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.0
+			trait = brave
+		}
+		has_trait = {
+			value = 0.5
+			trait = ambitious
+		}
+		has_trait = {
+			value = 0.5
+			trait = ruthless
+		}
+		has_trait = {
+			value = 0.25
+			trait = proud
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		has_trait = {
+			value = 1.25
+			trait = duelist
+		}
+		has_trait = {
+			value = 0.25
+			trait = hunter
+		}
+		has_trait = {
+			value = 1.0
+			trait = adventurer
+		}
+		has_trait = {
+			value = 1.25
+			trait = gladiator
+		}
+		has_trait = {
+			value = 0.25
+			trait = equestrian
+		}
+		has_trait = {
+			value = 0.25
+			trait = blacksmith
+		}
+		#Congenital Traits
+		has_trait = {
+			value = 0.75
+			trait = strong
+		}
+		has_trait = {
+			value = 0.75
+			trait = raht
+		}
+		has_trait = {
+			value = 0.5
+			trait = fortitude
+		}
+		has_trait = {
+			value = 0.75
+			trait = robust
+		}
+		has_trait = {
+			value = 0.5
+			trait = agile
+		}
+		has_trait = {
+			value = 0.25
+			trait = perceptive
+		}
+		has_trait = {
+			value = 0.25
+			trait = shrewd
+		}
+		has_trait = {
+			value = 0.25
+			trait = powerful_voice
+		}
+		has_trait = {
+			value = 0.25
+			trait = lucky
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = warrior_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = warrior_4
+		}
+		has_trait = {
+			value = 2
+			trait = warrior_5
+		}
+		has_trait = {
+			value = 1
+			trait = mage_4
+		}
+		has_trait = {
+			value = 1.5
+			trait = mage_5
+		}
+		has_trait = {
+			value = 1
+			trait = agent_4
+		}
+		has_trait = {
+			value = 1.5
+			trait = agent_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 4
+			value = 0.5
+		}
+		society_rank = {
+			rank = 5
+			value = 1.0
+		}
+		society_rank = {
+			rank = 6
+			value = 2.5
+		}
+		society_rank = {
+			rank = 7
+			value = 5
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = { 
+			factor = 1.25
+			combat_rating = 5 
+			NOT = { combat_rating = 10 } 
+		}
+		modifier = { 
+			factor = 1.5
+			combat_rating = 10
+			NOT = { combat_rating = 15 } 
+		}
+		modifier = { 
+			factor = 2.0
+			combat_rating = 15
+			NOT = { combat_rating = 20 } 
+		}
+		modifier = { 
+			factor = 2.5
+			combat_rating = 20
+			NOT = { combat_rating = 30 } 
+		}
+		modifier = { factor = 3.0 combat_rating >= 30 }
+		modifier = { factor = 2.0 trait = diligent }
+		modifier = { factor = 2.0 trait = ambitious }
+		modifier = { factor = 1.5 trait = brave }
+		modifier = { factor = 1.5 trait = patient }
+		modifier = { factor = 1.25 trait = ruthless }
+		modifier = { factor = 2.0 trait = strategist }
+		modifier = { factor = 1.5 trait = adventurer }
+		modifier = { factor = 1.1 trait = alchemist }
+		modifier = { factor = 1.5 trait = administrator }
+		modifier = { factor = 1.5 trait = duelist }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 1.5 trait = blacksmith }
+		modifier = { factor = 1.75 trait = gladiator }
+		modifier = { factor = 1.25 trait = equestrian }
+		modifier = { factor = 1.1 trait = saboteur }
+		modifier = { factor = 1.15 trait = smuggler }
+		modifier = { factor = 1.25 is_strong_trigger = yes }
+		modifier = { factor = 1.25 trait = fortitude }
+		modifier = { factor = 1.25 trait = agile }
+		modifier = { factor = 1.25 is_smart_trigger = yes }
+		modifier = { factor = 1.25 trait = warrior_3 }
+		modifier = { factor = 1.5 trait = warrior_4 }
+		modifier = { factor = 2.0 trait = warrior_5 }
+		modifier = { factor = 1.25 trait = agent_4 }
+		modifier = { factor = 1.5 trait = agent_5 }
+		modifier = { factor = 1.25 trait = mage_5 }
+		modifier = { factor = 1.5 is_assassin = yes }
+		modifier = { factor = 1.2 is_scout = yes }
+		modifier = { factor = 1.5 is_battlemage = yes }
+		modifier = { factor = 1.75 is_spellsword = yes }
+		modifier = { factor = 2.0 is_knight = yes }
+		modifier = { factor = 1.25 is_witchhunter = yes }
+		modifier = { factor = 2.0 is_crusader = yes }
+		modifier = { factor = 2.0 is_barbarian = yes }
+		modifier = { factor = 2.0 is_ansei = yes }
+		modifier = { factor = 2.0 is_swordsinger = yes }
+		modifier = { factor = 2.5 trait = dragonborn }
+		modifier = { factor = 2.0 is_dragonblood = yes }
+		modifier = { factor = 1.25 has_bloodline = yes }
+		#Negatives
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = { factor = 0.75 is_dumb_trigger = yes }
+		modifier = { factor = 0.85 is_weak_trigger = yes }
+		modifier = { factor = 0.95 trait = dwarf }
+		modifier = { factor = 0.95 trait = hunchback }
+		modifier = { factor = 0.95 trait = clubfooted }
+		modifier = { factor = 0.95 trait = unlucky }
+		modifier = { factor = 0.95 OR = { trait = blinded trait = blind trait = blind_moth } }
+		modifier = { factor = 0.95 trait = deaf }
+		modifier = { factor = 0.95 has_severe_disability_trigger = yes }
+		modifier = { factor = 0.95 is_maimed_trigger = yes }
+		modifier = { factor = 0.95 has_mental_disorder_trigger = yes }
+		modifier = { factor = 0.99 trait = arbitrary }
+		modifier = { factor = 0.99 trait = absent_minded }
+		modifier = { factor = 0.98 trait = slothful }
+		modifier = { factor = 0.95 trait = cruel }
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			martial = 10
+			OR = {
+				is_warrior = yes
+				AND = {
+					has_acceptable_fighters_specialisation = yes
+					martial = 15
+				}
+				AND = {
+					combat_rating = 75
+					martial = 30
+				}
+				AND = {
+					OR = {
+						is_mage = yes
+						is_agent = yes
+					}
+					martial = 25
+				}
+				trait = dragonborn
+			}
+			OR = {
+				is_landed = yes
+				AND = {
+					is_landed = no
+					martial = 15
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+		}
+	}
+}
+
+companions_tamriel = {
+	primary_attribute = martial
+	society_ranks_gfx = companions_society_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = companions_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		martial = 12
+		OR = {
+			is_warrior = yes
+			AND = {
+				has_acceptable_fighters_specialisation = yes
+				martial = 15
+			}
+			AND = {
+				combat_rating = 75
+				martial = 30
+			}
+			AND = {
+				OR = {
+					is_mage = yes
+					is_agent = yes
+				}
+				martial = 25
+			}
+			trait = dragonborn
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_tamriel_skyrim
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_tamriel_skyrim
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = companions_tamriel
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_tamriel_skyrim
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_tamriel_skyrim
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 48
+		startup_limit = 12
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			enable_quests_decision
+			study_specialization
+		}
+		powers = {
+			warrior_training
+			infestation_fighter
+		}
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 24
+		startup_limit = 8
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+			fighter_buy_techpoints
+			strengthen_body_fighter
+		}
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 12
+		startup_limit = 6
+		modifier = {
+			monthly_character_prestige = 0.15
+			build_cost_castle_modifier = -0.1
+			build_cost_tribal_modifier = -0.1
+		}
+		decisions = {
+			request_grandmaster_retire
+			fighter_lifestyle
+		}
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			build_cost_castle_modifier = -0.2
+			build_cost_tribal_modifier = -0.2
+		}
+		decisions = {
+		}
+		powers = {
+			jorrvaskr_active_power
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_companions_tamriel
+		
+		per_attribute = {
+    		name = martial
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 0.75
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.25
+			trait = brave
+		}
+		has_trait = {
+			value = 1.0
+			trait = just
+		}
+		has_trait = {
+			value = 0.75
+			trait = zealous
+		}
+		has_trait = {
+			value = 0.25
+			trait = drunkard
+		}
+		has_trait = {
+			value = 0.5
+			trait = stubborn
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		has_trait = {
+			value = 1.25
+			trait = hunter
+		}
+		has_trait = {
+			value = 1
+			trait = duelist
+		}
+		has_trait = {
+			value = 1.0
+			trait = adventurer
+		}
+		has_trait = {
+			value = 0.75
+			trait = gladiator
+		}
+		has_trait = {
+			value = 0.25
+			trait = equestrian
+		}
+		has_trait = {
+			value = 1.0
+			trait = blacksmith
+		}
+		#Congenital Traits
+		has_trait = {
+			value = 1.0
+			trait = strong
+		}
+		has_trait = {
+			value = 0.75
+			trait = raht
+		}
+		has_trait = {
+			value = 0.75
+			trait = fortitude
+		}
+		has_trait = {
+			value = 1.0
+			trait = robust
+		}
+		has_trait = {
+			value = 0.5
+			trait = agile
+		}
+		has_trait = {
+			value = 0.5
+			trait = perceptive
+		}
+		has_trait = {
+			value = 0.25
+			trait = shrewd
+		}
+		has_trait = {
+			value = 0.5
+			trait = powerful_voice
+		}
+		has_trait = {
+			value = 0.25
+			trait = lucky
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = warrior_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = warrior_4
+		}
+		has_trait = {
+			value = 2
+			trait = warrior_5
+		}
+		has_trait = {
+			value = 0.5
+			trait = mage_4
+		}
+		has_trait = {
+			value = 1.0
+			trait = mage_5
+		}
+		#Lycanthropy
+		has_trait = {
+			value = 0.25
+			trait = lycan
+		}
+		has_trait = {
+			value = 0.5
+			trait = known_lycan_benevolent
+		}
+		#Ranks
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.0
+		}
+		society_rank = {
+			rank = 4
+			value = 3.0
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = { 
+			factor = 1.25
+			combat_rating = 5 
+			NOT = { combat_rating = 10 } 
+		}
+		modifier = { 
+			factor = 1.5
+			combat_rating = 10
+			NOT = { combat_rating = 15 } 
+		}
+		modifier = { 
+			factor = 2.0
+			combat_rating = 15
+			NOT = { combat_rating = 20 } 
+		}
+		modifier = { 
+			factor = 2.5
+			combat_rating = 20
+			NOT = { combat_rating = 30 } 
+		}
+		modifier = { factor = 3.0 combat_rating >= 30 }
+		modifier = { factor = 2.0 trait = diligent }
+		modifier = { factor = 2.5 trait = just }
+		modifier = { factor = 1.5 trait = brave }
+		modifier = { factor = 1.25 trait = stubborn }
+		modifier = { factor = 2.0 trait = strategist }
+		modifier = { factor = 1.5 trait = adventurer }
+		modifier = { factor = 1.1 trait = alchemist }
+		modifier = { factor = 1.5 trait = administrator }
+		modifier = { factor = 1.5 trait = duelist }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 1.5 trait = blacksmith }
+		modifier = { factor = 1.75 trait = gladiator }
+		modifier = { factor = 1.25 trait = equestrian }
+		modifier = { factor = 1.1 trait = saboteur }
+		modifier = { factor = 1.15 trait = smuggler }
+		modifier = { factor = 1.25 is_strong_trigger = yes }
+		modifier = { factor = 1.25 trait = fortitude }
+		modifier = { factor = 1.25 trait = agile }
+		modifier = { factor = 1.25 is_smart_trigger = yes }
+		modifier = { factor = 1.25 trait = warrior_3 }
+		modifier = { factor = 1.5 trait = warrior_4 }
+		modifier = { factor = 2.0 trait = warrior_5 }
+		modifier = { factor = 1.5 is_knight = yes }
+		modifier = { factor = 2.0 is_barbarian = yes }
+		modifier = { factor = 1.25 is_spellsword = yes }
+		modifier = { factor = 1.25 is_battlemage = yes }
+		modifier = { factor = 1.25 is_assassin = yes }
+		modifier = { factor = 2.0 is_swordsinger = yes }
+		modifier = { factor = 2.5 is_ansei = yes }
+		modifier = { factor = 1.5 is_crusader = yes }
+		modifier = { factor = 2.5 trait = dragonborn }
+		modifier = { factor = 2.0 is_dragonblood = yes }
+		modifier = { 
+			factor = 1.25 
+			has_bloodline = yes 
+			NOT = { 
+				any_owned_bloodline = {
+					OR = {
+						has_bloodline_flag = bloodline_companions
+						has_bloodline_flag = bloodline_ysgramor
+					}
+				} 
+			} 
+		}
+		modifier = { factor = 1.5 any_owned_bloodline = { has_bloodline_flag = bloodline_companions } }
+		modifier = { factor = 1.75 any_owned_bloodline = { has_bloodline_flag = bloodline_ysgramor	} }
+		modifier = { factor = 1.25 trait = nord }
+		modifier = { factor = 1.2 trait = redguard }
+		modifier = { factor = 1.15 trait = breton }
+		modifier = { factor = 1.15 trait = imperial }
+		#Negatives
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = { factor = 0.75 is_dumb_trigger = yes }
+		modifier = { factor = 0.85 is_weak_trigger = yes }
+		modifier = { factor = 0.95 trait = dwarf }
+		modifier = { factor = 0.95 trait = hunchback }
+		modifier = { factor = 0.95 trait = clubfooted }
+		modifier = { factor = 0.95 trait = unlucky }
+		modifier = { factor = 0.95 OR = { trait = blinded trait = blind trait = blind_moth } }
+		modifier = { factor = 0.95 trait = deaf }
+		modifier = { factor = 0.95 has_severe_disability_trigger = yes }
+		modifier = { factor = 0.95 is_maimed_trigger = yes }
+		modifier = { factor = 0.95 has_mental_disorder_trigger = yes }
+		modifier = { factor = 0.99 trait = arbitrary }
+		modifier = { factor = 0.99 trait = absent_minded }
+		modifier = { factor = 0.98 trait = slothful }
+		modifier = { factor = 0.99 trait = ruthless }
+		modifier = { factor = 0.95 trait = cruel }
+		modifier = { factor = 0.75 is_beast = yes }
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			martial = 10
+			OR = {
+				is_warrior = yes
+				AND = {
+					has_acceptable_fighters_specialisation = yes
+					martial = 15
+				}
+				AND = {
+					combat_rating = 75
+					martial = 30
+				}
+				AND = {
+					OR = {
+						is_mage = yes
+						is_agent = yes
+					}
+					martial = 25
+				}
+				trait = dragonborn
+			}
+			OR = {
+				is_landed = yes
+				AND = {
+					is_landed = no
+					martial = 15
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_tamriel_skyrim
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_tamriel_skyrim
+					}
+				}
+			}
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+		}
+	}
+}
+
+mages_guild_tamriel = {
+	primary_attribute = learning
+	society_ranks_gfx = mages_society_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = mages_guild_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		learning = 10
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = mages_guild_tamriel
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 100
+		startup_limit = 36
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			enable_quests_decision
+			study_specialization
+		}
+		powers = {
+			mage_training
+			infestation_mage
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_6_CT
+	}
+	society_rank = {
+		level = 2
+		limit = 72
+		startup_limit = 24
+		modifier = {
+			monthly_character_prestige = 0.025
+		}
+		decisions = {
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_6_CT
+	}
+	society_rank = {
+		level = 3
+		limit = 48
+		startup_limit = 12
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_6_CT
+	}
+	society_rank = {
+		level = 4
+		limit = 24
+		startup_limit = 8
+		modifier = {
+			monthly_character_prestige = 0.1
+			build_cost_temple_modifier = -0.1
+			build_time_temple_modifier = -0.1
+		}
+		decisions = {
+			mage_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_4_6_CT
+	}
+	society_rank = {
+		level = 5
+		limit = 12
+		startup_limit = 4
+		modifier = {
+			monthly_character_prestige = 0.25
+			build_cost_temple_modifier = -0.15
+			build_time_temple_modifier = -0.2
+		}
+		decisions = {
+			request_grandmaster_retire
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_5_6_CT
+	}
+	society_rank = {
+		level = 6
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			build_cost_temple_modifier = -0.2
+			build_time_temple_modifier = -0.3
+		}
+		decisions = {
+			power_necromancy_legality_tooltip
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_mages_guild_tamriel
+		
+		per_attribute = {
+    		name = learning
+    		value = 0.5
+    	}
+		has_trait = {
+			value = 2
+			trait = diligent
+		}
+		has_trait = {
+			value = 1
+			trait = scholar
+		}
+		has_trait = {
+			value = 1
+			trait = mystic
+		}
+		has_trait = {
+			value = 1
+			trait = erudite
+		}
+		has_trait = {
+			value = 1
+			trait = stubborn
+		}
+		has_trait = {
+			value = 1
+			trait = patient
+		}
+		has_trait = {
+			value = 1
+			trait = genius
+		}
+		has_trait = {
+			value = 1
+			trait = quick
+		}
+		has_trait = {
+			value = 1
+			trait = shrewd
+		}
+		has_trait = {
+			value = 1
+			trait = just
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			factor = 2
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.5
+			trait = scholar
+		}
+		modifier = {
+			factor = 1.5
+			trait = mystic
+		}
+		modifier = {
+			factor = 1.5
+			trait = erudite
+		}
+		modifier = {
+			factor = 1.5
+			trait = stubborn
+		}
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				trait = genius
+				trait = quick
+				trait = shrewd
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2
+			trait = mage_5
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			OR = {
+				AND = {
+					is_landed = yes
+					learning = 14
+				}
+				learning = 18
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel
+								region = nirn_yokuda
+							}
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			NOR = {
+				character = 49700 #Divayth Fyr
+				character = 300499 #Yagrum Bagarn
+			}
+		}
+	}
+}
+
+mages_guild_akavir = {
+	primary_attribute = learning
+	society_ranks_gfx = mages_society_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = mages_guild_akavir
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		learning = 10
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_akavir
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = mages_guild_akavir
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 250
+		startup_limit = 50
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			mage_training
+			infestation_mage
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 100
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 50
+		startup_limit = 10
+		modifier = {
+			monthly_character_prestige = 0.15
+			build_cost_temple_modifier = -0.1
+			build_time_temple_modifier = -0.15
+		}
+		decisions = {
+			request_grandmaster_retire
+			mage_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			build_cost_temple_modifier = -0.2
+			build_time_temple_modifier = -0.3
+		}
+		decisions = {
+			power_necromancy_legality_tooltip
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_mages_guild_akavir
+		
+		per_attribute = {
+    		name = learning
+    		value = 0.5
+    	}
+		has_trait = {
+			value = 2
+			trait = diligent
+		}
+		has_trait = {
+			value = 1
+			trait = scholar
+		}
+		has_trait = {
+			value = 1
+			trait = mystic
+		}
+		has_trait = {
+			value = 1
+			trait = erudite
+		}
+		has_trait = {
+			value = 1
+			trait = stubborn
+		}
+		has_trait = {
+			value = 1
+			trait = patient
+		}
+		has_trait = {
+			value = 1
+			trait = genius
+		}
+		has_trait = {
+			value = 1
+			trait = quick
+		}
+		has_trait = {
+			value = 1
+			trait = shrewd
+		}
+		has_trait = {
+			value = 1
+			trait = just
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			factor = 2
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.5
+			trait = scholar
+		}
+		modifier = {
+			factor = 1.5
+			trait = mystic
+		}
+		modifier = {
+			factor = 1.5
+			trait = erudite
+		}
+		modifier = {
+			factor = 1.5
+			trait = stubborn
+		}
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				trait = genius
+				trait = quick
+				trait = shrewd
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2
+			trait = mage_5
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			OR = {
+				AND = {
+					is_landed = yes
+					OR = { 
+						learning = 14
+						is_mage = yes
+					}
+				}
+				AND = {
+					learning = 18
+					is_mage = yes
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+		}
+	}
+}
+
+mercantile_guild_tamriel = {
+	primary_attribute = stewardship
+	society_ranks_gfx = generic_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = mercantile_guild_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		stewardship = 10
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = mercantile_guild_tamriel
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 100
+		startup_limit = 50
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			magistrate_training
+			infestation_mercantile
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 36
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+			mercantile_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 10
+		startup_limit = 10
+		modifier = {
+			monthly_character_prestige = 0.15
+			build_cost_city_modifier = -0.1
+			build_time_city_modifier = -0.15
+		}
+		decisions = {
+			request_grandmaster_retire
+			mercantile_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			build_cost_city_modifier = -0.15
+			build_time_city_modifier = -0.3
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_mercantile_guild_tamriel
+		
+		per_attribute = {
+    		name = stewardship
+    		value = 0.5
+    	}
+		has_trait = {
+			value = 2
+			trait = diligent
+		}
+		has_trait = {
+			value = 1
+			trait = architect
+		}
+		has_trait = {
+			value = 1
+			trait = administrator
+		}
+		has_trait = {
+			value = 1
+			trait = gregarious
+		}
+		has_trait = {
+			value = 1
+			trait = stubborn
+		}
+		has_trait = {
+			value = 1
+			trait = patient
+		}
+		has_trait = {
+			value = 1
+			trait = genius
+		}
+		has_trait = {
+			value = 1
+			trait = quick
+		}
+		has_trait = {
+			value = 1
+			trait = shrewd
+		}
+		has_trait = {
+			value = 1
+			trait = just
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			factor = 2
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.5
+			trait = architect
+		}
+		modifier = {
+			factor = 1.5
+			trait = administrator
+		}
+		modifier = {
+			factor = 1.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 1.5
+			trait = stubborn
+		}
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				trait = genius
+				trait = quick
+				trait = shrewd
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2
+			trait = magistrate_5
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			OR = {
+				AND = {
+					is_landed = yes
+					OR = { 
+						stewardship = 14
+						is_magistrate = yes
+					}
+				}
+				AND = {
+					stewardship = 18
+					is_magistrate = yes
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel
+								region = nirn_yokuda
+							}
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+		}
+	}
+}
+
+mercantile_guild_akavir = {
+	primary_attribute = stewardship
+	society_ranks_gfx = generic_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = mercantile_guild_akavir
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		stewardship = 10
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_akavir
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = mercantile_guild_akavir
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 100
+		startup_limit = 50
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			magistrate_training
+			infestation_mercantile
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 36
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+			mercantile_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 10
+		startup_limit = 10
+		modifier = {
+			monthly_character_prestige = 0.15
+			build_cost_city_modifier = -0.1
+			build_time_city_modifier = -0.15
+		}
+		decisions = {
+			request_grandmaster_retire
+			mercantile_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			build_cost_city_modifier = -0.15
+			build_time_city_modifier = -0.3
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_mercantile_guild_akavir
+		
+		per_attribute = {
+    		name = stewardship
+    		value = 0.5
+    	}
+		has_trait = {
+			value = 2
+			trait = diligent
+		}
+		has_trait = {
+			value = 1
+			trait = architect
+		}
+		has_trait = {
+			value = 1
+			trait = administrator
+		}
+		has_trait = {
+			value = 1
+			trait = gregarious
+		}
+		has_trait = {
+			value = 1
+			trait = stubborn
+		}
+		has_trait = {
+			value = 1
+			trait = patient
+		}
+		has_trait = {
+			value = 1
+			trait = genius
+		}
+		has_trait = {
+			value = 1
+			trait = quick
+		}
+		has_trait = {
+			value = 1
+			trait = shrewd
+		}
+		has_trait = {
+			value = 1
+			trait = just
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			factor = 2
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.5
+			trait = architect
+		}
+		modifier = {
+			factor = 1.5
+			trait = administrator
+		}
+		modifier = {
+			factor = 1.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 1.5
+			trait = stubborn
+		}
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				trait = genius
+				trait = quick
+				trait = shrewd
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2
+			trait = magistrate_5
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			OR = {
+				AND = {
+					is_landed = yes
+					OR = { 
+						stewardship = 14
+						is_magistrate = yes
+					}
+				}
+				AND = {
+					stewardship = 18
+					is_magistrate = yes
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+		}
+	}
+}
+
+scenarist_guild_tamriel = {
+	primary_attribute = diplomacy
+	society_ranks_gfx = generic_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = scenarist_guild_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		diplomacy = 10
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = scenarist_guild_tamriel
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 100
+		startup_limit = 50
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			diplomat_training
+			infestation_scenarist
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 36
+		modifier = {
+			monthly_character_prestige = 0.05
+			general_opinion = 2
+		}
+		startup_limit = 20
+		decisions = {
+			scenarist_buy_techpoints
+			take_care_appearance_scenarist
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 10
+		modifier = {
+			monthly_character_prestige = 0.15
+			general_opinion = 5
+		}
+		startup_limit = 10
+		decisions = {
+			request_grandmaster_retire
+			scenarist_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			general_opinion = 10
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_scenarist_guild_tamriel
+		
+		per_attribute = {
+    		name = diplomacy
+    		value = 0.5
+    	}
+		has_trait = {
+			value = 2
+			trait = diligent
+		}
+		has_trait = {
+			value = 1
+			trait = socializer
+		}
+		has_trait = {
+			value = 1
+			trait = gamer
+		}
+		has_trait = {
+			value = 1
+			trait = gregarious
+		}
+		has_trait = {
+			value = 1
+			trait = stubborn
+		}
+		has_trait = {
+			value = 1
+			trait = patient
+		}
+		has_trait = {
+			value = 1
+			trait = genius
+		}
+		has_trait = {
+			value = 1
+			trait = quick
+		}
+		has_trait = {
+			value = 1
+			trait = shrewd
+		}
+		has_trait = {
+			value = 1
+			trait = just
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			factor = 2
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.5
+			trait = socializer
+		}
+		modifier = {
+			factor = 1.5
+			trait = gamer
+		}
+		modifier = {
+			factor = 1.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 1.5
+			trait = stubborn
+		}
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				trait = genius
+				trait = quick
+				trait = shrewd
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2
+			trait = diplomat_5
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			OR = {
+				AND = {
+					is_landed = yes
+					OR = { 
+						diplomacy = 14
+						is_diplomat = yes
+					}
+				}
+				AND = {
+					diplomacy = 18
+					is_diplomat = yes
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel
+								region = nirn_yokuda
+							}
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+		}
+	}
+}
+
+scenarist_guild_akavir = {
+	primary_attribute = diplomacy
+	society_ranks_gfx = generic_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = hermetic_society_interface
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = scenarist_guild_akavir
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		diplomacy = 10
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_akavir
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = scenarist_guild_akavir
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 100
+		startup_limit = 50
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			diplomat_training
+			infestation_scenarist
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 36
+		modifier = {
+			monthly_character_prestige = 0.05
+			general_opinion = 2
+		}
+		startup_limit = 20
+		decisions = {
+			scenarist_buy_techpoints
+			take_care_appearance_scenarist
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 10
+		modifier = {
+			monthly_character_prestige = 0.15
+			general_opinion = 5
+		}
+		startup_limit = 10
+		decisions = {
+			request_grandmaster_retire
+			scenarist_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			general_opinion = 10
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_scenarist_guild_akavir
+		
+		per_attribute = {
+    		name = diplomacy
+    		value = 0.5
+    	}
+		has_trait = {
+			value = 2
+			trait = diligent
+		}
+		has_trait = {
+			value = 1
+			trait = socializer
+		}
+		has_trait = {
+			value = 1
+			trait = gamer
+		}
+		has_trait = {
+			value = 1
+			trait = gregarious
+		}
+		has_trait = {
+			value = 1
+			trait = stubborn
+		}
+		has_trait = {
+			value = 1
+			trait = patient
+		}
+		has_trait = {
+			value = 1
+			trait = genius
+		}
+		has_trait = {
+			value = 1
+			trait = quick
+		}
+		has_trait = {
+			value = 1
+			trait = shrewd
+		}
+		has_trait = {
+			value = 1
+			trait = just
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			factor = 2
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.5
+			trait = socializer
+		}
+		modifier = {
+			factor = 1.5
+			trait = gamer
+		}
+		modifier = {
+			factor = 1.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 1.5
+			trait = stubborn
+		}
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				trait = genius
+				trait = quick
+				trait = shrewd
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 2
+			trait = diplomat_5
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			OR = {
+				AND = {
+					is_landed = yes
+					OR = { 
+						diplomacy = 14
+						is_diplomat = yes
+					}
+				}
+				AND = {
+					diplomacy = 18
+					is_diplomat = yes
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+		}
+	}
+}
+
+greybeards_tamriel = {
+	primary_attribute = learning
+	is_religious = yes
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = monastic_orders_interface
+	society_ranks_gfx = monk_ranks
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = greybeards_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		OR = {
+			religion_group = human_pantheon
+			religion_group = mer_pantheon
+			religion = animism
+			religion = anuic_skaal
+			is_dragonblood = yes
+		}
+		custom_tooltip = {
+			text = did_not_betray_society
+			NOT = { has_character_flag = betrayed_greybeards_tamriel }
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_tamriel
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_tamriel
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+	
+	show_society = {
+		OR = {
+			society_member_of = greybeards_tamriel
+			AND = {
+				OR = {
+					religion_group = human_pantheon
+					religion_group = mer_pantheon
+					religion = animism
+					religion = anuic_skaal
+					is_dragonblood = yes
+				}
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		OR = {
+			religion_group = human_pantheon
+			religion_group = mer_pantheon
+			religion = animism
+			religion = anuic_skaal
+			is_dragonblood = yes
+		}
+		OR = {
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_tamriel
+				}
+			}
+		}
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 36 
+		startup_limit = 10
+		modifier = {
+			monthly_character_piety = 0.01
+			same_religion_opinion = 3
+		}
+		decisions = {
+			study_specialization
+			power_get_good_traits_tooltip
+		}
+		powers = {
+			thuum_learning
+			general_training_no_agent
+		}
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 24
+		startup_limit = 8
+		modifier = {
+			monthly_character_piety = 0.05
+			same_religion_opinion = 5
+		}
+		decisions = {
+			monastic_buy_techpoints
+		}
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 12
+		startup_limit = 6
+		modifier = {
+			monthly_character_piety = 0.15
+			same_religion_opinion = 10
+			health = 0.5
+		}
+		decisions = {
+		}
+	}
+
+	society_rank = {
+		level = 4
+		limit = 6
+		startup_limit = 2
+		modifier = {
+			monthly_character_piety = 0.5
+			same_religion_opinion = 15
+			health = 1.5
+		}
+		decisions = {
+		}
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_greybeards_tamriel
+    	
+    	per_attribute = {
+    		name = learning
+    		value = 0.5
+    	}
+    	has_trait = {
+			trait = greybeard
+			value = 5
+		}
+		has_trait = {
+			trait = dragonborn
+			value = 5
+		}
+		has_trait = {
+			trait = dragonborn_g_1
+			value = 3.5
+		}
+		has_trait = {
+			trait = dragonborn_g_2
+			value = 3
+		}
+		has_trait = {
+			trait = dragonborn_g_3
+			value = 2.5
+		}
+		has_trait = {
+			trait = dragonborn_g_4
+			value = 2
+		}
+		has_trait = {
+			trait = dragonborn_g_5
+			value = 1.5
+		}
+		has_trait = {
+			trait = dragonborn_descendant
+			value = 1
+		}
+		has_trait = {
+			trait = honest
+			value = 2
+		}
+    	has_trait = {
+			trait = diligent
+			value = 2
+		}
+		has_trait = {
+			trait = temperate
+			value = 2
+		}
+		has_trait = {
+			trait = charitable
+			value = 2
+		}
+		has_trait = {
+			trait = chaste
+			value = 2
+		}
+		has_trait = {
+			trait = kind
+			value = 2
+		}
+		has_trait = {
+			trait = patient
+			value = 2
+		}
+		has_trait = {
+			trait = humble
+			value = 2
+		}
+		has_trait = {
+			trait = zealous
+			value = 2
+		}
+		has_trait = {
+			trait = erudite
+			value = 1
+		}
+		has_trait = {
+			trait = pilgrim
+			value = 1
+		}
+		has_trait = {
+			trait = theologian
+			value = 1
+		}
+		has_trait = {
+			trait = gardener
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = dragonborn
+			factor = 10
+		}
+		modifier = {
+			trait = greybeard
+			factor = 10
+		}
+		modifier = {
+			trait = dragonborn_g_1
+			factor = 8
+		}
+		modifier = {
+			trait = dragonborn_g_2
+			factor = 6
+		}
+		modifier = {
+			trait = dragonborn_g_3
+			factor = 5
+		}
+		modifier = {
+			trait = dragonborn_g_4
+			factor = 4
+		}
+		modifier = {
+			trait = dragonborn_g_5
+			factor = 3
+		}
+		modifier = {
+			trait = dragonborn_descendant
+			factor = 2
+		}
+		modifier = {
+			trait = honest
+			factor = 1.3
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.3
+		}
+    	modifier = {
+			trait = charitable
+			factor = 1.3
+		}
+		modifier = {
+			trait = temperate
+			factor = 1.3
+		}
+		modifier = {
+			trait = chaste
+			factor = 1.3
+		}
+		modifier = {
+			trait = kind
+			factor = 1.3
+		}
+		modifier = {
+			trait = patient
+			factor = 1.3
+		}
+		modifier = {
+			trait = humble
+			factor = 1.3
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.3
+		}
+		modifier = {
+			trait = erudite
+			factor = 1.1
+		}
+		modifier = {
+			trait = pilgrim
+			factor = 1.1
+		}
+		modifier = {
+			trait = theologian
+			factor = 1.1
+		}
+		modifier = {
+			trait = gardener
+			factor = 1.1
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+		   	OR = {
+				religion = eight_divines
+				religion = nine_divines
+			}
+			OR = {
+				culture = nord
+				culture = skaal
+				culture = atmoran
+				culture = reachmen
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel_colovia
+								region = nirn_tamriel_skyrim
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel_colovia
+								region = nirn_tamriel_skyrim
+							}
+						}
+					}
+				}
+			}
+			age = 16
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOT = { higher_tier_than = DUKE }
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+			}
+			NOT = { trait = cynical }
+			has_secret_religion_trait_trigger = no
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+			learning = 8
+			OR = {
+				learning = 10
+				is_mage = yes
+				is_healer = yes
+				is_monk_education = yes
+				is_priest_education = yes
+				is_wayfarer = yes
+				trait = monk
+				trait = nun
+				trait = celibate
+			}
+		}
+	}
+}
+
+moth_priests_tamriel = {
+	primary_attribute = learning
+	is_religious = yes
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	#sound = monastic_orders_interface
+	society_ranks_gfx = monk_ranks
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = moth_priests_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			OR = {
+				ai = no
+				AND = {
+					ai = yes
+					OR = {
+						trait = chaste
+						trait = celibate
+						trait = temperate
+						trait = humble
+						trait = content
+						trait = zealous
+						trait = shy
+						trait = absent_minded
+						trait = monk
+						trait = nun
+						has_character_flag = interest_in_moth_priests
+					}
+				}
+			}
+		}
+		age = 16
+		controls_religion = no
+		religion_group = human_pantheon
+		custom_tooltip = {
+			text = did_not_betray_society
+			NOT = { has_character_flag = betrayed_moth_priests_tamriel }
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_tamriel
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_tamriel
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+	
+	show_society = {
+		OR = {
+			society_member_of = moth_priests_tamriel
+			AND = {
+				religion_group = human_pantheon
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		religion_group = human_pantheon
+		OR = {
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_tamriel
+				}
+			}
+		}
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 36
+		modifier = {
+			monthly_character_prestige = 0.025
+			monthly_character_piety = 0.025
+		}
+		startup_limit = 12
+		decisions = {
+			study_specialization
+			power_get_good_traits_tooltip
+		}
+		powers = {
+			general_training_no_agent
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 18
+		startup_limit = 6
+		modifier = {
+			same_religion_opinion = 2
+			monthly_character_prestige = 0.1
+			monthly_character_piety = 0.1
+		}
+		decisions = {
+			study_an_elder_scroll
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 6 
+		startup_limit = 3
+		modifier = {
+			same_religion_opinion = 5
+			monthly_character_prestige = 0.2
+			monthly_character_piety = 0.2
+		}
+		decisions = {
+			mitigate_blindness
+		}
+	}
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			same_religion_opinion = 10
+			monthly_character_prestige = 0.5
+			monthly_character_piety = 0.5
+		}
+		decisions = {
+		}
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_moth_priests_tamriel
+    	
+    	per_attribute = {
+    		name = learning
+    		value = 0.5
+    	}
+    	has_trait = {
+			trait = erudite
+			value = 2.5
+		}
+		has_trait = {
+			trait = scholar
+			value = 2.5
+		}
+		has_trait = {
+			trait = theologian
+			value = 2.5
+		}
+		has_trait = {
+			trait = gardener
+			value = 2.5
+		}
+		has_trait = {
+			trait = honest
+			value = 2
+		}
+    	has_trait = {
+			trait = diligent
+			value = 2
+		}
+		has_trait = {
+			trait = temperate
+			value = 2
+		}
+		has_trait = {
+			trait = charitable
+			value = 2
+		}
+		has_trait = {
+			trait = chaste
+			value = 2
+		}
+		has_trait = {
+			trait = kind
+			value = 2
+		}
+		has_trait = {
+			trait = patient
+			value = 2
+		}
+		has_trait = {
+			trait = humble
+			value = 2
+		}
+		has_trait = {
+			trait = zealous
+			value = 2
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = gardener
+			factor = 3
+		}
+		modifier = {
+			trait = erudite
+			factor = 3
+		}
+		modifier = {
+			trait = theologian
+			factor = 3
+		}
+		modifier = {
+			trait = scholar
+			factor = 3
+		}
+		modifier = {
+			trait = honest
+			factor = 1.3
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.3
+		}
+    	modifier = {
+			trait = charitable
+			factor = 1.3
+		}
+		modifier = {
+			trait = temperate
+			factor = 1.3
+		}
+		modifier = {
+			trait = chaste
+			factor = 1.3
+		}
+		modifier = {
+			trait = kind
+			factor = 1.3
+		}
+		modifier = {
+			trait = patient
+			factor = 1.3
+		}
+		modifier = {
+			trait = humble
+			factor = 1.3
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.3
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+		   	OR = {
+				religion = eight_divines
+				religion = nine_divines
+				religion = maruhkati
+			}
+			OR = {
+				culture = colovian
+				culture = imperial
+				culture = nibenean
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel_heartlands
+								region = nirn_tamriel_nibenay
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel_heartlands
+								region = nirn_tamriel_nibenay
+							}
+						}
+					}
+				}
+			}
+			age = 16
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOT = { higher_tier_than = DUKE }
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+			}
+			NOT = { trait = cynical }
+			has_secret_religion_trait_trigger = no
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+			learning = 8
+			OR = {
+				learning = 10
+				is_mage = yes
+				is_healer = yes
+				is_monk_education = yes
+				is_priest_education = yes
+				is_wayfarer = yes
+				trait = monk
+				trait = nun
+			}
+		}
+	}
+}
+
+###THE ASSASSINS###
+dark_brotherhood_tamriel = {
+	primary_attribute = intrigue
+	is_secret = yes
+	criminal = yes
+	devil_worshipper = no
+	opinion_to_other_members = +10
+	opinion_to_pretenders = -20			#Pretenders is the opinion you have of people perceived/discovered to be in your society.
+	opinion_to_perceived_members = -20 	#Perceived is the opinion you have of people perceived/discovered to be of a society you're not part of
+	opinion_per_rank_above = +10
+	society_rank_up_decision = request_to_rank_up_within_society
+	sound = secret_cults_interface
+	society_ranks_gfx = dark_brotherhood_ranks
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = dark_brotherhood_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		intrigue = 10
+		OR = {
+			religion_group = hist_group
+			religion_group = void_religions
+			has_character_modifier = known_murderer
+			has_character_flag = brotherhood_qualified
+			trait = shadowscale
+			intrigue = 20
+			combat_rating = 30
+			trait = impaler
+		}
+		NOR = {
+			religion_group = tribunal
+			religion = daedra_mephala
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_tamriel
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_tamriel
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			AND = {
+				is_undead = yes
+				trait = vampire
+			}
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = dark_brotherhood_tamriel
+			AND = {
+				OR = {
+					religion_group = hist_group
+					religion_group = void_religions
+					has_character_modifier = known_murderer
+					trait = shadowscale
+					intrigue = 20
+					combat_rating = 30
+					trait = impaler
+				}
+				NOR = {
+					religion_group = tribunal
+					religion = daedra_mephala
+				}
+				age = 16
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				OR = {
+					is_not_undead = yes
+					AND = {
+						is_undead = yes
+						trait = vampire
+					}
+				}
+			}
+		}
+	}
+
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		OR = {
+			is_not_undead = yes
+			AND = {
+				is_undead = yes
+				trait = vampire
+			}
+		}
+	}
+	
+	#Murderer
+	society_rank = {
+		level = 1
+		limit = 36
+		startup_limit = 10
+		modifier = {
+			monthly_character_prestige = 0.01
+			combat_rating = 3
+			is_visible = {
+				OR = {
+					society_member_of = dark_brotherhood_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			agent_training
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_5_CT
+	}
+
+	#Assassin
+	society_rank = {
+		level = 2
+		limit = 24
+		startup_limit = 6
+		modifier = {
+			monthly_character_prestige = 0.025
+			combat_rating = 6
+			is_visible = {
+				OR = {
+					society_member_of = dark_brotherhood_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			assassin_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_5_CT
+	}
+
+	#Silencer
+	society_rank = {
+		level = 3
+		limit = 16
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.05
+			combat_rating = 9
+			is_visible = {
+				OR = {
+					society_member_of = dark_brotherhood_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_5_CT
+	}
+
+	#Speaker
+	society_rank = {
+		level = 4
+		limit = 9 #One for each "Province" of Tamriel
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.15
+			combat_rating = 12
+			is_visible = {
+				OR = {
+					society_member_of = dark_brotherhood_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			request_grandmaster_retire
+			hire_trained_assassin
+			assassin_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_4_5_CT
+	}
+	
+	#Listener
+	society_rank = {
+		level = 5
+		limit = 1 
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+			combat_rating = 15
+			is_visible = {
+				OR = {
+					society_member_of = dark_brotherhood_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			claim_shadowmere
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_dark_brotherhood_tamriel
+    
+		per_attribute = {
+			name = intrigue
+			value = 0.5
+		}
+		per_attribute = {
+			name = martial
+			value = 0.25
+		}
+		has_trait = {
+			trait = zealous
+			value = 3
+		}
+		has_trait = {
+			trait = deceitful
+			value = 1.5
+		}
+		has_trait = {
+			trait = ruthless
+			value = 1.5
+		}
+		has_trait = {
+			trait = cruel
+			value = 1.5
+		}
+		has_trait = {
+			trait = schemer
+			value = 3
+		}
+		has_trait = {
+			trait = strong
+			value = 1
+		}
+		has_trait = {
+			trait = fortitude
+			value = 1
+		}
+		has_trait = {
+			trait = robust
+			value = 1
+		}
+		has_trait = {
+			trait = genius
+			value = 1
+		}
+		has_trait = {
+			trait = quick
+			value = 1
+		}
+		has_trait = {
+			trait = shrewd
+			value = 1
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = agile
+			value = 1
+		}
+		has_trait = {
+			trait = perceptive
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.3
+		}
+		modifier = {
+			trait = deceitful
+			factor = 1.2
+		}
+		modifier = {
+			trait = ruthless
+			factor = 1.2
+		}
+		modifier = {
+			trait = cruel
+			factor = 1.2
+		}
+		modifier = {
+			trait = schemer
+			factor = 1.3
+		}
+		modifier = {
+			trait = strong
+			factor = 1.1
+		}
+		modifier = {
+			trait = fortitude
+			factor = 1.1
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = genius
+			factor = 1.1
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = agile
+			factor = 1.1
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 1.2
+			trait = agent_5
+		}
+		modifier = {
+			factor = 1.1
+			trait = assassin_3
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			intrigue = 8
+			OR = {
+				is_agent = yes
+				is_assassin = yes
+				is_nightblade = yes
+			}
+			OR = {
+				NOR = {
+					religion_group = tribunal
+					religion = daedra_mephala
+				}
+				has_character_modifier = known_murderer
+			}
+			OR = {
+				trait = ruthless
+				trait = schemer
+				trait = agent_4
+				trait = agent_5
+				trait = assassin_3
+				trait = deceitful
+				trait = ambitious
+				combat_rating = 24
+			}
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				AND = {
+					is_undead = yes
+					trait = vampire
+				}
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+		}
+	}
+}
+
+assassin_guild_akavir = {
+	primary_attribute = intrigue
+	is_secret = yes
+	criminal = yes
+	devil_worshipper = no
+	opinion_to_other_members = +10
+	opinion_to_pretenders = -20			#Pretenders is the opinion you have of people perceived/discovered to be in your society.
+	opinion_to_perceived_members = -20 	#Perceived is the opinion you have of people perceived/discovered to be of a society you're not part of
+	opinion_per_rank_above = +10
+	society_rank_up_decision = request_to_rank_up_within_society
+	sound = secret_cults_interface
+	society_ranks_gfx = generic_ranks
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = assassin_guild_akavir
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		intrigue = 10
+		OR = {
+			has_character_modifier = known_murderer
+			intrigue = 20
+			combat_rating = 30
+			trait = impaler
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_akavir
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			AND = {
+				is_undead = yes
+				trait = vampire
+			}
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = assassin_guild_akavir
+			AND = {
+				OR = {
+					has_character_modifier = known_murderer
+					intrigue = 20
+					combat_rating = 30
+					trait = impaler
+				}
+				age = 16
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_akavir
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				OR = {
+					is_not_undead = yes
+					AND = {
+						is_undead = yes
+						trait = vampire
+					}
+				}
+			}
+		}
+	}
+
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		OR = {
+			is_not_undead = yes
+			AND = {
+				is_undead = yes
+				trait = vampire
+			}
+		}
+	}
+	
+	#Murderer
+	society_rank = {
+		level = 1
+		limit = 30
+		startup_limit = 15
+		modifier = {
+			monthly_character_prestige = 0.01
+			combat_rating = 4
+			is_visible = {
+				OR = {
+					society_member_of = assassin_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			agent_training
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+
+	#Assassin
+	society_rank = {
+		level = 2
+		limit = 20
+		startup_limit = 10
+		modifier = {
+			monthly_character_prestige = 0.05
+			combat_rating = 8
+			is_visible = {
+				OR = {
+					society_member_of = assassin_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			assassin_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	#Shadow
+	society_rank = {
+		level = 3
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.15
+			combat_rating = 12
+			is_visible = {
+				OR = {
+					society_member_of = assassin_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			request_grandmaster_retire
+			hire_trained_assassin
+			order_pale_mist_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	#Mist Walker
+	society_rank = {
+		level = 4
+		limit = 5
+		startup_limit = 3
+		modifier = {
+			monthly_character_prestige = 0.15
+			combat_rating = 12
+			is_visible = {
+				OR = {
+					society_member_of = assassin_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+		}
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_assassin_guild_akavir
+    
+		per_attribute = {
+			name = intrigue
+			value = 0.5
+		}
+		per_attribute = {
+			name = diplomacy
+			value = 0.25
+		}
+		has_trait = {
+			trait = painter
+			value = 3
+		}
+		has_trait = {
+			trait = musician
+			value = 3
+		}
+		has_trait = {
+			trait = deceitful
+			value = 1.5
+		}
+		has_trait = {
+			trait = gregarious
+			value = 1.5
+		}
+		has_trait = {
+			trait = cruel
+			value = 1.5
+		}
+		has_trait = {
+			trait = schemer
+			value = 3
+		}
+		has_trait = {
+			trait = strong
+			value = 1
+		}
+		has_trait = {
+			trait = fortitude
+			value = 1
+		}
+		has_trait = {
+			trait = robust
+			value = 1
+		}
+		has_trait = {
+			trait = genius
+			value = 1
+		}
+		has_trait = {
+			trait = quick
+			value = 1
+		}
+		has_trait = {
+			trait = shrewd
+			value = 1
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = agile
+			value = 1
+		}
+		has_trait = {
+			trait = perceptive
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.3
+		}
+		modifier = {
+			trait = deceitful
+			factor = 1.2
+		}
+		modifier = {
+			trait = ruthless
+			factor = 1.2
+		}
+		modifier = {
+			trait = cruel
+			factor = 1.2
+		}
+		modifier = {
+			trait = schemer
+			factor = 1.3
+		}
+		modifier = {
+			trait = strong
+			factor = 1.1
+		}
+		modifier = {
+			trait = fortitude
+			factor = 1.1
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = genius
+			factor = 1.1
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = agile
+			factor = 1.1
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 1.2
+			trait = agent_5
+		}
+		modifier = {
+			factor = 1.1
+			trait = assassin_3
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			intrigue = 8
+			OR = {
+				is_agent = yes
+				is_assassin = yes
+				is_nightblade = yes
+			}
+			OR = {
+				trait = ruthless
+				trait = schemer
+				trait = agent_4
+				trait = agent_5
+				trait = assassin_3
+				trait = deceitful
+				trait = ambitious
+				combat_rating = 24
+			}
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				AND = {
+					is_undead = yes
+					trait = vampire
+				}
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+		}
+	}
+}
+
+morag_tong_tamriel = {
+	primary_attribute = intrigue
+	is_secret = yes
+	devil_worshipper = no
+	opinion_to_other_members = +10
+	opinion_to_pretenders = -20			#Pretenders is the opinion you have of people perceived/discovered to be in your society.
+	opinion_to_perceived_members = -20 	#Perceived is the opinion you have of people perceived/discovered to be of a society you're not part of
+	opinion_per_rank_above = +10
+	society_rank_up_decision = request_to_rank_up_within_society
+	sound = secret_cults_interface
+	society_ranks_gfx = generic_ranks
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = morag_tong_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		intrigue = 10
+		OR = {
+			religion_group = tribunal
+			religion = daedra_mephala
+			has_character_modifier = known_murderer
+			intrigue = 20
+			combat_rating = 30
+		}
+		NOT = { 
+			religion_group = void_religions
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					region = nirn_tamriel
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				region = nirn_tamriel
+			}
+		}
+		
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = morag_tong_tamriel
+			AND = {
+				OR = {
+					religion_group = tribunal
+					religion = daedra_mephala
+					has_character_modifier = known_murderer
+					intrigue = 20
+					combat_rating = 30
+				}
+				NOT = { 
+					religion_group = void_religions
+				}
+				age = 16
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				OR = {
+					is_not_undead = yes
+					is_unknown_vampire = yes
+				}
+			}
+		}
+	}
+
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+	}
+
+	society_rank = {
+		level = 1
+		limit = 30 
+		startup_limit = 15
+		modifier = {
+			monthly_character_piety = 0.01
+			combat_rating = 4
+			is_visible = {
+				OR = {
+					society_member_of = morag_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			agent_training
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 20
+		startup_limit = 10
+		modifier = {
+			monthly_character_piety = 0.05
+			combat_rating = 8
+			is_visible = {
+				OR = {
+					society_member_of = morag_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			assassin_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 10 
+		startup_limit = 5
+		modifier = {
+			monthly_character_piety = 0.15
+			combat_rating = 12
+			is_visible = {
+				OR = {
+					society_member_of = morag_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			request_grandmaster_retire
+			hire_trained_assassin
+			assassin_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1 
+		startup_limit = 1
+		modifier = {
+			monthly_character_piety = 0.5
+			combat_rating = 15
+			is_visible = {
+				OR = {
+					society_member_of = morag_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_morag_tong_tamriel
+    
+		per_attribute = {
+			name = intrigue 
+			value = 0.5
+		}
+		per_attribute = {
+			name = martial 
+			value = 0.25
+		}
+		has_trait = {
+			trait = zealous
+			value = 3
+		}
+		has_trait = {
+			trait = deceitful
+			value = 1.5
+		}
+		has_trait = {
+			trait = ruthless
+			value = 1.5
+		}
+		has_trait = {
+			trait = cruel
+			value = 1.5
+		}
+		has_trait = {
+			trait = schemer
+			value = 3
+		}
+		has_trait = {
+			trait = strong
+			value = 1
+		}
+		has_trait = {
+			trait = fortitude
+			value = 1
+		}
+		has_trait = {
+			trait = robust
+			value = 1
+		}
+		has_trait = {
+			trait = genius
+			value = 1
+		}
+		has_trait = {
+			trait = quick
+			value = 1
+		}
+		has_trait = {
+			trait = shrewd
+			value = 1
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = agile
+			value = 1
+		}
+		has_trait = {
+			trait = perceptive
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.3
+		}
+		modifier = {
+			trait = deceitful
+			factor = 1.2
+		}
+		modifier = {
+			trait = ruthless
+			factor = 1.2
+		}
+		modifier = {
+			trait = cruel
+			factor = 1.2
+		}
+		modifier = {
+			trait = schemer
+			factor = 1.3
+		}
+		modifier = {
+			trait = strong
+			factor = 1.1
+		}
+		modifier = {
+			trait = fortitude
+			factor = 1.1
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = genius
+			factor = 1.1
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = agile
+			factor = 1.1
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 1.2
+			trait = agent_5
+		}
+		modifier = {
+			factor = 1.1
+			trait = assassin_3
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			OR = {
+				is_agent = yes
+				is_assassin = yes
+				is_nightblade = yes
+			}
+			OR = {
+				religion_group = tribunal
+				religion = daedra_mephala
+				has_character_modifier = known_murderer
+				OR = {
+					AND = {
+						is_landed = yes
+						capital_scope = {
+							region = nirn_tamriel_morrowind
+						}
+					}
+					AND = {
+						is_landed = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel_morrowind
+							}
+						}
+					}
+				}
+			}
+			OR = {
+				trait = ruthless
+				trait = schemer
+				trait = agent_4
+				trait = agent_5
+				trait = assassin_3
+				trait = deceitful
+				trait = ambitious
+				combat_rating = 24
+			}
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOT = { higher_tier_than = DUKE }
+			NOT = { mercenary = yes }
+			NOT = { holy_order = yes }
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+		}
+	}
+}
+
+###Criminal Syndicates###
+thieves_guild_tamriel = {
+	primary_attribute = intrigue
+	is_secret = yes
+	criminal = yes
+	devil_worshipper = no
+	opinion_to_other_members = +10
+	opinion_to_pretenders = -10			#Pretenders is the opinion you have of people perceived/discovered to be in your society.
+	opinion_to_perceived_members = -10 	#Perceived is the opinion you have of people perceived/discovered to be of a society you're not part of
+	opinion_per_rank_above = +5
+	society_rank_up_decision = request_to_rank_up_within_society
+	sound = secret_cults_interface
+	society_ranks_gfx = thieves_ranks
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = thieves_guild_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		intrigue = 10
+		OR = {
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_tamriel
+				}
+			}
+		}
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = thieves_guild_tamriel
+			AND = {
+				intrigue = 10
+				age = 16
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_tamriel
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				OR = {
+					is_not_undead = yes
+					is_unknown_vampire = yes
+				}
+			}
+		}
+	}
+
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+	}
+	
+	#Toad
+	society_rank = {
+		level = 1
+		limit = 60
+		startup_limit = 30
+		modifier = {
+			intrigue = 1
+			monthly_character_prestige = 0.005
+			global_tax_modifier = 0.01
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			agent_training
+			infestation_thief
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_5_CT
+	}
+
+	#Footpad
+	society_rank = {
+		level = 2
+		limit = 30
+		startup_limit = 15
+		modifier = {
+			intrigue = 1
+			monthly_character_prestige = 0.025
+			global_tax_modifier = 0.025
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			assassin_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_5_CT
+	}
+
+	#Bandit
+	society_rank = {
+		level = 3
+		limit = 15
+		startup_limit = 7
+		modifier = {
+			intrigue = 2
+			monthly_character_prestige = 0.05
+			global_tax_modifier = 0.05
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			thief_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_5_CT
+	}
+
+	#Mastermind
+	society_rank = {
+		level = 4
+		limit = 9 #One for each "Province" of Tamriel
+		startup_limit = 4
+		modifier = {
+			intrigue = 2
+			monthly_character_prestige = 0.125
+			global_tax_modifier = 0.15
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			request_grandmaster_retire
+			hire_trained_thief
+		}
+		custom_tooltip = QUEST_DIFFICULTY_4_5_CT
+	}
+	
+	#Master Thief
+	society_rank = {
+		level = 5
+		limit = 1 
+		startup_limit = 1
+		modifier = {
+			intrigue = 3
+			monthly_character_prestige = 0.25
+			global_tax_modifier = 0.25
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_thieves_guild_tamriel
+    
+		per_attribute = {
+			name = intrigue 
+			value = 0.5
+		}
+		per_attribute = {
+			name = diplomacy 
+			value = 0.25
+		}
+		per_attribute = {
+			name = stewardship 
+			value = 0.25
+		}
+		has_trait = {
+			trait = deceitful
+			value = 3
+		}
+		has_trait = {
+			trait = greedy
+			value = 1.5
+		}
+		has_trait = {
+			trait = charitable
+			value = 1.5
+		}
+		has_trait = {
+			trait = paranoid
+			value = 1.5
+		}
+		has_trait = {
+			trait = schemer
+			value = 1.5
+		}
+		has_trait = {
+			trait = ambitious
+			value = 1.5
+		}
+		has_trait = {
+			trait = strong
+			value = 1
+		}
+		has_trait = {
+			trait = fortitude
+			value = 1
+		}
+		has_trait = {
+			trait = robust
+			value = 1
+		}
+		has_trait = {
+			trait = genius
+			value = 1
+		}
+		has_trait = {
+			trait = quick
+			value = 1
+		}
+		has_trait = {
+			trait = shrewd
+			value = 1
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = agile
+			value = 1
+		}
+		has_trait = {
+			trait = perceptive
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = deceitful
+			factor = 1.3
+		}
+		modifier = {
+			trait = greedy
+			factor = 1.2
+		}
+		modifier = {
+			trait = charitable
+			factor = 1.2
+		}
+		modifier = {
+			trait = paranoid
+			factor = 1.2
+		}
+		modifier = {
+			trait = ambitious
+			factor = 1.2
+		}
+		modifier = {
+			trait = schemer
+			factor = 1.3
+		}
+		modifier = {
+			trait = strong
+			factor = 1.1
+		}
+		modifier = {
+			trait = fortitude
+			factor = 1.1
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = genius
+			factor = 1.1
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = agile
+			factor = 1.1
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 1.2
+			trait = agent_5
+		}
+		modifier = {
+			factor = 1.2
+			OR = {
+				trait = acrobat_3
+				trait = thief_3
+			}
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			AND = {
+				intrigue = 8
+				OR = {
+					diplomacy = 6
+					stewardship = 4
+				}
+			}
+			OR = {
+				trait = greedy
+				trait = charitable
+				trait = schemer
+				is_agent = yes
+				is_diplomat = yes
+				is_magistrate = yes
+				is_warrior = yes
+				trait = acrobat_3
+				trait = thief_3
+				trait = deceitful
+				trait = ambitious
+				intrigue = 14
+			}
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+		}
+	}
+}
+
+camonna_tong_tamriel = {
+	primary_attribute = intrigue
+	is_secret = yes
+	criminal = yes
+	devil_worshipper = no
+	opinion_to_other_members = +10
+	opinion_to_pretenders = -10			#Pretenders is the opinion you have of people perceived/discovered to be in your society.
+	opinion_to_perceived_members = -10 	#Perceived is the opinion you have of people perceived/discovered to be of a society you're not part of
+	opinion_per_rank_above = +5
+	society_rank_up_decision = request_to_rank_up_within_society
+	sound = secret_cults_interface
+	society_ranks_gfx = generic_ranks
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = camonna_tong_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		intrigue = 10
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel_morrowind
+						AND = {
+							region = nirn_tamriel
+							culture = dunmer
+						}
+					}
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel_morrowind
+					AND = {
+						region = nirn_tamriel
+						culture = dunmer
+					}
+				}
+			}
+		}
+		
+		OR = {
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel_morrowind
+							AND = {
+								region = nirn_tamriel
+								culture = dunmer
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel_morrowind
+						AND = {
+							region = nirn_tamriel
+							culture = dunmer
+						}
+					}
+				}
+			}
+		}
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = camonna_tong_tamriel
+			AND = {
+				intrigue = 10
+				age = 16
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								OR = {
+									region = nirn_tamriel_morrowind
+									AND = {
+										region = nirn_tamriel
+										culture = dunmer
+									}
+								}
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel_morrowind
+								AND = {
+									region = nirn_tamriel
+									culture = dunmer
+								}
+							}
+						}
+					}
+				}
+				OR = {
+					is_not_undead = yes
+					is_unknown_vampire = yes
+				}
+			}
+		}
+	}
+
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+	}
+	
+	#Tough
+	society_rank = {
+		level = 1
+		limit = 50 
+		startup_limit = 15
+		modifier = {
+			intrigue = 1
+			monthly_character_prestige = 0.005
+			global_tax_modifier = 0.01
+			is_visible = {
+				OR = {
+					society_member_of = camonna_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			agent_training
+			infestation_thief
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	#Thug
+	society_rank = {
+		level = 2
+		limit = 20
+		startup_limit = 10
+		modifier = {
+			intrigue = 1
+			monthly_character_prestige = 0.025
+			global_tax_modifier = 0.025
+			is_visible = {
+				OR = {
+					society_member_of = camonna_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			assassin_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	#Strongman
+	society_rank = {
+		level = 3
+		limit = 8 
+		startup_limit = 5
+		modifier = {
+			intrigue = 2
+			monthly_character_prestige = 0.075
+			global_tax_modifier = 0.1
+			is_visible = {
+				OR = {
+					society_member_of = camonna_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			request_grandmaster_retire
+			hire_trained_thief
+			thief_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	#Kingpin
+	society_rank = {
+		level = 4
+		limit = 1 
+		startup_limit = 1
+		modifier = {
+			intrigue = 3
+			monthly_character_prestige = 0.25
+			global_tax_modifier = 0.25
+			is_visible = {
+				OR = {
+					society_member_of = camonna_tong_tamriel
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_camonna_tong_tamriel
+    
+		per_attribute = {
+			name = intrigue 
+			value = 0.5
+		}
+		per_attribute = {
+			name = diplomacy 
+			value = 0.25
+		}
+		per_attribute = {
+			name = stewardship 
+			value = 0.25
+		}
+		has_trait = {
+			trait = deceitful
+			value = 3
+		}
+		has_trait = {
+			trait = greedy
+			value = 1.5
+		}
+		has_trait = {
+			trait = charitable
+			value = 1.5
+		}
+		has_trait = {
+			trait = paranoid
+			value = 1.5
+		}
+		has_trait = {
+			trait = schemer
+			value = 1.5
+		}
+		has_trait = {
+			trait = ambitious
+			value = 1.5
+		}
+		has_trait = {
+			trait = strong
+			value = 1
+		}
+		has_trait = {
+			trait = fortitude
+			value = 1
+		}
+		has_trait = {
+			trait = robust
+			value = 1
+		}
+		has_trait = {
+			trait = genius
+			value = 1
+		}
+		has_trait = {
+			trait = quick
+			value = 1
+		}
+		has_trait = {
+			trait = shrewd
+			value = 1
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = agile
+			value = 1
+		}
+		has_trait = {
+			trait = perceptive
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = deceitful
+			factor = 1.3
+		}
+		modifier = {
+			trait = greedy
+			factor = 1.2
+		}
+		modifier = {
+			trait = charitable
+			factor = 1.2
+		}
+		modifier = {
+			trait = paranoid
+			factor = 1.2
+		}
+		modifier = {
+			trait = ambitious
+			factor = 1.2
+		}
+		modifier = {
+			trait = schemer
+			factor = 1.3
+		}
+		modifier = {
+			trait = strong
+			factor = 1.1
+		}
+		modifier = {
+			trait = fortitude
+			factor = 1.1
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = genius
+			factor = 1.1
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = agile
+			factor = 1.1
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 1.2
+			trait = agent_5
+		}
+		modifier = {
+			factor = 1.1
+			OR = {
+				trait = acrobat_3
+				trait = thief_3
+			}
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			culture = dunmer
+			AND = {
+				intrigue = 6
+				OR = {
+					diplomacy = 5
+					stewardship = 5
+					combat_rating = 15
+				}
+			}
+			OR = {
+				trait = greedy
+				trait = charitable
+				trait = schemer
+				is_agent = yes
+				is_diplomat = yes
+				is_magistrate = yes
+				is_warrior = yes
+				trait = acrobat_3
+				trait = thief_3
+				trait = deceitful
+				trait = ambitious
+				intrigue = 14
+			}
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_tamriel
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_tamriel
+					}
+				}
+			}
+		}
+	}
+}
+
+thieves_guild_akavir = {
+	primary_attribute = intrigue
+	is_secret = yes
+	criminal = yes
+	devil_worshipper = no
+	opinion_to_other_members = +10
+	opinion_to_pretenders = -10			#Pretenders is the opinion you have of people perceived/discovered to be in your society.
+	opinion_to_perceived_members = -10 	#Perceived is the opinion you have of people perceived/discovered to be of a society you're not part of
+	opinion_per_rank_above = +5
+	society_rank_up_decision = request_to_rank_up_within_society
+	sound = secret_cults_interface
+	society_ranks_gfx = generic_ranks
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = thieves_guild_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		intrigue = 10
+		OR = {
+			AND = {
+				is_ruler = no
+				liege = {
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				capital_scope = {
+					region = nirn_akavir
+				}
+			}
+		}
+		NOT = { trait = sload }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = thieves_guild_akavir
+			AND = {
+				intrigue = 10
+				age = 16
+				OR = {
+					AND = {
+						is_ruler = no
+						liege = {
+							capital_scope = {
+								region = nirn_akavir
+							}
+						}
+					}
+					AND = {
+						is_ruler = yes
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				OR = {
+					is_not_undead = yes
+					is_unknown_vampire = yes
+				}
+			}
+		}
+	}
+
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+	}
+	
+	#Tough
+	society_rank = {
+		level = 1
+		limit = 50 
+		startup_limit = 15
+		modifier = {
+			intrigue = 1
+			monthly_character_prestige = 0.005
+			global_tax_modifier = 0.01
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			agent_training
+			infestation_thief
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_4_CT
+	}
+	
+	#Thug
+	society_rank = {
+		level = 2
+		limit = 20
+		startup_limit = 10
+		modifier = {
+			intrigue = 1
+			monthly_character_prestige = 0.025
+			global_tax_modifier = 0.025
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			assassin_buy_techpoints
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_4_CT
+	}
+	
+	#Strongman
+	society_rank = {
+		level = 3
+		limit = 8 
+		startup_limit = 5
+		modifier = {
+			intrigue = 2
+			monthly_character_prestige = 0.075
+			global_tax_modifier = 0.1
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			request_grandmaster_retire
+			hire_trained_thief
+			thief_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_4_CT
+	}
+
+	#Kingpin
+	society_rank = {
+		level = 4
+		limit = 1 
+		startup_limit = 1
+		modifier = {
+			intrigue = 3
+			monthly_character_prestige = 0.25
+			global_tax_modifier = 0.25
+			is_visible = {
+				OR = {
+					society_member_of = thieves_guild_akavir
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+		}
+		# obedience_tooltip = obedience_tooltip #this can be unique per rank/society 
+		# obedient = {
+			# ROOT = {
+				# always = yes
+			# }
+		# }
+	}
+
+	monthly_currency_gain = {
+		name = currency_name_thieves_guild_tamriel
+    
+		per_attribute = {
+			name = intrigue 
+			value = 0.5
+		}
+		per_attribute = {
+			name = diplomacy 
+			value = 0.25
+		}
+		per_attribute = {
+			name = stewardship 
+			value = 0.25
+		}
+		has_trait = {
+			trait = deceitful
+			value = 3
+		}
+		has_trait = {
+			trait = greedy
+			value = 1.5
+		}
+		has_trait = {
+			trait = charitable
+			value = 1.5
+		}
+		has_trait = {
+			trait = paranoid
+			value = 1.5
+		}
+		has_trait = {
+			trait = schemer
+			value = 1.5
+		}
+		has_trait = {
+			trait = ambitious
+			value = 1.5
+		}
+		has_trait = {
+			trait = strong
+			value = 1
+		}
+		has_trait = {
+			trait = fortitude
+			value = 1
+		}
+		has_trait = {
+			trait = robust
+			value = 1
+		}
+		has_trait = {
+			trait = genius
+			value = 1
+		}
+		has_trait = {
+			trait = quick
+			value = 1
+		}
+		has_trait = {
+			trait = shrewd
+			value = 1
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = agile
+			value = 1
+		}
+		has_trait = {
+			trait = perceptive
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = deceitful
+			factor = 1.3
+		}
+		modifier = {
+			trait = greedy
+			factor = 1.2
+		}
+		modifier = {
+			trait = charitable
+			factor = 1.2
+		}
+		modifier = {
+			trait = paranoid
+			factor = 1.2
+		}
+		modifier = {
+			trait = ambitious
+			factor = 1.2
+		}
+		modifier = {
+			trait = schemer
+			factor = 1.3
+		}
+		modifier = {
+			trait = strong
+			factor = 1.1
+		}
+		modifier = {
+			trait = fortitude
+			factor = 1.1
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = genius
+			factor = 1.1
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = agile
+			factor = 1.1
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 1.2
+			trait = agent_5
+		}
+		modifier = {
+			factor = 1.1
+			OR = {
+				trait = acrobat_3
+				trait = thief_3
+			}
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			age = 16
+			AND = {
+				intrigue = 8
+				OR = {
+					diplomacy = 6
+					stewardship = 4
+				}
+			}
+			OR = {
+				trait = greedy
+				trait = charitable
+				trait = schemer
+				is_agent = yes
+				is_diplomat = yes
+				is_magistrate = yes
+				is_warrior = yes
+				trait = acrobat_3
+				trait = thief_3
+				trait = deceitful
+				trait = ambitious
+				intrigue = 14
+			}
+			is_in_society = no
+			is_inaccessible_trigger = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							region = nirn_akavir
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						region = nirn_akavir
+					}
+				}
+			}
+		}
+	}
+}
+
+# Hardcoded society tag. If this exists, religions will get versions of this society generated for them unless specifically opted out, or another is specificed. See dynamic_societies.info for more documentation
+secret_religious_society_template = {
+	template = yes
+	primary_attribute = diplomacy
+	is_religious = yes
+	is_secret = yes
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	opinion_to_perceived_members = +10
+	criminal = yes
+	sound = secret_cults_interface
+	society_ranks_gfx = secret_ranks
+	non_interference = {
+		FROM = {
+			same_realm = ROOT
+		}
+	}
+	
+	can_join_society = {
+		is_in_society = no
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = FROM
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		any_society_member = { society_member_of = FROM }
+		secret_religion = FROM
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		OR = {
+			is_not_undead = yes
+			AND = {
+				is_undead = yes
+				trait = vampire
+			}
+		}
+	}
+
+	show_society = {
+		any_society_member = { society_member_of = FROM }
+		secret_religion = FROM
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		secret_religion = FROM
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		controls_religion = no
+		OR = {
+			is_not_undead = yes
+			AND = {
+				is_undead = yes
+				trait = vampire
+			}
+		}
+	}
+	
+	society_rank = {
+		level = 1
+		limit = 50
+		startup_limit = 0
+		decisions = {
+			secret_religions_induct_child
+			secret_religions_evoke_sympathy
+		}
+	}
+	
+	society_rank = {
+		level = 2
+		limit = 30
+		startup_limit = 0
+		modifier = { 
+			is_visible = {
+				OR = {
+					same_society_as = FROM
+					FROM = { is_society_discovered = yes }
+				}
+			}
+			diplomacy = 1
+		}
+		decisions = {
+			secret_religions_induct_character
+		}
+	}
+	
+	society_rank = {
+		level = 3
+		limit = 10
+		startup_limit = 0
+		modifier = {
+			is_visible = {
+				OR = {
+					same_society_as = FROM
+					FROM = { is_society_discovered = yes }
+				}
+			}
+			diplomacy = 2
+		}
+		decisions = {
+			secret_religions_prepare_grounds
+		}
+	}
+
+	society_rank = {
+		level = 4
+		limit = 1
+		startup_limit = 0
+		modifier = { 
+			diplomacy = 3
+			is_visible = {
+				OR = {
+					same_society_as = FROM
+					FROM = { is_society_discovered = yes }
+				}
+			}
+		}
+		decisions = {
+			secret_religions_openly_adopt_faith
+		}
+	}
+	
+	plots = {
+	
+	}
+	
+	monthly_currency_gain = {
+		name = secret_religion_currency
+		
+		per_attribute = {
+    		name = diplomacy
+    		value = 0.5
+    	}
+		has_trait = {
+			trait = zealous
+			value = 3
+		}
+		has_trait = {
+			trait = scholar
+			value = 3
+		}
+		has_trait = {
+			trait = theologian
+			value = 3
+		}	
+		has_trait = {
+			trait = celibate
+			value = 2
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+    	has_trait = {
+			trait = chaste
+			value = 1
+		}
+		has_trait = {
+			trait = temperate
+			value = 1
+		}
+		has_trait = {
+			trait = charitable
+			value = 1
+		}
+		has_trait = {
+			trait = kind
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = humble
+			value = 1
+		}
+		has_trait = {
+			trait = honest
+			value = 1
+		}
+		has_trait = {
+			trait = erudite
+			value = 1
+		}
+		has_trait = {
+			trait = pilgrim
+			value = 1
+		}
+		society_rank = {
+			rank = 4
+			value = 10
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.3
+		}
+		modifier = {
+			trait = scholar
+			factor = 1.3
+		}
+		modifier = {
+			trait = theologian
+			factor = 1.3
+		}
+		modifier = {
+			trait = celibate
+			factor = 1.2
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.2
+		}
+    	modifier = {
+			trait = chaste
+			factor = 1.1
+		}
+		modifier = {
+			trait = temperate
+			factor = 1.1
+		}
+		modifier = {
+			trait = charitable
+			factor = 1.1
+		}
+		modifier = {
+			trait = kind
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = humble
+			factor = 1.1
+		}
+		modifier = {
+			trait = honest
+			factor = 1.1
+		}
+		modifier = {
+			trait = erudite
+			factor = 1.1
+		}
+		modifier = {
+			trait = pilgrim
+			factor = 1.1
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+	    	always = no
+		}
+	}
+}

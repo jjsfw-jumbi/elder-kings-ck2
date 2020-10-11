@@ -1,0 +1,62 @@
+decisions = {
+	refocus_hist_connection = {
+		potential = {
+			is_ruler = yes
+			culture_group = argonian
+			religion_group = hist_group
+			NOR = {
+				has_character_modifier = hist_diplomacy
+				has_character_modifier = hist_martial
+				has_character_modifier = hist_stewardship
+				has_character_modifier = hist_intrigue
+				has_character_modifier = hist_learning
+			}
+			NOT = { has_character_flag = hist_decision }
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			NOT = {
+				any_demesne_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+			piety = 50
+			prisoner = no
+			
+		}
+		effect = {
+			set_character_flag = hist_decision
+			piety = -50
+			character_event = { id = hist.1 days = 3 }
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0.1
+				NOT = {
+					piety = 200
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = {
+				factor = 2
+				trait = mystic
+			}
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0.5
+				trait = cynical
+			}
+		}
+	}
+}

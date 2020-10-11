@@ -1,0 +1,4254 @@
+decisions = {
+	# TODO:JJ ai_will_do
+	# TODO:JJ decision icons
+	# TODO:JJ remember what this e.g. was an example of
+	# e.g. no changing council join reqs unless e_potentate (?) or elder_council_empire exist - have being dismissed clear ec_hc_appointed_successor to be safe
+
+	# TODO:JJ make de jure kingdoms in elder_council_empire count for more in votes, decision taking (?)
+	# TODO:JJ benefits of being the pretender (easier decision to become Emperor?)
+	# TODO:JJ modify empire creation decisions more for pretenders, potentates
+	# TODO:JJ creating e_tamriel or e_cyrodiil while the other is elder_council_empire
+	become_emperor_in_fact = {
+		is_high_prio = yes
+		only_independent = yes
+
+		potential = {
+			real_tier = KING # Emperors can instead absorb the Council into their empire
+			any_realm_province = {
+				province = 1
+			}
+			independent_elder_council = yes
+			independent = yes
+			has_submenu_open = no
+			NOR = {
+				#government = matriarchy_government # TODO:JJ special case for matriarchy (eventually)?
+				government = orsimer_government
+				# Mane?
+				government = imperial_commune_government
+				government = reformed_imperial_commune_government # Restore the Potentate instead
+				government = merchant_republic_government
+			}
+		}
+
+		allow = {
+			war = no
+			is_inaccessible_trigger = no
+			is_adult = yes
+			OR = {
+				num_of_king_titles = 2
+				has_landed_title = k_cyrodiil
+			}
+			custom_tooltip = {
+				text = ec_councillor_cant_pretend
+				hidden_tooltip = {
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+			}
+			custom_tooltip = {
+				text = wait_10_years
+				hidden_tooltip = {
+					OR = {
+						NOT = {
+							has_character_flag = demanded_emperor_council
+						}
+						had_character_flag = { flag = demanded_emperor_council days = 3650 }
+					}
+				}
+			}
+
+			ec_not_voting = yes
+		}
+
+		effect = {
+			if = {
+				limit = {
+					has_character_modifier = ec_council_defender
+				}
+				remove_character_modifier = ec_council_defender
+			}
+			set_character_flag = demanded_emperor_council
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					character_event = { id = eldercouncil.20 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			# TODO:JJ
+			factor = 0.1
+			modifier = {
+				factor = 0
+				trait = content
+			}
+			modifier = {
+				factor = 10
+				trait = warlord
+			}
+			modifier = {
+				factor = 3
+				OR = {
+					culture = imperial
+					culture = nibenean
+				}
+			}
+			modifier = {
+				factor = 6
+				culture = colovian
+			}
+			modifier = {
+				factor = 0
+				holds_imperial_province = no
+			}
+		}
+	}
+
+	# TODO:JJ potentate succession
+	restore_the_potentate = {
+		is_high_prio = yes
+		only_independent = yes
+
+		potential = {
+			has_character_flag = jj_debug_potentate # Disabled in general release
+			government = reformed_imperial_commune_government
+			higher_real_tier_than = DUKE
+			any_realm_province = {
+				province = 1
+			}
+			independent_elder_council = yes
+			independent = yes
+			has_submenu_open = no
+		}
+
+		allow = {
+			society_member_of = elder_council
+			is_society_grandmaster = yes
+			war = no
+			is_inaccessible_trigger = no
+			is_adult = yes
+			completely_controls_region = nirn_tamriel_cyrodiil
+		}
+
+		effect = {
+			# TODO:JJ Elder council vote?
+			# TODO:JJ rulers rally against the Potentate?
+
+			# TODO:JJ make an event that does the effect below, this is just here for testing (?)
+			# TODO:JJ notification events
+			primary_title = {
+				show_scope_change = no
+				e_potentate = {
+					show_scope_change = no
+					#any_landed_title = {
+					#	limit = {
+					#		has_title_flag = elder_council_empire
+					#	}
+					#	show_scope_change = no
+					#	custom_tooltip = {
+					#		text = ec_restore_potentate_tooltip
+					#		hidden_tooltip = {
+					#			e_potentate = {
+					#				set_coa = PREV
+					#			}
+					#		}
+					#	}
+					#}
+					if = {
+						limit = {
+							e_cyrodiil = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_cyrodiil = {
+							show_scope_change = no
+							custom_tooltip = {
+								text = ec_restore_potentate_tooltip
+								hidden_tooltip = {
+									e_potentate = {
+										set_coa = PREV
+									}
+								}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							e_tamriel = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_tamriel = {
+							show_scope_change = no
+							custom_tooltip = {
+								text = ec_restore_potentate_tooltip
+								hidden_tooltip = {
+									e_potentate = {
+										set_coa = PREV
+									}
+								}
+							}
+						}
+					}
+					hidden_tooltip = {
+						grant_title = ROOT
+						make_primary_title = yes
+						copy_title_laws = PREV
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			# TODO:JJ
+			factor = 0.1
+			modifier = {
+				factor = 0
+				trait = content
+			}
+			modifier = {
+				factor = 10
+				trait = warlord
+			}
+			modifier = {
+				factor = 0
+				holds_imperial_province = no
+			}
+		}
+	}
+
+	# Replace current elder_council_empire
+	# Keeping the Elder Council as a purely Imperial institution - only e_cyrodiil and e_tamriel will have access to it
+	#subsume_elder_council = {
+	#	is_high_prio= yes
+	#
+	#	potential = {
+	#		real_tier = EMPEROR
+	#		OR = { # Don't want daedric hordes, Ideal invasion, etc doing this
+	#			has_landed_title = e_aldmeri
+	#			has_landed_title = e_argonia
+	#			has_landed_title = e_cyrodiil
+	#			has_landed_title = e_daggerfall
+	#			has_landed_title = e_dami
+	#			has_landed_title = e_dunmer
+	#			has_landed_title = e_ebonheart
+	#			has_landed_title = e_elsweyr
+	#			has_landed_title = e_kamal
+	#			has_landed_title = e_kapotun
+	#			has_landed_title = e_maormer
+	#			has_landed_title = e_nordic
+	#			has_landed_title = e_potentate
+	#			has_landed_title = e_tamriel
+	#			has_landed_title = e_tangmo
+	#			has_landed_title = e_tsaesci
+	#			has_landed_title = e_yokuda
+	#		}
+	#		any_realm_province = {
+	#			province = 1
+	#		}
+	#		independent_elder_council = yes
+	#	}
+	#
+	#	allow = {
+	#		war = no
+	#		is_inaccessible_trigger = no
+	#		is_adult = yes
+	#
+	#	}
+	#}
+
+	# Pay taxes to the Elder Council
+	# For de jure vassals of the Empire
+	pay_elder_council_taxes = {
+		only_rulers = yes
+
+		potential = {
+			higher_tier_than = BARON
+			in_elder_council_range = yes
+			NOT = {
+				has_character_modifier = ec_paying_de_jure
+			}
+			NOT = {
+				society_member_of = elder_council # Councillors are forced to pay
+			}
+			is_elder_council_citizen = no
+			OR = {
+				ai = yes
+				has_character_flag = title_open
+			}
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = ec_will_pay_taxes
+			}
+			add_character_modifier = {
+				name = ec_paying_de_jure
+				duration = -1
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.12
+			modifier = {
+				factor = 0
+				trait = greedy
+				independent_elder_council = yes
+			}
+			modifier = {
+				factor = 0.1
+				trait = greedy
+				independent_elder_council = no
+			}
+			modifier = {
+				factor = 4
+				independent_elder_council = no
+			}
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+			modifier = {
+				factor = 1.25
+				trait = content
+			}
+			modifier = {
+				factor = 0.33
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0
+				trait = warlord
+			}
+			modifier = {
+				factor = 0
+				is_elder_council_citizen = no
+				independent_elder_council = no
+			}
+			modifier = {
+				factor = 0.1
+				is_elder_council_citizen = no
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					yearly_income = 12
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					wealth = 50
+				}
+			}
+			modifier = {
+				factor = 1.2
+				OR = {
+					wealth = 150
+					yearly_income = 36
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					is_primary_war_attacker = yes
+					is_primary_war_defender = yes
+				}
+			}
+		}
+	}
+
+	# Stop paying Elder Council taxes
+	stop_paying_elder_council_taxes = {
+		only_rulers = yes
+
+		potential = {
+			has_character_modifier = ec_paying_de_jure
+			OR = {
+				ai = yes
+				has_character_flag = title_open
+			}
+		}
+
+		effect = {
+			remove_character_modifier = ec_paying_de_jure # TODO:JJ consequences for not paying taxes when a member of the realm
+		}
+
+		ai_will_do = {
+			factor = 0.05
+			modifier = {
+				factor = 1000 # Remove superfluous modifier
+				is_elder_council_citizen = yes
+			}
+			modifier = {
+				factor = 50
+				trait = greedy
+				independent_elder_council = yes
+			}
+			modifier = {
+				factor = 0.1
+				independent_elder_council = no
+			}
+			modifier = {
+				factor = 3
+				independent_elder_council = yes
+			}
+			modifier = {
+				factor = 50
+				NOT = {
+					wealth = 50
+				}
+			}
+			modifier = {
+				factor = 50
+				NOT = {
+					yearly_income = 12
+				}
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					wealth = 300
+					yearly_income = 60
+				}
+			}
+			modifier = {
+				factor = 0.25 # stacks
+				OR = {
+					wealth = 600
+					yearly_income = 120
+				}
+			}
+			modifier = {
+				factor = 100
+				OR = {
+					is_primary_war_defender = yes
+					is_primary_war_attacker = yes
+				}
+			}
+		}
+	}
+
+	# Player alert to stop paying taxes when paying de facto
+	# All this does is remove the superfluous modifier. De facto vassals pay taxes anyway
+	stop_paying_elder_council_taxes_de_facto = {
+		ai = no
+		is_high_prio = yes
+
+		potential = {
+			has_character_modifier = ec_paying_de_jure
+			has_submenu_open = no
+			is_elder_council_citizen = yes
+		}
+
+		effect = {
+			remove_character_modifier = ec_paying_de_jure
+		}
+	}
+
+	check_elder_council_status = {
+		ai = no
+
+		potential = {
+			OR = {
+				has_character_flag = news_open
+				AND = {
+					has_character_flag = society_open
+					society_member_of = elder_council
+				}
+			}
+		}
+		allow = {
+			NOT = {
+				has_character_flag = reading_the_news
+			}
+		}
+		effect = {
+			set_character_flag = reading_the_news
+			character_event = { id = eldercouncil.3 }
+		}
+	}
+
+	# Votes
+
+	# TODO:JJ better ai weights to take decisions
+	# TODO:JJ make certain policies (e.g. quest funding) capless, use variable instead of flag (?)
+
+	# High Chancellor proposes vote
+
+	# Guard funding
+	ec_vote_increase_guard_funding = {
+		ai = no
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+
+			NOT = {
+				has_global_flag = ec_funding_guards_full
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.601 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.601 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.600 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.600 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.600 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 10
+				check_variable = { which = global_ec_treasury value = 500 }
+				check_variable = { which = global_ec_income value = 25 }
+			}
+		}
+	}
+
+	ec_vote_decrease_guard_funding = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			ec_funding_guards = yes
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.608 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.608 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.607 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.607 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.607 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 10
+				check_variable = { which = global_ec_treasury value < 300 }
+				check_variable = { which = global_ec_income value < 50 }
+			}
+		}
+	}
+
+	# Quest funding
+	ec_vote_increase_quest_funding = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_funding_quests_75
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.615 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.615 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.614 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.614 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.614 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 10
+				check_variable = { which = global_ec_treasury value = 500 }
+				check_variable = { which = global_ec_income value = 25 }
+			}
+		}
+	}
+
+	ec_vote_decrease_quest_funding = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_funding_quests_0
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.622 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.622 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.621 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.621 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.621 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 10
+				check_variable = { which = global_ec_treasury value < 300 }
+				check_variable = { which = global_ec_income value < 50 }
+			}
+		}
+	}
+
+	# Increase Emperor appointment power
+	ec_vote_increase_appoint_emperor = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_policy_join_appoint_emp
+			}
+		}
+
+		allow = {
+			ec_influence_4000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_4000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.629 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.629 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.628 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.628 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.628 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				NOT = {
+					trait = imperialist
+					ec_is_emperor = yes
+				}
+			}
+		}
+	}
+
+	# Decrease Emperor appointment power
+	ec_vote_decrease_appoint_emperor = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				ec_policy_join_none_emp = yes
+			}
+		}
+
+		allow = {
+			ec_influence_4000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_4000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.636 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.636 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.635 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.635 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.635 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				OR = {
+					trait = imperialist
+					ec_is_emperor = yes
+				}
+			}
+		}
+	}
+
+	# Increase HC appointment power
+	ec_vote_increase_appoint_hc = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_policy_join_appoint_hc
+			}
+		}
+
+		allow = {
+			ec_influence_4000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_4000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.643 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.643 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.642 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.642 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.642 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				NOT = {
+					trait = councilist
+				}
+			}
+		}
+	}
+
+	# Decrease HC appointment power
+	ec_vote_decrease_appoint_hc = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				ec_policy_join_none_hc = yes
+			}
+		}
+
+		allow = {
+			ec_influence_4000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_4000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.650 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.650 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.649 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.649 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.649 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				OR = {
+					trait = councilist
+				}
+			}
+		}
+	}
+
+	# Skill join criterion
+	ec_vote_increase_appoint_skill = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				ec_policy_join_quality = yes
+			}
+		}
+
+		allow = {
+			ec_influence_4000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_4000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.657 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.657 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.656 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.656 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.656 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				NOT = {
+					worthy_of_elder_council = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = greedy
+			}
+		}
+	}
+
+	# Wealth join criterion
+	ec_vote_decrease_appoint_skill = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_policy_join_payment
+			}
+		}
+
+		allow = {
+			ec_influence_4000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_4000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.664 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.664 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.663 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.663 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.663 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				NAND = {
+					ec_is_emperor = yes
+					trait = greedy
+				}
+			}
+		}
+	}
+
+	# Law Proposals
+	ec_vote_council_law_proposals = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+
+			ec_policy_law_proposals_hc = no
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.671 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.671 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.670 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.670 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.670 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				OR = {
+					ec_is_emperor = yes
+					trait = imperialist
+				}
+			}
+		}
+	}
+
+	ec_vote_imperial_law_proposals = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_policy_law_proposals_emp
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+			custom_tooltip = {
+				text = legislature_must_not_be_empowered
+				NOR = {
+					has_global_flag = ec_imperial_legislature_advisory
+					has_global_flag = ec_imperial_legislature_de_facto
+				}
+			}
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.678 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.678 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.677 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.677 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.677 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				trait = councilist
+			}
+		}
+	}
+
+	# High Chancellor Dismissal
+	ec_vote_council_hc_succ = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			ec_policy_hc_succ_society = no
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.685 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.685 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.684 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.684 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.684 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				OR = {
+					ec_is_emperor = yes
+					trait = imperialist
+				}
+			}
+		}
+	}
+
+	ec_vote_imperial_hc_succ = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_policy_hc_succ_appointed
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.692 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.692 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.691 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.691 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.691 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				trait = councilist
+			}
+		}
+	}
+
+	# Imperial Allowance
+	ec_vote_council_allowance = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			ec_imperial_allowance_0 = no
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.699 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.699 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.698 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.698 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.698 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				OR = {
+					ec_is_emperor = yes
+					trait = imperialist
+				}
+			}
+		}
+	}
+
+	ec_vote_imperial_allowance = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_imperial_allowance_50
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.706 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.706 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.705 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.705 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.705 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				trait = councilist
+			}
+		}
+	}
+
+	# Imperial Legislature
+	ec_vote_council_legislature = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_imperial_legislature_de_facto
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			custom_tooltip = {
+				text = ec_empire_council_vote
+				OR = {
+					e_cyrodiil = {
+						has_title_flag = elder_council_empire
+						has_law = law_voting_power_1
+					}
+					e_tamriel = {
+						has_title_flag = elder_council_empire
+						has_law = law_voting_power_1
+					}
+					e_pretender_empire = {
+						has_holder = yes
+						has_law = law_voting_power_1
+					}
+				}
+			}
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+			custom_tooltip = {
+				text = hc_can_propose_laws
+				OR = {
+					has_global_flag = ec_policy_law_proposals_both
+					ec_policy_law_proposals_hc = yes
+				}
+			}
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.720 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.720 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.719 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.719 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.719 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				OR = {
+					ec_is_emperor = yes
+					trait = imperialist
+				}
+			}
+		}
+	}
+
+	ec_vote_imperial_legislature = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			ec_imperial_legislature_none = no
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			custom_tooltip = {
+				text = ruby_throne_must_control_council
+				NOT = {
+					has_global_flag = ec_imperial_council_restricted
+					has_global_flag = ec_imperial_council_confirmed
+				}
+			}
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+							if = {
+								limit = {
+									NOT = {
+										society_member_of = elder_council
+									}
+								}
+								elder_council = {
+									any_society_member = {
+										limit = {
+											is_society_grandmaster = yes
+										}
+										character_event = { id = eldercouncil.727 }
+									}
+								}
+							}
+							else = {
+								if = {
+									limit = {
+										ec_recognises_emperor = no
+									}
+									character_event = { id = eldercouncil.727 }
+								}
+								else = {
+									if = {
+										limit = {
+											e_cyrodiil = {
+												has_title_flag = elder_council_empire
+												has_holder = yes
+											}
+										}
+										e_cyrodiil = {
+											holder_scope = {
+												character_event = { id = eldercouncil.726 }
+											}
+										}
+									}
+									else_if = {
+										limit = {
+											e_tamriel = {
+												has_title_flag = elder_council_empire
+												has_holder = yes
+											}
+										}
+										e_tamriel = {
+											holder_scope = {
+												character_event = { id = eldercouncil.726 }
+											}
+										}
+									}
+									else_if = {
+										limit= {
+											e_pretender_empire = {
+												has_holder = yes
+											}
+										}
+										e_pretender_empire = {
+											holder_scope = {
+												character_event = { id = eldercouncil.726 }
+											}
+										}
+									}
+								}
+							}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				trait = councilist
+			}
+		}
+	}
+
+	# Imperial Council
+	ec_vote_council_council = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			NOT = {
+				has_global_flag = ec_imperial_legislature_de_facto
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			custom_tooltip = {
+				text = ec_requires_empowered_legislature
+				OR = {
+					has_global_flag = ec_imperial_legislature_advisory
+					has_global_flag = ec_imperial_legislature_de_facto
+				}
+			}
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+			custom_tooltip = {
+				text = hc_can_propose_laws
+				OR = {
+					has_global_flag = ec_policy_law_proposals_both
+					ec_policy_law_proposals_hc = yes
+				}
+			}
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = eldercouncil.734 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = eldercouncil.734 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = eldercouncil.733 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = eldercouncil.733 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = eldercouncil.733 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				OR = {
+					ec_is_emperor = yes
+					trait = imperialist
+				}
+			}
+		}
+	}
+
+	ec_vote_imperial_council = {
+		ai_check_interval = 36
+
+		potential = {
+			ec_can_propose_laws = yes
+			ec_imperial_legislature_none = no
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+			ec_recognises_emperor = yes
+		}
+
+		effect = {
+			ec_sub_influence_2000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+							if = {
+								limit = {
+									NOT = {
+										society_member_of = elder_council
+									}
+								}
+								elder_council = {
+									any_society_member = {
+										limit = {
+											is_society_grandmaster = yes
+										}
+										character_event = { id = eldercouncil.741 }
+									}
+								}
+							}
+							else = {
+								if = {
+									limit = {
+										ec_recognises_emperor = no
+									}
+									character_event = { id = eldercouncil.741 }
+								}
+								else = {
+									if = {
+										limit = {
+											e_cyrodiil = {
+												has_title_flag = elder_council_empire
+												has_holder = yes
+											}
+										}
+										e_cyrodiil = {
+											holder_scope = {
+												character_event = { id = eldercouncil.740 }
+											}
+										}
+									}
+									else_if = {
+										limit = {
+											e_tamriel = {
+												has_title_flag = elder_council_empire
+												has_holder = yes
+											}
+										}
+										e_tamriel = {
+											holder_scope = {
+												character_event = { id = eldercouncil.740 }
+											}
+										}
+									}
+									else_if = {
+										limit= {
+											e_pretender_empire = {
+												has_holder = yes
+											}
+										}
+										e_pretender_empire = {
+											holder_scope = {
+												character_event = { id = eldercouncil.740 }
+											}
+										}
+									}
+								}
+							}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.33
+			modifier = {
+				factor = 0
+				trait = councilist
+			}
+		}
+	}
+
+	# Assume the regency as High Chancellor
+	# TODO:JJ have the Council vote on it (?)
+	ec_assume_regency = {
+		ai_check_interval = 12
+
+		potential = {
+			has_submenu_open = no
+			society_member_of = elder_council
+			is_society_grandmaster = yes
+			liege = {
+				ec_is_emperor = yes
+				has_regent = yes
+			}
+			NOT = {
+				has_minor_title = title_regent
+			}
+		}
+
+		allow = {
+			society_currency = 1000
+			is_voter = yes
+			ec_not_voting = yes
+			block_general_event_trigger = no
+			is_indisposed = no
+		}
+
+		effect = {
+			change_society_currency = -1000
+			give_minor_title = title_regent
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 10
+				trait = imperialist
+				liege = {
+					regent = {
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				trait = councilist
+				liege = {
+					regent = {
+						trait = imperialist
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = councilist
+				liege = {
+					regent = {
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = imperialist
+				liege = {
+					regent = {
+						trait = imperialist
+					}
+				}
+			}
+		}
+	}
+
+	# Restore the Elder Council if it has no members
+	ec_restore_elder_council = {
+		ai_check_interval = 12
+
+		potential = {
+			ec_is_emperor = yes
+			has_character_flag = title_open
+			NOT = {
+				ec_has_quorum = yes
+			}
+		}
+
+		allow = {
+			ec_influence_2000 = yes
+			NOT = { # Just for display purposes, checked in potential
+				ec_has_quorum = yes
+			}
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = ec_council_restored
+				while = {
+					limit = {
+						elder_council = {
+							num_of_society_members < 30
+						}
+					}
+					# Council
+					if = {
+						limit = {
+							NOT = {
+								has_character_flag = ec_repop_council_exhausted
+							}
+							any_courtier = {
+								is_voter = yes
+								is_in_society = no
+								liege = {
+									character = ROOT
+								}
+								ec_meets_potential = yes
+							}
+						}
+						random_courtier = {
+							limit = {
+								is_voter = yes
+								is_in_society = no
+								liege = {
+									character = ROOT
+								}
+								ec_meets_potential = yes
+							}
+							preferred_limit = {
+								real_tier = KING
+							}
+							preferred_limit = {
+								real_tier = DUKE
+							}
+							preferred_limit = {
+								real_tier = COUNT
+							}
+							ec_join_elder_council = yes
+						}
+					}
+					# Vassals and tributaries
+					else_if = {
+						limit = {
+							NOT = {
+								has_character_flag = ec_repop_vassals_exhausted
+							}
+							OR = {
+								any_realm_lord = {
+									is_in_society = no
+									ec_meets_potential = yes
+								}
+								any_tributary = {
+									is_in_society = no
+									ec_meets_potential = yes
+								}
+							}
+						}
+						set_character_flag = ec_repop_council_exhausted
+
+						random_list = {
+							3 = { # Vassals
+								random_realm_lord = {
+									limit = {
+										is_in_society = no
+										ec_meets_potential = yes
+									}
+									preferred_limit = {
+										real_tier = KING
+									}
+									preferred_limit = {
+										real_tier = DUKE
+										liege = {
+											character = ROOT
+										}
+									}
+									preferred_limit = {
+										real_tier = COUNT
+										liege = {
+											character = ROOT
+										}
+									}
+									preferred_limit = {
+										real_tier = DUKE
+									}
+									preferred_limit = {
+										real_tier = COUNT
+									}
+									ec_join_elder_council = yes
+								}
+							}
+							1 = { # Tributaries
+								modifier = {
+									factor = 5
+									any_tributary = {
+										real_tier = EMPEROR
+									}
+								}
+								modifier = {
+									factor = 3
+									NOT = {
+										any_tributary = {
+											real_tier = EMPEROR
+										}
+									}
+									any_tributary = {
+										real_tier = KING
+									}
+								}
+
+								random_tributary = {
+									limit = {
+										is_in_society = no
+										ec_meets_potential = yes
+									}
+									preferred_limit = {
+										real_tier = EMPEROR
+									}
+									preferred_limit = {
+										real_tier = KING
+									}
+									preferred_limit = {
+										real_tier = DUKE
+									}
+									preferred_limit = {
+										real_tier = COUNT
+									}
+									ec_join_elder_council = yes
+								}
+							}
+						}
+					}
+					# Elevate bureaucrats
+					else = {
+						random_list = {
+							1 = {
+								create_character = {
+									random_traits = yes
+									dynasty = NONE
+									female = random
+								}
+								new_character = {
+									remove_education_trait = yes
+									steward_education_assignment = yes
+									ec_join_elder_council = yes
+								}
+							}
+							1 = {
+								create_character = {
+									random_traits = yes
+									dynasty = NONE
+									female = random
+								}
+								new_character = {
+									remove_education_trait = yes
+									spymaster_education_assignment = yes
+									ec_join_elder_council = yes
+								}
+							}
+							1 = {
+								create_character = {
+									random_traits = yes
+									dynasty = NONE
+									female = random
+								}
+								new_character = {
+									remove_education_trait = yes
+									marshal_education_assignment = yes
+									ec_join_elder_council = yes
+								}
+							}
+							1 = {
+								create_character = {
+									random_traits = yes
+									dynasty = NONE
+									female = random
+								}
+								new_character = {
+									remove_education_trait = yes
+									mage_education_assignment = yes
+									ec_join_elder_council = yes
+								}
+							}
+							1 = {
+								create_character = {
+									random_traits = yes
+									dynasty = NONE
+									female = random
+								}
+								new_character = {
+									remove_education_trait = yes
+									chancellor_education_assignment = yes
+									ec_join_elder_council = yes
+								}
+							}
+						}
+					}
+					clr_character_flag = ec_repop_council_exhausted
+					clr_character_flag = ec_repop_vassals_exhausted
+				}
+			}
+		}
+	}
+
+	# Special councillor actions when EC is empowered
+}
+
+targetted_decisions = {
+	# FROM - taker
+	# ROOT - target
+
+	# HC or Emp proposes a candidate to join the Council
+	# TODO:JJ can nominate even if already in society (?)
+	nominate_council_candidate = {
+		filter = all
+		ai_target_filter = all
+		diplomacy_icon = GFX_elder_council_decision
+
+		from_potential = {
+			ec_can_appoint_councillors = yes
+		}
+
+		potential = {
+			in_elder_council_range = yes
+			age = 16
+			is_inaccessible_trigger = no
+			
+			hidden_trigger = {
+				NOT = { has_character_flag = society_join_block }
+			}
+			NOR = {
+				holy_order = yes
+				mercenary = yes
+				trait = clone
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			custom_tooltip = {
+				text = ec_1_appoint_per_month
+				hidden_tooltip = {
+					FROM = {
+						OR = {
+							had_character_flag = { flag = ec_monthly_appointment days = 30 }
+							NOT = {
+								has_character_flag = ec_monthly_appointment
+							}
+							has_character_flag = jj_debug # For my sanity
+						}
+					}
+				}
+			}
+			FROM = {
+				ec_influence_250 = yes
+				trigger_if = {
+					limit = {
+						ec_is_emperor = yes
+					}
+					is_council_content = yes
+				}
+			}
+			ec_not_voting_no_quorum = yes
+			NOT = {
+				is_society_rank_full = { society = elder_council rank = 1 }
+			}
+			is_in_society = no
+			OR = {
+				NOT = {
+					is_undead = yes
+				}
+				is_unknown_vampire = yes
+			}
+			NOT = {
+				has_character_modifier = warlord_imperial_claim_rejected
+			}
+			NOT = {
+				trait = hagraven
+				trait = briarheart
+			}
+			custom_tooltip = {
+				text = ec_5_years_between_join_requests
+				OR = {
+					NOT = {
+						has_character_flag = ec_join_rejected
+					}
+					had_character_flag = { flag = ec_join_rejected days = 1825 }
+					has_character_flag = jj_debug # For my sanity
+				}
+			}
+			NOT = {
+				real_tier = emperor
+			}
+			NOT = {
+				has_landed_title = e_pretender_empire
+			}
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = ec_1_appoint_per_month_set
+				hidden_tooltip = {
+					FROM = {
+						set_character_flag = ec_monthly_appointment
+					}
+				}
+			}
+			hidden_tooltip = {
+				clr_character_flag = ec_imperial_appointee
+				clr_character_flag = ec_nominee
+				set_character_flag = jj_debug_proposed
+			}
+			FROM = {
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								OR = {
+									has_global_flag = ec_policy_join_vote_hc
+									AND = {
+										OR = {
+											ec_regency_potentate = yes
+											independent_elder_council = yes # Potentate
+										}
+										OR = {
+											has_global_flag = ec_policy_join_vote_emp
+										}
+									}
+								}
+								society_member_of = elder_council
+								is_society_grandmaster = yes
+							}
+							AND = {
+								OR = {
+									has_global_flag = ec_policy_join_vote_emp
+								}
+								ec_is_emperor = yes
+							}
+						}
+					}
+					custom_tooltip = {
+						text = elder_council_will_consider
+						hidden_tooltip = {
+							set_global_flag = ec_voting
+							ROOT = {
+								set_character_flag = ec_nominee
+								character_event = { id = eldercouncil.4 }
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						FROM = {
+							OR = {
+								AND = {
+									OR = {
+										has_global_flag = ec_policy_join_appoint_hc
+										AND = {
+											OR = {
+												ec_regency_potentate = yes
+												independent_elder_council = yes # Potentate
+											}
+											OR = {
+												has_global_flag = ec_policy_join_appoint_emp
+											}
+										}
+									}
+									society_member_of = elder_council
+									is_society_grandmaster = yes
+								}
+								AND = {
+									OR = {
+										has_global_flag = ec_policy_join_appoint_emp
+									}
+									ec_is_emperor = yes
+								}
+							}
+						}
+					}
+					ROOT = {
+						character_event = { id = eldercouncil.4 }
+						#ec_join_elder_council = yes
+					}
+				}
+			}
+
+			FROM = {
+				ec_sub_influence_250 = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5
+				has_character_flag = ec_expressed_interest
+			}
+			modifier = {
+				factor = 2
+				ai = no
+			}
+			modifier = {
+				factor = 0.05
+				NOT = {
+					has_character_flag = ec_expressed_interest
+				}
+			}
+			modifier = {
+				factor = 0.01
+				NOT = {
+					has_character_flag = ec_expressed_interest
+				}
+				any_player = {
+					has_character_flag = ec_expressed_interest
+					is_in_society = no
+					in_elder_council_range = yes
+					OR = {
+						NOT = {
+							is_undead = yes
+						}
+						is_unknown_vampire = yes
+					}
+					NOT = {
+						trait = hagraven
+						trait = briarheart
+					}
+					custom_tooltip = {
+						text = ec_5_years_between_join_requests
+						OR = {
+							NOT = {
+								has_character_flag = ec_join_rejected
+							}
+							had_character_flag = { flag = ec_join_rejected days = 1825 }
+							has_character_flag = jj_debug # For my sanity
+						}
+					}
+					NOT = {
+						real_tier = emperor
+					}
+					NOT = {
+						has_landed_title = e_pretender_empire
+					}
+				}
+			}
+			# No quorum
+			modifier = {
+				factor = 20
+				elder_council = {
+					num_of_society_members < 10
+				}
+			}
+			# Slow down when the Council is large
+			modifier = {
+				factor = 0.5
+				elder_council = {
+					num_of_society_members = 30
+				}
+			}
+			modifier = {
+				factor = 5
+				is_voter = yes
+				liege = {
+					ec_is_emperor = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				elder_council = {
+					num_of_society_members = 30
+				}
+			}
+			# Less common when appointing vs nominating
+			modifier = {
+				factor = 0.1
+				OR = {
+					has_global_flag = ec_policy_join_appoint_hc
+					has_global_flag = ec_policy_join_appoint_emp
+				}
+			}
+			# Favour de facto vassal of the Empire
+			modifier = {
+				factor = 3
+				top_liege = {
+					ec_is_emperor = yes
+				}
+			}
+			# Like Emperor's councillors
+			modifier = {
+				factor = 10 # stacks w/ de facto vassal
+				is_voter = yes
+				liege = {
+					ec_is_emperor = yes
+				}
+			}
+			# Dislike imperial claimants
+			modifier = {
+				factor = 0.01
+				any_claim = {
+					OR = {
+						has_title_flag = elder_council_empire
+						title = e_pretender_empire
+					}
+				}
+			}
+			# Favour competent - stacking
+			modifier = {
+				factor = 2
+				OR = {
+					diplomacy = 20
+					martial = 20
+					stewardship = 20
+					intrigue = 20
+					learning = 20
+				}
+			}
+			modifier = {
+				factor = 5
+				diplomacy = 20
+			}
+			modifier = {
+				factor = 5
+				martial = 20
+			}
+			modifier = {
+				factor = 5
+				stewardship = 20
+			}
+			modifier = {
+				factor = 5
+				intrigue = 20
+			}
+			modifier = {
+				factor = 5
+				learning = 20
+			}
+			modifier = {
+				factor = 0.05
+				NOT = {
+					dynasty = FROM # why let a little incompetence get in the way of nepotism?
+				}
+				NOR = {
+					diplomacy = 10
+					martial = 10
+					stewardship = 10
+					intrigue = 10
+					learning = 10
+				}
+			}
+			# Dislike warlords
+			modifier = {
+				factor = 0.2
+				trait = warlord
+			}
+			# Like dynasts
+			modifier = {
+				factor = 15
+				dynasty = FROM
+			}
+			# Like kings
+			modifier = {
+				factor = 0.5
+				real_tier = DUKE
+			}
+			# Like dukes
+			modifier = {
+				factor = 0.1
+				NOT = {
+					higher_real_tier_than = COUNT
+				}
+			}
+			# Like prestigious families
+			modifier = {
+				factor = 0.7
+				dynastic_prestige = 150
+				dynastic_prestige < 200
+			}
+			modifier = {
+				factor = 0.4
+				dynastic_prestige = 100
+				dynastic_prestige < 150
+			}
+			modifier = {
+				factor = 0.1
+				dynastic_prestige < 100
+			}
+			# Like wealthy people
+			modifier = {
+				factor = 3
+				wealth = 150
+				wealth < 300
+			}
+			modifier = {
+				factor = 5
+				wealth = 300
+				wealth < 500
+			}
+			modifier = {
+				factor = 7
+				wealth = 500
+			}
+			# Like legendary education
+			modifier = {
+				factor = 10
+				OR = {
+					trait = diplomat_5
+					trait = warrior_5
+					trait = magistrate_5
+					trait = agent_5
+					trait = mage_5
+				}
+			}
+			# Dislike common nobility
+			modifier = {
+				factor = 0.25
+				dynastic_prestige < 50
+			}
+			# Dislike low-tier courtiers
+			modifier = {
+				factor = 0.01
+				is_landed = no
+				employer = {
+					NOT = {
+						higher_real_tier_than = COUNT
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				is_landed = no
+				dynastic_prestige < 10
+			}
+			modifier = {
+				factor = 0
+				is_landed = no
+				dynasty = none
+			}
+			# Like high-tier courtiers
+			modifier = {
+				factor = 3
+				is_landed = no
+				employer = {
+					higher_real_tier_than = DUKE
+				}
+			}
+		}
+	}
+
+	# Emperor designates successor to HC
+	# TODO:JJ frown on nepotism!
+	appoint_hc_successor = {
+		filter = all
+		ai_target_filter = realm
+		diplomacy_icon = GFX_elder_council_decision
+
+		from_potential = {
+			has_global_flag = ec_policy_hc_succ_appointed
+			ec_is_emperor = yes
+		}
+
+		potential = {
+			society_member_of = elder_council
+			is_society_grandmaster = no
+			NOT = {
+				elder_council = {
+					any_society_member = {
+						has_character_flag = ec_hc_appointed_successor
+						is_society_grandmaster = no
+					}
+				}
+			}
+		}
+
+		allow = {
+			FROM = {
+				ec_influence_4000 = yes
+				is_inaccessible_trigger = no
+				block_general_event_trigger = no
+				is_council_content = yes
+			}
+			is_inaccessible_trigger = no
+			block_general_event_trigger = no
+		}
+
+		effect = {
+			FROM = {
+				ec_sub_influence_4000 = yes
+			}
+			custom_tooltip = {
+				text = ec_will_succeed_hc
+				set_character_flag = ec_hc_appointed_successor
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				FROM = {
+					society_member_of = elder_council
+				}
+			}
+			modifier = {
+				factor = 0
+				trait = councilist
+			}
+		}
+	}
+
+	stop_favouring_successor = {
+		filter = all
+		ai = no
+		diplomacy_icon = GFX_elder_council_decision
+
+		from_potential = {
+			has_global_flag = ec_policy_hc_succ_appointed
+			ec_is_emperor = yes
+		}
+
+		potential = {
+			society_member_of = elder_council
+			is_society_grandmaster = no
+			has_character_flag = ec_hc_appointed_successor
+		}
+
+		allow = {
+			FROM = {
+				ec_influence_1000 = yes
+				NOT = {
+					block_general_event_trigger = yes
+				}
+			}
+		}
+
+		effect = {
+			clr_character_flag = ec_hc_appointed_successor
+		}
+	}
+
+	see_imperialism_breakdown = {
+		filter = all
+		ai = no
+		diplomacy_icon = GFX_elder_council_decision
+
+		potential = {
+			society_member_of = elder_council
+			OR = {
+				trait = imperialist
+				trait = councilist
+			}
+		}
+
+		effect = {
+			FROM = {
+				character_event = { id = eldercouncil.1006 }
+			}
+		}
+	}
+
+	expel_councillor = {
+		filter = all
+		ai_target_filter = independent_rulers
+		diplomacy_icon = GFX_elder_council_decision
+
+		from_potential = {
+			OR = {
+				ec_is_emperor = yes
+				AND = {
+					society_member_of = elder_council
+					is_society_grandmaster = yes
+				}
+			}
+		}
+
+		potential = {
+			society_member_of = elder_council
+			ai = yes
+			NOT = {
+				character = FROM
+			}
+		}
+
+		allow = {
+			# Valid reasons for expulsions
+			trigger_if = { # Known vamp
+				limit = {
+					OR = {
+						trait = known_vampire
+						trait = known_vampire_benevolent
+					}
+				}
+				is_vampire = yes
+				FROM = {
+					NOT = {
+						trait = known_vampire
+						trait = known_vampire_benevolent
+					}
+				}
+			}
+			trigger_else_if = { # Known lycan
+				limit = {
+					OR = {
+						trait = known_lycan
+						trait = known_lycan_benevolent
+					}
+				}
+				is_lycan = yes
+				FROM = {
+					NOT = {
+						trait = known_lycan
+						trait = known_lycan_benevolent
+					}
+				}
+			}
+			trigger_else_if = {
+				# Paid reasons
+				OR = {
+					# Traitor
+					custom_tooltip = {
+						text = expel_reason.traitor
+						is_traitor_to_from = yes
+					}
+					# Known murderer
+					custom_tooltip = {
+						text = expel_reason.murderer
+						has_character_modifier = known_murderer
+					}
+					trigger_if = {
+						limit = {
+							FROM = {
+								has_character_modifier = known_murderer
+							}
+						}
+						custom_tooltip = {
+							text = expel_reason.not_a_murderer
+							always = no
+						}
+					}
+					# Incapable
+					custom_tooltip = {
+						text = expel_reason.incapable
+						trait = incapable
+					}
+					# Nepotism
+					custom_tooltip = {
+						text = expel_reason.nepotism
+						trigger_if = {
+							limit = {
+								FROM = {
+									society_member_of = elder_council
+								}
+							}
+							any_dynasty_member = {
+								ec_is_emperor = yes
+							}
+						}
+						trigger_else_if = {
+							limit = {
+								FROM = {
+									ec_is_emperor = yes
+								}
+							}
+							any_dynasty_member = {
+								society_member_of = elder_council
+								is_society_grandmaster = yes
+							}
+						}
+					}
+				}
+
+				trigger_if = {
+					limit = {
+						society_rank == 1
+					}
+					FROM = {
+						ec_influence_1000 = yes
+					}
+				}
+				trigger_else_if = {
+					limit = {
+						society_rank == 2
+					}
+					FROM = {
+						ec_influence_2000 = yes
+					}
+				}
+				trigger_else_if = {
+					limit = {
+						society_rank == 3
+					}
+					FROM = {
+						ec_influence_4000 = yes
+					}
+				}
+				trigger_else_if = {
+					limit = {
+						society_rank == 4
+					}
+					custom_tooltip = {
+						text = ec_cannot_dismiss_high_chancellor
+						always = no
+					}
+				}
+			}
+			FROM = {
+				NOT = {
+					block_general_event_trigger = yes
+				}
+				is_council_content = yes
+			}
+		}
+
+		effect = {
+			# TODO:JJ information event
+			set_character_flag = ec_join_rejected
+			hidden_tooltip = {
+				destroy_artifact = elder_council_amulet
+			}
+			custom_tooltip = {
+				text = ec_expelled.5_years
+				leave_society = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							FROM = {
+								NOT = {
+									trait = known_vampire
+									trait = known_vampire_benevolent
+								}
+							}
+							OR = {
+								trait = known_vampire
+								trait = known_vampire_benevolent
+							}
+						}
+						AND = {
+							FROM = {
+								NOT = {
+									trait = known_lycan
+									trait = known_lycan_benevolent
+								}
+							}
+							OR = {
+								trait = known_lycan
+								trait = known_lycan_benevolent
+							}
+						}
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						society_rank == 1
+					}
+					FROM = {
+						ec_sub_influence_1000 = yes
+					}
+				}
+				else_if = {
+					limit = {
+						society_rank == 2
+					}
+					FROM = {
+						ec_sub_influence_2000 = yes
+					}
+				}
+				else_if = {
+					limit = {
+						society_rank == 3
+					}
+					FROM = {
+						ec_sub_influence_4000 = yes
+					}
+				}
+				if = {
+					limit = {
+						is_traitor_to_from = yes
+					}
+					custom_tooltip = {
+						text = ec_full_pardon
+						FROM = {
+							clear_prison_reasons = ROOT
+							clear_revoke_reasons = ROOT
+							clear_banish_reasons = ROOT
+							clear_execute_reasons = ROOT
+							ROOT = {
+								imprison = no
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0 # TODO:JJ
+		}
+	}
+
+	ec_dismiss_hc = {
+		ai_check_interval = 12
+		filter = all
+		ai_target_filter = realm
+		diplomacy_icon = GFX_elder_council_decision
+
+		from_potential = {
+			OR = {
+				has_global_flag = ec_policy_hc_succ_elected
+				has_global_flag = ec_policy_hc_succ_appointed
+			}
+			ec_is_emperor = yes
+		}
+
+		potential = {
+			society_member_of = elder_council
+			is_society_grandmaster = yes
+		}
+
+		allow = {
+			FROM = {
+				ec_influence_4000 = yes
+				NOT = {
+					block_general_event_trigger = yes
+				}
+				is_council_content = yes
+			}
+		}
+
+		effect = {
+			FROM = {
+				ec_sub_influence_4000 = yes
+				if = {
+					limit = {
+						has_global_flag = ec_policy_hc_succ_elected
+					}
+					custom_tooltip = {
+						text = elder_council_will_consider
+						character_event = { id = eldercouncil.713 }
+					}
+				}
+				else = {
+					ec_dismiss_hc_effect = yes
+					hidden_tooltip = {
+						character_event = { id = eldercouncil.999}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.05
+			modifier = {
+				factor = 0
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = imperialist
+					}
+				}
+			}
+		}
+	}
+	
+	request_elder_council_support = {
+		# Concessions:
+		# Money if greedy/in debt
+		# De jure land
+		# Releasing prisoners
+		# Arresting rivals - Amauri
+		# Elevation to a higher tier
+		# Replacing foreign overlord
+		# Land if unlanded
+		# Appoint a relative to an important position
+		# Artifacts - Ev
+		# Marrying a relative of the Emperor - Amauri
+		# Law change (?)
+		# Sexy times with the Emperor if the councillor is Potema - Amauri (high priority)
+
+		# Ranked from most important to least:
+		# Foreign overlord
+		# Prisoners
+		# Land
+		# Arrest rivals
+		# Artifact
+		# Money
+
+		# Law change/temporarily concede power
+		filter = all
+		ai_target_filter = independent_rulers
+		diplomacy_icon = GFX_elder_council_decision
+
+		from_potential = {
+			ai = no # TODO:JJ AI swaying AI - weight this decision or custom logic?
+			OR = {
+				ec_is_emperor = yes
+				# TODO:JJ High Chancellor options
+				# AND = {
+				# 	society_member_of = elder_council
+				# 	is_society_grandmaster = yes
+				# }
+			}
+		}
+
+		potential = {
+			society_member_of = elder_council
+			ai = yes # TODO:JJ AI swaying players
+			NOT = {
+				character = FROM
+			}
+		}
+
+		allow = {
+			# Cannot if bankrupt
+			custom_tooltip = {
+				text = not_currently_influencing
+				FROM = {
+					NOT = {
+						has_character_flag = ec_influencing
+					}
+				}
+			}
+
+			custom_tooltip = {
+				text = not_currently_influenced
+				NOT = {
+					has_character_flag = ec_being_influenced
+				}
+			}
+
+			NOT = {
+				has_character_modifier = ec_recent_sway_attempt
+			}
+
+			trigger_if = {
+				limit = {
+					society_rank == 1
+				}
+				FROM = {
+					ec_influence_250 = yes
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					society_rank == 2
+				}
+				FROM = {
+					ec_influence_500 = yes
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					society_rank == 3
+				}
+				FROM = {
+					ec_influence_1000 = yes
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					society_rank == 4
+				}
+				FROM = {
+					ec_influence_2000 = yes
+				}
+			}
+			FROM = {
+				NOT = {
+					block_general_event_trigger = yes
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				set_character_flag = ec_influencing
+			}
+			custom_tooltip = {
+				text = ec_will_consider_supporting
+				hidden_tooltip = {
+					add_character_modifier = { name = ec_recent_sway_attempt days = 365 }
+					set_character_flag = ec_being_influenced
+				}
+				if = {
+					limit = {
+						ai = yes
+					}
+					letter_event = { id = ecsway.0 }# days = 5 random = 9 } # TODO:JJ add delay back in once debugging is done
+				}
+				else = {
+					letter_event = { id = ecsway.1 }
+				}
+			}
+			if = {
+				limit = {
+					society_rank == 1
+				}
+				FROM = {
+					ec_sub_influence_250 = yes
+				}
+			}
+			else_if = {
+				limit = {
+					society_rank == 2
+				}
+				FROM = {
+					ec_sub_influence_500 = yes
+				}
+			}
+			else_if = {
+				limit = {
+					society_rank == 3
+				}
+				FROM = {
+					ec_sub_influence_1000 = yes
+				}
+			}
+			else_if = {
+				limit = {
+					society_rank == 4
+				}
+				FROM = {
+					ec_sub_influence_2000 = yes
+				}
+			}
+		}
+
+		ai_acceptance = {
+			factor = 1
+
+			additive_modifier = {
+				value = -999
+				localisation_key = REASON_ALREADY_SUPPORTING
+				OR = {
+					has_character_modifier = ec_sway_imperial
+					has_character_modifier = ec_sway_council
+				}
+			}
+			additive_modifier = {
+				value = -999
+				localisation_key = REASON_FOE
+				is_foe = FROM
+			}
+
+			# TODO:JJ treat tributaries the same as vassals for land grants, etc
+
+			# additive_modifier = {
+			# 	value = 15
+			# 	localisation_key = REASON_IMPERIALIST
+			# 	trait = imperialist
+			# 	FROM = {
+			# 		OR = {
+			# 			ec_is_emperor = yes
+			# 			trait = imperialist
+			# 		}
+			# 	}
+			# }
+			# additive_modifier = {
+			# 	value = 15
+			# 	localisation_key = REASON_COUNCILIST
+			# 	trait = councilist
+			# 	FROM = {
+			# 		trait = councilist
+			# 	}
+			# }
+			# additive_modifier = {
+			# 	value = 100
+			# 	localisation_key = REASON_FRIEND
+			# 	is_friend = FROM
+			# }
+			# additive_modifier = {
+			# 	factor = -500
+			# 	is_foe = FROM
+			# }
+			# additive_modifier = {
+			# 	value = 5
+			# 	localisation_key = REASON_SWAYED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_swayed_0 }
+			# }
+			# additive_modifier = {
+			# 	value = 10
+			# 	localisation_key = REASON_SWAYED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_swayed_1 }
+			# }
+			# additive_modifier = {
+			# 	value = 15
+			# 	localisation_key = REASON_SWAYED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_swayed_2 }
+			# }
+			# additive_modifier = {
+			# 	value = 20
+			# 	localisation_key = REASON_SWAYED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_swayed_3 }
+			# }
+			# additive_modifier = {
+			# 	value = -10
+			# 	localisation_key = REASON_ANTAGONISED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_antagonized_0 }
+			# }
+			# additive_modifier = {
+			# 	value = -10
+			# 	localisation_key = REASON_ANTAGONISED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_antagonized_1 }
+			# }
+			# additive_modifier = {
+			# 	value = -10
+			# 	localisation_key = REASON_ANTAGONISED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_antagonized_2 }
+			# }
+			# additive_modifier = {
+			# 	value = -10
+			# 	localisation_key = REASON_ANTAGONISED
+			# 	has_opinion_modifier = { who = FROM modifier = opinion_antagonized_3 }
+			# }
+			# additive_modifier = {
+			# 	value = -10
+			# 	localisation_key = REASON_HIGH_CHANCELLOR
+			# 	is_society_grandmaster = yes
+			# }
+			# additive_modifier = {
+			# 	value = 15
+			# 	localisation_key = REASON_COULD_BE_LANDED
+			# 	is_landed = no
+			# 	FROM = {
+			# 		demesne_size = 2
+			# 	}
+			# }
+			# additive_modifier = {
+			# 	value = -30
+			# 	localisation_key = REASON_ALREADY_HAS_FAVOUR
+			# 	holds_favor_on = FROM
+			# }
+			# additive_modifier = {
+			# 	value = 5
+			# 	localisation_key = REASON_SAME_REALM
+			# 	same_realm = FROM
+			# }
+			# additive_modifier = {
+			# 	value = 10
+			# 	localisation_key = REASON_DYNAST
+			# 	dynasty = FROM
+			# }
+			# additive_modifier = {
+			# 	value = 5
+			# 	localisation_key = REASON_CLOSE_RELATIVE
+			# 	is_close_relative = FROM
+			# }
+			# additive_modifier = {
+			# 	value = 30
+			# 	localisation_key = REASON_BANKRUPT
+			# 	wealth < 0
+			# }
+			# additive_modifier = {
+			# 	value = 20
+			# 	localisation_key = REASON_COULD_GIVE_DE_JURE_LAND
+			# 	OR = {
+			# 		any_de_jure_vassal = {
+			# 			liege = {
+			# 				character = FROM
+			# 			}
+			# 		}
+			# 		AND = {
+			# 			any_de_jure_vassal_title = {
+			# 				holder_scope = {
+			# 					character = FROM
+			# 				}
+			# 			}
+			# 			FROM = {
+			# 				demesne_size = 2
+			# 				any_demesne_title = {
+			# 					limit = {
+			# 						OR = {
+			# 							tier = COUNT
+			# 							tier = BARON
+			# 						}
+			# 					}
+			# 					can_be_given_away = yes
+			# 				}
+			# 			}
+			# 		}
+			# 	}
+			# }
+			# additive_modifier = {
+			# 	value = 20
+			# 	localisation_key = REASON_INTEREST_IN_PRISONERS
+			# 	FROM = {
+			# 		any_courtier = {
+			# 			limit = {
+			# 				prisoner = yes
+			# 				host = {
+			# 					character = FROM
+			# 				}
+			# 			}
+			# 			OR = {
+			# 				# Close relatives
+			# 				AND = {
+			# 					is_close_relative = ROOT
+			# 				}
+			# 				# Friends
+			# 				is_friend = ROOT
+			# 				# Powerful vassals of the Emperor
+			# 				AND = {
+			# 					is_powerful_vassal = yes
+			# 					liege = {
+			# 						character = FROM
+			# 					}
+			# 				}
+			# 			}
+			# 		}
+			# 	}
+			# }
+			# # Disabled for now
+			# # additive_modifier = {
+			# # 	value = 15
+			# # 	localisation_key = REASON_DESIRES_LAW_CHANGE
+			# # 	top_liege = {
+			# # 		character = FROM
+			# # 	}
+			# # 	FROM = {
+			# # 		primary_title = {
+			# # 			has_law = law_voting_power_0
+			# # 		}
+			# # 	}
+			# # }
+			# additive_modifier = {
+			# 	value = 20
+			# 	localisation_key = REASON_DESIRES_PROVINCE
+			# 	real_tier = DUKE
+			# 	liege = {
+			# 		character = FROM
+			# 	}
+			# 	capital_holding = {
+			# 		kingdom = {
+			# 			ROOT = {
+			# 				culture_scope = {
+			# 					has_flag = native_to_@PREVPREV
+			# 				}
+			# 			}
+			# 			holder_scope = {
+			# 				character = FROM
+			# 			}
+			# 		}
+			# 	}
+			# }
+			# additive_modifier = {
+			# 	value = 15
+			# 	localisation_key = REASON_FOREIGN_OVERLORD
+			# 	NOT = {
+			# 		tier = KING
+			# 	}
+			# 	capital_holding = {
+			# 		kingdom = {
+			# 			ROOT = {
+			# 				culture_scope = {
+			# 					has_flag = native_to_@PREVPREV
+			# 				}
+			# 				liege = {
+			# 					has_landed_title = PREVPREV
+			# 					real_tier = KING
+			# 					culture_scope = {
+			# 						NOT = {
+			# 							has_flag = native_to_@PREVPREVPREV
+			# 						}
+			# 					}
+			# 				}
+			# 			}
+			# 		}
+			# 	}
+			# }
+			# additive_modifier = {
+			# 	value = 20
+			# 	localisation_key = REASON_FOREIGN_NON_DE_JURE_PROVINCE
+			# 	NOT = {
+			# 		tier = KING
+			# 	}
+			# 	capital_holding = {
+			# 		kingdom = {
+			# 			ROOT = {
+			# 				liege = {
+			# 					OR = {
+			# 						AND = { # Provincial liege is a foreigner
+			# 							real_tier = KING
+			# 							OR = { # Only care if your de jure lord exists
+			# 								holds_de_jure_province = yes
+			# 								PREVPREV = {
+			# 									has_holder = yes
+			# 								}
+			# 							}
+			# 							NOT = {
+			# 								culture = PREV
+			# 								has_landed_title = PREVPREV
+			# 							}
+			# 						}
+			# 						top_liege = { # Or the Emperor is direct liege and it isn't their capital's province
+			# 							real_tier = EMPEROR # This should already be the case, but au cas où
+			# 							character = PREV
+			# 							NOT = {
+			# 								culture = PREVPREV
+			# 							}
+			# 							capital_holding = {
+			# 								kingdom = {
+			# 									NOT = {
+			# 										ROOT = {
+			# 											capital_holding = {
+			# 												kingdom = {
+			# 													title = PREVPREVPREV
+			# 												}
+			# 											}
+			# 										}
+			# 									}
+			# 								}
+			# 							}
+			# 						}
+			# 					}
+			# 				}
+			# 			}
+			# 		}
+			# 	}
+			# }
+			# additive_modifier = {
+			# 	value = 10
+			# 	localisation_key = REASON_NON_DE_JURE_PROVINCE
+			# 	NOT = {
+			# 		tier = KING
+			# 	}
+			# 	capital_holding = {
+			# 		kingdom = {
+			# 			ROOT = {
+			# 				liege = {
+			# 					OR = {
+			# 						AND = { # Provincial liege is a foreigner
+			# 							real_tier = KING
+			# 							OR = { # Only care if your de jure lord exists
+			# 								holds_de_jure_province = yes
+			# 								PREVPREV = {
+			# 									has_holder = yes
+			# 								}
+			# 							}
+			# 							culture = PREV
+			# 							NOT = {
+			# 								has_landed_title = PREVPREV
+			# 							}
+			# 						}
+			# 						top_liege = { # Or the Emperor is direct liege and it isn't their capital's province
+			# 							real_tier = EMPEROR # This should already be the case, but au cas où
+			# 							character = PREV
+			# 							culture = PREVPREV
+			# 							capital_holding = {
+			# 								kingdom = {
+			# 									NOT = {
+			# 										ROOT = {
+			# 											capital_holding = {
+			# 												kingdom = {
+			# 													title = PREVPREVPREV
+			# 												}
+			# 											}
+			# 										}
+			# 									}
+			# 								}
+			# 							}
+			# 						}
+			# 					}
+			# 				}
+			# 			}
+			# 		}
+			# 	}
+			# }
+		}
+
+		ai_will_do = {
+			factor = 0 # TODO:JJ
+		}
+	}
+}
+
+society_decisions = {
+	ec_recruit_bureaucrat = {
+		only_playable = yes
+		ai_check_interval = 36
+
+		potential = {
+			is_adult = yes
+			is_playable = yes
+			society_member_of = elder_council
+			society_rank = 2
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+		}
+
+		allow = {
+			has_society_currency_large_trigger_scaling = yes
+			is_inaccessible_trigger = no
+			custom_tooltip = {
+				text = ec_not_recruiting_bureaucrat
+
+				NOT = {
+					has_character_flag = ec_recruiting_bureaucrat
+				}
+			}
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = ec_recruit_bureaucrat_effect_tooltip
+
+				set_character_flag = ec_recruiting_bureaucrat
+				character_event = { id = eldercouncil.2500 }
+			}
+		}
+	}
+}

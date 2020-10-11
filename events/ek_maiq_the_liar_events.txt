@@ -1,0 +1,140 @@
+#Events for M'aiq the Liar#
+
+namespace = maiqtheliar
+
+#"M'aiq's father was also called M'aiq, as was M'aiq's father's father..."
+#on_birth
+character_event = {
+	id = maiqtheliar.0
+	hide_window = yes
+	
+	only_men = yes
+	culture_group = khajiit
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				real_father_even_if_dead = {
+					has_character_flag = maiq_the_liar_flag
+				}
+			}
+			set_name = "M'aiq"
+			set_character_flag = maiq_the_liar_flag
+			culture = anequinan
+			religion = riddlethar
+		}
+	}
+}
+
+#M'aiq is always "The Liar" no matter what
+#on_adulthood
+character_event = {
+	id = maiqtheliar.5
+	hide_window = yes
+	
+	has_character_flag = maiq_the_liar_flag
+	only_men = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		give_nickname = nick_the_liar
+	}
+}
+
+#In case M'aiq never has any kids...spawn a new M'aiq when he dies
+#on_death
+character_event = {
+	id = maiqtheliar.10
+	hide_window = yes
+	
+	only_men = yes
+	min_age = 16
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = maiq_the_liar
+	}
+	
+	immediate = {
+		create_character = {
+			name = "M'aiq"
+			dynasty = ROOT
+			female = no
+			age = 0
+			genetic_father = ROOT
+			culture = anequinan
+			religion = riddlethar
+			flag = maiq_the_liar_flag
+		}
+		new_character = {
+			set_father = ROOT
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			if = {
+				limit = {
+					maiq_the_liar = {
+						NOT = { is_alive = yes }
+					}
+				}
+				add_trait = maiq_the_liar
+			}
+		}
+	}
+}
+
+#M'aiq Manifests
+character_event = {
+	id = maiqtheliar.15
+	hide_window = yes
+	
+	has_character_flag = maiq_the_liar_flag
+	only_men = yes
+	
+	trigger = {
+		maiq_the_liar = {
+			NOT = { is_alive = yes }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		add_trait = maiq_the_liar
+		give_nickname = nick_the_liar
+	}
+}
+
+#M'aiq decides to swap courts
+character_event = {
+	id = maiqtheliar.20
+	hide_window = yes
+	
+	has_character_flag = maiq_the_liar_flag
+	only_men = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		trait = maiq_the_liar
+		is_ruler = no
+		is_married = no
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	immediate = {
+		random_playable_ruler = {
+			limit = { is_within_diplo_range = ROOT }
+			reverse_banish = ROOT
+		}
+	}
+}

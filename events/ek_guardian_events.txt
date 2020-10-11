@@ -1,0 +1,302 @@
+namespace = guardian
+# Fashionable
+character_event = {
+	id = guardian.2
+	desc = guardian.2.desc
+	picture = GFX_evt_guardian
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = guardian.21.name # Yes
+		ai_chance = {
+			factor = 5
+			modifier = {
+				trait = vain 
+				factor = 2
+			}
+			modifier = {
+				OR = {
+					is_altmer = yes
+					trait = breton
+					is_falmer = yes
+					trait = reachman
+					is_dunmer = yes
+					is_imperial = yes
+					is_tsaesci = yes
+				}
+				factor = 1.5
+			}
+		}
+		
+		FROM = {
+			tooltip = {
+				add_trait = vain
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_happy_with_guardian
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = guardian.22.name # Birch
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.1
+				trait = vain
+			}
+		}
+		
+		FROM = {
+			remove_trait = vain
+			
+			opinion = {
+				who = ROOT
+				modifier = opinion_sad
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = guardian.23.name # Show him the cost
+		ai_chance = {
+			factor = 5
+			modifier = {
+				trait = greedy
+				factor = 1.25
+			}
+			modifier = {
+				trait = charitable 
+				factor = 1.5
+			}
+		}
+		
+		FROM = {
+			remove_trait = vain
+			
+			random_list = {
+				35 = {
+					add_trait = greedy
+				}
+				40 = {
+					add_trait = charitable
+				}
+				25 = {
+					add_trait = vain
+				}
+			}
+		}
+	}
+}
+
+# Reckless
+character_event = {
+	id = guardian.3
+	desc = guardian.3.desc
+	picture = GFX_evt_guardian
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = guardian.31.name # Yes
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				trait = reckless
+			}
+			modifier = {
+				factor = 1.5
+				OR = {
+					trait = khajiit
+					is_maormer = yes
+					trait = nord
+					trait = orsimer
+				}
+			}
+		}
+		
+		FROM = {
+			tooltip = {
+				add_trait = reckless
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_happy_with_guardian
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = guardian.32.name # Birch
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.1
+				trait = reckless
+			}
+		}
+		FROM = {
+			remove_trait = reckless
+			
+			opinion = {
+				who = ROOT
+				modifier = opinion_sad
+				years = 2
+			}			
+		}
+	}
+	option = {
+		name = guardian.33.name # Try to learn him to think about consequences
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 1.5
+				trait = temperate
+			}
+			modifier = {
+				factor = 1.5
+				trait = patient
+			}
+			modifier = {
+				factor = 1.5
+				trait = diligent
+			}
+		}
+		FROM = {
+			remove_trait = reckless
+			
+			random_list = {
+				25 = {
+					add_trait = temperate
+				}
+				25 = {
+					add_trait = patient
+				}
+				25 = {
+					add_trait = diligent
+				}
+				25 = {
+					add_trait = reckless
+				}
+			}
+		}
+	}
+}
+
+# slovenly
+character_event = {
+	id = guardian.4
+	desc = guardian.4.desc
+	picture = GFX_evt_guardian
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = guardian.41.name # Yes
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = slovenly
+			}
+			modifier = {
+				factor = 1.5
+				OR = {
+					trait = argonian
+					is_bosmer = yes
+					is_ayleid = yes
+					is_chimer = yes
+					trait = orsimer
+				}
+			}
+		}
+		
+		FROM = {
+			tooltip = {
+				add_trait = slovenly
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_happy_with_guardian
+				years = 2
+			}			
+		}
+	}
+	option = {
+		name = guardian.42.name # Birch
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 0.1
+				trait = slovenly
+			}
+		}
+		
+		FROM = {
+			remove_trait = slovenly
+			
+			opinion = {
+				who = ROOT
+				modifier = opinion_sad
+				years = 2
+			}
+		}
+	}
+	option = {
+		name = guardian.43.name # Try to convince FROM that this is not the good way
+		ai_chance = {
+			factor = 5
+			modifier = {
+				NOT = {
+					trait = slovenly
+				}
+				factor = 1.5
+			}
+			modifier = {
+				trait = vain
+				factor = 5
+			}
+		}
+		FROM = {
+			remove_trait = slovenly
+			random_list = {
+				40 = {
+				}
+				30 = {
+					add_trait = vain
+				}
+				30 = {
+					add_trait = slovenly
+				}
+			}
+		}
+	}
+}

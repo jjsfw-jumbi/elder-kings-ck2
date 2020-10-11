@@ -1,0 +1,204 @@
+has_submenu_open = {
+	OR = {
+		has_character_flag = employment_open
+		has_character_flag = spellbook_open
+		has_character_flag = title_open
+		has_character_flag = marketplace_open
+		has_character_flag = society_open
+		has_character_flag = adventuring_open
+		has_character_flag = alchemist_open
+		has_character_flag = news_open
+		#has_character_flag = minor_title_open
+		#has_character_flag = prisoners_open
+		has_character_flag = supernatural_open
+	}
+	ai = no
+}
+
+is_in_marketplace_shop = { #Add flags for more marketplace subsubmenus here.
+	custom_tooltip = {
+		text = isinstoretext
+		OR = {
+			has_character_flag = alchemist_open
+			has_character_flag = adventuring_open
+		}
+	}
+}
+
+trade_route_post_trigger = {
+	custom_tooltip = {
+		text = trade_route_province_desc
+		hidden_tooltip = {
+			OR = {
+				province_id = 1 #Imperial Province
+				province_id = 10 #Bravil
+				province_id = 13 #Leyawiin
+				province_id = 211 #Senchal
+				province_id = 1065 #Soulrest
+				province_id = 119 #Blackrose
+				province_id = 218 #Alabaster
+				province_id = 118 #Lilmoth
+				province_id = 102 #Soulrest
+				province_id = 208 #Torval
+				province_id = 244 #Haven
+				province_id = 246 #Southpoint
+				province_id = 260 #Greenheart
+				province_id = 289 #Weye
+				province_id = 38 #Skingrad
+				province_id = 49 #Kvatch
+				province_id = 56 #Anvil
+				province_id = 242 #Velyn (Emperor's Run)
+				province_id = 547 #Abah
+				province_id = 181 #Stros M'Kai
+				province_id = 190 #Rihad
+				province_id = 185 #Gilane
+				province_id = 191 #Taneth
+				province_id = 281 #Stirk
+				province_id = 141 #Whiterun
+				province_id = 151 #Rorikstead
+				province_id = 145 #Dragonbridge
+				province_id = 143 #Solitude
+				province_id = 707 #Valtheim
+				province_id = 130 #Windhelm
+				province_id = 98 #Blacklight
+				province_id = 66 #Hirstaang
+				province_id = 166 #Ascadian Isles (Vivec)
+				province_id = 89 #Ebonheart
+				province_id = 375 #Thir
+				province_id = 92 #Narsis
+				province_id = 87 #Mournhold
+				province_id = 107 #Stormhold
+				province_id = 94 #Kragenmoor
+				province_id = 163 #Wayrest
+				province_id = 184 #Sentinel
+				province_id = 156 #Bhoriane
+				province_id = 188 #Lainlyn
+				province_id = 154 #Anticlere
+				province_id = 152 #Daggerfall
+				province_id = 182 #Hegathe
+				province_id = 127 #Riften
+				province_id = 222 #Rimmen
+				province_id = 99 #Silgrad
+				province_id = 148 #Markarth
+				province_id = 595 #Cropsford
+				province_id = 197 #Dragonstar
+				province_id = 177 #Evermore
+				province_id = 203 #Skaven
+				province_id = 134 #Falkreath
+				province_id = 193 #Elinhir
+				province_id = 165 #Norhpoint
+				province_id = 175 #Farrun
+				province_id = 45 #Chorrol
+				province_id = 174 #Jehenna
+				province_id = 168 #Phrygias
+				province_id = 159 #Camlorn
+				province_id = 139 #Dawnstar
+				province_id = 132 #Winterhold
+				province_id = 71 #Dusk
+				province_id = 72 #Sunhold
+				province_id = 88 #Tear
+				province_id = 110 #Thorn
+				province_id = 82 #Necrom
+				province_id = 77 #Telvannis
+				province_id = 116 #Archon
+				province_id = 73 #Alinor
+				province_id = 74 #Shimmerene
+				province_id = 665 #Skywatch
+				province_id = 265 #Diss
+				province_id = 76 #Lillandril
+				province_id = 75 #Cloudrest
+				province_id = 508 #King's Haven
+				province_id = 69 #Firsthold
+				province_id = 228 #Orcrest
+				province_id = 232 #Riverhold
+				province_id = 215 #Corinthe
+				province_id = 225 #Dune
+				province_id = 236 #Arenthia
+				province_id = 636 #Ravan
+				province_id = 633 #Samara
+				province_id = 527 #Herne
+			}
+		}
+	}
+}
+
+cb_no_blockers = {
+	ROOT = { # One declaring war
+		trigger_if = {
+			limit = {
+				has_earmarked_regiments = temple_crusaders
+			}
+			custom_tooltip = {
+				text = no_temple_crusaders
+				NOT = {
+					has_earmarked_regiments = temple_crusaders
+				}
+			}
+		}
+	}
+}
+
+# Holy sites controled
+controls_one_holy_sites = {
+	custom_tooltip = {
+		text = CONTROLS_ONE_HOLY_SITES_CT
+		hidden_tooltip = {
+			any_realm_title = {
+				count = 1
+				is_holy_site = ROOT
+			}
+		}
+	}
+}
+controls_two_holy_sites = {
+	custom_tooltip = {
+		text = CONTROLS_TWO_HOLY_SITES_CT
+		hidden_tooltip = {
+			any_realm_title = {
+				count = 2
+				is_holy_site = ROOT
+			}
+		}
+	}
+}
+controls_three_holy_sites = {
+	custom_tooltip = {
+		text = CONTROLS_THREE_HOLY_SITES_CT
+		hidden_tooltip = {
+			any_realm_title = {
+				count = 3
+				is_holy_site = ROOT
+			}
+		}
+	}
+}
+controls_four_holy_sites = {
+	custom_tooltip = {
+		text = CONTROLS_FOUR_HOLY_SITES_CT
+		hidden_tooltip = {
+			any_realm_title = {
+				count = 4
+				is_holy_site = ROOT
+			}
+		}
+	}
+}
+controls_five_holy_sites = {
+	custom_tooltip = {
+		text = CONTROLS_FIVE_HOLY_SITES_CT
+		hidden_tooltip = {
+			any_realm_title = {
+				count = 5
+				is_holy_site = ROOT
+			}
+		}
+	}
+}
+has_dragons_summoned = {
+	OR = {
+		has_earmarked_regiments = dragon_cult_dragon_0
+		has_earmarked_regiments = dragon_cult_dragon_1
+		has_earmarked_regiments = dragon_cult_dragon_2
+		has_earmarked_regiments = dragon_cult_dragon_3
+	}
+}

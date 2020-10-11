@@ -1,0 +1,338 @@
+namespace = witcher
+#Witchhunter Specialisation Feature
+
+# #Discovery At Court
+# character_event = {
+	# id = witcher.0
+
+	# only_rulers = yes
+	# prisoner = no
+	# capable_only = yes
+	# min_age = 16
+	
+	# trigger = {
+		# in_command = no
+		# any_courtier = {
+			# is_witchhunter = yes
+			# NOR = {
+				# trait = lycan
+				# trait = vampire
+				# trait = necromancer
+				# #TODO LATER; ADD CULTIST CHECKS
+			# }
+			# in_command = no
+		# }
+		# NOT = { has_character_modifier = witchhunter_timer }
+	# }
+	
+	# mean_time_to_happen = {
+		# months = 1280
+		
+		# modifier = {
+			# factor = 2
+			# OR = {
+				# trait = slothful
+				# trait = arbitrary
+			# }
+		# }
+		# modifier = {
+			# factor = 2
+			# trait = absent_minded
+		# }
+		# modifier = {
+			# factor = 1.5
+			# OR = {
+				# trait = lycan
+				# trait = vampire
+				# trait = necromancer
+				# #TODO LATER; ADD CULTIST CHECKS
+			# }
+		# }
+		# modifier = {
+			# factor = 2
+			# war = yes
+		# }
+	# }
+	
+	# desc = {
+		# text = witcher0lycand # A Witch Hunter in your court has uncovered evidence of the presence of one or more Lycanthropes in your local area, perhaps even someone here at Court!
+		# trigger = {
+			# any_courtier = {
+				# trait = lycan
+				# NOT = { is_witchhunter = yes }
+			# }
+		# }
+	# }
+	# desc = {
+		# text = witcher0vampired # A Witch Hunter in your court has uncovered evidence of the presence of one or more Vampires in your local area, perhaps even someone here at Court!
+		# trigger = {
+			# any_courtier = {
+				# trait = vampire
+				# NOT = { is_witchhunter = yes }
+			# }
+		# }
+	# }
+	# # desc = {
+		# # text = witcher0cultistd # A Witch Hunter in your court has uncovered evidence of the presence of one or more sinister Cultists in your local area, perhaps even someone here at Court!
+		# # trigger = {
+			# # any_courtier = {
+				# ## TODO LATER; ADD CULTIST CHECKS
+				# # NOT = { is_witchhunter = yes }
+				# # religion = ROOT
+			# # }
+		# # }
+	# # }
+	
+	# immediate = {
+		# random_courtier = {
+			# limit = {
+				# is_witchhunter = yes
+				# in_command = no
+				# NOR = {
+					# trait = lycan
+					# trait = vampire
+					# # TODO LATER; ADD CULTIST CHECKS
+				# }
+			# }
+			# save_event_target_as = witchhunter_marker
+		# }
+	# }
+	
+	# option = {
+		# name = witcher0opt #Hunt these fiends down brave Witch Hunter!
+		# event_target:witchhunter_marker = {
+			# character_event = { id = witcher.1 } #The Hunt Begins
+		# }
+	# }
+	
+	# option = {
+		# name = dontbothermewithsuchthings #Don't bother me with such things!
+		# event_target:witchhunter_marker = {
+			# opinion = { who = ROOT years = 1 modifier = opinion_annoyed }
+			# hidden_tooltip = {
+				# if = {
+					# limit = {
+						# OR = {
+							# trait = paranoid
+							# trait = wroth
+							# trait = perceptive
+						# }
+					# }
+					# character_event = { id = witcher.100 } #Witch Hunter's curiosity.
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { NOT = { trait = arbitrary } }
+			# random = {
+				# chance = 1
+				# add_trait = arbitrary
+				# hidden_tooltip = { character_event = { id = 38266 } }
+			# }
+		# }
+		# if = {
+			# limit = { trait = arbitrary	NOT = { trait = slothful }}
+			# random = {
+				# chance = 1
+				# add_trait = slothful
+				# hidden_tooltip = { character_event = { id = 38251 } }
+			# }
+		# }
+		# hidden_tooltip = { add_character_modifier = { name = witchhunter_timer years = 3 } }
+	# }
+# }
+
+
+
+# character_event = {
+	# id = witcher.100
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# immediate = {
+		# if = { #Ruler is supernatural
+			# limit = {
+				# FROM = {
+					# OR = {
+						# trait = lycan
+						# trait = vampire
+						# #TODO CULTIST
+					# }
+				# }
+			# }
+			# character_event = { id = witcher.101 }
+		# }
+		# if = { #Ruler is not supernatural, accuse them anyway.
+			# limit = {
+				# FROM = {
+					# NOR = {
+						# trait = lycan
+						# trait = vampire
+						# #TODO CULTIST
+					# }
+				# }
+			# }
+			# character_event = { id = witcher.101 }
+		# }
+		# if = { #Ruler is not supernatural or cultist, don't accuse them.
+			# limit = {
+				# FROM = {
+					# NOR = {
+						# trait = lycan
+						# trait = vampire
+						# #TODO CULTIST
+					# }
+				# }
+			# }
+			# character_event = { id = witcher.101 }
+		# }
+	# }
+# }
+
+
+character_event = {
+	id = witcher.1000
+	desc = witcher1000d
+	picture = GFX_evt_witcher
+	
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+	min_age = 16
+	
+	trigger = {
+		capital_scope = {
+			OR = {
+				region = nirn_tamriel_skyrim
+				region = nirn_tamriel_cyrodiil
+				region = nirn_tamriel_highrock
+				region = nirn_tamriel_hammerfell
+			}
+		}
+		NOT = { has_global_flag = witcher_easteregg }
+		in_command = no
+		any_demesne_province = {
+			count = 2
+			has_province_modifier = goblin_infestation
+			has_province_modifier = undead_infestation
+			has_province_modifier = lycan_infestation
+			has_province_modifier = vampire_infestation
+			has_province_modifier = trolls
+			has_province_modifier = dragon_den
+			has_province_modifier = oblivion_gate
+			has_province_modifier = daedric_incursion
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 241
+		
+		modifier = {
+			ai = no
+			factor = 0.75
+		}
+	}
+	
+	immediate = { set_global_flag = witcher_easteregg } #Max once per game.
+	
+	option = {
+		trigger = { wealth = 250 }
+		name = witcher1000opt0
+		create_character = {
+			name = "Geralt"
+			dynasty = 10409
+			culture = colovian
+			dna = aelcelgbgbs
+			age = 57
+			trait = hero
+			trait = warrior_5
+			trait = witchhunter_3
+			trait = spellsword_1
+			trait = diligent
+			trait = kind
+			trait = honest
+			trait = just
+			trait = cynical
+			trait = brave
+			trait = trusting
+			trait = robust
+			trait = scarred
+			wealth = 250
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			add_artifact = weapon_sword_silver
+			add_artifact = weapon_sword_steel
+			add_artifact = armor_mithril
+			add_artifact = mount_horse_rouncey
+		}
+		wealth = -250
+	}
+	option = {
+		name = witcher1000opt1
+	}
+}
+character_event = {
+	id = witcher.1001
+	desc = witcher1001d
+	picture = GFX_evt_buffy
+	
+	only_playable = yes
+	prisoner = no
+	capable_only = yes
+	min_age = 16
+	
+	trigger = {
+		capital_scope = { region = nirn_tamriel_highrock }
+		NOT = { has_global_flag = buffy_easteregg }
+		in_command = no
+		OR = {
+			any_courtier = { is_vampire = yes }
+			any_demesne_province = { has_province_modifier = vampire_infestation }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 241
+		
+		modifier = {
+			ai = no
+			factor = 0.75
+		}
+	}
+	
+	immediate = { set_global_flag = buffy_easteregg } #Max once per game.
+	
+	option = {
+		trigger = { wealth = 250 }
+		name = witcher1001opt0
+		create_character = {
+			name = "Elizabyth"
+			female = yes
+			dynasty = 90450
+			culture = breton
+			dna = djiaizfdhcd
+			age = 16
+			trait = hero
+			trait = warrior_5
+			trait = witchhunter_3
+			trait = wroth
+			trait = kind
+			trait = honest
+			trait = just
+			trait = brave
+			trait = strong
+			wealth = 100
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		wealth = -100
+	}
+	option = {
+		name = witcher1000opt1
+	}
+}

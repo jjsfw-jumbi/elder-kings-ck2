@@ -1,0 +1,1131 @@
+on_startup = {
+	effect = {
+		if = {
+			limit = { OR = { has_racial_trait = no } }
+			assign_racial_trait = yes
+			if = {
+				limit = {
+					graphical_culture = altmergfx
+					culture = altmer
+					NOR = {
+						trait = pure_altmer
+						trait = impure_altmer
+					}
+				}
+				character_event = { id = altmer.0 }
+			}
+			any_courtier_or_vassal = {
+				limit = { OR = { has_racial_trait = no } }
+				assign_racial_trait = yes
+				if = {
+					limit = {
+						graphical_culture = altmergfx
+						culture = altmer
+						NOR = {
+							trait = pure_altmer
+							trait = impure_altmer
+						}
+					}
+					character_event = { id = altmer.0 }
+				}
+			}
+		}
+		if = { limit = { has_birthsign = no }
+			assign_birthsign = yes
+			any_courtier_or_vassal = {
+				limit = { has_birthsign = no }
+				assign_birthsign = yes
+			}
+		}
+		if = {
+			limit = {
+				ai = no
+				age = 16
+				is_spellcaster = yes
+				NOT = { has_character_modifier = magicka_counter }
+			}
+			character_event = { id = magicka.0 }
+		}
+		if = { limit = { has_education = no age = 16 } add_random_education = yes }
+		if = {
+			limit = { any_courtier_or_vassal = { ai = yes has_education = no age >= 16 } }
+			any_courtier_or_vassal = { limit = { ai = yes has_education = no age >= 16 } add_random_education = yes }
+		}
+		if = { limit = { check_variable = { which = birth_seed value == 0 } } assign_birth_seed = yes }
+		
+		update_elven_immortality = yes
+		any_courtier_or_vassal = { update_elven_immortality = yes }
+
+		# Savegame maintenance - to be removed after a brief transition period to help testing
+		if = {
+			limit = {
+				government = roman_imperial_government
+			}
+			any_demesne_title = {
+				limit = {
+					real_tier = KING
+					NOT = {
+						has_law = succ_imperial_province_assignment
+					}
+					ROOT = {
+						capital_scope = {
+							kingdom = {
+								NOT = {
+									title = PREVPREVPREV
+								}
+							}
+						}
+					}
+				}
+				add_law = {
+					law = succ_imperial_province_assignment
+					cooldown = no
+					opinion_effect = no
+				}
+			}
+		}
+	}
+	events = {
+		startup.0 #Initialisation Event
+		startup.1 #Sets initial succession law
+		startup.2
+		startup.5 #Dragonborn Candidates
+		startup.6 #Almsivi Ardor
+		startup.7 # Not all immortals are sload (or *are* they)
+		#startup.8 # Backup immortal portrait fix
+		startup.9 # Culture flag fix - in an event so that it only fires once for performance reasons
+		ekpatrons.200 #AI Patron Deity Assignment
+		# ekruins.0 #Ruins are Constructed
+		# ekruins.1 #Ruins are Constructed
+		# ekruins.2 #Ruins are Constructed
+		# ekruins.3 #Ruins are Constructed
+		# ekruins.4 #Ruins are Constructed
+		# ekruins.5 #Ruins are Constructed
+		# ekruins.6 #Ruins are Constructed
+		# ekruins.7 #Ruins are Constructed
+		# ekruins.8 #Ruins are Constructed
+		# ekruins.20 #New ruin generation
+		ekmerhealth.0
+		magicka.0 #Magicka Initialisation
+		ideal_offmap.200 # Initial soul value
+		eldercouncil.10
+		eldercouncil.1903 # Emperor trait maintenance
+		ekevmisc.12 #Resettlement law save-game fixer
+		ekevmisc.13 #Titular Kingdoms law maintenance
+		story_blackdrake.1
+		orgnum.19
+		relbeh.0 # Religious behaviour traits
+	}
+}
+
+on_chronicle_start = {
+	effect = {
+		if = {
+			limit = { OR = { has_racial_trait = no } }
+			assign_racial_trait = yes
+			if = {
+				limit = {
+					graphical_culture = altmergfx
+					culture = altmer
+					NOR = {
+						trait = pure_altmer
+						trait = impure_altmer
+					}
+				}
+				character_event = { id = altmer.0 }
+			}
+			any_courtier_or_vassal = {
+				limit = { OR = { has_racial_trait = no } }
+				assign_racial_trait = yes
+				if = {
+					limit = {
+						graphical_culture = altmergfx
+						culture = altmer
+						NOR = {
+							trait = pure_altmer
+							trait = impure_altmer
+						}
+					}
+					character_event = { id = altmer.0 }
+				}
+			}
+		}
+		if = { limit = { has_birthsign = no }
+			assign_birthsign = yes
+			any_courtier_or_vassal = {
+				limit = { has_birthsign = no }
+				assign_birthsign = yes
+			}
+		}
+		if = {
+			limit = {
+				ai = no
+				age = 16
+				is_spellcaster = yes
+				NOT = { has_character_modifier = magicka_counter }
+			}
+			character_event = { id = magicka.0 }
+		}
+		if = { limit = { has_education = no age = 16 } add_random_education = yes }
+		if = {
+			limit = { any_courtier_or_vassal = { ai = yes has_education = no age >= 16 } }
+			any_courtier_or_vassal = { limit = { ai = yes has_education = no age >= 16 } add_random_education = yes }
+		}
+		if = { limit = { check_variable = { which = birth_seed value == 0 } } assign_birth_seed = yes }
+		update_elven_immortality = yes
+	}
+	
+	events = {
+		necromancy.100
+		#eksocieties.5 # Society influence
+		relbeh.0 # Needs to change the religious behaviour traits
+	}
+}
+
+on_birth = {
+	events = {
+		ekbirth.200 #Empire of Tamriel's ruler's dynasty takes priority on birth
+		ekbirth.250 #Birth Seed
+		racemaintenance.3 # Bloodline Assignment
+		altmer.0 # Altmer Purity
+		kmisc.1999 # Khajiit-Potun interbreeding
+		maiqtheliar.0 #M'aiq the Liar born
+		ekscion.1
+	}
+}
+on_post_birth = {
+	effect = {
+		random_list = {
+			40 = { #Father's race
+				true_father_even_if_dead = {
+					save_event_target_as = target_race_to_inherit
+				}
+			}
+			60 = { #Mother's race
+				mother_even_if_dead = {
+					save_event_target_as = target_race_to_inherit
+				}
+			}
+		}
+		if = { 
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = byzantinegfx }
+			}
+			set_graphical_culture = nibenean
+		}
+		if = { 
+			limit = {
+				event_target:target_race_to_inherit = {
+					OR = {
+						graphical_culture = southerngfx
+						graphical_culture = italiangfx
+					}
+				}
+			}
+			set_graphical_culture = imperial
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = {
+					OR = {
+						graphical_culture = saxongfx
+						graphical_culture = westernslavicgfx
+					}
+				}
+			}
+			set_graphical_culture = colovian
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = easternslavicgfx }
+			}
+			set_graphical_culture = reachmen
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = anequinagfx }
+			}
+			set_graphical_culture = anequinan
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = pellitinegfx }
+			}
+			set_graphical_culture = pellitinian
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = kamalgfx }
+			}
+			set_graphical_culture = kamal
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = kapotungfx }
+			}
+			set_graphical_culture = potun
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = tangmogfx }
+			}
+			set_graphical_culture = tangmo
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = sloadgfx }
+			}
+			set_graphical_culture = sload
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = argoniangfx }
+			}
+			set_graphical_culture = agaceph
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { OR = { graphical_culture = africangfx graphical_culture = westafricangfx graphical_culture = redguardgfx } }
+			}
+			set_graphical_culture = yokudan
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = celticgfx }
+			}
+			set_graphical_culture = breton
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit = { graphical_culture = norsegfx }
+			}
+			set_graphical_culture = nord
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = dunmergfx }
+			}
+			set_graphical_culture = dunmer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = dwemergfx }
+			}
+			set_graphical_culture = dwemer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = bosmergfx }
+			}
+			set_graphical_culture = bosmer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = ayleidgfx }
+			}
+			set_graphical_culture = ayleid
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = falmergfx }
+			}
+			set_graphical_culture = falmer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = altmergfx }
+			}
+			set_graphical_culture = altmer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = chimergfx }
+			}
+			set_graphical_culture = chimer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = maormergfx }
+			}
+			set_graphical_culture = maormer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { 
+					OR = {
+						graphical_culture = chinesegfx
+						graphical_culture = mongolgfx
+					}
+				}
+			}
+			set_graphical_culture = akaviri
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = tsaescigfx }
+			}
+			set_graphical_culture = tsaesci
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = orsimergfx }
+			}
+			set_graphical_culture = orsimer
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = indiangfx }
+			}
+			set_graphical_culture = quey
+		}
+		if = {
+			limit = {
+				event_target:target_race_to_inherit =  { graphical_culture = kamalgfx }
+			}
+			set_graphical_culture = kamal
+		}
+
+		assign_racial_trait = yes
+		assign_birthsign = yes
+		if = { #Bloodlines
+			limit = {
+				OR = {
+					father_even_if_dead = { has_bloodline = yes }
+					mother_even_if_dead = { has_bloodline = yes }
+				}
+			}
+			character_event = { id = racemaintenance.3 }
+		}
+		if = { #Dragonborn
+			limit = {
+				OR = {
+					true_father_even_if_dead = { is_dragonblood = yes }
+					mother_even_if_dead = { is_dragonblood = yes }
+				}
+			}
+			character_event = { id = dragonborn.2 }
+		}
+		if = {
+			limit = {
+				OR = { has_racial_trait = no }
+			}
+			assign_racial_trait = yes
+			if = {
+				limit = {
+					graphical_culture = altmergfx
+					culture = altmer
+					NOR = {
+						trait = pure_altmer
+						trait = impure_altmer
+					}
+				}
+				character_event = { id = altmer.0 }
+			}
+		}
+		if = { limit = { has_birthsign = no } assign_birthsign = yes }
+	}
+	events = {
+		ekbirth.4 #Remove inactive bloodlines from great-grandchildren
+		relbeh.0 # Needs to change the religious behaviour traits
+	}
+}
+on_death = {
+	events = {
+		ekwonder.100
+		ekartifacts.5 #Daedric artifacts destroyed at death - no Jade Dragon
+		ekartifacts.10 #Daedric artifacts transferred back to Prince at death - requires Jade Dragon
+		ekartifacts.15 #Other non-inheritable artifacts destroyed at death
+		ekardor.5 #Ardor reset on character death
+		mane.0 #mane succession
+		ideal_masters.8
+		divines.1 #Sybil of Dibella dies
+		greenpact.1 #Silvenar dies
+		greenpact.8 #Green Lady dies
+		ninedivines.1 #Nine Divines religion activation
+		dcdissolved.1 #DC getting dissolved
+		eso.1 #Hidellith dies - so begins the reign of the Unforeseen Queen!
+		eso.50 #Fake Clivia dies, Molag Kena revealed
+		orgnum.1 #Orgnum dies
+		orgnum.10 #Orgnum dies in a duel (triggers as well as orgnum.1), gives the bloodline
+		maiqtheliar.10 #Emergency event to prevent M'aiq bloodline from dying out
+		ideal_offmap.201 # Ideal Masters take soul
+		ideal_offmap.154 # Check debt
+		reach_flavour.20 # The High Crone should always be a Hagraven
+		
+		ekartifacts.6
+		ekartifacts.7
+	}
+}
+on_adulthood = {
+	effect = {
+		#character_event = { id = startup.8 days = 1 }
+		if = { #Dragonborn & Doom-Driven
+			limit = {
+				NOR = {
+					true_father_even_if_dead = { is_dragonblood = yes }
+					mother_even_if_dead = { is_dragonblood = yes }
+				}
+			}
+			character_event = { id = dragonborn.0 }
+		}
+		
+		character_event = { id = ekmerhealth.15 days = 2 }
+	}
+	events = {
+		#ekadult.0 # Resets racial trait
+		mane.10 #Mane adulthood
+		magicka.0 #Sets Magicka.
+		maiqtheliar.5 #M'aiq the Liar becomes "The Liar"
+		ekgreathouses.0 #Pledge into the Great Houses
+	}
+	random_events = {
+		100 = 0
+		50 = ekpatrons.200 #AI Patron Deity Assignment
+	}
+}
+
+on_yearly_pulse = {
+	effect = {
+		if = { limit = { has_racial_trait = no } assign_racial_trait = yes }
+		if = { limit = { has_birthsign = no } assign_birthsign = yes }
+		if = {
+			limit = {
+				NOR = {
+					graphical_culture = altmergfx
+					culture = altmer
+				}
+				OR = {
+					trait = pure_altmer
+					trait = impure_altmer
+				}
+			}
+			remove_trait = pure_altmer
+			remove_trait = impure_altmer
+		}
+	}
+	events = {
+		ekbirth.103
+		ekpets.10 #Pet death tombola
+		magicka.0
+		kmisc.5010 #Emergency removal of spouses/consorts of undead
+		ekwol.150 #Clear Scholarship flags
+		lycan.2 #Lycanthrope for players
+		vamp.2 #Vampire for players
+		ekresettlement.110 #Evilpoints tick
+		ekevmisc.9 #AI tech and wealth allowance
+		ideal_offmap.100 #Soul devastation
+		eldercouncil.500 # Payment of taxes per ruler
+		eldercouncil.502 # Expense calculation, imperial influence maintenance
+		eldercouncil.2300 # Council culture breakdown examination
+		#ekevmisc.13 #Titular Kingdoms law maintenance
+	}
+	random_events = {
+		200 = ekpatrons.200 #AI Patron Deity Assignment
+		1000 = ekfamily.10 #Relative wants republic or theocracy
+	}
+}
+
+on_five_year_pulse = {
+	events = {
+		ekpets.5 #Pet gains "pet death imminent" flag
+		eksocieties.30 #AI characters will join societies
+		mane.10 #Incase of ruler designer Mane
+		magicka.0 #Sets Magicka.
+		ekruins.25 #Treasure/artifacts
+		ekartifacts.20 #Cleanup artifacts
+		#startup.8 # Backup immortal portrait fix
+	}
+	random_events = {
+		25 = relsym.0
+		25 = relsym.1
+		50 = ekpatrons.200 #AI Patron Deity Assignment
+		5 = 1059 #Remove Ruthless
+		5 = 1060 #Remove Reckless
+		5 = 1061 #Remove Absentminded
+		5 = 1062 #Remove Vain
+		5 = 1063 #Remove Slovenly
+		20 = ekpetflavor.10 #Dog maims Undead courtier
+		20 = ekpetflavor.15 #Capybara or Horker found swimming in cistern
+		20 = ekpetflavor.20 #Vulture sunning
+		15 = ekwonder.0 #Famous Blacksmith
+		25 = ekartifacts.103
+	}
+}
+
+on_decade_pulse = {
+	events = {
+		ekmerhealth.10 #Help long-lived characters marry
+		ekardor.3 #Potential Daedric Herald will save up Ardor for invasion
+	}
+	random_events = {
+		10 = ekevmisc.0 #Ev's misc triggers
+		5 = kmisc.4 #AI Education/Specialisation Booster
+	}
+}
+
+# For characters 2 to 16 years old
+on_yearly_childhood_pulse = {
+	random_events = {
+		30 = 730002
+		30 = 730003
+		30 = 730004
+		10 = dragonborn.100
+	}
+}
+
+on_loot_settlement = {
+	events = {
+		slaves.1 #To enslave or not enslave?
+	}
+}
+
+# Fires for the owner of the winning unit (ROOT). The taken Holding title is in FROM.
+on_siege_over_winner = {
+	events = {
+		ekrebel.60 # Slaves liberate slaves
+		ekrevolts.3 #Bandits take county capital
+		ekrevolts.16 #Undead take county capital
+		ekrevolts.19 #Necromancers take country capital
+		slaves.20 #Should we free the slaves?
+		
+		### Three Banners War
+		alliancewar.50 # Alinor falls!
+		alliancewar.51 # Wayrest falls!
+		alliancewar.52 # Windhelm falls!
+	}
+}
+
+on_siege_won_leader = {
+	events = {
+#		idealinvasion.6 #Disabled until the event is added
+	}
+}
+
+# When rebels appear
+on_rebel_revolt = {
+	events = {
+		## Events rewritten, no need to have one for each culture anymore (yay)
+		#Normal Slave Uprisings
+		ekrebel.1
+		
+		#Reinforcing Slave Uprisings
+		ekrebel.75
+
+		#EK specific non-slave rebels rise up
+		ekrevolts.1 #Bandit rebels rise up
+		ekrevolts.10 #Warlord rises
+		ekrevolts.14 #Undead uprising
+		ekrevolts.17 #Necromancer uprising
+		ekrevolts.20 #Sload invasion
+		ekrevolts.22 #Vampire uprising
+		ekrevolts.24 #Lycan uprising
+	}
+}
+on_character_convert_culture = {
+	effect = {
+		if = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+		any_courtier_or_vassal = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+	}
+	events = {
+		reach_flavour.19
+
+		ekcoa.1 # CoA maintenance
+
+		ayleid_flavour.1 # Ayleids reclaim Imperial Isle
+	}
+}
+on_character_convert_religion = {
+	events = {
+		ekpatrons.200 #AI Patron Deity Assignment
+		malacath.3 #Character converts, not a strong/weak chief anymore
+		mehrunes.5 #Character converts, is no longer rebel leader
+		namira.5 #Character converts, vows of squalor invalidated
+		reach_flavour.19 # Name of the Reach Empire
+		relbeh.0 # Needs to change the religious behaviour traits
+		esmtrait.3 # Briarhearts and Hagravens shouldn't convert
+	}
+	effect = {
+		elder_council = { ec_recalc_entire_council = yes }
+		disband_religious_event_troops = yes
+	}
+}
+on_vassal_accepts_religious_conversion = {
+	events = {
+		ekpatrons.200 #AI Patron Deity Assignment
+	}
+}
+
+on_war_started = {
+	events = {
+		#almsivi.20 #Vivec Defenses - moved to building
+		# almsivi.25 #Almalexia Defenses - moved to building
+	}
+	effect = {
+		ec_recalc_entire_council = yes
+	}
+}
+
+#ROOT is the character, FROM is the title, FROMFROM is the old holder
+on_new_holder = {
+	events = {
+		ekmaintenance.0 #Destroy Titular Titles
+		ekmaintenance.1 #Destroy Great House Titles
+		ekmaintenance.6 #Direnni Naming
+		mane.3 #Mane title
+		almsivi.100 #Temple Tributary (Archcanon)
+		almsivi.110 #Temple Tributary (Rulers)
+		custgovts.300 #Assign Commune government is applicable
+		custgovts.301 #Assign Imperial Republic government is applicable
+		#custgovts.302 #Start Imperial Commune / Republic elections
+		custgovts.500 # Male matriarch malus handling
+		#ideal_masters.6 #Offer renewal
+		#ideal_masters.7 #Cannot be offered renewal
+		#ekresettlement.2 #Autoconvert conquered depopulated provinces
+		#ekresettlement.4 #Remove culture conversion efforts on conquered provinces unless conqueror is of the same culture.
+		eldercouncil.800 # Death of a pretender
+		eldercouncil.1901 # Emperor trait
+		#ektrade.100 # Trade post maintenance
+		
+		orsimer.2 # Orsinium is destroyed if held by a non-Orc
+		
+		reach_flavour.16 #Awards the Faolan/Melka title
+		reach_flavour.19 #Changes the Reach Empire's name
+		
+		tribunal_flavour.1 # Tribunal Temple decides if Vvardenfell can be colonized or not
+
+		ekcoa.1 # CoA maintenance
+
+		ayleid_flavour.1 # Ayleids retake Imperial Isle
+
+		orgnum.121 # Orgnum becomes God-Emperor
+		orgnum.200 # Orgnum reclaims Abbarbas
+	}
+	effect = {
+		elder_council = { ec_recalc_entire_council = yes }
+		if = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+		any_courtier_or_vassal = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+	}
+}
+
+# #ROOT is the character, FROM is the title, FROMFROM is the old holder
+on_new_holder_inheritance = {
+	events = {
+		ekmaintenance.0 #Destroy Titular Titles
+		ekmaintenance.1 #Destroy Great House Titles
+		ekmaintenance.6 #Direnni Naming
+		mane.3 #Mane title
+		almsivi.100 #Temple Tributary (Archcanon)
+		almsivi.110 #Temple Tributary (Rulers)
+		custgovts.300 #Assign Commune government is applicable
+		custgovts.301 #Assign Imperial Republic government is applicable
+		#custgovts.302 #Start Imperial Commune / Republic elections
+		custgovts.500 # Male matriarch malus handling
+		magicka.0
+		#ekresettlement.2 #Autoconvert conquered depopulated provinces
+		eldercouncil.800 # Death of a pretender
+		eldercouncil.1901 # Emperor trait, imperialism maintenance
+		#ektrade.100 # Trade post maintenance
+		
+		orsimer.2 # Orsinium is destroyed if held by a non-Orc
+		
+		tribunal_flavour.1 # Tribunal Temple decides if Vvardenfell can be colonized or not
+
+		ayleid_flavour.1 # Ayleids retake Imperial Isle
+
+		orgnum.121 # Orgnum becomes God-Emperor
+		orgnum.200 # Orgnum reclaims Abbarbas
+	}
+	effect = {
+		ec_recalc_entire_council = yes
+		if = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+		any_courtier_or_vassal = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+	}
+}
+
+#ROOT is the character, FROM is the title, FROMFROM is the old holder
+on_new_holder_usurpation = {
+	events = {
+		ekmaintenance.0 #Destroy Titular Titles
+		ekmaintenance.1 #Destroy Great House Titles
+		ekmaintenance.6 #Direnni Naming
+		mane.3 #Mane title
+		almsivi.100 #Temple Tributary (Archcanon)
+		almsivi.110 #Temple Tributary (Rulers)
+		custgovts.300 #Assign Commune government is applicable
+		custgovts.301 #Assign Imperial Republic government is applicable
+		#custgovts.302 #Start Imperial Commune / Republic elections
+		custgovts.500 # Male matriarch malus handling
+		#ekresettlement.2 #Autoconvert conquered depopulated provinces
+		#ekresettlement.4 #Remove culture conversion efforts on conquered provinces unless conqueror is of the same culture.
+		eldercouncil.800 # Death of a pretender
+		eldercouncil.1901 # Emperor trait, imperialism maintenance
+		#ektrade.100 # Trade post maintenance
+		eso.100 #Varen's Rebellion
+		eso.110 #Fortunata's Conquest
+		eso.120 #Ephrem's Conquest
+		
+		orsimer.2 # Orsinium is destroyed if held by a non-Orc
+		
+		tribunal_flavour.1 # Tribunal Temple decides if Vvardenfell can be colonized or not
+
+		ayleid_flavour.1 # Ayleids retake Imperial Isle
+
+		orgnum.121 # Orgnum becomes God-Emperor
+		orgnum.200 # Orgnum reclaims Abbarbas
+	}
+	effect = {
+		ec_recalc_entire_council = yes
+		if = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+		any_courtier_or_vassal = {
+			limit = { has_racial_trait = no }
+			assign_racial_trait = yes
+		}
+	}
+}
+
+# Fires every two years for characters who are members of any society
+on_society_bi_yearly_pulse = {
+	events = {
+		### Tombolas
+		ekguildflavor.20 #Fighters quest tombola
+		ekguildflavor.25 #Mages quest tombola
+		ekguildflavor.30 #Mercantile quest tombola
+		ekguildflavor.35 #Scenarist quest tombola
+		ekguildflavor.40 #Greybeards/Moth Priests tombola
+		ekguildflavor.45 #Thieves/Camonna Tong quest tombola
+		ekguildflavor.50 #DB/MT Priests quest tombola
+		ekguildflavor.55 #Great House Tombola
+		ekguildflavor.65 #Sword-Singer Tombola
+		eldercouncil.200 # Elder Council Tombola
+		ekguildflavor.10 # Education rank up
+		ekguildflavor.11 # Specialisation rank up
+		ekguildflavor.12 # Thu'um rank up
+		ekguildflavor.13 # Sword-Singing rank up
+	}
+
+	random_events = {
+		elder_council_random_events = {
+			delay = 40
+			50 = eldercouncil.2800 # Debate
+			50 = eldercouncil.2811 # Admin
+			150 = 0 # Nothing
+		}
+	}
+}
+
+# A character asks to join a society. Only works on player
+# Root = Character
+# From = Society
+on_character_ask_to_join_society = {
+	events = {
+		eksocieties.10 #Universal event for joining societies
+	}
+}
+
+#Root is the character?
+#From is the artifact?
+#FROMFROM is who gave the artifact?
+on_artifact_inheritance = {
+	effect = {
+		if = {
+			limit = { FROM = { artifact_type = ring_happiness } ROOT = { OR = { trait = depressed trait = stressed } } }
+			remove_trait = depressed remove_trait = stressed
+		}
+	}
+	events = {
+#		amuletofkings.1 #Amulet of Kings inherited, ex-owner no longer recognized as Amulet owner via trait
+	}
+}
+
+# An offmap power changes its ruler. Triggers for the new ruler
+# Root = New ruler
+# From = Old ruler
+# FromFrom = Offmap
+on_offmap_ruler_changed = {
+	events = {
+		ekoffmapstatus.170 #Almalexia dies
+		ekoffmapstatus.172 #Almalexia Vacant dies
+		ekoffmapstatus.175 #Sotha Sil dies
+		ekoffmapstatus.177 #Sotha Sil Vacant dies
+		ekoffmapstatus.180 #Vivec dies
+		ekoffmapstatus.182 #Vivec Vacant dies
+	}
+}
+
+# Happens once a year during a random monthly update. Triggers for the governor (once for each offmap governor, if there's more than one)
+# Root = Governor
+# From = Offmap
+on_offmap_yearly_pulse = {
+	events = {
+		ekoffmapstatus.100 #Almsivi bathe in the power of the Heart of Lorkhan to restore their power
+	}
+	
+	random_events = {
+		20000 = 0
+		500 = ekoffmapstatus.10 #Daedric Prince gets a stronger status
+		370 = ekoffmapstatus.12 #Daedric Prince gets a weaker status
+		400 = ekoffmapstatus.14 #Daedric Prince gets a stronger policy
+		300 = ekoffmapstatus.16 #Daedric Prince gets a weaker policy
+		750 = ekoffmapstatus.105 #Tribune weakens
+		75 = ekoffmapstatus.150 #Tribune goes Warlike
+		75 = ekoffmapstatus.155 #Tribune goes Convivial
+		125 = ekoffmapstatus.160 #Tribune goes Cordial
+		75 = ekoffmapstatus.165 #Tribune goes Withdrawn
+	}
+}
+on_pregnancy = {
+	events = {
+		#ekbirth.98 #Mer Pregnancy Management
+		#ekbirth.99 #Cancels illegal pregnancies.
+		#ekbirth.102 #Silently cancels some pregnancies.
+	}
+}
+
+# ROOT = holder of the title whose law changed
+# FROM = holder of the title whose law changed
+# FROMFROM = the title whose law changed
+# Happens AFTER the new law is put into effect
+# N.B. only happens after a law is *voted* in by the council, if a ruler sets it unilaterally, this event is not called
+on_law_vote_passed = {
+	events = {
+		eldercouncil.1299 # Catch-all
+		#eldercouncil.1300 # Slavery
+		#eldercouncil.1308
+		#eldercouncil.1316 # Investiture
+		#eldercouncil.1324
+		#eldercouncil.1332 # Centralisation
+		#eldercouncil.1340
+		#eldercouncil.1348 # Viceroyalties
+		#eldercouncil.1356
+		#eldercouncil.1364 # Administration
+		#eldercouncil.1372
+		#eldercouncil.1380 # Standing Army
+		#eldercouncil.1388
+		#eldercouncil.1396 # Out of realm inheritance
+		#eldercouncil.1404
+		#eldercouncil.1412 # Vassal wars
+		#eldercouncil.1420
+		#eldercouncil.1428 # Title revocation
+		#eldercouncil.1436
+	}
+}
+
+# A character leaves or is forced to leave a society
+# Root = Character
+# From = Society
+on_character_leave_society = {
+	events = {
+		ekmaintenance.1 # Great House maintenance
+		eldercouncil.1900 # Faction loyalty maintenance
+	}
+}
+
+# A character ranks up in their society, or becomes grandmaster
+# Root = Character
+# From = Society
+on_character_society_rank_up = {
+	events = {
+		#eldercouncil.504 # Special title maintenance
+		eksocieties.15 # New Grandmaster notification
+	}
+	effect = {
+		ec_recalc_entire_council = yes
+	}
+}
+
+on_character_society_rank_down = {
+	events = {
+		#eldercouncil.505 # Special title maintenance
+	}
+}
+
+# Triggers when a change of employer has been detected. Note that the from scope is empty for newly created characters.
+# Root = character that got a new employer
+# From = previous employer
+# FromFrom = new employer
+on_employer_change = {
+	effect = {
+		if = {
+			limit = {
+				OR = { has_racial_trait = no }
+			}
+			assign_racial_trait = yes
+			if = {
+				limit = {
+					graphical_culture = altmergfx
+					culture = altmer
+					NOR = {
+						trait = pure_altmer
+						trait = impure_altmer
+					}
+				}
+				character_event = { id = altmer.0 }
+			}
+		}
+		if = { limit = { has_birthsign = no } assign_birthsign = yes }
+		FROMFROM = {
+			if = {
+				limit = { has_racial_trait = no }
+				assign_racial_trait = yes
+			}
+			any_courtier_or_vassal = {
+				limit = { has_racial_trait = no }
+				assign_racial_trait = yes
+			}
+		}
+		update_elven_immortality = yes
+	}
+	events = {
+		kmisc.10050 #A new character is created
+		relbeh.0 # Needs to change the religious behaviour traits
+	}
+}
+
+# Triggers when a change of host has been detected. Note that the from scope is empty for newly created characters. "on_employer_change" is triggered first if a character has had both their employer and host changed since the last check was made.
+# Root = the character that got a new host
+# From = the previous host
+# FromFrom = new employer
+on_host_change = {
+	effect = {
+		if = {
+			limit = {
+				OR = { has_racial_trait = no }
+			}
+			assign_racial_trait = yes
+			if = {
+				limit = {
+					graphical_culture = altmergfx
+					culture = altmer
+					NOR = {
+						trait = pure_altmer
+						trait = impure_altmer
+					}
+				}
+				character_event = { id = altmer.0 }
+			}
+		}
+		if = { limit = { has_birthsign = no } assign_birthsign = yes }
+		update_elven_immortality = yes
+	}
+	events = {
+		kmisc.10050 #A new character is created
+		relbeh.0 # Religious behaviours
+	}
+}
+
+
+
+# any leader in battle on winning side (except the leader) is ROOT - opponent army leader is FROM
+on_battle_won = {
+	random_events = {
+		250 = aflavor.40
+	}
+}
+
+### on_war_ended block
+# From = Attacker, Root = Defender
+on_war_ended_victory = {
+	events = {
+		story_blackdrake.12 # Invasion of Evermore - successful
+		story_blackdrake.16 # Invasion of Solitude - successful
+		
+		alliancewar.115 # A faction claimed Cyrodiil!
+	}
+}
+
+# From = Attacker, Root = Defender
+on_war_ended_whitepeace = {
+	events = {
+		alliancewar.110 # Aldmeri Dominion defeated in the Three Banners War!
+		alliancewar.111 # Ebonheart Pact defeated in the Three Banners War!
+		alliancewar.112 # Daggerfall Covenant defeated in the Three Banners War!
+	}
+}
+
+# From = Attacker, Root = Defender
+on_war_ended_defeat = {
+	events = {
+		story_blackdrake.14
+		story_blackdrake.18
+		
+		alliancewar.110 # Aldmeri Dominion defeated in the Three Banners War!
+		alliancewar.111 # Ebonheart Pact defeated in the Three Banners War!
+		alliancewar.112 # Daggerfall Covenant defeated in the Three Banners War!
+	}
+}
+
+# From = Attacker, Root = Defender
+on_war_ended_invalid = {
+	events = {
+	}
+}
+
+on_marriage = {
+	events = {
+		reach_flavour.17
+	}
+}
+
+### Wonders on_actions
+# Triggers when restoration of a wonder begins
+# ROOT = owner
+# FROM = wonder
+# FROMFROM = province (location of wonder)
+on_wonder_restore_start = {
+	events = {
+		orgnum.201 # Repairing Orgnum's Temple
+	}
+}
+
+# Triggers when restoration of a wonder completed
+# ROOT = owner
+# FROM = wonder
+# FROMFROM = province (location of wonder)
+on_wonder_restore_finish = {
+	events = {
+		orgnum.202 # Finished the repair of Orgnum's Temple
+	}
+}
+
+# Triggers when a wonder finishes building a stage.
+# ROOT = owner
+# FROM = wonder
+# FROMFROM = province (location of wonder)
+on_wonder_stage_finish = {
+	events = {
+		orgnum.203
+	}
+}
+
+# Triggers when construction of an upgrade finishes in a wonder.
+# ROOT = owner
+# FROM = upgrade
+# FROMFROM = wonder
+# FROMFROMFROM = province (location of wonder)
+on_wonder_upgrade_finish = {
+	events = {
+		ekartnote.288 #gives dwemer carronade
+		ekwonder.30 #Imperial Chapel religious authority
+	}
+}

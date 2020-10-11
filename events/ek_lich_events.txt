@@ -1,0 +1,608 @@
+namespace = azo_lich_events
+
+##Azo's Lich to Undead transformations.
+#Updates by Etienne - see ek_offmap_events for Jade Dragon cure variations
+
+
+character_event = {
+	id = azo_lich_events.1
+	desc = azo_lich_decay_step_1
+	picture = GFX_evt_undead2
+
+
+	trigger = {
+		trait = lich
+		NOT = {
+			has_character_modifier = lich_decay_1
+		}
+		NOT = {
+			has_character_modifier = lich_decay_2
+		}
+		NOT = {
+			trait = undead
+		}
+		NOR = { 
+			has_character_flag = no_lich_decay
+			has_character_flag = perpetual_lich_decay
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 1.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.5
+			trait = fair
+		}
+		modifier = {
+			factor = 0.8
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 0.8
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.5
+			trait = slovenly
+		}
+		modifier = {
+			factor = 2
+			is_mer = yes
+		}
+	}
+
+	option = {
+		name = azo_lich_decay_acknowledge_1
+		add_character_modifier = {
+			name = lich_decay_1
+			duration = -1
+		}
+	}
+}
+
+character_event = {
+	id = azo_lich_events.2
+	desc = azo_lich_decay_step_2
+	picture = GFX_evt_undead2
+
+
+	trigger = {
+		trait = lich
+		has_character_modifier = lich_decay_1
+		NOT = {
+			has_character_modifier = lich_decay_2
+		}
+		NOT = {
+			trait = undead
+		}
+		NOR = { 
+			has_character_flag = no_lich_decay
+			has_character_flag = perpetual_lich_decay
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 1.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.5
+			trait = fair
+		}
+		modifier = {
+			factor = 0.8
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 0.8
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.5
+			trait = slovenly
+		}
+		modifier = {
+			factor = 2
+			is_mer = yes
+		}
+	}
+
+	option = {
+		name = azo_lich_decay_acknowledge_2
+		add_character_modifier = {
+			name = lich_decay_2
+			duration = -1
+		}
+		remove_character_modifier = lich_decay_1
+	}
+}
+
+character_event = {
+	id = azo_lich_events.3
+	desc = azo_lich_decay_step_3
+	picture = GFX_evt_undead2
+
+
+	trigger = {
+		trait = lich
+		has_character_modifier = lich_decay_2
+		NOT = {
+			trait = undead
+		}
+		NOR = { 
+			has_character_flag = no_lich_decay
+			has_character_flag = perpetual_lich_decay
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 600
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 1.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.8
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 0.8
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.5
+			trait = slovenly
+		}
+		modifier = {
+			factor = 2
+			is_mer = yes
+		}
+	}
+
+	option = {
+		name = azo_lich_decay_acknowledge_3
+		custom_tooltip = { text = "At long last!"
+			hidden_tooltip = {
+				add_trait = disabler
+				remove_racial_trait = yes
+				set_graphical_culture = draugr
+				culture = draugr 
+				add_trait = undead
+				remove_character_modifier = lich_decay_2
+			}
+		}
+	}
+	
+	after = {
+		if = {
+			limit = { trait = disabler }
+			remove_trait = disabler
+		}
+	}
+}
+
+#Azo's Lich interaction with Meridia
+character_event = {
+	id = azo_lich_events.4
+	desc = azo_meridia_smite_undead
+	picture = GFX_evt_undead
+
+
+	trigger = {
+		is_undead = yes
+		worships_meridia = yes
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	option = {
+		name = azo_undead_smite
+		death = { death_reason = death_sacrificed }
+	}
+}
+
+#Azo's Lich interaction with Clavicus Vile
+character_event = {
+	id = azo_lich_events.5
+	desc = azo_clavicus_vile_deal
+	picture = GFX_evt_undead
+
+
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		OR = {
+			has_character_modifier = lich_decay_1
+			has_character_modifier = lich_decay_2
+		}
+		NOR = { 
+			has_character_modifier = refused_daedra_lich_deal
+			has_character_flag = perpetual_lich_decay
+		}
+		worships_clavicus = yes
+		piety = 2000
+		wealth = 1000
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	option = {
+		name = azo_clavicus_deal
+		custom_tooltip = { text = "You've got a deal!"
+			hidden_tooltip = {
+				random_list = {
+					75 = { character_event = { id = azo_lich_events.6 } }
+					25 = { character_event = { id = azo_lich_events.7 } }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = azo_clavicus_refuse
+		add_character_modifier = {
+			name = refused_daedra_lich_deal
+			duration = 3650
+		}
+	}
+}
+
+character_event = {
+	id = azo_lich_events.6
+	desc = azo_clavicus_cure_rot
+	picture = GFX_evt_mage
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = azo_clavicus_cure
+		custom_tooltip = { text = "The Prince kept his word. But the price..."
+			hidden_tooltip = {
+				remove_character_modifier = lich_decay_1
+				remove_character_modifier = lich_decay_2
+				piety = -1500
+				wealth = -1000
+			}
+		}
+	}
+}
+
+
+
+character_event = {
+	id = azo_lich_events.7
+	desc = azo_clavicus_skeleton
+	picture = GFX_evt_undead
+
+	is_triggered_only = yes
+
+	trigger = {
+		trait = lich
+	}
+
+	option = {
+		name = azo_clavicus_skeletonize
+		custom_tooltip = { text = "Remove ALL my flesh?! But!..."	
+			hidden_tooltip = {
+				remove_character_modifier = lich_decay_1
+				remove_character_modifier = lich_decay_2
+				piety = -1500
+				wealth = -1000
+				add_trait = disabler
+				remove_racial_trait = yes
+				set_graphical_culture = skeleton
+				culture = skeleton
+				add_trait = undead
+			}
+		}
+	}
+	
+	after = {
+		if = {
+			limit = { trait = disabler }
+			remove_trait = disabler
+		}
+	}
+}
+
+#Azo's Lich interaction with Peryite
+character_event = {
+	id = azo_lich_events.8
+	desc = azo_peryite_deal
+	picture = GFX_evt_undead
+
+
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		OR = {
+			has_character_modifier = lich_decay_1
+			has_character_modifier = lich_decay_2
+		}
+		NOR = { 
+			has_character_modifier = refused_daedra_lich_deal
+			has_character_flag = perpetual_lich_decay
+		}
+		worships_peryite = yes
+		piety = 2500
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	option = {
+		name = azo_peryite_deal_accept
+		custom_tooltip = { text = "You've got a deal!"
+			hidden_tooltip = {
+				character_event = { id = azo_lich_events.9 } 
+			}
+		}
+	}
+	
+	option = {
+		name = azo_peryite_refuse
+		add_character_modifier = {
+			name = refused_daedra_lich_deal
+			duration = 3650
+		}
+	}
+}
+
+character_event = {
+	id = azo_lich_events.9
+	desc = azo_peryite_cure_rot
+	picture = GFX_evt_undead
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = azo_peryite_cure
+		custom_tooltip = { text = "The Prince kept his word. But the price..."
+			hidden_tooltip = {
+				remove_character_modifier = lich_decay_1
+				remove_character_modifier = lich_decay_2
+				piety = -2000
+				random_demesne_province = {
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+				random_demesne_province = { 
+					random_list = {
+						15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+						25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+						15 = { add_province_modifier = { name = trolls duration = 7200 } }
+						15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+					}
+				}
+			}
+		}
+	}
+}
+
+#Azo's Lich interaction with Namira
+character_event = {
+	id = azo_lich_events.12
+	desc = azo_namira_deal
+	picture = GFX_evt_undead
+
+
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		OR = {
+			has_character_modifier = lich_decay_1
+			has_character_modifier = lich_decay_2
+		}
+		NOT = { 
+			has_character_modifier = refused_daedra_lich_deal
+			has_character_flag = perpetual_lich_decay
+		}
+		worships_namira = yes
+		piety = 1500
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	option = {
+		name = azo_namira_deal_accept
+		piety = -1500
+		custom_tooltip = { text = namira_deal_accept_tooltip
+			hidden_tooltip = {
+				set_character_flag = perpetual_lich_decay 
+			}
+		}
+	}
+	
+	option = {
+		name = azo_namira_refuse
+		add_character_modifier = {
+			name = refused_daedra_lich_deal
+			duration = 3650
+		}
+	}
+}
+
+#Azo's Lich interaction with Arkay
+# character_event = {
+	# id = azo_lich_events.10
+	# desc = azo_arkay_smite_undead
+	# picture = GFX_evt_undead
+
+
+	# trigger = {
+		# OR = {
+			# trait = lich
+			# trait = undead
+		# }
+		# OR = {
+			# #religion = eightdivines 
+			# #ninedivines
+		# }
+		
+	# }
+
+	# mean_time_to_happen = {
+		# months = 1
+	# }
+
+	# option = {
+		# name = azo_undead_arkay_smite
+		# death = { death_reason = death_sacrificed }
+	# }
+# }
+
+
+#Azo's Lich interaction with Sheogorath
+# character_event = {
+	# id = azo_lich_events.11
+	# desc = azo_sheogorath_deal
+	# picture = GFX_evt_undead
+
+
+	# trigger = {
+		# OR = {
+			# has_character_modifier = lich_decay_1
+			# has_character_modifier = lich_decay_2
+		# }
+		# NOT = { has_character_modifier = refused_daedra_lich_deal}
+		# religion = daedra_sheogorath
+		# piety = 2500
+	# }
+
+	# mean_time_to_happen = {
+		# months = 1
+	# }
+
+	# option = {
+		# name = azo_sheogorath_deal_accept
+		# custom_tooltip = { text = "You've got a deal!"
+			# hidden_tooltip = {
+				# character_event = { id = azo_lich_events.11 } 
+			# }
+		# }
+	# }
+	
+	# option = {
+		# name = azo_sheogorath_refuse
+		# add_character_modifier = {
+			# name = refused_daedra_lich_deal
+			# duration = 60
+		# }
+	# }
+# }
+

@@ -1,0 +1,255 @@
+targetted_decisions = {
+	use_ring_transmutation = {
+		filter = self
+		ai_target_filter = self
+		
+		potential = {
+			has_artifact = ring_transmutation
+			OR = {
+				AND = {
+					any_artifact = {
+						artifact_type = ring_transmutation
+						is_artifact_active = yes
+					}
+					has_submenu_open = no
+				}
+				ai = yes
+			}
+		}
+		effect = {
+			custom_tooltip = {
+				text = urttt
+				hidden_tooltip = {
+					character_event = { id = artifactsminor.0 }
+					if = {
+						limit = { ai = yes }
+						add_character_modifier = { name = used_ring_transmute duration = 3650 }
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				has_character_modifier = used_ring_transmute
+			}
+			modifier = {
+				factor = 0
+				trait = content
+			}
+			modifier = {
+				factor = 0.5
+				trait = humble
+			}
+			modifier = {
+				factor = 0.75
+				trait = temperate
+			}
+			modifier = {
+				factor = 0
+				wealth = 500
+			}
+		}
+	}
+	manipulate_oghma_infinium = {
+		filter = self
+		ai_target_filter = self
+		
+		potential = {
+			has_artifact = book_oghma_infinium
+			OR = {
+				AND = {
+					any_artifact = {
+						artifact_type = book_oghma_infinium
+						is_artifact_active = yes
+					}
+					has_submenu_open = no
+				}
+				ai = yes
+			}
+			has_submenu_open = no
+		}
+		allow = {
+			age = 16
+		}
+		effect = {
+			character_event = { id = ekartifactdaedra.0 }
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { factor = 0 NOR = { trait = reckless trait = arbitrary trait = envious trait = brave trait = paranoid trait = lunatic trait = possessed } }
+			modifier = { factor = 0 OR = { trait = humble trait = content trait = diligent trait = temperate } }
+			modifier = { factor = 0.5 NOT = { true_religion = daedra_hermaeus } }
+			modifier = {
+				factor = 0
+				NOR = {
+					is_mer = yes
+					is_human = yes
+					is_beast = yes
+				}
+			}
+		}
+	}
+	
+	sell_artifact = { #Based on artifact theft decision
+		filter = self
+		ai_target_filter = self
+		
+		ai_check_interval = 12
+
+		third_party_filter = artifacts
+		ai_third_party_filter = artifacts
+		
+		potential = {
+			num_of_artifacts >= 1
+			NOT = { has_character_flag = selling_artifact_at_market }
+			has_submenu_open = no
+		}
+
+		third_party_potential = { #The artifact
+			FROMFROM = {
+				is_indestructible = no
+				NOR = {
+					#has_artifact_flag = mount
+					#has_artifact_flag = pet
+					has_artifact_flag = unique
+					has_artifact_flag = aedric_artifact
+					has_artifact_flag = artifact_is_being_destroyed #An artifact being sold or sacrificed is a no-go
+					has_artifact_flag = pet_death_imminent #No more selling your dead cats.
+					#has_artifact_flag = daedric_artifact #Generic Daedric gear should be able to be sold
+				}
+			}
+		}
+		
+		effect = {
+			set_character_flag = selling_artifact_at_market
+			FROMFROM = {
+				set_artifact_flag = artifact_is_being_destroyed
+			}
+			character_event = { id = ekartifacts.50 }
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.01 #Just to slow it down
+			}
+			modifier = { #Artifact must be sold, therefore it will be!
+				factor = 1000
+				FROMFROM = {
+					has_artifact_flag = force_sell
+				}
+			}
+			#AI doesn't know how to deal with the Band of Impotence
+			modifier = {
+				factor = 50
+				calc_true_if = {
+					amount = 2
+					NOT = { #No living children of dynasty
+						any_child = {
+							is_alive = yes
+							dynasty = ROOT
+						}
+					}
+					NOT = { #Less than 3 total children
+						num_of_children = 3
+					}
+					has_ambition = obj_groom_an_heir #If they want to groom an heir, they need an heir first!
+				}
+				FROMFROM = {
+					artifact_type = ring_impotence
+				}
+			}
+			modifier = {
+				factor = 0.01 #Wealthy characters have little reason to sell artifacts
+				wealth = 300
+			}
+			modifier = {
+				factor = 0 #Insanely wealthy characters have no reason to sell artifacts
+				wealth = 750
+				FROMFROM = {
+					NOT = { has_artifact_flag = force_sell }
+				}
+			}
+			modifier = {
+				factor = 0 #Characters with few artifacts will not sell them unless they're worse than bankrupt
+				num_of_artifacts < 4
+				wealth = -50
+				FROMFROM = {
+					NOT = { has_artifact_flag = force_sell }
+				}
+			}
+			modifier = {
+				factor = 0
+				FROMFROM = {
+					is_artifact_equipped = yes
+					OR = {
+						has_artifact_flag = mount
+						has_artifact_flag = pet
+					}
+				}
+			}
+			modifier = {
+				factor = 20 #Characters with a whole lot of artifacts are more likely to sell them
+				num_of_artifacts >= 20
+			}
+			modifier = {
+				factor = 2.5 #Bankrupt characters are more likely to sell artifacts
+				NOT = { wealth = 0 }
+			}
+			modifier = {
+				factor = 100 #Characters who are REALLY bankrupt will liquidate their inventory
+				NOT = { wealth = -250 }
+			}
+			#As quality scales, the likelihood of selling is reduced
+			modifier = {
+				factor = 0.8
+				FROMFROM = {
+					quality == 3
+				}
+			}
+			modifier = {
+				factor = 0.75
+				FROMFROM = {
+					quality == 4
+				}
+			}
+			modifier = {
+				factor = 0.65
+				FROMFROM = {
+					quality == 5
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROMFROM = {
+					quality == 6
+				}
+			}
+			modifier = {
+				factor = 0.25
+				FROMFROM = {
+					quality == 7
+				}
+			}
+			modifier = {
+				factor = 0.1
+				FROMFROM = {
+					quality == 8
+				}
+			}
+			modifier = {
+				factor = 0.01
+				FROMFROM = {
+					quality > 8
+				}
+			}
+		}
+	}
+	
+}

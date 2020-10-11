@@ -1,0 +1,782 @@
+targetted_decisions = {
+	
+	convert_to_liege_religion = {
+		only_playable = yes
+		
+		filter = self
+		ai_target_filter = self
+		ai = no
+		
+		potential = {
+			is_playable = yes
+			liege = {
+				NOT = { character = ROOT }
+				NOT = { religion = ROOT }
+				religion_group = ROOT
+			}
+			controls_religion = no
+			has_submenu_open = no
+		}
+		allow = {
+			NOT = { trait = zealous }
+		}
+		effect = {
+			prestige = -500
+			piety = 250
+			if = {
+				limit = { higher_tier_than = BARON }
+				religion_authority = {
+					modifier = ruler_converted_from
+				}
+			}
+			liege = {
+				reverse_religion = ROOT
+			}
+			if = {
+				limit = { higher_tier_than = BARON }
+				hidden_tooltip = {
+					religion_authority = {
+						modifier = ruler_converted_to
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	convert_to_liege_religion_on_liege = {
+		only_playable = yes
+		
+		filter = liege
+		ai_target_filter = liege
+		ai_check_interval = 60
+		
+		from_potential = {
+			ai = no
+			is_playable = yes
+			controls_religion = no
+		}
+		potential = {
+			NOT = { character = FROM }
+			NOT = { religion = FROM }
+			religion_group = FROM
+		}
+		
+		allow = {
+			FROM = { NOT = { trait = zealous } }
+		}
+		
+		effect = {
+			FROM = {
+				prestige = -500
+				piety = 250
+				if = {
+					limit = { higher_tier_than = BARON }
+					religion_authority = {
+						modifier = ruler_converted_from
+					}
+				}
+				religion = ROOT
+				if = {
+					limit = { higher_tier_than = BARON }
+					hidden_tooltip = {
+						religion_authority = {
+							modifier = ruler_converted_to
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	convert_to_liege_culture_on_liege = {
+		only_playable = yes
+		
+		filter = liege
+		ai_target_filter = liege
+		ai_check_interval = 60
+		
+		from_potential = {
+			is_playable = yes
+		}
+		
+		potential = {
+			NOT = { character = FROM }
+			NOT = { culture = FROM }
+		}
+		allow = {
+			FROM = { prestige = 200 }
+		}
+		effect = {
+			FROM = {
+				prestige = -200
+				culture = ROOT
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	convert_to_liege_culture = {
+		only_playable = yes
+		
+		filter = self
+		ai_target_filter = self
+		ai_check_interval = 60
+		
+		potential = {
+			is_playable = yes
+			liege = {
+				NOT = { character = ROOT }
+				NOT = { culture = ROOT }
+				culture_group = ROOT
+			}
+			has_submenu_open = no
+		}
+		allow = {
+			prestige = 200
+		}
+		effect = {
+			prestige = -200
+			liege = {
+				reverse_culture = ROOT
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	convert_to_local_culture = {
+		only_playable = yes
+		ai_check_interval = 24
+		
+		filter = self
+		ai_target_filter = self
+		
+		potential = {
+			is_playable = yes
+			is_nomadic = no
+			capital_scope = {
+				NOT = { culture = ROOT }
+				culture_group = ROOT
+			}
+			OR = {
+				independent = yes
+				liege = {
+					NOT = { culture = ROOT }
+				}
+			}
+			holy_order = no
+			mercenary = no
+			has_dlc = "Rajas of India"
+			has_submenu_open = no
+		}
+		allow = {
+			prestige = 500
+		}
+		effect = {
+			prestige = -500
+			capital_scope = {
+				reverse_culture = ROOT
+			}
+			hidden_tooltip = {
+				any_child = {
+					limit = {
+						is_ruler = no
+						liege = { character = ROOT }
+					}
+					culture = ROOT
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.01
+			}
+			modifier = {
+				factor = 0
+				primary_title = {
+					is_conquered = yes
+					conquest_culture = ROOT
+				}
+			}
+			modifier = {
+				factor = 0
+				any_vassal = {
+					culture = ROOT
+					OR = {
+						tier = duke
+						tier = king
+						AND = {
+							tier = count
+							ROOT = { tier = duke }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	convert_to_local_religion = {
+		only_playable = yes
+		
+		filter = self
+		ai_target_filter = self
+		ai = no
+		
+		potential = {
+			is_playable = yes
+			is_nomadic = no
+			capital_scope = {
+				NOT = { religion = ROOT }
+			}
+			OR = {
+				independent = yes
+				liege = {
+					NOT = { religion = ROOT }
+				}
+			}
+			
+			controls_religion = no
+			holy_order = no
+			
+			has_dlc = "Rajas of India"
+			
+			has_submenu_open = no
+		}
+		allow = {
+			NOT = { trait = zealous }
+			OR = {
+				AND = {
+					piety = 500
+					capital_scope = {
+						religion_group = ROOT
+					}
+				}
+				AND = {
+					piety = 1000
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				piety = -1000
+			}
+			if = {
+				limit = {
+					capital_scope = {
+						religion_group = ROOT
+					}
+				}
+				piety = -500
+			}
+			religion_authority = {
+				modifier = ruler_converted_from
+			}
+			if = {
+				limit = {
+					religion_group = human_pantheon
+					NOT = { trait = sympathy_human_pantheon }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_human_pantheon
+				}
+			}
+			if = {
+				limit = {
+					religion_group = yokudan_pantheon
+					NOT = { trait = sympathy_yokudan_pantheon }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_yokudan_pantheon
+				}
+			}
+			if = {
+				limit = {
+					religion_group = mer_pantheon
+					NOT = { trait = sympathy_mer_pantheon }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_mer_pantheon
+				}
+			}
+			if = {
+				limit = {
+					religion_group = tribunal
+					NOT = { trait = sympathy_tribunal }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_tribunal
+				}
+			}
+			if = {
+				limit = {
+					religion_group = daedra
+					NOT = { trait = sympathy_daedra }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_daedra
+				}
+			}
+			if = {
+				limit = {
+					religion_group = khajiit_pantheon
+					NOT = { trait = sympathy_khajiit_pantheon }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_khajiit_pantheon
+				}
+			}
+			if = {
+				limit = {
+					religion_group = hist_group
+					NOT = { trait = sympathy_hist_group }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_hist_group
+				}
+			}
+			if = {
+				limit = {
+					religion_group = reach_faiths
+					NOT = { trait = sympathy_reach_faiths }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_reach_faiths
+				}
+			}
+			if = {
+				limit = {
+					religion_group = old_faith
+					NOT = { trait = sympathy_old_faith }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_old_faith
+				}
+			}
+			if = {
+				limit = {
+					religion_group = void_religions
+					NOT = { trait = sympathy_void_religions }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_void_religions
+				}
+			}
+			if = {
+				limit = {
+					religion_group = atmoran_pantheon
+					NOT = { trait = sympathy_atmoran_pantheon }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_atmoran_pantheon
+				}
+			}
+			if = {
+				limit = {
+					religion_group = oblivion_religions
+					NOT = { trait = sympathy_oblivion_religions }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_oblivion_religions
+				}
+			}
+			if = {
+				limit = {
+					religion_group = tsaesci_courts
+					NOT = { trait = sympathy_tsaesci_courts }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_tsaesci_courts
+				}
+			}
+			if = {
+				limit = {
+					religion_group = tangmo_religions
+					NOT = { trait = sympathy_tangmo_religions }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_tangmo_religions
+				}
+			}
+			if = {
+				limit = {
+					religion_group = potun_religions
+					NOT = { trait = sympathy_potun_religions }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_potun_religions
+				}
+			}
+			if = {
+				limit = {
+					religion_group = kamal_religions
+					NOT = { trait = sympathy_kamal_religions }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_kamal_religions
+				}
+			}
+			if = {
+				limit = {
+					religion_group = islander_religions
+					NOT = { trait = sympathy_islander_religions }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_islander_religions
+				}
+			}
+			if = {
+				limit = {
+					religion_group = maormer_religion
+					NOT = { trait = sympathy_maormer_religion }
+					capital_scope = {
+						NOT = { religion_group = ROOT }
+					}
+				}
+				random = {
+					chance = 60
+					add_trait = sympathy_maormer_religion
+				}
+			}
+			custom_tooltip = { text = local_religion_conversion_tooltip }
+			hidden_tooltip = {
+				capital_scope = {
+					reverse_religion = ROOT
+				}
+			}
+			hidden_tooltip = {
+				religion_authority = {
+					modifier = ruler_converted_to
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	convert_to_parent_religion = {
+		only_playable = yes
+		
+		filter = self
+		ai_target_filter = self
+		ai = no
+		
+		potential = {
+			is_playable = yes
+			independent = yes
+			controls_religion = no
+			is_heretic = yes
+			has_submenu_open = no
+		}
+		allow = {
+			NOT = { trait = zealous }
+		}
+		effect = {
+			piety = -500
+			if = {
+				limit = { higher_tier_than = BARON }
+				religion_authority = {
+					modifier = ruler_converted_from
+				}
+			}
+			
+			abandon_heresy = yes
+			
+			if = {
+				limit = { higher_tier_than = BARON }
+				hidden_tooltip = {
+					religion_authority = {
+						modifier = ruler_converted_to
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	convert_to_spouse_religion = {
+		only_playable = yes
+		filter = home_court
+		ai_target_filter = home_court
+	
+		from_potential = {
+			ai = no
+			is_playable = yes
+			controls_religion = no
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			OR = {
+				spouse = {
+					character = FROM
+				}
+				consort = {
+					character = FROM
+				}
+			}
+			is_alive = yes
+			NOT = { religion = FROM }
+		}
+		
+		allow = {
+			FROM = { NOT = { trait = zealous } }
+		}
+		
+		effect = {
+			FROM = {
+				prestige = -500
+				religion_authority = {
+					modifier = ruler_converted_from
+				}	
+			
+				religion = ROOT
+				
+				hidden_tooltip = {
+					religion_authority = {
+						modifier = ruler_converted_to
+					}
+				}
+				piety = 200
+			}
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}	
+
+decisions = {
+	# Weak or unreformed religions are allowed to convert to the attacker's religion when under Holy War
+	convert_to_attacker_religion = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			NOT = { religion_authority = 0.25 }
+			NOT = { trait = zealous }
+			controls_religion = no
+			
+			war = yes
+			any_war = {
+				defender = { character = ROOT }
+				attacker = {
+					NOT = { religion = ROOT }
+					religion_authority = 0.6
+				}
+				using_cb = religious
+			}
+			has_submenu_open = no
+		}
+		
+		allow = {
+			NOT = { trait = zealous }
+		}
+		
+		effect = {
+			prestige = -500
+			piety = -500
+			religion_authority = {
+				modifier = ruler_converted_from
+			}
+			
+			hidden_tooltip = {
+				any_war = {
+					limit = {
+						defender = { character = ROOT }
+						attacker = {
+							NOT = { religion = ROOT }
+							religion_authority = 0.5
+						}
+						using_cb = religious
+					}
+					attacker = {
+						save_event_target_as = enemy_attacker
+					}
+				}
+			}
+			
+			event_target:enemy_attacker = {
+				hidden_tooltip = {
+					letter_event = { id = 62800 }
+					ROOT = {
+						any_courtier = {
+							limit = {
+								religion = ROOT
+								employer = { character = ROOT }
+							}
+							religion = PREVPREV
+						}
+						any_vassal = {
+							limit = {
+								is_playable = no
+								religion = ROOT
+							}
+							religion = PREVPREV
+						}
+						capital_scope = {
+							if = {
+								limit = { religion = ROOT }
+								religion = PREVPREV
+							}
+						}
+					}
+				}
+				reverse_religion = ROOT
+			}
+			
+			hidden_tooltip = {
+				religion_authority = {
+					modifier = ruler_converted_to
+				}
+			}
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					any_war = {
+						defender = { character = ROOT }
+						attacker = {
+							NOT = { religion = ROOT }
+							religion_authority = 0.45
+						}
+						using_cb = religious
+						war_score = 50
+						thirdparty_title_scope = {
+							ROOT = {
+								primary_title = {
+									title = PREVPREV
+								}
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				any_war = {
+					defender = { character = ROOT }
+					attacker = {
+						NOT = { religion = ROOT }
+						religion_authority = 0.45
+					}
+					using_cb = religious
+					war_score = 75
+					thirdparty_title_scope = {
+						ROOT = {
+							primary_title = {
+								title = PREVPREV
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

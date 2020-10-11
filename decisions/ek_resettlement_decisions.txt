@@ -1,0 +1,310 @@
+settlement_decisions = {
+
+	desettle_province = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 12
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			is_capital = yes
+			location = {
+				NOR = {
+					has_province_flag = desettlement
+					has_province_modifier = foreign_enclaves
+					has_province_modifier = depopulated_province
+					has_province_modifier = seed_hist
+					culture = FROM
+					culture_group = daedra
+					culture_group = undead
+				}
+			}
+			owner = {
+				OR = {
+					NOT = { #Allows a character to convert the province even as a vassal if the province is not the culture group of a liege.
+						any_liege = {
+							culture_group = ROOT
+						}
+					}
+					AND = { #Allows a character to convert the province if the liege and they as a vassal share a culture even if the province is of the same culture group. Thanks JJ!
+						any_liege = {
+							culture = PREV
+							NOT = {
+								any_liege = {
+									culture_group = ROOT
+									NOT = {
+										culture = PREV
+									}
+								}
+							}
+						}
+					}
+					independent = yes #Independent characters will always be able to convert their own provinces
+				}
+				character = FROM
+			}
+		}
+		
+		allow = {
+			FROM = {
+				war = no
+			}
+			location = {
+				NOR = {
+					has_province_flag = desettlement
+					has_province_modifier = resettlement
+				}
+			}
+			#NAND = {
+			#	culture_group = argonian
+			#	has_law = resettlement_0
+			#}
+		}
+		
+		effect = {
+			location = {
+				#add_province_modifier = {
+				#name = desettlement #Failsafe to prevent decision from being taken more than once at a time.
+				#duration = -1
+				#hidden = yes
+				#}
+				set_province_flag = desettlement #I should've just used flags to begin with.
+				province_event = { id = ekresettlement.10 }
+			}
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 1.0
+			modifier = {
+				factor = 0.5
+				FROM = { trait = slothful }
+			}
+			modifier = {
+				factor = 0.75
+				FROM = { trait = kind }
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					OR = {
+						trait = undead
+						trait = dremora
+						trait = sload
+					}
+				}
+			}
+		}
+	}
+	
+	resettle_province = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 12
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			is_capital = yes
+			location = {
+				NOR = {
+					has_province_modifier = resettlement
+					has_province_modifier = foreign_enclaves
+					has_province_modifier = seed_hist
+				}
+				has_province_modifier = depopulated_province
+			}
+			owner = { #Allow province owner and lieges to take the decision, since filter seems to not be working.
+				OR = {
+					character = FROM
+					any_liege = {
+						character = FROM
+					}
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				war = no
+			}
+			location = {
+				NOR = {
+					has_province_flag = desettlement
+					has_province_modifier = resettlement
+					has_province_modifier = undead_horde_province
+					has_province_modifier = daedric_horde_province
+				}
+				owner = {
+					NOR = {
+						culture_group = undead
+						culture_group = daedra
+					}
+				}
+			}
+		}
+		
+		effect = {
+			location = {
+				add_province_modifier = {
+				name = resettlement #Failsafe to prevent decision from being taken more than once at a time.
+				duration = -1
+				hidden = yes
+				}
+				province_event = { id = ekresettlement.50 }
+			}
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 0.75
+			modifier = {
+				factor = 0.5
+				FROM = { trait = slothful }
+			}
+		}
+	}
+	
+	cleanse_evil = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 6
+		
+		is_high_prio = yes
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+			NOR = {
+				culture_group = undead
+				culture_group = daedra
+			}
+		}
+		
+		potential = {
+			is_capital = yes
+			location = {
+				NOR = {
+					has_province_flag = desettlement
+					has_province_modifier = foreign_enclaves
+					has_province_modifier = seed_hist
+				}
+				OR = {
+					culture_group = undead
+					culture_group = daedra
+					has_province_modifier = undead_horde_province
+					has_province_modifier = daedric_horde_province
+				}
+			}
+			owner = { #Allow province owner and lieges to take the decision, since filter seems to not be working.
+				OR = {
+					character = FROM
+					any_liege = {
+						character = FROM
+					}
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				war = no
+			}
+			location = {
+				NOR = {
+					has_province_flag = desettlement
+					has_province_modifier = resettlement
+				}
+			}
+		}
+		
+		effect = {
+			location = {
+				set_province_flag = desettlement
+				add_province_modifier = {
+					name = cleansing_evil
+					duration = -1
+				}
+			}
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 1.0
+		}
+	}
+	
+	cancel_desettle = {
+		only_playable = yes
+		filter = owned
+		ai = no
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		potential = {
+			location = {
+				OR = {
+					has_province_modifier = purging_locals
+					has_province_modifier = expelling_locals
+					has_province_modifier = foreign_enclaves
+					has_province_modifier = seed_hist
+				}
+			}
+			owner = { #Allow province owner only to take the decision, failsafe because of filter being weird.
+				character = FROM
+			}
+		}
+		
+		effect = {
+			location = {
+				if = {
+					limit = {
+						has_province_modifier = purging_locals
+					}
+					remove_province_modifier = purging_locals
+					clr_province_flag = desettlement
+				}
+				else_if = {
+					limit = {
+						has_province_modifier = expelling_locals
+					}
+					remove_province_modifier = expelling_locals
+					clr_province_flag = desettlement
+				}
+				else_if = {
+					limit = {
+						has_province_modifier = foreign_enclaves
+					}
+					remove_province_modifier = foreign_enclaves
+					clr_province_flag = desettlement
+				}
+				else_if = {
+					limit = {
+						has_province_modifier = seed_hist
+					}
+					remove_province_modifier = seed_hist
+					clr_province_flag = desettlement
+				}
+			}
+		}
+	}
+}

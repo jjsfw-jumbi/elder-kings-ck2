@@ -1,0 +1,546 @@
+namespace = vampdepth
+
+###Positive opinion decay events
+
+character_event = {
+	id = vampdepth.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = { 
+			limit = { 
+				NOT = { has_character_flag = vamp_depth_turned_resentful }
+			}
+			any_opinion_modifier_target = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_vamp_depth_child
+						who = prev
+					}
+				}
+				reverse_remove_opinion = { 
+					who = prev
+					modifier = opinion_vamp_depth_turned_me_1 
+				}
+				reverse_opinion = { 
+					modifier = opinion_vamp_depth_turned_me_2 
+					who = prev
+					years = 40 
+				}
+			}
+			character_event = { id = vampdepth.2 years = 10 } 
+		}
+	}
+}
+
+character_event = {
+	id = vampdepth.2
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = { 
+			limit = { 
+				NOT = { has_character_flag = vamp_depth_turned_resentful }
+			}
+			any_opinion_modifier_target = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_vamp_depth_child
+						who = prev
+					}
+				}
+				reverse_remove_opinion = { 
+					who = prev
+					modifier = opinion_vamp_depth_turned_me_2 
+				}
+				reverse_opinion = { 
+					modifier = opinion_vamp_depth_turned_me_3 
+					who = prev
+					years = 30 
+				}
+			}
+			character_event = { id = vampdepth.3 years = 10 } 
+		}
+	}
+}
+
+character_event = {
+	id = vampdepth.3
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = { 
+			limit = { 
+				NOT = { has_character_flag = vamp_depth_turned_resentful }
+			}
+			any_opinion_modifier_target = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_vamp_depth_child
+						who = prev
+					}
+				}
+				reverse_remove_opinion = { 
+					who = prev
+					modifier = opinion_vamp_depth_turned_me_3 
+				}
+				reverse_opinion = { 
+					modifier = opinion_vamp_depth_turned_me_4 
+					who = prev
+					years = 20 
+				}
+			}
+			character_event = { id = vampdepth.4 years = 10 } 
+		}
+	}
+}
+
+character_event = {
+	id = vampdepth.4
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = { 
+			limit = { 
+				NOT = { has_character_flag = vamp_depth_turned_resentful }
+			}
+			any_opinion_modifier_target = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_vamp_depth_child
+						who = prev
+					}
+				}
+				reverse_remove_opinion = { 
+					who = prev
+					modifier = opinion_vamp_depth_turned_me_4 
+				}
+				reverse_opinion = { 
+					modifier = opinion_vamp_depth_turned_me_5 
+					who = prev
+					years = 10 
+				}
+			}
+			character_event = { id = vampdepth.5 years = 10 }
+		}
+	}
+}
+
+character_event = {
+	id = vampdepth.5
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		if = { 
+			limit = { 
+				NOT = { has_character_flag = vamp_depth_turned_resentful }
+			}
+			any_opinion_modifier_target = {
+				limit = {
+					has_opinion_modifier = {
+						modifier = opinion_vamp_depth_child
+						who = prev
+					}
+				}
+				reverse_remove_opinion = { 
+					who = prev
+					modifier = opinion_vamp_depth_turned_me_5 
+				}
+				reverse_opinion = { 
+					modifier = opinion_vamp_depth_turned_me_6 
+					who = prev
+					years = 1950
+				}
+			}
+		}
+	}
+}
+
+###Events for resent
+
+character_event = {
+	id = vampdepth.6
+	hide_window = yes
+	
+	trigger = {
+		has_character_flag = vamp_depth_turned
+		NOT = {
+			has_character_flag = vamp_depth_turned_resentful
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 200
+		modifier = {
+			NOR = { #All religions that don't like vampires
+				religion = daedra_molag
+				religion = daedra_namira
+				religion = dragon_cult
+				religion = ideal_masters
+				religion = king_of_worms_cult
+				religion = sithis
+				religion = winter_wind
+				religion = old_gods
+				religion = forsworn_heresy
+				religion = daedra_nocturnal
+			}
+			factor = 0.5
+		}
+		modifier = {
+			trait = depressed
+			factor = 0.75
+		}
+		modifier = { #More time to enjoy life? Yes please
+			trait = hedonist
+			factor = 1.5
+		}
+		modifier = {
+			trait = ambitious
+			factor = 1.5
+		}
+		modifier = {
+			NOT = { has_character_flag = asked_for_vampirism }
+			factor = 0.5
+		}
+	}
+	
+	immediate = {
+		any_opinion_modifier_target = {
+			limit = {
+				has_opinion_modifier = {
+					modifier = opinion_vamp_depth_child
+					who = prev
+				}
+			}
+			character_event = { id = vampdepth.7 }
+		}  
+	}
+	
+}
+
+character_event = {
+	id = vampdepth.7
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = { from = { character_event = { id = vampdepth.8 } } }
+}
+
+character_event = {
+	id = vampdepth.8
+	desc = EVTDESC_vamp_depth_resent
+	picture = GFX_evt_suspicious_noble
+	is_triggered_only = yes
+	
+	option = { #I hate my sire now!
+		name = EVTOPTA_vamp_depth_resent
+		ai_chance = {
+			factor = 5
+			modifier = {
+				NOR = {
+					religion = daedra_molag
+					religion = daedra_namira
+					religion = dragon_cult
+					religion = ideal_masters
+					religion = king_of_worms_cult
+					religion = sithis
+					religion = winter_wind
+					religion = old_gods
+					religion = forsworn_heresy
+					religion = daedra_nocturnal
+				}
+				factor = 10
+			}
+			modifier = {
+				trait = depressed
+				factor = 5
+			}
+			modifier = {
+				factor = 10
+				NOT = { 
+					opinion = {
+						who = FROM 
+						value = 0 
+					}
+				}
+			}
+			modifier = {
+				NOT = { has_character_flag = asked_for_vampirism }
+				factor = 10
+			}
+		}
+		custom_tooltip = {
+			text = TOOLTP_vamp_depth_resent
+			hidden_tooltip = {
+				set_character_flag = vamp_depth_turned_resentful
+				vamp_depth_add_resentment = yes
+			}
+		}
+		
+	}
+	
+	option = {
+		ai_chance = {
+			factor = 5
+			modifier = {
+				OR = {
+					religion = daedra_molag
+					religion = daedra_namira
+					religion = dragon_cult
+					religion = ideal_masters
+					religion = king_of_worms_cult
+					religion = sithis
+					religion = winter_wind
+					religion = old_gods
+					religion = forsworn_heresy
+					religion = daedra_nocturnal
+				}
+				factor = 10
+			}
+			modifier = {
+				trait = hedonist
+				factor = 5
+			}
+			modifier = {
+				trait = ambitious
+				factor = 10
+			}
+			modifier = {
+				factor = 10
+				is_father = FROM
+			}
+			modifier = {
+				factor = 10
+				is_mother = FROM
+			}
+			modifier = {
+				factor = 15
+				is_lover = FROM
+			}
+			modifier = {
+				factor = 15
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 5
+				opinion = { 
+					value = 25
+					who = FROM
+				}
+			}
+			modifier = {
+				factor = 5
+				opinion = { 
+					value = 50
+					who = FROM
+				}
+			}
+			modifier = {
+				factor = 5
+				opinion = { 
+					value = 75
+					who = FROM
+				}
+			}
+			modifier = {
+				has_character_flag = asked_for_vampirism
+				factor = 5
+			}
+		}
+		name = EVTOPTA_vamp_depth_dont_resent
+	}
+}
+
+character_event = {
+	id = vampdepth.9
+	hide_window = yes
+	
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			OR = {
+				religion = daedra_molag
+				religion = daedra_namira
+				religion = dragon_cult
+				religion = ideal_masters
+				religion = king_of_worms_cult
+				religion = sithis
+				religion = winter_wind
+				religion = old_gods
+				religion = forsworn_heresy
+				religion = daedra_nocturnal
+			}
+			factor = 0.5
+		}
+		modifier = {
+			trait = hedonist
+			factor = 0.75
+		}
+		modifier = {
+			trait = ambitious
+			factor = 0.75
+		}
+		modifier = {
+				has_character_flag = asked_for_vampirism
+				factor = 0.5
+		}
+	}
+	
+	immediate = {
+		any_opinion_modifier_target = {
+			limit = {
+				has_opinion_modifier = {
+					modifier = opinion_vamp_depth_child
+					who = prev
+				}
+			}
+			character_event = { id = vampdepth.10 }
+		}
+	}
+}
+
+character_event = {
+	id = vampdepth.10
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = { from = { character_event = { id = vampdepth.11 } } }
+}
+
+character_event = {
+	id = vampdepth.11
+	desc = EVTDESC_vamp_depth_resent_no_more
+	picture = GFX_evt_suspicious_noble
+	is_triggered_only = yes
+	
+	option = { #I no longer hate my sire
+		name = EVTOPTA_vamp_depth_no_longer_resent
+		ai_chance = {
+			factor = 5
+			modifier = {
+				OR = {
+					religion = daedra_molag
+					religion = daedra_namira
+					religion = dragon_cult
+					religion = ideal_masters
+					religion = king_of_worms_cult
+					religion = sithis
+					religion = winter_wind
+					religion = old_gods
+					religion = forsworn_heresy
+					religion = daedra_nocturnal
+				}
+				factor = 10
+			}
+			modifier = {
+				trait = hedonist
+				factor = 5
+			}
+			modifier = {
+				trait = ambitious
+				factor = 10
+			}
+			modifier = {
+				factor = 10
+				is_father = FROM
+			}
+			modifier = {
+				factor = 10
+				is_mother = FROM
+			}
+			modifier = {
+				factor = 15
+				is_lover = FROM
+			}
+			modifier = {
+				factor = 15
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 5
+				opinion = { 
+					value = 25
+					who = FROM
+				}
+			}
+			modifier = {
+				factor = 5
+				opinion = { 
+					value = 50
+					who = FROM
+				}
+			}
+			modifier = {
+				factor = 5
+				opinion = { 
+					value = 75
+					who = FROM
+				}
+			}
+			modifier = {
+				has_character_flag = asked_for_vampirism
+				factor = 5
+			}
+		}
+		custom_tooltip = {
+			text = TOOLTP_vamp_depth_no_longer_resent
+			hidden_tooltip = {
+				clr_character_flag = vamp_depth_turned_resentful
+				remove_opinion = {
+					who = from
+					modifier = opinion_vamp_depth_resentful
+				}
+				opinion = { 
+					modifier = opinion_vamp_depth_turned_me_6 
+					who = from
+					years = 1950
+				}
+			}
+		}
+	}
+		
+	
+	option = { #My sire is still a bastard
+		name = EVTOPTA_vamp_depth_still_resent
+		ai_chance = {
+			factor = 5
+			modifier = {
+				NOR = {
+					religion = daedra_molag
+					religion = daedra_namira
+					religion = dragon_cult
+					religion = ideal_masters
+					religion = king_of_worms_cult
+					religion = sithis
+					religion = winter_wind
+					religion = old_gods
+					religion = forsworn_heresy
+					religion = daedra_nocturnal
+				}
+				factor = 10
+			}
+			modifier = {
+				trait = depressed
+				factor = 5
+			}
+			modifier = {
+				factor = 10
+				NOT = { 
+					opinion = {
+						who = FROM 
+						value = 0 
+					}
+				}
+			}
+			modifier = {
+				NOT = { has_character_flag = asked_for_vampirism }
+				factor = 10
+			}
+		}
+	}
+}

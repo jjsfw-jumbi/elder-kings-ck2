@@ -1,0 +1,361 @@
+#### Etienne's Daedric Events - Nocturnal ####
+
+namespace = nocturnal
+
+#Thieves' Guild Event Chain#
+
+#Sponsor Local Thieves Guild#
+
+character_event = {
+	id = nocturnal.1
+	desc = Nocturnal1
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Nocturnal1Popular"
+		capital_scope = {
+			add_province_modifier = {
+				name = thieves_guild_popular
+				duration = -1
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+			add_character_modifier = { name = thieves_guild_timer years = 3 hidden = yes }
+		}
+	}
+
+	option = {
+		name = "Nocturnal1Noble"
+		capital_scope = {
+			add_province_modifier = {
+				name = thieves_guild_noble
+				duration = -1
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+			add_character_modifier = { name = thieves_guild_timer years = 3 hidden = yes }
+		}
+	}
+	
+	option = {
+		name = "Nocturnal1Decline"
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+		}
+	}
+}
+
+#Disband Local Thieves Guild#
+
+character_event = {
+	id = nocturnal.2
+	desc = Nocturnal2
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Nocturnal2PopularDisband"
+		trigger = {
+		capital_scope = {
+			has_province_modifier = thieves_guild_popular
+			}
+		}
+		capital_scope = {
+			remove_province_modifier = thieves_guild_popular
+		}
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+			add_character_modifier = { name = thieves_guild_timer years = 3 hidden = yes }
+		}
+	}
+
+	option = {
+		name = "Nocturnal2NobleDisband"
+		trigger = {
+		capital_scope = {
+			has_province_modifier = thieves_guild_noble
+			}
+		}
+		capital_scope = {
+			remove_province_modifier = thieves_guild_noble
+		}
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+			add_character_modifier = { name = thieves_guild_timer years = 3 hidden = yes }
+		}
+	}
+	
+	option = {
+		name = "Nocturnal2Decline"
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+		}
+	}
+}
+
+#Reorganize Local Thieves Guild#
+
+character_event = {
+	id = nocturnal.3
+	desc = Nocturnal3
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Nocturnal3PopularToNoble"
+		trigger = {
+		capital_scope = {
+				has_province_modifier = thieves_guild_popular
+			}
+		}
+		capital_scope = {
+			remove_province_modifier = thieves_guild_popular
+			add_province_modifier = {
+				name = thieves_guild_noble
+				duration = -1
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+			add_character_modifier = { name = thieves_guild_timer years = 3 hidden = yes }
+		}
+	}
+
+	option = {
+		name = "Nocturnal3NobleToPopular"
+		trigger = {
+		capital_scope = {
+				has_province_modifier = thieves_guild_noble
+			}
+		}
+		capital_scope = {
+			remove_province_modifier = thieves_guild_noble
+			add_province_modifier = {
+				name = thieves_guild_popular
+				duration = -1
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+			add_character_modifier = { name = thieves_guild_timer years = 3 hidden = yes }
+		}
+	}
+	
+	option = {
+		name = "Nocturnal3Decline"
+		hidden_tooltip = {
+			clr_character_flag = nocturnal_thieves_guild
+		}
+	}
+}
+
+#Thieves Guild disperses due to ruler no longer being Cult of Nocturnal
+
+province_event = {
+	id = nocturnal.4
+	hide_window = yes
+	
+	trigger = {
+		owner = {
+			NOT = { religion = daedra_nocturnal }
+			capital_scope = {
+				OR = {
+					has_province_modifier = thieves_guild_popular
+					has_province_modifier = thieves_guild_noble
+				}
+			}
+		}		
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_province_modifier = thieves_guild_popular }
+			remove_province_modifier = thieves_guild_popular
+		}
+		if = {
+			limit = { has_province_modifier = thieves_guild_noble }
+			remove_province_modifier = thieves_guild_noble
+		}
+		if = {
+			limit = { has_province_modifier = thieves_guild_successful }
+			remove_province_modifier = thieves_guild_successful
+		}
+		if = {
+			limit = { has_province_modifier = thieves_guild_unsuccessful }
+			remove_province_modifier = thieves_guild_unsuccessful
+		}
+	}
+}
+
+#Successful Thieves Guild Jobs
+
+province_event = {
+	id = nocturnal.5
+	desc = Nocturnal5
+	picture = GFX_evt_shadow
+	
+	trigger = {
+		NOR = {
+			has_province_modifier = thieves_guild_successful
+			has_province_modifier = thieves_guild_unsuccessful
+			has_province_modifier = thieves_guild 
+		}
+		owner = {
+			religion = daedra_nocturnal
+			capital_scope = {
+				OR = {
+					has_province_modifier = thieves_guild_popular
+					has_province_modifier = thieves_guild_noble
+				}
+			}
+		}		
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+	}
+	
+	option = {
+		name = "Nocturnal5Acknowledge"
+		add_province_modifier = {
+			name = thieves_guild_successful
+			duration = 1460
+		}
+	}
+}
+
+#Unsuccessful Thieves Guild Jobs
+
+province_event = {
+	id = nocturnal.6
+	desc = Nocturnal6
+	picture = GFX_evt_shadow
+	
+	trigger = {
+		NOT = { 
+			has_province_modifier = thieves_guild_successful
+			has_province_modifier = thieves_guild_unsuccessful
+			has_province_modifier = thieves_guild 
+		}
+		owner = {
+			religion = daedra_nocturnal
+			capital_scope = {
+				OR = {
+					has_province_modifier = thieves_guild_popular
+					has_province_modifier = thieves_guild_noble
+				}
+			}
+		}		
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+	}
+	
+	option = {
+		name = "Nocturnal6Acknowledge"
+		add_province_modifier = {
+			name = thieves_guild_unsuccessful
+			duration = 1460
+		}
+	}
+}
+
+
+#Thieves Guild falls into line
+
+province_event = {
+	id = nocturnal.10
+	hide_window = yes
+	
+	trigger = {
+		has_province_modifier = thieves_guild
+		owner = {
+			religion = daedra_nocturnal
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		remove_province_modifier = thieves_guild
+	}
+}
+
+#Hostile criminal operations are expelled from the province
+
+province_event = {
+	id = nocturnal.11
+	hide_window = yes
+	
+	trigger = {
+		OR = {
+			has_province_modifier = highway_robber_band
+			has_province_modifier = smugglers_ring
+		}
+		owner = {
+			religion = daedra_nocturnal
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = { factor = 0.5 has_province_modifier = thieves_guild_successful }
+		modifier = { factor = 2 has_province_modifier = thieves_guild_unsuccessful }
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_province_modifier = highway_robber_band }
+			remove_province_modifier = highway_robber_band
+		}
+		if = {
+			limit = { has_province_modifier = smugglers_ring }
+			remove_province_modifier = smugglers_ring
+		}
+	}
+}
+
+#Lady Luck's Fortunes
+character_event = {
+	id = nocturnal.20
+	desc = Nocturnal20
+	picture = GFX_evt_shadow
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	option = {
+		name = Nocturnal20Accept
+		clr_character_flag = nocturnal_deal
+		if = {
+			limit = {
+				NOR = {
+					trait = lucky
+					trait = unlucky
+				}
+			}
+			add_trait = lucky
+		}
+		if = {
+			limit = { trait = unlucky }
+			remove_trait = unlucky
+		}
+	}
+}

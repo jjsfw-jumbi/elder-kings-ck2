@@ -1,0 +1,1667 @@
+# Flavour events for Akaviri cultures and religions
+# By jjsfw/jumbi
+
+namespace = ekakaviri
+
+########## Kamal Pilgrimage 1 - 50 ##########
+
+# Decide where to go
+character_event = {
+	id = ekakaviri.1
+	desc = ekakaviri.1.desc
+	picture = GFX_evt_river_scene1
+
+	is_triggered_only = yes
+
+	immediate = {
+		clr_character_flag = kamal_pilgrimage_coast
+		clr_character_flag = kamal_pilgrimage_hills
+		clr_character_flag = kamal_pilgrimage_mountains
+	}
+
+	option = {
+		name = ekakaviri.1.coast
+
+		piety = 10
+		custom_tooltip = {
+			text = kamal_pilgrimage_coast_desc
+			set_character_flag = kamal_pilgrimage_coast
+		}
+
+		ai_chance = {
+			factor = 0.3
+			modifier = {
+				factor = 2
+				trait = craven
+			}
+			modifier = {
+				factor = 5
+				OR = {
+					trait = weak
+					trait = feeble
+				}
+			}
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+		}
+	}
+
+	option = {
+		name = ekakaviri.1.hills
+
+		piety = 25
+		custom_tooltip = {
+			text = kamal_pilgrimage_hills_desc
+			set_character_flag = kamal_pilgrimage_hills
+		}
+		ai_chance = {
+			factor = 0.5
+		}
+	}
+	option = {
+		name = ekakaviri.1.mountains
+
+		piety = 50
+		custom_tooltip = {
+			text = kamal_pilgrimage_mountains_desc
+			set_character_flag = kamal_pilgrimage_mountains
+		}
+
+		ai_chance = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				NAND = {
+					trait = strong
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = reckless
+			}
+		}
+	}
+	after = {
+		set_character_flag = preparing_pilgrimage
+		clr_character_flag = activated_pilgrimage
+		hidden_tooltip = {
+			character_event = { id = ekakaviri.2 }
+		}
+	}
+}
+
+# Set off!
+character_event = {
+	id = ekakaviri.2
+	picture = GFX_evt_s_snowforest
+	desc = {
+		text = ekakaviri.2.coast
+		picture = GFX_evt_river_scene1
+		trigger = {
+			has_character_flag = kamal_pilgrimage_coast
+		}
+	}
+	desc = {
+		text = ekakaviri.2.hills
+		picture = GFX_evt_s_snowforest
+		trigger = {
+			has_character_flag = kamal_pilgrimage_hills
+		}
+	}
+	desc = {
+		text = ekakaviri.2.mountains
+		picture = GFX_evt_mountains_0
+		trigger = {
+			has_character_flag = kamal_pilgrimage_mountains
+		}
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.2.accept
+
+		clr_character_flag = preparing_pilgrimage
+		add_trait = on_pilgrimage
+		# Next event
+		# Complications tombola
+		hidden_tooltip = {
+			random_list = {
+				# Bandits
+				20 = {
+					modifier = {
+						factor = 0
+						has_character_flag = kamal_pilgrimage_mountains
+					}
+					modifier = {
+						factor = 0.5
+						has_character_flag = kamal_pilgrimage_hills
+					}
+					character_event = { id = ekakaviri.3 days = 2 random = 24 }
+				}
+				# Beautiful sight
+				20 = {
+					modifier = {
+						factor = 0.1
+						has_character_flag = kamal_pilgrimage_mountains
+					}
+					modifier = {
+						factor = 0.75
+						has_character_flag = kamal_pilgrimage_hills
+					}
+					character_event = { id = ekakaviri.4 days = 2 random = 24 }
+				}
+				# Storm
+				20 = {
+					modifier = {
+						factor = 0.75
+						has_character_flag = kamal_pilgrimage_coast
+					}
+					modifier = {
+						factor = 0.5
+						has_character_flag = kamal_pilgrimage_mountains # More likely to have severe storm
+					}
+					character_event = { id = ekakaviri.5 days = 2 random = 24 }
+				}
+				# Awful storm
+				20 = {
+					modifier = {
+						factor = 0
+						has_character_flag = kamal_pilgrimage_coast
+					}
+					modifier = {
+						factor = 0.5
+						has_character_flag = kamal_pilgrimage_hills
+					}
+					character_event = { id = ekakaviri.6 days = 2 random = 24 }
+				}
+				# Wandering sage
+				20 = {
+					modifier = {
+						factor = 0
+						has_character_flag = kamal_pilgrimage_coast
+					}
+					modifier = {
+						factor = 0.5
+						has_character_flag = kamal_pilgrimage_hills
+					}
+					character_event = { id = ekakaviri.7 days = 2 random = 24 }
+				}
+				# Undead
+				20 = {
+					modifier = {
+						factor = 0.1
+						has_character_flag = kamal_pilgrimage_coast
+					}
+					modifier = {
+						factor = 1.75
+						has_character_flag = kamal_pilgrimage_mountains
+					}
+					modifier = {
+						factor = 2
+						religion = winter_wind
+					}
+					character_event = { id = ekakaviri.8 days = 2 random = 24 }
+				}
+				# Treacherous terrain
+				#20 = {
+				#	modifier = {
+				#		factor = 0.2
+				#		has_character_flag = kamal_pilgrimage_coast
+				#	}
+				#	modifier = {
+				#		factor = 1.5
+				#		has_character_flag = kamal_pilgrimage_mountains
+				#	}
+				#	character_event = { id = ekakaviri.9 days = 2 random = 24 }
+				#}
+			}
+			character_event = { id = ekakaviri.10 days = 30 }
+		}
+	}
+}
+
+# Bandits
+character_event = {
+	id = ekakaviri.3
+	picture = GFX_evt_kamal_invasion
+	desc = {
+		text = ekakaviri.3.coast
+		trigger = {
+			has_character_flag = kamal_pilgrimage_coast
+		}
+	}
+	desc = {
+		text = ekakaviri.3.hills
+		trigger = {
+			has_character_flag = kamal_pilgrimage_hills
+		}
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.3.avoid
+		prestige = -25
+		piety = -25
+		random = {
+			chance = 10
+			add_trait = craven
+		}
+	}
+
+	option = {
+		name = ekakaviri.3.fight
+		prestige = 25
+		piety = 25
+		random = {
+			chance = 15
+			modifier = {
+				factor = 1.32
+				has_character_flag = kamal_pilgrimage_hills
+			}
+			add_trait_wounded_effect = yes
+		}
+		random = {
+			chance = 10
+			modifier = {
+				factor = 1.5
+				has_character_flag = kamal_pilgrimage_hills
+			}
+			custom_tooltip = {
+				text = kamal_pilgrimage_loot
+				hidden_tooltip = {
+					generate_loot_akaviri_ruin = yes
+				}
+			}
+		}
+	}
+}
+
+# Beautiful sight
+character_event = {
+	id = ekakaviri.4
+	desc = ekakaviri.4.desc
+	picture = GFX_evt_adventurers_rest
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.4.stressed
+		trigger = {
+			trait = stressed
+		}
+		remove_trait = stressed
+	}
+	option = {
+		name = ekakaviri.4.depressed
+		trigger = {
+			trait = depressed
+		}
+		remove_trait = depressed
+	}
+	option = {
+		name = ekakaviri.4.accept
+		piety = 20
+	}
+}
+
+# Storm
+character_event = {
+	id = ekakaviri.5
+	desc = ekakaviri.5.desc
+	picture = GFX_evt_s_snowforest
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.5.shelter
+
+		piety = -25
+		if = {
+			limit = {
+				trait = brave
+			}
+			random = {
+				chance = 15
+				remove_trait = brave
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = patient
+				}
+			}
+			random = {
+				chance = 10
+				add_trait = patient
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.5.endure
+		piety = 50
+		if = {
+			limit = {
+				NOT = {
+					trait = brave
+				}
+			}
+			random = {
+				chance = 33
+				add_trait = brave
+			}
+		}
+		random_list = {
+			30 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick days = 365 }
+			}
+			20 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick days = 730 }
+			}
+			15 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick_major days = 730 }	
+			}
+			10 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick_major days = 1095 }
+			}
+			25 = {
+				modifier = {
+					factor = 3
+					has_character_flag = kamal_pilgrimage_coast
+				}
+				modifier = {
+					factor = 1.5
+					has_character_flag = kamal_pilgrimage_hills
+				}
+			}
+		}
+	}
+}
+
+# Awful storm
+character_event = {
+	id = ekakaviri.6
+	desc = ekakaviri.6.desc
+	picture = GFX_evt_s_snowforest
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.6.shelter
+
+		piety = -50
+		if = {
+			limit = {
+				trait = brave
+			}
+			random = {
+				chance = 75
+				remove_trait = brave
+			}
+		}
+		random = {
+			chance = 50
+			add_character_modifier = { name = kamal_pilgrimage_sick days = 365 }
+		}
+	}
+	option = {
+		name = ekakaviri.6.endure
+		piety = 100
+		if = {
+			limit = {
+				NOT = {
+					trait = brave
+				}
+			}
+			add_trait = brave
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = reckless
+				}
+			}
+			random = {
+				chance = 15
+				add_trait = reckless
+			}
+		}
+		random_list = {
+			20 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick days = 730 }
+			}
+			30 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick_major days = 730 }	
+			}
+			20 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick_major days = 1095 }
+			}
+			20 = {
+				add_character_modifier = { name = kamal_pilgrimage_sick_major days = 1460 }
+			}
+			5 = {
+				modifier = {
+					factor = 1.5
+					has_character_flag = kamal_pilgrimage_hills
+				}
+			}
+		}
+	}
+}
+
+# Wandering sage
+character_event = {
+	id = ekakaviri.7
+	desc = ekakaviri.7.desc
+	picture = GFX_evt_mage
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.7.donate
+
+		piety = 50
+		scaled_wealth = -0.1
+	}
+
+	option = {
+		name = ekakaviri.7.dont
+
+		piety = -25
+		random = {
+			chance = 33
+			add_trait = greedy
+		}
+	}
+}
+
+# Undead
+character_event = {
+	id = ekakaviri.8
+	desc = {
+		text = ekakaviri.8.four_winds
+		trigger = {
+			religion = kamal_pantheon
+		}
+	}
+	desc = {
+		text = ekakaviri.8.winter_wind
+		trigger = {
+			religion = winter_wind
+		}
+	}
+	picture = GFX_evt_undead
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.8.fight
+		trigger = {
+			religion = kamal_pantheon
+		}
+		piety = 50
+		prestige = 50
+		random = {
+			chance = 33
+			modifier = {
+				factor = 2
+				has_character_flag = kamal_pilgrimage_mountains
+			}
+			modifier = {
+				factor = 0.33
+				trait = necromancer
+			}
+			add_trait_wounded_effect = yes
+		}
+	}
+	option = {
+		name = ekakaviri.8.venerate
+		trigger = {
+			religion = winter_wind
+		}
+		piety = 25
+		if = {
+			limit = {
+				NOT = {
+					trait = necromancer
+				}
+				is_mage = yes
+			}
+			random = {
+				chance = 25
+				modifier = {
+					factor = 2
+					trait = genius
+				}
+				modifier = {
+					factor = 1.5
+					trait = zealous
+				}
+				modifier = {
+					factor = 1.5
+					trait = shrewd
+				}
+				modifier = {
+					factor = 1.25
+					trait = ambitious
+				}
+				modifier = {
+					factor = 1.25
+					trait = ruthless
+				}
+				modifier = {
+					factor = 1.25
+					trait = erudite
+				}
+				modifier = {
+					factor = 0.5
+					trait = slow
+				}
+				modifier = {
+					factor = 0.5
+					trait = dull
+				}
+				modifier = {
+					factor = 0.25
+					trait = cynical
+				}
+				become_necromancer = yes
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.8.study
+		trigger = {
+			religion = kamal_pantheon
+			NOT = {
+				trait = zealous
+			}
+		}
+
+		piety = -100
+		set_secret_religion = winter_wind
+		random = {
+			chance = 75
+			modifier = {
+				factor = 0.33
+				trait = necromancer
+			}
+			add_trait_wounded_effect = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = necromancer
+				}
+				is_mage = yes
+			}
+			random = {
+				chance = 5
+				modifier = {
+					factor = 2
+					trait = genius
+				}
+				modifier = {
+					factor = 1.5
+					trait = zealous
+				}
+				modifier = {
+					factor = 1.5
+					trait = shrewd
+				}
+				modifier = {
+					factor = 1.25
+					trait = ambitious
+				}
+				modifier = {
+					factor = 1.25
+					trait = ruthless
+				}
+				modifier = {
+					factor = 1.25
+					trait = erudite
+				}
+				modifier = {
+					factor = 0.5
+					trait = slow
+				}
+				modifier = {
+					factor = 0.5
+					trait = dull
+				}
+				modifier = {
+					factor = 0.25
+					trait = cynical
+				}
+				become_necromancer = yes
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+
+			modifier = {
+				factor = 0
+				NOT = {
+					trait = necromancer
+				}
+			}
+		}
+	}
+}
+
+# Pick a wind
+character_event = {
+	id = ekakaviri.10
+	desc = ekakaviri.10.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.10.kan
+		trigger = {
+			religion = kamal_pantheon
+		}
+		hidden_tooltip = {
+			random_list = {
+				33 = {
+					character_event = { id = ekakaviri.11 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.12 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.13 days = 12 random = 12 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.10.ura
+		trigger = {
+			religion = kamal_pantheon
+		}
+		hidden_tooltip = {
+			random_list = {
+				33 = {
+					character_event = { id = ekakaviri.14 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.15 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.16 days = 12 random = 12 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.10.en
+		trigger = {
+			religion = kamal_pantheon
+		}
+		hidden_tooltip = {
+			random_list = {
+				33 = {
+					character_event = { id = ekakaviri.17 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.18 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.19 days = 12 random = 12 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.10.zen
+		trigger = {
+			religion = kamal_pantheon
+		}
+		hidden_tooltip = {
+			random_list = {
+				33 = {
+					character_event = { id = ekakaviri.20 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.21 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.22 days = 12 random = 12 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.10.winter
+		trigger = {
+			religion = winter_wind
+		}
+		hidden_tooltip = {
+			random_list = {
+				33 = {
+					character_event = { id = ekakaviri.23 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.24 days = 12 random = 12 }
+				}
+				33 = {
+					character_event = { id = ekakaviri.25 days = 12 random = 12 }
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_tooltip = {
+			character_event = { id = ekakaviri.26 days = 30 }
+		}
+	}
+}
+
+# Kan - Wroth
+character_event = {
+	id = ekakaviri.11
+	desc = ekakaviri.11.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.11.accept
+
+		if = {
+			limit = {
+				trait = wroth
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = wroth
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = wroth
+			}
+		}
+		random = {
+			chance = 50
+			remove_trait = patient
+		}
+	}
+	option = {
+		name = ekakaviri.11.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = slothful
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = slothful
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Kan - Ruthless
+character_event = {
+	id = ekakaviri.12
+	desc = ekakaviri.12.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.12.accept
+
+		if = {
+			limit = {
+				trait = ruthless
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = ruthless
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = ruthless
+			}
+		}
+		random = {
+			chance = 50
+			if = {
+				limit = {
+					trait = kind
+				}
+				remove_trait = kind
+			}
+			if = {
+				limit = {
+					trait = patient
+				}
+				remove_trait = patient
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.12.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = content
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = content
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Kan - Brave
+character_event = {
+	id = ekakaviri.13
+	desc = ekakaviri.13.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.13.accept
+
+		if = {
+			limit = {
+				trait = brave
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = brave
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = brave
+			}
+		}
+		random = {
+			chance = 20
+			wound_then_maim = yes
+		}
+	}
+	option = {
+		name = ekakaviri.13.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = craven
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = craven
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+
+# Ura - Erudite
+character_event = {
+	id = ekakaviri.14
+	desc = ekakaviri.14.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.14.accept
+
+		if = {
+			limit = {
+				trait = erudite
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = erudite
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = erudite
+			}
+		}
+
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 0
+					OR = {
+						has_character_modifier = kamal_pilgrimage_sick
+						has_character_modifier = kamal_pilgrimage_sick_major
+					}
+				}
+				add_character_modifier = { name = kamal_pilgrimage_sick days = 365 }
+			}
+			50 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						has_character_modifier = kamal_pilgrimage_sick
+					}
+				}
+				remove_character_modifier = kamal_pilgrimage_sick
+				add_character_modifier = { name = kamal_pilgrimage_sick_major days = 730 }
+			}
+			50 = {}
+		}
+	}
+	option = {
+		name = ekakaviri.14.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = slothful
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = slothful
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Ura - Patient
+character_event = {
+	id = ekakaviri.15
+	desc = ekakaviri.15.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.15.accept
+
+		if = {
+			limit = {
+				trait = patient
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = patient
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = patient
+			}
+		}
+		random = {
+			chance = 50
+			add_stressed = yes
+		}
+	}
+	option = {
+		name = ekakaviri.15.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = reckless
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = reckless
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Ura - Zealous
+character_event = {
+	id = ekakaviri.16
+	desc = ekakaviri.16.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.16.accept
+
+		if = {
+			limit = {
+				trait = zealous
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = zealous
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = zealous
+			}
+		}
+		if = {
+			limit = {
+				has_secret_religion = yes
+			}
+			clear_secret_religion = yes
+		}
+	}
+	option = {
+		name = ekakaviri.16.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = cynical
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = cynical
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+
+# En - Just
+character_event = {
+	id = ekakaviri.17
+	desc = ekakaviri.17.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.17.accept
+
+		if = {
+			limit = {
+				trait = just
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = just
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = just
+			}
+		}
+		scaled_wealth = -0.2
+	}
+	option = {
+		name = ekakaviri.17.dont
+
+		if = {
+			limit = {
+				trait = just
+			}
+			remove_trait = just
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					trait = arbitrary
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = arbitrary
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# En - Honest
+character_event = {
+	id = ekakaviri.18
+	desc = ekakaviri.18.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.18.accept
+
+		if = {
+			limit = {
+				trait = honest
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = honest
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = honest
+			}
+		}
+	}
+	option = {
+		name = ekakaviri.18.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = deceitful
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = deceitful
+			}
+		}
+		piety = -50
+		prestige = -50
+		scaled_wealth = 0.2
+	}
+}
+# En - Diligent
+character_event = {
+	id = ekakaviri.19
+	desc = ekakaviri.19.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.19.accept
+
+		if = {
+			limit = {
+				trait = diligent
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = diligent
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = diligent
+			}
+		}
+		random = {
+			chance = 50
+			health = -0.5
+		}
+	}
+	option = {
+		name = ekakaviri.19.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = slothful
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = slothful
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+
+# Zen - Greedy
+character_event = {
+	id = ekakaviri.20
+	desc = ekakaviri.20.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.20.accept
+
+		if = {
+			limit = {
+				trait = greedy
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = greedy
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = greedy
+			}
+		}
+		if = {
+			limit = {
+				trait = zealous
+			}
+			remove_trait = zealous
+		}
+	}
+	option = {
+		name = ekakaviri.20.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = content
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = content
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Zen - Ambitious
+character_event = {
+	id = ekakaviri.21
+	desc = ekakaviri.21.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.21.accept
+
+		if = {
+			limit = {
+				trait = ambitious
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = ambitious
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = ambitious
+			}
+		}
+		random = {
+			chance = 50
+			add_depressed = yes
+		}
+	}
+	option = {
+		name = ekakaviri.21.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = content
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = content
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Zen - Envious
+character_event = {
+	id = ekakaviri.22
+	desc = ekakaviri.22.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.22.accept
+
+		if = {
+			limit = {
+				trait = envious
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = envious
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = envious
+			}
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+		}
+		random = {
+			chance = 50
+			add_stressed = yes
+		}
+	}
+	option = {
+		name = ekakaviri.22.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = kind
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = kind
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+
+# Winter - Ruthless
+character_event = {
+	id = ekakaviri.23
+	desc = ekakaviri.23.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.23.accept
+
+		if = {
+			limit = {
+				trait = ruthless
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = ruthless
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = ruthless
+			}
+		}
+		random = {
+			chance = 20
+			wound_then_maim = yes
+		}
+	}
+	option = {
+		name = ekakaviri.23.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = craven
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = craven
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Winter - Cruel
+character_event = {
+	id = ekakaviri.24
+	desc = ekakaviri.24.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.24.accept
+
+		if = {
+			limit = {
+				trait = cruel
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = cruel
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = cruel
+			}
+		}
+		if = {
+			limit = {
+				trait = kind
+			}
+			remove_trait = kind
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+		}
+		if = {
+			limit = {
+				trait = zealous
+			}
+			remove_trait = zealous
+		}
+	}
+	option = {
+		name = ekakaviri.24.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = reckless
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = reckless
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = kind
+				}
+			}
+			add_trait = kind
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+# Winter - Ambitious
+character_event = {
+	id = ekakaviri.25
+	desc = ekakaviri.25.desc
+	picture = GFX_evt_two_moon_aurora
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.25.accept
+
+		if = {
+			limit = {
+				trait = ambitious
+			}
+			piety = 100
+		}
+		else = {
+			piety = 50
+		}
+		if = {
+			limit = {
+				NOT = {
+					trait = ambitious
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = ambitious
+			}
+		}
+		random = {
+			chance = 50
+			add_stressed = yes
+		}
+	}
+	option = {
+		name = ekakaviri.25.dont
+
+		if = {
+			limit = {
+				NOT = {
+					trait = content
+				}
+			}
+			random = {
+				chance = 50
+				add_trait = content
+			}
+		}
+		piety = -50
+		prestige = -50
+	}
+}
+
+character_event = {
+	id = ekakaviri.26
+	desc = ekakaviri.26.desc
+	picture = GFX_evt_river_scene1
+
+	is_triggered_only = yes
+
+	option = {
+		name = ekakaviri.26.accept
+		remove_trait = on_pilgrimage
+		add_trait = pilgrim
+		piety = 25
+	}
+}

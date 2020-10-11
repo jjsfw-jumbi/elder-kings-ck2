@@ -1,0 +1,257 @@
+#Pet flavor events!#
+
+namespace = ekpetflavor
+
+#Give a dog a bone
+character_event = {
+	id = ekpetflavor.10
+	desc = {
+		text = EKPetFlavor10A
+		trigger = {
+			event_target:undead_victim = {
+				has_character_flag = undead_loses_leg
+			}
+		}
+	}
+	desc = {
+		text = EKPetFlavor10B
+		trigger = {
+			event_target:undead_victim = {
+				has_character_flag = undead_loses_hand
+			}
+		}
+	}
+	picture = GFX_evt_garden
+	
+	only_playable = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_artifact = {
+			has_artifact_flag = dog
+		}
+		any_courtier = {
+			trait = undead
+			NOT = { trait = lich }
+			NAND = {
+				trait = one_handed
+				trait = one_legged
+			}
+		}
+	}
+	
+	immediate = {
+		random_artifact = {
+			limit = { has_artifact_flag = dog }
+			save_event_target_as = dog_buries_bone
+		}
+		random_courtier = {
+			limit = {
+				trait = undead
+				NOT = { trait = lich }
+				NAND = {
+					trait = one_handed
+					trait = one_legged
+				}
+			}
+			save_event_target_as = undead_victim
+			if = {
+				limit = {
+					NOT = { trait = one_legged }
+				}
+				add_trait = one_legged
+				set_character_flag = undead_loses_leg
+			}
+			if = {
+				limit = {
+					NOT = { has_character_flag = undead_loses_leg }
+				}
+				add_trait = one_handed
+				set_character_flag = undead_loses_hand 
+			}
+		}
+	}
+	
+	option = { #Follow the trail of dirt
+		name = EKPetFlavor10OptA
+		character_event = { id = ekpetflavor.11 }
+	}
+	option = { #Do nothing
+		name = EKPetFlavor10OptB
+		prestige = 5
+		event_target:dog_buries_bone = {
+			clear_event_target = dog_buries_bone
+		}
+		event_target:undead_victim = {
+			clr_character_flag = undead_loses_leg
+			clr_character_flag = undead_loses_hand
+			clear_event_target = undead_victim
+		}
+	}
+}
+
+character_event = {
+	id = ekpetflavor.11
+	desc = {
+		text = EKPetFlavor11A
+		trigger = {
+			event_target:undead_victim = {
+				has_character_flag = undead_loses_leg
+			}
+		}
+	}
+	desc = {
+		text = EKPetFlavor11B
+		trigger = {
+			event_target:undead_victim = {
+				has_character_flag = undead_loses_hand
+			}
+		}
+	}
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	option = { #Reattach the missing limb
+		name = EKPetFlavor11OptA
+		prestige = 5
+		event_target:undead_victim = {
+			if = {
+				limit = {
+					has_character_flag = undead_loses_leg
+				}
+				remove_trait = one_legged
+			}
+			if = {
+				limit = {
+					has_character_flag = undead_loses_hand
+				}
+				remove_trait = one_handed
+			}
+			clr_character_flag = undead_loses_leg
+			clr_character_flag = undead_loses_hand
+		}
+	}
+	option = { #Let the dog keep the limb
+		name = EKPetFlavor11OptB
+		add_character_modifier = {
+			name = gave_a_dog_a_bone
+			duration = 1095
+		}
+		event_target:undead_victim = {
+			clr_character_flag = undead_loses_leg
+			clr_character_flag = undead_loses_hand
+		}
+	}
+}
+
+
+#Capybara (or Horker, or Lungshark) found swimming in cistern underneath the castle
+character_event = {
+	id = ekpetflavor.15
+	desc = EKPetFlavor15
+	picture = GFX_evt_into_the_dungeon
+	
+	only_playable = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_landed = yes
+		any_artifact = {
+			OR = {
+				artifact_type = pet_capybara
+				artifact_type = pet_horker
+				artifact_type = pet_lungshark
+			}
+		}
+	}
+	
+	immediate = {
+		random_artifact = {
+			limit = {
+				OR = {
+					artifact_type = pet_capybara
+					artifact_type = pet_horker
+					artifact_type = pet_lungshark
+				}
+			}
+			save_event_target_as = pet_swimming_in_cistern
+		}
+	}
+	
+	option = { #Let's *not* use this water
+		name = EKPetFlavor15OptA
+		trigger = { scaled_wealth = 0.10 }
+		scaled_wealth = -0.10
+		capital_scope = {
+			add_province_modifier = {
+				name = fresh_cistern_water
+				duration = 365
+			}
+		}
+	}
+	option = { #Ignore it, someone probably gets sick
+		name = EKPetFlavor15OptB
+		capital_scope = {
+			add_province_modifier = {
+				name = dirty_cistern_water
+				duration = 90
+			}
+		}
+	}
+}
+
+#Vulture is sunning outside, shall I join it?
+character_event = {
+	id = ekpetflavor.20
+	desc = EKPetFlavor20
+	picture = GFX_evt_garden
+	
+	only_playable = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_artifact = {
+			artifact_type = pet_vulture
+		}
+		location = {
+			NOR = {
+				region = nirn_akavir_kamal
+				region = nirn_atmora
+			}
+		}
+	}
+	
+	option = { #I'll join my feathered friend!
+		name = EKPetFlavor20OptA
+		trigger = { is_vampire = no }
+		custom_tooltip = { text = EKPetFlavor20TooltipA }
+		add_character_modifier = {
+			name = sunshine_and_fresh_air
+			duration = 365
+		}
+	}
+	option = { #How ridiculous!
+		name = EKPetFlavor20OptB
+		trigger = { is_vampire = no }
+		custom_tooltip = { text = EKPetFlavor20TooltipB }
+	}
+	option = { #Alas I cannot join it
+		name = EKPetFlavor20OptC
+		trigger = { is_vampire = yes }
+		custom_tooltip = { text = EKPetFlavor20TooltipC }
+		if = {
+			limit = { NOT = { trait = stressed } }
+			random = {
+				chance = 25
+				add_stressed = yes
+			}
+		}
+	}
+}

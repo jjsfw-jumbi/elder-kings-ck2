@@ -1,0 +1,270 @@
+###Additional Ultimatum events ###
+namespace = sorplots
+# Ultimatum - refute a claim
+letter_event = {
+	id = sorplots.0
+	desc = refute_Claim_Request
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Accept_Demand_opt
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 3
+				trait = craven
+			}
+			modifier = {
+				factor = 1.5
+				trait = humble
+			}
+			modifier = {
+				factor = 1.5
+				trait = kind
+			}
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+			modifier = {
+				factor = 10
+				trait = content
+			}
+			modifier = {
+				factor = 5
+				has_character_flag = Dead_Familar
+			}	
+		}
+		hidden_tooltip = {
+			FROM = {
+				letter_event = { id = sorplots.1 }
+				any_plot_backer = {
+					letter_event = { id = sorplots.2 }
+				}
+			}
+		}
+		FROM = {
+		#One random Claim is refuted - Higher Tier Titles are refuted first - change to any_demsene_title for all Claims being refuted
+			random_demesne_title = {
+				limit = {	
+					claimed_by = ROOT 
+					tier = EMPEROR
+					NOT = { ROOT = { has_character_flag = plot_claim_removed}}
+				}
+				remove_claim = ROOT
+				ROOT = {
+					set_character_flag = plot_claim_removed	
+				}
+			}
+			random_demesne_title = {
+				limit = {	
+					claimed_by = ROOT 
+					tier = KING
+					NOT = { ROOT = { has_character_flag = plot_claim_removed}}
+				}
+				remove_claim = ROOT
+				ROOT = {
+					set_character_flag = plot_claim_removed	
+				}
+			}
+			random_demesne_title = {
+				limit = {
+					claimed_by = ROOT 
+					tier = DUKE
+					NOT = { ROOT = { has_character_flag = plot_claim_removed}}
+				}
+				remove_claim = ROOT
+				ROOT = {
+					set_character_flag = plot_claim_removed	
+				}
+			}
+			random_demesne_title = {
+				limit = {	
+					claimed_by = ROOT 
+					NOT = { ROOT = { has_character_flag = plot_claim_removed}}
+				}
+				remove_claim = ROOT
+				ROOT = {
+					set_character_flag = plot_claim_removed	
+				}
+			}
+		}
+		ROOT = { clr_character_flag = plot_claim_removed }
+		FROM = {
+			clr_character_flag = Dead_Familar		
+			clr_character_flag = Depressed_Dead_Familar
+		}
+	}
+	option = {
+		trigger = {
+			NOT = { has_character_flag = Depressed_Dead_Familar }
+			and = {
+				prisoner = yes 
+				host = { character = FROM  }
+			}			
+		}
+		name = refute_Claim_Refuse_Demand_opt
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 2.5
+				trait = proud
+			}
+			modifier = {
+				factor = 2.5
+				trait = envious
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0.75
+				FROM = { plot_power = 1.5 }
+			}
+			modifier = {
+				factor = 0.75
+				FROM = { plot_power = 1.75 }
+			}
+			modifier = {
+				factor = 0.1
+				FROM = { plot_power = 2.0 }
+			}
+			modifier = {
+				factor = 0.0
+				and = {
+					prisoner = yes 
+					host = { character = FROM  }
+				}
+			}
+		}
+		FROM = {
+			letter_event = { id = sorplots.3 days = 3 tooltip = refute_Claim_Refuse_Demand }
+			clr_character_flag = Dead_Familar			
+		}
+	}
+}
+
+# Demand accepted - refute a claim
+letter_event = {
+	id = sorplots.1
+	desc = refute_Claim_Accept_desc
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = refute_Claim_Accept_opt
+		prestige = 50		
+		hidden_tooltip = {
+			set_character_flag = plot_refute_claim_success
+		}
+	}
+}
+
+# Inform backers - refute a claim
+letter_event = {
+	id = sorplots.2
+	desc = refute_Claim_Success_desc
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = refute_Claim_Success_opt
+	}
+}
+
+# Demand rejected - refute a claim
+letter_event = {
+	id = sorplots.3
+	desc = refute_Claim_Failed
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = refute_Claim_Continue_Plot
+		ai_chance = { factor = 5 }
+		hidden_tooltip = { 
+			reveal_plot = yes 
+			clr_character_flag = plot_refute_claim_decision_taken
+		}
+		prestige = -50
+		any_plot_backer = {
+			hidden_tooltip = {
+				#Plot Bakers are shocked That there plotting has been revealed
+				letter_event = { id = sorplots.4 }
+			}
+		}
+		activate_plot = no
+	}
+	option = {
+		name = refute_Claim_Stop_Plot
+		ai_chance = { factor = 5 }
+		prestige = -100
+		any_plot_backer = {
+			opinion = {
+				modifier = opinion_coward
+				who = ROOT
+				years = 5
+			}
+			hidden_tooltip = {
+				#Plot Bakers think you are a coward Generic event
+				letter_event = { id = 8120 }
+			}
+		}
+		cancel_plot = plot_refute_claim
+	}
+}
+
+# Demand rejected - Backers Informed
+letter_event = {
+	id = sorplots.4
+	desc = refute_Claim_Backer_Revealed
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = refute_Claim_Continue_Support
+		ai_chance = { factor = 4 }
+		
+		ROOT = {
+			reverse_opinion = {
+				modifier = Sora_EK_Stayed_in_Plot_opinion
+				who = FROM
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = refute_Claim_Stop_Support
+		ai_chance = { 
+			factor = 2 
+			
+			#90% Chance to stop backing Plot if someone is Craven
+			modifier = {
+				factor = 20
+				trait = craven
+			}
+		}
+		leave_plot = FROM
+		ROOT = {
+			reverse_opinion = {
+				modifier = opinion_coward
+				who = FROM
+				years = 5
+			}
+		
+			opinion = {
+				modifier = Sora_EK_no_more_plots_opinion
+				who = FROM
+				years = 1
+			}
+		}
+	}	
+}

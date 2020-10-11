@@ -1,0 +1,776 @@
+#Events for family and relatives
+#Written by Etienne
+
+namespace = ekfamily
+
+#A close relative decides to give up the feudal life
+#They will contact a baron- or count-tier ruler
+#Based on their rank, and traits, you may be able to buy the title for your relative
+character_event = {
+	id = ekfamily.10
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	war = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_inaccessible_trigger = no
+		wealth = 75 #To help prevent getting this event when you're flat broke
+		any_close_relative = {
+			liege = { character = ROOT }
+			is_adult = yes
+			is_landed = no
+			is_heir = no
+			is_betrothed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			prisoner = no
+			NOT = {
+				has_opinion_modifier = {
+					modifier = opinion_wont_let_me_find_calling
+					who = ROOT
+				}
+			}
+		}
+		any_vassal = {
+			NOT = { is_close_relative = ROOT }
+			OR = {
+				government = theocracy_government
+				government = republic_government
+			}
+			is_adult = yes
+			is_landed = yes
+			is_heir = no
+			is_betrothed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			prisoner = no
+			controls_religion = no
+			lower_tier_than = DUKE
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = { #Not as likely to get this event when AI
+			factor = 0.1
+			ai = yes
+		}
+		
+		modifier = {
+			factor = 1.25
+			num_of_children == 3
+			any_child = {
+				count = 3
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 1.5
+			num_of_children == 4
+			any_child = {
+				count = 4
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 2
+			num_of_children == 5
+			any_child = {
+				count = 5
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 2.5
+			num_of_children == 6
+			any_child = {
+				count = 6
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 3
+			num_of_children == 7
+			any_child = {
+				count = 7
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 3.5
+			num_of_children == 8
+			any_child = {
+				count = 8
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 4
+			num_of_children == 9
+			any_child = {
+				count = 9
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 5
+			num_of_children >= 10
+			any_child = {
+				count = 10
+				is_alive = yes
+			}
+		}
+		modifier = {
+			factor = 1.25
+			ai = no
+			wealth = 200
+			NOT = { wealth = 300 }
+		}
+		modifier = {
+			factor = 1.5
+			ai = no
+			wealth = 300
+			NOT = { wealth = 400 }
+		}
+		modifier = {
+			factor = 2.0
+			ai = no
+			wealth = 400
+			NOT = { wealth = 500 }
+		}
+		modifier = {
+			factor = 2.5
+			ai = no
+			wealth = 500
+			NOT = { wealth = 750 }
+		}
+		modifier = {
+			factor = 3
+			ai = no
+			wealth = 750
+			NOT = { wealth = 1000 }
+		}
+		modifier = {
+			factor = 5
+			ai = no
+			wealth = 1000
+		}
+	}
+	
+	immediate = {
+		random_close_relative = {
+			limit = {
+				liege = { character = ROOT }
+				is_adult = yes
+				is_landed = no
+				is_heir = no
+				is_betrothed = no
+				is_inaccessible_trigger = no
+				NOT = { trait = incapable }
+				prisoner = no
+				NOT = {
+					has_opinion_modifier = {
+						modifier = opinion_wont_let_me_find_calling
+						who = ROOT
+					}
+				}
+			}
+			save_event_target_as = ek_this_relative_wants_land
+		}
+		random_list = {
+			75 = {
+				trigger = {
+					any_vassal = {
+						NOT = { is_close_relative = ROOT }
+						government = republic_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						lower_tier_than = COUNT
+					}
+				}
+				modifier = {
+					factor = 2.5
+					event_target:ek_this_relative_wants_land = {
+						is_diplomat = yes
+					}
+				}
+				modifier = {
+					factor = 2.5
+					event_target:ek_this_relative_wants_land = {
+						is_magistrate = yes
+					}
+				}
+				#You are less likely to get this version if you don't have the appropriate amount of money
+				modifier = {
+					factor = 0.1
+					NOT = { wealth = 75 }
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { wealth = 150 }
+				}
+				modifier = {
+					factor = 0.75
+					NOT = { wealth = 300 }
+				}
+				random_vassal = {
+					limit = {
+						NOT = { is_close_relative = ROOT }
+						government = republic_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						lower_tier_than = COUNT
+					}
+					save_event_target_as = ek_this_person_can_sell_land
+				}
+			}
+			10 = {
+				trigger = {
+					any_vassal = {
+						NOT = { is_close_relative = ROOT }
+						government = republic_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+					}
+				}
+				modifier = {
+					factor = 2.5
+					event_target:ek_this_relative_wants_land = {
+						is_diplomat = yes
+					}
+				}
+				modifier = {
+					factor = 2.5
+					event_target:ek_this_relative_wants_land = {
+						is_magistrate = yes
+					}
+				}
+				#You are less likely to get this version if you don't have the appropriate amount of money
+				modifier = {
+					factor = 0.1
+					NOT = { wealth = 150 }
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { wealth = 250 }
+				}
+				modifier = {
+					factor = 0.75
+					NOT = { wealth = 500 }
+				}
+				random_vassal = {
+					limit = {
+						NOT = { is_close_relative = ROOT }
+						government = republic_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+					}
+					save_event_target_as = ek_this_person_can_sell_land
+				}
+			}
+			75 = {
+				trigger = {
+					any_vassal = {
+						NOT = { is_close_relative = ROOT }
+						government = theocracy_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						lower_tier_than = COUNT
+					}
+				}
+				modifier = {
+					factor = 5
+					event_target:ek_this_relative_wants_land = {
+						is_mage = yes
+					}
+				}
+				#You are less likely to get this version if you don't have the appropriate amount of money
+				modifier = {
+					factor = 0.1
+					NOT = { wealth = 75 }
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { wealth = 150 }
+				}
+				modifier = {
+					factor = 0.75
+					NOT = { wealth = 300 }
+				}
+				random_vassal = {
+					limit = {
+						NOT = { is_close_relative = ROOT }
+						government = theocracy_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						lower_tier_than = COUNT
+					}
+					save_event_target_as = ek_this_person_can_sell_land
+				}
+			}
+			10 = {
+				trigger = {
+					any_vassal = {
+						NOT = { is_close_relative = ROOT }
+						government = theocracy_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+					}
+				}
+				modifier = {
+					factor = 5
+					event_target:ek_this_relative_wants_land = {
+						is_mage = yes
+					}
+				}
+				#You are less likely to get this version if you don't have the appropriate amount of money
+				modifier = {
+					factor = 0.1
+					NOT = { wealth = 150 }
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { wealth = 250 }
+				}
+				modifier = {
+					factor = 0.75
+					NOT = { wealth = 500 }
+				}
+				random_vassal = {
+					limit = {
+						NOT = { is_close_relative = ROOT }
+						government = theocracy_government
+						is_adult = yes
+						is_landed = yes
+						is_heir = no
+						is_married = no
+						is_betrothed = no
+						is_inaccessible_trigger = no
+						NOT = { trait = incapable }
+						prisoner = no
+						controls_religion = no
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+					}
+					save_event_target_as = ek_this_person_can_sell_land
+				}
+			}
+		}
+		character_event = { id = ekfamily.15 }
+	}
+}
+
+character_event = {
+	id = ekfamily.15
+	desc = {
+		text = EKFamily15A
+		trigger = {
+			event_target:ek_this_person_can_sell_land = {
+				government = republic_government
+			}
+		}
+	}
+	desc = {
+		text = EKFamily15B
+		trigger = {
+			event_target:ek_this_person_can_sell_land = {
+				government = theocracy_government
+			}
+		}
+	}
+	picture = { 
+		trigger = { 
+			has_religion_feature = religion_matriarchal
+		} 
+		picture = GFX_evt_daughter_asking_mother
+	}
+	picture = { 
+		trigger = { 
+			NOT = { 
+				has_religion_feature = religion_matriarchal
+			} 
+		} 
+		picture = GFX_evt_son_asking_father
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKFamily15AcceptOptA
+		trigger = {
+			OR = {
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						NOR = {
+							trait = charitable
+							trait = greedy
+						}
+					}
+					wealth = 125
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						NOR = {
+							trait = charitable
+							trait = greedy
+						}
+					}
+					wealth = 250
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:ek_this_person_can_sell_land = {
+					lower_tier_than = COUNT
+				}
+			}
+			wealth = -125
+			event_target:ek_this_person_can_sell_land = {
+				abdicate_to = event_target:ek_this_relative_wants_land
+				wealth = 125
+			}
+			event_target:ek_this_relative_wants_land = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:ek_this_person_can_sell_land = {
+					higher_tier_than = BARON
+					lower_tier_than = DUKE
+				}
+			}
+			wealth = -250
+			event_target:ek_this_person_can_sell_land = {
+				abdicate_to = event_target:ek_this_relative_wants_land
+				wealth = 250
+			}
+			event_target:ek_this_relative_wants_land = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EKFamily15AcceptOptB
+		trigger = {
+			OR = {
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						trait = charitable
+					}
+					wealth = 75
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						trait = charitable
+					}
+					wealth = 150
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:ek_this_person_can_sell_land = {
+					lower_tier_than = COUNT
+				}
+			}
+			wealth = -75
+			event_target:ek_this_person_can_sell_land = {
+				abdicate_to = event_target:ek_this_relative_wants_land
+				wealth = 75
+			}
+			event_target:ek_this_relative_wants_land = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:ek_this_person_can_sell_land = {
+					higher_tier_than = BARON
+					lower_tier_than = DUKE
+				}
+			}
+			wealth = -150
+			event_target:ek_this_person_can_sell_land = {
+				abdicate_to = event_target:ek_this_relative_wants_land
+				wealth = 150
+			}
+			event_target:ek_this_relative_wants_land = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+	
+	
+	option = {
+		name = EKFamily15AcceptOptC
+		trigger = {
+			OR = {
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						trait = greedy
+					}
+					wealth = 250
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						trait = greedy
+					}
+					wealth = 500
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:ek_this_person_can_sell_land = {
+					lower_tier_than = COUNT
+				}
+			}
+			wealth = -250
+			event_target:ek_this_person_can_sell_land = {
+				abdicate_to = event_target:ek_this_relative_wants_land
+				wealth = 250
+			}
+			event_target:ek_this_relative_wants_land = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				event_target:ek_this_person_can_sell_land = {
+					higher_tier_than = BARON
+					lower_tier_than = DUKE
+				}
+			}
+			wealth = -500
+			event_target:ek_this_person_can_sell_land = {
+				abdicate_to = event_target:ek_this_relative_wants_land
+				wealth = 500
+			}
+			event_target:ek_this_relative_wants_land = {
+				opinion = {
+					modifier = opinion_grateful
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EKFamily15DeclineOptA
+		trigger = {
+			OR = {
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						NOR = {
+							trait = charitable
+							trait = greedy
+						}
+					}
+					NOT = { wealth = 125 }
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						NOR = {
+							trait = charitable
+							trait = greedy
+						}
+					}
+					NOT = { wealth = 250 }
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						trait = charitable
+					}
+					NOT = { wealth = 75 }
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						trait = charitable
+					}
+					NOT = { wealth = 150 }
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						trait = greedy
+					}
+					NOT = { wealth = 250 }
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						trait = greedy
+					}
+					NOT = { wealth = 500 }
+				}
+			}
+		}
+	}
+	option = {
+		name = EKFamily15DeclineOptB
+		trigger = {
+			OR = {
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						NOR = {
+							trait = charitable
+							trait = greedy
+						}
+					}
+					wealth = 125
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						NOR = {
+							trait = charitable
+							trait = greedy
+						}
+					}
+					wealth = 250
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						trait = charitable
+					}
+					wealth = 75
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						trait = charitable
+					}
+					wealth = 150
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						lower_tier_than = COUNT
+						trait = greedy
+					}
+					wealth = 250
+				}
+				AND = {
+					event_target:ek_this_person_can_sell_land = {
+						higher_tier_than = BARON
+						lower_tier_than = DUKE
+						trait = greedy
+					}
+					wealth = 500
+				}
+			}
+		}
+		event_target:ek_this_relative_wants_land = {
+			opinion = {
+				modifier = opinion_wont_let_me_find_calling
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}

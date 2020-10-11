@@ -1,0 +1,274 @@
+# Decisions for Orgnum, God-King of the Maormer
+decisions = {
+	### Divine artefacts decisions
+	summon_sea_serpents_orgnum_staff = {
+		is_high_prio = yes
+		
+		potential = {
+			higher_tier_than = BARON
+			has_submenu_open = no
+			
+			any_artifact = {
+				artifact_type = weapon_staff_orgnum
+				is_artifact_active = yes
+			}
+			
+			NOT = { has_earmarked_regiments = summoned_sea_serpents }
+		}
+		
+		allow = {
+			war = yes
+			any_artifact = {
+				artifact_type = weapon_staff_orgnum
+				is_artifact_active = yes
+			}
+		}
+		
+		effect = {
+			spawn_fleet = {
+				province = closest # closest sea zone
+				owner = ROOT
+				cannot_inherit = yes
+				disband_on_peace = yes
+				maintenance_multiplier = 0
+				earmark = summoned_sea_serpents
+				troops =
+				{
+					galleys = { 25 25 }
+				}
+			}
+		}
+	}
+	
+	heal_wounds_orgnum_armor = {
+		is_high_prio = yes
+		
+		potential = {
+			higher_tier_than = BARON
+			has_submenu_open = no
+			
+			OR = {
+				trait = wounded
+				trait = severely_injured
+				trait = infection
+				
+				trait = one_legged
+				trait = one_handed
+				trait = one_eyed
+				trait = disfigured
+				trait = mangled
+				trait = eunuch
+				trait = blinded
+				trait = maimed
+			}
+			
+			any_artifact = {
+				artifact_type = armor_orgnum
+				is_artifact_active = yes
+			}
+		}
+		
+		allow = {
+			any_artifact = {
+				artifact_type = armor_orgnum
+				is_artifact_active = yes
+			}
+			
+			custom_tooltip = {
+				text = HAS_NOT_USED_ORGNUM_ARMOR_CT
+				hidden_tooltip = {
+					OR = {
+						NOT = { has_character_flag = used_orgnum_armor }
+						had_character_flag = { flag = used_orgnum_armor days = 1825 }
+					}
+				}
+			}
+		}
+		
+		effect = {
+			random_list = {
+				50 = { trigger = { trait = wounded } remove_trait = wounded }
+				50 = { trigger = { trait = severely_injured } remove_trait = severely_injured }
+				50 = { trigger = { trait = infection } remove_trait = infection }
+				
+				25 = { trigger = { trait = one_legged } remove_trait = one_legged }
+				25 = { trigger = { trait = one_handed } remove_trait = one_handed }
+				25 = { trigger = { trait = one_eyed } remove_trait = one_eyed }
+				25 = { trigger = { trait = disfigured } remove_trait = disfigured }
+				25 = { trigger = { trait = mangled } remove_trait = mangled }
+				25 = { trigger = { trait = eunuch } remove_trait = eunuch }
+				25 = { trigger = { trait = blinded } remove_trait = blinded }
+				25 = { trigger = { trait = maimed } remove_trait = maimed }
+			}
+			
+			set_character_flag = used_orgnum_armor
+		}
+	}
+	### Story decisions
+	# Pyandonea unified
+	orgnum_reclaim_pyandonea = {
+		is_high_prio = yes
+		
+		potential = {
+			character = 39000
+			is_landed = yes
+			NOT = { has_global_flag = orgnum_pyandonea_reclaimed }
+			
+			has_submenu_open = no
+		}
+		
+		allow = {
+			war = no
+			completely_controls_region = nirn_tamriel_pyandonea
+			has_landed_title = k_pyandonea
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = ORGNUM_RECLAIM_PYANDONEA_CT
+				
+				hidden_tooltip = {
+					long_character_event = { id = orgnum.100 }
+					
+					set_global_flag = orgnum_pyandonea_reclaimed
+				}
+			}
+		}
+	}
+	
+	# Let's hop to Summerset
+	orgnum_expand_summerset = {
+		is_high_prio = yes
+		
+		potential = {
+			character = 39000
+			OR = {
+				has_landed_title = k_pyandonea
+				any_vassal = { has_landed_title = k_pyandonea }
+			}
+			
+			NOT = { has_global_flag = orgnum_invasion_summerset }
+			
+			has_submenu_open = no
+		}
+		
+		allow = {
+			custom_tooltip = {
+				text = ORGNUM_TEMPLE_RESTORED_CT
+				any_realm_wonder = {
+					has_wonder_flag = is_temple_orgnum
+					is_damaged = no
+				}
+			}
+			
+			custom_tooltip = {
+				text = PYANDONEA_RECLAIMED_CT
+			
+				has_global_flag = orgnum_pyandonea_reclaimed
+			}
+			
+			prestige = 1000
+			piety = 500
+		}
+		
+		effect = {
+			prestige = -250
+			piety = -100
+			
+			add_claim = k_summerset
+			
+			set_global_flag = orgnum_invasion_summerset
+			
+			narrative_event = { id = orgnum.110 }
+		}
+	}
+	
+	# Summerset controlled
+	orgnum_reclaim_summerset_part_1 = {
+		is_high_prio = yes
+		
+		potential = {
+			character = 39000
+			
+			OR = {
+				has_landed_title = k_pyandonea
+				any_vassal = { has_landed_title = k_pyandonea }
+			}
+			
+			any_realm_province = { kingdom = { title = k_summerset } }
+			
+			has_global_flag = orgnum_invasion_summerset
+			NOT = { has_global_flag = orgnum_alinor_controlled_part_1 }
+			
+			has_submenu_open = no
+		}
+		
+		allow = {
+			war = no
+			completely_controls_region = nirn_tamriel_summerset
+			
+			completely_controls = c_alinor
+			
+			73 = {
+				culture = ROOT
+				religion = ROOT
+			}
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = ORGNUM_RECLAIM_SUMMERSET_PART_1_CT
+				hidden_tooltip = {
+					set_global_flag = orgnum_alinor_controlled_part_1
+				}
+			}
+			
+			narrative_event = { id = orgnum.115 }
+		}
+	}
+	
+	# Summerset subjugated
+	orgnum_reclaim_summerset_part_2 = {
+		is_high_prio = yes
+		
+		potential = {
+			character = 39000
+			
+			OR = {
+				has_landed_title = k_pyandonea
+				any_vassal = { has_landed_title = k_pyandonea }
+			}
+			
+			any_realm_province = { kingdom = { title = k_summerset } }
+			
+			has_global_flag = orgnum_invasion_summerset
+			has_global_flag = orgnum_alinor_controlled_part_1
+			NOT = { has_global_flag = orgnum_alinor_controlled_part_2 }
+			
+			has_submenu_open = no
+		}
+		
+		allow = {
+			war = no
+			completely_controls_region = nirn_tamriel_summerset
+			
+			73 = { has_wonder = wonder_statue_ruler }
+			
+			prestige = 2500
+			piety = 1000
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = ORGNUM_RECLAIM_SUMMERSET_PART_2_CT
+				hidden_tooltip = {
+					set_global_flag = orgnum_alinor_controlled_part_2
+				}
+			}
+				
+			set_global_flag = orgnum_alinor_controlled_part_2
+			
+			narrative_event = { id = orgnum.120 }
+		}
+	}
+}

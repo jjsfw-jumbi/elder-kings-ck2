@@ -1,0 +1,41 @@
+namespace = dcdissolved
+
+narrative_event = {
+	id = dcdissolved.1
+	title = EVT_TITLE_DCDIS_1
+	desc = EVTDESC_DCDIS_1
+	picture = GFX_evt_covenant
+	is_triggered_only = yes
+	major = yes
+
+	only_rulers = yes
+
+	trigger = {
+		#Emerics Death ends the DC
+		has_landed_title = e_daggerfall #Hasn't won the Alliance War
+		AND = { has_character_flag = is_emeric }
+	}
+	
+	major_trigger = {
+		is_within_diplo_range = ROOT
+	}
+
+	immediate = {
+		e_daggerfall = {
+			unsafe_destroy_landed_title = THIS
+		}
+		k_wayrest = {
+			set_defacto_vassal = c_koegria
+			set_defacto_vassal = c_gauvadon
+			set_defacto_vassal = c_bhoriane
+			set_defacto_vassal = c_urvaius
+			set_defacto_vassal = d_alcaire
+			set_defacto_vassal = d_dwynnen
+			set_defacto_vassal = d_kambria
+		}
+	}
+
+	option = {
+		name = EVTDCDIS_1 # Bretons just can't get along with each other.
+	}
+}

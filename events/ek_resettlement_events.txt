@@ -1,0 +1,2339 @@
+namespace = ekresettlement
+
+### Maintenance events ###
+province_event = { #cease murderizing and converting if culture of owner and province are the same
+	id = ekresettlement.0
+	desc = ekresettlement0desc
+	picture = GFX_evt_placeholder
+	mean_time_to_happen = { days = 1 }
+	
+	trigger = {
+		OR = {
+			has_province_modifier = foreign_enclaves
+			has_province_modifier = expelling_locals
+			has_province_modifier = purging_locals
+			has_province_flag = desettlement
+		}
+		OR = {
+			owner = {
+				culture = ROOT
+			}
+			owner = {
+				any_liege = { #or if a liege is that culture.
+					culture = ROOT
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		remove_province_modifier = expelling_locals
+		remove_province_modifier = purging_locals
+		remove_province_modifier = foreign_enclaves
+		clr_province_flag = desettlement
+	}
+
+	option = {
+		name = excellent
+	}
+}
+
+province_event = { #cease repopulating if culture of owner and province aren't the same
+	id = ekresettlement.1
+	desc = ekresettlement1desc
+	picture = GFX_evt_placeholder
+	mean_time_to_happen = { days = 1 }
+	
+	trigger = {
+		OR = {
+			has_province_modifier = minor_repopulation
+			has_province_modifier = moderate_repopulation
+			has_province_modifier = major_repopulation
+			has_province_modifier = resettlement
+		}
+		NOR = {
+			owner = {
+				culture = ROOT
+			}
+			owner = {
+				any_liege = { #or if a liege isn't that culture.
+					culture = ROOT
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		remove_province_modifier = minor_repopulation
+		remove_province_modifier = moderate_repopulation
+		remove_province_modifier = major_repopulation
+		remove_province_modifier = resettlement
+	}
+
+	option = {
+		name = excellent
+	}
+}
+
+province_event = { #autoconvert depopulated province with a new holder - TODO: Set to fire on a delay so it doesn't interfere with .1?
+	id = ekresettlement.2
+	desc = ekresettlement2desc
+	is_triggered_only = yes
+	picture = GFX_evt_placeholder
+	trigger = {
+		has_province_modifier = depopulated_province
+		NOT = { owner = { culture = ROOT } }
+	}
+	
+	immediate = { #Old population initiatives don't apply to new populace
+		remove_province_modifier = minor_repopulation
+		remove_province_modifier = moderate_repopulation
+		remove_province_modifier = major_repopulation
+		remove_province_modifier = resettlement
+	}
+	
+	option = {
+		name = excellent
+		owner = {
+			ROOT = {
+				culture = PREV
+				religion = PREV
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					culture_group = undead
+				}
+			}
+			make_province_undead_effect = yes
+		}
+		if = {
+			limit = {
+				owner = {
+					culture_group = daedra
+				}
+			}
+			make_province_daedra_effect = yes
+		}
+	}
+}
+
+province_event = { #end genocide if province is captured - loud
+	id = ekresettlement.3
+	desc = ekresettlement3desc
+	picture = GFX_evt_placeholder
+	mean_time_to_happen = { days = 1 }
+	
+	trigger = {
+		is_occupied = yes
+		OR = {
+			has_province_modifier = purging_locals
+			has_province_modifier = expelling_locals
+			has_province_flag = desettlement
+		}
+		NOT = { ROOT = { owner = { has_character_flag = ignore_clear_genocide } } }
+	}
+	
+	immediate = {
+		remove_province_modifier = purging_locals
+		remove_province_modifier = expelling_locals
+		clr_province_flag = desettlement
+	}
+	
+	option = {
+		name = damn
+	}
+	option = {
+		name = dontbother
+		ROOT = { owner = { set_character_flag = ignore_clear_genocide } } 
+	}
+}
+
+province_event = { #end genocide and conversion if province is conquered in a war (or due to scripting limitations is inherited >.>')
+				#I can actually probably get around that with an is_dying on_action and scope to any_demesne_province and set province flags to represent it as a peaceful inheritance. But hopefully the culture check will simulate that well enough...
+	id = ekresettlement.4
+	hide_window = yes
+	picture = GFX_evt_placeholder #I'll have to remove this for debugging one of these days.
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { culture = ROOT } #This will probably be broken as hell. Province event scopes and on_action scopes interfering with eachother - what takes precedence, the on_action or the event type default scopes?
+		OR = {
+			has_province_modifier = purging_locals
+			has_province_modifier = expelling_locals
+			has_province_flag = desettlement
+			has_province_modifier = foreign_enclaves
+		}
+	}
+	
+	immediate = {
+		remove_province_modifier = purging_locals
+		remove_province_modifier = expelling_locals
+		clr_province_flag = desettlement
+		remove_province_modifier = foreign_enclaves
+	}
+}
+
+province_event = { #end genocide if province is captured - quiet
+	id = ekresettlement.5
+	hide_window = yes
+	picture = GFX_evt_placeholder
+	
+	mean_time_to_happen = { days = 1 }
+	
+	trigger = {
+		is_occupied = yes
+		OR = {
+			has_province_modifier = purging_locals
+			has_province_modifier = expelling_locals
+			has_province_flag = desettlement
+		}
+		ROOT = { owner = { has_character_flag = ignore_clear_genocide } }
+	}
+
+	immediate = {
+		remove_province_modifier = purging_locals
+		remove_province_modifier = expelling_locals
+		clr_province_flag = desettlement
+	}
+}
+
+province_event = { #autoconvert depopulated province with a different culture. Straight fork of event 2.
+	id = ekresettlement.6
+	desc = ekresettlement2desc
+	picture = GFX_evt_placeholder
+	mean_time_to_happen = { days = 30 }
+	
+	trigger = {
+		has_province_modifier = depopulated_province
+		NOT = { owner = { culture = ROOT } }
+	}
+	
+	immediate = { #Old population initiatives don't apply to new populace
+		remove_province_modifier = minor_repopulation
+		remove_province_modifier = moderate_repopulation
+		remove_province_modifier = major_repopulation
+		remove_province_modifier = resettlement
+	}
+	
+	option = {
+		name = excellent
+		owner = {
+			ROOT = {
+				culture = PREV
+				religion = PREV
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					culture_group = undead
+				}
+			}
+			make_province_undead_effect = yes
+		}
+		if = {
+			limit = {
+				owner = {
+					culture_group = daedra
+				}
+			}
+			make_province_daedra_effect = yes
+		}
+	}
+}
+
+province_event = { #cease repopulating if province is already repopulated
+	id = ekresettlement.7
+	hide_window = yes
+	picture = GFX_evt_placeholder
+	
+	mean_time_to_happen = { days = 1 }
+	
+	trigger = {
+		NOT = {
+			has_province_modifier = depopulated_province
+		}
+		OR = {
+			has_province_modifier = minor_repopulation
+			has_province_modifier = moderate_repopulation
+			has_province_modifier = major_repopulation
+		}
+	}
+	
+	immediate = {
+		remove_province_modifier = minor_repopulation
+		remove_province_modifier = moderate_repopulation
+		remove_province_modifier = major_repopulation
+		remove_province_modifier = resettlement
+	}
+}
+
+province_event = { #cease cleansing evil if there is no evil to be cleansed
+	id = ekresettlement.8
+	hide_window = yes
+	picture = GFX_evt_placeholder
+	
+	mean_time_to_happen = { days = 1 }
+	
+	trigger = {
+		has_province_modifier = cleansing_evil
+		NOR = {
+			culture_group = undead
+			culture_group = daedra
+			has_province_modifier = undead_horde_province
+			has_province_modifier = daedric_horde_province
+		}
+	}
+
+	immediate = {
+		remove_province_modifier = cleansing_evil
+		clr_province_flag = desettlement
+	}
+}
+
+province_event = { #cease seeding hist trees if you are not of Argonian culture group, or if the province is converted another way
+	id = ekresettlement.9
+	hide_window = yes
+	picture = GFX_evt_placeholder
+	
+	mean_time_to_happen = { days = 1 }
+	
+	trigger = {
+		has_province_modifier = seed_hist
+		OR = {
+			owner = {
+				NOT = { culture_group = argonian }
+			}
+			culture_group = argonian
+		}
+	}
+
+	immediate = {
+		remove_province_modifier = seed_hist
+	}
+}
+### Desettlement events ###
+
+province_event = { #Base-Desettle
+	id = ekresettlement.10
+	desc = ekresettlement10desc
+	is_triggered_only = yes
+	picture = GFX_evt_burning_house
+	
+	option = { #Assimilate
+		name = ekresettlement10opta
+		trigger = {
+			NOR = {
+				FROMFROM = {
+					OR = {
+						culture_group = daedra
+						culture_group = undead
+						culture_group = sload_group
+					}
+				}
+				culture_group = daedra
+				culture_group = undead
+				culture_group = sload_group
+				#AND = {
+				#	owner = { culture_group = argonian }
+				#	NOT = {
+				#		terrain = argonia
+				#		terrain = marsh
+				#		terrain = mangrove_swamp
+				#		terrain = jungle
+				#		terrain = valen_woods
+				#	}
+				#}
+			}
+			OR = {
+				AND = { #Argonians can convert Argonian-cultured provinces and the Argonia terrain type without seeding hist trees.
+					FROMFROM = {
+						culture_group = argonian
+					}
+					OR = {
+						culture_group = argonian
+						terrain = argonia
+					}
+				}
+				NOT = { FROMFROM = { culture_group = argonian } }
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				FROMFROM = { culture_group = ROOT }
+			}
+			modifier = {
+				factor = 0.7
+				FROMFROM = {
+					OR = {
+						trait = wroth
+						trait = cruel
+						trait = ruthless
+						trait = impaler
+					}
+				}
+			}
+			modifier = {
+				factor = 0.8
+				FROMFROM = {
+					OR = {
+						trait = warlord
+						trait = ambitious
+						trait = reckless
+						trait = arbitrary
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROMFROM = {
+					diplomacy < 10
+				}
+			}
+			modifier = {
+				factor = 3
+				FROMFROM = {
+					trait = kind
+					trait = just
+				}
+			}
+		}
+		province_event = { id = ekresettlement.20 }
+	}
+	option = { #Seed Hist Trees
+		name = ekresettlement10optd
+		trigger = { #Argonian-cultured non-Argonians would still need to seed hist trees for a proper Argonian way of life, hence why this doesn't include the Saxhleel trait.
+			FROMFROM = {
+				culture_group = argonian
+			}
+			NOR = { #Argonian-cultured and Argonia-terrain provinces can be assumed to already have Hist trees and will convert normally through enclaves.
+				culture_group = argonian
+				terrain = argonia
+			}
+			NOR = {
+				culture_group = daedra
+				culture_group = undead
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0.7
+				FROMFROM = {
+					OR = {
+						trait = wroth
+						trait = cruel
+						trait = ruthless
+						trait = impaler
+					}
+				}
+			}
+			modifier = {
+				factor = 0.8
+				FROMFROM = {
+					OR = {
+						trait = warlord
+						trait = ambitious
+						trait = reckless
+						trait = arbitrary
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROMFROM = {
+					diplomacy < 10
+				}
+			}
+			modifier = {
+				factor = 3
+				FROMFROM = {
+					trait = kind
+					trait = just
+				}
+			}
+		}
+		province_event = { id = ekresettlement.25 }
+	}
+	option = { #Expel
+		name = ekresettlement10optb
+		trigger = {
+			FROMFROM = {
+				NOR = {
+					culture_group = daedra
+					culture_group = undead
+					culture_group = sload_group
+					has_character_flag = nogenocidechar
+					has_law = resettlement_0
+				}
+			}
+		}
+		ai_chance = {
+			factor = 0.40
+			modifier = {
+				factor = 3
+				FROMFROM = {
+					OR = {
+						trait = wroth
+						trait = cruel
+						trait = ruthless
+						trait = impaler
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				FROMFROM = {
+					OR = {
+						trait = warlord
+						trait = ambitious
+						trait = reckless
+						trait = arbitrary
+					}
+				}
+			}
+			modifier = {
+				factor = 0.50
+				FROMFROM = {
+					OR = {
+						trait = temperate
+						trait = charitable
+						trait = just
+					}
+				}
+			}
+			modifier = {
+				factor = 0.25
+				FROMFROM = {
+					trait = kind
+				}
+			}
+			modifier = { #Less likely to commit violent acts against own culture group.
+				factor = 0.50
+				ROOT = {
+					owner = {
+						culture_group = PREV
+						NOR = {
+							trait = arbitrary
+							trait = lunatic
+						}
+					}
+				}
+			}
+			modifier = { #People are less likely to carry out hostile acts agaist their own overarching racial/species groups
+				factor = 0.75
+				OR = {
+					AND = {  #All humans (including distant relatives, the Tsaesci)
+						OR = {
+							culture_group = nedic
+							culture_group = yokudan_group
+							culture_group = tsaesci_group
+							culture_group = kamal_group
+							culture_group = islander_group
+						}
+						owner = {
+							OR = {
+								culture_group = nedic
+								culture_group = yokudan_group
+								culture_group = tsaesci_group
+								culture_group = kamal_group
+								culture_group = islander_group
+							}
+						}
+					}
+					AND = { #All mer #notallmer
+						OR = {
+							culture_group = aldmeris
+							culture_group = chimeris
+						}
+						owner = { 
+							OR = {
+								culture_group = aldmeris
+								culture_group = chimeris
+							}
+						}
+					}
+					AND = { #Khajiit and Po Tun have many compatibilities and similarities
+						OR = {
+							culture_group = khajiit
+							culture_group = potun_group
+						}
+						owner = { 
+							OR = {
+								culture_group = khajiit
+								culture_group = potun_group
+							}
+						}
+					}
+					AND = { #Argonians are alone
+						culture_group = argonian
+						owner = { culture_group = argonian }
+					}
+					AND = { #Tang Mo are alone
+						culture_group = tangmo_group
+						owner = { culture_group = tangmo_group }
+					}
+					AND = { #Sload REALLY stand apart
+						culture_group = sload_group
+						owner = { culture_group = sload_group }
+					}
+				}
+			}
+			modifier = { #More likely to expel or purge if they are native to the region and the inhabitants are not.
+				factor = 2
+				ROOT = {
+					kingdom = {
+						ROOT = {
+							holder_scope = {
+								culture_scope = {
+									has_flag = native_to_@PREVPREVPREV
+								}
+							}
+						}
+					}
+				}
+				NOT = {
+					ROOT = {
+						kingdom = {
+							ROOT = {
+								culture_scope = {
+									has_flag = native_to_@PREVPREV
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		province_event = { id = ekresettlement.30 }
+	}
+	option = { #Purge
+		name = ekresettlement10optc
+		trigger = {
+			FROMFROM = {
+				NAND = { #Prohibit Kind individuals from purging provinces, unless they are Dremora, Undead, or Sload.
+					trait = kind
+					NOR = {
+						trait = dremora
+						trait = undead
+						trait = sload
+					}
+				}
+				NOR = {
+					has_character_flag = nogenocidechar
+					has_law = resettlement_0
+					has_law = resettlement_1
+				}
+			}
+		}
+		ai_chance = {
+			factor = 0.25
+			modifier = {
+				factor = 2.5
+				FROMFROM = {
+					OR = {
+						trait = wroth
+						trait = cruel
+						trait = ruthless
+						trait = impaler
+					}
+				}
+			}
+			modifier = {
+				factor = 1.75
+				FROMFROM = {
+					OR = {
+						trait = warlord
+						trait = ambitious
+						trait = reckless
+						trait = arbitrary
+					}
+				}
+			}
+			modifier = {
+				factor = 0.50
+				FROMFROM = {
+					OR = {
+						trait = temperate
+						trait = charitable
+						trait = just
+					}
+				}
+			}
+			modifier = { #Less likely to commit violent acts against own culture group.
+				factor = 0.25
+				ROOT = {
+					owner = {
+						culture_group = PREV
+						NOR = {
+							trait = arbitrary
+							trait = lunatic
+						}
+					}
+				}
+			}
+			modifier = { #People are less likely to carry out hostile acts against their own overarching racial/species groups
+				factor = 0.5
+				OR = {
+					AND = {  #All humans (including distant relatives, the Tsaesci)
+						OR = {
+							culture_group = nedic
+							culture_group = yokudan_group
+							culture_group = tsaesci_group
+							culture_group = kamal_group
+							culture_group = islander_group
+						}
+						owner = {
+							OR = {
+								culture_group = nedic
+								culture_group = yokudan_group
+								culture_group = tsaesci_group
+								culture_group = kamal_group
+								culture_group = islander_group
+							}
+						}
+					}
+					AND = { #All mer
+						OR = {
+							culture_group = aldmeris
+							culture_group = chimeris
+						}
+						owner = { 
+							OR = {
+								culture_group = aldmeris
+								culture_group = chimeris
+							}
+						}
+					}
+					AND = { #Khajiit and Po Tun have many compatibilities and similarities
+						OR = {
+							culture_group = khajiit
+							culture_group = potun_group
+						}
+						owner = { 
+							OR = {
+								culture_group = khajiit
+								culture_group = potun_group
+							}
+						}
+					}
+					AND = { #Argonians are alone
+						culture_group = argonian
+						owner = { culture_group = argonian }
+					}
+					AND = { #Tang Mo are alone
+						culture_group = tangmo_group
+						owner = { culture_group = tangmo_group }
+					}
+					AND = { #Sload REALLY stand apart
+						culture_group = sload_group
+						owner = { culture_group = sload_group }
+					}
+				}
+			}
+			modifier = { #More likely to expel or purge if they are native to the region and the inhabitants are not.
+				factor = 2
+				ROOT = {
+					kingdom = {
+						ROOT = {
+							holder_scope = {
+								culture_scope = {
+									has_flag = native_to_@PREVPREVPREV
+								}
+							}
+						}
+					}
+				}
+				NOT = {
+					ROOT = {
+						kingdom = {
+							ROOT = {
+								culture_scope = {
+									has_flag = native_to_@PREVPREV
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		province_event = { id = ekresettlement.40 }
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = { #AI normally can't say no, but can if they don't have enough money or are an Argonian with no other option. Haha JK Argonians have other options now!
+			fromfrom = {
+				OR = {
+					ai = no
+					AND = {
+						OR = {
+							NOT = { scaled_wealth = 1 }
+							#culture_group = argonian
+						}
+						has_law = resettlement_0
+					}
+				}
+			}
+		}
+		clr_province_flag = desettlement
+	}
+}
+
+province_event = { #Assimilate - Nanaki's process.
+	id = ekresettlement.20
+	desc = ekresettlement20desc
+	is_triggered_only = yes
+	picture = GFX_evt_burning_house
+	
+	option = {
+		name = ekresettlement20opta
+		FROMFROMFROM = { scaled_wealth = -1 }
+		ROOT = {
+			add_province_modifier = {
+				name = foreign_enclaves
+				duration = -1
+			}
+			clr_province_flag = desettlement
+		}
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = {
+			fromfromfrom = {
+				ai = no
+			}
+		}
+		clr_province_flag = desettlement
+	}
+}
+
+province_event = { #Seed Hist Trees
+	id = ekresettlement.25
+	desc = ekresettlement25desc
+	is_triggered_only = yes
+	picture = GFX_evt_valenwood2
+	
+	option = {
+		name = ekresettlement25opta
+		FROMFROMFROM = { scaled_wealth = -1 }
+		ROOT = {
+			add_province_modifier = {
+				name = seed_hist
+				duration = -1
+			}
+			clr_province_flag = desettlement
+		}
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = {
+			fromfromfrom = {
+				ai = no
+			}
+		}
+		clr_province_flag = desettlement
+	}
+}
+
+province_event = { #Expel
+	id = ekresettlement.30
+	desc = ekresettlement30desc
+	is_triggered_only = yes
+	picture = GFX_evt_burning_house
+	
+	option = { #Expel
+		name = ekresettlement30opta
+		add_province_modifier = {
+			name = expelling_locals
+			duration = -1
+		}
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = {
+			fromfromfrom = {
+				ai = no
+			}
+		}
+		clr_province_flag = desettlement
+	}
+}
+
+province_event = { #Purge
+	id = ekresettlement.40
+	desc = ekresettlement40desc
+	is_triggered_only = yes
+	picture = GFX_evt_burning_house
+
+	option = { #Purge
+		name = ekresettlement40opta
+		add_province_modifier = {
+			name = purging_locals
+			duration = -1
+		}
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = {
+			fromfromfrom = {
+				ai = no
+			}
+		}
+		clr_province_flag = desettlement
+	}
+}
+
+### Result events ###
+
+province_event = { #26 - Hist Growth
+	id = ekresettlement.26
+	desc = ekresettlement26desc
+	picture = GFX_evt_valenwood2
+	
+	trigger = {
+		has_province_modifier = seed_hist
+	}
+	mean_time_to_happen = {
+		years = 8
+		modifier = {
+			factor = 0.80
+			has_province_modifier = prosperity_modifier_1
+		}
+		modifier = {
+			factor = 0.65
+			has_province_modifier = prosperity_modifier_2
+		}
+		modifier = {
+			factor = 0.50
+			has_province_modifier = prosperity_modifier_3
+		}
+		modifier = {
+			factor = 0.75
+			OR = {
+				terrain = marsh
+				terrain = mangrove_swamp
+				terrain = jungle
+				terrain = valen_woods
+			}
+		}
+		modifier = {
+			factor = 4
+			OR = {
+				terrain = desert
+				terrain = arctic
+				terrain = mountains
+				terrain = ashlands
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = { NOT = { owner = { culture = ROOT } } }
+			province_convert_to_owner_culture = yes
+		}
+		
+		if = {
+			limit = { NOT = { owner = { religion = ROOT } } }
+			province_convert_to_owner_religion = yes
+		}
+		hidden_tooltip = {
+			remove_province_modifier = nomad_agitation
+			remove_province_modifier = seed_hist
+		}
+	}
+	option = {
+		name = excellent
+	}
+}
+
+province_event = { #31 - Locals expelled peacefully
+	id = ekresettlement.31
+	desc = ekresettlement31desc
+	picture = GFX_evt_carriage_default
+	
+	trigger = {
+		has_province_modifier = expelling_locals
+		had_province_flag = { flag = desettlement days = 1095 }
+	}
+	mean_time_to_happen = {
+		years = 4
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 10
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 12
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 14
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 16
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 18
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 20
+			}
+		}
+		
+		bloodline_culture_conversion_modifier = yes
+	}
+	immediate = {
+		clr_province_flag = desettlement
+		remove_province_modifier = expelling_locals
+		random = {
+			chance = 5
+			create_ruins = yes
+			modifier = {
+				factor = 20
+				owner = {
+					has_character_flag = evdebug
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				change_variable = {
+					which = evilpoints
+					value = 10
+				}
+				add_character_modifier = {
+					name = atrocity_timer
+					hidden = yes
+					years = 1
+					stacking = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				AND = {
+					has_DLC = "Reapers"
+					NOR = {
+						has_province_modifier = depopulated_2
+						has_province_modifier = depopulated_3
+					}
+				}
+			}
+			hidden_tooltip = {
+				remove_province_modifier = prosperity_modifier_1
+				remove_province_modifier = prosperity_modifier_2
+				remove_province_modifier = prosperity_modifier_3
+				remove_province_modifier = depopulated_1
+			}
+			add_province_modifier = {
+				name = depopulated_2
+				duration = -1
+			}
+		}
+	}
+	option = {
+		name = excellent
+		owner = { piety = -25 }
+		add_province_modifier = {
+			name = depopulated_province
+			days = -1
+		}
+		
+		if = {
+			limit = { NOT = { owner = { culture = ROOT } } }
+			province_convert_to_owner_culture = yes
+		}
+		
+		if = {
+			limit = { NOT = { owner = { religion = ROOT } } }
+			province_convert_to_owner_religion = yes
+		}
+	}
+}
+#province_event = { #32 - Locals expelled violently, triggering revolt. TODO?
+
+
+province_event = { #41 - Locals purged peacefully
+	id = ekresettlement.41
+	desc = ekresettlement41desc
+	picture = GFX_evt_carriage_default
+	
+	trigger = {
+		has_province_modifier = purging_locals
+		had_province_flag = { flag = desettlement days = 730 }
+	}
+	mean_time_to_happen = {
+		years = 2
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 10
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 12
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 14
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 16
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 18
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				martial = 20
+			}
+		}
+		
+		bloodline_culture_conversion_modifier = yes
+	}
+	immediate = {
+		clr_province_flag = desettlement
+		remove_province_modifier = purging_locals
+		random = {
+			chance = 15
+			create_ruins = yes
+			modifier = {
+				factor = 10
+				owner = {
+					has_character_flag = evdebug
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				change_variable = {
+					which = evilpoints
+					value = 20
+				}
+			}
+		}
+		if = {
+			limit = {
+				AND = {
+					has_DLC = "Reapers"
+					NOT = { has_province_modifier = depopulated_3 }
+				}
+			}
+			hidden_tooltip = {
+				remove_province_modifier = prosperity_modifier_1
+				remove_province_modifier = prosperity_modifier_2
+				remove_province_modifier = prosperity_modifier_3
+				remove_province_modifier = depopulated_1
+				remove_province_modifier = depopulated_2
+			}
+			add_province_modifier = {
+				name = depopulated_3
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					culture_group = undead
+				}
+			}
+			make_province_undead_effect = yes
+		}
+		if = {
+			limit = {
+				owner = {
+					culture_group = daedra
+				}
+			}
+			make_province_daedra_effect = yes
+		}
+	}
+	option = {
+		name = excellent
+		owner = { piety = -50 }
+		add_province_modifier = {
+			name = depopulated_province
+			days = -1
+		}
+		
+		if = {
+			limit = { NOT = { owner = { culture = ROOT } } }
+			province_convert_to_owner_culture = yes
+		}
+		
+		if = {
+			limit = { NOT = { owner = { religion = ROOT } } }
+			province_convert_to_owner_religion = yes
+		}
+	}
+}
+#province_event = { #42 - Locals purged violently, triggering revolt. TODO?
+
+### Resettlement events ###
+
+province_event = { #Base-Resettle
+	id = ekresettlement.50
+	desc = ekresettlement50desc
+	is_triggered_only = yes
+	picture = GFX_evt_sparse
+	
+	option = { #Minor
+		name = ekresettlement50opta
+		trigger = {
+			FROMFROM = { #decision-taker
+				scaled_wealth = 0.5
+			}
+		}
+		ai_chance = { #AI less likely to do it if it doesn't have a lot of money.
+			factor = 1
+			modifier = {
+				factor = 0.8
+				FROMFROM = { NOT = { scaled_wealth > 1 } }
+			}
+			modifier = {
+				factor = 0.6
+				FROMFROM = { NOT = { scaled_wealth > 0.75 } }
+			}
+		}
+		FROMFROM = { province_event = { id = ekresettlement.60 } }
+	}
+	option = { #Middling
+		name = ekresettlement50optb
+		trigger = {
+			FROMFROM = {
+				scaled_wealth = 0.75
+			}
+		}
+		ai_chance = {
+			factor = 0.75
+			modifier = {
+				factor = 0.8
+				FROMFROM = { NOT = { scaled_wealth > 1.25 } }
+			}
+			modifier = {
+				factor = 0.6
+				FROMFROM = { NOT = { scaled_wealth > 1 } }
+			}		
+		}
+		FROMFROM = { province_event = { id = ekresettlement.70 } }
+	}
+	option = { #Major
+		name = ekresettlement50optc
+		trigger = {
+			FROMFROM = {
+				scaled_wealth = 1.0
+			}
+		}
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0.8
+				FROMFROM = { NOT = { scaled_wealth > 1.5 } }
+			}
+			modifier = {
+				factor = 0.6
+				FROMFROM = { NOT = { scaled_wealth > 1.25 } }
+			}
+		}
+		FROMFROM = { province_event = { id = ekresettlement.80 } }
+	}
+	option = { #Natural resettlement
+		name = ekresettlement50optd
+		ai_chance = {
+			factor = 0.25
+			modifier = {
+				factor = 1.25
+				FROMFROM = { NOT = { scaled_wealth > 1 } }
+			}
+			modifier = {
+				factor = 1.5
+				FROMFROM = { NOT = { scaled_wealth > 0.75 } }
+			}
+			modifier = {
+				factor = 1.75
+				FROMFROM = { NOT = { scaled_wealth > 0.5 } }
+			}
+		}
+		remove_province_modifier = resettlement
+	}
+}
+
+province_event = { #Minor efforts
+	id = ekresettlement.60
+	desc = ekresettlement60desc
+	is_triggered_only = yes
+	picture = GFX_evt_sparse
+
+	option = { #Resettle
+		name = ekresettlement60opta
+		FROM = {
+			add_province_modifier = {
+				name = minor_repopulation
+				duration = -1
+			}
+		}
+		ROOT = { scaled_wealth = -0.5 }
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = {
+			ai = no
+		}
+		FROM = {
+			remove_province_modifier = resettlement
+		}
+	}
+}
+
+province_event = { #Middling efforts
+	id = ekresettlement.70
+	desc = ekresettlement70desc
+	is_triggered_only = yes
+	picture = GFX_evt_sparse
+
+	option = { #Resettle
+		name = ekresettlement70opta
+		FROM = {
+			add_province_modifier = {
+				name = moderate_repopulation
+				duration = -1
+			}
+		}
+		ROOT = { scaled_wealth = -0.75 }
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = {
+			ai = no
+		}
+		FROM = {
+			remove_province_modifier = resettlement
+		}
+	}
+}
+
+province_event = { #Major efforts
+	id = ekresettlement.80
+	desc = ekresettlement80desc
+	is_triggered_only = yes
+	picture = GFX_evt_sparse
+
+	option = { #Resettle
+		name = ekresettlement80opta
+		FROM = {
+			add_province_modifier = {
+				name = major_repopulation
+				duration = -1
+			}
+		}
+		ROOT = { scaled_wealth = -1 }
+	}
+	option = { #Nevermind
+		name = nevermind
+		trigger = {
+			ai = no
+		}
+		FROM = {
+			remove_province_modifier = resettlement
+		}
+	}
+}
+
+### Result events II ###
+
+province_event = { #Province resettled
+	id = ekresettlement.90
+	desc = ekresettlement90desc
+	picture = GFX_evt_cyrodiil_boatscene
+	
+	trigger = {
+		has_province_modifier = depopulated_province
+		is_occupied = no
+		NOR = { #Failsafe.
+			owner = {
+				culture_group = undead
+				culture_group = daedra
+			}
+			culture_group = undead
+			culture_group = daedra
+		}
+		NOR = {
+			has_province_modifier = undead_horde_province
+			has_province_modifier = daedric_horde_province
+		}
+	}
+	mean_time_to_happen = {
+		months = 240 #20 years
+		modifier = { 
+			factor = 2 #480 - 40 years
+			owner = {
+				war = yes
+			}
+		}
+		modifier = {
+			factor = 2 #480 - 40 years
+			NOR = {
+				port = yes
+				any_neighbor_province = {
+					culture = ROOT
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			ROOT = {
+				kingdom = {
+					ROOT = {
+						holder_scope = {
+							culture_scope = {
+								has_flag = native_to_@PREVPREVPREV
+							}
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.75 #180- 15 years
+			has_province_modifier = minor_repopulation
+		}
+		modifier = {
+			factor = 0.50 #120 - 10 years
+			has_province_modifier = moderate_repopulation
+		}
+		modifier = {
+			factor = 0.25 #60 - 5 years
+			has_province_modifier = major_repopulation
+		}
+		modifier = {
+			factor = 0.8
+			has_province_modifier = prosperity_modifier_1
+		}
+		modifier = {
+			factor = 0.7
+			has_province_modifier = prosperity_modifier_2
+		}
+		modifier = {
+			factor = 0.6
+			has_province_modifier = prosperity_modifier_3
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				stewardship = 10
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				stewardship = 12
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				stewardship = 14
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				stewardship = 16
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				stewardship = 18
+			}
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				stewardship = 20
+			}
+		}
+		modifier = {
+			factor = 0.01
+			owner = {
+				has_character_flag = evdebug
+			}
+		}
+	}
+	immediate = {
+		remove_province_modifier = resettlement #cleanup
+		remove_province_modifier = minor_repopulation
+		remove_province_modifier = moderate_repopulation
+		remove_province_modifier = major_repopulation
+		clr_province_flag = desettlement #failsafe
+	}
+	
+	option = {
+		name = excellent
+		owner = { prestige = 25 }
+		remove_province_modifier = depopulated_province
+	}
+}
+
+province_event = { #Evil cleansed
+	id = ekresettlement.91
+	desc = ekresettlement91desc
+	picture = GFX_evt_battle
+	
+	trigger = {
+		OR = {
+			culture_group = undead
+			culture_group = daedra
+			has_province_modifier = undead_horde_province
+			has_province_modifier = daedric_horde_province
+		}
+		has_province_modifier = cleansing_evil
+		is_occupied = no
+	}
+	mean_time_to_happen = {
+		months = 60
+		modifier = {
+			factor = 2 
+			owner = {
+				war = yes
+			}
+		}
+		modifier = { #This exists because I'm considering changing the way hordes spawn rather than auto-creating them on depopulation.
+			factor = 1.5
+			OR = {
+				has_province_modifier = undead_horde_province
+				has_province_modifier = daedric_horde_province
+			}
+		}
+	}
+	immediate = {
+		clr_province_flag = desettlement
+		owner = {
+			change_variable = {
+				which = evils_cleansed
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = excellent
+		owner = { prestige = 50 }
+		remove_province_modifier = cleansing_evil
+		
+		if = {
+			limit = { NOT = { owner = { culture = ROOT } } }
+			province_convert_to_owner_culture = yes
+		}
+		
+		if = {
+			limit = { NOT = { owner = { religion = ROOT } } }
+			province_convert_to_owner_religion = yes
+		}
+		
+		if = {
+			limit = {
+				has_province_modifier = undead_horde_province
+			}
+			remove_province_modifier = undead_horde_province
+		}
+		if = {
+			limit = {
+				has_province_modifier = daedric_horde_province
+			}
+			remove_province_modifier = daedric_horde_province
+		}
+		generate_loot_generic = yes
+	}
+	
+	after = {
+		if = {
+			limit = {
+				owner = {
+					check_variable = {
+						which = evils_cleansed
+						value = 5
+					}
+					NOT = { has_character_flag = evrecognition1 }
+				}
+			}
+			owner = {
+				character_event = { id = ekresettlement.100 }
+			}
+		}
+	}
+}
+
+###
+
+character_event = { #Evil-Cleanser recognized
+	id = ekresettlement.100
+	desc = ekresettlement100desc
+	picture = GFX_evt_armycastle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = evrecognition1
+	}
+	
+	option = { 
+		name = ekresettlement100opta
+		prestige = 250
+		wealth = 100
+		give_nickname = nick_the_lion
+	}
+	option = {
+		name = ekresettlement100optb
+		prestige = 200
+		piety = 300
+	}
+}
+
+character_event = { #Genocidal Maniac recognized
+	id = ekresettlement.101
+	desc = ekresettlement101desc
+	picture = GFX_evt_burning_house
+	
+	trigger = {
+		check_variable = { which = evilpoints value = 80 }
+		NOT = { has_character_flag = evrecognition2 }
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.8
+			check_variable = { which = evilpoints value = 100 }
+		}
+		modifier = {
+			factor = 0.8
+			check_variable = { which = evilpoints value = 120 }
+		}
+		modifier = {
+			factor = 0.8
+			check_variable = { which = evilpoints value = 140 }
+		}
+		modifier = {
+			factor = 0.7
+			check_variable = { which = evilpoints value = 160 }
+		}
+		modifier = {
+			factor = 0.6
+			check_variable = { which = evilpoints value = 180 }
+		}
+		modifier = {
+			factor = 0.5
+			check_variable = { which = evilpoints value = 200 }
+		}
+	}
+	
+	immediate = {
+		set_character_flag = evrecognition2
+		if = {
+			limit = {
+				OR = {
+					culture_group = undead
+					culture_group = daedra
+					culture_group = sload_group
+				}
+			}
+			add_character_modifier = { name = genocidal_maniac_2 duration = -1 }
+		}
+		else_if = {
+			limit = { #'Barbarian' or otherwise cruel cultures and religions
+				OR = {
+					culture = orsimer
+					culture = reachmen
+					culture = ayleid
+					culture = maormer
+					culture = falmer
+					culture = dwemer
+					culture = kamal
+					culture = tsaesci
+					culture = naga
+					culture = atmoran
+					culture = yokudan
+					culture = quey
+					is_fringe_religion = yes
+				}
+			}
+			add_character_modifier = { name = genocidal_maniac_3 duration = -1 }
+		}
+		else = {
+			add_character_modifier = { name = genocidal_maniac duration = -1 }
+		}
+	}
+	
+	option = {
+		name = ekresettlement101opta
+		prestige = -750
+		piety = -250
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				75 = {}
+				20 = { give_nickname = nick_the_genocidal }
+				05 = { give_nickname = nick_the_genocidal_maniac }
+			}
+		}
+	}
+}
+
+### Evilpoints events ###
+
+character_event = { #Evilpoints tickdown, event fires on a yearly pulse.
+	id = ekresettlement.110
+	hide_window = yes
+	picture = GFX_evt_placeholder
+	
+	is_triggered_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value > 0 }
+		NOR = {
+			has_character_modifier = atrocity_timer 	#I'm considering making slavery generate evilpoints, but I also don't want it to block
+			any_demesne_province = { 			#evilpoint reduction, so basically it could tip you over the edge, but slaving alone wouldn't propel you
+				OR = { 							#into genocidal maniac-ness. That's a word, right?
+					has_province_modifier = expelling_locals
+					has_province_modifier = purging_locals
+				}
+			}
+		}
+	}
+	immediate = {
+		if = { #We don't want NEGATIVE evil points!!
+			limit = {
+				check_variable = { which = evilpoints value > 10 }
+			}
+			change_variable = { which = evilpoints value = -10 }
+		}
+		else = {
+			set_variable = { which = evilpoints value = 0 }
+		}
+	}
+}
+
+character_event = { #Lose Kind
+	id = ekresettlement.111
+	desc = ekresettlement111desc
+	picture = "GFX_evt_two_moon_aurora"
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		trait = kind
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement111opta
+		remove_trait = kind
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Lose Just
+	id = ekresettlement.112
+	desc = ekresettlement112desc
+	picture = "GFX_evt_two_moon_aurora"
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		trait = just
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement112opta
+		remove_trait = just
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Lose Patient
+	id = ekresettlement.113
+	desc = ekresettlement113desc
+	picture = "GFX_evt_two_moon_aurora"
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		trait = patient
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement113opta
+		remove_trait = patient
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Lose Content
+	id = ekresettlement.114
+	desc = ekresettlement114desc
+	picture = "GFX_evt_two_moon_aurora"
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		trait = content
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement114opta
+		remove_trait = content
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Lose Charitable
+	id = ekresettlement.115
+	desc = ekresettlement115desc
+	picture = "GFX_evt_two_moon_aurora"
+	
+	only_rulers = yes
+
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		trait = charitable
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement115opta
+		remove_trait = charitable
+		random = {
+			chance = 50
+			add_stressed = yes
+		}
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Lose Trusting
+	id = ekresettlement.116
+	desc = ekresettlement116desc
+	picture = "GFX_evt_two_moon_aurora"
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		trait = trusting
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement116opta
+		remove_trait = trusting
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Gain Ruthless
+	id = ekresettlement.117
+	desc = ekresettlement117desc
+	picture = GFX_evt_burning_house
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		NOR = {
+			trait = kind
+			trait = content
+			trait = charitable
+			trait = ruthless
+		}
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement117opta
+		add_trait = ruthless
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Gain Wroth
+	id = ekresettlement.118
+	desc = ekresettlement118desc
+	picture = GFX_evt_burning_house
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		NOR = {
+			trait = wroth
+			trait = patient
+		}
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement118opta
+		add_trait = wroth
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+character_event = { #Gain Cruel
+	id = ekresettlement.119
+	desc = ekresettlement119desc
+	picture = GFX_evt_burning_house
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		NOR = {
+			trait = cruel
+			trait = kind
+		}
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement119opta
+		add_trait = cruel
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+long_character_event = { #Gain Paranoid
+	id = ekresettlement.120
+	desc = ekresettlement120desc
+	picture = GFX_evt_burning_house
+
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value >= 10 }
+		OR = {
+			NOT = {
+				has_character_flag = evilpersonalitytimer
+			}
+			had_character_flag = { flag = evilpersonalitytimer days = 180 }
+		}
+		NOR = {
+			trait = trusting
+			trait = paranoid
+		}
+	}
+	mean_time_to_happen = {
+		years = 5
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 40 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 60 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 80 }
+		}
+		modifier = { 
+			factor = 0.75
+			check_variable = { which = evilpoints value >= 100 }
+		}
+	}
+	immediate = {
+		clr_character_flag = evilpersonalitytimer
+	}
+	option = {
+		name = ekresettlement120opta
+		add_trait = paranoid
+		random = {
+			chance = 50
+			add_stressed = yes
+		}
+	}
+	after = {
+		set_character_flag = evilpersonalitytimer
+	}
+}
+
+long_character_event = { #Lose Genocidal Maniac
+	id = ekresettlement.121
+	desc = ekresettlement121desc
+	picture = GFX_evt_forestwalk
+	
+	only_rulers = yes
+	
+	trigger = {
+		check_variable = { which = evilpoints value <= 0 }
+		OR = {
+			has_character_modifier = genocidal_maniac
+			has_character_modifier = genocidal_maniac_2
+			has_character_modifier = genocidal_maniac_3
+		}
+		NOR = {
+			culture_group = sload_group
+			culture_group = undead
+			culture_group = daedra
+		}
+		NOT = {
+			any_demesne_province = {
+				OR = {
+					has_province_modifier = expelling_locals
+					has_province_modifier = purging_locals
+				}
+			}
+		}
+	}
+	mean_time_to_happen = {
+		years = 30
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+		modifier = {
+			factor = 0.8
+			trait = humble
+		}
+		modifier = {
+			factor = 2
+			trait = ruthless
+		}
+		modifier = {
+			factor = 2
+			trait = cruel
+		}
+		modifier = {
+			factor = 2
+			trait = warlord
+		}
+		modifier = {
+			factor = 3
+			has_character_flag = declinednogenocide
+		}
+	}
+	option = {
+		name = ekresettlement121opta
+		if = {
+			limit = {
+				has_character_modifier = genocidal_maniac
+			}
+			remove_character_modifier = genocidal_maniac
+		}
+		else_if = {
+			limit = {
+				has_character_modifier = genocidal_maniac_2
+			}
+			remove_character_modifier = genocidal_maniac_2
+		}
+		else_if = {
+			limit = {
+				has_character_modifier = genocidal_maniac_3
+			}
+			remove_character_modifier = genocidal_maniac_3
+		}
+		custom_tooltip = { text = ekresettlement121ct }
+		set_character_flag = nogenocidechar
+	}
+	option = {
+		name = ekresettlement121optb
+		prestige = -200
+		set_character_flag = declinednogenocide
+	}
+}

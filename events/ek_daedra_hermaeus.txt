@@ -1,0 +1,1781 @@
+####Etienne's Daedric Events - Hermaeus Mora####
+
+namespace = hermaeus
+
+
+###Hermaeus Mora Black Book Event Chain###
+
+long_character_event = {
+	id = hermaeus.1
+	desc = "Hermaeus1"
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus1Accept"
+		ai_chance = {
+			factor = 1
+		}
+		add_trait = on_mission
+		custom_tooltip = {
+			text = "Hermaeus1AcceptInfo"
+			hidden_tooltip = {
+				set_character_flag = do_not_disturb
+				character_event = { id = hermaeus.2 }
+			}
+		}
+	}
+	# option = {
+		# name = "Hermaeus1Decline"
+		# ai_chance = {
+			# factor = 0
+		# }
+		# custom_tooltip = {
+			# text = "Hermaeus1DeclineInfo"
+			# hidden_tooltip = {
+			# clr_character_flag = black_book
+				# if = {
+					# limit = { is_long_lived = no }
+					# add_character_modifier = { name = hermaeus_cooldown months = 36 hidden = yes }
+				# }
+				# if = {
+					# limit = { is_long_lived = yes }
+					# add_character_modifier = { name = hermaeus_cooldown months = 144 hidden = yes }
+				# }
+			# }
+		# }
+	# }
+}
+
+#Transportation to Apocrypha
+
+character_event = {
+	id = hermaeus.2
+	desc = "Hermaeus2"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus2Acknowledge"
+			hidden_tooltip = {
+			character_event = { id = hermaeus.3 }
+		}
+	}
+}
+
+#Arrival in Apocrypha
+
+character_event = {
+	id = hermaeus.3
+	desc = "Hermaeus3"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus3Acknowledge"
+		hidden_tooltip = {
+			random_list = {
+				25 = { character_event = { id = hermaeus.30 } } #Lurkers!
+				25 = { character_event = { id = hermaeus.40 } } #The Bridge!
+				25 = { character_event = { id = hermaeus.50 } } #Seekers!
+				25 = { character_event = { id = hermaeus.60 } } #A chest with loot!
+			}
+		}
+	}
+}
+
+#Lurker attack
+
+character_event = {
+	id = hermaeus.30
+	desc = "Hermaeus30"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				1 = { character_event = { id = hermaeus.31  } } #Victorious!
+				99 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				5 = { character_event = { id = hermaeus.31  } } #Victorious!
+				95 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				10 = { character_event = { id = hermaeus.31  } } #Victorious!
+				90 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				15 = { character_event = { id = hermaeus.31  } } #Victorious!
+				85 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				25 = { character_event = { id = hermaeus.31  } } #Victorious!
+				75 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				35 = { character_event = { id = hermaeus.31  } } #Victorious!
+				65 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = hermaeus.31  } } #Victorious!
+				50 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				60 = { character_event = { id = hermaeus.31  } } #Victorious!
+				40 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				70 = { character_event = { id = hermaeus.31  } } #Victorious!
+				30 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				80 = { character_event = { id = hermaeus.31  } } #Victorious!
+				20 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				90 = { character_event = { id = hermaeus.31  } } #Victorious!
+				10 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 44
+			NOT = { combat_rating = 48 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				92 = { character_event = { id = hermaeus.31  } } #Victorious!
+				8 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 48
+			NOT = { combat_rating = 52 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				95 = { character_event = { id = hermaeus.31  } } #Victorious!
+				5 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 52
+			NOT = { combat_rating = 56 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				96 = { character_event = { id = hermaeus.31  } } #Victorious!
+				4 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 56
+			NOT = { combat_rating = 60 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				97 = { character_event = { id = hermaeus.31  } } #Victorious!
+				3 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 60
+			NOT = { combat_rating = 64 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				98 = { character_event = { id = hermaeus.31  } } #Victorious!
+				2 = { character_event = { id = hermaeus.32  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Combat"
+		trigger = {
+			combat_rating = 64
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.31  }
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Flee"
+		trigger = {
+			NOT = { trait = agile }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30FleeInfo"
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = hermaeus.33  } } #Successful!
+				50 = { character_event = { id = hermaeus.34  } } #Unsuccessful!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus30Flee"
+		trigger = {
+			trait = agile
+			}
+		custom_tooltip = {
+			text = "Hermaeus30FleeInfo"
+		hidden_tooltip = {
+			random_list = {
+				90 = { character_event = { id = hermaeus.33  } } #Successful!
+				10 = { character_event = { id = hermaeus.34  } } #Unsuccessful!
+				}
+			}
+		}
+	}
+}
+
+#Victorious against a Lurker
+
+character_event = {
+	id = hermaeus.31
+	desc = "Hermaeus31"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus31Acknowledge"
+			random_list = {
+					25 = { wealth = 5 }
+					25 = { wealth = 10 }
+					25 = { wealth = 15 }
+					25 = { wealth = 20 }
+			}
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = hermaeus.40  } } #The Bridge!
+					20 = { character_event = { id = hermaeus.50  } } #Seekers!
+					20 = { character_event = { id = hermaeus.60  } } #A chest with loot!
+					40 = { character_event = { id = hermaeus.70  } } #A test of will
+			}
+		}
+	}
+}
+
+#Defeated by a Lurker
+
+character_event = {
+	id = hermaeus.32
+	desc = "Hermaeus32"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus32Acknowledge"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+		}
+	}
+}
+
+#Successful evasion of a Lurker
+
+character_event = {
+	id = hermaeus.33
+	desc = "Hermaeus33"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus33Acknowledge"
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = hermaeus.40  } } #The Bridge!
+					20 = { character_event = { id = hermaeus.50  } } #Seekers!
+					20 = { character_event = { id = hermaeus.60  } } #A chest with loot!
+					40 = { character_event = { id = hermaeus.70  } } #A test of will
+			}
+		}
+	}
+}
+
+#Unsuccessful evasion of a Lurker
+
+character_event = {
+	id = hermaeus.34
+	desc = "Hermaeus34"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus34Acknowledge"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+		}
+	}
+}
+
+#Running the Gauntlet
+
+character_event = {
+	id = hermaeus.40
+	desc = "Hermaeus40"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				1 = { character_event = { id = hermaeus.41  } } #Victorious!
+				99 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				5 = { character_event = { id = hermaeus.41  } } #Victorious!
+				95 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				10 = { character_event = { id = hermaeus.41  } } #Victorious!
+				90 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				15 = { character_event = { id = hermaeus.41  } } #Victorious!
+				85 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				25 = { character_event = { id = hermaeus.41  } } #Victorious!
+				75 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				35 = { character_event = { id = hermaeus.41  } } #Victorious!
+				65 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = hermaeus.41  } } #Victorious!
+				50 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				60 = { character_event = { id = hermaeus.41  } } #Victorious!
+				40 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				70 = { character_event = { id = hermaeus.41  } } #Victorious!
+				30 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				80 = { character_event = { id = hermaeus.41  } } #Victorious!
+				20 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				90 = { character_event = { id = hermaeus.41  } } #Victorious!
+				10 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 44
+			NOT = { combat_rating = 48 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				92 = { character_event = { id = hermaeus.41  } } #Victorious!
+				8 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 48
+			NOT = { combat_rating = 52 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				95 = { character_event = { id = hermaeus.41  } } #Victorious!
+				5 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 52
+			NOT = { combat_rating = 56 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				96 = { character_event = { id = hermaeus.41  } } #Victorious!
+				4 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 56
+			NOT = { combat_rating = 60 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				97 = { character_event = { id = hermaeus.41  } } #Victorious!
+				3 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 60
+			NOT = { combat_rating = 64 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				98 = { character_event = { id = hermaeus.41  } } #Victorious!
+				2 = { character_event = { id = hermaeus.42  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Combat"
+		trigger = {
+			combat_rating = 64
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.41  }
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Flee"
+		trigger = {
+			NOT = { trait = agile }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30FleeInfo"
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = hermaeus.43  } } #Successful!
+				50 = { character_event = { id = hermaeus.44  } } #Unsuccessful!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus40Flee"
+		trigger = {
+			trait = agile
+			}
+		custom_tooltip = {
+			text = "Hermaeus30FleeInfo"
+		hidden_tooltip = {
+			random_list = {
+				99 = { character_event = { id = hermaeus.43  } } #Successful!
+				1 = { character_event = { id = hermaeus.44  } } #Unsuccessful!
+				}
+			}
+		}
+	}
+}
+
+#Successful Running of the Gauntlet
+
+character_event = {
+	id = hermaeus.41
+	desc = "Hermaeus41"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus41Acknowledge"
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = hermaeus.30  } } #Lurkers!
+					20 = { character_event = { id = hermaeus.50  } } #Seekers!
+					20 = { character_event = { id = hermaeus.60  } } #A chest with loot!
+					40 = { character_event = { id = hermaeus.70  } } #A test of will!
+			}
+		}
+	}
+}
+
+#Unsuccessful Running of the Gauntlet
+
+character_event = {
+	id = hermaeus.42
+	desc = "Hermaeus42"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus42Acknowledge"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+		}
+	}
+}
+
+#Successful Running of the Gauntlet
+
+character_event = {
+	id = hermaeus.43
+	desc = "Hermaeus43"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus43Acknowledge"
+		hidden_tooltip = {
+			random_list = {
+					25 = { character_event = { id = hermaeus.30  } } #Attacked by a Lurker, Phase 1
+					25 = { character_event = { id = hermaeus.40  } } #Running the Gauntlet, Phase 1
+					25 = { character_event = { id = hermaeus.50  } } #Seekers! Phase 1
+					25 = { character_event = { id = hermaeus.60  } } #A chest with loot Phase 1
+			}
+		}
+	}
+}
+
+#Unsuccessful Running of the Gauntlet
+
+character_event = {
+	id = hermaeus.44
+	desc = "Hermaeus44"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus44Acknowledge"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+		}
+	}
+}
+
+#Seekers - Sneak or Destroy?
+
+#Lurker attack
+
+character_event = {
+	id = hermaeus.50
+	desc = "Hermaeus50"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				1 = { character_event = { id = hermaeus.51  } } #Victorious!
+				99 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				5 = { character_event = { id = hermaeus.51  } } #Victorious!
+				95 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				10 = { character_event = { id = hermaeus.51  } } #Victorious!
+				90 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				15 = { character_event = { id = hermaeus.51  } } #Victorious!
+				85 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				25 = { character_event = { id = hermaeus.51  } } #Victorious!
+				75 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				35 = { character_event = { id = hermaeus.51  } } #Victorious!
+				65 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = hermaeus.51  } } #Victorious!
+				50 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				60 = { character_event = { id = hermaeus.51  } } #Victorious!
+				40 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				70 = { character_event = { id = hermaeus.51  } } #Victorious!
+				30 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				80 = { character_event = { id = hermaeus.51  } } #Victorious!
+				20 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				90 = { character_event = { id = hermaeus.51  } } #Victorious!
+				10 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 44
+			NOT = { combat_rating = 48 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				92 = { character_event = { id = hermaeus.51  } } #Victorious!
+				8 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 48
+			NOT = { combat_rating = 52 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				95 = { character_event = { id = hermaeus.51  } } #Victorious!
+				5 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 52
+			NOT = { combat_rating = 56 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				96 = { character_event = { id = hermaeus.51  } } #Victorious!
+				4 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 56
+			NOT = { combat_rating = 60 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				97 = { character_event = { id = hermaeus.51  } } #Victorious!
+				3 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 60
+			NOT = { combat_rating = 64 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+				98 = { character_event = { id = hermaeus.51  } } #Victorious!
+				2 = { character_event = { id = hermaeus.52  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Combat"
+		trigger = {
+			combat_rating = 64
+			}
+		custom_tooltip = {
+			text = "Hermaeus30CombatInfo"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.51  }
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			NOT = { intrigue = 1 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				1 = { character_event = { id = hermaeus.53  } } #Victorious!
+				99 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 1
+			NOT = { intrigue = 2 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				5 = { character_event = { id = hermaeus.53  } } #Victorious!
+				95 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 2
+			NOT = { intrigue = 3 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				10 = { character_event = { id = hermaeus.53  } } #Victorious!
+				90 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 3
+			NOT = { intrigue = 4 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				15 = { character_event = { id = hermaeus.53  } } #Victorious!
+				85 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 4
+			NOT = { intrigue = 5 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				20 = { character_event = { id = hermaeus.53  } } #Victorious!
+				80 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 5
+			NOT = { intrigue = 6 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				30 = { character_event = { id = hermaeus.53  } } #Victorious!
+				70 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 6
+			NOT = { intrigue = 7 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				40 = { character_event = { id = hermaeus.53  } } #Victorious!
+				60 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 7
+			NOT = { intrigue = 8 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = hermaeus.53  } } #Victorious!
+				50 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 8
+			NOT = { intrigue = 9 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				60 = { character_event = { id = hermaeus.53  } } #Victorious!
+				40 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 9
+			NOT = { intrigue = 10 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				70 = { character_event = { id = hermaeus.53  } } #Victorious!
+				30 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 10
+			NOT = { intrigue = 11 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				80 = { character_event = { id = hermaeus.53  } } #Victorious!
+				20 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 11
+			NOT = { intrigue = 12 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				85 = { character_event = { id = hermaeus.53  } } #Victorious!
+				15 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 12
+			NOT = { intrigue = 13 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				90 = { character_event = { id = hermaeus.53  } } #Victorious!
+				10 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 13
+			NOT = { intrigue = 14 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				95 = { character_event = { id = hermaeus.53  } } #Victorious!
+				5 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 14
+			NOT = { intrigue = 15 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				97 = { character_event = { id = hermaeus.53  } } #Victorious!
+				3 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 15
+			NOT = { intrigue = 16 }
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			random_list = {
+				98 = { character_event = { id = hermaeus.53  } } #Victorious!
+				2 = { character_event = { id = hermaeus.54  } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Hermaeus50Sneak"
+		trigger = {
+			intrigue = 16
+			}
+		custom_tooltip = {
+			text = "Hermaeus50SneakInfo"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.53  }
+			}
+		}
+	}
+}
+
+#Victorious against Seekers
+
+character_event = {
+	id = hermaeus.51
+	desc = "Hermaeus51"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus51Acknowledge"
+			random_list = {
+					25 = { wealth = 5 }
+					25 = { wealth = 10 }
+					25 = { wealth = 15 }
+					25 = { wealth = 20 }
+			}
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = hermaeus.30  } } #Lurkers!
+					20 = { character_event = { id = hermaeus.40  } } #Bridge!
+					20 = { character_event = { id = hermaeus.60  } } #A chest with loot!
+					40 = { character_event = { id = hermaeus.70  } } #A test of will!
+			}
+		}
+	}
+}
+
+#Defeated by a Seeker
+
+character_event = {
+	id = hermaeus.52
+	desc = "Hermaeus52"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus52Acknowledge"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+		}
+	}
+}
+
+#Successful evasion of Seekers
+
+character_event = {
+	id = hermaeus.53
+	desc = "Hermaeus53"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus53Acknowledge"
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = hermaeus.30  } } #Lurkers!
+					20 = { character_event = { id = hermaeus.40  } } #Bridge!
+					20 = { character_event = { id = hermaeus.60  } } #A chest with loot!
+					40 = { character_event = { id = hermaeus.70  } } #A test of will!
+			}
+		}
+	}
+}
+
+#Unsuccessful evasion of Seekers
+
+character_event = {
+	id = hermaeus.54
+	desc = "Hermaeus54"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus54Acknowledge"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+		}
+	}
+}
+
+#A chest with loot - yay!
+
+character_event = {
+	id = hermaeus.60
+	desc = "Hermaeus60"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus60Acknowledge"
+			random_list = {
+					25 = { wealth = 1 }
+					25 = { wealth = 5 }
+					25 = { wealth = 10 }
+					25 = { wealth = 20 }
+			}
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = hermaeus.30  } } #Lurkers!
+					20 = { character_event = { id = hermaeus.40  } } #Bridge!
+					20 = { character_event = { id = hermaeus.50  } } #Seekers!
+					40 = { character_event = { id = hermaeus.70  } } #A test of will!
+			}
+		}
+	}
+}
+
+#A taste of knowledge in Apocrypha#
+
+#To read or not to read?
+
+character_event = {
+	id = hermaeus.70
+	desc = "Hermaeus70"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus70Accept"
+			hidden_tooltip = {
+			long_character_event = { id = hermaeus.72  }
+		}
+	}
+	
+	option = {
+		name = "Hermaeus70Decline"
+			hidden_tooltip = {
+			random_list = {
+					80 = { character_event = { id = hermaeus.71  } }
+					20 = { long_character_event = { id = hermaeus.72  } }
+			}
+		}
+	}
+	
+	option = {
+		name = "Hermaeus70DeclineSlothful"
+			trigger = {
+				trait = slothful
+			}
+		custom_tooltip = {
+			text = "Hermaeus70DeclineSlothfulInfo"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.71  }
+			}
+		}
+	}
+	
+	option = {
+		name = "Hermaeus70DeclineCynical"
+			trigger = {
+				trait = cynical
+			}
+		custom_tooltip = {
+			text = "Hermaeus70DeclineCynicalInfo"
+		hidden_tooltip = {
+			character_event = { id = hermaeus.71  }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = hermaeus.71
+	desc = "Hermaeus71"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus71Acknowledge"
+		trigger = { ai = no }
+			hidden_tooltip = {
+			character_event = { id = hermaeus.80  }
+		}
+	}
+	option = {
+		name = "Hermaeus71Acknowledge"
+		trigger = { ai = yes }
+			hidden_tooltip = {
+			character_event = { id = hermaeus.85  }
+		}
+	}
+}
+
+long_character_event = {
+	id = hermaeus.72
+	desc = "Hermaeus72"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus72Acknowledge"
+		trigger = {
+			NOT = { trait = lunatic }
+		}
+		add_trait = lunatic
+		hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+			set_character_flag = permanent_lunatic
+		}
+	}
+	option = {
+		name = "Hermaeus72Acknowledge"
+			trigger = {
+				trait = lunatic
+			}
+			hidden_tooltip = {
+			character_event = { id = hermaeus.75  }
+		}
+	}
+}
+
+#Failure - the Black Book is gone!#
+
+character_event = {
+	id = hermaeus.75
+	desc = "Hermaeus75"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus75Acknowledge"
+			prestige = -25
+			remove_trait = on_mission
+			hidden_tooltip = {
+			clr_character_flag = black_book
+			clr_character_flag = do_not_disturb
+			if = {
+				limit = { is_long_lived = no }
+				add_character_modifier = { name = hermaeus_cooldown months = 36 hidden = yes }
+			}
+			if = {
+				limit = { is_long_lived = yes }
+				add_character_modifier = { name = hermaeus_cooldown months = 144 hidden = yes }
+			}
+		}
+	}
+}
+
+#The Payoff - Choose your Prize!#
+
+character_event = {
+	id = hermaeus.80
+	desc = "Hermaeus80"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus80Diplomacy"
+			change_diplomacy = 2
+			hidden_tooltip = {
+			character_event = { id = hermaeus.82  }
+		}
+	}
+	
+	option = {
+		name = "Hermaeus80Martial"
+			change_martial = 2
+			hidden_tooltip = {
+			character_event = { id = hermaeus.82  }
+		}
+	}
+	
+	option = {
+		name = "Hermaeus80Stewardship"
+			change_stewardship = 2
+			hidden_tooltip = {
+			character_event = { id = hermaeus.82  }
+		}
+	}
+	
+	option = {
+		name = "Hermaeus80Wrap"
+			hidden_tooltip = {
+			character_event = { id = hermaeus.81 }
+		}
+	}
+}
+
+character_event = {
+	id = hermaeus.81
+	desc = "Hermaeus81"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus81Intrigue"
+			change_intrigue = 2
+			hidden_tooltip = {
+			character_event = { id = hermaeus.82  }
+		}
+	}
+	
+	option = {
+		name = "Hermaeus81Learning"
+			change_learning = 1
+			hidden_tooltip = {
+			character_event = { id = hermaeus.82  }
+		}
+	}
+	
+	option = {
+		name = "Hermaeus81Wrap"
+			hidden_tooltip = {
+			character_event = { id = hermaeus.80 }
+		}
+	}
+}
+
+character_event = {
+	id = hermaeus.82
+	desc = "Hermaeus82"
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hermaeus82Acknowledge"
+			prestige = 100
+			hidden_tooltip = { change_variable = { which = black_books_read value = 1 } } #Hid the tooltip, had no localization so I'm not sure if it was supposed to be visible or not.
+			remove_trait = on_mission
+			hidden_tooltip = {
+			clr_character_flag = black_book
+			clr_character_flag = do_not_disturb
+			if = {
+				limit = { is_long_lived = no }
+				add_character_modifier = { name = hermaeus_cooldown months = 36 hidden = yes }
+			}
+			if = {
+				limit = { is_long_lived = yes }
+				add_character_modifier = { name = hermaeus_cooldown months = 144 hidden = yes }
+			}
+		}
+	}
+}
+
+#AI Black Book Selection Event
+character_event = {
+	id = hermaeus.85
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { change_diplomacy = 2 }
+			20 = { change_martial = 2 }
+			20 = { change_stewardship = 2 }
+			20 = { change_intrigue = 2 }
+			20 = { change_learning = 1 }
+		}
+		hidden_tooltip = { change_variable = { which = black_books_read value = 1 } }
+		character_event = { id = hermaeus.82  }
+	}
+}

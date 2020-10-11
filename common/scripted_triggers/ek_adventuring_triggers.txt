@@ -1,0 +1,692 @@
+#Triggers to be used in adventuring decisions and events to help streamline encounters.
+
+### Skill triggers ###
+#Tiers: Excellent > Superior > Average > Poor
+
+#COMBAT - use for standard combat checks.
+adv_is_excellent_combatant = {
+	OR = {
+		adv_is_excellent_fighter = yes
+		adv_is_excellent_mage = yes
+	}
+}
+adv_is_superior_combatant = {
+	NOT = {
+		adv_is_excellent_combatant = yes
+	}
+	OR = {
+		adv_is_superior_fighter = yes
+		adv_is_superior_mage = yes
+	}
+}
+adv_is_average_combatant = {
+	NOR = {
+		adv_is_excellent_combatant = yes
+		adv_is_superior_combatant = yes
+	}
+	OR = {
+		adv_is_superior_fighter = yes
+		adv_is_superior_mage = yes
+	}
+}
+adv_is_poor_combatant = {
+	NOR = {
+		adv_is_average_combatant = yes
+		adv_is_superior_combatant = yes
+		adv_is_excellent_combatant = yes
+	}
+}
+
+#DIPLOMACY - negotiating, persuading, bluffing, leading
+adv_is_excellent_diplomat = {
+	calc_true_if = {
+		amount = 3
+		diplomacy = 30
+		AND = {
+			combat_rating = 75
+			is_diplomat = yes
+		}
+		OR = {
+			trait = bard_3
+			trait = wayfarer_3
+			trait = savant_3
+			trait = rogue_3
+		}
+		OR = {
+			trait = diplomat_4
+			trait = diplomat_5
+		}
+		trait = genius
+	}
+}
+adv_is_superior_diplomat = {
+	NOT = { adv_is_excellent_diplomat = yes }
+	calc_true_if = {
+		amount = 2
+		diplomacy = 20
+		AND = {
+			combat_rating = 45
+			is_diplomat = yes
+		}
+		OR = {
+			trait = bard_2
+			trait = bard_3
+			trait = wayfarer_2
+			trait = wayfarer_3
+			trait = savant_2
+			trait = savant_3
+			trait = rogue_2
+			trait = rogue_3
+		}
+		OR = {
+			trait = diplomat_3
+			trait = diplomat_4
+			trait = diplomat_5
+		}
+		OR = {
+			trait = genius
+			trait = quick
+		}
+		trait = gregarious
+	}
+}
+adv_is_average_diplomat = {
+	NOR = {
+		adv_is_excellent_diplomat = yes
+		adv_is_superior_diplomat = yes
+	}
+	calc_true_if = {
+		amount = 2
+		diplomacy = 15
+		diplomacy = 40 #Brute-force to prevent poor status if your stats are this high without formal training.
+		AND = {
+			combat_rating = 30
+			is_diplomat = yes
+		}
+		OR = {
+			is_bard = yes
+			is_wayfarer = yes
+			is_savant = yes
+			is_rogue = yes
+		}
+		OR = {
+			trait = diplomat_2
+			trait = diplomat_3
+			trait = diplomat_4
+			trait = diplomat_5
+		}
+		OR = {
+			trait = shrewd
+			trait = genius
+			trait = quick
+		}
+		OR = {
+			trait = kind
+			trait = gregarious
+		}
+	}
+}
+adv_is_poor_diplomat = {
+	NOR = {
+		adv_is_excellent_diplomat = yes
+		adv_is_superior_diplomat = yes
+		adv_is_average_diplomat = yes
+	}
+}
+
+#MARTIAL - fighting, fighting, fighting
+adv_is_excellent_fighter = {
+	calc_true_if = {
+		amount = 3
+		martial = 30
+		AND = {
+			combat_rating = 90 #Requires higher combat rating to be considered excellent fighter.
+			is_warrior = yes
+		}
+		OR = {
+			trait = knight_3
+			trait = crusader_3
+			trait = barbarian_3
+			trait = spellsword_3
+			trait = ansei_3
+			trait = swordsinger_3
+			trait = thuum_3
+		}
+		OR = {
+			trait = warrior_4
+			trait = warrior_5
+		}
+		trait = genius
+	}
+}
+adv_is_superior_fighter = {
+	NOT = { adv_is_excellent_fighter = yes }
+	calc_true_if = {
+		amount = 2
+		martial = 20
+		AND = {
+			combat_rating = 60
+			is_warrior = yes
+		}
+		OR = {
+			trait = knight_2
+			trait = knight_3
+			trait = crusader_2
+			trait = crusader_3
+			trait = barbarian_2
+			trait = barbarian_3
+			trait = spellsword_2
+			trait = spellsword_3
+			trait = ansei_2
+			trait = ansei_3
+			trait = swordsinger_2
+			trait = swordsinger_3
+			trait = thuum_2
+			trait = thuum_3
+		}
+		OR = {
+			trait = warrior_3
+			trait = warrior_4
+			trait = warrior_5
+		}
+		OR = {
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_average_fighter = {
+	NOR = {
+		adv_is_excellent_fighter = yes
+		adv_is_superior_fighter = yes
+	}
+	calc_true_if = {
+		amount = 2
+		martial = 15
+		martial = 40
+		AND = {
+			combat_rating = 30
+			is_warrior = yes
+		}
+		OR = {
+			is_knight = yes
+			is_crusader = yes
+			is_barbarian = yes
+			is_spellsword = yes
+			is_ansei = yes
+			is_swordsinger = yes
+			has_thuum = yes
+		}
+		OR = {
+			trait = warrior_2
+			trait = warrior_3
+			trait = warrior_4
+			trait = warrior_5
+		}
+		OR = {
+			trait = shrewd
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_poor_fighter = {
+	NOR = {
+		adv_is_excellent_fighter = yes
+		adv_is_superior_fighter = yes
+		adv_is_average_fighter = yes
+	}
+}
+
+#STEWARDSHIP - resource management, bartering, appraising
+adv_is_excellent_magistrate = {
+	calc_true_if = {
+		amount = 3
+		stewardship = 30
+		AND = {
+			combat_rating = 75
+			is_magistrate = yes
+		}
+		OR = {
+			trait = trader_3
+			trait = monk_3
+			trait = scout_3
+			trait = healer_3
+		}
+		OR = {
+			trait = magistrate_4
+			trait = magistrate_5
+		}
+		trait = genius
+	}
+}
+adv_is_superior_magistrate = {
+	NOT = { adv_is_excellent_magistrate = yes }
+	calc_true_if = {
+		amount = 2
+		stewardship = 20
+		AND = {
+			combat_rating = 45
+			is_magistrate = yes
+		}
+		OR = {
+			trait = trader_2
+			trait = trader_3
+			trait = monk_2
+			trait = monk_3
+			trait = scout_2
+			trait = scout_3
+			trait = healer_2
+			trait = healer_3
+		}
+		OR = {
+			trait = magistrate_3
+			trait = magistrate_4
+			trait = magistrate_5
+		}
+		OR = {
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_average_magistrate = {
+	NOR = {
+		adv_is_excellent_magistrate = yes
+		adv_is_superior_magistrate = yes
+	}
+	calc_true_if = {
+		amount = 2
+		stewardship = 15
+		stewardship = 40
+		AND = {
+			combat_rating = 30
+			is_magistrate = yes
+		}
+		OR = {
+			is_trader = yes
+			is_monk_education = yes
+			is_scout = yes
+			is_healer = yes
+		}
+		OR = {
+			trait = magistrate_2
+			trait = magistrate_3
+			trait = magistrate_4
+			trait = magistrate_5
+		}
+		OR = {
+			trait = shrewd
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_poor_magistrate = {
+	NOR = {
+		adv_is_excellent_magistrate = yes
+		adv_is_superior_magistrate = yes
+		adv_is_average_magistrate = yes
+	}
+}
+
+#INTRIGUE - sneaking, spying, escaping
+adv_is_excellent_agent = {
+	calc_true_if = {
+		amount = 3
+		intrigue = 30
+		AND = {
+			combat_rating = 75
+			is_agent = yes
+		}
+		OR = {
+			trait = acrobat_3
+			trait = thief_3
+			trait = assassin_3
+			trait = nightblade_3
+		}
+		OR = {
+			trait = agent_4
+			trait = agent_5
+		}
+		trait = genius
+	}
+}
+adv_is_superior_agent = {
+	NOT = { adv_is_excellent_agent = yes }
+	calc_true_if = {
+		amount = 2
+		intrigue = 20
+		AND = {
+			combat_rating = 45
+			is_agent = yes
+		}
+		OR = {
+			trait = acrobat_2
+			trait = acrobat_3
+			trait = thief_2
+			trait = thief_3
+			#trait = thi3f #haha i'm so funny
+			trait = assassin_2
+			trait = assassin_3
+			trait = nightblade_2
+			trait = nightblade_3
+		}
+		OR = {
+			trait = agent_3
+			trait = agent_4
+			trait = agent_5
+		}
+		OR = {
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_average_agent = {
+	NOR = {
+		adv_is_excellent_agent = yes
+		adv_is_superior_agent = yes
+	}
+	calc_true_if = {
+		amount = 2
+		intrigue = 15
+		intrigue = 40
+		AND = {
+			combat_rating = 30
+			is_agent = yes
+		}
+		OR = {
+			is_acrobat = yes
+			is_thief = yes
+			is_assassin = yes
+			is_nightblade = yes
+		}
+		OR = {
+			trait = agent_2
+			trait = agent_3
+			trait = agent_4
+			trait = agent_5
+		}
+		OR = {
+			trait = shrewd
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_poor_agent = {
+	NOR = {
+		adv_is_excellent_agent = yes
+		adv_is_superior_agent = yes
+		adv_is_average_agent = yes
+	}
+}
+
+#LEARNING - fighting, scholarly things, protection from magic, various magical abilities.
+adv_is_excellent_mage = {
+	calc_true_if = {
+		amount = 3
+		learning = 30
+		AND = {
+			combat_rating = 75
+			is_mage = yes
+		}
+		OR = {
+			trait = priest_3
+			trait = witchhunter_3
+			trait = battlemage_3
+			trait = sorcerer_3
+		}
+		OR = {
+			trait = mage_4
+			trait = mage_5
+		}
+		trait = genius
+	}
+}
+adv_is_superior_mage = {
+	NOT = { adv_is_excellent_mage = yes }
+	calc_true_if = {
+		amount = 2
+		learning = 20
+		AND = {
+			combat_rating = 45
+			is_mage = yes
+		}
+		OR = {
+			trait = priest_2
+			trait = priest_3
+			trait = witchhunter_2
+			trait = witchhunter_3
+			trait = battlemage_2
+			trait = battlemage_3
+			trait = sorcerer_2
+			trait = sorcerer_3
+		}
+		OR = {
+			trait = mage_3
+			trait = mage_4
+			trait = mage_5
+		}
+		OR = {
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_average_mage = {
+	NOR = {
+		adv_is_excellent_mage = yes
+		adv_is_superior_mage = yes
+	}
+	calc_true_if = {
+		amount = 2
+		learning = 15
+		learning = 40
+		AND = {
+			combat_rating = 30
+			is_mage = yes
+		}
+		OR = {
+			is_priest_education = yes
+			is_witchhunter = yes
+			is_battlemage = yes
+			is_sorcerer = yes
+		}
+		OR = {
+			trait = mage_2
+			trait = mage_3
+			trait = mage_4
+			trait = mage_5
+		}
+		OR = {
+			trait = shrewd
+			trait = genius
+			trait = quick
+		}
+	}
+}
+adv_is_poor_mage = {
+	NOR = {
+		adv_is_excellent_mage = yes
+		adv_is_superior_mage = yes
+		adv_is_average_mage = yes
+	}
+}
+
+### Encounter Triggers ###
+
+## Difficulty ##
+#Easy, Normal (no trigger), Hard, Extreme
+#Empty triggers always return true - remove the 'always = no' if the trigger is no longer empty
+
+DONOTUSETHIS_quickreference = { #This is just a list of encounters and their difficulties/parameters. 
+	#If you make a new encounter please add it to both the reference sheet and the triggers below.
+	#Define a difficulty even for resolves you don't intend to allow, just incase. Werewolves, for example, cannot normally be negotiated with.
+	
+	#Encounter	Dip		Com		Snk		Run		Soul		RNW?
+	
+	#Bandits		hard		norm		norm		easy		blk
+	#Berserker	extr		hard		easy		hard		blk
+	#Werewolves	extr		hard		hard		extr		blk		yes
+	#NordWarriors	easy		norm		norm		hard		blk
+	#Vampires	norm		hard		hard		norm		blk		yes
+	#Dremora		hard		hard		norm		norm		grd		yes
+	#Mercenaries	norm		norm		hard		hard		blk
+	#Dragons		extr		extr		extr		extr		div		yes(?)
+	#Mudcrabs	easy		easy		easy		easy		pty
+	
+	
+	
+	
+	always = no #Incase somebody uses it for some reason.
+}
+
+#NEGOTIATION
+adv_negotiation_easy = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_nordwarriors
+	}
+}
+adv_negotiation_hard = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_bandits
+		has_character_flag = adv_encounter_dremora
+	}
+}
+adv_negotiation_extreme = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_berserker
+	}
+}
+
+#COMBAT
+adv_combat_easy = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_mudcrabs
+	}
+}
+adv_combat_hard = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_berserker
+		has_character_flag = adv_encounter_werewolves
+		has_character_flag = adv_encounter_vampires
+		has_character_flag = adv_encounter_dremora
+		AND = {
+			has_character_flag = adv_encounter_dragon
+			trait = dragonborn
+		}
+	}
+}
+adv_combat_extreme = {
+	#always = no
+	OR = {
+		AND = {
+			has_character_flag = adv_encounter_dragon
+			NOT = { trait = dragonborn }
+		}
+	}
+}
+
+#STEALTH
+adv_stealth_easy = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_berserker
+		has_character_flag = adv_encounter_mudcrabs
+	}
+}
+adv_stealth_hard = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_werewolves
+		has_character_flag = adv_encounter_vampires
+	}
+}
+adv_stealth_extreme = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_dragon
+	}
+}
+
+#RETREAT
+adv_retreat_easy = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_bandits
+		has_character_flag = adv_encounter_mudcrabs
+	}
+}
+adv_retreat_hard = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_berserker
+		has_character_flag = adv_encounter_nordwarriors
+	}
+}
+adv_retreat_extreme = {
+	#always = no
+	OR = {
+		has_character_flag = adv_encounter_werewolves
+		has_character_flag = adv_encounter_dragon
+	}
+}
+
+## Misc ##
+
+adv_resist_normal_weapons_encounter = { #Add encounters with enemies who resist normal weapons here.
+	OR = {
+		has_character_flag = adv_encounter_vampires
+		has_character_flag = adv_encounter_werewolves
+		has_character_flag = adv_encounter_dremora #and any other daedric encounters
+		has_character_flag = adv_encounter_dragon #maybe.
+	}
+}
+
+adventurer_has_non_normal_weapon = {
+	OR = {
+		any_artifact = {
+			AND = {
+				has_artifact_flag = combat_weapon
+				is_artifact_equipped = yes
+				OR = {
+					has_artifact_flag = silver
+					has_artifact_flag = daedric_artifact
+					has_artifact_flag = aedric_artifact
+					has_artifact_flag = quality_legendary
+					has_artifact_flag = quality_flawless
+					#has_artifact_flag = unique #Sorry Percy, your fork won't defeat the Dremora anymore.
+				}
+			}
+		}
+	}
+}
+
+# Soul-gem related things
+
+encounter_has_black_soul = {
+	OR = {
+		has_character_flag = adv_encounter_bandits
+		has_character_flag = adv_encounter_vampires
+		has_character_flag = adv_encounter_werewolves
+		has_character_flag = adv_encounter_berserker
+		has_character_flag = adv_encounter_nordwarriors
+	}
+}
+encounter_has_grand_soul = {
+	OR = {
+		has_character_flag = adv_encounter_dremora
+	}
+}
+encounter_has_divine_soul = {
+	OR = {
+		has_character_flag = adv_encounter_dragon
+	}
+}

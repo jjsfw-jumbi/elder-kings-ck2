@@ -1,0 +1,4597 @@
+#Special events for gaining fervor with Daedric Princes
+#Daedric invasion events partly based on Ideal Masters events by jjsfw/jumbi
+#Daedric invasion revolts based on TOG province revolts
+
+namespace = ekardor
+
+#Potential herald starts saving up Ardor
+character_event = {
+	id = ekardor.3
+	hide_window = yes
+	
+	has_dlc = "Jade Dragon" #Offmaps aren't relevant if you don't have Jade Dragon
+	only_playable = yes
+	min_age = 16 #Children generally don't have any meaningful way to gain offmap currency so this helps reduce CPU burden
+	only_capable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_character_flag = wannabe_herald }
+		OR = {
+			AND = {
+				worships_azura = yes
+				has_offmap_currency = { offmap = oblivion_azura value = 500 }
+			}
+			AND = {
+				worships_boethiah = yes
+				has_offmap_currency = { offmap = oblivion_boethiah value = 500 }
+			}
+			AND = {
+				worships_clavicus = yes
+				has_offmap_currency = { offmap = oblivion_clavicus value = 500 }
+			}
+			AND = {
+				worships_hermaeus = yes
+				has_offmap_currency = { offmap = oblivion_hermaeus value = 500 }
+			}
+			AND = {
+				worships_hircine = yes
+				has_offmap_currency = { offmap = oblivion_hircine value = 500 }
+			}
+			AND = {
+				worships_malacath = yes
+				has_offmap_currency = { offmap = oblivion_malacath value = 500 }
+			}
+			AND = {
+				worships_mehrunes = yes
+				has_offmap_currency = { offmap = oblivion_mehrunes value = 500 }
+			}
+			AND = {
+				worships_mephala = yes
+				has_offmap_currency = { offmap = oblivion_mephala value = 500 }
+			}
+			AND = {
+				worships_meridia = yes
+				has_offmap_currency = { offmap = oblivion_meridia value = 500 }
+			}
+			AND = {
+				worships_molag = yes
+				has_offmap_currency = { offmap = oblivion_molag value = 500 }
+			}
+			AND = {
+				worships_namira = yes
+				has_offmap_currency = { offmap = oblivion_namira value = 500 }
+			}
+			AND = {
+				worships_nocturnal = yes
+				has_offmap_currency = { offmap = oblivion_nocturnal value = 500 }
+			}
+			AND = {
+				worships_peryite = yes
+				has_offmap_currency = { offmap = oblivion_peryite value = 500 }
+			}
+			AND = {
+				worships_sanguine = yes
+				has_offmap_currency = { offmap = oblivion_sanguine value = 500 }
+			}
+			AND = {
+				worships_sheogorath = yes
+				has_offmap_currency = { offmap = oblivion_sheogorath value = 500 }
+			}
+			AND = {
+				worships_vaermina = yes
+				has_offmap_currency = { offmap = oblivion_vaermina value = 500 }
+			}
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			95 = { }
+			5 = {
+				modifier = {
+					factor = 5
+					is_long_lived = no
+				}
+				set_character_flag = wannabe_herald 
+			}
+		}
+	}
+}
+
+#Ardor reset on death
+character_event = {
+	id = ekardor.5
+	hide_window = yes
+	
+	has_dlc = "Jade Dragon" #Offmaps aren't relevant if you don't have Jade Dragon
+	min_age = 16 #Children generally don't have any meaningful way to gain offmap currency so this helps reduce CPU burden
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_offmap_currency = {
+			offmap = oblivion_azura
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_boethiah
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_clavicus
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_hermaeus
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_hircine
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_malacath
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_mehrunes
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_mephala
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_meridia
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_molag
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_namira
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_nocturnal
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_peryite
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_sanguine
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_sheogorath
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_vaermina
+			value = -999999
+		}
+		add_offmap_currency = {
+			offmap = oblivion_ideal_masters
+			value = -999999
+		}
+	}
+}
+
+#Standard offering
+character_event = {
+    id = ekardor.10
+	has_dlc = "Jade Dragon"
+    desc = EKArdor10
+	picture = GFX_evt_two_moon_aurora
+
+    is_triggered_only = yes
+	hide_from = yes
+
+    option = {
+        name = EKArdor10Accept
+		
+		sound_effect = china_grace_gain
+		if = {
+            limit = { NOT = { has_character_flag = jd_gifting_artifact } }
+			piety = 25
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_azura
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_azura
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_boethiah
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_boethiah
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_clavicus
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_clavicus
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					from = {
+						is_offmap_tag = oblivion_hermaeus
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_hermaeus
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_hircine
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_hircine
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_malacath
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_malacath
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_mehrunes
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_mehrunes
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_mephala
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_mephala
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_meridia
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_meridia
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_molag
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_molag
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_namira
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_namira
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_nocturnal
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_nocturnal
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_peryite
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_peryite
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_sanguine
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_sanguine
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_sheogorath
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_sheogorath
+					value = 50
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						is_offmap_tag = oblivion_vaermina
+					}
+				}
+				add_offmap_currency = {
+					offmap = oblivion_vaermina
+					value = 50
+				}
+			}
+        }
+    }
+}
+
+character_event = {
+    id = ekardor.15
+	has_dlc = "Jade Dragon"
+    desc = EKArdor15
+	picture = GFX_evt_two_moon_aurora
+
+    is_triggered_only = yes
+	hide_from = yes
+
+    option = {
+        name = EKArdor15Accept
+		
+		sound_effect = china_grace_gain
+		piety = 25
+		clr_character_flag = jd_gifting_artifact
+    }
+}
+
+#Sacrifice a character
+character_event = {
+	id = ekardor.20
+	has_dlc = "Jade Dragon"
+    desc = EKArdor20
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	show_from_from = yes
+	
+	option = {
+		name = EKArdor20Accept
+		death = {
+			death_reason = death_sacrificed
+			killer = event_target:oblivion_sacrifice_killer
+		}
+		mother = {
+			opinion = {
+				modifier = opinion_killed_close_kin
+				who = event_target:oblivion_sacrifice_killer
+			}
+		}
+		father = {
+			opinion = {
+				modifier = opinion_killed_close_kin
+				who = event_target:oblivion_sacrifice_killer
+			}
+		}
+		spouse = {
+			opinion = {
+				modifier = opinion_killed_close_kin
+				who = event_target:oblivion_sacrifice_killer
+			}
+		}
+		any_child = {
+			opinion = {
+				modifier = opinion_killed_close_kin
+				who = event_target:oblivion_sacrifice_killer
+			}
+		}
+		if = {
+			limit = {
+				NOT = { dynasty = event_target:oblivion_sacrifice_killer }
+				NOT = { sibling = event_target:oblivion_sacrifice_killer }
+			}
+			any_sibling = {
+				opinion = {
+					modifier = opinion_killed_close_kin
+					who = event_target:oblivion_sacrifice_killer
+				}
+			}
+			any_dynasty_member = {
+				opinion = {
+					modifier = opinion_mutilated_family
+					who = event_target:oblivion_sacrifice_killer
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ekardor.25
+	has_dlc = "Jade Dragon"
+    desc = EKArdor25
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	show_from_from = no
+	
+	option = {
+		name = EKArdor25Accept
+	}
+}
+
+# MASS SACRIFICE
+character_event = {
+	id = ekardor.30
+	has_dlc = "Jade Dragon"
+    desc = EKArdor30
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	show_from_from = no
+	
+	immediate = {
+		set_variable = { which = local_mass_sacrifice_result value = 0 }
+		
+		while = {
+			limit = {
+				any_courtier = {
+					prisoner = yes
+					is_adult = yes
+					NOT = { is_heir = yes }
+					NOT = { has_character_flag = he_ded }
+					NOT = { has_character_flag = saved_from_mass_sacrifice }
+					
+					# Can't be a summonded entity, obviously
+					NOR = {
+						has_opinion_modifier = { who = ROOT modifier = opinion_summoner }
+						has_opinion_modifier = { who = ROOT modifier = opinion_bound_dremora }
+					}
+					
+					# Can't have already been taken into account
+					NOT = { has_character_flag = mass_sacrifice_counted }
+				}
+			}
+		
+			random_courtier = {
+				limit = {
+					prisoner = yes
+					is_adult = yes
+					NOT = { is_heir = yes }
+					NOT = { has_character_flag = he_ded }
+					NOT = { has_character_flag = saved_from_mass_sacrifice }
+					
+					# Can't be a summonded entity, obviously
+					NOR = {
+						has_opinion_modifier = { who = ROOT modifier = opinion_summoner }
+						has_opinion_modifier = { who = ROOT modifier = opinion_bound_dremora }
+					}
+					
+					# Can't have already been taken into account
+					NOT = { has_character_flag = mass_sacrifice_counted }
+				}
+				
+				### Compute how much ardor that would give
+				set_variable = { which = local_mass_sacrifice_local value = 25 }
+				## Stats - dip
+				if = {
+					limit = { diplomacy = 8 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { diplomacy = 12 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { diplomacy = 16 }
+					change_variable = { which = local_mass_sacrifice_local value = 10 }
+				}
+				
+				if = {
+					limit = { diplomacy = 20 }
+					change_variable = { which = local_mass_sacrifice_local value = 30 }
+				}
+				## Stats - mar
+				if = {
+					limit = { martial = 8 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { martial = 12 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { martial = 16 }
+					change_variable = { which = local_mass_sacrifice_local value = 10 }
+				}
+				
+				if = {
+					limit = { martial = 20 }
+					change_variable = { which = local_mass_sacrifice_local value = 30 }
+				}
+				## Stats - ste
+				if = {
+					limit = { stewardship = 8 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { stewardship = 12 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { stewardship = 16 }
+					change_variable = { which = local_mass_sacrifice_local value = 10 }
+				}
+				
+				if = {
+					limit = { stewardship = 20 }
+					change_variable = { which = local_mass_sacrifice_local value = 30 }
+				}
+				## Stats - int
+				if = {
+					limit = { intrigue = 8 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { intrigue = 12 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { intrigue = 16 }
+					change_variable = { which = local_mass_sacrifice_local value = 10 }
+				}
+				
+				if = {
+					limit = { intrigue = 20 }
+					change_variable = { which = local_mass_sacrifice_local value = 30 }
+				}
+				## Stats - lea
+				if = {
+					limit = { learning = 8 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { learning = 12 }
+					change_variable = { which = local_mass_sacrifice_local value = 5 }
+				}
+				
+				if = {
+					limit = { learning = 16 }
+					change_variable = { which = local_mass_sacrifice_local value = 10 }
+				}
+				
+				if = {
+					limit = { learning = 20 }
+					change_variable = { which = local_mass_sacrifice_local value = 30 }
+				}
+				## Tier
+				if = {
+					limit = { tier == BARON }
+					change_variable = { which = local_mass_sacrifice_local value = 25 }
+				}
+				if = {
+					limit = { tier == COUNT }
+					change_variable = { which = local_mass_sacrifice_local value = 75 }
+				}
+				if = {
+					limit = { tier == DUKE }
+					change_variable = { which = local_mass_sacrifice_local value = 150 }
+				}
+				if = {
+					limit = { tier == KING }
+					change_variable = { which = local_mass_sacrifice_local value = 400 }
+				}
+				if = {
+					limit = { tier == EMPEROR }
+					change_variable = { which = local_mass_sacrifice_local value = 1000 }
+				}
+				## Dragonblood
+				if = {
+					limit = { trait = dragonborn }
+					change_variable = { which = local_mass_sacrifice_local value = 2500 }
+				}
+				if = {
+					limit = { trait = dragonborn_descendant }
+					change_variable = { which = local_mass_sacrifice_local value = 250 }
+				}
+				## Bloodline
+				if = {
+					limit = { has_bloodline = yes }
+					change_variable = { which = local_mass_sacrifice_local value = 100 }
+				}
+				
+				# We apply the local result
+				change_variable = { which = local_mass_sacrifice_result which = local_mass_sacrifice_local }
+				
+				set_character_flag = mass_sacrifice_counted
+			}
+		}
+		
+		ROOT = ( save_event_target_as = oblivion_sacrifice_killer }
+	}
+	
+	option = {
+		name = EKArdor30Accept
+		
+		sound_effect = china_grace_gain
+		
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+		
+		clr_character_flag = oblivion_mass_sacrifice_ongoing
+		
+		any_courtier = {
+			limit = { has_character_flag = mass_sacrifice_counted }
+			set_character_flag = he_ded
+			character_event = { id = ekardor.20 }
+		}
+		
+		add_offmap_currency = {
+			offmap = FROM
+			value = local_mass_sacrifice_result
+		}
+		
+		if = {
+			limit = {
+				FROM = { is_offmap_tag = oblivion_ideal_masters }
+			}
+			oblivion_ideal_masters = {
+				offmap_ruler = {
+					change_variable = { which = offmap_souls which = local_mass_sacrifice_result }
+					change_variable = { which = souls_from_sacrifice which = local_mass_sacrifice_result }
+				}
+			}
+		}
+	}
+}
+
+# province_event = {
+	# id = ekardor.40
+	# has_dlc = "Jade Dragon"
+    # desc = EKArdor40
+	# picture = GFX_evt_two_moon_aurora
+	
+	# is_triggered_only = yes
+	# show_from_from = no
+	
+	# option = {
+		# name = EKArdor40Accept
+		# if = {
+			# limit = { has_province_modifier = imperial_slaves }
+			# remove_province_modifier = imperial_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = nibenean_slaves }
+			# remove_province_modifier = nibenean_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = colovian_slaves }
+			# remove_province_modifier = colovian_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = nord_slaves }
+			# remove_province_modifier = nord_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = skaal_slaves }
+			# remove_province_modifier = skaal_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = breton_slaves }
+			# remove_province_modifier = breton_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = reachmen_slaves }
+			# remove_province_modifier = reachmen_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = atmoran_slaves }
+			# remove_province_modifier = atmoran_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = forebear_slaves }
+			# remove_province_modifier = forebear_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = crown_slaves }
+			# remove_province_modifier = crown_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = yokudan_slaves }
+			# remove_province_modifier = yokudan_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = lhotunic_slaves }
+			# remove_province_modifier = lhotunic_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = bosmer_slaves }
+			# remove_province_modifier = bosmer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = ayleid_slaves }
+			# remove_province_modifier = ayleid_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = altmer_slaves }
+			# remove_province_modifier = altmer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = maormer_slaves }
+			# remove_province_modifier = maormer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = falmer_slaves }
+			# remove_province_modifier = falmer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = dwemer_slaves }
+			# remove_province_modifier = dwemer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = orsimer_slaves }
+			# remove_province_modifier = orsimer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = ashlander_slaves }
+			# remove_province_modifier = ashlander_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = dunmer_slaves }
+			# remove_province_modifier = dunmer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = chimer_slaves }
+			# remove_province_modifier = chimer_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = agaceph_slaves }
+			# remove_province_modifier = agaceph_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = archein_slaves }
+			# remove_province_modifier = archein_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = paatru_slaves }
+			# remove_province_modifier = paatru_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = sarpa_slaves }
+			# remove_province_modifier = sarpa_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = naga_slaves }
+			# remove_province_modifier = naga_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = pellitinian_slaves }
+			# remove_province_modifier = pellitinian_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = anequinan_slaves }
+			# remove_province_modifier = anequinan_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = tsaesci_slaves }
+			# remove_province_modifier = tsaesci_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = kamal_slaves }
+			# remove_province_modifier = kamal_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = tangmo_slaves }
+			# remove_province_modifier = tangmo_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = potun_slaves }
+			# remove_province_modifier = potun_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = akaviri_slaves }
+			# remove_province_modifier = akaviri_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = quey_slaves }
+			# remove_province_modifier = quey_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+		# if = {
+			# limit = { has_province_modifier = lukiul_slaves }
+			# remove_province_modifier = lukiul_slaves
+			# owner = {
+				# add_offmap_currency = {
+					# offmap = oblivion_azura
+					# value = 125
+				# }
+			# }
+		# }
+	# }
+# }
+
+#Daedric attribute increase
+character_event = {
+	id = ekardor.50
+	has_dlc = "Jade Dragon"
+    desc = EKArdor50
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor50OptA
+		change_diplomacy = 1
+	}
+	option = {
+		name = EKArdor50OptB
+		change_martial = 1
+	}
+	option = {
+		name = EKArdor50OptC
+		change_stewardship = 1
+	}
+	option = {
+		name = EKArdor50Wrap
+		character_event = { id = ekardor.51 }
+	}
+}
+character_event = {
+	id = ekardor.51
+	has_dlc = "Jade Dragon"
+    desc = EKArdor50
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor50OptD
+		change_intrigue = 1
+	}
+	option = {
+		name = EKArdor50OptE
+		change_learning = 1
+	}
+	option = {
+		name = EKArdor50Wrap
+		character_event = { id = ekardor.50 }
+	}
+}
+
+#Lesser Daedric Artifact
+character_event = {
+	id = ekardor.60
+	has_dlc = "Jade Dragon"
+    desc = EKArdor60
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor60Accept
+		generate_loot_wealth_of_oblivion = yes
+	}
+}
+
+#Bound Dremora
+character_event = {
+	id = ekardor.100
+	has_dlc = "Jade Dragon"
+    desc = EKArdor100
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_azura
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_azura
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_azura
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_boethiah
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_boethiah
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_boethiah
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_clavicus
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_clavicus
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_clavicus
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_hermaeus
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_hermaeus
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_hermaeus
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_hircine
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_hircine
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_hircine
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_malacath
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_malacath
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_malacath
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_mehrunes
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_mehrunes
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_mehrunes
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_mephala
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_mephala
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_mephala
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_meridia
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_meridia
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_meridia
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_molag
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_molag
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_molag
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_namira
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_namira
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_namira
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_nocturnal
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_nocturnal
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_nocturnal
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_peryite
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_peryite
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_peryite
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_sanguine
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_sanguine
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_sanguine
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_sheogorath
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_sheogorath
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_sheogorath
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_vaermina
+				}
+			}
+			random_list = {
+				80 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = no
+						age = 45
+						religion = daedra_vaermina
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+				20 = {
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = NONE
+						female = yes
+						age = 45
+						religion = daedra_vaermina
+						culture = dremora
+						flag = ai_flag_refuse_conversion
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						remove_trait = warrior_1
+						remove_trait = warrior_2
+						remove_trait = warrior_3
+						remove_trait = warrior_4
+						remove_trait = warrior_5
+						random_list = {
+							60 = {
+								add_trait = warrior_3
+							}
+							40 = {
+								add_trait = warrior_4
+							}
+						}
+						random_list = {
+							15 = {
+								add_trait = barbarian_2
+							}
+							10 = {
+								add_trait = barbarian_3
+							}
+							15 = {
+								add_trait = battlemage_2
+							}
+							10 = {
+								add_trait = battlemage_3
+							}
+							15 = {
+								add_trait = crusader_2
+							}
+							10 = {
+								add_trait = crusader_3
+							}
+							15 = {
+								add_trait = knight_2
+							}
+							10 = {
+								add_trait = knight_3
+							}
+							15 = {
+								add_trait = sorcerer_2
+							}
+							10 = {
+								add_trait = sorcerer_3
+							}
+							15 = {
+								add_trait = spellsword_2
+							}
+							10 = {
+								add_trait = spellsword_3
+							}
+						}
+						opinion = {
+							modifier = opinion_bound_dremora
+							who = ROOT
+							years = 1000
+						}
+						remove_trait = craven
+						remove_trait = kind
+						remove_trait = charitable
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EKArdor100Accept
+	}
+}
+
+#Daedric Protection
+character_event = {
+	id = ekardor.110
+	has_dlc = "Jade Dragon"
+    desc = EKArdor110
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor110Accept
+		add_character_modifier = { name = daedric_protection months = 36 }
+	}
+}
+
+#Lesser Daedric Horde
+character_event = {
+	id = ekardor.120
+	has_dlc = "Jade Dragon"
+    desc = EKArdor120
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor120Accept
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						dremora_troop = { 100 100 }
+						#lesser_daedra = { 200 200 }
+					}
+					attrition = 1.0
+					cannot_inherit = yes
+					earmark = summoned_troops
+					merge = yes
+					reinforces = yes
+					reinforce_rate_multiplier = 0.1
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						dremora_troop = { 150 150 }
+						#lesser_daedra = { 250 250 }
+					}
+					attrition = 1.0
+					cannot_inherit = yes
+					earmark = summoned_troops
+					merge = yes
+					reinforces = yes
+					reinforce_rate_multiplier = 0.1
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						dremora_troop = { 100 100 }
+						#lesser_daedra = { 200 200 }
+					}
+					attrition = 1.0
+					cannot_inherit = yes
+					earmark = summoned_troops
+					merge = yes
+					reinforces = yes
+					reinforce_rate_multiplier = 0.1
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						#dremora_troop = { 100 100 }
+						lesser_daedra = { 200 200 }
+					}
+					attrition = 1.0
+					cannot_inherit = yes
+					earmark = summoned_troops
+					merge = yes
+					reinforces = yes
+					reinforce_rate_multiplier = 0.1
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						#dremora_troop = { 150 150 }
+						lesser_daedra = { 250 250 }
+					}
+					attrition = 1.0
+					cannot_inherit = yes
+					earmark = summoned_troops
+					merge = yes
+					reinforces = yes
+					reinforce_rate_multiplier = 0.1
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						#dremora_troop = { 100 100 }
+						lesser_daedra = { 200 200 }
+					}
+					attrition = 1.0
+					cannot_inherit = yes
+					earmark = summoned_troops
+					merge = yes
+					reinforces = yes
+					reinforce_rate_multiplier = 0.1
+				}
+			}
+		}
+	}
+}
+
+#Lich Decay - Based on original Lich decay events by Azo
+#Curing Lichdom Decay - Basic version
+character_event = {
+	id = ekardor.130
+	has_dlc = "Jade Dragon"
+    desc = EKArdor130
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor130Accept
+		if = {
+			limit = { has_character_modifier = lich_decay_1 }
+			remove_character_modifier = lich_decay_1
+		}
+		if = {
+			limit = { has_character_modifier = lich_decay_2 }
+			remove_character_modifier = lich_decay_2
+		}
+		clr_character_flag = curing_lich_decay
+	}
+}
+character_event = { #Clavicus Vile's variant - Become a Skeleton
+	id = ekardor.131
+	has_dlc = "Jade Dragon"
+    desc = {
+		text = EKArdor131A
+		trigger = {
+			NOT = { has_character_flag = clavicus_skeleton_cure }
+		}
+	}
+	desc = {
+		text = EKArdor131B
+		trigger = {
+			has_character_flag = clavicus_skeleton_cure
+		}
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	trigger = {
+		trait = lich
+	}
+	
+	option = {
+		name = EKArdor131OptA
+		trigger = { NOT = { has_character_flag = clavicus_skeleton_cure } }
+		if = {
+			limit = { has_character_modifier = lich_decay_1 }
+			remove_character_modifier = lich_decay_1
+		}
+		if = {
+			limit = { has_character_modifier = lich_decay_2 }
+			remove_character_modifier = lich_decay_2
+		}
+		clr_character_flag = curing_lich_decay
+		hidden_effect = {
+			random = {
+				chance = 20
+				set_character_flag = clavicus_skeleton_cure
+			}
+		}
+	}
+	option = {
+		name = EKArdor131Optb
+		trigger = { has_character_flag = clavicus_skeleton_cure }
+		if = {
+			limit = { has_character_modifier = lich_decay_1 }
+			remove_character_modifier = lich_decay_1
+		}
+		if = {
+			limit = { has_character_modifier = lich_decay_2 }
+			remove_character_modifier = lich_decay_2
+		}
+		if = {
+			limit = { has_character_flag = clavicus_skeleton_cure }
+			add_trait = disabler
+			remove_racial_trait = yes
+			set_graphical_culture = skeleton
+			culture = skeleton
+			add_trait = undead
+		}
+		clr_character_flag = curing_lich_decay
+	}
+	
+	after = {
+		if = {
+			limit = { trait = disabler }
+			remove_trait = disabler
+		}
+	}
+}
+character_event = { #Namira's variant - Decay limbo is also an option
+	id = ekardor.133
+	has_dlc = "Jade Dragon"
+    desc = EKArdor133
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor133OptA
+		if = {
+			limit = { has_character_modifier = lich_decay_1 }
+			remove_character_modifier = lich_decay_1
+		}
+		if = {
+			limit = { has_character_modifier = lich_decay_2 }
+			remove_character_modifier = lich_decay_2
+		}
+		clr_character_flag = curing_lich_decay
+	}
+	option = {
+		name = EKArdor133OptB
+		add_offmap_currency = {
+			offmap = oblivion_namira
+			value = 6500
+		}
+		set_character_flag = perpetual_lich_decay
+		clr_character_flag = curing_lich_decay
+	}
+}
+character_event = { #Peryite's variant - Province disasters all over the place
+	id = ekardor.135
+	has_dlc = "Jade Dragon"
+    desc = EKArdor135
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	option = {
+		name = EKArdor135OptA
+		if = {
+			limit = { has_character_modifier = lich_decay_1 }
+			remove_character_modifier = lich_decay_1
+		}
+		if = {
+			limit = { has_character_modifier = lich_decay_2 }
+			remove_character_modifier = lich_decay_2
+		}
+		random_demesne_province = {
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		random_demesne_province = { 
+			random_list = {
+				15 = { add_province_modifier = { name = goblin_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = falmer_infestation duration = 7200 } }
+				25 = { add_province_modifier = { name = skeever_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = undead_infestation duration = 7200 } }
+				15 = { add_province_modifier = { name = trolls duration = 7200 } }
+				15 = { add_province_modifier = { name = kwama_infestation duration = 7200 } }
+			}
+		}
+		clr_character_flag = curing_lich_decay
+	}
+}
+
+#Greater Daedric Horde
+
+long_character_event = {
+	id = ekardor.200
+	has_dlc = "Jade Dragon"
+    desc = EKArdor200
+	picture = GFX_evt_daedric_invasion_city
+	
+	is_triggered_only = yes
+	hide_from = yes
+	
+	immediate = {
+		clr_character_flag = latent_daedric_herald
+		set_character_flag = daedric_herald
+		if = {
+			limit = { has_character_flag = wannabe_herald }
+			clr_character_flag = wannabe_herald
+		}
+	}
+	
+	option = {
+		name = EKArdor200Accept
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						light_infantry = { 5000 5000 }
+						heavy_infantry = { 3750 3750 }
+						archers = { 2500 2500 }
+						light_cavalry = { 1500 1500 }
+						battlemages = { 750 750 }
+					}
+					attrition = 0.5
+					earmark = oblivion_troops
+					cannot_inherit = yes
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						light_infantry = { 5000 5000 }
+						heavy_infantry = { 3750 3750 }
+						archers = { 2500 2500 }
+						light_cavalry = { 1500 1500 }
+						battlemages = { 750 750 }
+					}
+					attrition = 0.5
+					earmark = oblivion_troops
+					cannot_inherit = yes
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						light_infantry = { 5000 5000 }
+						heavy_infantry = { 3750 3750 }
+						archers = { 2500 2500 }
+						light_cavalry = { 1500 1500 }
+						battlemages = { 750 750 }
+					}
+					attrition = 0.5
+					earmark = oblivion_troops
+					cannot_inherit = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_azura
+				}
+			}
+			#activate_title = { title = e_horde_azura status = yes }
+			primary_title = {
+				e_horde_azura = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_azura
+			set_global_flag = oblivion_invasion_azura
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_boethiah
+				}
+			}
+			#activate_title = { title = e_horde_boethiah status = yes }
+			primary_title = {
+				e_horde_boethiah = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_boethiah
+			set_global_flag = oblivion_invasion_boethiah
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_clavicus
+				}
+			}
+			#activate_title = { title = e_horde_clavicus status = yes }
+			primary_title = {
+				e_horde_clavicus = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_clavicus
+			set_global_flag = oblivion_invasion_clavicus
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_hermaeus
+				}
+			}
+			#activate_title = { title = e_horde_hermaeus status = yes }
+			primary_title = {
+				e_horde_hermaeus = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_hermaeus
+			set_global_flag = oblivion_invasion_hermaeus
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_hircine
+				}
+			}
+			#activate_title = { title = e_horde_hircine status = yes }
+			primary_title = {
+				e_horde_hircine = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_hircine
+			set_global_flag = oblivion_invasion_hircine
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_malacath
+				}
+			}
+			#activate_title = { title = e_horde_malacath status = yes }
+			primary_title = {
+				e_horde_malacath = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_malacath
+			set_global_flag = oblivion_invasion_malacath
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_mehrunes
+				}
+			}
+			#activate_title = { title = e_cult_mehrunes status = yes }
+			primary_title = {
+				e_horde_mehrunes = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_mehrunes
+			set_global_flag = oblivion_invasion_mehrunes
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_mephala
+				}
+			}
+			#activate_title = { title = e_horde_mephala status = yes }
+			primary_title = {
+				e_horde_mephala = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_mephala
+			set_global_flag = oblivion_invasion_mephala
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_meridia
+				}
+			}
+			#activate_title = { title = e_horde_meridia status = yes }
+			primary_title = {
+				e_horde_meridia = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_meridia
+			set_global_flag = oblivion_invasion_meridia
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_molag
+				}
+			}
+			#activate_title = { title = e_horde_molag status = yes }
+			primary_title = {
+				e_horde_molag = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_molag
+			set_global_flag = oblivion_invasion_molag
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_namira
+				}
+			}
+			#activate_title = { title = e_horde_namira status = yes }
+			primary_title = {
+				e_horde_namira = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_namira
+			set_global_flag = oblivion_invasion_namira
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_nocturnal
+				}
+			}
+			#activate_title = { title = e_horde_nocturnal status = yes }
+			primary_title = {
+				e_horde_nocturnal = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_nocturnal
+			set_global_flag = oblivion_invasion_nocturnal
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_peryite
+				}
+			}
+			#activate_title = { title = e_horde_peryite status = yes }
+			primary_title = {
+				e_horde_peryite = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_peryite
+			set_global_flag = oblivion_invasion_peryite
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_sanguine
+				}
+			}
+			#activate_title = { title = e_horde_sanguine status = yes }
+			primary_title = {
+				e_horde_sanguine = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_sanguine
+			set_global_flag = oblivion_invasion_sanguine
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_sheogorath
+				}
+			}
+			#activate_title = { title = e_horde_sheogorath status = yes }
+			primary_title = {
+				e_horde_sheogorath = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_sheogorath
+			set_global_flag = oblivion_invasion_sheogorath
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_offmap_tag = oblivion_vaermina
+				}
+			}
+			#activate_title = { title = e_horde_vaermina status = yes }
+			primary_title = {
+				e_horde_vaermina = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					succession = turkish_succession
+					gender_succ = true_cognatic
+				}
+			}
+			religion = daedra_vaermina
+			set_global_flag = oblivion_invasion_vaermina
+		}
+		#They go Warlord and get the Warlord CB
+		add_trait = warlord
+		#Continental flags determine where the invasion is centered, you get a far lower rate of Oblivion gates if you're in a different region
+		if = {
+			limit = { 
+				OR = {
+					capital_scope = { region = nirn_tamriel }
+					capital_scope = { region = nirn_yokuda }
+				}
+			}
+			set_global_flag = daedric_invasion_of_tamriel
+		}
+		if = {
+			limit = { 
+				capital_scope = { region = nirn_akavir }
+			}
+			set_global_flag = daedric_invasion_of_akavir
+		}
+		if = {
+			limit = { 
+				OR = {
+				capital_scope = { region = nirn_atmora }
+					capital_scope = { region = nirn_roscrea }
+				}
+			}
+			set_global_flag = daedric_invasion_of_atmora
+		}
+		narrative_event = { id = ekardor.210 days = 3 }
+	}
+}
+
+narrative_event = {
+	id = ekardor.210
+    desc = EKArdor210
+	title = EKArdor210Title
+	picture = GFX_evt_daedric_invasion_city
+	
+	is_triggered_only = yes
+	
+	major = yes
+	show_from_from = no
+	
+	major_trigger = {
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				OR = {
+					capital_scope = { region = nirn_tamriel }
+					capital_scope = { region = nirn_yokuda }
+				}
+				FROM = {
+					OR = {
+						capital_scope = { region = nirn_tamriel }
+						capital_scope = { region = nirn_yokuda }
+					}
+				}
+			}
+			AND = {
+				capital_scope = { region = nirn_atmora }
+				FROM = {
+					capital_scope = { region = nirn_atmora }
+				}
+			}
+			AND = {
+				capital_scope = { region = nirn_akavir }
+				FROM = {
+					capital_scope = { region = nirn_akavir }
+				}
+			}
+		}
+	}
+	
+	option = { #Accept Daedric Prince and worship them
+		name = EKArdor210OptA
+		trigger = {
+			NOR = {
+				religion = FROM
+				controls_religion = yes
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5.0
+				trait = cynical
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+				NOR = {
+					religion = FROM
+					true_religion = FROM
+				}
+			}
+		}
+		religion = FROM
+		if = {
+			limit = {
+				independent = yes
+				NOT = { tier = EMPEROR } 
+			}
+			set_defacto_liege = FROM
+		}
+	}
+	option = { #Accept Daedric Prince and secretly worship them
+		name = EKArdor210OptB
+		trigger = {
+			NOR = {
+				true_religion = FROM
+				controls_religion = yes
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5.0
+				trait = cynical
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+				NOR = {
+					religion = FROM
+					true_religion = FROM
+				}
+			}
+		}
+		set_secret_religion = { target_type = public target = FROM }
+		if = {
+			limit = {
+				independent = yes
+				NOT = { tier = EMPEROR } 
+			}
+			set_defacto_liege = FROM
+		}
+	}
+	option = { #Publicly worship Daedric Prince but retain old religion
+		name = EKArdor210OptC
+		trigger = {
+			NOR = {
+				true_religion = FROM
+				controls_religion = yes
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				trait = zealous
+				NOR = {
+					religion = FROM
+					true_religion = FROM
+				}
+			}
+		}
+		hidden_tooltip = {
+			religion_scope = { save_event_target_as = daedric_defender_religion }
+			FROM = {
+				religion_scope = { save_event_target_as = daedric_crisis_religion }
+			}
+		}
+		religion = event_target:daedric_crisis_religion
+		set_secret_religion = event_target:daedric_defender_religion
+		if = {
+			limit = {
+				independent = yes
+				NOT = { tier = EMPEROR } 
+			}
+			set_defacto_liege = FROM
+		}
+	}
+	option = { #Defy this Prince and retain old religion
+		name = EKArdor210OptD
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 500
+				NOR = {
+					religion = FROM
+					true_religion = FROM
+				}
+			}
+		}
+		piety = 25
+	}
+}

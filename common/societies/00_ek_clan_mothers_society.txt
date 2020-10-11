@@ -1,0 +1,324 @@
+clan_mothers = {
+	primary_attribute = diplomacy
+	society_ranks_gfx = imperial_geographical_society_ranks
+	opinion_to_other_members = +15
+	opinion_per_rank_above = +5
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = clan_mothers
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 35
+		is_female = yes
+		controls_religion = no
+		culture_group = khajiit
+		diplomacy = 8
+		NOT = { trait = sload }
+		NOT = { trait = necromancer }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			religion_group = khajiit_pantheon
+			culture_group = khajiit
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 30
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		OR = {
+			religion_group = khajiit_pantheon
+			culture_group = khajiit
+		}
+		NOT = { trait = necromancer }
+		controls_religion = no
+	}
+	
+	#Beloved/Exalted/Supreme
+	society_rank = {
+		level = 1
+		limit = 12
+		startup_limit = 6
+		modifier = {
+			monthly_character_prestige = 0.10
+			health = 10
+		}
+		decisions = {
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 6
+		startup_limit = 3
+		modifier = {
+			monthly_character_prestige = 0.15
+			health = 10
+		}
+		decisions = {
+			power_tech_culture_tooltip
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.25
+			health = 15
+		}
+		decisions = {
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_ansei_guild_tamriel
+		
+		per_attribute = {
+    		name = diplomacy
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.0
+			trait = brave
+		}
+		has_trait = {
+			value = 1
+			trait = poet
+		}
+		has_trait = {
+			value = 1.5
+			trait = just
+		}
+		has_trait = {
+			trait = honest
+			value = 1
+		}
+		has_trait = {
+			trait = charitable
+			value = 1
+		}
+		has_trait = {
+			trait = erudite
+			value = 0.5
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		has_trait = {
+			value = 0.25
+			trait = duelist
+		}
+		has_trait = {
+			value = 0.25
+			trait = hunter
+		}
+		has_trait = {
+			value = 0.25
+			trait = adventurer
+		}
+		has_trait = {
+			value = 0.75
+			trait = scholar
+		}
+		#Congenital Traits
+		has_trait = {
+			value = 0.25
+			trait = strong
+		}
+		has_trait = {
+			value = 0.25
+			trait = fortitude
+		}
+		has_trait = {
+			value = 0.25
+			trait = robust
+		}
+		has_trait = {
+			value = 0.5
+			trait = agile
+		}
+		has_trait = {
+			value = 0.25
+			trait = perceptive
+		}
+		has_trait = {
+			value = 0.25
+			trait = shrewd
+		}
+		has_trait = {
+			value = 0.25
+			trait = quick
+		}
+		has_trait = {
+			value = 0.25
+			trait = genius
+		}
+		has_trait = {
+			value = 0.5
+			trait = lucky
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = magistrate_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = magistrate_4
+		}
+		has_trait = {
+			value = 2
+			trait = magistrate_5
+		}
+		has_trait = {
+			value = 1
+			trait = mage_4
+		}
+		has_trait = {
+			value = 1.5
+			trait = mage_5
+		}
+		#Patrion Deities
+		has_trait = {
+			value = 0.5
+			trait = p_alkosh
+		}
+		has_trait = {
+			value = 0.5
+			trait = p_khenarthi
+		}
+		has_trait = {
+			value = 1.0
+			trait = p_azurah
+		}
+		has_trait = {
+			value = 1.0
+			trait = p_kmara
+		}
+		#Ranks
+		society_rank = {
+			rank = 3
+			value = 0.5
+		}
+		society_rank = {
+			rank = 4
+			value = 1.0
+		}
+		society_rank = {
+			rank = 5
+			value = 3
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+
+		modifier = { factor = 2.5 trait = magistrate_5 }
+		modifier = { factor = 1.75 trait = magistrate_4 }
+		modifier = { factor = 1.75 trait = magistrate_3 }
+		modifier = { factor = 1.25 trait = mage_4 }
+		modifier = { factor = 1.5 trait = mage_5 }
+		modifier = { factor = 1.5 trait = envious }
+		modifier = { factor = 1.5 trait = proud }
+		modifier = { factor = 1.5 trait = greedy }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = content }
+		modifier = { factor = 1.25 trait = administrator }
+		modifier = { factor = 1.25 trait = architect }
+		modifier = { factor = 1.25 trait = gamer }
+		modifier = { factor = 1.25 trait = gardener }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 2.5 culture = pellitinian }
+		modifier = { factor = 1.5 culture = anequinan }
+	}
+	
+	startup_populate = {
+	     trigger = {
+	    	controls_religion = no
+			is_theocracy = no
+			is_ruler = yes
+			is_female = yes
+			OR = {
+			religion_group = khajiit_pantheon
+			culture_group = khajiit
+		}
+			age = 30
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			OR = {
+				is_landed = yes
+				AND = {
+					is_landed = no
+					diplomacy = 10
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				AND = {
+					is_undead = yes
+					trait = vampire
+				}
+			}
+		}
+	}
+}

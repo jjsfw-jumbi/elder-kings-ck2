@@ -1,0 +1,137 @@
+namespace = artifactsminor
+#Ring of Transmutation
+character_event = {
+	id = artifactsminor.0
+	title = artifactsminor.0.t #Ring of Transmutation
+	desc = artifactsminor.0.d #
+	picture = GFX_evt_moneh
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			25 = {#Maximum Yield Outcome
+				modifier = { factor = 0.75 trait = envious }
+				modifier = { factor = 0.75 trait = gluttonous }
+				modifier = { factor = 0.75 trait = greedy }
+				modifier = { factor = 1.25 trait = humble }
+				modifier = { factor = 1.5 is_lucky = yes }
+				modifier = { factor = 1.15 ai = yes }
+				set_character_flag = max_yield_rot
+			}
+			25 = { #High Yield Outcome
+				modifier = { factor = 1.25 is_lucky = yes }
+				set_character_flag = high_yield_rot
+			}
+			25 = { #Medium Yield Outcome
+				modifier = { factor = 0.95 ai = yes }
+				set_character_flag = med_yield_rot
+			}
+			25 = { #Low Yield Outcome
+				modifier = { factor = 1.25 trait = greedy }
+				modifier = { factor = 1.25 trait = envious }
+				modifier = { factor = 1.5 is_unlucky = yes }
+				modifier = { factor = 0.85 ai = yes }
+				set_character_flag = low_yield_rot
+			}
+		}
+	}
+	
+	option = {
+		name = artifactsminor.0.o #Gold, glorious gold!
+		trigger = { has_character_flag = max_yield_rot }
+		scaled_wealth = 10
+		destroy_artifact = ring_transmutation
+	}
+	option = {
+		name = artifactsminor.0.o #Gold, glorious gold!
+		trigger = { has_character_flag = high_yield_rot }
+		scaled_wealth = 5
+		destroy_artifact = ring_transmutation
+	}
+	option = {
+		name = artifactsminor.0.o #Gold, glorious gold!
+		trigger = { has_character_flag = med_yield_rot }
+		scaled_wealth = 2.5
+		destroy_artifact = ring_transmutation
+	}
+	option = {
+		name = artifactsminor.0.o #Gold, glorious gold!
+		trigger = { has_character_flag = low_yield_rot }
+		scaled_wealth = 1
+		destroy_artifact = ring_transmutation
+	}
+	
+	after = {
+		clr_character_flag = max_yield_rot
+		clr_character_flag = high_yield_rot
+		clr_character_flag = med_yield_rot
+		clr_character_flag = low_yield_rot
+	}
+}
+
+#Artifact overboard!
+character_event = {
+	id = artifactsminor.1
+	title = artifactsminor.1.title
+	desc = artifactsminor.1.desc
+	picture = GFX_evt_ship_voyage_hf
+	
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		is_at_sea = yes
+		NOT = { trait = lucky }
+		has_artifact = yes
+		any_artifact = {
+			is_artifact_equipped = yes
+			is_indestructible = no
+			NOR = {
+				has_artifact_flag = unique
+				has_artifact_flag = pet
+				has_artifact_flag = mount
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 432
+		
+		modifier = { factor = 0.9 trait = reckless }
+		modifier = { factor = 0.5 trait = unlucky }
+		modifier = { factor = 0.75 trait = absent_minded }
+		modifier = { factor = 0.9 trait = slothful }
+		modifier = { factor = 0.9 trait = imbecile }
+		modifier = { factor = 0.9 trait = inbred }
+		modifier = { factor = 0.9 trait = slow }
+		modifier = { factor = 3.0 trait = agile }
+		modifier = { factor = 2.0 trait = quick }
+		modifier = { factor = 5.0 trait = perceptive }
+		modifier = { factor = 3.0 is_acrobat = yes }
+		modifier = { factor = 1.25 trait = diligent }
+		modifier = { factor = 1.5 trait = paranoid }
+		modifier = { factor = 2.0 ai = yes top_liege = { ai = no } }
+	}
+	
+	immediate = {
+		random_artifact = {
+			limit = {
+				is_artifact_equipped = yes
+				is_indestructible = no
+				NOR = {
+					has_artifact_flag = unique
+					has_artifact_flag = pet
+					has_artifact_flag = mount
+				}
+			}
+			save_event_target_as = target_artifact
+		}
+	}
+	
+	option = {
+		name = artifactsminor.1.option
+		event_target:target_artifact = { destroy_artifact = yes }
+	}
+}

@@ -1,0 +1,2592 @@
+namespace = ekgreathouses
+
+character_event = { #Delay event, so that children get their infancy traits properly translated to adult traits first
+	id = ekgreathouses.0
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_house_trait_including_houseless = no
+		NOT = { has_global_flag = great_houses_banned }
+		OR = {
+			NOT = { top_liege = { primary_title = { title = k_almsivi } } }
+			AND = {
+				controls_religion = yes
+				religion = almsivi
+			}
+		}
+		OR = { 
+			mother_even_if_dead = { has_house_trait = yes }
+			father_even_if_dead = { has_house_trait = yes }
+			liege = { is_great_house_grandmaster = yes }
+			AND = {
+				top_liege = { has_house_trait_including_houseless = yes }
+				liege = { has_house_trait_including_houseless = yes }
+				OR = {
+					culture = chimer
+					culture = dunmer
+				}
+			}
+			AND = {
+				k_almsivi = { holder_scope = { has_house_trait_including_houseless = yes } }
+				is_tributary = { type = tribunal_temple }
+			}
+		}
+	}
+	
+	immediate = {
+		character_event = { id = ekgreathouses.1 days = 60 }
+	}
+}
+
+character_event = { #Pledge (or not) into one of Morrowind's Great Houses
+	id = ekgreathouses.1
+	is_triggered_only = yes
+	title = ekgreathouses.title.1
+	desc = ekgreathouses.desc.1
+	picture = GFX_evt_council_dunmer
+	
+	trigger = {
+		has_house_trait = no
+	}
+	
+	option = {
+		name = "ekgreathouses.pledgehouse" #Pledge to a Great House
+		trigger = {
+			ai = no
+			NOR = {
+				AND = {
+					dynasty = 160003 #Dres
+					NOT = { has_global_flag = house_dres_extinct }
+				}
+				AND = {
+					dynasty = 160004 #Indoril
+					NOT = { has_global_flag = house_indoril_extinct }
+				}
+				AND = {
+					dynasty = 160005 #Telvanni
+					NOT = { has_global_flag = house_telvanni_extinct }
+				}
+				AND = {
+					dynasty = 160002 #Hlaalu
+					NOT = { has_global_flag = house_hlaalu_extinct }
+				}
+				AND = {
+					dynasty = 160001 #Redoran
+					NOT = { has_global_flag = house_redoran_extinct }
+				}
+				AND = {
+					dynasty = 160773 #Sadras
+					NOT = { has_global_flag = house_sadras_extinct }
+				}
+				AND = {
+					dynasty = 160777 #Dagoth
+					NOT = { has_global_flag = house_dagoth_extinct }
+				}
+				AND = {
+					dynasty = 160775 #Sul
+					NOT = { has_global_flag = house_sul_extinct }
+				}
+				AND = {
+					dynasty = 160662 #Veloth
+					NOT = { has_global_flag = house_veloth_extinct }
+				}
+			}
+		}
+		character_event = { id = ekgreathouses.2 }
+	}
+	
+	option = {
+		name = "ekgreathouses.pledgeancestors" #Pledge to the Great House of your ancestors
+		
+		trigger = {
+			OR = {
+				AND = {
+					dynasty = 160003 #Dres
+					NOT = { has_global_flag = house_dres_extinct }
+				}
+				AND = {
+					dynasty = 160004 #Indoril
+					NOT = { has_global_flag = house_indoril_extinct }
+				}
+				AND = {
+					dynasty = 160005 #Telvanni
+					NOT = { has_global_flag = house_telvanni_extinct }
+				}
+				AND = {
+					dynasty = 160002 #Hlaalu
+					NOT = { has_global_flag = house_hlaalu_extinct }
+				}
+				AND = {
+					dynasty = 160001 #Redoran
+					NOT = { has_global_flag = house_redoran_extinct }
+				}
+				AND = {
+					dynasty = 160773 #Sadras
+					NOT = { has_global_flag = house_sadras_extinct }
+				}
+				AND = {
+					dynasty = 160777 #Dagoth
+					NOT = { has_global_flag = house_dagoth_extinct }
+				}
+				AND = {
+					dynasty = 160775 #Sul
+					NOT = { has_global_flag = house_sul_extinct }
+				}
+				AND = {
+					dynasty = 160662 #Veloth
+					NOT = { has_global_flag = house_veloth_extinct }
+				}
+			}
+		}
+		
+		trigger_switch = {
+			on_trigger = dynasty
+			160003 = { add_trait = house_dres }
+			160004 = { add_trait = house_indoril }
+			160005 = { add_trait = house_telvanni }
+			160002 = { add_trait = house_hlaalu }
+			160001 = { add_trait = house_redoran }
+			160773 = { add_trait = house_sadras }
+			160777 = { add_trait = house_dagoth }
+			160775 = { add_trait = house_sul }
+			160662 = { add_trait = house_veloth }
+		}
+
+	}
+	
+	option = {
+		name = "ekgreathouses.dontpledge" #Don't pledge for any Great House
+		
+		trigger = {
+			ai = no
+		}
+		
+		if = {
+			limit = { 
+				OR = {
+					culture = dunmer
+					culture = ashlander
+					culture = chimer
+				}
+			}
+			add_trait = houseless_dunmer
+		}
+	}
+	
+	option = {
+		name = "ekgreathouses.ai"
+		
+		trigger = {
+			ai = yes
+		}
+		
+		random_list = {
+			10 = { #Houseless
+				modifier = {
+					factor = 100
+					AND = {
+						mother_even_if_dead = { has_house_trait = no }
+						father_even_if_dead = { has_house_trait = no }
+						any_liege = { has_house_trait = no }
+					}
+				}
+				modifier = {
+					factor = 75
+					OR = {
+						trait = heresiarch
+						trait = bandit_leader
+						trait = peasant_leader
+						trait = necromancer
+					}
+				}
+				modifier = {
+					factor = 50
+					NOR = {
+						culture = dunmer
+						culture = chimer
+						culture = ashlander
+					}
+				}
+				modifier = {
+					factor = 30
+					OR = {
+						mother_even_if_dead = { has_house_trait = no }
+						father_even_if_dead = { has_house_trait = no }
+					}
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						liege = { trait = houseless_dunmer }
+						any_spouse = { trait = houseless_dunmer }
+						trait = heresiarch
+						trait = bandit_leader
+						trait = peasant_leader
+						trait = necromancer
+						trait = bastard
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = arbitrary
+						trait = cynical
+						trait = craven
+						trait = legit_bastard
+						any_close_relative = { trait = houseless_dunmer }
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							culture = dunmer
+							culture = ashlander
+							culture = chimer
+						}
+					}
+					add_trait = houseless_dunmer
+					clr_character_flag = running_maintenance
+				}
+				set_character_flag = refused_great_house_pledge
+			}
+			10 = { #House Dres
+				modifier = {
+					factor = 100000
+					dynasty = 160003
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_dres }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_dres }
+				}
+				modifier = {
+					factor = 50
+					liege = { trait = house_dres }		
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_dres }
+						any_close_relative = { trait = house_dres }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = envious
+						trait = proud
+						trait = greedy
+						trait = diligent
+						trait = content
+						trait = cruel
+						trait = slaver
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = administrator
+						trait = architect
+						trait = gamer
+						trait = gardener
+						trait = hunter
+						trait = impaler
+						trait = saboteur
+						trait = smuggler
+					}
+				}
+				modifier = {
+					factor = 10
+					is_magistrate = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_wayfarer = yes
+						is_acrobat = yes
+						is_scout = yes
+						is_healer = yes
+					}
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { religion = almsivi }
+				}
+				modifier = {
+					factor = 0.5
+					has_global_flag = house_dres_extinct
+				}
+				add_trait = house_dres
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Indoril
+				modifier = {
+					factor = 100000
+					dynasty = 160004
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_indoril }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_indoril }
+				}
+				modifier = {
+					factor = 50
+					liege = { trait = house_indoril }			
+				}
+				modifier = {
+					factor = 30
+					is_theocracy = yes			
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_indoril }
+						any_close_relative = { trait = house_indoril }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = zealous
+						trait = proud
+						trait = charitable
+						trait = diligent
+						trait = patient
+						trait = brave
+						trait = temperate
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = adventurer
+						trait = magician
+						trait = musician
+						trait = mystic
+						trait = painter
+						trait = scholar
+						trait = strategist
+						trait = theologian
+					}
+				}
+				modifier = {
+					factor = 10
+					is_diplomat = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_priest_education = yes
+						is_monk_education = yes
+						is_savant = yes
+						is_bard = yes
+					}
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { religion = almsivi }
+				}
+				modifier = {
+					factor = 0.5
+					has_global_flag = house_indoril_extinct
+				}
+				add_trait = house_indoril
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Redoran
+				modifier = {
+					factor = 100000
+					dynasty = 160001
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_redoran }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_redoran }
+				}
+				modifier = {
+					factor = 50
+					liege = { trait = house_redoran }			
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_redoran }
+						any_close_relative = { trait = house_redoran }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = just
+						trait = brave
+						trait = humble
+						trait = diligent
+						trait = honest
+						trait = zealous
+						trait = patient
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = adventurer
+						trait = blacksmith
+						trait = duelist
+						trait = equestrian
+						trait = gamer
+						trait = gladiator
+						trait = hunter
+						trait = strategist
+					}
+				}
+				modifier = {
+					factor = 10
+					is_warrior = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_knight = yes
+						is_crusader = yes
+						is_barbarian = yes
+						is_rogue = yes
+					}
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { religion = almsivi }
+				}
+				modifier = {
+					factor = 0.5
+					has_global_flag = house_redoran_extinct
+				}
+				add_trait = house_redoran
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Hlaalu
+				modifier = {
+					factor = 100000
+					dynasty = 160002
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_hlaalu }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_hlaalu }
+				}
+				modifier = {
+					factor = 50
+					liege = { trait = house_hlaalu }				
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_hlaalu }
+						any_close_relative = { trait = house_hlaalu }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = gregarious
+						trait = lustful
+						trait = greedy
+						trait = deceitful
+						trait = diligent
+						trait = patient
+						trait = paranoid
+						trait = charitable
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = administrator
+						trait = engineer
+						trait = gambler
+						trait = hedonist
+						trait = seducer
+						trait = seductress
+						trait = saboteur
+						trait = schemer
+						trait = socializer
+						trait = smuggler
+					}
+				}
+				modifier = {
+					factor = 10
+					is_agent = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_assassin = yes
+						is_thief = yes
+						is_witchhunter = yes
+						is_trader = yes
+					}
+				}
+				modifier = {
+					factor = 5
+					NOT = { is_dunmer = yes }
+				}
+				modifier = {
+					factor = 0.5
+					OR = {					
+						religion = nerevarine
+						religion = almsivi_old_velothi
+					}
+				}
+				modifier = {
+					factor = 0.5
+					has_global_flag = house_hlaalu_extinct
+				}
+				add_trait = house_hlaalu
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Telvanni
+				modifier = {
+					factor = 100000
+					dynasty = 160005
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_telvanni }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_telvanni }
+				}
+				modifier = {
+					factor = 50
+					liege = { trait = house_telvanni }				
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_telvanni }
+						any_close_relative = { trait = house_telvanni }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = ruthless
+						trait = proud
+						trait = deceitful
+						trait = envious
+						trait = paranoid
+						trait = ambitious
+						trait = cynical
+						trait = erudite
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = alchemist
+						trait = magician
+						trait = architect
+						trait = engineer
+						trait = gardener
+						trait = mystic
+						trait = necromancer
+						trait = schemer
+						trait = scholar
+					}
+				}
+				modifier = {
+					factor = 10
+					is_mage = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_battlemage = yes
+						is_sorcerer = yes
+						is_nightblade = yes
+						is_spellsword = yes
+					}
+				}
+				modifier = {
+					factor = 0.5				
+					religion = nerevarine
+				}
+				modifier = {
+					factor = 0.5
+					has_global_flag = house_telvanni_extinct
+				}
+				add_trait = house_telvanni
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Sadras
+				modifier = {
+					factor = 100000
+					dynasty = 160773
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_sadras }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_sadras }
+				}
+				modifier = {
+					factor = 50
+					liege = { trait = house_sadras }					
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_sadras }
+						any_close_relative = { trait = house_sadras }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = gregarious
+						trait = lustful
+						trait = greedy
+						trait = deceitful
+						trait = diligent
+						trait = patient
+						trait = paranoid
+						trait = charitable
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = administrator
+						trait = engineer
+						trait = gambler
+						trait = hedonist
+						trait = seducer
+						trait = seductress
+						trait = saboteur
+						trait = schemer
+						trait = socializer
+						trait = smuggler
+					}
+				}
+				modifier = {
+					factor = 10
+					is_agent = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_assassin = yes
+						is_thief = yes
+						is_witchhunter = yes
+						is_trader = yes
+					}
+				}
+				modifier = {
+					factor = 0.5
+					NOT = { religion = almsivi }
+				}
+				modifier = {
+					factor = 0.5
+					has_global_flag = house_sadras_extinct
+				}
+				add_trait = house_sadras
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Sul
+				modifier = {
+					factor = 100000
+					dynasty = 160775
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_sul }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_sul }
+				}
+				modifier = {
+					factor = 50
+					OR = {
+						liege = { trait = house_sul }
+						religion = nerevarine
+						culture = ashlander
+					}
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_sul }
+						any_close_relative = { trait = house_sul }
+					}
+				}
+				modifier = {
+					factor = 20
+					any_owned_bloodline = { has_bloodline_flag = bloodline_sul }
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = just
+						trait = brave
+						trait = humble
+						trait = diligent
+						trait = honest
+						trait = zealous
+						trait = patient
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = adventurer
+						trait = blacksmith
+						trait = duelist
+						trait = equestrian
+						trait = gamer
+						trait = gladiator
+						trait = hunter
+						trait = strategist
+					}
+				}
+				modifier = {
+					factor = 10
+					is_warrior = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_knight = yes
+						is_crusader = yes
+						is_barbarian = yes
+						is_rogue = yes
+					}
+				}
+				modifier = {
+					factor = 0.5
+					NOR = {
+						culture = ashlander
+						religion = nerevarine
+					}
+				}
+				modifier = {
+					factor = 0.2
+					has_global_flag = house_sul_extinct
+				}
+				add_trait = house_sul
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Veloth
+				modifier = {
+					factor = 100000
+					dynasty = 160662
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_veloth }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_veloth }
+				}
+				modifier = {
+					factor = 50
+					OR = {
+						liege = { trait = house_veloth }
+						religion = almsivi_old_velothi
+						culture = chimer
+					}
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						any_spouse = { trait = house_veloth }
+						any_close_relative = { trait = house_veloth }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = zealous
+						trait = proud
+						trait = charitable
+						trait = diligent
+						trait = patient
+						trait = brave
+						trait = temperate
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = adventurer
+						trait = magician
+						trait = musician
+						trait = mystic
+						trait = painter
+						trait = scholar
+						trait = strategist
+						trait = theologian
+					}
+				}
+				modifier = {
+					factor = 10
+					is_diplomat = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_priest_education = yes
+						is_monk_education = yes
+						is_savant = yes
+						is_bard = yes
+					}
+				}
+				modifier = {
+					factor = 0.5
+					NOR = {
+						culture = chimer
+						religion = almsivi_old_velothi
+					}
+				}
+				modifier = {
+					factor = 0.2
+					has_global_flag = house_veloth_extinct
+				}
+				add_trait = house_veloth
+				character_event = { id = ekgreathouses.6 }
+			}
+			10 = { #House Dagoth
+				modifier = {
+					factor = 100000
+					dynasty = 160777
+				}
+				modifier = {
+					factor = 100
+					mother_even_if_dead = { trait = house_dagoth }
+				}
+				modifier = {
+					factor = 100
+					father_even_if_dead = { trait = house_dagoth }
+				}
+				modifier = {
+					factor = 50
+					liege = { trait = house_dagoth }
+				}
+				modifier = {
+					factor = 20
+					OR = {
+						liege = { trait = house_dagoth }
+						any_spouse = { trait = house_dagoth }
+						any_close_relative = { trait = house_dagoth }
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = ruthless
+						trait = proud
+						trait = deceitful
+						trait = envious
+						trait = paranoid
+						trait = ambitious
+						trait = cynical
+						trait = erudite
+					}
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						trait = alchemist
+						trait = magician
+						trait = architect
+						trait = engineer
+						trait = gardener
+						trait = mystic
+						trait = necromancer
+						trait = schemer
+						trait = scholar
+					}
+				}
+				modifier = {
+					factor = 10
+					is_mage = yes
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						is_battlemage = yes
+						is_sorcerer = yes
+						is_nightblade = yes
+						is_spellsword = yes
+					}
+				}
+				modifier = {
+					factor = 0.2
+					has_global_flag = house_dagoth_extinct
+				}
+				modifier = {
+					factor = 0
+					NOT = { religion = sixth_house }
+				}
+				add_trait = house_dagoth
+				character_event = { id = ekgreathouses.6 }
+			}
+		}
+	}
+	
+	after = {
+		clr_character_flag = running_maintenance
+	}
+
+}
+
+character_event = { #Pledge I
+	id = ekgreathouses.2
+	is_triggered_only = yes
+	desc = ekgreathouses.desc.2
+	picture = GFX_evt_dunmer_ambassadors
+	
+	option = {
+		name = "ekgreathouses.pledgeredoran"
+		trigger = { NOT = { has_global_flag = house_redoran_outlawed } }
+		add_trait = house_redoran
+	}
+	option = {
+		name = "ekgreathouses.pledgehlaalu"
+		trigger = { NOT = { has_global_flag = house_hlaalu_outlawed } }
+		add_trait = house_hlaalu
+	}
+	option = {
+		name = "ekgreathouses.pledgedres"
+		trigger = { NOT = { has_global_flag = house_dres_outlawed } }
+		add_trait = house_dres
+	}
+	option = {
+		name = "ekgreathouses.pledgeother"
+		character_event = { id = ekgreathouses.3 }
+	}
+}
+
+character_event = { #Pledge II
+	id = ekgreathouses.3
+	is_triggered_only = yes
+	desc = ekgreathouses.desc.1
+	picture = GFX_evt_dunmer_ambassadors
+	
+	option = {
+		name = "ekgreathouses.pledgeindoril"
+		trigger = { NOT = { has_global_flag = house_redoran_outlawed } }
+		add_trait = house_indoril
+	}
+	option = {
+		name = "ekgreathouses.pledgetelvanni"
+		trigger = { NOT = { has_global_flag = house_telvanni_outlawed } }
+		add_trait = house_telvanni
+	}
+	option = {
+		name = "ekgreathouses.pledgesadras"
+		trigger = { NOT = { has_global_flag = house_sadras_outlawed } }
+		add_trait = house_sadras
+	}
+	option = {
+		name = "ekgreathouses.pledgeother"
+		character_event = { id = ekgreathouses.4 }
+	}
+}
+
+character_event = { #Pledge III
+	id = ekgreathouses.4
+	is_triggered_only = yes
+	desc = ekgreathouses.desc.1
+	picture = GFX_evt_dunmer_ambassadors
+	
+	option = {
+		name = "ekgreathouses.pledgesul"
+		trigger = { 
+			NOT = { has_global_flag = house_sul_outlawed }
+			OR = { 
+				culture = ashlander
+				religion = nerevarine
+				any_owned_bloodline = { has_bloodline_flag = bloodline_sul }
+				liege = { trait = house_sul }
+				mother_even_if_dead = { trait = house_sul }
+				father_even_if_dead = { trait = house_sul }
+			}
+		}
+		add_trait = house_sul
+	}
+	option = {
+		name = "ekgreathouses.pledgeveloth"
+		trigger = { 
+			NOT = { has_global_flag = house_veloth_outlawed }
+			OR = { 
+				culture = chimer
+				religion = almsivi_old_velothi
+				trait = p_veloth
+				liege = { trait = house_veloth }
+				mother_even_if_dead = { trait = house_veloth }
+				father_even_if_dead = { trait = house_veloth }
+			}
+		}
+		add_trait = house_veloth
+	}
+	option = {
+		name = "ekgreathouses.pledgedagoth"
+		trigger = { 
+			NOT = { has_global_flag = house_dagoth_outlawed }
+			OR = { 
+				religion = sixth_house
+				liege = { trait = house_dagoth }
+				mother_even_if_dead = { trait = house_dagoth }
+				father_even_if_dead = { trait = house_dagoth }
+			}
+		}
+		add_trait = house_dagoth
+	}
+	option = {
+		name = "ekgreathouses.pledgeother"
+		character_event = { id = ekgreathouses.2 }
+	}
+}
+
+character_event = { #Bend (or not) the knee for the new ruler of your House
+	id = ekgreathouses.5
+	is_triggered_only = yes
+	title = ekgreathouses.title.5
+	desc = ekgreathouses.desc.5
+	picture = GFX_evt_council_dunmer
+	
+	desc = {
+		trigger = {
+			FROM = {
+				OR = {
+					has_landed_title = k_hlaalu
+					has_landed_title = k_dres
+					has_landed_title = k_telvanni
+					has_landed_title = k_redoran
+					has_landed_title = k_indoril
+					has_landed_title = k_sadras
+					has_landed_title = k_dagoth
+					has_landed_title = k_sul
+					has_landed_title = k_veloth
+				}
+			}
+		}
+		text = ekgreathouses.2.desc.5
+	}
+	
+	option = {
+		name = "ekgreathouses.bend"
+		set_defacto_liege = FROM
+		prestige = 100
+		piety = 100
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_hlaalu_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_hlaalu_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_hlaalu_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_dres_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_dres_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_dres_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_redoran_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_redoran_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_redoran_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_telvanni_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_telvanni_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_telvanni_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_indoril_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_indoril_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_indoril_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_sadras_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_sadras_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_sadras_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_sul_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_sul_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_sul_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_veloth_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_veloth_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_veloth_council
+			society_rank_up = 1
+		}
+		
+		if =  {
+			limit = { 
+				FROM = { society_member_of = house_dagoth_council } 
+				NOT = {
+					is_society_rank_full = {
+						society = house_dagoth_council
+						rank = 2
+					}
+				}
+				is_in_society = no
+			}
+			join_society = house_dagoth_council
+			society_rank_up = 1
+		}
+	}
+	
+	option = {
+		name = "ekgreathouses.dontbend"
+		prestige = 500
+		piety = -50
+		primary_title = {
+			add_claim = FROM
+		}	
+	}
+}
+
+character_event = { #Find members for Great Houses Societies
+	id = ekgreathouses.6
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		always = yes
+	}
+	
+	immediate = {
+		random_list = {
+			20 = { #Don't join
+				modifier = {
+					factor = 100
+					is_in_society = yes
+				}
+				modifier = {
+					factor = 10
+					is_lowborn = yes
+				}
+				modifier = {
+					factor = 5
+					is_landed = no
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						trait = content
+						trait = slothful
+					}
+				}
+			}
+			10 = { #House Dres
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160003
+						any_dynasty_member = {
+							society_member_of = house_dres_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_dres }
+				}
+				if =  {
+					limit = {
+						NOT = {
+							is_society_rank_full = {
+								society = house_dres_council
+								rank = 1
+							}
+							has_global_flag = house_dres_extinct
+						}
+					}
+					if = {
+						limit = { is_in_society = yes }
+						leave_society = yes
+					}
+					join_society = house_dres_council
+				}
+			}
+			10 = { #House Indoril
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_indoril }
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160004
+						any_dynasty_member = {
+							society_member_of = house_indoril_council
+						}
+					}
+				}
+				if =  {
+					limit = { 
+						NOT = {
+							is_society_rank_full = {
+								society = house_indoril_council
+								rank = 1
+							}
+							has_global_flag = house_indoril_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_indoril_council
+				}
+			}
+			10 = { #House Redoran
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160001
+						any_dynasty_member = {
+							society_member_of = house_redoran_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_redoran }
+				}
+				if =  {
+					limit = { 
+						NOT = {
+							is_society_rank_full = {
+								society = house_redoran_council
+								rank = 1
+							}
+							has_global_flag = house_redoran_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_redoran_council
+				}
+			}
+			10 = { #House Hlaalu
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160002
+						any_dynasty_member = {
+							society_member_of = house_hlaalu_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_hlaalu }
+				}
+				if =  {
+					limit = { 
+						NOT = {
+							is_society_rank_full = {
+								society = house_hlaalu_council
+								rank = 1
+							}
+							has_global_flag = house_hlaalu_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_hlaalu_council
+				}
+			}
+			10 = { #House Telvanni
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160005
+						any_dynasty_member = {
+							society_member_of = house_telvanni_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_telvanni }
+				}
+				if =  {
+					limit = { 
+						NOT = {
+							is_society_rank_full = {
+								society = house_telvanni_council
+								rank = 1
+							}
+							has_global_flag = house_telvanni_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_telvanni_council
+				}
+			}
+			10 = { #House Sadras
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160773
+						any_dynasty_member = {
+							society_member_of = house_sadras_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_sadras }
+				}
+				if =  {
+					limit = { 
+						NOT = {
+							is_society_rank_full = {
+								society = house_sadras_council
+								rank = 1
+							}
+							has_global_flag = house_sadras_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_sadras_council
+				}
+			}
+			10 = { #House Sul
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160775
+						any_dynasty_member = {
+							society_member_of = house_sul_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_sul }
+				}
+				if =  {
+					limit = { 
+						NOT = {
+							is_society_rank_full = {
+								society = house_sul_council
+								rank = 1
+							}
+							has_global_flag = house_sul_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_sul_council
+				}
+			}
+			10 = { #House Veloth
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160662
+						any_dynasty_member = {
+							society_member_of = house_veloth_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_veloth }
+				}
+				if =  {
+					limit = { 
+						NOT = {
+							is_society_rank_full = {
+								society = house_veloth_council
+								rank = 1
+							}
+							has_global_flag = house_veloth_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_veloth_council
+				}
+			}
+			10 = { #House Dagoth
+				modifier = {
+					factor = 100
+					real_tier = KING
+				}
+				modifier = {
+					factor = 50
+					real_tier = DUKE
+				}
+				modifier = {
+					factor = 20
+					real_tier = COUNT
+				}
+				modifier = {
+					factor = 10
+					real_tier = BARON
+				}
+				modifier = {
+					factor = 10
+					OR = {
+						dynasty = 160777
+						any_dynasty_member = {
+							society_member_of = house_dagoth_council
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = { trait = house_dagoth }
+				}
+				if =  {
+					limit = { 
+						NOR = {
+							is_society_rank_full = {
+								society = house_dagoth_council
+								rank = 1
+							}
+							has_global_flag = house_dagoth_extinct
+						}
+					}
+					if = { limit = { is_in_society = yes } leave_society = yes }
+					join_society = house_dagoth_council
+				}
+			}
+		}
+		clr_character_flag = running_maintenance
+	}
+}
+
+#Lawman gender assignment
+character_event = {
+	id = ekgreathouses.90
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = { limit = { is_female = yes } set_special_character_title = lawwoman break = yes }
+		if = { limit = { is_female = no } set_special_character_title = lawman break = yes }
+	}
+}
+
+#Mouth council assignment
+character_event = {
+	id = ekgreathouses.95
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		set_special_character_title = mouth
+		if = {
+			limit = { 
+				trait = house_hlaalu 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_hlaalu
+							has_landed_title = k_hlaalu
+						}
+						NOT = { society_member_of = house_hlaalu_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_hlaalu_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_redoran 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_redoran
+							has_landed_title = k_redoran
+						}
+						NOT = { society_member_of = house_redoran_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_redoran_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_dres 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_dres
+							has_landed_title = k_dres
+						}
+						NOT = { society_member_of = house_dres_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_dres_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_indoril 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_indoril
+							has_landed_title = k_indoril
+						}
+						NOT = { society_member_of = house_indoril_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_indoril_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_telvanni 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_telvanni
+							has_landed_title = k_telvanni
+						}
+						NOT = { society_member_of = house_telvanni_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_telvanni_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_sadras 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_sadras
+							has_landed_title = k_sadras
+						}
+						NOT = { society_member_of = house_sadras_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_sadras_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_sul 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_sul
+							has_landed_title = k_sul
+						}
+						NOT = { society_member_of = house_sul_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_sul_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_veloth 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_veloth
+							has_landed_title = k_veloth
+						}
+						NOT = { society_member_of = house_veloth_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_veloth_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+		if = {
+			limit = { 
+				trait = house_dagoth 
+				OR = {
+					liege = { has_character_flag = wants_mouth_in_council }
+					liege = {
+						OR = {
+							has_landed_title = d_dagoth
+							has_landed_title = k_dagoth
+						}
+						NOT = { society_member_of = house_dagoth_council }
+					}
+				}
+			}
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			join_society = house_dagoth_council
+			set_society_grandmaster = yes
+			set_character_flag = mouth_in_council
+			liege = { 
+				clr_character_flag = wants_mouth_in_council
+				remove_character_modifier = no_house_council_representation
+			}
+			break = yes
+		}
+	}
+}
+
+#Mouth laid off
+character_event = {
+	id = ekgreathouses.96
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = {
+			limit = { has_character_flag = mouth_in_council }
+			if = { limit = { is_in_society = yes } leave_society = yes }
+			liege = { character_event = { id = ekgreathouses.101 days = 2 } }
+		}
+	}
+}
+
+#Mouth in Council died
+character_event = {
+	id = ekgreathouses.100
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		liege = { character_event = { id = ekgreathouses.101 days = 2 } }
+	}
+}
+
+#Warns Liege
+character_event = {
+	id = ekgreathouses.101
+	picture = GFX_evt_council_dunmer
+	desc = ekgreathouses.101.desc
+	is_triggered_only = yes
+	
+	#Join Council
+	option = {
+		name = ekgreathouses.101.opt1
+		if = { limit = { is_in_society = yes } leave_society = yes }
+		if = {
+			limit = { trait = house_hlaalu }
+			join_society = house_hlaalu_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_redoran }
+			join_society = house_redoran_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_dres }
+			join_society = house_dres_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_indoril }
+			join_society = house_indoril_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_telvanni }
+			join_society = house_telvanni_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_sadras }
+			join_society = house_sadras_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_sul }
+			join_society = house_sul_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_veloth }
+			join_society = house_veloth_council
+			set_society_grandmaster = yes
+			break = yes
+		}
+		if = {
+			limit = { trait = house_dagoth }
+			join_society = house_dagoth_council
+			set_society_grandmaster = yes
+		}
+	}
+	
+	#I'll appoint a new Mouth
+	option = {
+		name = ekgreathouses.101.opt2
+		set_character_flag = wants_mouth_in_council
+		add_character_modifier = { name = no_house_council_representation duration = -1 } 
+	}
+}
+
+### Usages of the Clout
+
+## Bring someone back in our society
+character_event = {
+	id = ekgreathouses.200
+	desc = ekgreathouses.200.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekgreathouses.200.optA
+		
+		remove_house_trait = yes
+		join_fromfrom_great_house = yes
+		
+		reverse_opinion = { modifier = opinion_grateful who = FROMFROM years = 10 }
+		
+		FROMFROM = { character_event = { id = ekgreathouses.201 days = 3 }  }
+	}
+	
+	option = {
+		trigger = { ai = no }
+		name = ekgreathouses.200.optB
+		
+		prestige = 50
+		reverse_opinion = { modifier = opinion_disappointed who = FROMFROM years = 10 }
+		
+		FROMFROM = { character_event = { id = ekgreathouses.202 days = 3 } }
+	}
+}
+
+# Target accepted!
+character_event = {
+	id = ekgreathouses.201
+	desc = ekgreathouses.201.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekgreathouses.201.optA
+		
+		prestige = 5
+		
+		tooltip = { 
+			opinion = { modifier = opinion_grateful who = FROM years = 10 }
+			FROM = {
+				#remove_house_trait = yes
+				join_fromfrom_great_house = yes
+			}
+		}
+	}
+}
+
+# Target refused...
+character_event = {
+	id = ekgreathouses.202
+	desc = ekgreathouses.202.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekgreathouses.202.optA
+		
+		prestige = -5
+		
+		tooltip = { opinion = { modifier = opinion_disappointed who = FROM years = 10 } }
+	}
+}
+
+## Colonize a county in Vvardenfell
+# Archcanon is asked to let a House colonize a county
+character_event = {
+	id = ekgreathouses.210
+	desc = ekgreathouses.210.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Accept
+	option = {
+		name = ekgreathouses.210.optA
+		
+		event_target:colonizer = { character_event = { id = ekgreathouses.211 days = 2 } }
+		
+		ai_chance = {
+			factor = 75
+			
+			# Opinion
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:colonizer value = 50 }
+			}
+			
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:colonizer value = 60 }
+			}
+			
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:colonizer value = 70 }
+			}
+			
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:colonizer value = 80 }
+			}
+			
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:colonizer value = 90 }
+			}
+			
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:colonizer value = 100 }
+			}
+			
+			# Same House trait
+			modifier = {
+				factor = 2
+				OR = {
+					AND = { trait = house_indoril event_target:colonizer = { trait = house_indoril } }
+					AND = { trait = house_dres event_target:colonizer = { trait = house_dres } }
+					AND = { trait = house_hlaalu event_target:colonizer = { trait = house_hlaalu } }
+					AND = { trait = house_redoran event_target:colonizer = { trait = house_redoran } }
+					AND = { trait = house_telvanni event_target:colonizer = { trait = house_telvanni } }
+					AND = { trait = house_sadras event_target:colonizer = { trait = house_sadras } }
+					AND = { trait = house_dagoth event_target:colonizer = { trait = house_dagoth } }
+					AND = { trait = house_veloth event_target:colonizer = { trait = house_veloth } }
+					AND = { trait = house_sul event_target:colonizer = { trait = house_sul } }
+				}
+			}
+			
+			# Indoril
+			modifier = {
+				factor = 1.25
+				event_target:colonizer = { trait = house_indoril }
+			}
+		}
+	}
+	
+	# Refuse
+	option = {
+		name = ekgreathouses.210.optB
+		
+		event_target:colonizer = { character_event = { id = ekgreathouses.212 days = 2 } }
+		
+		ai_chance = {
+			factor = 25
+			
+			# Opinion
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:colonizer value = 50 } }
+			}
+			
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:colonizer value = 40 } }
+			}
+			
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:colonizer value = 30 } }
+			}
+			
+			# Not the same House trait
+			modifier = {
+				factor = 2
+				OR = {
+					AND = { trait = house_indoril event_target:colonizer = { NOT = { trait = house_indoril } } }
+					AND = { trait = house_dres event_target:colonizer = { NOT = { trait = house_dres } } }
+					AND = { trait = house_hlaalu event_target:colonizer = { NOT = { trait = house_hlaalu } } }
+					AND = { trait = house_redoran event_target:colonizer = { NOT = { trait = house_redoran } } }
+					AND = { trait = house_telvanni event_target:colonizer = { NOT = { trait = house_telvanni } } }
+					AND = { trait = house_sadras event_target:colonizer = { NOT = { trait = house_sadras } } }
+					AND = { trait = house_dagoth event_target:colonizer = { NOT = { trait = house_dagoth } } }
+					AND = { trait = house_veloth event_target:colonizer = { NOT = { trait = house_veloth } } }
+					AND = { trait = house_sul event_target:colonizer = { NOT = { trait = house_sul } } }
+				}
+			}
+		}
+	}
+}
+
+# Archcanon accepted, what settlement?
+character_event = {
+	id = ekgreathouses.211
+	desc = ekgreathouses.211.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# A castle
+	option = {
+		name = ekgreathouses.211.optA
+		
+		event_target:county_to_colonize = {
+			location = {
+				any_province_holding = { set_flag = already_existing_building }
+				
+				build_holding = {
+					type = castle
+					holder = event_target:colonizer
+				}
+			}
+		}
+		
+		wealth = -500
+	}
+	
+	# A city
+	option = {
+		name = ekgreathouses.211.optB
+		
+		event_target:county_to_colonize = {
+			location = {
+				any_province_holding = { set_flag = already_existing_building }
+				
+				build_holding = {
+					type = city
+					holder = event_target:colonizer
+				}
+			}
+		}
+		
+		wealth = -500
+	}
+	
+	# A temple
+	option = {
+		name = ekgreathouses.211.optC
+		
+		event_target:county_to_colonize = {
+			location = {
+				any_province_holding = { set_flag = already_existing_building }
+				
+				build_holding = {
+					type = temple
+					holder = event_target:colonizer
+				}
+			}
+		}
+		
+		wealth = -500
+	}
+	
+	after = {
+		event_target:county_to_colonize = {
+			location = {
+				random_province_holding = {
+					limit = { NOT = { has_flag = already_existing_building } }
+					add_holding_modifier = {
+						name = new_house_settlement_vvardenfell
+						years = -1
+					}
+					
+					custom_tooltip = {
+						text = SPEND_CLOUT_REMOVE_NEW_HOUSE_SETTLEMENT_CT
+					}
+				}
+				
+				add_province_modifier = { name = recent_colonization_vvardenfell years = 5 }
+				
+				any_province_holding = { clr_flag = already_existing_building }
+			}
+		}
+	}
+}
+
+# Archcanon refused
+character_event = {
+	id = ekgreathouses.212
+	desc = ekgreathouses.212.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# *unhappy noises*
+	option = {
+		name = ekgreathouses.212.optA
+		
+		prestige = -50
+	}
+}
+
+## Getting a favor with Clout
+# Success!
+character_event = {
+	id = ekgreathouses.230
+	desc = ekgreathouses.230.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Fine...
+	option = {
+		name = ekgreathouses.230.optA
+		
+		tooltip = { FROMFROM  = { add_favor = ROOT } }
+		opinion = {
+			modifier = opinion_blackmailed
+			who = FROMFROM
+			years = 5
+		}
+		hidden_effect = { FROMFROM = { character_event = { id = ekgreathouses.231 } } }
+	}
+}
+
+character_event = {
+	id = ekgreathouses.231
+	desc = ekgreathouses.231.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Great!
+	option = {
+		name = ekgreathouses.231.optA
+		tooltip = { add_favor = FROM }
+		tooltip = {
+			reverse_opinion = {
+				modifier = opinion_blackmailed
+				who = FROMFROM
+				years = 5
+			}
+		}
+	}
+}
+
+# Failure
+character_event = {
+	id = ekgreathouses.232
+	desc = ekgreathouses.232.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Hmm... No.
+	option = {
+		name = ekgreathouses.232.optA
+		
+		opinion = {
+			modifier = opinion_blackmailed
+			who = FROMFROM
+			years = 5
+		}
+		hidden_effect = { FROMFROM = { character_event = { id = ekgreathouses.233 } } }
+	}
+}
+
+character_event = {
+	id = ekgreathouses.233
+	desc = ekgreathouses.233.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Oof
+	option = {
+		name = ekgreathouses.233.optA
+		tooltip = {
+			reverse_opinion = {
+				modifier = opinion_blackmailed
+				who = FROMFROM
+				years = 5
+			}
+		}
+	}
+}
+
+## Claiming a title with clout
+character_event = {
+	id = ekgreathouses.240
+	desc = ekgreathouses.240.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Certainly not!
+	option = {
+		trigger = { society_currency = 500 }
+		
+		name = ekgreathouses.240.optA
+		
+		change_society_currency = -500
+		
+		event_target:county_claimant = { character_event = { id = ekgreathouses.241 days = 2 } }
+	}
+	
+	# We have no choice but to let it happen...
+	option = {
+		name = ekgreathouses.240.optB
+		
+		tooltip = {
+			event_target:county_claimed = {
+				event_target:county_claimant = {
+					add_claim = PREV
+				}
+			}
+		}
+		
+		event_target:county_claimant = { character_event = { id = ekgreathouses.242 days = 2 } }
+		
+		ai_chance = {
+			factor = 100
+			
+			# Opinion
+			modifier = {
+				factor = 0.01
+				society_currency = 500
+			}
+			
+			modifier = {
+				factor = 2
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = brave
+			}
+		}
+	}
+}
+
+# Other Grandmaster refuted the claim!
+character_event = {
+	id = ekgreathouses.241
+	desc = ekgreathouses.241.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Curses
+	option = {
+		name = ekgreathouses.241.optA
+		
+		prestige = -50
+	}
+}
+
+# Other Grandmaster could not refute the claim
+character_event = {
+	id = ekgreathouses.242
+	desc = ekgreathouses.242.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Wonderful
+	option = {
+		name = ekgreathouses.242.optA
+		
+		event_target:county_claimed = {
+			event_target:county_claimant = {
+				add_claim = PREV
+			}
+		}
+	}
+}
+
+## Annexing a title with clout
+character_event = {
+	id = ekgreathouses.250
+	desc = ekgreathouses.250.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Certainly not!
+	option = {
+		trigger = { society_currency = 1000 }
+		
+		name = ekgreathouses.250.optA
+		
+		change_society_currency = -1000
+		
+		event_target:county_annexer = { character_event = { id = ekgreathouses.251 days = 2 } }
+	}
+	
+	# We have no choice but to let it happen...
+	option = {
+		name = ekgreathouses.250.optB
+		
+		tooltip = {
+			event_target:county_annexer = {
+				event_target:county_annexed = {
+					usurp_title = PREV
+				}
+			}
+		}
+		
+		event_target:county_annexer = { character_event = { id = ekgreathouses.252 days = 2 } }
+		
+		ai_chance = {
+			factor = 100
+			
+			# Opinion
+			modifier = {
+				factor = 0.01
+				society_currency = 500
+			}
+			
+			modifier = {
+				factor = 2
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = brave
+			}
+		}
+	}
+}
+
+# Other Grandmaster refuted the claim!
+character_event = {
+	id = ekgreathouses.251
+	desc = ekgreathouses.251.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Curses
+	option = {
+		name = ekgreathouses.251.optA
+		
+		prestige = -100
+	}
+}
+
+# Other Grandmaster could not refute the claim
+character_event = {
+	id = ekgreathouses.252
+	desc = ekgreathouses.252.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Wonderful
+	option = {
+		name = ekgreathouses.252.optA
+		
+		event_target:county_annexer = {
+			event_target:county_annexed = {
+				usurp_title = PREV
+			}
+		}
+	}
+}
+
+## Expelled from Vvardenfell by the Temple
+character_event = {
+	id = ekgreathouses.260
+	desc = ekgreathouses.260.d
+	picture = GFX_evt_council_dunmer
+	
+	is_triggered_only = yes
+	
+	# Wonderful
+	option = {
+		name = ekgreathouses.260.optA
+		
+		excommunicate = no
+	}
+}

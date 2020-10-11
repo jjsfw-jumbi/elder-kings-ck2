@@ -1,0 +1,301 @@
+succession_laws = {
+	succ_confederacy_elective = {
+		#oldest_child_opinion = -5
+		#child_opinion = -5
+		#dynasty_opinion = -5
+		#feudal_opinion = -5
+		potential = {
+			#has_flag = confederacy
+			holder_scope = {
+				government = confederacy_government
+			}
+			is_merchant_republic = no
+			is_patrician = no
+			OR = {
+				is_landless_type_title = no
+				is_tribal_type_title = yes
+				temporary = yes
+			}
+			NOT = { holder_scope = { government = chinese_imperial_government } }
+			is_dunmer_great_house_title = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = not_forced_tt
+				hidden_tooltip = {
+					holder_scope = { NOT = { has_character_flag = liege_forced_succ_law } }
+				}
+			}
+		}
+
+		effect = {
+			succession = {
+				base_type = feudal_elective
+				voting_rules = confederacy_elective
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+	}
+	succ_imperial_commune_elective = {	#Aristocratic Republican Elective
+		oldest_child_opinion = -5
+		child_opinion = -5
+		feudal_opinion = 5
+		potential = {
+			#has_flag = confederacy
+			holder_scope = {
+				OR = {
+					government = imperial_commune_government
+					government = reformed_imperial_commune_government
+				}
+			}
+			is_merchant_republic = no
+			is_patrician = no
+			OR = {
+				is_landless_type_title = no
+				is_tribal_type_title = yes
+				temporary = yes
+			}
+			NOT = { holder_scope = { government = chinese_imperial_government } }
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = not_forced_tt
+				hidden_tooltip = {
+					holder_scope = { NOT = { has_character_flag = liege_forced_succ_law } }
+				}
+			}
+		}
+
+		effect = {
+			succession = {
+				base_type = feudal_elective
+				voting_rules = imperial_commune_elective
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+	}
+	succ_feudal_confirmation = {	#Feudal Confirmation
+		oldest_child_opinion = 5
+		child_opinion = -5
+		dynasty_opinion = 5
+		feudal_opinion = 5
+		potential = {
+			NOT = { 
+				has_law = succ_confederacy_elective 
+				OR = { 
+					has_flag = confederacy
+				}
+			}
+			NAND = {
+				OR = {
+					title = k_skyrim
+					title = e_nordic
+				}
+				holder_scope = {
+					OR = {
+						culture = nord
+						culture = skaal
+						culture = atmoran
+					}
+				}
+			}
+			holder_scope = {
+				OR = {
+					independent = yes
+					NOT = {
+						any_liege = {
+							holy_order = yes
+						}
+					}
+				}
+				is_merchant_republic = no
+				is_patrician = no
+				NOR = {
+					culture = orsimer
+					government = orsimer_government
+					government = matriarchy_government
+					government = imperial_commune_government
+					government = reformed_imperial_commune_government
+					government = confucian_bureaucracy
+					government = chinese_imperial_government
+					government = roman_imperial_government
+					AND = { has_landed_title = d_riddle trait = mane }
+				}
+			}
+			OR = {
+				is_landless_type_title = no
+				is_tribal_type_title = yes
+				temporary = yes
+			}
+			OR = {
+				holder_scope = { is_feudal = yes }
+				holder_scope = { is_tribal = yes }
+			}
+			is_dunmer_great_house_title = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = not_forced_tt
+				hidden_tooltip = {
+					holder_scope = { NOT = { has_character_flag = liege_forced_succ_law } }
+				}
+			}
+		}
+
+		effect = {
+			succession = {
+				base_type = feudal_elective
+				voting_rules = feudal_confirmation
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+	}
+	succ_great_house_selection = {	#Great House Selection
+		oldest_child_opinion = 5
+		child_opinion = -10
+		dynasty_opinion = 10
+		feudal_opinion = 10
+		
+		potential = {
+			is_dunmer_great_house_title = yes
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = not_forced_tt
+				hidden_tooltip = {
+					holder_scope = { NOT = { has_character_flag = liege_forced_succ_law } }
+				}
+			}
+		}
+
+		effect = {
+			succession = {
+				base_type = feudal_elective
+				voting_rules = great_house_selection
+			}
+		}
+
+	}
+	succ_nord_moot_elective = {	#Nordic Moots
+		oldest_child_opinion = 5
+		child_opinion = -10
+		dynasty_opinion = 10
+		feudal_opinion = 10
+		
+		potential = {
+			OR = {
+				title = k_skyrim
+				title = e_nordic
+				holder_scope = {
+					OR = {
+						culture = nord
+						culture = atmoran
+						culture = skaal
+					}
+				}
+			}
+			is_dunmer_great_house_title = no
+		}
+
+		allow = {
+			OR = { 
+				title = k_skyrim
+				title = e_nordic
+			}
+			custom_tooltip = {
+				text = not_forced_tt
+				hidden_tooltip = {
+					holder_scope = { NOT = { has_character_flag = liege_forced_succ_law } }
+				}
+			}
+		}
+
+		effect = {
+			succession = {
+				base_type = feudal_elective
+				voting_rules = nord_moot_elective
+			}
+		}
+
+	}
+	succ_elder_council_elective = {	#Imperial Elder Council
+		oldest_child_opinion = 5
+		child_opinion = -5
+		dynasty_opinion = 5
+		feudal_opinion = 5
+		potential = {
+			OR = {
+				title = e_cyrodiil
+				title = e_tamriel
+			}
+			holder_scope = {
+				OR = {
+					has_landed_title = e_cyrodiil
+					has_landed_title = e_tamriel
+				}
+				is_merchant_republic = no
+				is_patrician = no
+				NOR = {
+					government = orsimer_government
+					government = matriarchy_government
+					government = imperial_commune_government
+					government = reformed_imperial_commune_government
+					government = confucian_bureaucracy
+					government = chinese_imperial_government
+					AND = { has_landed_title = d_riddle trait = mane }
+				}
+			}
+			is_dunmer_great_house_title = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = not_forced_tt
+				hidden_tooltip = {
+					holder_scope = { NOT = { has_character_flag = liege_forced_succ_law } }
+				}
+			}
+		}
+
+		effect = {
+			succession = {
+				base_type = feudal_elective
+				voting_rules = elder_council_elective
+			}
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+	}
+
+	succ_imperial_province_assignment = { # Test for getting provinces having their own administrations
+		potential = {
+			ec_imperial_province_assignment_potential = yes
+		}
+
+		allow = {
+			always = yes
+		}
+
+		effect = {
+			succession = {
+				base_type = feudal_elective
+				voting_rules = imperial_province_assignment
+			}
+		}
+	}
+}

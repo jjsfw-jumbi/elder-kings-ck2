@@ -1,0 +1,2790 @@
+decisions = {
+	pledge_great_house = {
+		only_playable = yes
+		
+		potential = {
+			ai = no
+			OR = {
+				OR = {
+					culture = dunmer
+					culture = ashlander
+					culture = chimer
+				}
+				mother_even_if_dead = { has_house_trait = yes }
+				father_even_if_dead = { has_house_trait = yes }
+				any_liege = { has_house_trait_including_houseless = yes }
+			}
+			has_house_trait = no
+			NOT = { has_global_flag = great_houses_banned }
+			NOT = { has_character_flag = renounced_great_house }
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			in_command = no
+			is_adult = yes
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = {
+				any_demesne_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+			prisoner = no
+			NOT = { trait = incapable }
+		}
+		effect = {
+			character_event = { id = ekgreathouses.1 }
+		}
+	}
+	
+	renounce_great_house = {
+		only_playable = yes
+		
+		potential = {
+			NOT = { has_global_flag = great_houses_banned }
+			ai = no
+			has_house_trait = yes
+			has_submenu_open = no
+			is_great_house_grandmaster = no
+			NOR = {
+				has_landed_title = k_hlaalu
+				has_landed_title = d_hlaalu
+				has_landed_title = k_redoran
+				has_landed_title = d_redoran
+				has_landed_title = k_dres
+				has_landed_title = d_dres
+				has_landed_title = k_indoril
+				has_landed_title = d_indoril
+				has_landed_title = k_telvanni
+				has_landed_title = d_telvanni
+				has_landed_title = k_sul
+				has_landed_title = d_sul
+				has_landed_title = k_dagoth
+				has_landed_title = d_dagoth
+				has_landed_title = k_sadras
+				has_landed_title = d_sadras
+				has_landed_title = k_veloth
+				has_landed_title = d_veloth
+			}
+		}
+		allow = {
+			war = no
+			in_command = no
+			is_adult = yes
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = {
+				any_demesne_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+			prisoner = no
+			NOT = { trait = incapable }
+			scaled_wealth = 2.5
+			NOT = {
+				AND = {
+					trait = house_dagoth
+					religion = sixth_house
+				}
+			}
+		}
+		effect = {
+			piety = -100
+			prestige = -500
+			scaled_wealth = -2.5
+			hidden_tooltip = { set_character_flag = renounced_great_house }
+			trigger_switch = {
+				on_trigger = trait
+				house_dres = { remove_trait = house_dres }
+				house_indoril = { remove_trait = house_indoril }
+				house_telvanni = { remove_trait = house_telvanni }
+				house_hlaalu = { remove_trait = house_hlaalu }
+				house_redoran = { remove_trait = house_redoran }
+				house_sadras = { remove_trait = house_sadras }
+				house_sul = { remove_trait = house_sul }
+				house_veloth = { remove_trait = house_veloth }
+			}
+			if = {
+				limit = {
+					OR = {
+						culture = dunmer
+						culture = ashlander
+						culture = chimer
+					}
+				}
+				add_trait = houseless_dunmer
+			}
+		}
+	}
+	
+	pledge_house_dagoth = {
+		only_playable = yes
+		
+		potential = {
+			OR = {
+				secret_religion = sixth_house
+				religion = sixth_house
+			}
+			NOT = { has_global_flag = great_houses_banned }
+			NOT = { trait = house_dagoth }
+			has_house_trait_including_houseless = yes
+			has_submenu_open = no
+			is_great_house_grandmaster = no
+			NOR = {
+				has_landed_title = k_hlaalu
+				has_landed_title = d_hlaalu
+				has_landed_title = k_redoran
+				has_landed_title = d_redoran
+				has_landed_title = k_dres
+				has_landed_title = d_dres
+				has_landed_title = k_indoril
+				has_landed_title = d_indoril
+				has_landed_title = k_telvanni
+				has_landed_title = d_telvanni
+				has_landed_title = k_sul
+				has_landed_title = d_sul
+				has_landed_title = k_dagoth
+				has_landed_title = d_dagoth
+				has_landed_title = k_sadras
+				has_landed_title = d_sadras
+				has_landed_title = k_veloth
+				has_landed_title = d_veloth
+			}
+		}
+		allow = {
+			war = no
+			in_command = no
+			is_adult = yes
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = {
+				any_demesne_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+			prisoner = no
+			NOT = { trait = incapable }
+			NOT = { secret_religion = sixth_house }
+			religion = sixth_house
+		}
+		effect = {
+			piety = 100
+			if = {
+				limit = { trait = house_dres }
+				remove_trait = house_dres
+			}
+			if = {
+				limit = { trait = house_indoril }
+				remove_trait = house_indoril
+			}
+			if = {
+				limit = { trait = house_telvanni }
+				remove_trait = house_telvanni
+			}
+			if = {
+				limit = { trait = house_hlaalu }
+				remove_trait = house_hlaalu
+			}
+			if = {
+				limit = { trait = house_redoran }
+				remove_trait = house_redoran
+			}
+			if = {
+				limit = { trait = house_sadras }
+				remove_trait = house_sadras
+			}
+			if = {
+				limit = { trait = house_sul }
+				remove_trait = house_sul
+			}
+			if = {
+				limit = { trait = house_veloth }
+				remove_trait = house_veloth
+			}
+			if = {
+				limit = { trait = houseless_dunmer }
+				remove_trait = houseless_dunmer
+			}
+			add_trait = house_dagoth
+		}
+		ai_will_do = {
+			factor = 99
+		}
+	}
+	
+	ai_dunmer_house_trait = {
+		potential = {
+			ai = yes
+			NOT = { has_character_flag = refused_great_house_pledge }
+		}
+		
+		allow = {
+			NOT = { has_global_flag = great_houses_banned }
+			age = 18		
+			#Only those who are personally interested or whose realm is within House politics
+			OR = {
+				AND = {
+					mother_even_if_dead = { has_house_trait_including_houseless = yes }
+					father_even_if_dead = { has_house_trait_including_houseless = yes }
+				}
+				AND = {
+					OR = {
+						culture = dunmer
+						culture = chimer
+						culture = ashlander
+						is_dunmer = yes
+					}
+					OR = {
+						mother_even_if_dead = { has_house_trait_including_houseless = yes }
+						father_even_if_dead = { has_house_trait_including_houseless = yes }
+					}
+				}
+				AND = {
+					top_liege = { has_house_trait = yes }
+					liege = { has_house_trait = yes }
+					any_vassal = { has_house_trait = yes }
+				}
+				AND = {
+					OR = {
+						culture = dunmer
+						culture = chimer
+						culture = ashlander
+						is_dunmer = yes
+					}
+					any_liege = { has_house_trait = yes }
+				}
+				AND = {
+					OR = {
+						culture = dunmer
+						culture = chimer
+						culture = ashlander
+						is_dunmer = yes
+					}
+					is_tributary = { type = tribunal_temple }
+				}
+			}
+			#Exceptions for Temple vassals, people with already have the trait, a future banishment of Great Houses or families outside House politics
+			has_house_trait_including_houseless = no
+			NOT = { has_global_flag = great_houses_banned }
+			NOT = { top_liege = { primary_title = { title = k_almsivi } } }
+			NOT = {
+				mother_even_if_dead = { trait = houseless_dunmer }
+				father_even_if_dead = { trait = houseless_dunmer }
+			}
+		}
+		
+		effect = {
+			set_character_flag = running_maintenance
+			character_event = { id = ekgreathouses.1 }
+		}
+		
+		ai_will_do = {
+			factor = 99
+		}
+	}
+	
+	centralize_house_power = {
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			has_house_trait = yes
+			has_submenu_open = no
+			NOT = { has_global_flag = great_houses_banned }
+			OR = {
+				AND = {
+					trait = house_dres
+					d_dres = { has_holder = no }
+					k_dres = { has_holder = no }
+					has_global_flag = house_dres_extinct
+				}
+				AND = {
+					society_member_of = house_dres_council
+					is_society_grandmaster = yes
+					d_dres = { has_holder = no }
+					k_dres = { has_holder = no }
+				}
+				AND = {
+					trait = house_indoril
+					d_indoril = { has_holder = no }
+					k_indoril = { has_holder = no }
+					has_global_flag = house_indoril_extinct
+				}
+				AND = {
+					society_member_of = house_indoril_council
+					is_society_grandmaster = yes
+					d_indoril = { has_holder = no }
+					k_indoril = { has_holder = no }
+				}
+				AND = {
+					trait = house_hlaalu
+					d_hlaalu = { has_holder = no }
+					k_hlaalu = { has_holder = no }
+					has_global_flag = house_hlaalu_extinct
+				}
+				AND = {
+					society_member_of = house_hlaalu_council
+					is_society_grandmaster = yes
+					d_hlaalu = { has_holder = no }
+					k_hlaalu = { has_holder = no }
+				}
+				AND = {
+					trait = house_redoran
+					d_redoran = { has_holder = no }
+					k_redoran = { has_holder = no }
+					has_global_flag = house_redoran_extinct
+				}
+				AND = {
+					society_member_of = house_redoran_council
+					is_society_grandmaster = yes
+					d_redoran = { has_holder = no }
+					k_redoran = { has_holder = no }
+				}
+				AND = {
+					trait = house_telvanni
+					d_telvanni = { has_holder = no }
+					k_telvanni = { has_holder = no }
+					has_global_flag = house_telvanni_extinct
+				}
+				AND = {
+					society_member_of = house_telvanni_council
+					is_society_grandmaster = yes
+					d_telvanni = { has_holder = no }
+					k_telvanni = { has_holder = no }
+				}
+				AND = {
+					trait = house_sadras
+					d_sadras = { has_holder = no }
+					k_sadras = { has_holder = no }
+					has_global_flag = house_sadras_extinct
+				}
+				AND = {
+					society_member_of = house_sadras_council
+					is_society_grandmaster = yes
+					d_sadras = { has_holder = no }
+					k_sadras = { has_holder = no }
+				}
+				AND = {
+					trait = house_sul
+					d_sul = { has_holder = no }
+					k_sul = { has_holder = no }
+					has_global_flag = house_sul_extinct
+				}
+				AND = {
+					society_member_of = house_sul_council
+					is_society_grandmaster = yes
+					d_sul = { has_holder = no }
+					k_sul = { has_holder = no }
+				}
+				AND = {
+					trait = house_dagoth
+					d_dagoth = { has_holder = no }
+					k_dagoth = { has_holder = no }
+					has_global_flag = house_dagoth_extinct
+				}
+				AND = {
+					society_member_of = house_dagoth_council
+					is_society_grandmaster = yes
+					d_dagoth = { has_holder = no }
+					k_dagoth = { has_holder = no }
+				}
+				AND = {
+					trait = house_veloth
+					d_veloth = { has_holder = no }
+					k_veloth = { has_holder = no }
+					has_global_flag = house_veloth_extinct
+				}
+				AND = {
+					society_member_of = house_veloth_council
+					is_society_grandmaster = yes
+					d_veloth = { has_holder = no }
+					k_veloth = { has_holder = no }
+				}
+			}
+		}
+		allow = {
+			war = no
+			in_command = no
+			is_adult = yes
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = {
+				any_demesne_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+			prisoner = no
+			NOT = { trait = incapable }
+			
+			OR = {
+				trigger_if = {
+					limit = { ai = no }
+					wealth = 300
+					prestige = 1000
+				}
+				
+				trigger_else = {
+					wealth = 200
+					prestige = 500
+				}
+				
+				is_great_house_grandmaster = yes
+			}
+			
+			OR = {
+				independent = yes
+				liege = { OR = { has_landed_title = k_morrowind has_landed_title = e_dunmer } }
+			}
+		}
+		effect = {
+			if = {
+				limit = { is_great_house_grandmaster = no }
+				prestige = -1000
+				wealth = -300
+			}
+			if = {
+				limit = { trait = house_dres }
+				primary_title = {
+					d_dres = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_dres_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_dres
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_dres_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_indoril }
+				primary_title = {
+					d_indoril = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_indoril_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_indoril
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_indoril_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_telvanni }
+				primary_title = {
+					d_telvanni = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_telvanni_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_telvanni
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_telvanni_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_hlaalu }
+				primary_title = {
+					d_hlaalu = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_hlaalu_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_hlaalu
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_hlaalu_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_redoran }
+				primary_title = {
+					d_redoran = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_redoran_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_redoran
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_redoran_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_sadras }
+				primary_title = {
+					d_sadras = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_sadras_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_sadras
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_sadras_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_dagoth }
+				primary_title = {
+					d_dagoth = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_dagoth_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_dagoth
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_dagoth_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_sul }
+				primary_title = {
+					d_sul = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_sul_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_sul
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_sul_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+			if = {
+				limit = { trait = house_veloth }
+				primary_title = {
+					d_veloth = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				hidden_tooltip = {
+					clr_global_flag = house_veloth_extinct
+					any_independent_ruler = {
+						limit = {
+							trait = house_veloth
+							lower_tier_than = DUKE
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+					leave_society = yes
+					join_society = house_veloth_council
+					hidden_tooltip = { set_society_grandmaster = yes }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 99
+		}
+	}
+	
+	form_great_house = {
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			has_house_trait = yes
+			has_submenu_open = no
+			NOT = { has_global_flag = great_houses_banned }
+			OR = {
+				AND = {
+					trait = house_dres
+					has_landed_title = d_dres
+					k_dres = { has_holder = no }
+				}
+				AND = {
+					trait = house_indoril
+					has_landed_title = d_indoril
+					k_indoril = { has_holder = no }
+				}
+				AND = {
+					trait = house_hlaalu
+					has_landed_title = d_hlaalu
+					k_hlaalu = { has_holder = no }
+				}
+				AND = {
+					trait = house_redoran
+					has_landed_title = d_redoran
+					k_redoran = { has_holder = no }
+				}
+				AND = {
+					trait = house_telvanni
+					has_landed_title = d_telvanni
+					k_telvanni = { has_holder = no }
+				}
+				AND = {
+					trait = house_sadras
+					has_landed_title = d_sadras
+					k_sadras = { has_holder = no }
+				}
+				AND = {
+					trait = house_sul
+					has_landed_title = d_sul
+					k_sul = { has_holder = no }
+				}
+				AND = {
+					trait = house_dagoth
+					has_landed_title = d_dagoth
+					k_dagoth = { has_holder = no }
+				}
+				AND = {
+					trait = house_veloth
+					has_landed_title = d_veloth
+					k_veloth = { has_holder = no }
+				}
+			}
+		}
+		allow = {
+			war = no
+			in_command = no
+			is_adult = yes
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = {
+				any_demesne_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+			prisoner = no
+			NOT = { trait = incapable }
+			wealth = 500
+			prestige = 1000
+			OR = {
+				independent = yes
+				liege = { has_landed_title = e_dunmer }
+			}
+		}
+		effect = {
+			prestige = -1000
+			wealth = -500
+			if = {
+				limit = { trait = house_dres }
+				primary_title = {
+					k_dres = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_dres = { destroy_landed_title = THIS }
+				hidden_tooltip = {
+					any_independent_ruler = {
+						limit = {
+							trait = house_dres
+							lower_tier_than = KING
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+				}
+			}
+			if = {
+				limit = { trait = house_indoril }
+				primary_title = {
+					k_indoril = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_indoril = { destroy_landed_title = THIS }
+				hidden_tooltip = {
+					any_independent_ruler = {
+						limit = {
+							trait = house_indoril
+							lower_tier_than = KING
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+				}
+			}
+			if = {
+				limit = { trait = house_telvanni }
+				primary_title = {
+					k_telvanni = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_telvanni = { destroy_landed_title = THIS }
+				hidden_tooltip = {
+					any_independent_ruler = {
+						limit = {
+							trait = house_telvanni
+							lower_tier_than = KING
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+				}
+			}
+			if = {
+				limit = { trait = house_hlaalu }
+				primary_title = {
+					k_hlaalu = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_hlaalu = { destroy_landed_title = THIS }
+				hidden_tooltip = {
+					any_independent_ruler = {
+						limit = {
+							trait = house_hlaalu
+							lower_tier_than = KING
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+				}
+			}
+			if = {
+				limit = { trait = house_redoran }
+				primary_title = {
+					k_redoran = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_redoran = { destroy_landed_title = THIS }
+				hidden_tooltip = {
+					any_independent_ruler = {
+						limit = {
+							trait = house_redoran
+							lower_tier_than = KING
+						}
+						character_event = { id = ekgreathouses.5 }
+					}
+				}
+			}
+			if = {
+				limit = { trait = house_sadras }
+				primary_title = {
+					k_sadras = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_sadras = { destroy_landed_title = THIS }
+				any_independent_ruler = {
+					limit = {
+						trait = house_sadras
+						lower_tier_than = KING
+					}
+					character_event = { id = ekgreathouses.5 }
+				}
+			}
+			if = {
+				limit = { trait = house_dagoth }
+				primary_title = {
+					k_dagoth = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_dagoth = { destroy_landed_title = THIS }
+				any_independent_ruler = {
+					limit = {
+						trait = house_dagoth
+						lower_tier_than = KING
+					}
+					character_event = { id = ekgreathouses.5 }
+				}
+			}
+			if = {
+				limit = { trait = house_sul }
+				primary_title = {
+					k_sul = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_sul = { destroy_landed_title = THIS }
+				any_independent_ruler = {
+					limit = {
+						trait = house_sul
+						lower_tier_than = KING
+					}
+					character_event = { id = ekgreathouses.5 }
+				}
+			}
+			if = {
+				limit = { trait = house_veloth }
+				primary_title = {
+					k_veloth = {
+						grant_title = ROOT
+						copy_title_laws = PREV
+						add_law = succ_great_house_selection
+						make_primary_title_for_root_no_independence = yes
+					}
+				}
+				d_veloth = { destroy_landed_title = THIS }
+				any_independent_ruler = {
+					limit = {
+						trait = house_veloth
+						lower_tier_than = KING
+					}
+					character_event = { id = ekgreathouses.5 }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 99
+		}
+	}
+	
+	# The Temple can expell a Great House from Vvardenfell if they are excommunicated/the relations are very very bad
+	temple_expell_house_indoril_vvardenfell = {
+		potential = {
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_indoril = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_indoril } }
+						}
+					}
+				}
+				d_indoril = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_indoril } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+				
+				if = {
+					limit = {
+						k_indoril = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_indoril } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_indoril = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_indoril = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_indoril } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_indoril = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_indoril
+			}
+		}
+	}
+	
+	temple_expell_house_hlaalu_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_hlaalu = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_hlaalu } }
+						}
+					}
+				}
+				d_hlaalu = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_hlaalu } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+			
+				if = {
+					limit = {
+						k_hlaalu = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_hlaalu } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_hlaalu = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_hlaalu = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_hlaalu } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_hlaalu = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_hlaalu
+			}
+		}
+	}
+	
+	temple_expell_house_dres_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_dres = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_dres } }
+						}
+					}
+				}
+				d_dres = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_dres } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+				
+				if = {
+					limit = {
+						k_dres = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_dres } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_dres = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_dres = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_dres } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_dres = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_dres
+			}
+		}
+	}
+	
+	temple_expell_house_redoran_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_redoran = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_redoran } }
+						}
+					}
+				}
+				d_redoran = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_redoran } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+				
+				if = {
+					limit = {
+						k_redoran = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_redoran } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_redoran = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_redoran = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_redoran } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_redoran = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_redoran
+			}
+		}
+	}
+	
+	temple_expell_house_telvanni_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_telvanni = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_telvanni } }
+						}
+					}
+				}
+				d_telvanni = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_telvanni } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+				
+				if = {
+					limit = {
+						k_telvanni = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_telvanni } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_telvanni = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_telvanni = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_telvanni } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_telvanni = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_telvanni
+			}
+		}
+	}
+	
+	temple_expell_house_sul_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_sul = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_sul } }
+						}
+					}
+				}
+				d_sul = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_sul } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+			
+				if = {
+					limit = {
+						k_sul = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_sul } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_sul = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_sul = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_sul } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_sul = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_sul
+			}
+		}
+	}
+	
+	temple_expell_house_sadras_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_sadras = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_sadras } }
+						}
+					}
+				}
+				d_sadras = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_sadras } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+				
+				if = {
+					limit = {
+						k_sadras = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_sadras } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_sadras = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_sadras = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_sadras } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_sadras = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_sadras
+			}
+		}
+	}
+	
+	temple_expell_house_dagoth_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_dagoth = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_dagoth } }
+						}
+					}
+				}
+				d_dagoth = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_dagoth } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+			
+				if = {
+					limit = {
+						k_dagoth = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_dagoth } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_dagoth = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_dagoth = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_dagoth } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_dagoth = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_dagoth
+			}
+		}
+	}
+	
+	temple_expell_house_veloth_vvardenfell = {
+		potential = {
+			has_submenu_open = no
+			
+			has_landed_title = k_almsivi
+			#ai = no
+			
+			OR = {
+				k_veloth = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_veloth } }
+						}
+					}
+				}
+				d_veloth = {
+					owner = { excommunicated_for = ROOT }
+					owner = { NOT = { reverse_opinion = { who = ROOT value = -25 } } }
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							tier = BARON
+							owner = { top_liege = { has_landed_title = k_veloth } }
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			war = no
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = EXPELL_HOUSE_NO_LONGER_EXCOMMUNICATED_CT
+				
+				if = {
+					limit = {
+						k_veloth = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = k_veloth } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					k_veloth = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+				
+				else_if = {
+					limit = {
+						d_veloth = { is_title_active = THIS }
+					}
+					k_vvardenfell = {
+						any_de_jure_vassal_title = {
+							limit = {
+								tier = BARON
+								owner = { top_liege = { has_landed_title = d_veloth } }
+							}
+							show_scope_change = no
+							ROOT = { usurp_title = PREV }
+						}
+					}
+					d_veloth = { owner = { character_event = { id = ekgreathouses.260 days = 1 } } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = craven
+			}
+			
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.1
+				trait = house_veloth
+			}
+		}
+	}
+	
+	### Unite Morrowind as a triumphant Great House
+	# unite_morrowind_gh = {
+		# only_playable = yes
+		# is_high_prio = yes
+		
+		# potential = {
+			# always = no
+			# ai = no
+			# is_great_house_grandmaster = yes
+			
+			# k_morrowind = {
+				# OR = {
+					# has_holder = no
+					# holder_scope = { character = ROOT }
+				# }
+			# }
+		# }
+		
+		# allow = {
+			# trigger_if = {
+				# limit = { society_member_of = house_dres_council }
+				# house_dres_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_hlaalu_council }
+				# house_hlaalu_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_indoril_council }
+				# house_indoril_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_redoran_council }
+				# house_redoran_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_telvanni_council }
+				# house_telvanni_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_sadras_council }
+				# house_sadras_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_sul_council }
+				# house_sul_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_veloth_council }
+				# house_veloth_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+			
+			# trigger_else_if = {
+				# limit = { society_member_of = house_dagoth_council }
+				# house_dagoth_council = { society_influence >= 95 }
+				# NOR = {
+					# house_dres_council = { society_influence >= 15 }
+					# house_hlaalu_council = { society_influence >= 15 }
+					# house_indoril_council = { society_influence >= 15 }
+					# house_redoran_council = { society_influence >= 15 }
+					# house_telvanni_council = { society_influence >= 15 }
+					# house_sadras_council = { society_influence >= 15 }
+					# house_sul_council = { society_influence >= 15 }
+					# house_veloth_council = { society_influence >= 15 }
+					# house_dagoth_council = { society_influence >= 15 }
+				# }
+			# }
+		# }
+		
+		# effect = {
+			# if = {
+				# limit = { k_morrowind = { has_holder = no } }
+				# k_morrowind = { grant_title = ROOT }
+			# }
+			
+			# custom_tooltip = {
+				# text = GREAT_HOUSES_DESTROYED_CT
+				
+				# any_society_member = {
+					# limit = { is_member_great_house_society = yes }
+					# leave_society = yes
+				# }
+				
+				# set_global_flag = great_houses_banned
+				
+				# set_global_flag = house_dres_extinct
+				# set_global_flag = house_hlaalu_extinct
+				# set_global_flag = house_indoril_extinct
+				# set_global_flag = house_redoran_extinct
+				# set_global_flag = house_telvanni_extinct
+				# set_global_flag = house_sadras_extinct
+				# set_global_flag = house_sul_extinct
+				# set_global_flag = house_veloth_extinct
+				# set_global_flag = house_dagoth_extinct
+				
+				
+				# any_title = {
+					# limit = {
+						# OR = {
+							# title = d_dres
+							# title = k_dres
+							# title = d_hlaalu
+							# title = k_hlaalu
+							# title = d_indoril
+							# title = k_indoril
+							# title = d_redoran
+							# title = k_redoran
+							# title = d_telvanni
+							# title = k_telvanni
+							# title = d_sadras
+							# title = k_sadras
+							# title = d_sul
+							# title = k_sul
+							# title = d_veloth
+							# title = k_veloth
+							# title = d_dagoth
+							# title = k_dagoth
+						# }
+						# has_holder = yes
+					# }
+					# grant_title = ROOT
+					# destroy_landed_title = THIS
+				# }
+				
+				# any_character = {
+					# limit = { has_house_trait = yes }
+					# remove_house_trait = yes
+				# }
+			# }
+		# }
+	# }
+}
+
+targetted_decisions = {
+	# Someone with enough Clout can ask a relative in their court to join their House
+	convince_to_join_house = {
+		only_playable = yes
+		filter = dynasty
+		ai_target_filter = dynasty
+		ai_check_interval = 6
+		
+		from_potential = {
+			has_submenu_open = no
+			is_playable = yes
+			is_adult = yes
+			
+			has_house_trait = yes
+			is_member_great_house_society = yes
+			
+			society_rank = 2
+		}
+		
+		potential = {
+			independent = no
+			is_adult = yes
+			any_liege = { character = FROM }
+			dynasty = FROM
+			
+			custom_tooltip = {
+				text = HAS_WRONG_HOUSE_CT
+				
+				OR = {
+					AND = {
+						trait = house_indoril
+						FROM = { NOT = { trait = house_indoril } }
+					}
+					AND = {
+						trait = house_dres
+						FROM = { NOT = { trait = house_dres } }
+					}
+					AND = {
+						trait = house_hlaalu
+						FROM = { NOT = { trait = house_hlaalu } }
+					}
+					AND = {
+						trait = house_redoran
+						FROM = { NOT = { trait = house_redoran } }
+					}
+					AND = {
+						trait = house_telvanni
+						FROM = { NOT = { trait = house_telvanni } }
+					}
+					AND = {
+						trait = house_sadras
+						FROM = { NOT = { trait = house_sadras } }
+					}
+					AND = {
+						trait = house_dagoth
+						FROM = { NOT = { trait = house_dagoth } }
+					}
+					AND = {
+						trait = house_veloth
+						FROM = { NOT = { trait = house_veloth } }
+					}
+					AND = {
+						trait = house_sul
+						FROM = { NOT = { trait = house_sul } }
+					}
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				prestige = 50
+				prisoner = no
+				has_society_currency_major_trigger = yes
+			}
+			custom_tooltip = {
+				text = "NOT_ALREADY_NEGOTIATED"
+				NOT = { has_character_flag = negotiated_to_switch_house }
+			}
+		}
+		effect = {
+			set_character_flag = negotiated_to_switch_house
+			character_event = { id = ekgreathouses.200 }
+			
+			FROM = {
+				prestige = -50
+				detract_society_currency_major_effect = yes
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				any_dynasty_member = {
+					ai = no
+					higher_tier_than = ROOT
+					same_realm = ROOT
+				}
+			}
+		}
+	}
+	
+	# You can spend Clout to try and get a favor from someone within the Society
+	use_clout_to_get_favor = {
+		only_playable = yes
+		
+		# Can only get it from someone within the House
+		filter = society
+		ai_target_filter = society
+		ai_check_interval = 60
+
+		from_potential = {
+			has_submenu_open = no
+			
+			has_dlc = "Conclave"
+			is_playable = yes
+			is_adult = yes
+			NOT = { trait = incapable }
+			prisoner = no
+			
+			has_house_trait = yes
+			is_member_great_house_society = yes
+			
+			society_rank = 2
+		}
+
+		potential = {
+			NOT = { character = FROM }
+			is_adult = yes
+			is_within_diplo_range = FROM
+			
+			same_society_as = FROM
+		}
+
+		allow = {
+			ROOT = {
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = { owes_favor_to = FROM }
+			}
+			FROM = {
+				has_society_currency_medium_trigger = yes
+				is_inaccessible_trigger = no
+			}
+			NOT = {
+				has_opinion_modifier = {
+					modifier = opinion_blackmailed
+					who = FROM
+				}
+			}
+		}
+
+		effect = {
+			FROM = { detract_society_currency_medium_effect = yes }
+
+			random_list = {
+				50 = {
+					modifier = { # Grandmasters should have an easy time getting a favor from someone
+						factor = 2
+						FROM = { society_rank == 3 }
+					}
+					modifier = {
+						factor = 1.25
+						FROM = { society_rank == 2 }
+					}
+					modifier = {
+						factor = 2
+						trait = craven
+					}
+					modifier = {
+						factor = 1.5
+						trait = content
+					}
+					
+					# Scales with Agent education
+					modifier = {
+						factor = 1.1
+						trait = agent_1
+					}
+					modifier = {
+						factor = 1.2
+						trait = agent_2
+					}
+					modifier = {
+						factor = 1.3
+						trait = agent_3
+					}
+					modifier = {
+						factor = 1.4
+						trait = agent_4
+					}
+					modifier = {
+						factor = 1.5
+						trait = agent_5
+					}
+					
+					# Scales with Intrigue (yes, it stacks with above)
+					modifier = {
+						factor = 1.25
+						intrigue = 10
+					}
+					modifier = {
+						factor = 1.25
+						intrigue = 20
+					}
+					modifier = {
+						factor = 1.25
+						intrigue = 30
+					}
+					modifier = {
+						factor = 1.25
+						intrigue = 40
+					}
+					
+					hidden_effect = { character_event = { id = ekgreathouses.230 days = 1 } }
+					FROM = { add_favor = ROOT }
+				}
+				50 = {
+					modifier = { # Quite difficult to get a favor from the Grandmaster
+						factor = 2
+						society_rank == 3
+					}
+					modifier = { # Quite difficult to get a favor from the Grandmaster
+						factor = 1.25
+						society_rank == 2
+					}
+					modifier = { #Makes it harder to threaten someone above you
+						factor = 3
+						higher_tier_than = FROM
+					}
+					modifier = {
+						factor = 2
+						trait = brave
+					}
+					modifier = {
+						factor = 1.5
+						trait = ambitious
+					}
+					
+					# Scales with Agent education
+					modifier = {
+						factor = 1.1
+						trait = agent_1
+					}
+					modifier = {
+						factor = 1.2
+						trait = agent_2
+					}
+					modifier = {
+						factor = 1.3
+						trait = agent_3
+					}
+					modifier = {
+						factor = 1.4
+						trait = agent_4
+					}
+					modifier = {
+						factor = 1.5
+						trait = agent_5
+					}
+					
+					# Scales with Intrigue (yes, it stacks with above)
+					modifier = {
+						factor = 1.25
+						intrigue = 10
+					}
+					modifier = {
+						factor = 1.25
+						intrigue = 20
+					}
+					modifier = {
+						factor = 1.25
+						intrigue = 30
+					}
+					modifier = {
+						factor = 1.25
+						intrigue = 40
+					}
+					custom_tooltip = { text = CANNOT_GET_FAVOR_CLOUT_CT }
+					hidden_effect = { FROM = { character_event = { id = ekgreathouses.231 days = 1 } } }
+				}
+			}
+			
+		}
+
+		revoke_allowed = {
+			always = no
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5 # slow down
+			}
+			modifier = {
+				FROM = { is_benevolent_trigger = yes }
+				factor = 0.1
+			}
+			modifier = {
+				FROM = { is_evil_trigger = yes }
+				factor = 2
+			}
+			modifier = {
+				OR = {
+					is_friend = FROM
+					is_lover = FROM
+					NOR = {
+						liege = { character = FROM }
+						is_liege_of = FROM
+					}
+				}
+				factor = 0
+			}
+		}
+	}
+}
+
+title_decisions = {
+	vvardenfell_colonize_county = {
+		is_high_prio = yes
+		
+		only_playable = yes
+		
+		ai_target_filter = all
+		filter = all
+		ai_check_interval = 24
+		
+		from_potential = {
+			has_submenu_open = no
+			is_member_great_house_society = yes
+			is_society_grandmaster = yes
+		}
+		
+		potential = {
+			tier = COUNT
+			owner = { top_liege = { has_landed_title = k_almsivi } }
+			region = nirn_tamriel_vvardenfell
+		}
+		
+		allow = {
+			FROM = {
+				has_society_currency_major_trigger = yes
+				prestige = 100
+				wealth = 500
+			}
+			
+			k_almsivi = {
+				owner = { opinion = { who = FROM value = 25 } }
+			}
+			
+			FROM = {
+				custom_tooltip = {
+					text = GREAT_HOUSE_NO_COLONIZATION_5_YEARS_CT
+					NOT = { has_character_modifier = grandmaster_recently_asked_colonisation_vvardenfell }
+				}
+			}
+			
+			location = { NOT = { has_province_modifier = recent_colonization_vvardenfell } }
+			
+			custom_tooltip = {
+				text = ARCHCANON_HAS_ALLOWED_COLONIZATION_CT
+				
+				has_global_flag = vvardenfell_colonisation_allowed
+			}
+		}
+		
+		effect = {
+			save_event_target_as = county_to_colonize
+			FROM = { save_event_target_as = colonizer }
+			
+			FROM = {
+				prestige = -50
+				detract_society_currency_major_effect = yes
+				
+				add_character_modifier = { name = grandmaster_recently_asked_colonisation_vvardenfell duration = 1825 }
+			}
+			
+			k_almsivi = { owner = { character_event = { id = ekgreathouses.210 } } }
+		}
+	}
+	
+	vvardenfell_colonization_effort = {
+		is_high_prio = yes
+		
+		only_playable = yes
+		
+		ai_target_filter = all
+		filter = all
+		ai_check_interval = 24
+		
+		from_potential = {
+			has_submenu_open = no
+			is_member_great_house_society = yes
+			is_society_grandmaster = yes
+		}
+		
+		potential = {
+			tier = BARON
+			
+			OR = {
+				has_holding_modifier = new_house_settlement_vvardenfell
+				has_holding_modifier = new_house_settlement_vvardenfell_1
+			}
+			
+			owner = {
+				OR = {
+					character = FROM
+					top_liege = { character = FROM }
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				has_society_currency_medium_trigger = yes
+				wealth = 100
+			}
+		}
+		
+		effect = {
+			FROM = {
+				wealth = -100
+				detract_society_currency_medium_effect = yes
+			}
+			
+			if = {
+				limit = { has_holding_modifier = new_house_settlement_vvardenfell }
+				remove_holding_modifier = new_house_settlement_vvardenfell
+				add_holding_modifier = { modifier = new_house_settlement_vvardenfell_1 years = -1 }
+			}
+			
+			else_if = {
+				limit = { has_holding_modifier = new_house_settlement_vvardenfell_1 }
+				remove_holding_modifier = new_house_settlement_vvardenfell_1
+			}
+		}
+	}
+	
+	house_claim_county = {
+		is_high_prio = yes
+		
+		only_playable = yes
+		
+		ai_target_filter = all
+		filter = all
+		ai_check_interval = 60
+		
+		from_potential = {
+			has_submenu_open = no
+			is_member_great_house_society = yes
+			is_society_grandmaster = yes
+		}
+		
+		potential = {
+			tier = COUNT
+			owner = {
+				top_liege = {
+					is_member_great_house_society = yes
+					any_demesne_title = { is_dunmer_great_house_title = yes }
+					
+					NOT = { character = FROM }
+				}
+			}
+			location = {
+				any_neighbor_province = {
+					owner = {
+						OR = {
+							character = FROM
+							is_liege_or_above = FROM
+						}
+					}
+				}
+			}
+			NOT = { claimed_by = FROM }
+		}
+		
+		allow = {
+			FROM = {
+				society_currency >= 1000
+			}
+		}
+		
+		effect = {
+			FROM = {
+				change_society_currency = -1000
+				save_event_target_as = county_claimant
+				#add_claim = ROOT
+			}
+			
+			save_event_target_as = county_claimed
+			
+			owner = {
+				top_liege = { character_event = { id = ekgreathouses.240 days = 2 } }
+			}
+			
+			custom_tooltip = {
+				text = CLAIM_GREAT_HOUSE_TERRITORY_OPINION_HIT_CT
+				any_independent_ruler = {
+					limit = {
+						any_demesne_title = {
+							OR = {
+								is_dunmer_great_house_title = yes
+								title = k_almsivi
+							}
+						}
+						NOT = { character = FROM }
+					}
+					opinion = {
+						modifier = opinion_claimed_great_house_territory
+						who = FROM
+						years = 5
+					}
+					
+					any_vassal = {
+						opinion = {
+							modifier = opinion_claimed_great_house_territory
+							who = FROM
+							years = 5
+						}
+					}
+				}
+			}	
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5 # slow down
+			}
+			modifier = {
+				FROM = { trait = content }
+				factor = 0.1
+			}
+			modifier = {
+				FROM = { trait = ambitious }
+				factor = 2
+			}
+		}
+	}
+	
+	house_annex_county = {
+		is_high_prio = yes
+		
+		only_playable = yes
+		
+		ai_target_filter = all
+		filter = all
+		ai_check_interval = 60
+		
+		from_potential = {
+			has_submenu_open = no
+			is_member_great_house_society = yes
+			is_society_grandmaster = yes
+			
+			NOT = { war = yes }
+		}
+		
+		potential = {
+			tier = COUNT
+			owner = {
+				top_liege = {
+					is_member_great_house_society = yes
+					any_demesne_title = { is_dunmer_great_house_title = yes }
+				}
+			}
+			location = {
+				any_neighbor_province = {
+					owner = {
+						OR = {
+							character = FROM
+							is_liege_or_above = FROM
+						}
+					}
+				}
+			}
+			claimed_by = FROM
+		}
+		
+		allow = {
+			trigger_if = {
+				limit = {
+					dejure_liege_title = {
+						owner = {
+							OR = {
+								character = FROM
+								top_liege = { character = FROM }
+							}
+						}
+					}
+				}
+				FROM = { society_currency >= 1500 }
+			}
+			
+			trigger_else = {
+				FROM = { society_currency >= 2500 }
+			}
+		}
+		
+		effect = {
+			FROM = {
+				if = {
+					limit = {
+						ROOT = {
+							dejure_liege_title = {
+								owner = {
+									OR = {
+										character = FROM
+										top_liege = { character = FROM }
+									}
+								}
+							}
+						}
+					}
+					change_society_currency = -1500
+				}
+				
+				else = {
+					change_society_currency = -2500
+				}
+				
+				save_event_target_as = county_annexer
+			}
+			
+			save_event_target_as = county_annexed
+			
+			owner = {
+				top_liege = { character_event = { id = ekgreathouses.250 days = 2 } }
+			}
+			
+			#usurp_title = FROM
+			
+			custom_tooltip = {
+				text = ANNEX_GREAT_HOUSE_TERRITORY_OPINION_HIT_CT
+				any_independent_ruler = {
+					limit = {
+						any_demesne_title = {
+							OR = {
+								is_dunmer_great_house_title = yes
+								title = k_almsivi
+							}
+						}
+						NOT = { character = FROM }
+					}
+					opinion = {
+						modifier = opnion_annexed_great_house_territory
+						who = FROM
+						years = 25
+					}
+					
+					any_vassal = {
+						opinion = {
+							modifier = opnion_annexed_great_house_territory
+							who = FROM
+							years = 25
+						}
+					}
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.25 # slow down
+			}
+			modifier = {
+				FROM = { trait = content }
+				factor = 0.1
+			}
+			modifier = {
+				FROM = { trait = ambitious }
+				factor = 2
+			}
+		}
+	}
+}

@@ -1,0 +1,245 @@
+oblivion_molag = {
+	name = molag_molag
+	window_name = domestic_offmaps_window
+	button_name = icon_offmaps_entry
+	currency_name = TXT_ARDOR
+	currency_gain = monthly_ardor
+	currency_reset_on_dynasty_change = yes
+	holder_title = title_oblivion_molag			# minor title used to identify a character as holder of this offmap power
+	governor_title = e_cult_molag
+	tier = emperor
+	non_aggression_modifier = peace_deal_with_china
+	coa_religion = daedra_molag
+	government = confucian_bureaucracy
+	beginning_of_history = 1.1.1
+	sound = china_interaction_interface
+	display_trigger = {
+		has_dlc = "Jade Dragon"
+		FROM = {
+			worships_molag = yes
+		}
+	}
+	policies = {
+		oblivion_isolationist
+		oblivion_interactive
+		oblivion_interventionist
+	}
+	statuses = {
+		oblivion_normal
+		oblivion_apogee
+		oblivion_convalescing
+		oblivion_cataclysm
+	}
+	buttons = {
+		offmap_gifts = {
+			is_active_trigger = {
+				always = yes
+			}
+		}
+		offmap_boons = {
+			is_active_trigger = {
+				oblivion_molag_boon_decisions_enabled_trigger = yes
+			}
+		}
+		offmap_hostility = {
+			is_active_trigger = {
+				#china_offmap_hostile_decisions_enabled_trigger = yes
+			}
+			display_trigger = {
+				always = no
+			}
+		}
+		offmap_hostility2 = {
+			display_trigger = {
+				always = no
+			}
+		}
+	}
+	
+	#These conditions only effect the appearance of the button, it does not actually disable them from being clickable. The same triggers are used in all tribute/boon decisions respectively
+	
+	icon_triggers = {
+	}
+	
+	monthly_currency_gain = {
+		offmap_openly_worship = {
+			value = 2.5
+			FROM = { likes_daedra_molag = yes }
+		}
+		offmap_secretly_worship = {
+			value = 1.25
+			FROM = { likes_secretly_daedra_molag = yes }
+		}
+		offmap_pantheon_worship = {
+			value = 0.5
+			FROM = { likes_patron_molag = yes }
+		}
+		offmap_offering = {
+			value = 5.0
+			FROM = { likes_sacrifice_molag = yes }
+		}
+		offmap_likes_arbitrary = {
+			value = 0.25
+			FROM = { likes_arbitrary = yes }
+		}
+		offmap_likes_cruel = {
+			value = 0.25
+			FROM = { likes_cruel = yes }
+		}
+		offmap_likes_greedy = {
+			value = 0.25
+			FROM = { likes_greedy = yes }
+		}
+		offmap_likes_ruthless = {
+			value = 0.25
+			FROM = { likes_ruthless = yes }
+		}
+		offmap_likes_wroth = {
+			value = 0.25
+			FROM = { likes_wroth = yes }
+		}
+		offmap_likes_proud = {
+			value = 0.25
+			FROM = { likes_proud = yes }
+		}
+		offmap_likes_lustful = {
+			value = 0.25
+			FROM = { likes_lustful = yes }
+		}
+		offmap_likes_zealous = {
+			value = 0.25
+			FROM = { likes_zealous = yes }
+		}
+		offmap_likes_falconers = {
+			value = 0.25
+			FROM = { likes_falconers = yes }
+		}
+		offmap_likes_hunters = {
+			value = 0.25
+			FROM = { likes_hunters = yes }
+		}
+		offmap_likes_impalers = {
+			value = 0.25
+			FROM = { likes_impalers = yes }
+		}
+		offmap_likes_schemers = {
+			value = 0.25
+			FROM = { likes_schemers = yes }
+		}
+		offmap_likes_warlords = {
+			value = 0.25
+			FROM = { likes_warlords = yes }
+		}
+		offmap_likes_slavers = {
+			value = 0.25
+			FROM = { likes_slavers = yes }
+		}
+		offmap_likes_pirates = {
+			value = 0.25
+			FROM = { likes_pirates = yes }
+		}
+		offmap_likes_necromancers = {
+			value = 0.25
+			FROM = { likes_necromancers = yes }
+		}
+		offmap_likes_vampires = {
+			value = 0.75
+			FROM = { likes_vampires = yes }
+		}
+		offmap_likes_dragonborns = {
+			value = 5.0
+			FROM = { likes_dragonborns = yes }
+		}
+		
+		#Negative
+		offmap_likes_celibate = {
+			value = -0.50
+			FROM = { likes_celibate = yes }
+		}
+		offmap_likes_charitable = {
+			value = -0.75
+			FROM = { likes_charitable = yes }
+		}
+		offmap_likes_chaste = {
+			value = -0.50
+			FROM = { likes_chaste = yes }
+		}
+		offmap_likes_cynical = {
+			value = -0.25
+			FROM = { likes_cynical = yes }
+		}
+		offmap_likes_humble = {
+			value = -0.50
+			FROM = { likes_humble = yes }
+		}
+		offmap_likes_just = {
+			value = -0.75
+			FROM = { likes_just = yes }
+		}
+		offmap_likes_kind = {
+			value = -0.75
+			FROM = { likes_kind = yes }
+		}
+		offmap_likes_patient = {
+			value = -0.50
+			FROM = { likes_patient = yes }
+		}
+		
+		# offmap_ = {
+			# FROM = {  = yes }
+		# }
+	}
+	
+	temple_names = {
+		{ # Founder names
+			"Molag Bal"
+		}
+		{ # Successor names
+			"Molag Bal"
+		}
+	}
+	holder_succession = {
+		is_female = {					# chances of getting a female holder, as a percentage: if the total is >= 100, the new holder will always be female. If the total is <= 0, the new holder will always be male
+			value = 0
+		}
+		culture = {
+			daedric = {
+				value = 100
+			}
+		}
+
+		graphical_culture = { 
+			FROM = {
+				value = 100
+			}
+		}
+
+		religion = {
+			daedra_molag = {
+				value = 100
+			}
+		}
+
+		dynasty = {
+			FROM = {
+				value = 100
+			}
+		}
+		
+		likes = {
+			likes_dragonborns = {
+				value = 250
+			}
+		}
+		
+		dislikes = {
+			likes_kind = {
+				value = 100
+			}
+		}
+	}
+	
+	diplomatic_range = { #Already includes the western governor's "normal" diplo range
+		worships_molag = yes
+	}
+}

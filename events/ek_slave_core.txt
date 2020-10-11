@@ -1,0 +1,1092 @@
+namespace = slaves
+
+character_event = {
+	id = slaves.1
+	desc = Slaves1
+	picture = GFX_evt_burning_house
+
+	is_triggered_only = yes
+	
+	only_playable = yes #This way, landless adventurers can't take slaves
+	
+	trigger = {
+		has_law = slavery_1
+		NOT = { has_character_flag = slave_raid_events_disabled }
+		FROM = {
+			location = {
+				any_neighbor_province = {
+					OR = {
+						has_game_rule = { name = slave_raiding_restriction value = unrestricted }
+						AND = { # Borders raider
+							owner = {
+								OR = {
+									character = ROOT
+									any_liege = {
+										character = ROOT
+									}
+								}
+							}
+						}
+						AND = { # Raider has fleet off the coast
+							is_land = no
+							ROOT = {
+								any_fleet = {
+									location = {
+										province = PREVPREVPREV
+									}
+								}
+							}
+						}
+					}
+				}
+				NOT = { owner = { same_realm = ROOT } }
+				province_can_be_enslaved = yes
+			}
+		}
+	}
+	
+	immediate = {
+		# Let's save the province potentially receiving the slaves here?
+		random_demesne_province = {
+			limit = { province_has_slaves = no NOT = { has_province_flag = potentially_receiving_slaves } }
+			location = { save_event_target_as = target_province_receive_slaves }
+			
+			# This flag can be useful if there are several slave raid events popping at the same time I guess
+			set_province_flag = potentially_receiving_slaves
+		}
+		
+		# Let's also save the province the slaves are from, could maybe be useful at one point
+		FROM = { location = { save_event_target_as = target_province_enslaved } }
+		
+		# We have to remove any leftover persistent event target
+		cleanse_slavery_event_target = yes
+		
+		# Save the province total value here
+		export_to_variable = { which = province_value value = total_tax_value who = event_target:target_province_enslaved }
+		multiply_variable = { which = province_value value = 1.5 }
+		change_variable = { which = province_value value = 5 }
+	}
+
+	option = {
+		name = Slaves1Accept
+		trigger = {
+			event_target:target_province_receive_slaves = { always = yes } # This province can receive slaves
+		}
+		
+		# target_province_receive_slaves and target_province_enslaved have already been decided in the immediate
+		enslave_province_send_target_province_receive_slaves = yes
+		
+		increment_slaver_progression = yes
+	}
+	
+	option = {
+		name = Slaves1Sell
+		
+		# target_province_enslaved has already been decided
+		enslave_province = yes
+		
+		wealth = province_value
+
+		increment_slaver_progression = yes
+	}
+	
+	option = {
+		name = Slaves1Decline
+	}
+	
+	after = {
+		random_realm_province = {
+			limit = { has_province_flag = potentially_receiving_slaves }
+			clr_province_flag = potentially_receiving_slaves
+		}
+	}
+}
+
+#character_event = {
+#	id = slaves.10
+#	desc = Slaves10
+#	picture = GFX_evt_burning_house
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = Slaves10Accept
+#		capital_scope = {
+#			add_province_modifier = {
+#				name = imperial_slaves
+#				months = 60
+#				stacking = yes
+#			}
+#		}
+#	}
+#}
+#
+#character_event = {
+#	id = slaves.11
+#	desc = Slaves11
+#	picture = GFX_evt_burning_house
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = Slaves11Accept
+#		capital_scope = {
+#			remove_province_modifier = imperial_slaves
+#		}
+#	}
+#}
+
+# Finishing the siege of a province with slaves, what to do with them?
+character_event = {
+	id = slaves.20
+	desc = slaves.20.d
+	is_triggered_only = yes
+	picture = GFX_evt_burning_house
+	
+	trigger = {
+		FROM = { 
+			is_capital = yes # The capital holding
+			location = {
+				province_has_slaves = yes
+			}
+		}
+		# Slave revolt have their own event
+		NOT = {
+			any_war = {
+				attacker = { character = ROOT }
+				using_cb = slave_liberation_revolt
+			}
+		}
+		
+		OR = {
+			NOT = { has_character_flag = dont_want_liberate_slaves_pls_stop }
+			had_character_flag = { flag = dont_want_liberate_slaves_pls_stop days = 365 }
+		}
+	}
+	
+	immediate = {
+		# Where the slaves come from and are kept
+		FROM = { location = { save_event_target_as = province_with_slaves } }
+		FROM = { location = { persistent_event_target:slaves_come_from_province = { save_event_target_as = province_slaves_come_from } } }
+		local_get_enslaved_culture = yes
+		
+		# Who's the liberator
+		ROOT = { save_event_target_as = target_liberator }
+	}	
+	
+	# Free the slaves
+	option = {
+		name = {
+			text = slaves.20.optA
+			trigger = {
+				NOR = {
+					# Come from your realm
+					event_target:province_with_slaves = { persistent_event_target:slaves_come_from_province = { owner = { NOT = { same_realm = ROOT } } } }
+					# You're a liberator
+					trait = liberator
+					# You have the Liberator bloodline
+					any_owned_bloodline = {
+						has_bloodline_flag = liberator_bloodline
+						bloodline_is_active_for = PREV
+					}
+				}
+			}
+		}
+		
+		name = {
+			text = slaves.20.samerealm
+			trigger = {
+				OR = {
+					# Slaves come from your realm
+					event_target:province_with_slaves = { persistent_event_target:slaves_come_from_province = { owner = { same_realm = ROOT } } }
+					# You're a liberator
+					trait = liberator
+					# You have the Liberator bloodline
+					any_owned_bloodline = {
+						has_bloodline_flag = liberator_bloodline
+						bloodline_is_active_for = PREV
+					}
+				}
+			}
+		}
+		
+		name = slaves.20.optA
+		
+		prestige = 25
+		
+		if = {
+			limit = {
+				OR = {
+					# Come from your realm
+					event_target:province_with_slaves = { persistent_event_target:slaves_come_from_province = { owner = { NOT = { same_realm = ROOT } } } }
+					# You're a liberator
+					trait = liberator
+					# You have the Liberator bloodline
+					any_owned_bloodline = {
+						has_bloodline_flag = liberator_bloodline
+						bloodline_is_active_for = PREV
+					}
+				}
+					
+			}
+			
+			# Let's tell the province owner that their slaves have been liberated
+			if = {
+				limit = {
+					event_target:province_slaves_come_from = { owner = { NOT = { character = ROOT } } }
+				}
+				
+				event_target:province_slaves_come_from = { owner = { character_event = { id = slaves.21 days = 3 } } }
+			}
+			
+			event_target:province_with_slaves = { liberate_province_send_back = yes }
+		}
+		
+		else = {
+			event_target:province_with_slaves = { liberate_province = yes }
+		}
+			
+		
+		custom_tooltip = {
+			text = SLAVES_LIBERATED_CULTURE_OPINION_BOOST_CT
+			any_realm_character = {
+				limit = { culture = event_target:enslaved_culture }
+				opinion = { who = ROOT modifier = liberated_my_people }
+			}
+		}
+		
+		hidden_tooltip = {
+			if = {
+				limit = { NOT = { trait = slaver } }
+				random_list = {
+					# Ex-Slave wants to join your court
+					20 = { character_event = { id = slaves.30 days = 2 } }
+					# Some ex-slaves wish to establish themselves in your realm
+					20 = { character_event = { id = slaves.31 days = 2 } }
+					# Nothing
+					60 = { }
+				}
+			}
+		}
+			
+		hidden_tooltip = {
+			if = {
+				# Can't be both a slaver and a liberator
+				limit = {
+					NOR = { character_dabbles_in_slavery = yes }
+					NOR = { character_is_known_slaver = yes }
+				}
+				
+				increment_liberator_progression = yes
+			}
+		}
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0.25
+				OR = {
+					is_slavery_religion = yes
+					is_proslavery_culture = yes
+				}
+			}
+			
+			modifier = {
+				factor = 0.25
+				trait = slaver
+			}
+			
+			modifier = {
+				factor = 2.0
+				is_antislavery_culture = yes
+			}
+			
+			modifier = {
+				factor = 5
+				trait = exslave
+			}
+			
+			# Wants to free slaves of their own culture
+			modifier = {
+				factor = 2
+				culture = event_target:enslaved_culture
+			}
+		}
+	}
+	
+	# Do nothing
+	option = {
+		name = slaves.20.optB
+	}
+	
+	# Stop pestering me about it!
+	option = {
+		trigger = { ai = no }
+		name = slaves.20.optC
+		
+		custom_tooltip = {
+			text = WONT_ASK_AGAIN_1_YEAR_CT
+			set_character_flag = dont_want_liberate_slaves_pls_stop
+		}
+	}
+	
+	# TO DO: Take the slaves for yourself, maybe later
+}
+
+# Province owner is informed their population has been escorted back to their home province
+character_event = {
+	id = slaves.21
+	picture = GFX_evt_burning_house
+	
+	desc = {
+		# If we know who liberated them
+		trigger = { event_target:target_liberator = { always = yes } }
+		text = slaves.21.d.liberator
+	}
+	
+	desc = {
+		trigger = { NOT = { event_target:target_liberator = { always = yes } } }
+		text = slaves.21.d.unknown
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = slaves.21.optA
+		
+		custom_tooltip = {
+			text = SLAVES_JOIN_BACK_HOME_PROVINCE_CT
+		}
+	}
+}
+
+### Post-liberation events
+# Former slave wants to join you
+character_event = {
+	id = slaves.30
+	desc = slaves.30.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			female = 50
+			culture = event_target:enslaved_culture
+			religion = event_target:province_with_slaves
+			trait = exslave
+		}
+		random_list = {
+			33 = {
+				new_character = {
+					remove_education_trait = yes
+					marshal_education_assignment = yes
+					save_event_target_as = former_slave
+					if = {
+						limit = { is_long_lived = yes age < 56 }
+						random_list = {
+							10 = { add_age = 11 }
+							10 = { add_age = 22 }
+							10 = { add_age = 33 }
+							10 = { add_age = 44 }
+							10 = { add_age = 55 }
+							10 = { add_age = 66 }
+							10 = { add_age = 77 }
+							10 = { add_age = 88 }
+							10 = { add_age = 99 }
+							10 = { add_age = 111 }
+						}
+					}
+					assign_racial_trait = yes
+				}
+			}
+			33 = {
+				new_character = {
+					remove_education_trait = yes
+					steward_education_assignment = yes
+					save_event_target_as = former_slave
+					if = {
+						limit = { is_long_lived = yes age < 56 }
+						random_list = {
+							10 = { add_age = 11 }
+							10 = { add_age = 22 }
+							10 = { add_age = 33 }
+							10 = { add_age = 44 }
+							10 = { add_age = 55 }
+							10 = { add_age = 66 }
+							10 = { add_age = 77 }
+							10 = { add_age = 88 }
+							10 = { add_age = 99 }
+							10 = { add_age = 111 }
+						}
+					}
+					assign_racial_trait = yes
+				}
+			}
+			
+			33 = {
+				new_character = {
+					remove_education_trait = yes
+					spymaster_education_assignment = yes
+					save_event_target_as = former_slave
+					if = {
+						limit = { is_long_lived = yes age < 56 }
+						random_list = {
+							10 = { add_age = 11 }
+							10 = { add_age = 22 }
+							10 = { add_age = 33 }
+							10 = { add_age = 44 }
+							10 = { add_age = 55 }
+							10 = { add_age = 66 }
+							10 = { add_age = 77 }
+							10 = { add_age = 88 }
+							10 = { add_age = 99 }
+							10 = { add_age = 111 }
+						}
+					}
+					assign_racial_trait = yes
+				}
+			}
+		}
+	}
+	
+	# Welcome them to my court!
+	option = {
+		name = slaves.30.optA
+		
+		prestige = -50
+		
+		reverse_opinion = { who = event_target:former_slave modifier = opinion_eternally_grateful years = 10 }
+	}
+	
+	# Go away please
+	option = {
+		name = slaves.30.optB
+		
+		event_target:former_slave = { death = death_missing }
+	}
+}
+
+character_event = {
+	id = slaves.31
+	desc = slaves.31.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_demesne_province = {
+			NOT = { has_province_modifier = province_has_exslaves }
+		}
+	}
+	
+	immediate = {
+		random_demesne_province = {
+			limit = { NOT = { has_province_modifier = province_has_exslaves } }
+			save_event_target_as = province_slaves_go
+		}
+	}
+	
+	# Let them settle
+	option = {
+		name = slaves.31.optA
+		
+		prestige = -50
+		
+		if = {
+			limit = { event_target:province_slaves_go = { NOT = { culture = event_target:enslaved_culture } } }
+			event_target:province_slaves_go = {
+				add_province_modifier = {
+					modifier = province_has_exslaves
+					years = 2
+				}
+			}
+		}
+		else = {
+			custom_tooltip = { text = SAME_CULTURE_EXSLAVES_PROVINCE_CT }
+		}
+		
+		if = {
+			limit = { has_dlc = "Reapers" }
+			custom_tooltip = {
+				text = PROVINCE_SMALL_PROSPERITY_BOOST_CT
+				event_target:province_slaves_go = { change_variable = { which = prosperity_value value = 12 } }
+			}
+		}
+		
+		# Uh, some cash should do it?
+		else = {
+			wealth = 15
+		}
+	}
+	
+	# Go away please
+	option = {
+		name = slaves.31.optB
+	}
+}
+
+### Slaver & Liberator bloodlines
+# Slaver
+long_character_event = {
+	id = slaves.50
+	title = slaves.50.t
+	desc = slaves.50.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { any_owned_bloodline = { has_bloodline_flag = slaver_bloodline } }
+		has_law = slavery_1
+		NOT = { any_owned_bloodline = { has_bloodline_flag = liberator_bloodline } }
+		trait = slaver
+	}
+	
+	option = {
+		name = slaves.50.optA
+		
+		create_bloodline = {
+			type = bloodline_slaver
+		}
+		
+		prestige = 500
+		
+		give_nickname = nick_the_slaver
+	}
+}
+
+# Liberator	
+long_character_event = {
+	id = slaves.60
+	title = slaves.60.t
+	desc = slaves.60.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { any_owned_bloodline = { has_bloodline_flag = liberator_bloodline } }
+		NOR = {
+			trait = slaver
+			any_owned_bloodline = { has_bloodline_flag = slaver_bloodline }
+			has_law = slavery_1
+		}
+	}
+	
+	option = {
+		name = slaves.60.optA
+		
+		create_bloodline = {
+			type = bloodline_liberator
+		}
+		
+		prestige = 250
+		piety = 250
+		
+		give_nickname = nick_the_liberator
+	}
+}
+
+### Flavour events around slavery
+# Random roll
+province_event = {
+	id = slaves.100
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		always = no
+		
+		province_has_slaves = yes
+		
+		NOR = {
+			has_province_modifier = slaves_ruin_economy
+			has_province_modifier = slaves_drafted
+			has_province_modifier = slaves_cultural_tensions
+		}
+	}
+	
+	immediate = {
+		random_list = {
+			# Slavery destroys a local economy
+			10 = { province_event = { id = slaves.101 days = 60 random = 45 } }
+			# Draft the slaves
+			10 = { province_event = { id = slaves.102 days = 60 random = 45 } }
+			# Cultural tensions
+			10 = { province_event = { id = slaves.103 days = 60 random = 45 } }
+		}
+	}
+}
+
+# Slavery destroys a local economy
+province_event = {
+	id = slaves.101
+	desc = slaves.101.d
+	picture = GFX_evt_outside_tavern_hf
+	
+	is_triggered_only = yes
+
+	option = {
+		name = damn
+		
+		add_province_modifier = { name = slaves_ruin_economy duration = 3650 }
+	}
+	
+	option = {
+		name = freetheslaves
+		
+		liberate_province = yes
+		
+		add_province_modifier = { name = slaves_ruin_economy duration = 1825 }
+	}
+	
+	option = {
+		name = freetheslavescompensation
+		
+		liberate_province = yes
+		
+		custom_tooltip = { text = SLAVES_RUIN_ECONOMY_COMPENSATE_SLAVERS_CT }
+		
+		scaled_wealth = { value = -1 min = -5 max = -100 }
+	}
+}
+
+# Slaves get drafted
+province_event = {
+	id = slaves.102
+	desc = slaves.102.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = slaves.102.optA
+		
+		add_province_modifier = { name = slaves_drafted duration = 730 }
+		
+		scaled_wealth = { value = -0.5 min = -5 max = -100 }
+	}
+	
+	option = {
+		name = slaves.102.optB
+	}
+}
+
+# Local outcry against the slaves culture
+province_event = {
+	id = slaves.103
+	desc = slaves.103.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { culture = persistent_event_target:slaves_culture }
+	}
+	
+	option = {
+		name = damn
+		
+		add_province_modifier = { name = slaves_cultural_tensions duration = 1095 }
+	}
+	
+	option = {
+		name = freetheslaves
+		
+		liberate_province = yes
+		
+		add_province_modifier = { name = slaves_cultural_tensions duration = 365 }
+	}
+	
+	option = {
+		name = freetheslavescompensation
+		
+		liberate_province = yes
+		
+		custom_tooltip = { text = SLAVES_CULTURAL_TENSIONS_COMPENSATE_SLAVERS_CT }
+		
+		scaled_wealth = { value = -1 min = -5 max = -100 }
+	}
+}
+
+### AI dumb dumb + Flavour events
+## Local slavers propose to raid a nearby province
+province_event = {
+	id = slaves.200
+	desc = slaves.200.d
+	picture = GFX_evt_burning_house
+	
+	trigger = {
+		# Even if the province has slaves, its owner could always sell them to the market
+		#province_has_slaves = no
+		owner = { has_law = slavery_1 }
+		
+		# Not in the same realm
+		any_neighbor_province = {
+			owner = {
+				ROOT = {
+					owner = { NOT = { same_realm = PREVPREV } }
+				}
+			}
+			province_can_be_enslaved = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			factor = 0.75
+			owner = { trait = slaver }
+		}
+		
+		modifier = {
+			factor = 0.75
+			owner = {
+				any_owned_bloodline = {
+					has_bloodline_flag = slaver_bloodline
+					bloodline_is_active_for = PREV
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		# Save the potentially enslaved province and the province of origin
+		save_event_target_as = province_origin
+		
+		random_neighbor_province = {
+			limit = {
+				owner = {
+					ROOT = {
+						owner = { NOT = { same_realm = PREVPREV } }
+					}
+				}
+				province_can_be_enslaved = yes
+			}
+			save_event_target_as = province_to_enslave
+		}
+	}
+	
+	# Let them do their thing
+	option = {
+		name = slaves.200.optA
+		
+		random_list = {
+			50 = {
+				custom_tooltip = {
+					text = PROVINCE_TO_ENSLAVE_IS_ENSLAVED_CT
+					
+					event_target:province_to_enslave = {
+						province_event = { id = slaves.201 days = 2 }
+					}
+				}
+			}
+			
+			50 = {
+				custom_tooltip = {
+					text = RAID_FAILS_NO_COMMITMENT_CT
+					
+					# We don't have to tell the target province owner if the raid goes sour, because we'll say they didn't notice it
+					province_event = { id = slaves.202 days = 2 }
+				}
+			}
+		}
+	}
+	
+	# Sponsor them
+	option = {
+		name = slaves.200.optB
+		
+		owner = { wealth = -25 }
+		
+		random_list = {
+			75 = {
+				modifier = {
+					factor = 1.5
+					owner = {
+						OR = {
+							trait = slaver
+							any_owned_bloodline = {
+								has_bloodline_flag = slaver_bloodline
+								bloodline_is_active_for = PREV
+							}
+						}
+					}
+				}
+				custom_tooltip = {
+					text = PROVINCE_TO_ENSLAVE_IS_ENSLAVED_CT
+					
+					event_target:province_to_enslave = {
+						province_event = { id = slaves.201 days = 2 }
+					}
+				}
+			}
+			
+			25 = {
+				custom_tooltip = {
+					text = RAID_FAILS_COMMITMENT_CT
+					
+					# We don't have to tell the target province owner if the raid goes sour, because we'll say they didn't notice it
+					province_event = { id = slaves.203 days = 2 }
+				}
+			}
+		}
+	}
+	
+	# No
+	option = {
+		name = slaves.200.optC
+	}
+}
+
+# Slave raid goes well
+province_event = {
+	id = slaves.201
+	desc = slaves.201.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = slaves.201.optA
+		
+		# Only as a tooltip, because we don't know what the province owner will do
+		tooltip = {
+			save_event_target_as = target_province_enslaved
+			
+			enslave_province = yes
+		}
+		
+		# Now for a magic trick
+		# The new FROM will be THIS (so the current province, the one we targetted) and the new ROOT will be the province of origin's owner
+		# Wow wouldn't this exactly be what the regular enslavement event requires??
+		FROM = { owner = { character_event = { id = slaves.1 } } }
+		FROM = { owner = { prestige = 50 } }
+	}
+}
+
+# Slave raid goes sour
+province_event = {
+	id = slaves.202
+	desc = slaves.202.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	# Mission failed, we'll get them next time
+	option = {
+		name = slaves.202.optA
+	}
+}
+
+# Slave raid goes sour + commitment
+province_event = {
+	id = slaves.203
+	desc = slaves.203.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	# Oof
+	option = {
+		name = slaves.203.optA
+		
+		owner = { prestige = -50 }
+	}
+}
+
+## Pirates raided our coast!
+province_event = {
+	id = slaves.210
+	picture = GFX_evt_burning_house
+	
+	desc = {
+		trigger = { NOT = { province_has_slaves = yes } }
+		text = slaves.210.d.enslaved
+	}
+	
+	desc = {
+		trigger = { province_has_slaves = yes }
+		text = slaves.210.d.slavesStolen
+	}
+	
+	trigger = {
+		port = yes
+		
+		OR = {
+			province_has_slaves = yes
+			province_can_be_enslaved = yes
+		}	
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+		
+		modifier = { factor = 1.1 AND = { has_province_modifier = infrastructure_1 has_damaged_infrastructure = no } }
+		modifier = { factor = 1.2 AND = { has_province_modifier = infrastructure_2 has_damaged_infrastructure = no } }
+		modifier = { factor = 1.3 AND = { has_province_modifier = infrastructure_3 has_damaged_infrastructure = no } }
+		modifier = { factor = 1.4 AND = { has_province_modifier = infrastructure_4 has_damaged_infrastructure = no } }
+		
+		modifier = { factor = 5 has_fort = yes }
+	}
+	
+	option = {
+		name = slaves.210.optA
+		
+		if = {
+			limit = { province_has_slaves = yes }
+			liberate_province = yes
+		}
+		
+		else = {
+			save_event_target_as = target_province_enslaved
+			enslave_province = yes
+		}
+	}
+	
+	option = {
+		name = slaves.210.optB
+		
+		if = {
+			limit = { ai = no }
+			owner = { scaled_wealth = { value = -0.25 min = -10 max = -100 } }
+		}
+		
+		random_list = {
+			# The pirates manage to flee with the slaves
+			33 = {
+				custom_tooltip = {
+					text = PIRATES_FLEE_CT
+					province_event = { id = slaves.211 days = 3 random = 2 }
+				}
+			}
+			# You intercept the pirates and get the captured people back to their province
+			33 = {
+				custom_tooltip = {
+					text = PIRATES_KILLED_CT
+					province_event = { id = slaves.212 days = 3 random = 2 }
+				}
+			}
+			# You capture the pirates and their fleet!
+			33 = {
+				custom_tooltip = {
+					text = PIRATES_CAPTURED_CT
+					province_event = { id = slaves.213 days = 3 random = 2 }
+				}
+			}
+		}	
+	}
+	
+	after = {
+		if = {
+			limit = { owner = { ai = yes } }
+			county = { create_fort = location }
+		}
+		
+		else = {
+			custom_tooltip = {
+				text = BUILD_FORT_REDUCES_CHANCES_RAID_CT
+			}
+		}
+	}
+}
+
+province_event = {
+	id = slaves.211
+	desc = slaves.211.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = slaves.211.optA
+		
+		if = {
+			limit = { province_has_slaves = yes }
+			liberate_province = yes
+		}
+		
+		else = {
+			save_event_target_as = target_province_enslaved
+			enslave_province = yes
+		}
+		
+		owner = { prestige = -50 }
+	}
+}
+
+province_event = {
+	id = slaves.212
+	desc = slaves.212.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = slaves.212.optA
+		
+		owner = { prestige = 25 }
+	}
+}
+
+province_event = {
+	id = slaves.213
+	desc = slaves.213.d
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	# Enslave them!
+	option = {
+		trigger = { owner = { has_law = slavery_1 } }
+		
+		name = slaves.213.optA
+		
+		owner = { wealth = 10 }
+	}
+	
+	# Employ them
+	option = {
+		name = slaves.213.optB
+		
+		owner = { wealth = -25 }
+		
+		add_province_modifier = { name = pirates_employed duration = 730 }
+	}
+	
+	# Slaughter them all
+	option = {
+		name = slaves.213.optC
+		
+		owner = {
+			prestige = 50
+			
+			random_list = {
+				10 = {
+					modifier = { factor = 0 trait = ruthless }
+					add_trait = ruthless
+				}
+				10 = {
+					modifier = { factor = 0 trait = cruel }
+					add_trait = cruel
+				}
+				80 = { }
+			}
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random = {
+				chance = 1
+				owner = { character_event = { id = ekartnote.253 } }
+			}
+		}
+	}
+}

@@ -1,0 +1,5434 @@
+namespace = vamp
+#Todo - Martial law event to catch vampires trying to feed in the province
+
+
+#Special event for ruler designer vampires
+character_event = {
+	id = vamp.2
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { trait = vampire }
+		OR = {
+			trait = known_vampire
+			trait = known_vampire_benevolent
+		}
+	}
+	
+	immediate = {
+		add_trait = vampire
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		if = {
+			limit = {
+				trait = vampire #This is for stageless normal vampires
+				NOT = { has_character_modifier = pureblood_vampire } #Purebloods don't have a stage
+				NOR = { #Failsafe for vampires who don't have any stage of vampirism
+					has_character_flag = stage_1_vampire
+					has_character_flag = stage_2_vampire
+					has_character_flag = stage_3_vampire
+					has_character_flag = stage_4_vampire
+				}
+			}
+			set_character_flag = stage_1_vampire
+		}
+	}
+}
+
+#A character gets attacked by vampires
+character_event = {
+	id = vamp.4
+	desc = Vamp4
+	picture = GFX_evt_burning_house
+	
+	capable_only = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		location = { has_province_modifier = vampire_infestation }
+		is_disease_immune = no
+		NOT = { is_inaccessible_trigger = yes }
+		NOT = { combat_rating = 40 }
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 0.8
+			trait = reckless
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 1.5
+			trait = paranoid
+		}
+	}
+	
+	option = {
+		name = Vamp4Acknowledge
+		hidden_tooltip = {
+			random_list = {
+				20 = { character_event = { id = vamp.5 } } #Character dies to vampires
+				30 = { character_event = { id = vamp.6 } } #Character escapes unscathed
+				50 = { character_event = { id = vamp.7 } } #Character gets infected
+			}
+		}	
+	}
+}
+
+#Courtier dies
+character_event = {
+	id = vamp.5
+	desc = Vamp5
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = { character_event = { id = vamp.8 } }
+		}
+	}
+	
+	option = {
+		name = Vamp5Acknowledge
+		death = {
+			death_reason = death_murder_vampire_unknown
+		}
+	}
+}
+
+#Character survives
+character_event = {
+	id = vamp.6
+	desc = Vamp6
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = { character_event = { id = vamp.9 } }
+		}
+	}
+	
+	option = {
+		name = Vamp6Acknowledge
+	}
+}
+
+#Character survives but gets wounded, possibly infected
+character_event = {
+	id = vamp.7
+	desc = Vamp7
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		roll_for_vampirism = yes
+		if = { #Notify the liege if one exists
+			limit = {
+				independent = no
+			}
+		liege = { character_event = { id = vamp.10 } }
+		}
+	}
+	
+	option = {
+		name = Vamp7Infection #Wounded, infected
+		trigger = {
+			is_disease_immune = no
+			has_character_flag = vampire_disease
+		}
+		add_trait = wounded
+		#hidden_tooltip = {
+		#	character_event = { id = vamp.15 days = 3 }
+		#}
+	}
+	option = {
+		name = Vamp7NoInfection #Wounded, not infected
+		trigger = {
+			is_disease_immune = no
+			NOT = { has_character_flag = vampirism_immune }
+			NOT = { has_character_flag = vampire_disease }
+		}
+		add_trait = wounded
+	}
+	option = {
+		name = Vamp7Immune #Wounded, but not infected due to immunity
+		trigger = {
+			OR = {
+				is_disease_immune = yes
+				has_character_flag = vampirism_immune
+			}
+		}
+		add_trait = wounded
+	}
+}
+
+#Character dies - fallout
+character_event = {
+	id = vamp.8
+	desc = Vamp8
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp8Acknowledge
+		prestige = -20
+	}
+}
+
+#Character lives - fallout
+character_event = {
+	id = vamp.9
+	desc = Vamp9
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp9Acknowledge
+		prestige = -10
+	}
+}
+
+#Character lives but is wounded - fallout
+character_event = {
+	id = vamp.10
+	desc = Vamp10
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp10Acknowledge
+		prestige = -15
+	}
+	option = {
+		name = Vamp10Imprison #Imprison them, they could be a vampire
+		trigger = {
+			FROM = {
+				is_disease_immune = no
+			}
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+		}
+		FROM = {
+			imprison = ROOT
+			opinion = {
+				modifier = opinion_hate
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Vampiric Powers Awaken...or not
+character_event = {
+	id = vamp.15
+	desc = Vamp15
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = vampire_disease
+		is_disease_immune = no
+	}
+	
+	immediate = {
+		add_trait = vampire
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+	}
+	
+	option = {
+		name = Vamp15Accept
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.25
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.8
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+		}
+		necromancy_p100 = yes
+		set_character_flag = stage_1_vampire
+		clr_character_flag = transform_no_suicide
+	}
+	option = {
+		name = Vamp15Suicide
+		trigger = {
+			NOT = { has_character_flag = transform_no_suicide }
+		}
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+			
+			modifier = {
+				factor = 0.001
+				is_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+		}
+		prestige = -50
+		piety = -50
+		death = { death_reason = death_suicide }
+	}
+}
+
+#Vampire Hunger Event for normal vampires
+character_event = {
+	id = vamp.20
+	desc = Vamp20
+	picture = GFX_evt_burning_house
+	
+	trigger = {
+		trait = vampire
+		NOT = { has_character_flag = hunting_vampire }
+		NOT = { has_character_modifier = pureblood_vampire }
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		
+		modifier = {
+			factor = 0.5
+			OR = {
+				has_character_flag = stage_1_vampire
+				NOR = { #Failsafe for vampires who don't have any stage of vampirism
+					has_character_flag = stage_1_vampire
+					has_character_flag = stage_2_vampire
+					has_character_flag = stage_3_vampire
+					has_character_flag = stage_4_vampire
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			has_character_flag = stage_3_vampire
+		}
+		modifier = {
+			factor = 0.75
+			trait = gluttonous
+		}
+		modifier = {
+			factor = 1.5
+			trait = temperate
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = stage_1_vampire
+					has_character_flag = stage_2_vampire
+					has_character_flag = stage_3_vampire
+					has_character_flag = stage_4_vampire
+				}
+			}
+			set_character_flag = stage_1_vampire
+		}
+	}
+	
+	option = {
+		name = Vamp20Acknowledge
+		custom_tooltip = { text = stage_2_vampire_tooltip }
+		trigger = {
+				has_character_flag = stage_1_vampire 
+			}
+		clr_character_flag = stage_1_vampire
+		set_character_flag = stage_2_vampire
+		change_diplomacy = -1
+		change_intrigue = 1
+		change_learning = 1
+	}
+	option = {
+		name = Vamp20Acknowledge
+		custom_tooltip = { text = stage_3_vampire_tooltip }
+		trigger = {
+				has_character_flag = stage_2_vampire 
+			}
+		clr_character_flag = stage_2_vampire
+		set_character_flag = stage_3_vampire
+		change_diplomacy = -1
+		change_martial = 1
+		change_intrigue = 1
+	}
+	option = {
+		name = Vamp20Acknowledge
+		custom_tooltip = { text = stage_4_vampire_tooltip }
+		trigger = {
+				has_character_flag = stage_3_vampire 
+			}
+		clr_character_flag = stage_3_vampire
+		set_character_flag = stage_4_vampire
+		change_diplomacy = -1
+		change_martial = 1
+		change_learning = 1
+	}
+	option = {
+		name = Vamp20Acknowledge
+		custom_tooltip = { text = stage_4_critical_tooltip }
+		trigger = {
+			has_character_flag = stage_4_vampire
+		}
+		hidden_tooltip = {
+			character_event = { id = vamp.30 days = 30 random = 10 }
+		}
+	}
+}
+
+#Vampire Hunger Reset Event
+character_event = {
+	id = vamp.25
+	desc = Vamp25
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = vampire
+	}
+	
+	option = {
+		name = Vamp25Acknowledge
+		trigger = { 
+			NOT = { 
+				has_character_modifier = pureblood_vampire 
+			} 
+		}
+		custom_tooltip = { text = stage_1_vampire_tooltip }
+		vampire_stage_reset = yes
+	}
+	option = {
+		name = Vamp25Acknowledge
+		trigger = { 
+			has_character_modifier = pureblood_vampire
+		}
+		vampire_stage_reset = yes
+	}
+}
+
+#Stage 4 Vampire Suffers Breakdown
+character_event = {
+	id = vamp.30
+	desc = Vamp30
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		has_character_flag = stage_4_vampire 
+	}
+	
+	option = {
+		trigger = {
+			NOT = {
+				trait = known_vampire_benevolent
+			}
+			NOT = { trait = incapable }
+			prisoner = no
+		}
+		name = Vamp30Rage
+		ai_chance = {
+			factor = 5
+		}
+		character_event = { id = vamp.50 }
+	}
+	
+	option = {
+		trigger = {
+			trait = known_vampire_benevolent
+			NOT = { trait = incapable }
+			prisoner = no
+			OR = {
+				AND = {
+					ai = yes
+					scaled_wealth = 0.1
+				}
+				AND = {
+					ai = no
+					scaled_wealth = 0.75
+				}
+			}
+		}
+		name = Vamp30Cattle
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				ai = yes
+			}
+			scaled_wealth = -0.1
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			scaled_wealth = -0.75
+		}
+		character_event = { id = vamp.25 }
+	}
+	
+	option = {
+		name = Vamp30Resist
+		ai_chance = {
+			factor = 0.01
+			
+			modifier = {
+				factor = 250
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+		anti_necromancy_p25 = yes
+		random_list = {
+			20 = { add_stressed = yes }
+			8 = { add_trait = lunatic }
+			2 = { add_trait = incapable }
+			70 = { prestige = -5 }
+		}
+	}
+}
+
+#Pure-Blooded Vampire feels the urge to feed
+character_event = {
+	id = vamp.35
+	desc = Vamp35
+	picture = GFX_evt_burning_house
+	
+	trigger = {
+		trait = vampire
+		has_character_modifier = pureblood_vampire
+		NOT = { has_character_flag = hunting_vampire }
+		NOT = { trait = known_vampire_benevolent }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 0.75
+			trait = gluttonous
+		}
+		modifier = {
+			factor = 1.5
+			trait = temperate
+		}
+	}
+	
+	option = {
+		name = Vamp35Hunt
+		trigger = {
+			NOT = { trait = known_vampire_benevolent }
+			NOT = { trait = incapable }
+			prisoner = no
+		}
+		ai_chance = {
+			factor = 5
+		}
+		character_event = { id = vamp.50 }
+	}
+	option = {
+		trigger = {
+			trait = known_vampire_benevolent
+			NOT = { trait = incapable }
+			prisoner = no
+			OR = {
+				AND = {
+					ai = yes
+					scaled_wealth = 0.1
+				}
+				AND = {
+					ai = no
+					scaled_wealth = 0.75
+				}
+			}
+		}
+		name = Vamp30Cattle
+		ai_chance = {
+			factor = 5
+		}
+		if = {
+			limit = {
+				ai = yes
+			}
+			scaled_wealth = -0.1
+		}
+		if = {
+			limit = {
+				ai = no
+			}
+			scaled_wealth = -0.75
+		}
+		character_event = { id = vamp.25 }
+	}
+	
+	option = {
+		name = Vamp35Resist
+		ai_chance = {
+			factor = 5
+		}
+		anti_necromancy_p25 = yes
+		add_stressed = yes
+	}
+}
+
+#Vampire out on the Hunt
+character_event = {
+	id = vamp.50
+	desc = Vamp50
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp50Locals #Hunt the locals
+		set_character_flag = hunting_vampire
+		character_event = { id = vamp.60 }
+	}
+	option = {
+		name = Vamp50Courtier #Hunt a character
+		trigger = {
+			any_realm_character = {
+				is_adult = yes
+				is_disease_immune = no
+				at_location = ROOT
+				NOT = { character = ROOT }
+				NOT = { is_close_relative = ROOT }
+				NOT = { is_lover = ROOT }
+				NOT = { is_friend = ROOT }
+				NOT = { has_character_flag = do_not_disturb }
+				NOT = { is_inaccessible_trigger = yes }
+				NOT = { trait = incapable }
+			}
+		}
+		set_character_flag = hunting_vampire
+		save_event_target_as = vampire_attacker
+		random_realm_character = {
+			limit = {
+				is_adult = yes
+				is_disease_immune = no
+				at_location = ROOT
+				NOT = { character = ROOT }
+				NOT = { is_close_relative = ROOT }
+				NOT = { is_lover = ROOT }
+				NOT = { is_friend = ROOT }
+				NOT = { has_character_flag = do_not_disturb }
+				NOT = { is_inaccessible_trigger = yes }
+				NOT = { trait = incapable }
+			}
+			character_event = { id = vamp.70 }
+		}
+	}
+}
+
+#Vampire out on the Hunt - Populace
+character_event = {
+	id = vamp.60
+	desc = Vamp60
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			NOT = { intrigue = 1 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				10 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				90 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 1
+			NOT = { intrigue = 2 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				20 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				80 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 2
+			NOT = { intrigue = 3 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				30 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				70 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 3
+			NOT = { intrigue = 4 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				40 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				60 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 4
+			NOT = { intrigue = 5 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				50 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				50 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 5
+			NOT = { intrigue = 6 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				60 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				40 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 6
+			NOT = { intrigue = 7 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				70 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				30 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 7
+			NOT = { intrigue = 8 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				80 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				20 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+				intrigue = 8
+				NOT = { intrigue = 9 }
+			}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				90 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				10 = { character_event = { id = vamp.62  } } #Caught in the Act!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 9
+			NOT = { intrigue = 10 }
+		}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+				95 = { character_event = { id = vamp.61  } } #Successful Hunt!
+				5 = { character_event = { id = vamp.62  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Vamp60Intrigue"
+		trigger = {
+			intrigue = 10
+		}
+		custom_tooltip = {
+			text = "Vamp60IntrigueInfo"
+		hidden_tooltip = {
+				character_event = { id = vamp.61  } #Successful Hunt!
+			}
+		}
+	}
+}
+
+#Successful Feeding
+character_event = {
+	id = vamp.61
+	desc = Vamp61
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp61Acknowledge
+		clr_character_flag = hunting_vampire
+		character_event = { id = vamp.25 } #Reset vampire stage event
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Caught in the Act
+character_event = {
+	desc = Vamp62
+	id = vamp.62
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = vamp.65 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = Vamp62Acknowledge
+		clr_character_flag = hunting_vampire
+		add_trait = known_vampire
+		hidden_tooltip = {
+			if = {
+				limit = {
+					independent = no
+					location = {
+						owner = {
+							NOT = { is_liege_of = ROOT }
+						}
+					}
+				}
+				liege = { 
+					character_event = { id = vamp.100  }
+				}
+			}
+		}
+	}
+}
+
+#Local ruler finds out about vampire
+character_event = {
+	id = vamp.65
+	desc = Vamp65
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp65Acknowledge
+		prestige = -25
+		if = {
+			limit = {
+				is_necromancy_religion = yes
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_feral_monster
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				is_necromancy_religion = no
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_evil_monster
+				years = 5
+			}
+		}
+	}
+}
+
+#Vampire out on the Hunt - Character
+character_event = {
+	id = vamp.70
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the vampire ambushed the character, the vampire has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				10 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				20 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				10 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				1 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				30 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				15 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				5 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				35 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				15 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				5 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				40 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				20 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				10 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				40 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				25 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				10 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				40 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				30 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				10 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				35 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				35 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				15 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				35 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				40 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				15 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				30 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				40 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				20 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				25 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				35 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				30 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = vamp.71 } } #Vampire feeds, courtier killed
+				15 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				35 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				49 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = vamp.72 } } #Vampire flees, courtier wounded
+				10 = { character_event = { id = vamp.73 } } #Vampire unable to feed
+				89 = { character_event = { id = vamp.74 } } #Vampire killed by courtier
+			}
+		}
+	}
+}
+
+#Character dies
+character_event = {
+	id = vamp.71
+	desc = Vamp71
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:vampire_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = vamp.75 } #Notify liege of death
+				}
+			}
+		}
+		event_target:vampire_attacker = { character_event = { id = vamp.80 } } #Notify vampire
+	}
+	
+	option = {
+		name = Vamp71Acknowledge
+		death = {
+			death_reason = death_murder_vampire_unknown 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Character wounded
+character_event = {
+	id = vamp.72
+	desc = Vamp72
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { #50/50 chance of infection
+				is_disease_immune = no
+				NOT = { trait = argonian }
+			}
+			random = {
+				chance = 50
+				set_character_flag = vampire_disease
+				set_character_flag = vamp_depth_turned
+				reverse_opinion = {
+					who = event_target:vampire_attacker
+					modifier = opinion_vamp_depth_child
+					years = 2000
+				}
+			}
+		}
+		if = {
+			limit = { #Argonians are less likely to become vampires
+				is_disease_immune = no
+				trait = argonian
+			}
+			random = {
+				chance = 25
+				set_character_flag = vampire_disease
+				set_character_flag = vamp_depth_turned
+				reverse_opinion = {
+					who = event_target:vampire_attacker
+					modifier = opinion_vamp_depth_child
+					years = 2000
+				}
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:vampire_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = vamp.76 } #Notify liege of incident
+				}
+			}
+		}
+		event_target:vampire_attacker = { character_event = { id = vamp.81 } } #Notify vampire
+	}
+	
+	option = {
+		name = Vamp72Infection #Wounded, infected
+		trigger = {
+			is_disease_immune = no
+			has_character_flag = vampire_disease
+		}
+		add_trait = wounded
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:vampire_attacker
+			years = 10
+		}
+		hidden_tooltip = {
+			character_event = { id = vamp.15 days = 3 }
+		}
+	}
+	option = {
+		name = Vamp72NoInfection #Wounded, not infected
+		trigger = {
+			is_disease_immune = no
+			NOT = { has_character_flag = vampire_disease }
+		}
+		add_trait = wounded
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:vampire_attacker
+			years = 10
+		}
+	}
+	option = {
+		name = Vamp72Immune #Wounded, but not infected due to immunity
+		trigger = {
+			is_disease_immune = yes
+		}
+		add_trait = wounded
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:vampire_attacker
+			years = 10
+		}
+	}
+}
+
+#Character survives
+character_event = {
+	id = vamp.73
+	desc = Vamp73
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:vampire_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = vamp.77 } #Notify liege of death
+				}
+			}
+		}
+		event_target:vampire_attacker = { character_event = { id = vamp.82 } } #Notify vampire
+	}
+	
+	option = {
+		name = Vamp73Acknowledge
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:vampire_attacker
+			years = 10
+		}
+	}
+}
+
+#Character kills vampire
+character_event = {
+	id = vamp.74
+	desc = Vamp74
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:vampire_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = vamp.78 } #Notify liege of death
+				}
+			}
+		}
+		event_target:vampire_attacker = { character_event = { id = vamp.83 } } #Notify vampire
+	}
+	
+	option = {
+		name = Vamp74Acknowledge
+	}
+}
+
+#Vampire kills character - Notify Liege
+
+character_event = {
+	id = vamp.75
+	desc = Vamp75
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp75Acknowledge
+		prestige = -100
+	}
+}
+
+#Vampire wounds character - Notify Liege
+
+character_event = {
+	id = vamp.76
+	desc = Vamp76
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp76Acknowledge
+		prestige = -50
+		if = {
+			limit = {
+				is_necromancy_religion = yes
+			}
+			opinion = {
+				who = event_target:vampire_attacker
+				modifier = opinion_feral_monster
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				is_necromancy_religion = no
+			}
+			opinion = {
+				who = event_target:vampire_attacker
+				modifier = opinion_evil_monster
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = Vamp76Imprison #Imprison them, they could be a vampire
+		trigger = {
+			FROM = {
+				is_disease_immune = no
+			}
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+		}
+		FROM = {
+			imprison = ROOT
+			opinion = {
+				modifier = opinion_hate
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Vampire flees - Notify liege
+character_event = {
+	id = vamp.77
+	desc = Vamp77
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp77Acknowledge
+		prestige = -25
+		if = {
+			limit = {
+				is_necromancy_religion = yes
+			}
+			opinion = {
+				who = event_target:vampire_attacker
+				modifier = opinion_feral_monster
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				is_necromancy_religion = no
+			}
+			opinion = {
+				who = event_target:vampire_attacker
+				modifier = opinion_evil_monster
+				years = 5
+			}
+		}
+	}
+}
+
+#Vampire killed - Notify liege
+character_event = {
+	id = vamp.78
+	desc = Vamp78
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp78Acknowledge
+	}
+}
+
+#Character killed - Notify vampire
+character_event = {
+	id = vamp.80
+	desc = Vamp80
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp80Acknowledge
+		clr_character_flag = hunting_vampire
+		clear_event_target = vampire_attacker
+		character_event = { id = vamp.25  }
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Character wounded - Notify vampire
+character_event = {
+	id = vamp.81
+	desc = Vamp81
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp81Acknowledge
+		clr_character_flag = hunting_vampire
+		clear_event_target = vampire_attacker
+		add_trait = known_vampire
+		hidden_tooltip = {
+			if = {
+				limit = {
+					independent = no
+					location = {
+						owner = {
+							NOT = { is_liege_of = ROOT }
+						}
+					}
+				}
+				liege = { 
+					character_event = { id = vamp.105  }
+				}
+			}
+		}
+	}
+}
+
+#Character survives - Notify vampire
+character_event = {
+	id = vamp.82
+	desc = Vamp82
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp82Acknowledge
+		clr_character_flag = hunting_vampire
+		clear_event_target = vampire_attacker
+		add_trait = known_vampire
+		hidden_tooltip = {
+			if = {
+				limit = {
+					independent = no
+					location = {
+						owner = {
+							NOT = { is_liege_of = ROOT }
+						}
+					}
+				}
+				liege = { 
+					character_event = { id = vamp.105  }
+				}
+			}
+		}
+	}
+}
+
+#Character kills vampire - Notify vampire
+character_event = {
+	id = vamp.83
+	desc = Vamp83
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp83Acknowledge
+		clr_character_flag = hunting_vampire
+		clear_event_target = vampire_attacker
+		add_trait = known_vampire
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Liege finds out about vampire attacks vs peasants/land
+character_event = {
+	id = vamp.100
+	desc = Vamp100
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp100Acknowledge
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 0.05
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.5
+				is_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+		}
+		prestige = -25
+		if = {
+			limit = {
+				is_necromancy_religion = yes
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_feral_monster
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				is_necromancy_religion = no
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_evil_monster
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = Vamp100Ignore
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				is_necromancy_religion = no
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.01
+				is_necromancy_religion = no
+				NOT = { trait = zealous }
+			}
+		}
+		necromancy_p50 = yes
+		prestige = -25
+	}
+}
+
+#Liege finds out about vampire attacks vs named character
+character_event = {
+	id = vamp.105
+	desc = Vamp105
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp105Acknowledge
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 0.05
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.5
+				is_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+		}
+		prestige = -25
+		if = {
+			limit = {
+				is_necromancy_religion = yes
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_feral_monster
+				years = 1
+			}
+		}
+		if = {
+			limit = {
+				is_necromancy_religion = no
+			}
+			opinion = {
+				who = FROM
+				modifier = opinion_evil_monster
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = Vamp105Ignore
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				is_necromancy_religion = no
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.01
+				is_necromancy_religion = no
+				NOT = { trait = zealous }
+			}
+		}
+		necromancy_p50 = yes
+		prestige = -25
+	}
+}
+
+#Vampire interrogates Imprisoned Vampire
+character_event = {
+	id = vamp.230
+	desc = Vamp230
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = Vamp230LetGo
+		opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROMFROMFROM
+			years = 50
+		}
+		FROMFROM = { character_event = { id = vamp.235 } }
+	}
+	option = {
+		name = Vamp230Press
+		FROMFROM = { character_event = { id = vamp.240 } }
+	}
+}
+#Non-Vamp Interrogates Imprisoned Vamp
+character_event = {
+	id = vamp.232
+	desc = Vamp232
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	option = {
+		name = Vamp230LetGo
+		opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROMFROMFROM
+			years = 50
+		}
+		FROMFROM = { character_event = { id = vamp.235 } }
+	}
+	option = {
+		name = Vamp230Press
+		FROMFROM = { character_event = { id = vamp.240 } }
+	}
+}
+
+character_event = {
+	id = vamp.235
+	desc = Vamp235
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp235Accept
+		if = {
+			limit = { FROM = { trait = vampire } }
+			opinion = {
+				modifier = opinion_understanding_vampire
+				who = FROM
+				years = 50
+			}
+		}
+	}
+}
+
+#Imprisoned Vampire is interrogated about their condition
+character_event = {
+	id = vamp.240
+	desc = Vamp240
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp250RevealBenevolent
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_vampire_benevolent
+		host = {
+			character_event = { id = vamp.255 }
+		}
+	}
+	
+	option = {
+		name = Vamp250RevealVampire
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_vampire
+		host = {
+			character_event = { id = vamp.260 }
+		}
+	}
+}
+
+#Vampire ponders whether or not it's time to admit the truth
+character_event = {
+	id = vamp.250
+	desc = Vamp250
+	picture = GFX_evt_burning_house
+	
+	capable_only = yes
+	
+	trigger = {
+		trait = vampire
+		NOT = { has_character_flag = hunting_vampire }
+		NOT = { trait = known_vampire }
+		NOT = { trait = known_vampire_benevolent }
+	}
+	
+	mean_time_to_happen = {
+		years = 50
+		
+		modifier = {
+			factor = 0.25
+			trait = honest
+		}
+		modifier = {
+			factor = 0.25
+			is_anti_necromancy_religion = yes
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+		modifier = {
+			factor = 0.8
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.8
+			trait = just
+		}
+		modifier = {
+			factor = 0.8
+			trait = humble
+		}
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 1.2
+			trait = stubborn
+		}
+		modifier = {
+			factor = 4
+			trait = craven
+		}
+		modifier = {
+			factor = 4
+			trait = shy
+		}
+		modifier = {
+			factor = 4
+			trait = deceitful
+		}
+		modifier = {
+			factor = 3
+			has_character_modifier = pureblood_vampire
+		}
+	}
+	
+	option = {
+		name = Vamp250Hide
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+		}
+	}
+	
+	option = {
+		name = Vamp250RevealBenevolent
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_vampire_benevolent
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.255  }
+			}
+		}
+	}
+	
+	option = {
+		name = Vamp250RevealVampire
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_vampire
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.260  }
+			}
+		}
+	}
+	
+	after = {
+		clr_character_flag = lycan_vamp_reveal_flag
+	}
+}
+
+#Characters find out about the vampire's condition - Benevolent vampire
+character_event = {
+	id = vamp.255
+	desc = Vamp255
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp255Approve #Approve of the vampire and support them
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				sibling = FROM
+			}
+			modifier = {
+				factor = 5
+				is_child_of = FROM
+			}
+			modifier = {
+				factor = 5
+				is_father = FROM
+			}
+			modifier = {
+				factor = 5
+				is_mother = FROM
+			}
+			modifier = {
+				factor = 5
+				is_married = FROM
+			}
+			modifier = {
+				factor = 5
+				is_lover = FROM
+			}
+			modifier = {
+				factor = 5
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 10
+				trait = known_vampire_benevolent
+			}
+			modifier = {
+				factor = 0.5
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.01
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 25
+		}
+	}
+	option = {
+		name = Vamp255Disapprove #Disapprove the vampire and oppose them
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 10
+				trait = cruel
+			}
+			modifier = {
+				factor = 10
+				trait = paranoid
+			}
+			modifier = {
+				factor = 0.5
+				is_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.01
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_hostile_vampire
+			who = FROM
+			years = 25
+		}
+	}
+}
+
+#Characters find out about the vampire's condition - Normal vampire
+character_event = {
+	id = vamp.260
+	desc = Vamp260
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp260Approve #Approve of the vampire and support them
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2.5
+				sibling = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_child_of = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_father = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_mother = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_married = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_lover = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 10
+				trait = known_vampire
+			}
+			modifier = {
+				factor = 0.01
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 25
+		}
+	}
+	option = {
+		name = Vamp260Disapprove #Disapprove the vampire and oppose them
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 10
+				trait = cruel
+			}
+			modifier = {
+				factor = 10
+				trait = paranoid
+			}
+			modifier = {
+				factor = 0.5
+				is_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.01
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_hostile_vampire
+			who = FROM
+			years = 25
+		}
+	}
+}
+
+#Vamp325 - Accept Vampirism?
+
+character_event = {
+	id = vamp.325
+	desc = Vamp325
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp325Accept #Accept Vampirism
+		ai_chance = {
+			factor = 0.25
+			modifier = {
+				factor = 0.40
+				is_anti_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 0.40
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 2
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 2
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = { #Lovers and spouses more likely to consent.
+				factor = 2
+				OR = {
+					is_lover = FROMFROM
+					is_married = FROMFROM
+				}
+			}
+			modifier = { #Double-dipping for lust towards attractive characters
+				factor = 2.5
+				trait = lustful
+				FROMFROM = {
+					OR = {
+						is_lover = PREV
+						is_married = PREV
+					}
+					trait = fair
+				}
+			}
+			modifier = { #Ambitious characters more likely to accept
+				factor = 1.2
+				trait = ambitious
+			}
+			modifier = { #Paranoid characters not
+				factor = 0.8
+				trait = paranoid
+			}
+			modifier = { #Will never accept vampirism from rivals, if this ever becomes relevant somehow
+				factor = 0
+				is_rival = FROMFROM
+			}
+			modifier = { #Friends more likely to accept vampirism
+				factor = 2
+				is_friend = FROMFROM
+			}
+			modifier = { #Comrades more likely to accept vampirism
+				factor = 1.5
+				same_society_as = FROMFROM
+				NOT = {
+					opinion = { who = FROMFROM value < 0 }
+				}
+			}
+			modifier = {
+				factor = 2
+				FROMFROM = {
+					any_artifact = { #Maybe I should make this a trigger. It could be useful.
+						AND = {
+							artifact_type = amulet_of_domination
+							is_artifact_equipped = yes
+						}
+					}
+				}
+			}
+			### Opinion spam modifiers ###
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 100 }
+			}
+		}
+		reverse_opinion = {
+			who = FROMFROM
+			modifier = opinion_vamp_depth_child
+			years = 2000
+		}
+		opinion = {
+			modifier = opinion_vamp_depth_turned_me_1
+			who = FROMFROM
+			years = 50
+		}
+		set_character_flag = vamp_depth_turned
+		set_character_flag = vampire_disease
+		set_character_flag = transform_no_suicide #They accepted the chance to be a vampire, so they shouldn't suicide
+		set_character_flag = asked_for_vampirism
+		character_event = { id = vamp.15 days = 3 }
+		character_event = { id = vampdepth.1 years = 10 } 
+		FROMFROM = { character_event = { id = vamp.326 } }
+	}
+	option = {
+		name = Vamp325Decline #Refuse Vampirism
+		ai_chance = {
+			factor = 0.75
+		#	modifier = {
+		#		factor = 0.5
+		#		is_necromancy_religion = yes
+		#		NOT = { trait = zealous }
+		#	}
+		#	modifier = {
+		#		factor = 0
+		#		is_necromancy_religion = yes
+		#		trait = zealous
+		#	}
+		}
+		FROMFROM = { character_event = { id = vamp.327 } }
+	}
+}
+
+character_event = {
+	id = vamp.326
+	desc = Vamp326
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp327Acknowledge
+		character_event = { id = vamp.25 } #Reset Vampire Stage Event
+		FROM = { clr_character_flag = vampirism_requested }
+	}
+}
+
+character_event = {
+	id = vamp.327
+	desc = Vamp327
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp327Acknowledge
+		FROM = {
+			opinion = {
+				modifier = opinion_horrified_vampire
+				who = ROOT
+				years = 5
+			}
+			clr_character_flag = vampirism_requested
+		}
+	}
+}
+
+#From Vampire to Friend: Confess my condition?
+character_event = {
+	id = vamp.350
+	desc = Vamp350
+	picture = GFX_evt_bad_news
+	
+	capable_only = yes
+	min_age = 16
+	friends = yes
+	prisoner = no
+	
+	trigger = {
+		trait = vampire
+		NOT = { has_character_flag = hunting_vampire }
+		NOT = { trait = known_vampire }
+		NOT = { trait = known_vampire_benevolent }
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		any_friend = {
+			is_adult = yes
+			prisoner = no
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			NOT = {
+				is_lover = ROOT
+			}
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire }
+				has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_vampire }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_bad }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 0.5
+			is_anti_necromancy_religion = yes
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = kind
+		}
+		modifier = {
+			factor = 0.9
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.9
+			trait = just
+		}
+		modifier = {
+			factor = 0.9
+			trait = humble
+		}
+		modifier = {
+			factor = 0.9
+			trait = brave
+		}
+		modifier = {
+			factor = 1.1
+			trait = stubborn
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 2
+			trait = shy
+		}
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.5
+			has_character_modifier = pureblood_vampire
+		}
+	}
+	
+	immediate = {
+		random_friend = {
+			limit = {
+				is_adult = yes
+				prisoner = no
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				NOT = { trait = incapable }
+				NOT = {
+					is_lover = ROOT
+				}
+				NOR = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire }
+					has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_vampire }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_bad }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+				}
+			}
+			save_event_target_as = secret_vampire_friend
+		}
+	}
+	
+	option = { #Tell them
+		name = Vamp350Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_vampire_friend = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_vampire_friend = {
+					trait = trusting
+				}
+			}
+		}
+		event_target:secret_vampire_friend = {
+			character_event = { id = vamp.351 }
+		}
+	}
+	
+	option = { #Or don't
+		name = Vamp350Decline
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+			modifier = {
+				factor = 0.01
+				event_target:secret_vampire_friend = {
+					is_anti_necromancy_religion = yes
+					trait = zealous
+				}
+			}
+		}
+	}
+}
+#Friend finds out
+character_event = {
+	id = vamp.351
+	desc = Vamp351
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = secret_vampire_friend
+	}
+	
+	option = { #You're joking
+		name = Vamp351OptA
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = slothful
+			}
+			modifier = {
+				factor = 2.5
+				trait = gregarious
+			}
+		}
+		FROM = { character_event = { id = vamp.355 } }
+	}
+	option = { #You're a monster!
+		name = Vamp351OptB
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 50
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.001
+				is_vampire = yes
+			}
+			modifier = {
+				factor = 0.25
+				is_supernatural = yes
+			}
+			modifier = {
+				factor = 0.5
+				trait = kind
+			}
+		}
+		FROM = { character_event = { id = vamp.356 } }
+	}
+	option = { #You're a still my friend!
+		name = Vamp351OptC
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = vamp.357 } }
+	}
+	option = { #Share your powers with me!
+		name = Vamp351OptD
+		trigger = {
+			is_disease_immune = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				trait = ambitious
+			}
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 0.001
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.1
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = vamp.358 } }
+	}
+}
+#A joke?
+character_event = {
+	id = vamp.355
+	desc = Vamp355
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp355Accept
+		prestige = -5
+	}
+}
+#You're a monster!
+character_event = {
+	id = vamp.356
+	desc = Vamp356
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp356Accept
+		piety = -10
+		remove_friend = FROM
+		add_rival = FROM
+		reverse_opinion = {
+			modifier = opinion_not_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_bad
+				who = FROM
+				years = 5000
+			}
+			FROM = { character_event = { id = vamp.360 } }
+		}
+	}
+}
+#You're still my friend!
+character_event = {
+	id = vamp.357
+	desc = Vamp357
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp357Accept
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+	}
+}
+#We're still friends, can you give me your powers?
+character_event = {
+	id = vamp.358
+	desc = Vamp358
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp358Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = vamp.365 } }
+	}
+	option = {
+		name = Vamp358Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = vamp.366 } }
+	}
+}
+#Monster, how to proceed?
+character_event = {
+	id = vamp.360
+	desc = Vamp360
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp360Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = schemer
+			}
+		}
+		character_event = { id = vamp.370 days = 5 }
+	}
+	option = {
+		name = Vamp360Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+	}
+}
+#Yay, vampirism!
+character_event = {
+	id = vamp.365
+	desc = Vamp365
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp365Accept
+		set_character_flag = vampire_disease
+		set_character_flag = transform_no_suicide #Not much point in them asking for vampirism just to commit suicide is there?
+		set_character_flag = asked_for_vampirism
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_vamp_depth_child
+			years = 2000
+		}
+		opinion = {
+			modifier = opinion_vamp_depth_turned_me_1
+			who = FROM
+			years = 50
+		}
+		set_character_flag = vamp_depth_turned
+		hidden_tooltip = {
+			character_event = { id = vampdepth.1 years = 10 }
+			character_event = { id = vamp.15 days = 3 }
+			FROM = { character_event = { id = vamp.25 } } #Reset Vampire Stage Event
+		}
+	}
+}
+#Boo, no vampirism!
+character_event = {
+	id = vamp.366
+	desc = Vamp366
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp366Accept
+	}
+}
+#A cunning plan to reveal the truth!
+character_event = {
+	id = vamp.370
+	desc = Vamp370
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp370Accept
+		ai_chance = {
+			factor = 1
+		}
+		FROMFROM = { character_event = { id = vamp.375 days = 5 } }
+	}
+	option = { #AI check evaluated in previous event
+		name = Vamp370Decline
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+#Vampire is confronted
+character_event = {
+	id = vamp.375
+	desc = Vamp375
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp375OptA
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_1_tooltip"
+		}
+		add_trait = known_vampire
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.380 } }
+		}
+	}
+	option = {
+		name = Vamp375OptB
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_2_tooltip"
+		}
+		add_trait = known_vampire
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.380 } }
+		}
+	}
+	option = {
+		name = Vamp375OptC
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		add_trait = known_vampire_benevolent
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.255  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.380 } }
+		}
+	}
+	option = {
+		name = Vamp375OptD
+		trigger = {
+			OR = {
+				intrigue = 20
+				diplomacy = 20
+			}
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_3_tooltip"
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.381 } }
+		}
+	}
+	option = {
+		name = Vamp375OptE
+		trigger = {
+			OR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.382 } }
+		}
+	}
+}
+#The vampire is revealed, plotter reacts
+character_event = {
+	id = vamp.380
+	desc =  {
+		text = Vamp380A
+		trigger = {
+			FROM = { trait = known_vampire }
+		}
+	}
+	desc =  {
+		text = Vamp380B
+		trigger = {
+			FROM = { trait = known_vampire_benevolent }
+		}
+	}
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp380OptA
+		trigger = {
+			FROM = { trait = known_vampire }
+		}
+	}
+	option = {
+		name = Vamp380OptB
+		trigger = {
+			FROM = { trait = known_vampire_benevolent }
+		}
+	}
+}
+#Discredited
+character_event = {
+	id = vamp.381
+	desc = Vamp381
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp381Accept
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 120
+		}
+	}
+}
+character_event = {
+	id = vamp.382
+	desc = Vamp382
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp382Accept
+	}
+}
+
+#From Vampire to Spouse: Confess my condition?
+character_event = {
+	id = vamp.400
+	desc = Vamp400
+	picture = GFX_evt_bad_news
+	
+	capable_only = yes
+	min_age = 16
+	friends = yes
+	prisoner = no
+	
+	trigger = {
+		trait = vampire
+		NOT = { has_character_flag = hunting_vampire }
+		NOT = { trait = known_vampire }
+		NOT = { trait = known_vampire_benevolent }
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		any_spouse = {
+			prisoner = no
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			NOR = {
+				is_friend = ROOT
+				is_lover = ROOT 
+				is_rival = ROOT
+			}
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire }
+				has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_vampire }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_bad }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 0.5
+			is_anti_necromancy_religion = yes
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = kind
+		}
+		modifier = {
+			factor = 0.9
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.9
+			trait = just
+		}
+		modifier = {
+			factor = 0.9
+			trait = humble
+		}
+		modifier = {
+			factor = 0.9
+			trait = brave
+		}
+		modifier = {
+			factor = 1.1
+			trait = stubborn
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 2
+			trait = shy
+		}
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.5
+			has_character_modifier = pureblood_vampire
+		}
+	}
+	
+	immediate = {
+		random_spouse = {
+			limit = {
+				prisoner = no
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				NOT = { trait = incapable }
+				NOR = { 
+					is_lover = ROOT 
+					is_friend = ROOT
+					is_rival = ROOT
+				}
+				NOR = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire }
+					has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_vampire }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_bad }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+					reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+				}
+			}
+			save_event_target_as = secret_vampire_spouse
+		}
+	}
+	
+	option = { #Tell them
+		name = Vamp400Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_vampire_spouse = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_vampire_spouse = {
+					trait = trusting
+				}
+			}
+		}
+		event_target:secret_vampire_spouse = {
+			character_event = { id = vamp.401 }
+		}
+	}
+	
+	option = { #Or don't
+		name = Vamp400Decline
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+			modifier = {
+				factor = 0.01
+				event_target:secret_vampire_spouse = {
+					is_anti_necromancy_religion = yes
+					trait = zealous
+				}
+			}
+		}
+	}
+}
+#Spouse finds out
+character_event = {
+	id = vamp.401
+	desc = Vamp401
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = secret_vampire_spouse
+	}
+	
+	option = { #You're joking
+		name = Vamp401OptA
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = slothful
+			}
+			modifier = {
+				factor = 2.5
+				trait = gregarious
+			}
+		}
+		FROM = { character_event = { id = vamp.405 } }
+	}
+	option = { #You're a monster!
+		name = Vamp401OptB
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 50
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.001
+				is_vampire = yes
+			}
+			modifier = {
+				factor = 0.25
+				is_supernatural = yes
+			}
+			modifier = {
+				factor = 0.5
+				trait = kind
+			}
+		}
+		FROM = { character_event = { id = vamp.406 } }
+	}
+	option = { #I stand with you!
+		name = Vamp401OptC
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = vamp.407 } }
+	}
+	option = { #Share your powers with me!
+		name = Vamp401OptD
+		trigger = {
+			is_disease_immune = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				trait = ambitious
+			}
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 0.001
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.1
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = vamp.408 } }
+	}
+}
+#A joke?
+character_event = {
+	id = vamp.405
+	desc = Vamp405
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp405Accept
+		prestige = -5
+	}
+}
+#You're a monster!
+character_event = {
+	id = vamp.406
+	desc = Vamp406
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp406Accept
+		piety = -10
+		add_rival = FROM
+		reverse_opinion = {
+			modifier = opinion_not_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_bad
+				who = FROM
+				years = 5000
+			}
+			FROM = { character_event = { id = vamp.410 } }
+		}
+	}
+}
+#I stand with you!
+character_event = {
+	id = vamp.407
+	desc = Vamp407
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp407Accept
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+	}
+}
+#We're still on the same page, can you give me your powers?
+character_event = {
+	id = vamp.408
+	desc = Vamp408
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp408Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = vamp.415 } }
+	}
+	option = {
+		name = Vamp408Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = vamp.416 } }
+	}
+}
+#Monster, how to proceed?
+character_event = {
+	id = vamp.410
+	desc = Vamp410
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp410Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = schemer
+			}
+		}
+		character_event = { id = vamp.420 days = 5 }
+	}
+	option = {
+		name = Vamp410Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+	}
+}
+#Yay, vampirism!
+character_event = {
+	id = vamp.415
+	desc = Vamp415
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp415Accept
+		set_character_flag = vampire_disease
+		set_character_flag = transform_no_suicide #Not much point in them asking for vampirism just to commit suicide is there?
+		set_character_flag = asked_for_vampirism
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_vamp_depth_child
+			years = 2000
+		}
+		opinion = {
+			modifier = opinion_vamp_depth_turned_me_1
+			who = FROM
+			years = 50
+		}
+		set_character_flag = vamp_depth_turned
+		hidden_tooltip = {
+			character_event = { id = vampdepth.1 years = 10 }
+			character_event = { id = vamp.15 days = 3 }
+			FROM = { character_event = { id = vamp.25 } } #Reset Vampire Stage Event
+		}
+	}
+}
+#Boo, no vampirism!
+character_event = {
+	id = vamp.416
+	desc = Vamp416
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp416Accept
+	}
+}
+#A cunning plan to reveal the truth!
+character_event = {
+	id = vamp.420
+	desc = Vamp420
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp420Accept
+		ai_chance = {
+			factor = 1
+		}
+		FROMFROM = { character_event = { id = vamp.425 days = 5 } }
+	}
+	option = { #AI check evaluated in previous event
+		name = Vamp420Decline
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+#Vampire is confronted
+character_event = {
+	id = vamp.425
+	desc = Vamp425
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp425OptA
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_1_tooltip"
+		}
+		add_trait = known_vampire
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.430 } }
+		}
+	}
+	option = {
+		name = Vamp425OptB
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_2_tooltip"
+		}
+		add_trait = known_vampire
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.430 } }
+		}
+	}
+	option = {
+		name = Vamp425OptC
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		add_trait = known_vampire_benevolent
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.255  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.430 } }
+		}
+	}
+	option = {
+		name = Vamp425OptD
+		trigger = {
+			OR = {
+				intrigue = 20
+				diplomacy = 20
+			}
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_3_tooltip"
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.431 } }
+		}
+	}
+	option = {
+		name = Vamp425OptE
+		trigger = {
+			OR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.432 } }
+		}
+	}
+}
+#The vampire is revealed, plotter reacts
+character_event = {
+	id = vamp.430
+	desc =  {
+		text = Vamp430A
+		trigger = {
+			FROM = { trait = known_vampire }
+		}
+	}
+	desc =  {
+		text = Vamp430B
+		trigger = {
+			FROM = { trait = known_vampire_benevolent }
+		}
+	}
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp430OptA
+		trigger = {
+			FROM = { trait = known_vampire }
+		}
+	}
+	option = {
+		name = Vamp430OptB
+		trigger = {
+			FROM = { trait = known_vampire_benevolent }
+		}
+	}
+}
+#Discredited
+character_event = {
+	id = vamp.431
+	desc = Vamp431
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp431Accept
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 120
+		}
+	}
+}
+character_event = {
+	id = vamp.432
+	desc = Vamp432
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp432Accept
+	}
+}
+
+#From Vampire to Lover: Confess my condition?
+character_event = {
+	id = vamp.450
+	desc = Vamp450
+	picture = GFX_evt_bad_news
+	
+	capable_only = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		trait = vampire
+		NOT = { has_character_flag = hunting_vampire }
+		NOT = { trait = known_vampire }
+		NOT = { trait = known_vampire_benevolent }
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		any_lover = {
+			prisoner = no
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			NOT = { is_rival = ROOT }
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire }
+				has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_vampire }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_bad }
+				has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 0.5
+			is_anti_necromancy_religion = yes
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = kind
+		}
+		modifier = {
+			factor = 0.9
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.9
+			trait = just
+		}
+		modifier = {
+			factor = 0.9
+			trait = humble
+		}
+		modifier = {
+			factor = 0.9
+			trait = brave
+		}
+		modifier = {
+			factor = 1.1
+			trait = stubborn
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 2
+			trait = shy
+		}
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.5
+			has_character_modifier = pureblood_vampire
+		}
+	}
+	
+	immediate = {
+		random_lover = {
+			limit = {
+				prisoner = no
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				NOT = { trait = incapable }
+				NOT = {
+					is_rival = ROOT
+				}
+				NOR = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire }
+					has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_vampire }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_bad }
+					has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+					reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vamp_depth_child }
+				}
+			}
+			save_event_target_as = secret_vampire_lover
+		}
+	}
+	
+	option = { #Tell them
+		name = Vamp450Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_vampire_lover = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_vampire_lover = {
+					trait = trusting
+				}
+			}
+		}
+		event_target:secret_vampire_lover = {
+			character_event = { id = vamp.451 }
+		}
+	}
+	
+	option = { #Or don't
+		name = Vamp450Decline
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+			modifier = {
+				factor = 0.01
+				event_target:secret_vampire_lover = {
+					is_anti_necromancy_religion = yes
+					trait = zealous
+				}
+			}
+		}
+	}
+}
+#Lover finds out
+character_event = {
+	id = vamp.451
+	desc = Vamp451
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = secret_vampire_lover
+	}
+	
+	option = { #You're joking
+		name = Vamp451OptA
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = slothful
+			}
+			modifier = {
+				factor = 2.5
+				trait = gregarious
+			}
+		}
+		FROM = { character_event = { id = vamp.455 } }
+	}
+	option = { #You're a monster!
+		name = Vamp451OptB
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 50
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.001
+				is_vampire = yes
+			}
+			modifier = {
+				factor = 0.25
+				is_supernatural = yes
+			}
+			modifier = {
+				factor = 0.5
+				trait = kind
+			}
+		}
+		FROM = { character_event = { id = vamp.456 } }
+	}
+	option = { #I stand with you!
+		name = Vamp451OptC
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = vamp.457 } }
+	}
+	option = { #Share your powers with me!
+		name = Vamp451OptD
+		trigger = {
+			is_disease_immune = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				trait = ambitious
+			}
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 0.001
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.1
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = vamp.458 } }
+	}
+}
+#A joke?
+character_event = {
+	id = vamp.455
+	desc = Vamp455
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp455Accept
+		prestige = -5
+	}
+}
+#You're a monster!
+character_event = {
+	id = vamp.456
+	desc = Vamp456
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp456Accept
+		piety = -10
+		FROM = { save_event_target_as = former_lover }
+		break_up_with_target = yes
+		add_rival = FROM
+		reverse_opinion = {
+			modifier = opinion_not_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_bad
+				who = FROM
+				years = 5000
+			}
+			FROM = { character_event = { id = vamp.460 } }
+		}
+	}
+}
+#I stand with you!
+character_event = {
+	id = vamp.457
+	desc = Vamp457
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp457Accept
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+	}
+}
+#We're still on the same page, can you give me your powers?
+character_event = {
+	id = vamp.458
+	desc = Vamp458
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp458Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = vamp.465 } }
+	}
+	option = {
+		name = Vamp458Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_vampire
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_vampire_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = vamp.466 } }
+	}
+}
+#Monster, how to proceed?
+character_event = {
+	id = vamp.460
+	desc = Vamp460
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp460Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = schemer
+			}
+		}
+		character_event = { id = vamp.470 days = 5 }
+	}
+	option = {
+		name = Vamp460Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+	}
+}
+#Yay, vampirism!
+character_event = {
+	id = vamp.465
+	desc = Vamp465
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp465Accept
+		set_character_flag = vampire_disease
+		set_character_flag = transform_no_suicide #Not much point in them asking for vampirism just to commit suicide is there?
+		set_character_flag = asked_for_vampirism
+		set_character_flag = vamp_depth_turned
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_vamp_depth_child
+			years = 2000
+		}
+		opinion = {
+			modifier = opinion_vamp_depth_turned_me_1
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			character_event = { id = vampdepth.1 years = 10 }
+			character_event = { id = vamp.15 days = 3 }
+			FROM = { character_event = { id = vamp.25 } } #Reset Vampire Stage Event
+		}
+	}
+}
+#Boo, no vampirism!
+character_event = {
+	id = vamp.466
+	desc = Vamp466
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp466Accept
+	}
+}
+#A cunning plan to reveal the truth!
+character_event = {
+	id = vamp.470
+	desc = Vamp470
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp470Accept
+		ai_chance = {
+			factor = 1
+		}
+		FROMFROM = { character_event = { id = vamp.475 days = 5 } }
+	}
+	option = { #AI check evaluated in previous event
+		name = Vamp470Decline
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+#Vampire is confronted
+character_event = {
+	id = vamp.475
+	desc = Vamp475
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp475OptA
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_1_tooltip"
+		}
+		add_trait = known_vampire
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.480 } }
+		}
+	}
+	option = {
+		name = Vamp475OptB
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_2_tooltip"
+		}
+		add_trait = known_vampire
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.480 } }
+		}
+	}
+	option = {
+		name = Vamp475OptC
+		trigger = {
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		add_trait = known_vampire_benevolent
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = vamp.255  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.480 } }
+		}
+	}
+	option = {
+		name = Vamp475OptD
+		trigger = {
+			OR = {
+				intrigue = 20
+				diplomacy = 20
+			}
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		custom_tooltip = {
+			text = "vamp_plot_reveal_3_tooltip"
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.481 } }
+		}
+	}
+	option = {
+		name = Vamp475OptE
+		trigger = {
+			OR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = vamp.482 } }
+		}
+	}
+}
+#The vampire is revealed, plotter reacts
+character_event = {
+	id = vamp.480
+	desc =  {
+		text = Vamp480A
+		trigger = {
+			FROM = { trait = known_vampire }
+		}
+	}
+	desc =  {
+		text = Vamp480B
+		trigger = {
+			FROM = { trait = known_vampire_benevolent }
+		}
+	}
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp480OptA
+		trigger = {
+			FROM = { trait = known_vampire }
+		}
+	}
+	option = {
+		name = Vamp480OptB
+		trigger = {
+			FROM = { trait = known_vampire_benevolent }
+		}
+	}
+}
+#Discredited
+character_event = {
+	id = vamp.481
+	desc = Vamp481
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp481Accept
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 120
+		}
+	}
+}
+character_event = {
+	id = vamp.482
+	desc = Vamp482
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp482Accept
+	}
+}
+
+#Vampire character causes a stir at court
+province_event = {
+	id = vamp.500
+	hide_window = yes
+	
+	trigger = {
+		NOR = { 
+			has_province_modifier = vampire_peasant_unrest
+			has_province_modifier = lycan_peasant_unrest 
+			has_province_modifier = peasantry_placated
+		}
+		owner = {
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			prisoner = no
+			NOT = { trait = incapable }
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+			any_courtier = {
+				is_ruler = no
+				trait = vampire
+				OR = {
+					trait = known_vampire
+					trait = known_vampire_benevolent
+				}
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				prisoner = no
+				NOT = { trait = incapable }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 960
+		
+		modifier = {
+			factor = 0.5
+			is_anti_necromancy_religion = yes
+		}
+		modifier = {
+			factor = 0.75
+			owner = {
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+		}
+		modifier = {
+			factor = 5.0
+			is_necromancy_religion = yes
+		}
+	}
+	
+	immediate = {
+		owner = {
+			random_courtier = {
+				limit = {
+					is_ruler = no
+					trait = vampire
+					OR = {
+						trait = known_vampire
+						trait = known_vampire_benevolent
+					}
+					is_indisposed = no
+					is_inaccessible_trigger = no
+					prisoner = no
+					NOT = { trait = incapable }
+				}
+				save_event_target_as = vampire_peasant_target
+			}
+			character_event = { id = vamp.505 }
+		}
+	}
+}
+character_event = {
+	id = vamp.505
+	desc = Vamp505
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp505Accept
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 15
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 100
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				is_anti_necromancy_religion = no
+				is_necromancy_religion = no
+			}
+			modifier = {
+				factor = 5
+				is_necromancy_religion = no
+				trait = just
+			}
+			modifier = {
+				factor = 0.001
+				event_target:vampire_peasant_target = {
+					OR = {
+						is_friend = ROOT
+						is_lover = ROOT
+						is_close_relative = ROOT
+						is_married = ROOT
+					}
+				}
+			}
+		}
+		reverse_imprison = event_target:vampire_peasant_target
+		opinion = {
+			modifier = opinion_hostile_vampire
+			who = event_target:vampire_peasant_target
+			years = 25
+		}
+		FROM = {
+			add_province_modifier = {
+				name = peasantry_placated
+				duration = 365
+			}
+		}
+		event_target:vampire_peasant_target = {
+			character_event = { id = vamp.506 }
+		}
+	}
+	option = {
+		name = Vamp505Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				is_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 50
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				event_target:vampire_peasant_target = {
+					is_rival = ROOT
+				}
+			}
+		}
+		FROM = {
+			add_province_modifier = {
+				name = vampire_peasant_unrest
+				duration = 1825
+			}
+		}
+		event_target:vampire_peasant_target = {
+			character_event = { id = vamp.506 }
+		}
+	}
+}
+character_event = {
+	id = vamp.506
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = vampire_peasant_target
+	}
+}
+
+
+#Vampire ruler draws the ire of the peasantry
+province_event = {
+	id = vamp.510
+	hide_window = yes
+	
+	trigger = {
+		NOR = { 
+			has_province_modifier = vampire_peasant_unrest
+			has_province_modifier = lycan_peasant_unrest
+			has_province_modifier = peasantry_placated
+		}
+		owner = {
+			trait = vampire
+			OR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			prisoner = no
+			NOT = { trait = incapable }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		
+		modifier = {
+			factor = 0.5
+			is_anti_necromancy_religion = yes
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = just
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = kind
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = gregarious
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = charitable
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = deceitful
+			}
+		}
+		modifier = {
+			factor = 2.5
+			owner = {
+				trait = known_vampire_benevolent
+			}
+		}
+		modifier = {
+			factor = 5.0
+			is_necromancy_religion = yes
+		}
+	}
+	
+	immediate = {
+		owner = {
+			character_event = { id = vamp.515 }
+		}
+	}
+}
+character_event = {
+	id = vamp.515
+	desc = Vamp515
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Vamp515Accept
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 15
+				is_anti_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 100
+				is_anti_necromancy_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				is_anti_necromancy_religion = no
+				is_necromancy_religion = no
+			}
+			modifier = {
+				factor = 5
+				is_necromancy_religion = no
+				trait = just
+			}
+		}
+		scaled_wealth = -0.25
+		if = {
+			limit = { ai = yes }
+			scaled_wealth = 0.15
+		}
+		FROM = {
+			add_province_modifier = {
+				name = peasantry_placated
+				duration = 365
+			}
+		}
+	}
+	option = {
+		name = Vamp515Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				is_necromancy_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 50
+				is_necromancy_religion = yes
+				trait = zealous
+			}
+		}
+		FROM = {
+			add_province_modifier = {
+				name = vampire_peasant_unrest
+				duration = 1825
+			}
+		}
+	}
+}

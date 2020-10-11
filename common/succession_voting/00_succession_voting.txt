@@ -1,0 +1,1867 @@
+# The entry should be named in the same way that the elective succession law is named to define it's voter's logic.
+# Root scope - Voter, the character voting in the election
+# From scope - Candidate, Character considered for the title
+# FromFrom scope - The title the nomination is for
+# FromFromFrom scope - The title owner's candidate
+# The voter will vote for the top score candidate calculated from this script.
+
+### Condensed syntax layout:
+#<elective_law_type> = {
+#	candidate_vote_score = {
+#		<MTTH>
+#	}
+#	elector_selection = {
+#		max_amount = <int>
+#		<MTTH> - if max_amount is set it will pick the X amount of top scorers.
+#				 Negative scores are considered invalid electors - Ruler is always an elector
+#	}
+#	elector_vote_strength = {
+#		<MTTH>
+#	}
+#	elector_stances = { - Intended for the elder council positions
+#		<stance_name> = {
+#			icon = <int>
+#			<MTTH>
+#		}
+#	}
+#	candidate_trigger = { 
+#		<trigger>
+#	}
+#}
+
+### Example elective succession setup
+#my_test_law = {
+	#elector_stances = { #Electoral stances visible on the Electors' tab. Do not directly affect voting pattern unless used as triggers in the modifiers of candidate_voter_score.
+#		my_stance = {
+#			icon = 5
+#			days = 1
+#			additive_modifier = {
+#				trait = humble
+#				value = 6
+#			}
+#		}
+#		other_stance = {
+#			icon = 3
+#			days = 1
+#		}
+#		third_stance = {
+#			icon = 1
+#			days = 5
+#			additive_modifier = {
+#				trait = wroth
+#				value = 10
+#			}
+#		}
+#	}
+#	elector_selection = {
+#		days = -5 		# If below 0, ROOT is not valid to be an Elector. Any character above 0 will be an elector.
+#		max_amount = 7 # Determines max amount of electors, with the lower scoring ones being excluded (limit is optional)
+#		additive_modifier = { #
+#			value = 10
+#			OR = { #
+#				AND = {
+#					higher_real_tier_than = BARON
+#					FROMFROM = { real_tier = DUKE } #If the Elector Title is a Duchy, any vassal is an elector, otherwise only Dukes and above.
+#				}
+#				higher_real_tier_than = COUNT
+#			}
+#			OR = { #Either defacto direct vassal, or independent ruler who is dejure vassal.
+#				vassal_of = FROMFROM 
+#				independent = yes
+#			}
+#			OR = { #dejure vassal, or any vassal if title titular.
+#				AND = {
+#					FROMFROM = { is_titular = yes }
+#					vassal_of = FROMFROM 
+#				}
+#				any_dejure_liege = { title = FROMFROM }
+#			}
+#		}
+#		additive_modifier = {
+#			value = 10
+#			character = FROMFROM
+#		}
+#	}
+#	elector_vote_strength = { #Affects the voting strength of each elector.
+#		days = 1 # 1 elector = 1 vote.
+#		additive_modifier = {
+#			trait = humble
+#			value = 3 # Ex: An Elector with the humble trait is worth an addtional 3 votes.
+#		}
+#	}
+#	candidate_vote_score = { #Chance of an Elector voting for a candidate over the other. The candidate with the highest value will be picked.
+#		days = 1
+#		##########################   Elector voting himself   ##########################
+#		additive_modifier = {
+#			value = 15
+#			localisation_key = tooltip_feudal_elector_vote_myself
+#			character = FROM
+#			NOR = {
+#				trait = humble
+#				trait = content
+#				trait = craven
+#				trait = slothful
+#				trait = stressed
+#				trait = depressed
+#				trait = ambitious
+#			}
+#			NOT = { 
+#				FROMFROM = { 
+#					holder_scope = { 
+#						is_parent_of = ROOT
+#					} 
+#				}
+#			}
+#		}
+#	}
+#	candidate_trigger = { #Trigger to determine what characters are valid candidates that can be voted by electors.
+#		always = yes
+#	}
+#}
+
+# TODO:COMPATCH For Talos' sake, use the new scripted scores system
+
+feudal_elective = {
+
+	elector_vote_strength = {
+		days = 1
+	}
+	
+	elector_selection = {
+		days = -5 		#If below 0, ROOT is not valid to be an Elector.
+		additive_modifier = { #Current ruler is always an elector.
+			value = 10
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			FROMFROM = {
+				holder_scope = {
+					character = PREVPREV
+				}
+			}
+		}
+		additive_modifier = { #
+			value = 10
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			OR = { #
+				AND = {
+					higher_real_tier_than = BARON
+					FROMFROM = { real_tier = DUKE } #If the Elector Title is a Duchy, any vassal is an elector, otherwise only Dukes and above.
+				}
+				higher_real_tier_than = COUNT
+			}
+			OR = { #Either defacto direct vassal, or independent ruler who is dejure vassal.
+				vassal_of = FROMFROM 
+				independent = yes
+			}
+			OR = { #dejure vassal, or any vassal if title titular.
+				AND = {
+					FROMFROM = { is_titular = yes }
+					vassal_of = FROMFROM 
+				}
+				any_dejure_liege = { title = FROMFROM }
+			}
+		}
+		additive_modifier = {
+			value = -5
+			is_republic = yes
+		}
+		additive_modifier = {
+			value = -5
+			is_merchant_republic = yes
+		}
+		additive_modifier = {
+			value = -4
+			is_tribal = yes
+		}
+		additive_modifier = {
+			value = -4
+			is_nomadic = yes
+		}
+		additive_modifier = { #Theocracies favored over other government forms, feudalism left at base score.
+			value = 4
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			higher_real_tier_than = COUNT
+			is_theocracy = yes
+			FROMFROM = { #Tied to religion.
+				holder_scope = { religion = ROOT }
+			}
+			vassal_of = FROMFROM
+			OR = { #dejure vassal, or any vassal if title titular.
+				AND = {
+					FROMFROM = { is_titular = yes }
+					vassal_of = FROMFROM 
+				}
+				any_dejure_liege = { title = FROMFROM }
+			}
+		}
+		additive_modifier = { #Slight prioritization based on religion.
+			value = 4
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			is_feudal = yes
+			vassal_of = FROMFROM
+			higher_real_tier_than = COUNT
+			OR = { #dejure vassal, or any vassal if title titular.
+				AND = {
+					FROMFROM = { is_titular = yes }
+					vassal_of = FROMFROM 
+				}
+				any_dejure_liege = { title = FROMFROM }
+			}
+			FROMFROM = {
+				holder_scope = {
+					religion = ROOT
+				}
+			}
+		}
+		additive_modifier = { #Slight prioritization based on religion_group.
+			value = 4
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			is_feudal = yes
+			vassal_of = FROMFROM
+			higher_real_tier_than = COUNT
+			OR = { #dejure vassal, or any vassal if title titular.
+				AND = {
+					FROMFROM = { is_titular = yes }
+					vassal_of = FROMFROM 
+				}
+				any_dejure_liege = { title = FROMFROM }
+			}
+			FROMFROM = {
+				holder_scope = {
+					NOT = { religion = ROOT }
+					religion_group = ROOT
+				}
+			}
+		}
+		additive_modifier = { #Slight prioritization based on culture.
+			value = 4
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			is_feudal = yes
+			vassal_of = FROMFROM
+			higher_real_tier_than = COUNT
+			OR = { #dejure vassal, or any vassal if title titular.
+				AND = {
+					FROMFROM = { is_titular = yes }
+					vassal_of = FROMFROM 
+				}
+				any_dejure_liege = { title = FROMFROM }
+			}
+			FROMFROM = {
+				holder_scope = {
+					culture = ROOT
+				}
+			}
+		}
+	}
+	candidate_vote_score = {
+		days = 0
+		##########################   Elector voting himself   ##########################
+		succession_vote_self_score = yes
+
+		##########################   Candidate's traits   ##########################
+
+		#The heir
+		succession_player_heir_score = yes
+
+		#Sexism
+		succession_gender_score = yes
+
+		#Ageism
+		succession_age_score = yes
+
+		#Culturism
+		succession_culture_score = yes
+		succession_foreign_score = yes
+
+		#Faithism
+		succession_religion_score = yes
+
+		#Barbarism
+		succession_barbarism_score = yes
+
+		#Nepotism
+		succession_nepotism_score = yes
+
+		#Prestige
+		succession_prestige_score = yes
+
+		#Piety
+		succession_piety_score = yes
+
+		#Educational preferences
+		succession_education_score = yes
+
+		#Claims
+		succession_claim_score = yes
+
+
+		#General Traits
+		succession_candidate_child_traits_score = yes
+		succession_candidate_traits_score = yes
+		
+		#Adventurer-related things
+		succession_adventurer_trait_score = yes
+		
+		#Attraction
+		succession_attraction_score = yes
+		
+		#Kinslaying
+		succession_kinslayer_score = yes
+
+		##########################   Ruler's traits   ##########################
+		succession_current_ruler_score = yes
+
+
+		##########################   Raw Opinion bonus towards Candidate   ##########################
+		succession_candidate_opinion_score = yes
+
+		##########################   Raw Opinion bonus towards Ruler   ##########################
+		succession_current_ruler_opinion_score = yes
+		
+	}
+	
+	#ROOT = Current Title holder, FROM = Candidate, FROMFROM = Title, FROMFROMFROM = Null
+	candidate_trigger = {
+		NOT = { character = FROM } #Not the current ruler.
+		FROM = { #Either the candidate is in the realm, or is landless, or the title is independent, or the realm of the title does NOT have protected inheritance.
+			OR = { 
+				any_liege = { 
+					character = ROOT
+				} 
+				is_ruler = no
+				ROOT_FROMFROM = { holder_scope = { independent = yes } }
+				NOR = { 
+					ROOT_FROMFROM = { has_law = out_of_realm_inheritance_law_1 } 
+					ROOT_FROMFROM = { has_law = crown_authority_3 } 
+					ROOT_FROMFROM = { has_law = crown_authority_4 } 
+				} 
+			} 
+		} 
+		OR = {
+			FROM = { any_claim = { title = ROOT_FROMFROM } }
+			ROOT = { 
+				is_close_relative = FROM
+				OR = { 
+					dynasty = FROM
+					FROM = { is_landed = yes higher_real_tier_than = BARON }
+				}
+			}
+			AND = { 
+				OR = { 
+					FROM = { higher_real_tier_than = COUNT } #Or Duke-tier...
+					AND = { 
+						ROOT = { 
+							lower_real_tier_than = KING
+							higher_real_tier_than = COUNT
+						}
+						FROM = { higher_real_tier_than = BARON } #...Or Count-tier under a Duchy...
+					} 
+					AND = { 
+						ROOT = { 
+							lower_real_tier_than = DUKE
+						}
+						FROM = { is_landed = yes is_ruler = yes } #...Or Baron-tier under a County.
+					} 
+				}
+				FROM = { 
+					OR = { #Either defacto direct vassal, or independent ruler who is dejure vassal.
+						vassal_of = ROOT 
+						AND = {
+							independent = yes
+						 	any_dejure_liege = { title = ROOT } 
+						}
+					}
+				} 
+			}
+		}
+		FROM = {
+			OR = { #Candidate should not be a landless Courtier that is about to inherit a Theocracy or Republic
+				AND = {
+					is_ruler = yes
+					is_landed = yes
+					is_republic = no
+					is_merchant_republic = no
+					is_theocracy = no
+				}
+				NOR = {
+					any_heir_title = {
+						is_republic = yes
+					}
+					any_heir_title = {
+						is_merchant_republic = yes
+					}
+					any_heir_title = {
+						is_theocracy = yes
+					}
+				}
+			}
+			OR = { #If the title controls the religion, candidates must be of the same religion.
+				ROOT = { 
+					NOT = { 
+						controls_religion = yes
+					}
+				}
+				religion = ROOT
+			}
+			NOR = {
+				mother = {
+					is_alive = yes
+					is_married = ROOT
+					parent_for_elective_succession_trigger = yes
+				}
+				father = {
+					is_alive = yes
+					is_married = ROOT
+					parent_for_elective_succession_trigger = yes
+				}
+				trait = disinherited
+				trait = eunuch
+				AND = { 
+					trait = bastard 
+					is_ruler = no
+				}
+				is_ascetic_trigger = yes
+				is_theocracy = yes
+				is_republic = yes
+				is_merchant_republic = yes
+			}
+		}
+	}
+}
+
+	#####################################################################################################################################################
+	#####################################################################################################################################################
+	#####################################################################################################################################################
+	#Tanistry
+
+tanistry = {
+	elector_vote_strength = {
+		days = 1
+	}
+	
+	elector_selection = {
+		days = -5
+		additive_modifier = { 
+			value = 10
+			is_vassal_or_below_of = FROMFROM 
+			OR = { #Any vassals of one or two lower tiers than the main title are viable Electors.
+				AND = {
+					FROMFROM = { real_tier = COUNT }
+					is_ruler = yes #Barons
+				}
+				AND = {
+					FROMFROM = { real_tier = DUKE }
+					is_ruler = yes #Barons and Counts
+				}
+				AND = {
+					FROMFROM = { real_tier = KING }
+					higher_real_tier_than = BARON #Counts and Dukes
+				}
+				AND = {
+					FROMFROM = { real_tier = EMPEROR }
+					higher_real_tier_than = COUNT #Dukes and Kings
+				}
+			}
+		}
+		additive_modifier = { #Current ruler is always an elector.
+			value = 10
+			FROMFROM = {
+				holder_scope = {
+					character = ROOT
+				}
+			}
+		}
+	}
+	candidate_vote_score = {
+		days = 0
+		##########################   Elector voting himself   ##########################
+		additive_modifier = {
+			value = 15
+			localisation_key = tooltip_feudal_elector_vote_myself
+			character = FROM
+			NOR = {
+				trait = humble
+				trait = content
+				trait = craven
+				trait = slothful
+				trait = stressed
+				trait = depressed
+				trait = ambitious
+			}
+			NOT = { 
+				FROMFROM = { 
+					holder_scope = { 
+						is_parent_of = ROOT
+					} 
+				}
+			}
+		}
+		additive_modifier = {
+			value = -15
+			localisation_key = tooltip_feudal_elector_vote_not_myself
+			character = FROM
+			NOT = { trait = ambitious }
+			OR = {
+				trait = humble
+				trait = content
+				trait = craven
+				trait = slothful
+				trait = stressed
+				trait = depressed
+			}
+		}
+		additive_modifier = {
+			value = 40
+			localisation_key = tooltip_feudal_elector_vote_myself_heir
+			character = FROM
+			NOR = {
+				trait = humble
+				trait = content
+				trait = craven
+				trait = slothful
+				trait = stressed
+				trait = depressed
+				trait = ambitious
+			}
+			FROMFROM = { 
+				holder_scope = { 
+					is_parent_of = ROOT
+				} 
+			}
+		}
+		additive_modifier = {
+			value = 40
+			localisation_key = tooltip_feudal_elector_vote_myself_ambitious
+			character = FROM
+			trait = ambitious
+		}
+
+		##########################   Candidate's traits   ##########################
+
+		#The heir
+		succession_player_heir_score = yes
+
+		#Sexism
+		succession_gender_score = yes
+
+		#Ageism - Tanistry is more biased towards older rulers.
+		succession_age_older_score = yes
+
+		#Culturism - Tanistry is tribalistic succession, therefore malus/bonus on cultural bias are increased.
+		succession_culture_phobic_score = yes
+		succession_foreign_phobic_score = yes
+
+		#Faithism - Tanistry is more about choosing a good Dynastic member, so faith bias is slightly reduced.
+		succession_religion_philic_score = yes
+
+	#	#Barbarism - Tribal succession, that is the point.
+	#	succession_barbarism_score = yes
+	
+		#Tribalism
+		succession_tribalism_score = yes
+
+		#Nepotism
+		succession_nepotism_score = yes
+
+		#Prestige 
+		succession_prestige_score = yes
+
+		#Piety
+		succession_piety_score = yes
+
+		#Educational preferences
+		succession_warrior_combat_score = yes
+
+		#Claims
+		success_claim_lesser_score = yes
+
+		#General Traits
+		succession_candidate_child_traits_score = yes
+		succession_candidate_traits_score = yes
+		
+		#Adventurer-related things
+		succession_adventurer_trait_score = yes
+		
+		#Attraction
+		succession_attraction_score = yes
+		
+		#Kinslayer
+		succession_kinslayer_score = yes
+
+		##########################   Ruler's traits   ##########################
+		succession_current_ruler_score = yes
+
+		
+		##########################   Raw Opinion bonus towards Candidate   ##########################
+		succession_candidate_opinion_score = yes
+
+
+		##########################   Raw Opinion bonus towards Ruler   ##########################
+		succession_current_ruler_opinion_score = yes
+		
+	}
+
+	#ROOT = Current Title holder, FROM = Candidate, FROMFROM = Title, FROMFROMFROM = Null
+	candidate_trigger = {
+		NOT = { character = FROM } #Not the current ruler.
+		dynasty = FROM
+		FROM = {
+			OR = { #Candidate should not be a landless Courtier that is about to inherit a Theocracy or Republic
+				AND = {
+					is_ruler = yes
+					is_landed = yes
+					is_republic = no
+					is_merchant_republic = no
+					is_theocracy = no
+				}
+				NOR = {
+					any_heir_title = {
+						is_republic = yes
+					}
+					any_heir_title = {
+						is_merchant_republic = yes
+					}
+					any_heir_title = {
+						is_theocracy = yes
+					}
+				}
+			}
+			OR = { #If the title controls the religion, candidates must be of the same religion.
+				ROOT = { 
+					NOT = { 
+						controls_religion = yes
+					}
+				}
+				religion = ROOT
+			}
+			NOR = {
+				trait = disinherited
+				trait = eunuch
+				trait = bastard
+				is_ascetic_trigger = yes
+				is_theocracy = yes
+				is_republic = yes
+				is_merchant_republic = yes
+			}
+		}
+	}
+}
+
+
+	#####################################################################################################################################################
+	#####################################################################################################################################################
+	#####################################################################################################################################################
+
+	#Elective Gavelkind
+
+elective_gavelkind = {
+	elector_vote_strength = {
+		days = 1
+	}
+	
+	elector_selection = {
+		days = -5
+		additive_modifier = { 
+			value = 10
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			vassal_of = FROMFROM 
+			OR = { #Any vassals of one or two lower tiers than the main title are viable Electors.
+				AND = {
+					FROMFROM = { real_tier = DUKE }
+					is_ruler = yes
+				}
+				AND = {
+					FROMFROM = { real_tier = KING }
+					higher_real_tier_than = BARON
+				}
+				AND = {
+					FROMFROM = { real_tier = EMPEROR }
+					higher_real_tier_than = COUNT
+				}
+			}
+		}
+		additive_modifier = { #Current ruler is always an elector.
+			value = 10
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
+				}
+			}
+			FROMFROM = {
+				holder_scope = {
+					character = ROOT
+				}
+			}
+		}
+	}
+	candidate_vote_score = {
+		days = 0
+		##########################   Elector voting himself   ##########################
+		succession_vote_self_score = yes
+
+		##########################   Candidate's traits   ##########################
+
+		#The heir
+		succession_player_heir_score = yes
+
+		#Sexism
+		succession_gender_score = yes
+
+		#Ageism - Elective Gavelkind is more biased towards younger (adult) rulers.
+		succession_age_younger_score = yes
+
+		#Culturism - Elective Gavelkind is a tribalistic succession, therefore malus/bonus on cultural bias are increased.
+		succession_culture_phobic_score = yes
+		succession_foreign_phobic_score = yes
+
+		#Faithism - Elective Gavelkind is more about choosing a good Dynastic member, so faith bias is slightly reduced.
+		succession_religion_philic_score = yes
+
+		#Barbarism - Tribal succession, that is the point.
+	#	additive_modifier = { 
+	#		value = -15
+	#		localisation_key = tooltip_feudal_elector_vote_uncivilized
+	#		OR = { 
+	#			is_feudal = yes 
+	#			is_merchant_republic = yes
+	#			is_patrician = yes
+	#		}
+	#		FROM = { 
+	#			NOR = { 
+	#				is_feudal = yes 
+	#				is_merchant_republic = yes
+	#				is_patrician = yes
+	#			} 
+	#		}
+	#	}
+		#Tribalism
+		succession_tribalism_score = yes
+
+		#Nepotism
+		succession_nepotism_score = yes
+
+		#Prestige 
+		succession_prestige_score = yes
+
+		#Piety
+		succession_piety_score = yes
+
+		#Educational preferences
+		succession_education_score = yes
+		succession_warrior_combat_score = yes
+
+		#Claims - More emphasis on claimants for Elective Gavelkind.
+		succession_claim_score = yes
+
+		#General Traits
+		succession_candidate_child_traits_score = yes
+		succession_candidate_traits_score = yes
+		
+		#Adventurer-related things
+		succession_adventurer_trait_prefer_score = yes
+		
+		#Attraction
+		succession_attraction_score = yes
+		
+		
+		#Kinslayer - From stranger's perspective
+		succession_kinslayer_score = yes
+
+		##########################   Ruler's traits   ##########################
+		succession_current_ruler_score = yes
+
+
+		##########################   Raw Opinion bonus towards Candidate   ##########################
+		succession_candidate_opinion_score = yes
+
+
+		##########################   Raw Opinion bonus towards Ruler   ##########################
+		succession_current_ruler_opinion_score = yes
+		
+	}
+	
+	#ROOT = Current Title holder, FROM = Candidate, FROMFROM = Title, FROMFROMFROM = Null
+	candidate_trigger = {
+		NOT = { character = FROM } #Not the current ruler.
+		FROM = { #Either the candidate is in the realm, or is landless, or the title is independent, or the realm of the title does NOT have protected inheritance.
+			OR = { 
+				any_liege = { 
+					character = ROOT
+				} 
+				is_ruler = no
+				ROOT_FROMFROM = { holder_scope = { independent = yes } }
+				NOR = { 
+					ROOT_FROMFROM = { has_law = out_of_realm_inheritance_law_1 } 
+					ROOT_FROMFROM = { has_law = crown_authority_3 } 
+					ROOT_FROMFROM = { has_law = crown_authority_4 } 
+				} 
+			} 
+		}
+		dynasty = FROM
+		FROM = {
+			OR = { #Candidate should not be a landless Courtier that is about to inherit a Theocracy or Republic
+				AND = {
+					is_ruler = yes
+					is_landed = yes
+					is_republic = no
+					is_merchant_republic = no
+					is_theocracy = no
+				}
+				NOR = {
+					any_heir_title = {
+						is_republic = yes
+					}
+					any_heir_title = {
+						is_merchant_republic = yes
+					}
+					any_heir_title = {
+						is_theocracy = yes
+					}
+				}
+			}
+			OR = { #If the title controls the religion, candidates must be of the same religion.
+				ROOT = { 
+					NOT = { 
+						controls_religion = yes
+					}
+				}
+				religion = ROOT
+			}
+			NOR = {
+				trait = disinherited
+				trait = eunuch
+				trait = bastard
+				is_ascetic_trigger = yes
+				is_theocracy = yes
+				is_republic = yes
+				is_merchant_republic = yes
+			}
+		}
+	}
+}
+
+	#####################################################################################################################################################
+	#####################################################################################################################################################
+	#####################################################################################################################################################
+
+
+	#Eldership
+
+eldership_rules = {
+	elector_stances = {
+		elder_ruler = {
+			icon = 2
+			days = 1
+			additive_modifier = {
+				value = 500
+				localisation_key = tooltip_eldership_stance_ruler_is_ruler
+				FROMFROM = { 
+					holder_scope = { 
+						character = ROOT
+					}
+				}
+			}
+		}
+		elder_ecstatic = {
+			icon = 2
+			days = 1
+			additive_modifier = {
+				value = 1
+				trait = content
+				localisation_key = tooltip_eldership_stance_elder_content
+			}
+			additive_modifier = {
+				value = 2
+				localisation_key = tooltip_eldership_stance_elder_councilor
+				OR = { 
+				 	has_job_title = job_chancellor
+				 	has_job_title = job_treasurer
+				 	has_job_title = job_spiritual
+				}
+				FROMFROM = { 
+					holder_scope = { 
+						is_liege_of = ROOT
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				localisation_key = tooltip_eldership_stance_elder_ecstatic_opinion
+				FROMFROM = { 
+					holder_scope = { 
+						OR = { 
+							reverse_opinion = { who = ROOT value = 60 } 
+							is_friend = ROOT
+							is_lover = ROOT
+						} 
+					} 
+				}
+			}
+			additive_modifier = {
+				value = 5
+				localisation_key = tooltip_eldership_stance_elder_ecstatic_fulfilled_demand
+				FROMFROM = { 
+					holder_scope = { 
+						reverse_opinion = { who = ROOT value = 25 } 
+						reverse_has_opinion_modifier = { who = ROOT modifier = opinion_elder_fulfilled_demand }
+					}
+				}
+			}
+		}
+		elder_pleased = {
+			icon = 3
+			days = 2
+			additive_modifier = {
+				value = 2
+				localisation_key = tooltip_eldership_stance_elder_councilor
+				OR = { 
+				 	has_job_title = job_chancellor
+				 	has_job_title = job_treasurer
+				 	has_job_title = job_spiritual
+				}
+				FROMFROM = { 
+					holder_scope = { 
+						is_liege_of = ROOT
+					}
+				}
+			}
+			additive_modifier = {
+				value = 4
+				localisation_key = tooltip_eldership_stance_elder_pleased_opinion
+				FROMFROM = { 
+					holder_scope = { 
+						reverse_opinion = { who = ROOT value = 0 } 
+						NOR = { 
+							reverse_opinion = { who = ROOT value = 60 }
+							is_rival = ROOT
+						} 
+					} 
+				}
+			}
+			additive_modifier = {
+				value = 2
+				localisation_key = tooltip_eldership_stance_elder_stubborn_opinion
+				trait = stubborn
+			}
+			additive_modifier = {
+				value = 4
+				localisation_key = tooltip_eldership_stance_elder_ecstatic_fulfilled_demand
+				FROMFROM = { 
+					holder_scope = { 
+						NOT = { reverse_opinion = { who = ROOT value = 0 } } 
+						reverse_has_opinion_modifier = { who = ROOT modifier = opinion_elder_fulfilled_demand }
+					}
+				}
+			}
+		}
+		elder_displeased = {
+			icon = 1
+			days = 1
+			additive_modifier = {
+				value = 5
+				localisation_key = tooltip_eldership_stance_elder_stubborn_opinion
+				trait = stubborn
+			}
+			additive_modifier = {
+				value = 4
+				localisation_key = tooltip_eldership_stance_elder_negative_opinion
+				FROMFROM = { 
+					holder_scope = { 
+						OR = { 
+							is_rival = ROOT
+							NOR = { 
+								reverse_opinion = { who = ROOT value = 0 }
+								is_friend = ROOT
+								is_lover = ROOT
+							} 
+						} 
+					} 
+				}
+			}
+		}
+	}
+
+	elector_vote_strength = {
+		days = 1
+	}
+	
+	elector_selection = {
+		days = -5
+		max_amount = 7
+		additive_modifier = { #Ruler is also always an Elector.
+			value = 200
+			FROMFROM = { holder_scope = { character = ROOT } }
+		}
+		additive_modifier = {
+			value = 4
+			has_job_title = job_spiritual
+			FROMFROM = { holder_scope = { is_liege_of = ROOT } }
+		}
+		additive_modifier = {
+			value = 6
+			is_vassal_or_below_of = FROMFROM
+			liege = { character = ROOT }
+			has_character_modifier = elder_long_life_modifier #Favor former Elders who are still in your court or your direct vassals.
+			NOT = { age = 40 }
+		}
+		additive_modifier = {
+			value = 16
+			is_vassal_or_below_of = FROMFROM
+			liege = { character = ROOT }
+			has_character_modifier = elder_long_life_modifier #Favor former Elders who are still in your court or your direct vassals, and who are old even more.
+			age = 40
+		}
+		additive_modifier = {
+			value = 4
+			is_vassal_or_below_of = FROMFROM
+			NOT = { liege = { character = ROOT } }
+			has_character_modifier = elder_long_life_modifier #Favor former Elders.
+			NOT = { age = 40 }
+		}
+		additive_modifier = {
+			value = 6
+			is_vassal_or_below_of = FROMFROM
+			NOT = { liege = { character = ROOT } }
+			has_character_modifier = elder_long_life_modifier #Favor former Elders who are old even more.
+			age = 40
+		}
+		additive_modifier = {
+			value = 20
+			is_vassal_or_below_of = FROMFROM
+			age = 70
+		}
+		additive_modifier = {
+			value = 15
+			is_vassal_or_below_of = FROMFROM
+			NOT = { age = 70 }
+			age = 60
+		}
+		additive_modifier = {
+			value = 10
+			is_vassal_or_below_of = FROMFROM
+			NOT = { age = 60 }
+			age = 50
+		}
+		additive_modifier = {
+			value = 8
+			is_vassal_or_below_of = FROMFROM
+			NOT = { age = 50 }
+			age = 40
+		}
+		additive_modifier = {
+			value = 7
+			is_vassal_or_below_of = FROMFROM
+			NOT = { age = 40 }
+			age = 35
+		}
+		additive_modifier = {
+			value = 6
+			is_vassal_or_below_of = FROMFROM
+			NOT = { age = 35 }
+			age = 30
+		}
+		additive_modifier = {
+			value = -8
+			is_vassal_or_below_of = FROMFROM
+			NOT = { age = 27 }
+		}
+		additive_modifier = {
+			value = 9
+			is_vassal_or_below_of = FROMFROM
+			learning = 18
+			age = 35
+		}
+		additive_modifier = {
+			value = 8
+			is_vassal_or_below_of = FROMFROM
+			NOT = { learning = 18 }
+			learning = 16
+			age = 35
+		}
+		additive_modifier = {
+			value = 7
+			is_vassal_or_below_of = FROMFROM
+			NOT = { learning = 16 }
+			learning = 14
+			age = 35
+		}
+		additive_modifier = {
+			value = 6
+			is_vassal_or_below_of = FROMFROM
+			NOT = { learning = 14 }
+			learning = 12
+			age = 35
+		}
+		additive_modifier = {
+			value = 8
+			vassal_of = FROMFROM
+			age = 37
+			FROMFROM = { holder_scope = { culture = ROOT } }
+			FROMFROM = { holder_scope = { religion = ROOT } }
+			OR = { 
+				has_job_title = job_chancellor
+				has_job_title = job_spiritual
+			}
+		}
+		additive_modifier = {
+			value = -5
+			NOT = { FROMFROM = { holder_scope = { culture = ROOT } } }
+		}
+		additive_modifier = {
+			value = -3
+			NOT = { FROMFROM = { holder_scope = { has_religion_feature = religion_cosmopolitan } } }
+			NOT = { FROMFROM = { holder_scope = { religion = ROOT } } }
+			FROMFROM = { holder_scope = { religion_group = ROOT } }
+		}
+		additive_modifier = {
+			value = -10
+			NOT = { FROMFROM = { holder_scope = { culture_group = ROOT } } }
+		}
+		additive_modifier = {
+			value = -5
+			NOT = { FROMFROM = { holder_scope = { has_religion_feature = religion_cosmopolitan } } }
+			NOT = { FROMFROM = { holder_scope = { religion_group = ROOT } } }
+		}
+		additive_modifier = {
+			value = 4
+			is_vassal_or_below_of = FROMFROM
+			is_ruler = no
+		}
+		additive_modifier = {
+			value = -100
+			is_vassal_or_below_of = FROMFROM
+			trait = incapable
+		}
+		additive_modifier = { #Try to avoid having long-lived rulers seeing their children become "Elders".
+			value = -25
+			NOT = { age = 50 }
+			FROMFROM = { holder_scope = { is_parent_of = ROOT } }
+		}
+		additive_modifier = { #Try to avoid having young Elders when older options are available.
+			value = -15
+			NOT = { age = 45 }
+			FROMFROM = { 
+				holder_scope = { 
+					any_courtier_or_vassal = { 
+						age = 45
+						NOT = { has_character_modifier = elder_long_life_modifier }
+					}
+				} 
+			}
+		}
+	}
+	candidate_vote_score = {
+		days = 0
+		##########################   Title Holder logic for voting   ##########################
+		#The title holder (who also gets a vote), calculates his chosen heir using a very similar behavior to that of the Elective Gavelkind Electors.
+		#Elder AI behavior on the other hand uses an entirely different set of modifiers.
+
+		##########################   Candidate's traits   ##########################
+
+		#Sexism
+		succession_gender_score = yes
+
+		#NO Ageism - The ruler will not care, as long as they are its children.
+
+		#Culturism - Eldership is a tribalistic succession, therefore malus/bonus on cultural bias are increased.
+		succession_culture_phobic_score = yes
+		succession_foreign_phobic_score = yes
+
+		#Faithism - Eldership is more about choosing a good Dynastic member, so faith bias is slightly reduced.
+		succession_religion_philic_score = yes
+
+		#Barbarism - Tribal succession, that is the point.
+	#	additive_modifier = { 
+	#		value = -15
+	#		localisation_key = tooltip_feudal_elector_vote_uncivilized
+	#		OR = { 
+	#			is_feudal = yes 
+	#			is_merchant_republic = yes
+	#			is_patrician = yes
+	#		}
+	#		FROM = { 
+	#			NOR = { 
+	#				is_feudal = yes 
+	#				is_merchant_republic = yes
+	#				is_patrician = yes
+	#			} 
+	#		}
+	#	}
+	
+		#Tribalism
+		succession_tribalism_score = yes
+
+		#Nepotism
+		succession_nepotism_score = yes
+
+		#Prestige - Neglegible. Will usually pick his own children.
+
+		#Piety - Neglegible. Will usually pick his own children.
+		#Educational preferences
+		succession_shared_interests_score = yes
+
+		#Claims - The title holder does not care, he wants his children to be the heirs.
+
+		#General Traits
+		succession_candidate_child_traits_score = yes
+		succession_candidate_traits_score = yes
+		
+		#Adventurer-related things
+		succession_adventurer_trait_prefer_score = yes
+		
+		#Kinslayer - From stranger's perspective
+		succession_kinslayer_score = yes
+		
+		##########################   Raw Opinion bonus towards Candidate   ##########################
+		succession_candidate_opinion_lesser_score = yes
+
+		##########################   Elder is Ecstatic + Title holder has selected a Candidate   ##########################
+		additive_modifier = {
+			value = 200
+			localisation_key = tooltip_elder_elector_vote_ecstatic_candidate
+			has_elector_stance = { stance = elder_ecstatic title = FROMFROM }
+			FROMFROMFROM = { 
+				character = ROOT_FROM 
+			}
+		}
+		additive_modifier = {
+			value = 60
+			localisation_key = tooltip_elder_elector_vote_ecstatic_candidate_bad
+			has_elector_stance = { stance = elder_ecstatic title = FROMFROM }
+			FROMFROMFROM = { 
+				character = ROOT_FROM 
+			}
+			OR = { 
+				is_rival = FROM 
+				FROM = { trait = inbred }
+				FROM = { trait = imbecile }
+				FROM = { trait = incapable }
+			}
+		}
+		##########################   Elder is Pleased (OR Ecstatic but title holder has NOT selected a Candidate)   ##########################
+
+		##########################   Candidate's traits   ##########################
+
+		##########################   Elector voting himself - Less likely for Elders   ##########################
+		additive_modifier = {
+			value = 5
+			localisation_key = tooltip_feudal_elector_vote_myself
+			character = FROM
+			NOR = {
+				trait = humble
+				trait = content
+				trait = craven
+				trait = slothful
+				trait = stressed
+				trait = depressed
+				trait = ambitious
+			}
+			NOT = { 
+				FROMFROM = { 
+					holder_scope = { 
+						is_parent_of = ROOT
+					} 
+				}
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = {
+			value = -30
+			localisation_key = tooltip_feudal_elector_vote_not_myself
+			character = FROM
+			NOT = { trait = ambitious }
+			OR = {
+				trait = humble
+				trait = content
+				trait = craven
+				trait = slothful
+				trait = stressed
+				trait = depressed
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = {
+			value = 10
+			localisation_key = tooltip_feudal_elector_vote_myself_heir
+			character = FROM
+			NOR = {
+				trait = humble
+				trait = content
+				trait = craven
+				trait = slothful
+				trait = stressed
+				trait = depressed
+				trait = ambitious
+			}
+			FROMFROM = { 
+				holder_scope = { 
+					is_parent_of = ROOT
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = {
+			value = 15
+			localisation_key = tooltip_feudal_elector_vote_myself_ambitious
+			character = FROM
+			trait = ambitious
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+
+		#Elders voting other elders.
+		additive_modifier = {
+			value = -25
+			localisation_key = tooltip_elder_elector_vote_pleased_elder_candidate
+			FROM = { 
+				has_character_modifier = elder_long_life_modifier
+			}
+			FROM = {
+				NOT = {
+					character = ROOT #Don't judge yourself.
+				}
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+
+
+		#Sexism
+		succession_gender_score = yes
+
+		#Ageism - Boosted for Elders, they will always prefer more experienced leaders.
+		succession_not_young_score = yes
+
+		#Culturism - Eldership is a tribalistic succession, therefore malus/bonus on cultural bias are increased.
+		succession_culture_phobic_score = yes
+		succession_foreign_phobic_score = yes
+
+		#Faithism - Eldership is more about choosing a good Dynastic member, so faith bias is slightly reduced.
+		succession_religion_philic_score = yes
+
+		#Barbarism - Tribal succession, that is the point.
+	#	additive_modifier = { 
+	#		value = -15
+	#		localisation_key = tooltip_feudal_elector_vote_uncivilized
+	#		OR = { 
+	#			is_feudal = yes 
+	#			is_merchant_republic = yes
+	#			is_patrician = yes
+	#		}
+	#		FROM = { 
+	#			NOR = { 
+	#				is_feudal = yes 
+	#				is_merchant_republic = yes
+	#				is_patrician = yes
+	#			} 
+	#		}
+	#	}
+	
+		#Tribalism
+		succession_tribalism_score = yes
+		
+		#Nepotism
+		succession_nepotism_score = yes
+		
+		#Prestige
+		succession_prestige_score = yes
+
+		#Piety
+		succession_piety_score = yes
+
+		#Educational preferences
+		succession_shared_interests_score = yes
+		succession_stewardship_score = yes
+
+		#Claims - More emphasis on claimants for Elective Gavelkind.
+		succession_claim_score = yes
+
+		#All the Traits
+		#Child traits removed, the Elder will not think of children as good candidates to begin with.
+		succession_candidate_traits_score = yes
+		
+		#Adventurer-related things
+		succession_adventurer_trait_prefer_score = yes
+		
+		#Kinslayer - From stranger's perspective - Elders are for family values, all Kinslayer maluses are boosted.
+		succession_kinslayer_hate_score = yes
+		
+		##########################   Ruler's traits   ##########################
+		#Ruler is lunatic, vote against his pick
+		succession_current_ruler_score = yes
+		
+		##########################   Raw Opinion bonus towards Candidate - Boosted for Eldership   ##########################
+		succession_candidate_opinion_boosted_score = yes
+		
+		
+		##########################   Raw Opinion bonus towards Ruler - Boosted for Eldership   ##########################
+		additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+			value = -35
+			localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					NOT = { 
+						reverse_opinion = { who = ROOT value = -75 } 
+					} 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+			value = -25
+			localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					NOT = { 
+						reverse_opinion = { who = ROOT value = -50 } 
+					} 
+					reverse_opinion = { who = ROOT value = -75 } 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+			value = -15
+			localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					NOT = { 
+						reverse_opinion = { who = ROOT value = -25 } 
+					} 
+					reverse_opinion = { who = ROOT value = -50 } 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+			value = -10
+			localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					NOT = { 
+						reverse_opinion = { who = ROOT value = 0 } 
+					} 
+					reverse_opinion = { who = ROOT value = -25 } 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+			value = 20
+			localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					reverse_opinion = { who = ROOT value = 0 } 
+					NOT = { 
+						reverse_opinion = { who = ROOT value = 25 } 
+					} 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+			value = 35
+			localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					reverse_opinion = { who = ROOT value = 25 } 
+					NOT = { 
+						reverse_opinion = { who = ROOT value = 50 } 
+					} 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+			value = 45
+			localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					reverse_opinion = { who = ROOT value = 50 } 
+					NOT = { 
+						reverse_opinion = { who = ROOT value = 75 } 
+					} 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+		additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+			value = 65
+			localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+			FROMFROM = { 
+				holder_scope = {
+					reverse_opinion = { who = ROOT value = 75 } 
+				} 
+			}
+			has_elector_stance = { stance = elder_pleased title = FROMFROM }
+		}
+
+		##########################   Elder is Displeased   ##########################
+		additive_modifier = { #If Displeased, the Elder will not be likely to pick the ruler's candidate on purpose.
+			value = -1000
+			localisation_key = tooltip_elder_elector_vote_displeased_ruler_candidate
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			FROM = { character = ROOT_FROMFROMFROM }
+			NOT = { character = FROM } #But not if it's me.
+		}
+
+		#Displeased Elders will consider poor candidates to spite the ruler.
+		additive_modifier = { 
+			value = 15
+			localisation_key = tooltip_elder_elector_vote_displeased_incapable
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { trait = incapable }
+		}
+		additive_modifier = { 
+			value = 10
+			localisation_key = tooltip_elder_elector_vote_displeased_elder
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				has_character_modifier = elder_long_life_modifier
+			}
+		}
+		additive_modifier = { 
+			value = 30
+			localisation_key = tooltip_elder_elector_vote_displeased_friend
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					is_lover = yes
+					is_friend = yes
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 10
+			localisation_key = tooltip_elder_elector_vote_displeased_bad_face
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					trait = ugly
+					trait = disfigured
+					trait = harelip
+					trait = lisp
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 15
+			localisation_key = tooltip_elder_elector_vote_displeased_deformed
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					trait = dwarf
+					trait = mangled
+					trait = hunchback
+					trait = inbred
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 20
+			localisation_key = tooltip_elder_elector_vote_displeased_idiot
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					trait = imbecile
+					trait = slow
+					trait = infirm
+					trait = dull
+					trait = inbred
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 10
+			localisation_key = tooltip_elder_elector_vote_displeased_cautious
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					trait = craven
+					trait = shy
+					trait = paranoid
+					trait = content
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 20
+			localisation_key = tooltip_elder_elector_vote_displeased_endearing
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					trait = drunkard
+					trait = skooma_addiction
+					trait = arbitrary
+					trait = slothful
+					trait = gluttonous
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 10
+			localisation_key = tooltip_elder_elector_vote_displeased_celibate
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				trait = celibate
+				NOT = { 
+					num_of_children = 1
+				}
+			}
+		}
+
+		additive_modifier = { 
+			value = 15
+			localisation_key = tooltip_elder_elector_vote_displeased_low_martial
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				is_adult = yes
+				NOT = { 
+					martial = 6
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 15
+			localisation_key = tooltip_elder_elector_vote_displeased_low_diplomacy
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				is_adult = yes
+				NOT = { 
+					diplomacy = 6
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 15
+			localisation_key = tooltip_elder_elector_vote_displeased_low_stewardship
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				is_adult = yes
+				NOT = { 
+					stewardship = 6
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 15
+			localisation_key = tooltip_elder_elector_vote_displeased_low_intrigue
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				is_adult = yes
+				NOT = { 
+					intrigue = 6
+				}
+			}
+		}
+		additive_modifier = { 
+			value = 15
+			localisation_key = tooltip_elder_elector_vote_displeased_low_learning
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				is_adult = yes
+				NOT = { 
+					learning = 6
+				}
+			}
+		}
+		additive_modifier = { 
+			value = -20
+			localisation_key = tooltip_elder_elector_vote_displeased_reckless
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					trait = brave
+					trait = strong
+					trait = robust
+					trait = ambitious
+					trait = zealous
+					trait = reckless
+				}
+			}
+		}
+		additive_modifier = { 
+			value = -20
+			localisation_key = tooltip_elder_elector_vote_displeased_devious
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				OR = { 
+					trait = deceitful
+					trait = genius
+					trait = quick
+					trait = shrewd
+					trait = ruthless
+				}
+			}
+		}
+		additive_modifier = { 
+			value = -15
+			localisation_key = tooltip_elder_elector_vote_displeased_high_martial
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				martial = 12
+			}
+		}
+		additive_modifier = { 
+			value = -15
+			localisation_key = tooltip_elder_elector_vote_displeased_high_diplomacy
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				diplomacy = 12
+			}
+		}
+		additive_modifier = { 
+			value = -15
+			localisation_key = tooltip_elder_elector_vote_displeased_high_stewardship
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				stewardship = 12
+			}
+		}
+		additive_modifier = { 
+			value = -15
+			localisation_key = tooltip_elder_elector_vote_displeased_high_intrigue
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				intrigue = 12
+			}
+		}
+		additive_modifier = { 
+			value = -15
+			localisation_key = tooltip_elder_elector_vote_displeased_high_learning
+			has_elector_stance = { stance = elder_displeased title = FROMFROM }
+			NOT = { character = FROM } #Do not judge yourself.
+			FROM = { 
+				learning = 12
+			}
+		}	
+	}
+	
+	#ROOT = Current Title holder, FROM = Candidate, FROMFROM = Title, FROMFROMFROM = Null
+	candidate_trigger = {
+		NOT = { character = FROM } #Not the current ruler.
+		FROM = { #Either the candidate is in the realm, or is landless, or the title is independent, or the realm of the title does NOT have protected inheritance.
+			OR = { 
+				any_liege = { 
+					character = ROOT
+				} 
+				is_ruler = no
+				ROOT_FROMFROM = { holder_scope = { independent = yes } }
+				NOR = { 
+					ROOT_FROMFROM = { has_law = out_of_realm_inheritance_law_1 } 
+					ROOT_FROMFROM = { has_law = crown_authority_3 } 
+					ROOT_FROMFROM = { has_law = crown_authority_4 } 
+				} 
+			} 
+		}
+		dynasty = FROM
+		FROM = {
+			OR = { #Candidate should not be a landless Courtier that is about to inherit a Theocracy or Republic
+				AND = {
+					is_ruler = yes
+					is_landed = yes
+					is_republic = no
+					is_merchant_republic = no
+					is_theocracy = no
+				}
+				NOR = {
+					any_heir_title = {
+						is_republic = yes
+					}
+					any_heir_title = {
+						is_merchant_republic = yes
+					}
+					any_heir_title = {
+						is_theocracy = yes
+					}
+				}
+			}
+			OR = { #If the title controls the religion, candidates must be of the same religion.
+				ROOT = { 
+					NOT = { 
+						controls_religion = yes
+					}
+				}
+				religion = ROOT
+			}
+			NOR = {
+				trait = disinherited
+				trait = eunuch
+				trait = bastard
+				is_ascetic_trigger = yes
+				is_theocracy = yes
+				is_republic = yes
+				is_merchant_republic = yes
+			}
+		}
+	}
+} 

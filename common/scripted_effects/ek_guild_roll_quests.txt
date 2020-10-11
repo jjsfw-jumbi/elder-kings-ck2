@@ -1,0 +1,1311 @@
+### How it works
+# Quests are given a tier, impacting their difficulty
+# Higher quests tiers are given to members with higher ranks, but also give more rewards
+# Most quests have 13 steps. Each step has 4 outcomes, Death (Fail), Maimed, Wounded or OK (Success)
+# Each next step reduces the chances or a bad outcome and increases the chances of a good (or better at least) one
+
+###
+# Save a stat value (diplomacy => event_target:stat_to_check) | If stat is dip, mar, ste, int, or lea
+# If pcs, keep the other system
+# Values: 0-15 (easy), 5-15 (medium), 10-20 (hard) - with an offset like pcs. Step of 1.
+
+### Personal combat skill (combat rating) check
+roll_trivial_pcs = {
+	if = {
+		limit = { NOT = { combat_rating = 12 } }
+		random_list = {
+			50 = {
+				guild_quest_is_success_wounded = yes
+			}
+			50 = {
+				guild_quest_is_success = yes
+			}
+		}
+	}
+	
+	else = {
+		guild_quest_is_success = yes
+	}
+}
+
+roll_easy_pcs = {
+	custom_tooltip = {
+		text = EASY_PCS_MISSION_CT
+		set_variable = { which = local_guild_difficulty_offset value = 0 }
+		roll_quest_result_pcs = yes
+	}
+}
+
+roll_medium_pcs = {
+	custom_tooltip = {
+		text = MEDIUM_PCS_MISSION_CT
+		set_variable = { which = local_guild_difficulty_offset value = 20 }
+		roll_quest_result_pcs = yes
+	}
+}
+
+roll_hard_pcs = {
+	custom_tooltip = {
+		text = HARD_PCS_MISSION_CT
+		set_variable = { which = local_guild_difficulty_offset value = 40 }
+		roll_quest_result_pcs = yes
+	}
+}
+
+roll_very_hard_pcs = {
+	custom_tooltip = {
+		text = VERY_HARD_PCS_MISSION_CT
+		set_variable = { which = local_guild_difficulty_offset value = 60 }
+		roll_quest_result_pcs = yes
+	}
+}
+
+## USE ROLL_difficulty_PCS BEFORE!!
+roll_quest_result_pcs = {
+	hidden_tooltip = {
+		clr_character_flag = guild_quest_fail
+		clr_character_flag = guild_quest_maimed
+		clr_character_flag = guild_quest_wounded
+		clr_character_flag = guild_quest_success
+		
+		set_variable = { which = local_guild_difficulty_0 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_1 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_2 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_3 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_4 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_5 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_6 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_7 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_8 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_9 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_10 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_11 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_12 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_13 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_14 which = local_guild_difficulty_offset }
+		
+		change_variable = { which = local_guild_difficulty_1 value = 5 }
+		change_variable = { which = local_guild_difficulty_2 value = 10 }
+		change_variable = { which = local_guild_difficulty_3 value = 15 }
+		change_variable = { which = local_guild_difficulty_4 value = 20 }
+		change_variable = { which = local_guild_difficulty_5 value = 25 }
+		change_variable = { which = local_guild_difficulty_6 value = 30 }
+		change_variable = { which = local_guild_difficulty_7 value = 35 }
+		change_variable = { which = local_guild_difficulty_8 value = 40 }
+		change_variable = { which = local_guild_difficulty_9 value = 45 }
+		change_variable = { which = local_guild_difficulty_10 value = 50 }
+		change_variable = { which = local_guild_difficulty_11 value = 55 }
+		change_variable = { which = local_guild_difficulty_12 value = 60 }
+		change_variable = { which = local_guild_difficulty_13 value = 65 }
+		change_variable = { which = local_guild_difficulty_14 value = 70 }
+		
+		export_to_variable = { which = local_pcs value = combat_rating }
+	}
+}
+
+send_quest_result_pcs = {
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_0
+				}
+			}
+		}
+		random_list = {
+			75 = { guild_quest_is_failure = yes }
+			20 = { guild_quest_is_success_maimed = yes }
+			4 = { guild_quest_is_success_wounded = yes }
+			1 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_0
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_1
+				}
+			}
+		}
+		random_list = {
+			50 = { guild_quest_is_failure = yes }
+			30 = { guild_quest_is_success_maimed = yes }
+			15 = { guild_quest_is_success_wounded = yes }
+			5 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_1
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_2
+				}
+			}
+		}
+		random_list = {
+			40 = { guild_quest_is_failure = yes }
+			30 = { guild_quest_is_success_maimed = yes }
+			10 = { guild_quest_is_success_wounded = yes }
+			10 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_2
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_3
+				}
+			}
+		}
+		random_list = {
+			30 = { guild_quest_is_failure = yes }
+			30 = { guild_quest_is_success_maimed = yes }
+			25 = { guild_quest_is_success_wounded = yes }
+			15 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_3
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_4
+				}
+			}
+		}
+		random_list = {
+			20 = { guild_quest_is_failure = yes }
+			30 = { guild_quest_is_success_maimed = yes }
+			30 = { guild_quest_is_success_wounded = yes }
+			20 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_4
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_5
+				}
+			}
+		}
+		random_list = {
+			10 = { guild_quest_is_failure = yes }
+			30 = { guild_quest_is_success_maimed = yes }
+			35 = { guild_quest_is_success_wounded = yes }
+			25 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_5
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_6
+				}
+			}
+		}
+		random_list = {
+			5 = { guild_quest_is_failure = yes }
+			30 = { guild_quest_is_success_maimed = yes }
+			35 = { guild_quest_is_success_wounded = yes }
+			30 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_6
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_7
+				}
+			}
+		}
+		random_list = {
+			5 = { guild_quest_is_failure = yes }
+			20 = { guild_quest_is_success_maimed = yes }
+			35 = { guild_quest_is_success_wounded = yes }
+			40 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_7
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_8
+				}
+			}
+		}
+		random_list = {
+			5 = { guild_quest_is_failure = yes }
+			15 = { guild_quest_is_success_maimed = yes }
+			35 = { guild_quest_is_success_wounded = yes }
+			50 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_8
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_9
+				}
+			}
+		}
+		random_list = {
+			1 = { guild_quest_is_failure = yes }
+			9 = { guild_quest_is_success_maimed = yes }
+			30 = { guild_quest_is_success_wounded = yes }
+			60 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_9
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_10
+				}
+			}
+		}
+		random_list = {
+			0 = { guild_quest_is_failure = yes }
+			5 = { guild_quest_is_success_maimed = yes }
+			25 = { guild_quest_is_success_wounded = yes }
+			70 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_10
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_11
+				}
+			}
+		}
+		random_list = {
+			0 = { guild_quest_is_failure = yes }
+			5 = { guild_quest_is_success_maimed = yes }
+			15 = { guild_quest_is_success_wounded = yes }
+			80 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_11
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_12
+				}
+			}
+		}
+		random_list = {
+			0 = { guild_quest_is_failure = yes }
+			5 = { guild_quest_is_success_maimed = yes }
+			10 = { guild_quest_is_success_wounded = yes }
+			85 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_12
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_13
+				}
+			}
+		}
+		random_list = {
+			0 = { guild_quest_is_failure = yes }
+			1 = { guild_quest_is_success_maimed = yes }
+			9 = { guild_quest_is_success_wounded = yes }
+			90 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_13
+			}
+			NOT = {
+				check_variable = {
+					which = local_pcs
+					which = local_guild_difficulty_14
+				}
+			}
+		}
+		random_list = {
+			0 = { guild_quest_is_failure = yes }
+			0 = { guild_quest_is_success_maimed = yes }
+			5 = { guild_quest_is_success_wounded = yes }
+			95 = { guild_quest_is_success = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = local_pcs
+				which = local_guild_difficulty_14
+			}
+		}
+		random_list = {
+			0 = { guild_quest_is_failure = yes }
+			0 = { guild_quest_is_success_maimed = yes }
+			1 = { guild_quest_is_success_wounded = yes }
+			99 = { guild_quest_is_success = yes }
+		}
+	}
+}
+
+guild_quest_is_failure = {
+	custom_tooltip = {
+		text = GUILD_QUEST_FAILURE_CT
+		set_character_flag = guild_quest_fail
+	}
+}
+
+guild_quest_is_success_maimed = {
+	custom_tooltip = {
+		text = GUILD_QUEST_MAIMED_CT
+		set_character_flag = guild_quest_maimed
+	}
+}
+
+guild_quest_is_success_wounded = {
+	custom_tooltip = {
+		text = GUILD_QUEST_WOUNDED_CT
+		set_character_flag = guild_quest_wounded
+	}
+}
+
+guild_quest_is_success = {
+	custom_tooltip = {
+		text = GUILD_QUEST_SUCCESS_CT
+		set_character_flag = guild_quest_success
+	}
+}
+
+### Regular stat
+roll_trivial_quest = {
+	set_variable = {
+		which = local_guild_difficulty_offset
+		value = -30
+	}
+	roll_quest_result_stat = yes
+}
+
+roll_easy_quest = {
+	set_variable = {
+		which = local_guild_difficulty_offset
+		value = 0
+	}
+	roll_quest_result_stat = yes
+}
+
+roll_medium_quest = {
+	set_variable = {
+		which = local_guild_difficulty_offset
+		value = 5
+	}
+	roll_quest_result_stat = yes
+}
+
+roll_hard_quest = {
+	set_variable = {
+		which = local_guild_difficulty_offset
+		value = 10
+	}
+	roll_quest_result_stat = yes
+}
+
+roll_very_hard_quest = {
+	set_variable = {
+		which = local_guild_difficulty_offset
+		value = 15
+	}
+	roll_quest_result_stat = yes
+}
+##
+# Dip
+roll_trivial_diplomacy = {
+	custom_tooltip = {
+		text = TRIVIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = diplomacy }
+		roll_trivial_quest = yes
+	}
+}
+
+roll_easy_diplomacy = {
+	custom_tooltip = {
+		text = EASY_DIPLOMACY_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = diplomacy }
+		roll_easy_quest = yes
+	}
+}
+
+roll_medium_diplomacy = {
+	custom_tooltip = {
+		text = MEDIUM_DIPLOMACY_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = diplomacy }
+		roll_medium_quest = yes
+	}
+}
+
+roll_hard_diplomacy = {
+	custom_tooltip = {
+		text = HARD_DIPLOMACY_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = diplomacy }
+		roll_hard_quest = yes
+	}
+}
+
+roll_very_hard_diplomacy = {
+	custom_tooltip = {
+		text = VERY_HARD_DIPLOMACY_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = diplomacy }
+		roll_very_hard_quest = yes
+	}
+}
+
+# Mar
+roll_trivial_martial = {
+	custom_tooltip = {
+		text = TRIVIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = martial }
+		roll_trivial_quest = yes
+	}
+}
+
+roll_easy_martial = {
+	custom_tooltip = {
+		text = EASY_MARTIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = martial }
+		roll_easy_quest = yes
+	}
+}
+
+roll_medium_martial = {
+	custom_tooltip = {
+		text = MEDIUM_MARTIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = martial }
+		roll_medium_quest = yes
+	}
+}
+
+roll_hard_martial = {
+	custom_tooltip = {
+		text = HARD_MARTIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = martial }
+		roll_hard_quest = yes
+	}
+}
+
+roll_very_hard_martial = {
+	custom_tooltip = {
+		text = VERY_HARD_MARTIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = martial }
+		roll_very_hard_quest = yes
+	}
+}
+
+# Ste
+roll_trivial_stewardship = {
+	custom_tooltip = {
+		text = TRIVIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = stewardship }
+		roll_trivial_quest = yes
+	}
+}
+
+roll_easy_stewardship = {
+	custom_tooltip = {
+		text = EASY_STEWARDSHIP_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = stewardship }
+		roll_easy_quest = yes
+	}
+}
+
+roll_medium_stewardship = {
+	custom_tooltip = {
+		text = MEDIUM_STEWARDSHIP_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = stewardship }
+		roll_medium_quest = yes
+	}
+}
+
+roll_hard_stewardship = {
+	custom_tooltip = {
+		text = HARD_STEWARDSHIP_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = stewardship }
+		roll_hard_quest = yes
+	}
+}
+
+roll_very_hard_stewardship = {
+	custom_tooltip = {
+		text = VERY_HARD_STEWARDSHIP_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = stewardship }
+		roll_very_hard_quest = yes
+	}
+}
+
+# Int
+roll_trivial_intrigue = {
+	custom_tooltip = {
+		text = TRIVIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = intrigue }
+		roll_trivial_quest = yes
+	}
+}
+
+roll_easy_intrigue = {
+	custom_tooltip = {
+		text = EASY_INTRIGUE_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = intrigue }
+		roll_easy_quest = yes
+	}
+}
+
+roll_medium_intrigue = {
+	custom_tooltip = {
+		text = MEDIUM_INTRIGUE_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = intrigue }
+		roll_medium_quest = yes
+	}
+}
+
+roll_hard_intrigue = {
+	custom_tooltip = {
+		text = HARD_INTRIGUE_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = intrigue }
+		roll_hard_quest = yes
+	}
+}
+
+roll_very_hard_intrigue = {
+	custom_tooltip = {
+		text = VERY_HARD_INTRIGUE_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = intrigue }
+		roll_very_hard_quest = yes
+	}
+}
+
+# Lea
+roll_trivial_learning = {
+	custom_tooltip = {
+		text = TRIVIAL_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = learning }
+		roll_trivial_quest = yes
+	}
+}
+
+roll_easy_learning = {
+	custom_tooltip = {
+		text = EASY_LEARNING_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = learning }
+		roll_easy_quest = yes
+	}
+}
+
+roll_medium_learning = {
+	custom_tooltip = {
+		text = MEDIUM_LEARNING_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = learning }
+		roll_medium_quest = yes
+	}
+}
+
+roll_hard_learning = {
+	custom_tooltip = {
+		text = HARD_LEARNING_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = learning }
+		roll_hard_quest = yes
+	}
+}
+
+roll_very_hard_learning = {
+	custom_tooltip = {
+		text = VERY_HARD_LEARNING_MISSION_CT
+		export_to_variable = { which = local_stat_to_check value = learning }
+		roll_very_hard_quest = yes
+	}
+}
+
+# USE ROLL_difficulty_stat BEFORE!!
+roll_quest_result_stat = {
+	hidden_tooltip = {
+		clr_character_flag = guild_quest_fail
+		clr_character_flag = guild_quest_success
+		
+		set_variable = { which = local_guild_difficulty_stat_0 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_1 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_2 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_3 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_4 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_5 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_6 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_7 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_8 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_9 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_10 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_11 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_12 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_13 which = local_guild_difficulty_offset }
+		set_variable = { which = local_guild_difficulty_stat_14 which = local_guild_difficulty_offset }
+		
+		change_variable = { which = local_guild_difficulty_stat_1 value = 1 }
+		change_variable = { which = local_guild_difficulty_stat_2 value = 2 }
+		change_variable = { which = local_guild_difficulty_stat_3 value = 3 }
+		change_variable = { which = local_guild_difficulty_stat_4 value = 4 }
+		change_variable = { which = local_guild_difficulty_stat_5 value = 5 }
+		change_variable = { which = local_guild_difficulty_stat_6 value = 6 }
+		change_variable = { which = local_guild_difficulty_stat_7 value = 7 }
+		change_variable = { which = local_guild_difficulty_stat_8 value = 8 }
+		change_variable = { which = local_guild_difficulty_stat_9 value = 9 }
+		change_variable = { which = local_guild_difficulty_stat_10 value = 10 }
+		change_variable = { which = local_guild_difficulty_stat_11 value = 11 }
+		change_variable = { which = local_guild_difficulty_stat_12 value = 12 }
+		change_variable = { which = local_guild_difficulty_stat_13 value = 13 }
+		change_variable = { which = local_guild_difficulty_stat_14 value = 14 }
+	}
+}
+
+send_quest_result_stat = {
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_0
+				}
+			}
+		}
+		random_list = {
+			99 = { guild_quest_is_failure = yes }
+			1 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_0
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_1
+				}
+			}
+		}
+		random_list = {
+			95 = { guild_quest_is_failure = yes }
+			5 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_1
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_2
+				}
+			}
+		}
+		random_list = {
+			90 = { guild_quest_is_failure = yes }
+			10 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_2
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_3
+				}
+			}
+		}
+		random_list = {
+			85 = { guild_quest_is_failure = yes }
+			15 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_3
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_4
+				}
+			}
+		}
+		random_list = {
+			80 = { guild_quest_is_failure = yes }
+			20 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_4
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_5
+				}
+			}
+		}
+		random_list = {
+			75 = { guild_quest_is_failure = yes }
+			25 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_5
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_6
+				}
+			}
+		}
+		random_list = {
+			70 = { guild_quest_is_failure = yes }
+			30 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_6
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_7
+				}
+			}
+		}
+		random_list = {
+			60 = { guild_quest_is_failure = yes }
+			40 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_7
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_8
+				}
+			}
+		}
+		random_list = {
+			50 = { guild_quest_is_failure = yes }
+			50 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_8
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_9
+				}
+			}
+		}
+		random_list = {
+			40 = { guild_quest_is_failure = yes }
+			60 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_9
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_10
+				}
+			}
+		}
+		random_list = {
+			30 = { guild_quest_is_failure = yes }
+			70 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_10
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_11
+				}
+			}
+		}
+		random_list = {
+			20 = { guild_quest_is_failure = yes }
+			80 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_11
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_12
+				}
+			}
+		}
+		random_list = {
+			15 = { guild_quest_is_failure = yes }
+			85 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_12
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_13
+				}
+			}
+		}
+		random_list = {
+			10 = { guild_quest_is_failure = yes }
+			90 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_13
+			}
+			NOT = {
+				check_variable = {
+					which = local_stat_to_check
+					which = local_guild_difficulty_stat_14
+				}
+			}
+		}
+		random_list = {
+			5 = { guild_quest_is_failure = yes }
+			95 = { guild_quest_is_success = yes }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = local_stat_to_check
+				which = local_guild_difficulty_stat_14
+			}
+		}
+		random_list = {
+			1 = { guild_quest_is_failure = yes }
+			99 = { guild_quest_is_success = yes }
+		}
+	}
+}
+
+guild_pcs_maimed_effect = {
+	add_maimed_trait_effect = yes
+	character_event = { id = ekguildflavor.90 days = 1 }
+}
+
+guild_pcs_wounded_effect = {
+	add_trait = wounded
+	character_event = { id = ekguildflavor.91 days = 1 }
+}
+
+guild_pcs_success_effect = {
+	character_event = { id = ekguildflavor.92 days = 1 }
+}
+
+guild_stat_failure_effect = {
+	character_event = { id = ekguildflavor.93 days = 1 }
+}
+
+guild_stat_success_effect = {
+	character_event = { id = ekguildflavor.94 days = 1 }
+}
+
+give_trivial_quest_reward = {
+	custom_tooltip = { text = QUEST_REWARD }
+	wealth = 10
+	add_society_currency_trivial_effect = yes
+}
+
+give_easy_quest_reward = {
+	custom_tooltip = { text = QUEST_REWARD }
+	wealth = 20
+	add_society_currency_tiny_effect = yes
+}
+
+give_medium_quest_reward = {
+	custom_tooltip = { text = QUEST_REWARD }
+	wealth = 30
+	add_society_currency_minor_effect = yes
+}
+
+give_hard_quest_reward = {
+	custom_tooltip = { text = QUEST_REWARD }
+	wealth = 40
+	add_society_currency_medium_effect = yes
+}
+
+give_very_hard_quest_reward = {
+	custom_tooltip = { text = QUEST_REWARD }
+	wealth = 50
+	add_society_currency_major_effect = yes
+}
+
+## Possible results tooltips
+generic_quest_tooltip_result = {
+	tooltip = {
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			give_trivial_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			give_easy_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			give_medium_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			give_hard_quest_reward = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			give_very_hard_quest_reward = yes
+		}
+	}
+}
+
+## To show the possible results (+ roll the actual result)
+generic_quest_stat_result = {
+	if = {
+		limit = { has_character_flag = guild_quest_fail }
+		
+		guild_stat_failure_effect = yes
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_1
+			}
+			detract_society_currency_trivial_effect = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_2
+			}
+			detract_society_currency_tiny_effect = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_3
+			}
+			detract_society_currency_minor_effect = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_4
+			}
+			detract_society_currency_medium_effect = yes
+		}
+		
+		if = {
+			limit = {
+				has_character_flag = quest_desc_5
+			}
+			detract_society_currency_major_effect = yes
+		}
+	
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+		clr_character_flag = quest_desc_5
+		
+		break = yes
+	}
+	
+	guild_stat_success_effect = yes
+		
+	if = {
+		limit = {
+			has_character_flag = quest_desc_1
+		}
+		give_trivial_quest_reward = yes
+	}
+	
+	if = {
+		limit = {
+			has_character_flag = quest_desc_2
+		}
+		give_easy_quest_reward = yes
+	}
+	
+	if = {
+		limit = {
+			has_character_flag = quest_desc_3
+		}
+		give_medium_quest_reward = yes
+	}
+	
+	if = {
+		limit = {
+			has_character_flag = quest_desc_4
+		}
+		give_hard_quest_reward = yes
+	}
+	
+	if = {
+		limit = {
+			has_character_flag = quest_desc_5
+		}
+		give_very_hard_quest_reward = yes
+	}
+	
+	clr_character_flag = quest_desc_1
+	clr_character_flag = quest_desc_2
+	clr_character_flag = quest_desc_3
+	clr_character_flag = quest_desc_4
+	clr_character_flag = quest_desc_5
+}
+
+easy_quest_stat_result = {
+	if = {
+		limit = { has_character_flag = guild_quest_fail }
+		guild_stat_failure_effect = yes
+		clr_quest = easy_quest
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+		clr_character_flag = quest_desc_5
+		
+		break = yes
+	}
+	
+
+	guild_stat_success_effect = yes
+	give_easy_quest_reward = yes
+	
+	clr_quest = easy_quest
+	
+	clr_character_flag = quest_desc_1
+	clr_character_flag = quest_desc_2
+	clr_character_flag = quest_desc_3
+	clr_character_flag = quest_desc_4
+	clr_character_flag = quest_desc_5
+}
+
+medium_quest_stat_result = {
+	if = {
+		limit = { has_character_flag = guild_quest_fail }
+		guild_stat_failure_effect = yes
+		clr_quest = medium_quest
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+		clr_character_flag = quest_desc_5
+		
+		break = yes
+	}
+	
+
+	guild_stat_success_effect = yes
+	give_medium_quest_reward = yes
+	
+	clr_quest = medium_quest
+	
+	clr_character_flag = quest_desc_1
+	clr_character_flag = quest_desc_2
+	clr_character_flag = quest_desc_3
+	clr_character_flag = quest_desc_4
+	clr_character_flag = quest_desc_5
+}
+
+hard_quest_stat_result = {
+	if = {
+		limit = { has_character_flag = guild_quest_fail }
+		guild_stat_failure_effect = yes
+		clr_quest = hard_quest
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+		clr_character_flag = quest_desc_5
+		
+		break = yes
+	}
+	
+
+	guild_stat_success_effect = yes
+	give_hard_quest_reward = yes
+	
+	clr_quest = hard_quest
+	
+	clr_character_flag = quest_desc_1
+	clr_character_flag = quest_desc_2
+	clr_character_flag = quest_desc_3
+	clr_character_flag = quest_desc_4
+	clr_character_flag = quest_desc_5
+}
+
+very_hard_quest_stat_result = {
+	if = {
+		limit = { has_character_flag = guild_quest_fail }
+		guild_stat_failure_effect = yes
+		clr_quest = very_hard_quest
+		
+		clr_character_flag = quest_desc_1
+		clr_character_flag = quest_desc_2
+		clr_character_flag = quest_desc_3
+		clr_character_flag = quest_desc_4
+		clr_character_flag = quest_desc_5
+		
+		break = yes
+	}
+	
+
+	guild_stat_success_effect = yes
+	give_very_hard_quest_reward = yes
+	
+	clr_quest = very_hard_quest
+	
+	clr_character_flag = quest_desc_1
+	clr_character_flag = quest_desc_2
+	clr_character_flag = quest_desc_3
+	clr_character_flag = quest_desc_4
+	clr_character_flag = quest_desc_5
+}
+	

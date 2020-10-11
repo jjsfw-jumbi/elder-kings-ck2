@@ -1,0 +1,1779 @@
+decisions = {
+	create_e_aldmeri = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_aldmeri = { has_holder = no }
+			OR = {
+				has_landed_title = k_summerset
+				has_landed_title = k_valenwood
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = altmer
+				culture = bosmer
+				culture = ayleid
+				culture = falmer
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_summerset
+				has_landed_title = k_valenwood
+				has_landed_title = k_elsweyr
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_aldmeri = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_summerset } }
+				k_summerset = { de_jure_liege = e_aldmeri }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_valenwood } }
+				k_valenwood = { de_jure_liege = e_aldmeri }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_elsweyr } }
+				k_elsweyr = { de_jure_liege = e_aldmeri }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_aldmeri = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_aldmeri = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_argonia = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_argonia = { has_holder = no }
+			has_landed_title = k_argonia
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			culture_group = argonian
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_argonia
+				has_landed_title = k_morrowind
+				has_landed_title = k_cyrodiil
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_argonia = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_morrowind } }
+				k_morrowind = { de_jure_liege = e_argonia }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_argonia } }
+				k_argonia = { de_jure_liege = e_argonia }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_cyrodiil } }
+				k_cyrodiil = { de_jure_liege = e_argonia }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_vvardenfell } }
+				k_vvardenfell = { de_jure_liege = e_argonia }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_argonia = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_argonia = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_breton = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_breton = { has_holder = no }
+			has_landed_title = k_highrock
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = breton
+				culture = reachmen
+				culture = orsimer
+				dynasty = 120001 #Direnni
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_highrock
+				has_landed_title = k_skyrim
+				has_landed_title = k_hammerfell
+			}
+			
+			can_create_empire_general = yes
+			
+			custom_tooltip = {
+				text = DE_JURE_REACH_DOESNT_EXIST
+				hidden_tooltip = {
+					NOT = { has_global_flag = reach_de_jure_kingdom_formed }
+				}
+			}
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_breton = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_highrock } }
+				k_highrock = { de_jure_liege = e_breton }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_hammerfell } }
+				k_hammerfell = { de_jure_liege = e_breton }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_skyrim } }
+				k_skyrim = { de_jure_liege = e_breton }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_breton = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_breton = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_cyrodiil = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			OR = {
+				NOT = { primary_title = { tier = EMPEROR } }
+				has_landed_title = e_pretender_empire
+			}
+			e_cyrodiil = { has_holder = no }
+			has_landed_title = k_cyrodiil
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = colovian
+				culture = imperial
+				culture = nibenean
+				culture = ayleid
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_cyrodiil
+				has_landed_title = k_skyrim
+				has_landed_title = k_hammerfell
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_cyrodiil = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					add_law = succ_elder_council_elective
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_highrock } }
+				k_highrock = { de_jure_liege = e_cyrodiil }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_hammerfell } }
+				k_hammerfell = { de_jure_liege = e_cyrodiil }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_skyrim } }
+				k_skyrim = { de_jure_liege = e_cyrodiil }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_cyrodiil } }
+				k_cyrodiil = { de_jure_liege = e_cyrodiil }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_cyrodiil = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_cyrodiil = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = EMPIRE_IN_FACT
+							destroy_landed_title = THIS
+						}
+					}
+					else = {
+						e_pretender_empire = {
+							set_name = EMPIRE_IN_FACT
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_dunmer = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_dunmer = { has_holder = no }
+			has_landed_title = k_morrowind
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				AND = {
+					culture_group = chimeris
+					NOT = { culture = orsimer }
+				}
+				culture = dwemer
+			}
+			OR = {
+				has_landed_title = k_vvardenfell
+				religion = almsivi
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_argonia
+				has_landed_title = k_skyrim
+				has_landed_title = k_morrowind
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_dunmer = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_morrowind } }
+				k_morrowind = { de_jure_liege = e_dunmer }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_argonia } }
+				k_argonia = { de_jure_liege = e_dunmer }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_vvardenfell } }
+				k_vvardenfell = { de_jure_liege = e_dunmer }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_skyrim } }
+				k_skyrim = { de_jure_liege = e_dunmer }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_dunmer = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_dunmer = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_elsweyr = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_elsweyr = { has_holder = no }
+			has_landed_title = k_elsweyr
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			culture_group = khajiit
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_argonia
+				has_landed_title = k_valenwood
+				has_landed_title = k_elsweyr
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_elsweyr = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_elsweyr } }
+				k_elsweyr = { de_jure_liege = e_elsweyr }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_valenwood } }
+				k_valenwood = { de_jure_liege = e_elsweyr }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_argonia } }
+				k_argonia = { de_jure_liege = e_elsweyr }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_elsweyr = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_elsweyr = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_maormer = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_maormer = { has_holder = no }
+			has_landed_title = k_pyandonea
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			culture = maormer
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_summerset
+				has_landed_title = k_valenwood
+				has_landed_title = k_pyandonea
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_maormer = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_pyandonea } }
+				k_pyandonea = { de_jure_liege = e_maormer }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_summerset } }
+				k_summerset = { de_jure_liege = e_maormer }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_valenwood } }
+				k_valenwood = { de_jure_liege = e_maormer }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_maormer = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_maormer = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_nordic = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			e_nordic = { has_holder = no }
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_nordic = { has_holder = no }
+			OR = {
+				has_landed_title = k_skyrim
+				has_landed_title = k_atmora
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = nord
+				culture = skaal
+				culture = atmoran
+				culture = reachmen
+				culture = falmer
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_skyrim
+				has_landed_title = k_atmora
+				has_landed_title = k_highrock
+				has_landed_title = k_morrowind
+				has_landed_title = k_solstheim
+			}
+			
+			can_create_empire_general = yes
+			
+			custom_tooltip = {
+				text = DE_JURE_REACH_DOESNT_EXIST
+				hidden_tooltip = {
+					NOT = { has_global_flag = reach_de_jure_kingdom_formed }
+				}
+			}
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_nordic = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_skyrim } }
+				k_skyrim = { de_jure_liege = e_nordic }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_highrock } }
+				k_highrock = { de_jure_liege = e_nordic }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_morrowind } }
+				k_morrowind = { de_jure_liege = e_nordic }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_cyrodiil } }
+				k_cyrodiil = { de_jure_liege = e_nordic }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_solstheim } }
+				k_solstheim = { de_jure_liege = e_nordic }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_nordic = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_nordic = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_yokuda = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			e_yokuda = { has_holder = no }
+			NOT = { primary_title = { tier = EMPEROR } }
+			OR = {
+				has_landed_title = k_hammerfell
+				has_landed_title = k_yokuda
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = crown
+				culture = yokudan
+				culture = forebear
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_yokuda
+				has_landed_title = k_hammerfell
+				has_landed_title = k_highrock
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_yokuda = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_hammerfell } }
+				k_hammerfell = { de_jure_liege = e_yokuda }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_yokuda } }
+				k_yokuda = { de_jure_liege = e_yokuda }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_highrock } }
+				k_highrock = { de_jure_liege = e_yokuda }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_yokuda = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_yokuda = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_tamriel = {
+		is_high_prio = yes
+		potential = {
+			#ai = no #The AI should be able to make Tamriel
+			independent = yes
+			e_tamriel = { has_holder = no }
+			OR = {
+				holds_imperial_province = yes
+				any_vassal = {
+					OR = {
+						holds_imperial_province = yes
+					}
+				}
+			}
+			OR = {
+				tier = EMPEROR # Have the decision appear for emperors so that they know they need 3 kingdoms
+				num_of_king_titles = 3
+				AND = {
+					num_of_king_titles = 2
+					any_vassal = {
+						count = 1
+						num_of_king_titles >= 1
+					}
+				}
+				AND = {
+					num_of_king_titles = 1
+					any_vassal = {
+						count = 2
+						num_of_king_titles >= 1
+					}
+				}
+				AND = {
+					tier = emperor
+					any_vassal = {
+						count = 3
+						num_of_king_titles >= 1
+					}
+				}
+				AND = {
+					tier = emperor
+					any_vassal = {
+						count = 1
+						num_of_king_titles >= 2
+					}
+					any_vassal = {
+						count = 1
+						num_of_king_titles == 1 # check exact equality so as not to get the same vassal twice
+					}
+				}
+				AND = {
+					tier = emperor
+					any_vassal = {
+						count = 2
+						num_of_king_titles >= 2
+					}
+				}
+				AND = {
+					tier = emperor
+					any_vassal = {
+						num_of_king_titles >= 3
+					}
+				}
+			}
+			NOT = { trait = incapable }
+			NOT = { trait = infirm }
+			NOT = { trait = imbecile }
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			prisoner = no
+			ruled_years = 10
+			age = 26
+			trigger_if = {
+				limit = {
+					ai = yes
+				}
+				wealth = 350
+			}
+			trigger_else = {
+				wealth = 2000
+			}
+			prestige = 1000
+			piety = 500
+			OR = {
+				has_landed_title = c_imperialisle
+				any_vassal = { has_landed_title = c_imperialisle }
+			}
+			custom_tooltip = {
+				text = create_tamriel_tt_0
+				hidden_tooltip = {
+					has_landed_title = k_cyrodiil
+					OR = {
+						OR = {
+							has_landed_title = k_hammerfell
+							completely_controls = k_hammerfell
+							any_vassal = { has_landed_title = k_hammerfell }
+						}
+						OR = {
+							has_landed_title = k_highrock
+							completely_controls = k_highrock
+							any_vassal = { has_landed_title = k_highrock }
+						}
+						OR = {
+							has_landed_title = k_skyrim
+							completely_controls = k_skyrim
+							any_vassal = { has_landed_title = k_skyrim }
+						}
+						AND = {
+							OR = {
+								has_landed_title = k_thereach
+								completely_controls = k_thereach
+								any_vassal = { has_landed_title = k_thereach }
+							}
+							has_global_flag = reach_de_jure_kingdom_formed
+						}
+						OR = {
+							has_landed_title = k_valenwood
+							completely_controls = k_valenwood
+							any_vassal = { has_landed_title = k_valenwood }
+						}
+						OR = {
+							has_landed_title = k_summerset
+							completely_controls = k_summerset
+							any_vassal = { has_landed_title = k_summerset }
+						}
+						OR = {
+							has_landed_title = k_morrowind
+							completely_controls = k_morrowind
+							any_vassal = { has_landed_title = k_morrowind }
+						}
+						OR = {
+							has_landed_title = k_argonia
+							completely_controls = k_argonia
+							any_vassal = { has_landed_title = k_argonia }
+						}
+						OR = {
+							has_landed_title = k_elsweyr
+							completely_controls = k_elsweyr
+							any_vassal = { has_landed_title = k_elsweyr }
+						}
+					}
+					OR = {
+						num_of_king_titles = 3
+						AND = {
+							num_of_king_titles = 2
+							any_vassal = {
+								count = 1
+								num_of_king_titles >= 1
+							}
+						}
+						AND = {
+							num_of_king_titles = 1
+							any_vassal = {
+								count = 2
+								num_of_king_titles >= 1
+							}
+						}
+						AND = {
+							tier = emperor
+							any_vassal = {
+								count = 3
+								num_of_king_titles >= 1
+							}
+						}
+						AND = {
+							tier = emperor
+							any_vassal = {
+								count = 1
+								num_of_king_titles >= 2
+							}
+							any_vassal = {
+								count = 1
+								num_of_king_titles == 1 # check exact equality so as not to get the same vassal twice
+							}
+						}
+						AND = {
+							tier = emperor
+							any_vassal = {
+								count = 2
+								num_of_king_titles >= 2
+							}
+						}
+						AND = {
+							tier = emperor
+							any_vassal = {
+								num_of_king_titles >= 3
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				text = create_tamriel_tt_1
+				hidden_tooltip = {
+					OR = {
+						has_artifact = amulet_of_kings
+						any_claim = { title = e_tamriel }
+						OR = {
+							is_former_emperor_bloodline = yes
+							is_potential_emperor_bloodline = yes
+						}
+						is_dragonblood = yes
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				wealth = -2000
+			}
+			if = {
+				limit = { ai = yes }
+				wealth = -350
+			}
+			piety = -500
+			prestige = 200
+			set_global_flag = e_tamriel_founded
+			save_global_event_target_as = tamriel_founder
+			hidden_tooltip = {
+				set_variable = { which = global_current_era value = 3 }
+				export_to_variable = { which = global_third_era_start value = year } #We'll deal with Varlatra's stuff later
+				subtract_variable = { which = global_third_era_year which = global_third_era_start }
+			}
+			primary_title = {
+				show_scope_change = no
+				e_tamriel = {
+					show_scope_change = no
+					grant_title = ROOT
+					copy_title_laws = PREV
+					add_law = succ_elder_council_elective
+					hidden_tooltip = { # This appears as making it the primary title for No Character in the decision tooltip, hide it to avoid confusion
+						make_primary_title = yes
+					}
+				}
+			}
+			k_cyrodiil = { show_scope_change = no de_jure_liege = e_tamriel }
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_highrock } ROOT = { has_landed_title = k_highrock } } }
+				k_highrock = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_hammerfell } ROOT = { has_landed_title = k_hammerfell } } }
+				k_hammerfell = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_elsweyr } ROOT = { has_landed_title = k_elsweyr } } }
+				k_elsweyr = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_skyrim } ROOT = { has_landed_title = k_skyrim } } }
+				k_skyrim = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { has_global_flag = reach_de_jure_kingdom_formed OR = { any_vassal = { has_landed_title = k_thereach } ROOT = { has_landed_title = k_thereach } } }
+				k_thereach = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_argonia } ROOT = { has_landed_title = k_argonia } } }
+				k_argonia = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_morrowind } ROOT = { has_landed_title = k_morrowind } } }
+				k_morrowind = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_vvardenfell } ROOT = { has_landed_title = k_vvardenfell } } }
+				k_vvardenfell = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_yokuda } ROOT = { has_landed_title = k_yokuda } } }
+				k_yokuda = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_valenwood } ROOT = { has_landed_title = k_valenwood } } }
+				k_valenwood = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_pyandonea } ROOT = { has_landed_title = k_pyandonea } } }
+				k_pyandonea = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_summerset } ROOT = { has_landed_title = k_summerset } } }
+				k_summerset = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_esroniet } ROOT = { has_landed_title = k_esroniet } } }
+				k_esroniet = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_yneslea } ROOT = { has_landed_title = k_yneslea } } }
+				k_yneslea = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_cathnoquey } ROOT = { has_landed_title = k_cathnoquey } } }
+				k_cathnoquey = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { OR = { any_vassal = { has_landed_title = k_solstheim } ROOT = { has_landed_title = k_solstheim } } }
+				k_solstheim = { show_scope_change = no de_jure_liege = e_tamriel }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_cyrodiil } }
+				e_cyrodiil = { clr_title_flag = elder_council_empire }
+				e_tamriel = { set_title_flag = elder_council_empire }
+				e_cyrodiil = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_pretender_empire } }
+				e_tamriel = { set_title_flag = elder_council_empire }
+				# pretender title is destroyed below
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_dunmer } }
+				e_dunmer = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_yokuda } }
+				e_yokuda = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_aldmeri } }
+				e_aldmeri = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_argonia } }
+				e_argonia = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_nordic } }
+				e_nordic = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_breton } }
+				e_breton = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_elsweyr } }
+				e_elsweyr = { show_scope_change = no destroy_landed_title = yes }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = e_maormer } }
+				e_maormer = { show_scope_change = no destroy_landed_title = yes }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_tamriel = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_tamriel = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = EMPIRE_IN_FACT
+							destroy_landed_title = THIS
+						}
+					}
+					else = {
+						e_pretender_empire = {
+							set_name = EMPIRE_IN_FACT
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+			
+			narrative_event = { id = aflavor.20 }
+		}
+
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 100
+				trait = dragonborn
+			}
+		}
+	}
+#Akavir
+	create_e_dami = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_dami = { has_holder = no }
+			OR = {
+				has_landed_title = k_zasho
+				has_landed_title = k_yneslea
+				has_landed_title = k_esroniet
+				has_landed_title = k_cathnoquey
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = akaviri
+				culture = quey
+				culture = chimer
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_zasho
+				has_landed_title = k_yneslea
+				has_landed_title = k_esroniet
+				has_landed_title = k_cathnoquey
+
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_dami = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_zasho } }
+				k_zasho = { de_jure_liege = e_dami }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_yneslea } }
+				k_yneslea = { de_jure_liege = e_dami }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_esroniet } }
+				k_esroniet = { de_jure_liege = e_dami }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_cathnoquey } }
+				k_cathnoquey = { de_jure_liege = e_dami }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_dami = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_dami = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_akaviri = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_akaviri = { has_holder = no }
+			OR = {
+				has_landed_title = k_zasho
+				has_landed_title = k_kamipara
+				has_landed_title = k_sigtari
+				has_landed_title = k_gorkota
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = akaviri
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				AND = {
+					has_landed_title = k_zasho
+					regional_percentage = {
+						region = nirn_akavir_zasho
+						percentage = 0.5
+						culture = akaviri
+						NOT = {
+							has_province_modifier = depopulated_province
+						}
+					}
+				}
+				AND = {
+					has_landed_title = k_kamipara
+					regional_percentage = {
+						region = nirn_akavir_kamipara
+						percentage = 0.5
+						culture = akaviri
+						NOT = {
+							has_province_modifier = depopulated_province
+						}
+					}
+
+				}
+				AND = {
+					has_landed_title = k_sigtari
+					regional_percentage = {
+						region = nirn_akavir_sigtari
+						percentage = 0.5
+						culture = akaviri
+						NOT = {
+							has_province_modifier = depopulated_province
+						}
+					}
+
+				}
+				AND = {
+					has_landed_title = k_gorkota
+					regional_percentage = {
+						region = nirn_akavir_gorkota
+						percentage = 0.5
+						culture = akaviri
+						NOT = {
+							has_province_modifier = depopulated_province
+						}
+					}
+
+				}
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			set_global_flag = e_akaviri_founded
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_akaviri = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_zasho } }
+				k_zasho = { de_jure_liege = e_akaviri }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_kamipara } }
+				k_kamipara = { de_jure_liege = e_akaviri }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_sigtari } }
+				k_sigtari = { de_jure_liege = e_akaviri }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_gorkota } }
+				k_gorkota = { de_jure_liege = e_akaviri }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_akaviri = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_akaviri = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_tsaesci = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_tsaesci = { has_holder = no }
+			OR = {
+				has_landed_title = k_zasho
+				has_landed_title = k_gorkota
+				has_landed_title = k_kamipara
+				has_landed_title = k_sigtari
+				has_landed_title = k_panman
+				has_landed_title = k_nuku
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = tsaesci
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif4 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 4
+				has_landed_title = k_zasho
+				has_landed_title = k_gorkota
+				has_landed_title = k_kamipara
+				has_landed_title = k_sigtari
+				has_landed_title = k_panman
+				has_landed_title = k_nuku
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_tsaesci = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_zasho } }
+				k_zasho = { de_jure_liege = e_tsaesci }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_gorkota } }
+				k_gorkota = { de_jure_liege = e_tsaesci }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_kamipara } }
+				k_kamipara = { de_jure_liege = e_tsaesci }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_sigtari } }
+				k_sigtari = { de_jure_liege = e_tsaesci }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_panman } }
+				k_panman = { de_jure_liege = e_tsaesci }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_nuku } }
+				k_nuku = { de_jure_liege = e_tsaesci }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_tsaesci = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_tsaesci = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_kamal = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_kamal = { has_holder = no }
+			OR = {
+				has_landed_title = k_kamaleimirvuk
+				has_landed_title = k_kamalettan
+				has_landed_title = k_mehekbaz
+				has_landed_title = k_ryzgaley
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = kamal
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif3 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 3
+				has_landed_title = k_kamaleimirvuk
+				has_landed_title = k_kamalettan
+				has_landed_title = k_mehekbaz
+				has_landed_title = k_ryzgaley
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_kamal = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_kamaleimirvuk } }
+				k_kamaleimirvuk = { de_jure_liege = e_kamal }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_kamalettan } }
+				k_kamalettan = { de_jure_liege = e_kamal }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_mehekbaz } }
+				k_mehekbaz = { de_jure_liege = e_kamal }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_ryzgaley } }
+				k_ryzgaley = { de_jure_liege = e_kamal }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_kamal = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_kamal = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_kapotun = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_kapotun = { has_holder = no }
+			OR = {
+				has_landed_title = k_xieyang
+				has_landed_title = k_gucun
+				has_landed_title = k_beidao
+				has_landed_title = k_phaedin
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = potun
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif3 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 3
+				has_landed_title = k_xieyang
+				has_landed_title = k_gucun
+				has_landed_title = k_beidao
+				has_landed_title = k_phaedin
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_kapotun = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_xieyang } }
+				k_xieyang = { de_jure_liege = e_kapotun }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_gucun } }
+				k_gucun = { de_jure_liege = e_kapotun }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_beidao } }
+				k_beidao = { de_jure_liege = e_kapotun }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_phaedin } }
+				k_phaedin = { de_jure_liege = e_kapotun }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_kapotun = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_kapotun = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	create_e_tangmo = {
+		is_high_prio = yes
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_tangmo = { has_holder = no }
+			OR = {
+				has_landed_title = k_langdin
+				has_landed_title = k_sungkwa
+				has_landed_title = k_phaedin
+			}
+			num_of_king_titles = 2
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				culture = tangmo
+			}
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_langdin
+				has_landed_title = k_sungkwa
+				has_landed_title = k_phaedin
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_tangmo = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_langdin } }
+				k_langdin = { de_jure_liege = e_tangmo }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_sungkwa } }
+				k_sungkwa = { de_jure_liege = e_tangmo }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_phaedin } }
+				k_phaedin = { de_jure_liege = e_tangmo }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_tangmo = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_tangmo = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+}

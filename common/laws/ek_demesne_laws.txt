@@ -1,0 +1,1720 @@
+law_groups = {
+	law_vassalage = {
+		law_type = realm
+	}
+	slavery_laws = {
+		law_type = realm
+		allowed_for_councillors = yes
+	}
+	resettlement_law = {
+		law_type = realm
+		allowed_for_councillors = yes
+	}
+	mutilation_law = {
+		law_type = realm
+		allowed_for_councillors = yes
+	}
+	vassal_title_law = {
+		law_type = realm
+		allowed_for_councillors = yes
+	}
+}
+
+laws = {
+	## Slavery ##
+	slavery_0 = { # Slavery Outlawed
+		group = slavery_laws
+		default = yes
+		
+		potential = {
+			always = yes
+		}
+		
+		allow = {
+			has_law = slavery_1
+			ec_realm_laws_allowed = yes
+			hidden_tooltip = {
+				holder_scope = {
+					OR = {
+						ai = no
+						AND = {
+							ai = yes
+							NOR = {
+								trait = slaver
+								has_character_flag = set_slavery_law #This is set on the AI to block them from changing the slavery law more than once per life time.
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.0
+				holder_scope = {
+					is_slavery_religion = yes
+					NOR = {
+						trait = kind
+						trait = charitable
+						trait = just
+						trait = exslave
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = {
+					is_slavery_religion = yes
+					OR = {
+						trait = kind
+						trait = just
+						trait = charitable
+						trait = exslave
+					}
+				}
+			}
+			modifier = {
+				factor = 0.0
+				holder_scope = {
+					is_proslavery_culture = yes
+					NOR = {
+						trait = kind
+						trait = charitable
+						trait = just
+						trait = exslave
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = {
+					is_proslavery_culture = yes
+					OR = {
+						trait = kind
+						trait = just
+						trait = charitable
+						trait = exslave
+					}
+				}
+			}
+			modifier = {
+				factor = 0.0
+				holder_scope = {
+					OR = {
+						is_slaving_culture = yes
+						is_proslavery_culture = yes
+					}
+					NOR = {
+						trait = kind
+						trait = charitable
+						trait = just
+						trait = exslave
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = {
+					is_slaving_culture = yes
+					OR = {
+						trait = kind
+						trait = just
+						trait = charitable
+						trait = exslave
+					}
+				}
+			}
+			modifier = {
+				factor = 0.75
+				holder_scope = {
+					is_proslavery_culture = yes
+					OR = {
+						trait = kind
+						trait = just
+						trait = charitable
+						trait = exslave
+					}
+				}
+			}
+			modifier = {
+				factor = 5.0
+				holder_scope = {
+					is_antislavery_culture = yes
+					NOR = {
+						trait = slaver
+						trait = ruthless
+						trait = greedy
+						trait = cruel
+					}
+				}
+			}
+			modifier = {
+				factor = 2.0
+				holder_scope = {
+					is_antislavery_culture = yes
+				}
+			}
+			modifier = {
+				factor = 1.25
+				holder_scope = { trait = exslave }
+			}
+			modifier = {
+				factor = 0.0
+				holder_scope = { trait = slaver }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 0.75
+				holder_scope = { trait = greedy }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = arbitrary
+				trait = reckless }
+			}
+			modifier = {
+				factor = 0.5 
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 1.25
+				holder_scope = { trait = kind }
+			}
+			modifier = {
+				factor = 1.25
+				holder_scope = { trait = just }
+			}
+			modifier = {
+				factor = 1.25
+				holder_scope = { trait = charitable }
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = {
+						limit = {
+							OR = {
+								ec_is_emperor = no
+								NOT = {
+									has_global_flag = ec_leg_slavery_0
+								}
+							}
+						}
+						if = { limit = { ai = yes } set_character_flag = set_slavery_law } #AI will only set slavery once per life time.
+						any_courtier = {
+							limit = {
+								trait = slave
+							}
+							remove_trait = slave
+							add_trait = exslave
+							opinion = {
+								who = ROOT
+								modifier = opinion_emancipation
+								years = 10
+							}
+						}
+						any_vassal = {
+							any_courtier = {
+								limit = {
+									trait = slave
+								}
+								remove_trait = slave
+								add_trait = exslave
+								opinion = {
+									who = ROOT
+									modifier = opinion_emancipation
+									years = 10
+								}
+							}
+						}
+						any_vassal = {
+							limit = {
+								OR = {
+									NOT = { culture = ROOT }
+									NOT = { religion = ROOT }
+									trait = exslave
+									trait = kind
+									trait = charitable
+									trait = just
+								}
+								NOT = { trait = slaver }
+							}
+							opinion = {
+								who = ROOT
+								modifier = opinion_emancipation
+								years = 10
+							}
+						}
+						any_vassal = {
+							limit = {
+								OR = {
+									trait = slaver
+									AND = {
+										OR = {
+											trait = ruthless
+											trait = cruel
+											trait = arbitrary
+											trait = zealous
+											trait = envious
+											trait = greedy
+										}
+										is_proslavery_culture = yes
+										is_slavery_religion = yes
+										is_slaving_culture = yes
+										is_necromancy_religion = yes
+									}
+								}
+							}
+							opinion = {
+								who = ROOT
+								modifier = opinion_illegalised_slavery
+								years = 25
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			leg_slavery_flag = yes
+			hidden_tooltip = {
+				revoke_law = slavery_0
+				revoke_law = slavery_1
+			}
+		}
+	}
+	slavery_1 = { # Slavery Allowed
+		group = slavery_laws
+		
+		potential = {
+			always = yes
+		}
+		allow = {
+			has_law = slavery_0
+			ec_realm_laws_allowed = yes
+			holder_scope = {
+				NAND = {
+					is_antislavery_religion = yes
+					is_antislavery_culture = yes
+				}
+				hidden_tooltip = {
+					OR = {
+						ai = no
+						AND = {
+							ai = yes
+							OR = {
+								is_slaving_culture = yes
+								is_proslavery_culture = yes
+								is_slavery_religion = yes
+							}
+							OR = {
+								trait = slaver
+								trait = ruthless
+								trait = envious
+								trait = greedy
+								trait = ambitious
+								trait = cruel
+								trait = arbitrary
+								trait = wroth
+							}
+							NOT = {
+								OR = {
+									trait = exslave
+									trait = imperial
+									trait = nord
+									trait = breton
+									trait = redguard
+									trait = khajiit
+									trait = akaviri
+									trait = tangmo
+								}
+								OR = {
+									trait = kind
+									trait = charitable
+									trait = just
+									trait = humble
+									trait = temperate
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}			
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				holder_scope = {
+					is_slaving_culture = yes
+				}
+				factor = 3.0
+			}
+			modifier = {
+				holder_scope = {
+					is_proslavery_culture = yes
+				}
+				factor = 2.0
+			}
+			modifier = {
+				holder_scope = {
+					is_necromancy_religion = yes
+				}
+				factor = 2.0
+			}
+			modifier = {
+				holder_scope = {
+					is_slavery_religion = yes
+				}
+				factor = 2.0
+			}
+			modifier = {
+				holder_scope = { trait = exslave }
+				factor = 0.25
+			}
+			modifier = {
+				holder_scope = { trait = kind }
+				factor = 0.0
+			}
+			modifier = {
+				holder_scope = { trait = just }
+				factor = 0.25
+			}
+			modifier = {
+				holder_scope = { trait = charitable }
+				factor = 0.1
+			}
+			modifier = {
+				holder_scope = { trait = slaver }
+				factor = 5.0
+			}
+			modifier = {
+				holder_scope = { trait = cruel }
+				factor = 1.5
+			}
+			modifier = {
+				holder_scope = { trait = ruthless }
+				factor = 1.25
+			}
+			modifier = {
+				holder_scope = { trait = arbitrary }
+				factor = 1.25
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = {
+						limit = {
+							OR = {
+								ec_is_emperor = no
+								NOT = {
+									has_global_flag = ec_leg_slavery_1
+								}
+							}
+						}
+						if = { limit = { ai = yes } set_character_flag = set_slavery_law } #AI will only set slavery once per life time.
+						any_vassal = {
+							limit = {
+								OR = {
+									NOT = { culture = ROOT }
+									NOT = { religion = ROOT }
+									trait = exslave
+									trait = kind
+									trait = charitable
+									trait = just
+								}
+								NOT = { trait = slaver }
+							}
+							opinion = {
+								who = ROOT
+								modifier = opinion_increased_authority
+								years = 100
+							}
+						}
+						any_vassal = {
+							limit = {
+								crownlaw_title = { title = ROOT }
+								trait = slaver
+							}
+							opinion = {
+								who = ROOT
+								modifier = opinion_legalised_slavery
+								years = 10
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			leg_slavery_flag = yes
+			hidden_tooltip = {
+				revoke_law = slavery_0
+				revoke_law = slavery_1
+			}
+		}
+		
+		global_revolt_risk = 0.03 #haha whoops almost gave this 300% revolt risk. that would've been fun.
+		
+		enables_slavery_through_raid = 1
+		enables_slave_raid_cb = 1
+		
+	}
+
+	## Resettlement ##
+	resettlement_0 = { # Only Assimilation
+		group = resettlement_law
+		
+		potential = {
+			always = yes
+		}
+		
+		allow = {
+			OR = { #Gradual change
+				has_law = resettlement_1
+				#has_law = resettlement_2
+			}
+			ec_realm_laws_allowed = yes
+			holder_scope = { #TODOing: Hist Trees!
+				#NOT = { culture_group = argonian }
+				hidden_tooltip = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_resettlement_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+				always = yes
+			}
+			
+			modifier = {
+				factor = 4.0
+				holder_scope = {
+					is_generous_religion = yes
+				}
+			}
+			modifier = {
+				factor = 2.0
+				holder_scope = {
+					is_pacifist_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = {
+					is_selfish_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = {
+					is_warlike_religion = yes
+				}
+			}
+			
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 0.5 
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 0.5 
+				holder_scope = { trait = reckless }
+			}
+			modifier = {
+				factor = 0.5 
+				holder_scope = { trait = envious }
+			}
+			modifier = {
+				factor = 0.75
+				holder_scope = { trait = greedy }
+			}
+			modifier = {
+				factor = 0.75
+				holder_scope = { trait = wroth }
+			}
+			modifier = {
+				factor = 0.9
+				holder_scope = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = kind }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = just }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = charitable }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = gregarious }
+			}
+			
+			modifier = {
+				factor = 0
+				holder_scope = { 
+					calc_true_if = {
+						amount = 3
+						trait = cruel
+						trait = ruthless
+						trait = reckless
+						trait = envious
+						trait = greedy
+						trait = wroth
+						trait = zealous
+					}
+				}
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_resettlement_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			hidden_tooltip = {
+				revoke_law = resettlement_1
+				revoke_law = resettlement_2
+				holder_scope = {
+					any_vassal = {
+						limit = {
+							is_landed = yes
+							primary_title = {
+								OR = {
+									has_law = resettlement_1
+									has_law = resettlement_2
+								}
+							}
+						}
+						primary_title = {
+							revoke_law = resettlement_1
+							revoke_law = resettlement_2
+							add_law = { law = resettlement_0 cooldown = no opinion_effect = no }
+						}
+					}
+					# any_realm_province = {
+						# limit = { 
+							# OR = {
+								# has_province_modifier = expelling_locals
+								# has_province_modifier = purging_locals 
+								# has_province_flag = desettlement
+							# }
+						# }
+						# remove_province_modifier = expelling_locals
+						# remove_province_modifier = purging_locals
+						# clr_province_flag = desettlement
+					# }
+				}
+			}
+		}
+	}
+	resettlement_1 = { # Expulsion Allowed
+		group = resettlement_law
+		default = yes
+		
+		potential = {
+			always = yes
+		}
+		
+		allow = {
+			holder_scope = {
+				OR = {
+					independent = yes
+					top_liege = {
+						primary_title = {
+							NOR = {
+								has_law = resettlement_0
+								has_law = resettlement_2
+							}
+						}
+					}
+				}
+				hidden_tooltip = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_resettlement_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+			OR = {
+				has_law = resettlement_0
+				has_law = resettlement_2
+			}
+			ec_realm_laws_allowed = yes
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+				always = yes
+			}
+			
+			modifier = {
+				factor = 0.25
+				holder_scope = {
+					is_generous_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = {
+					is_pacifist_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4
+				holder_scope = {
+					is_selfish_religion = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				holder_scope = {
+					is_warlike_religion = yes
+				}
+			}
+			
+			modifier = {
+				factor = 4
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = reckless }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = envious }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = greedy }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = wroth }
+			}
+			modifier = {
+				factor = 1.1
+				holder_scope = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = kind }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = just }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = charitable }
+			}
+			modifier = {
+				factor = 0
+				holder_scope = { 
+					calc_true_if = {
+						amount = 2
+						trait = kind
+						trait = just
+						trait = charitable
+					}
+				}
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_resettlement_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			hidden_tooltip = {
+				revoke_law = resettlement_0
+				revoke_law = resettlement_2
+				holder_scope = {
+					any_vassal = {
+						limit = {
+							is_landed = yes
+							primary_title = {
+								has_law = resettlement_0
+								has_law = resettlement_2
+							}
+						}
+						primary_title = {
+							revoke_law = resettlement_0
+							revoke_law = resettlement_2
+							add_law = { law = resettlement_1 cooldown = no opinion_effect = no }
+						}
+					}
+					# any_realm_province = {
+						# limit = { 
+							# AND = {
+								# has_province_modifier = purging_locals 
+								# has_province_flag = desettlement
+							# }
+						# }
+						# remove_province_modifier = purging_locals
+						# clr_province_flag = desettlement
+					# }
+				}
+			}
+		}
+	}
+	resettlement_2 = { # Purging Allowed
+		group = resettlement_law
+		
+		potential = {
+			always = yes
+		}
+		
+		allow = {
+			holder_scope = {
+				OR = {
+					independent = yes
+					top_liege = {
+						primary_title = {
+							NOR = {
+								has_law = resettlement_0
+								has_law = resettlement_1
+							}
+						}
+					}
+				}
+				hidden_tooltip = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_resettlement_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+			OR = { #Gradual change
+				#has_law = resettlement_0
+				has_law = resettlement_1
+			}
+			ec_realm_laws_allowed = yes
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.05
+				always = yes
+			}
+			
+			modifier = {
+				factor = 0.25
+				holder_scope = {
+					is_generous_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = {
+					is_pacifist_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4
+				holder_scope = {
+					is_selfish_religion = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				holder_scope = {
+					is_warlike_religion = yes
+				}
+			}
+			
+			modifier = {
+				factor = 5
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = reckless }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = envious }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = greedy }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = wroth }
+			}
+			modifier = {
+				factor = 1.1
+				holder_scope = { trait = zealous }
+			}
+			modifier = {
+				factor = 0
+				holder_scope = { 
+					OR = {
+						trait = kind
+						trait = just
+						trait = charitable
+					}
+				}
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_resettlement_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			hidden_tooltip = {
+				revoke_law = resettlement_0
+				revoke_law = resettlement_1
+				holder_scope = {
+					any_vassal = {
+						limit = {
+							is_landed = yes
+							primary_title = {
+								has_law = resettlement_0
+								has_law = resettlement_1
+							}
+						}
+						primary_title = {
+							revoke_law = resettlement_0
+							revoke_law = resettlement_1
+							add_law = { law = resettlement_2 cooldown = no opinion_effect = no }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	## Corporal Punishment ##
+	mutilation_0 = { # No mutilation allowed in entire realm
+		group = mutilation_law
+		
+		potential = {
+			always = yes
+		}
+		
+		allow = {
+			has_law = mutilation_1
+			ec_realm_laws_allowed = yes
+			hidden_tooltip = {
+				holder_scope = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_mutilation_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+				always = yes
+			}
+			
+			modifier = {
+				factor = 4.0
+				holder_scope = {
+					is_generous_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4.0
+				holder_scope = {
+					is_pacifist_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = {
+					is_selfish_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = {
+					is_warlike_religion = yes
+				}
+			}		
+			modifier = {
+				factor = 0
+				holder_scope = {
+					is_selfish_religion = yes
+					is_warlike_religion = yes
+					trait = zealous
+				}
+			}
+			modifier = {
+				factor = 0
+				holder_scope = { trait = impaler }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 0.5 
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 0.5 
+				holder_scope = { trait = reckless }
+			}
+			modifier = {
+				factor = 0.5 
+				holder_scope = { trait = envious }
+			}
+			modifier = {
+				factor = 0.75
+				holder_scope = { trait = wroth }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = kind }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = charitable }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { trait = content }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { trait = slothful }
+			}			
+			modifier = {
+				factor = 0
+				holder_scope = { 
+					calc_true_if = {
+						amount = 2
+						trait = impaler
+						trait = cruel
+						trait = ruthless
+						trait = reckless
+						trait = envious
+						trait = wroth
+					}
+				}
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_mutilation_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			hidden_tooltip = {
+				revoke_law = mutilation_1
+				revoke_law = mutilation_2
+				holder_scope = {
+					any_vassal = {
+						limit = {
+							is_landed = yes
+							primary_title = {
+								OR = {
+									has_law = mutilation_1
+									has_law = mutilation_2
+								}
+							}
+						}
+						primary_title = {
+							revoke_law = mutilation_1
+							revoke_law = mutilation_2
+						}
+					}
+				}
+			}
+		}
+	}
+	mutilation_1 = { # No mutilation allowed in personal demesne, allowed otherwise
+		group = mutilation_law
+		
+		potential = {
+			always = yes
+		}
+		
+		allow = {
+			OR = {
+				has_law = mutilation_0
+				has_law = mutilation_2
+			}
+			ec_realm_laws_allowed = yes
+			hidden_tooltip = {
+				holder_scope = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_mutilation_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+				always = yes
+			}
+			
+			#If you have mutilation_2
+			modifier = {
+				factor = 4.0
+				has_law = mutilation_2
+				holder_scope = {
+					is_generous_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4.0
+				has_law = mutilation_2
+				holder_scope = {
+					is_pacifist_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.25
+				has_law = mutilation_2
+				holder_scope = {
+					is_selfish_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.25
+				has_law = mutilation_2
+				holder_scope = {
+					is_warlike_religion = yes
+				}
+			}		
+			modifier = {
+				factor = 0
+				has_law = mutilation_2
+				holder_scope = {
+					is_selfish_religion = yes
+					is_warlike_religion = yes
+					trait = zealous
+				}
+			}
+			modifier = {
+				factor = 0
+				has_law = mutilation_2
+				holder_scope = { trait = impaler }
+			}
+			modifier = {
+				factor = 0.25
+				has_law = mutilation_2
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 0.5
+				has_law = mutilation_2
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 0.5
+				has_law = mutilation_2
+				holder_scope = { trait = reckless }
+			}
+			modifier = {
+				factor = 0.5
+				has_law = mutilation_2
+				holder_scope = { trait = envious }
+			}
+			modifier = {
+				factor = 0.75
+				has_law = mutilation_2
+				holder_scope = { trait = wroth }
+			}
+			modifier = {
+				factor = 1.5
+				has_law = mutilation_2
+				holder_scope = { trait = kind }
+			}
+			modifier = {
+				factor = 1.5
+				has_law = mutilation_2
+				holder_scope = { trait = charitable }
+			}
+			modifier = {
+				factor = 0.1
+				has_law = mutilation_2
+				holder_scope = { trait = content }
+			}
+			modifier = {
+				factor = 0.1
+				has_law = mutilation_2
+				holder_scope = { trait = slothful }
+			}			
+			modifier = {
+				factor = 0
+				has_law = mutilation_2
+				holder_scope = { 
+					calc_true_if = {
+						amount = 2
+						trait = impaler
+						trait = cruel
+						trait = ruthless
+						trait = reckless
+						trait = envious
+						trait = wroth
+					}
+				}
+			}
+			
+			#If you have mutilation_0
+			modifier = {
+				factor = 0.25
+				has_law = mutilation_0
+				holder_scope = {
+					is_generous_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.25
+				has_law = mutilation_0
+				holder_scope = {
+					is_pacifist_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4.0
+				has_law = mutilation_0
+				holder_scope = {
+					is_selfish_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4.0
+				has_law = mutilation_0
+				holder_scope = {
+					is_warlike_religion = yes
+				}
+			}		
+			modifier = {
+				factor = 0
+				has_law = mutilation_0
+				holder_scope = {
+					is_generous_religion = yes
+					is_pacifist_religion = yes
+					trait = zealous
+				}
+			}
+			modifier = {
+				factor = 4
+				has_law = mutilation_0
+				holder_scope = { trait = impaler }
+			}
+			modifier = {
+				factor = 4
+				has_law = mutilation_0
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 2
+				has_law = mutilation_0
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 2
+				has_law = mutilation_0
+				holder_scope = { trait = reckless }
+			}
+			modifier = {
+				factor = 2
+				has_law = mutilation_0
+				holder_scope = { trait = envious }
+			}
+			modifier = {
+				factor = 1.5
+				has_law = mutilation_0
+				holder_scope = { trait = wroth }
+			}
+			modifier = {
+				factor = 0.25
+				has_law = mutilation_0
+				holder_scope = { trait = kind }
+			}
+			modifier = {
+				factor = 0.25
+				has_law = mutilation_0
+				holder_scope = { trait = charitable }
+			}
+			modifier = {
+				factor = 0.1
+				has_law = mutilation_0
+				holder_scope = { trait = content }
+			}
+			modifier = {
+				factor = 0.1
+				has_law = mutilation_0
+				holder_scope = { trait = slothful }
+			}
+			modifier = {
+				factor = 1.5
+				has_law = mutilation_0
+				holder_scope = { 
+					calc_true_if = {
+						amount = 3
+						trait = impaler
+						trait = cruel
+						trait = ruthless
+						trait = reckless
+						trait = envious
+						trait = wroth
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				has_law = mutilation_0
+				holder_scope = { 
+					trait = kind
+					trait = charitable
+				}
+			}
+			
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_mutilation_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			hidden_tooltip = {
+				revoke_law = mutilation_0
+				revoke_law = mutilation_2
+				holder_scope = {
+					any_vassal = {
+						limit = {
+							is_landed = yes
+							primary_title = {
+								has_law = mutilation_2
+							}
+						}
+						primary_title = {
+							revoke_law = mutilation_0
+							revoke_law = mutilation_2
+						}
+					}
+				}
+			}
+		}
+	}
+	mutilation_2 = { # Mutilation allowed everywhere
+		group = mutilation_law
+		default = yes
+		
+		potential = {
+			always = yes
+		}
+		
+		allow = {
+			has_law = mutilation_1
+			ec_realm_laws_allowed = yes
+			hidden_tooltip = {
+				holder_scope = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_mutilation_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+				always = yes
+			}
+			
+			modifier = {
+				factor = 0.25
+				holder_scope = {
+					is_generous_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = {
+					is_pacifist_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4.0
+				holder_scope = {
+					is_selfish_religion = yes
+				}
+			}
+			modifier = {
+				factor = 4.0
+				holder_scope = {
+					is_warlike_religion = yes
+				}
+			}		
+			modifier = {
+				factor = 0
+				holder_scope = {
+					is_generous_religion = yes
+					is_pacifist_religion = yes
+					trait = zealous
+				}
+			}
+			modifier = {
+				factor = 4
+				holder_scope = { trait = impaler }
+			}
+			modifier = {
+				factor = 4
+				holder_scope = { trait = cruel }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 2 
+				holder_scope = { trait = reckless }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = envious }
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = wroth }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = kind }
+			}
+			modifier = {
+				factor = 0.25
+				holder_scope = { trait = charitable }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { trait = content }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { trait = slothful }
+			}	
+			
+			modifier = {
+				factor = 1.5
+				holder_scope = { 
+					calc_true_if = {
+						amount = 3
+						trait = impaler
+						trait = cruel
+						trait = ruthless
+						trait = reckless
+						trait = envious
+						trait = wroth
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				holder_scope = { 
+					trait = kind
+					trait = charitable
+				}
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_mutilation_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			ec_legislature_tooltip = yes
+			hidden_tooltip = {
+				revoke_law = mutilation_0
+				revoke_law = mutilation_1
+			}
+		}
+	}
+
+	vassal_titular_kings_0 = { #No vassals may create titular Kingdom titles.
+		group = vassal_title_law
+		
+		potential = {
+			OR = {
+				higher_real_tier_than = KING
+				#AND = {
+				#	top_liege = {
+				#		higher_real_tier_than = KING
+				#	}
+				#	higher_real_tier_than = COUNT
+				#}
+			}
+		}
+		
+		allow = {
+			higher_real_tier_than = KING
+			holder_scope = { capital_scope = { TECH_LEGALISM = 2 } }
+			hidden_tooltip = {
+				holder_scope = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_titular_kingdoms_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = { #Added only very basic voting patterns for this law since there's not much nuance between councillor types when it comes to this law.
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+				always = yes
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = ambitious }
+			}
+			modifier = {
+				factor = 3
+				holder_scope = { trait = ruthless }
+			}
+			modifier = {
+				factor = 5
+				holder_scope = { trait = paranoid }
+			}
+			modifier = { #Emperors more likely to be like 'oh crap' if he has a ton of King vassals already.
+				factor = 5
+				holder_scope = { 
+					any_vassal = { 
+						count = 5
+						num_of_king_titles >= 1
+					}
+				}
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_titular_kingdoms_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			hidden_tooltip = {
+				revoke_law = vassal_titular_kings_1
+				#holder_scope = {
+				#	any_vassal = {
+				#		limit = {
+				#			is_landed = yes
+				#			higher_real_tier_than = COUNT
+				#		}
+				#		revoke_law = vassal_titular_kings_1
+				#		add_law = { law = vassal_titular_kings_0 cooldown = no opinion_effect = no }
+				#	}
+				#}
+			}
+		}
+	}
+	vassal_titular_kings_1 = { #Vassals may freely create titular Kingdom titles.
+		group = vassal_title_law
+		default = yes
+		
+		potential = {
+			OR = {
+				higher_real_tier_than = KING
+				#AND = {
+				#	top_liege = {
+				#		higher_real_tier_than = KING
+				#	}
+				#	higher_real_tier_than = COUNT	
+				#}
+			}
+		}
+		
+		allow = {
+			higher_real_tier_than = KING
+			hidden_tooltip = {
+				holder_scope = {
+					OR = {
+						ai = no
+						NOT = { has_character_flag = set_titular_kingdoms_law } #Like slavery, is meant to keep AI from spamming
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.05
+				always = yes
+			}
+			modifier = {
+				factor = 1.5
+				holder_scope = { trait = content }
+			}
+			modifier = {
+				factor = 3
+				holder_scope = { trait = slothful }
+			}
+			modifier = {
+				factor = 5
+				holder_scope = { trait = trusting }
+			}
+		}
+		pass_effect = {
+			hidden_tooltip = {
+				holder_scope = {
+					if = { limit = { ai = yes } set_character_flag = set_titular_kingdoms_law } #Can pass this just once
+				}
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			hidden_tooltip = {
+				revoke_law = vassal_titular_kings_0
+				#holder_scope = {
+				#	any_vassal = {
+				#		limit = {
+				#			is_landed = yes
+				#			higher_real_tier_than = COUNT
+				#		}
+				#		revoke_law = vassal_titular_kings_0
+				#		add_law = { law = vassal_titular_kings_1 cooldown = no opinion_effect = no }
+				#	}
+				#}
+			}
+		}
+	}
+}

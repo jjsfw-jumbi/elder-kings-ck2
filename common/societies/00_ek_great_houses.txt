@@ -1,0 +1,2910 @@
+house_dres_council = {
+	primary_attribute = stewardship
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_dres_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_dres
+		age = 16
+		controls_religion = no
+		is_theocracy = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_dres_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_dres_council
+			has_house_trait_including_houseless = yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		trait = house_dres
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+				is_theocracy = no
+			}
+		}
+	}
+	
+	#House Father > Councilman > Grandmaster
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = stewardship
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = envious
+		}
+		has_trait = {
+			value = 1.5
+			trait = proud
+		}
+		has_trait = {
+			value = 1.5
+			trait = greedy
+		}
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.5
+			trait = content
+		}
+		has_trait = {
+			value = 1.5
+			trait = cruel
+		}
+		has_trait = {
+			value = 1.5
+			trait = slaver
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = administrator
+		}
+		has_trait = {
+			value = 0.5
+			trait = architect
+		}
+		has_trait = {
+			value = 0.5
+			trait = gamer
+		}
+		has_trait = {
+			value = 0.5
+			trait = gardener
+		}
+		has_trait = {
+			value = 0.5
+			trait = hunter
+		}
+		has_trait = {
+			value = 0.5
+			trait = impaler
+		}
+		has_trait = {
+			value = 0.5
+			trait = saboteur
+		}
+		has_trait = {
+			value = 0.5
+			trait = smuggler
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = magistrate_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = magistrate_4
+		}
+		has_trait = {
+			value = 2
+			trait = magistrate_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 1
+			trait = p_almalexia
+		}
+		has_trait = {
+			value = 0.5
+			trait = scout_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = scout_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = scout_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = trader_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = trader_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = trader_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = magistrate_5 }
+		modifier = { factor = 1.75 trait = magistrate_4 }
+		modifier = { factor = 1.75 trait = magistrate_3 }
+		modifier = { factor = 1.25 trait = scout_1 }
+		modifier = { factor = 1.5 trait = scout_2 }
+		modifier = { factor = 1.75 trait = scout_3 }
+		modifier = { factor = 1.25 trait = trader_1 }
+		modifier = { factor = 1.5 trait = trader_2 }
+		modifier = { factor = 1.75 trait = trader_3 }
+		modifier = { factor = 1.5 trait = p_almalexia }
+		modifier = { factor = 1.5 trait = envious }
+		modifier = { factor = 1.5 trait = proud }
+		modifier = { factor = 1.5 trait = greedy }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = content }
+		modifier = { factor = 1.5 trait = cruel }
+		modifier = { factor = 1.5 trait = slaver }
+		modifier = { factor = 1.25 trait = administrator }
+		modifier = { factor = 1.25 trait = architect }
+		modifier = { factor = 1.25 trait = gamer }
+		modifier = { factor = 1.25 trait = gardener }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 1.25 trait = impaler }
+		modifier = { factor = 1.25 trait = saboteur }
+		modifier = { factor = 1.25 trait = smuggler }
+		modifier = { factor = 2.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = ashlander }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 2.5 religion = almsivi}
+		modifier = { factor = 1.25 religion = almsivi_old_velothi}
+		modifier = { factor = 0.1 religion = daedra_malacath}
+		modifier = { factor = 0.1 religion = daedra_mehrunes }
+		modifier = { factor = 0.1 religion = daedra_molag }
+		modifier = { factor = 0.1 religion = daedra_sheogorath }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_dres
+	    	controls_religion = no
+			is_theocracy = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160003 #Dres
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}
+
+house_hlaalu_council = {
+	primary_attribute = intrigue
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_hlaalu_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_hlaalu
+		age = 16
+		controls_religion = no
+		is_theocracy = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_hlaalu_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_hlaalu_council
+			has_house_trait_including_houseless = yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+				is_theocracy = no
+			}
+		}
+	}
+	
+	#House Father > Councilman > Grandmaster
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = intrigue
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = gregarious
+		}
+		has_trait = {
+			value = 1.5
+			trait = deceitful
+		}
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.5
+			trait = greedy
+		}
+		has_trait = {
+			value = 1.5
+			trait = patient
+		}
+		has_trait = {
+			value = 1.0
+			trait = paranoid
+		}
+		has_trait = {
+			value = 1.0
+			trait = charitable
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = administrator
+		}
+		has_trait = {
+			value = 0.5
+			trait = engineer
+		}
+		has_trait = {
+			value = 0.5
+			trait = gambler
+		}
+		has_trait = {
+			value = 0.5
+			trait = hedonist
+		}
+		has_trait = {
+			value = 0.5
+			trait = seducer
+		}
+		has_trait = {
+			value = 0.5
+			trait = seductress
+		}
+		has_trait = {
+			value = 0.5
+			trait = saboteur
+		}
+		has_trait = {
+			value = 0.5
+			trait = schemer
+		}
+		has_trait = {
+			value = 0.5
+			trait = socializer
+		}
+		has_trait = {
+			value = 0.5
+			trait = smuggler
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = agent_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = agent_4
+		}
+		has_trait = {
+			value = 2
+			trait = agent_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 1
+			trait = p_vivec
+		}
+		has_trait = {
+			value = 0.5
+			trait = assassin_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = assassin_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = assassin_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = thief_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = thief_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = thief_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = agent_5 }
+		modifier = { factor = 1.75 trait = agent_4 }
+		modifier = { factor = 1.75 trait = agent_3 }
+		modifier = { factor = 1.25 trait = assassin_1 }
+		modifier = { factor = 1.5 trait = assassin_2 }
+		modifier = { factor = 1.75 trait = assassin_3 }
+		modifier = { factor = 1.25 trait = thief_1 }
+		modifier = { factor = 1.5 trait = thief_2 }
+		modifier = { factor = 1.75 trait = thief_3 }
+		modifier = { factor = 1.5 trait = p_vivec }
+		modifier = { factor = 1.5 trait = gregarious }
+		modifier = { factor = 1.5 trait = deceitful }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = greedy }
+		modifier = { factor = 1.5 trait = patient }
+		modifier = { factor = 1.25 trait = paranoid }
+		modifier = { factor = 1.25 trait = charitable }
+		modifier = { factor = 1.25 trait = administrator }
+		modifier = { factor = 1.25 trait = engineer }
+		modifier = { factor = 1.25 trait = gambler }
+		modifier = { factor = 1.25 trait = hedonist }
+		modifier = { factor = 1.25 trait = seducer }
+		modifier = { factor = 1.25 trait = seductress }
+		modifier = { factor = 1.25 trait = saboteur }
+		modifier = { factor = 1.25 trait = socializer }
+		modifier = { factor = 1.25 trait = smuggler }
+		modifier = { factor = 2.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = ashlander }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 1.5 religion = almsivi }
+		modifier = { factor = 1.25 religion = almsivi_old_velothi }
+		modifier = { factor = 0.25 religion = daedra_malacath}
+		modifier = { factor = 0.25 religion = daedra_mehrunes }
+		modifier = { factor = 0.25 religion = daedra_molag }
+		modifier = { factor = 0.25 religion = daedra_sheogorath }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_hlaalu
+	    	controls_religion = no
+			is_theocracy = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160002 #Hlaalu
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}
+
+house_indoril_council = {
+	primary_attribute = diplomacy
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_indoril_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_indoril
+		age = 16
+		controls_religion = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_indoril_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_indoril_council
+			has_house_trait_including_houseless	= yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+			}
+		}
+	}
+	
+	#House Father > Councilman > Grandmaster
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = diplomacy
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 2.5
+			trait = zealous
+		}
+		has_trait = {
+			value = 1.5
+			trait = proud
+		}
+		has_trait = {
+			value = 1.5
+			trait = charitable
+		}
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.5
+			trait = patient
+		}
+		has_trait = {
+			value = 1.0
+			trait = brave
+		}
+		has_trait = {
+			value = 1.0
+			trait = temperate
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = adventurer
+		}
+		has_trait = {
+			value = 0.5
+			trait = magician
+		}
+		has_trait = {
+			value = 0.5
+			trait = musician
+		}
+		has_trait = {
+			value = 0.5
+			trait = mystic
+		}
+		has_trait = {
+			value = 0.5
+			trait = painter
+		}
+		has_trait = {
+			value = 0.5
+			trait = scholar
+		}
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		has_trait = {
+			value = 0.5
+			trait = theologian
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = diplomat_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = diplomat_4
+		}
+		has_trait = {
+			value = 2
+			trait = diplomat_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 1
+			trait = p_almalexia
+		}
+		has_trait = {
+			value = 0.5
+			trait = priest_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = priest_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = priest_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = monk_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = monk_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = monk_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = diplomat_5 }
+		modifier = { factor = 1.75 trait = diplomat_4 }
+		modifier = { factor = 1.75 trait = diplomat_3 }
+		modifier = { factor = 1.25 trait = priest_1 }
+		modifier = { factor = 1.5 trait = priest_2 }
+		modifier = { factor = 1.75 trait = priest_3 }
+		modifier = { factor = 1.25 trait = monk_1 }
+		modifier = { factor = 1.5 trait = monk_2 }
+		modifier = { factor = 1.75 trait = monk_3 }
+		modifier = { factor = 1.5 trait = p_almalexia }
+		modifier = { factor = 2.0 trait = zealous }
+		modifier = { factor = 1.5 trait = proud }
+		modifier = { factor = 1.5 trait = charitable }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = patient }
+		modifier = { factor = 1.25 trait = brave }
+		modifier = { factor = 1.25 trait = temperate }
+		modifier = { factor = 1.25 trait = adventurer }
+		modifier = { factor = 1.25 trait = magician }
+		modifier = { factor = 1.25 trait = musician }
+		modifier = { factor = 1.25 trait = mystic }
+		modifier = { factor = 1.25 trait = painter }
+		modifier = { factor = 1.25 trait = scholar }
+		modifier = { factor = 1.25 trait = strategist }
+		modifier = { factor = 1.25 trait = theologian }
+		modifier = { factor = 2.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 5.0 religion = almsivi }
+		modifier = { factor = 0.5 NOT = { religion = almsivi } }
+		modifier = { factor = 0.1 religion = daedra_malacath}
+		modifier = { factor = 0.1 religion = daedra_mehrunes }
+		modifier = { factor = 0.1 religion = daedra_molag }
+		modifier = { factor = 0.1 religion = daedra_sheogorath }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_indoril
+	    	controls_religion = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160004 #Indoril
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}
+
+house_redoran_council = {
+	primary_attribute = martial
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_redoran_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_redoran
+		age = 16
+		controls_religion = no
+		is_theocracy = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_redoran_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_redoran_council
+			has_house_trait_including_houseless = yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+				is_theocracy = no
+			}
+		}
+	}
+	
+	#House Father > Councilman > Archmaster
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = martial
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = just
+		}
+		has_trait = {
+			value = 1.5
+			trait = brave
+		}
+		has_trait = {
+			value = 1.5
+			trait = humble
+		}
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.5
+			trait = honest
+		}
+		has_trait = {
+			value = 1.0
+			trait = zealous
+		}
+		has_trait = {
+			value = 1.0
+			trait = patient
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = adventurer
+		}
+		has_trait = {
+			value = 0.5
+			trait = blacksmith
+		}
+		has_trait = {
+			value = 0.5
+			trait = duelist
+		}
+		has_trait = {
+			value = 0.5
+			trait = equestrian
+		}
+		has_trait = {
+			value = 0.5
+			trait = gamer
+		}
+		has_trait = {
+			value = 0.5
+			trait = gladiator
+		}
+		has_trait = {
+			value = 0.5
+			trait = hunter
+		}
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = warrior_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = warrior_4
+		}
+		has_trait = {
+			value = 2
+			trait = warrior_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 1
+			trait = p_vivec
+		}
+		has_trait = {
+			value = 0.5
+			trait = crusader_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = crusader_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = crusader_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = knight_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = knight_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = knight_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = warrior_5 }
+		modifier = { factor = 1.75 trait = warrior_4 }
+		modifier = { factor = 1.75 trait = warrior_3 }
+		modifier = { factor = 1.25 trait = crusader_1 }
+		modifier = { factor = 1.5 trait = crusader_2 }
+		modifier = { factor = 1.75 trait = crusader_3 }
+		modifier = { factor = 1.25 trait = knight_1 }
+		modifier = { factor = 1.5 trait = knight_2 }
+		modifier = { factor = 1.75 trait = knight_3 }
+		modifier = { factor = 1.5 trait = p_vivec }
+		modifier = { factor = 1.5 trait = just }
+		modifier = { factor = 1.5 trait = brave }
+		modifier = { factor = 1.5 trait = humble }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = honest }
+		modifier = { factor = 1.25 trait = zealous }
+		modifier = { factor = 1.25 trait = patient }
+		modifier = { factor = 1.25 trait = adventurer }
+		modifier = { factor = 1.25 trait = blacksmith }
+		modifier = { factor = 1.25 trait = duelist }
+		modifier = { factor = 1.25 trait = equestrian }
+		modifier = { factor = 1.25 trait = gamer }
+		modifier = { factor = 1.25 trait = gladiator }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 1.25 trait = strategist }
+		modifier = { factor = 2.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = ashlander }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 3.0 religion = almsivi}
+		modifier = { factor = 1.25 religion = almsivi_old_velothi}
+		modifier = { factor = 0.1 religion = daedra_malacath}
+		modifier = { factor = 0.1 religion = daedra_mehrunes }
+		modifier = { factor = 0.1 religion = daedra_molag }
+		modifier = { factor = 0.1 religion = daedra_sheogorath }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_redoran
+	    	controls_religion = no
+			is_theocracy = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160001 #Redoran
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}
+
+house_telvanni_council = {
+	primary_attribute = learning
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_telvanni_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_telvanni
+		age = 16
+		controls_religion = no
+		is_theocracy = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_telvanni_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_telvanni_council
+			has_house_trait_including_houseless = yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_vampire = yes
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+				is_theocracy = no
+			}
+		}
+	}
+	
+	#Master > Magister > Archmagister
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = learning
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = proud
+		}
+		has_trait = {
+			value = 1.5
+			trait = ruthless
+		}
+		has_trait = {
+			value = 1.5
+			trait = deceitful
+		}
+		has_trait = {
+			value = 1.5
+			trait = envious
+		}
+		has_trait = {
+			value = 1.5
+			trait = paranoid
+		}
+		has_trait = {
+			value = 1.0
+			trait = ambitious
+		}
+		has_trait = {
+			value = 1.0
+			trait = cynical
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = alchemist
+		}
+		has_trait = {
+			value = 0.5
+			trait = architect
+		}
+		has_trait = {
+			value = 0.5
+			trait = engineer
+		}
+		has_trait = {
+			value = 0.5
+			trait = gardener
+		}
+		has_trait = {
+			value = 0.5
+			trait = mystic
+		}
+		has_trait = {
+			value = 0.5
+			trait = magician
+		}
+		has_trait = {
+			value = 0.5
+			trait = necromancer
+		}
+		has_trait = {
+			value = 0.5
+			trait = schemer
+		}
+		has_trait = {
+			value = 0.5
+			trait = scholar
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = mage_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = mage_4
+		}
+		has_trait = {
+			value = 2
+			trait = mage_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 0.5
+			trait = p_sotha
+		}
+		has_trait = {
+			value = 0.5
+			trait = battlemage_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = battlemage_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = battlemage_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = sorcerer_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = sorcerer_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = sorcerer_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = mage_5 }
+		modifier = { factor = 1.75 trait = mage_4 }
+		modifier = { factor = 1.75 trait = mage_3 }
+		modifier = { factor = 1.25 trait = battlemage_1 }
+		modifier = { factor = 1.5 trait = battlemage_2 }
+		modifier = { factor = 1.75 trait = battlemage_3 }
+		modifier = { factor = 1.25 trait = sorcerer_1 }
+		modifier = { factor = 1.5 trait = sorcerer_2 }
+		modifier = { factor = 1.75 trait = sorcerer_3 }
+		modifier = { factor = 1.1 trait = p_sotha }
+		modifier = { factor = 1.5 trait = proud }
+		modifier = { factor = 1.5 trait = ruthless }
+		modifier = { factor = 1.5 trait = deceitful }
+		modifier = { factor = 1.5 trait = envious }
+		modifier = { factor = 1.5 trait = paranoid }
+		modifier = { factor = 1.25 trait = ambitious }
+		modifier = { factor = 1.25 trait = cynical }
+		modifier = { factor = 1.25 trait = alchemist }
+		modifier = { factor = 1.25 trait = architect }
+		modifier = { factor = 1.25 trait = engineer }
+		modifier = { factor = 1.25 trait = gardener }
+		modifier = { factor = 1.25 trait = mystic }
+		modifier = { factor = 1.25 trait = magician }
+		modifier = { factor = 1.25 trait = necromancer }
+		modifier = { factor = 1.25 trait = schemer }
+		modifier = { factor = 1.25 trait = scholar }
+		modifier = { factor = 2.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = ashlander }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 1.5 religion = almsivi_old_velothi }
+		modifier = { factor = 0.5 religion = almsivi }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_telvanni
+	    	controls_religion = no
+			is_theocracy = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160005 #Telvanni
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+			NOT = { character = 49700 }
+		}
+	}
+}
+
+house_sadras_council = {
+	primary_attribute = intrigue
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_sadras_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_sadras
+		age = 16
+		controls_religion = no
+		is_theocracy = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_sadras_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_sadras_council
+			has_house_trait_including_houseless = yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+				is_theocracy = no
+			}
+		}
+	}
+	
+	#House Father > Councilman > Grandmaster
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = intrigue
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = gregarious
+		}
+		has_trait = {
+			value = 1.5
+			trait = deceitful
+		}
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.5
+			trait = greedy
+		}
+		has_trait = {
+			value = 1.5
+			trait = patient
+		}
+		has_trait = {
+			value = 1.0
+			trait = paranoid
+		}
+		has_trait = {
+			value = 1.0
+			trait = charitable
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = administrator
+		}
+		has_trait = {
+			value = 0.5
+			trait = engineer
+		}
+		has_trait = {
+			value = 0.5
+			trait = gambler
+		}
+		has_trait = {
+			value = 0.5
+			trait = hedonist
+		}
+		has_trait = {
+			value = 0.5
+			trait = seducer
+		}
+		has_trait = {
+			value = 0.5
+			trait = seductress
+		}
+		has_trait = {
+			value = 0.5
+			trait = saboteur
+		}
+		has_trait = {
+			value = 0.5
+			trait = schemer
+		}
+		has_trait = {
+			value = 0.5
+			trait = socializer
+		}
+		has_trait = {
+			value = 0.5
+			trait = smuggler
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = agent_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = agent_4
+		}
+		has_trait = {
+			value = 2
+			trait = agent_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 1
+			trait = p_vivec
+		}
+		has_trait = {
+			value = 0.5
+			trait = assassin_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = assassin_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = assassin_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = thief_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = thief_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = thief_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = agent_5 }
+		modifier = { factor = 1.75 trait = agent_4 }
+		modifier = { factor = 1.75 trait = agent_3 }
+		modifier = { factor = 1.25 trait = assassin_1 }
+		modifier = { factor = 1.5 trait = assassin_2 }
+		modifier = { factor = 1.75 trait = assassin_3 }
+		modifier = { factor = 1.25 trait = thief_1 }
+		modifier = { factor = 1.5 trait = thief_2 }
+		modifier = { factor = 1.75 trait = thief_3 }
+		modifier = { factor = 1.5 trait = p_vivec }
+		modifier = { factor = 1.5 trait = gregarious }
+		modifier = { factor = 1.5 trait = deceitful }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = greedy }
+		modifier = { factor = 1.5 trait = patient }
+		modifier = { factor = 1.25 trait = paranoid }
+		modifier = { factor = 1.25 trait = charitable }
+		modifier = { factor = 1.25 trait = administrator }
+		modifier = { factor = 1.25 trait = engineer }
+		modifier = { factor = 1.25 trait = gambler }
+		modifier = { factor = 1.25 trait = hedonist }
+		modifier = { factor = 1.25 trait = seducer }
+		modifier = { factor = 1.25 trait = seductress }
+		modifier = { factor = 1.25 trait = saboteur }
+		modifier = { factor = 1.25 trait = socializer }
+		modifier = { factor = 1.25 trait = smuggler }
+		modifier = { factor = 2.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = ashlander }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 1.5 religion = almsivi }
+		modifier = { factor = 1.25 religion = almsivi_old_velothi }
+		modifier = { factor = 0.25 religion = daedra_malacath}
+		modifier = { factor = 0.25 religion = daedra_mehrunes }
+		modifier = { factor = 0.25 religion = daedra_molag }
+		modifier = { factor = 0.25 religion = daedra_sheogorath }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			year = 4200
+			trait = house_sadras
+	    	controls_religion = no
+			is_theocracy = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160773 #Sadras
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}			
+
+house_sul_council = {
+	primary_attribute = martial
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_sul_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_sul
+		age = 16
+		controls_religion = no
+		is_theocracy = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_sul_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_sul_council
+			has_house_trait_including_houseless = yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+				is_theocracy = no
+			}
+		}
+	}
+	
+	#House Father > Councilman > Archmaster
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = martial
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = just
+		}
+		has_trait = {
+			value = 1.5
+			trait = brave
+		}
+		has_trait = {
+			value = 1.5
+			trait = humble
+		}
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.5
+			trait = honest
+		}
+		has_trait = {
+			value = 1.0
+			trait = zealous
+		}
+		has_trait = {
+			value = 1.0
+			trait = patient
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = adventurer
+		}
+		has_trait = {
+			value = 0.5
+			trait = blacksmith
+		}
+		has_trait = {
+			value = 0.5
+			trait = duelist
+		}
+		has_trait = {
+			value = 0.5
+			trait = equestrian
+		}
+		has_trait = {
+			value = 0.5
+			trait = gamer
+		}
+		has_trait = {
+			value = 0.5
+			trait = gladiator
+		}
+		has_trait = {
+			value = 0.5
+			trait = hunter
+		}
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = warrior_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = warrior_4
+		}
+		has_trait = {
+			value = 2
+			trait = warrior_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		triggered_gain = {
+			trigger = {
+				any_owned_bloodline = { has_bloodline_flag = bloodline_sul }
+			}
+			value = 2.5
+		}
+		has_trait = {
+			value = 0.5
+			trait = barbarian_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = barbarian_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = barbarian_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = scout_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = scout_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = scout_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = warrior_5 }
+		modifier = { factor = 1.75 trait = warrior_4 }
+		modifier = { factor = 1.75 trait = warrior_3 }
+		modifier = { factor = 1.25 trait = barbarian_1 }
+		modifier = { factor = 1.5 trait = barbarian_2 }
+		modifier = { factor = 1.75 trait = barbarian_3 }
+		modifier = { factor = 1.25 trait = scout_1 }
+		modifier = { factor = 1.5 trait = scout_2 }
+		modifier = { factor = 1.75 trait = scout_3 }
+		modifier = { factor = 2.5 any_owned_bloodline = { has_bloodline_flag = bloodline_sul } }
+		modifier = { factor = 1.5 trait = just }
+		modifier = { factor = 1.5 trait = brave }
+		modifier = { factor = 1.5 trait = humble }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = honest }
+		modifier = { factor = 1.25 trait = zealous }
+		modifier = { factor = 1.25 trait = patient }
+		modifier = { factor = 1.25 trait = adventurer }
+		modifier = { factor = 1.25 trait = blacksmith }
+		modifier = { factor = 1.25 trait = duelist }
+		modifier = { factor = 1.25 trait = equestrian }
+		modifier = { factor = 1.25 trait = gamer }
+		modifier = { factor = 1.25 trait = gladiator }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 1.25 trait = strategist }
+		modifier = { factor = 2.5 culture = ashlander }
+		modifier = { factor = 1.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 1.5 religion = nerevarine }
+		modifier = { factor = 0.9 religion = almsivi_old_velothi }
+		modifier = { factor = 0.1 religion = almsivi }
+		modifier = { factor = 0.1 religion = daedra_malacath}
+		modifier = { factor = 0.1 religion = daedra_mehrunes }
+		modifier = { factor = 0.1 religion = daedra_molag }
+		modifier = { factor = 0.1 religion = daedra_sheogorath }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_veloth
+	    	controls_religion = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160775 #Sul
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}
+
+house_veloth_council = {
+	primary_attribute = diplomacy
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_veloth_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_veloth
+		age = 16
+		controls_religion = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_veloth_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_veloth_council
+			has_house_trait_including_houseless	= yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			OR = {
+				is_not_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+			}
+		}
+	}
+	
+	#House Father > Councilman > Grandmaster
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = diplomacy
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 2.5
+			trait = zealous
+		}
+		has_trait = {
+			value = 1.5
+			trait = proud
+		}
+		has_trait = {
+			value = 1.5
+			trait = charitable
+		}
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.5
+			trait = patient
+		}
+		has_trait = {
+			value = 1.0
+			trait = brave
+		}
+		has_trait = {
+			value = 1.0
+			trait = temperate
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = adventurer
+		}
+		has_trait = {
+			value = 0.5
+			trait = magician
+		}
+		has_trait = {
+			value = 0.5
+			trait = musician
+		}
+		has_trait = {
+			value = 0.5
+			trait = mystic
+		}
+		has_trait = {
+			value = 0.5
+			trait = painter
+		}
+		has_trait = {
+			value = 0.5
+			trait = scholar
+		}
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		has_trait = {
+			value = 0.5
+			trait = theologian
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = diplomat_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = diplomat_4
+		}
+		has_trait = {
+			value = 2
+			trait = diplomat_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 1
+			trait = pilgrim
+		}
+		has_trait = {
+			value = 0.5
+			trait = priest_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = priest_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = priest_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = wayfarer_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = wayfarer_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = wayfarer_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = diplomat_5 }
+		modifier = { factor = 1.75 trait = diplomat_4 }
+		modifier = { factor = 1.75 trait = diplomat_3 }
+		modifier = { factor = 1.25 trait = priest_1 }
+		modifier = { factor = 1.5 trait = priest_2 }
+		modifier = { factor = 1.75 trait = priest_3 }
+		modifier = { factor = 1.25 trait = wayfarer_1 }
+		modifier = { factor = 1.5 trait = wayfarer_2 }
+		modifier = { factor = 1.75 trait = wayfarer_3 }
+		modifier = { factor = 1.5 trait = pilgrim }
+		modifier = { factor = 2.0 trait = zealous }
+		modifier = { factor = 1.5 trait = proud }
+		modifier = { factor = 1.5 trait = charitable }
+		modifier = { factor = 1.5 trait = diligent }
+		modifier = { factor = 1.5 trait = patient }
+		modifier = { factor = 1.25 trait = brave }
+		modifier = { factor = 1.25 trait = temperate }
+		modifier = { factor = 1.25 trait = adventurer }
+		modifier = { factor = 1.25 trait = magician }
+		modifier = { factor = 1.25 trait = musician }
+		modifier = { factor = 1.25 trait = mystic }
+		modifier = { factor = 1.25 trait = painter }
+		modifier = { factor = 1.25 trait = scholar }
+		modifier = { factor = 1.25 trait = strategist }
+		modifier = { factor = 1.25 trait = theologian }
+		modifier = { factor = 2.5 culture = chimer }
+		modifier = { factor = 1.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = ashlander }
+		modifier = { factor = 1.5 religion = almsivi_old_velothi }
+		modifier = { factor = 1.1 religion = nerevarine }
+		modifier = { factor = 1.1 religion = daedra_azura }
+		modifier = { factor = 1.1 religion = daedra_boethiah }
+		modifier = { factor = 1.1 religion = daedra_mephala }
+		modifier = { factor = 0.25 religion = almsivi }
+		modifier = { factor = 0.1 religion = daedra_malacath}
+		modifier = { factor = 0.1 religion = daedra_mehrunes }
+		modifier = { factor = 0.1 religion = daedra_molag }
+		modifier = { factor = 0.1 religion = daedra_sheogorath }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_veloth
+	    	controls_religion = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160662 #Veloth
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}			
+
+house_dagoth_council = {
+	primary_attribute = learning
+	society_ranks_gfx = great_houses_ranks
+	
+	active = {
+		NOT = { has_global_flag = house_dagoth_extinct }
+	}
+	indestructible = no
+	
+	can_join_society = {
+		is_in_society = no
+		OR = {
+			is_lowborn = no
+			has_minor_title = title_mouth
+		}
+		trait = house_dagoth
+		age = 16
+		controls_religion = no
+		is_theocracy = no
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_vampire = yes
+		}
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = house_dagoth_council
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+			NOR = { 
+				has_character_flag = society_join_block
+				has_character_flag = wants_mouth_in_council
+				any_courtier_or_vassal = { has_character_flag = mouth_in_council }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = house_dagoth_council
+			has_house_trait_including_houseless = yes
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_vampire = yes
+		}
+		NOT = { has_character_flag = society_join_block }
+		controls_religion = no
+		hidden_tooltip = {
+			OR = {
+				mercenary = no
+				holy_order = no
+				is_theocracy = no
+			}
+		}
+	}
+	
+	#Master > Magister > Archmagister
+	society_rank = {
+		level = 1
+		limit = 40
+		startup_limit = 20
+		modifier = {
+			monthly_character_prestige = 0.10
+		}
+		decisions = {
+			study_specialization
+		}
+		powers = {
+			house_traits_gain
+			magistrate_training
+			general_training
+			infestation_reduction
+		}
+	}
+	society_rank = {
+		level = 2
+		limit = 10
+		startup_limit = 5
+		modifier = {
+			monthly_character_prestige = 0.25
+		}
+		decisions = {
+			get_into_house
+			get_favour_from_member
+		}
+	}
+	society_rank = {
+		level = 3
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.5
+		}
+		powers = {
+			vvardenfell_colonisation
+			house_territory_claim_annex
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_great_house
+		
+		per_attribute = {
+    		name = learning
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = proud
+		}
+		has_trait = {
+			value = 1.5
+			trait = ruthless
+		}
+		has_trait = {
+			value = 1.5
+			trait = deceitful
+		}
+		has_trait = {
+			value = 1.5
+			trait = envious
+		}
+		has_trait = {
+			value = 1.5
+			trait = paranoid
+		}
+		has_trait = {
+			value = 1.0
+			trait = ambitious
+		}
+		has_trait = {
+			value = 1.0
+			trait = cynical
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = alchemist
+		}
+		has_trait = {
+			value = 0.5
+			trait = architect
+		}
+		has_trait = {
+			value = 0.5
+			trait = engineer
+		}
+		has_trait = {
+			value = 0.5
+			trait = gardener
+		}
+		has_trait = {
+			value = 0.5
+			trait = mystic
+		}
+		has_trait = {
+			value = 0.5
+			trait = magician
+		}
+		has_trait = {
+			value = 0.5
+			trait = schemer
+		}
+		has_trait = {
+			value = 0.5
+			trait = scholar
+		}
+		has_trait = {
+			value = 0.5
+			trait = musician
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = mage_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = mage_4
+		}
+		has_trait = {
+			value = 2
+			trait = mage_5
+		}
+		#Ranks
+		society_rank = {
+			rank = 1
+			value = 0.5
+		}
+		society_rank = {
+			rank = 2
+			value = 1.0
+		}
+		society_rank = {
+			rank = 3
+			value = 2.5
+		}
+		#Other things
+		has_trait = {
+			value = 0.5
+			trait = priest_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = priest_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = priest_3
+		}
+		has_trait = {
+			value = 0.5
+			trait = nightblade_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = nightblade_2
+		}
+		has_trait = {
+			value = 1.25
+			trait = nightblade_3
+		}
+	}
+
+	member_score_per_attribute = 1
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+		additive_modifier = {
+			value = 2500
+			primary_title = { tier = EMPEROR }
+		}
+		additive_modifier = {
+			value = 1000
+			primary_title = { tier = KING }
+		}
+		additive_modifier = {
+			value = 250
+			primary_title = { tier = DUKE }
+		}
+		additive_modifier = {
+			value = 50
+			primary_title = { tier = COUNT }
+		}
+		modifier = { factor = 2.5 trait = mage_5 }
+		modifier = { factor = 1.75 trait = mage_4 }
+		modifier = { factor = 1.75 trait = mage_3 }
+		modifier = { factor = 1.25 trait = priest_1 }
+		modifier = { factor = 1.5 trait = priest_2 }
+		modifier = { factor = 1.75 trait = priest_3 }
+		modifier = { factor = 1.25 trait = nightblade_1 }
+		modifier = { factor = 1.5 trait = nightblade_2 }
+		modifier = { factor = 1.75 trait = nightblade_3 }
+		modifier = { factor = 1.1 trait = p_sotha }
+		modifier = { factor = 1.5 trait = proud }
+		modifier = { factor = 1.5 trait = ruthless }
+		modifier = { factor = 1.5 trait = deceitful }
+		modifier = { factor = 1.5 trait = envious }
+		modifier = { factor = 1.5 trait = paranoid }
+		modifier = { factor = 1.25 trait = ambitious }
+		modifier = { factor = 1.25 trait = cynical }
+		modifier = { factor = 1.25 trait = alchemist }
+		modifier = { factor = 1.25 trait = architect }
+		modifier = { factor = 1.25 trait = engineer }
+		modifier = { factor = 1.25 trait = gardener }
+		modifier = { factor = 1.25 trait = mystic }
+		modifier = { factor = 1.25 trait = magician }
+		modifier = { factor = 1.25 trait = schemer }
+		modifier = { factor = 1.25 trait = scholar }
+		modifier = { factor = 1.25 trait = musician }
+		modifier = { factor = 2.5 culture = dunmer }
+		modifier = { factor = 1.5 culture = ashlander }
+		modifier = { factor = 1.5 culture = chimer }
+		modifier = { factor = 0.1 trait = necromancer }
+		modifier = { factor = 0 NOT = { religion = sixth_house } }
+		modifier = { factor = 0 NOT = { is_dunmer = yes } }
+	}
+	
+	startup_populate = {
+	     trigger = {
+			trait = house_dagoth
+	    	controls_religion = no
+			is_theocracy = no
+			OR = {
+				is_ruler = yes
+				dynasty = 160777 #Dagoth
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+}

@@ -1,0 +1,520 @@
+on_pregnancy = {
+	effect = {
+		if = {
+			limit = { is_mer = yes is_pregnant = yes }
+			roll_d20 = yes
+			if = {
+				limit = {
+					OR = {
+						age <= 25
+						age >= 275
+						is_infertile_trigger = yes
+						AND = {
+							num_of_children >= 3
+							any_child = { is_alive = yes }
+							any_spouse = {
+								OR = {
+									num_of_children > 1
+									AND = {
+										num_of_children > 1
+										any_child = { is_alive = yes }
+									}
+								}
+							}
+						}
+						num_of_children >= 6
+						check_variable = { which = d20 value == 7 }
+						check_variable = { which = d20 value == 14 }
+						check_variable = { which = d20 value == 20 }
+						fertility <= 0.01
+						health < 1.0
+					}
+				}
+				cancel_pregnancy = yes
+			}
+			else_if = {
+				limit = { has_children = no }
+				random = {
+					chance = 20
+					modifier = { factor = 1.25 in_command = yes }
+					#Juvenile Mer Phase
+					modifier = { factor = 1.99	age <= 25 }
+					modifier = { factor = 1.95	age > 25 age <= 35 }
+					modifier = { factor = 1.9	age > 35 age <= 45 }
+					modifier = { factor = 1.85	age > 45 age <= 56 }
+					#Adult Mer Phase
+					modifier = { factor = 1.5	age > 56 age <= 70 }
+					modifier = { factor = 1.25	age > 70 age <= 80 }
+					modifier = { factor = 1.0	age > 80 age <= 100 }
+					modifier = { factor = 0.75	age > 100 age <= 135 }
+					modifier = { factor = 0.5	age > 135 age <= 156 }
+					#Aging Mer Phase
+					modifier = { factor = 0.75	age > 156 age <= 176 }
+					modifier = { factor = 1.0	age > 176 age <= 196 }
+					modifier = { factor = 1.25	age > 196 age <= 216 }
+					#Old Mer Phase
+					modifier = { factor = 1.5	age > 216 age <= 236 }
+					modifier = { factor = 1.75	age > 236 age <= 250 }
+					modifier = { factor = 1.9	age > 250 }
+					#Other Modifiers
+					modifier = { factor = 0.9	is_ruler = yes }
+					modifier = { factor = 0.95	has_focus = focus_family }
+					modifier = { factor = 0.85	trait = lucky }
+					modifier = { factor = 1.25	trait = unlucky }
+					modifier = { factor = 1.25	has_mental_disorder_trigger = yes }
+					modifier = { factor = 1.25	is_weak_trigger = yes }
+					modifier = { factor = 1.99	character_disease_trigger = yes }
+					modifier = { factor = 1.99	has_symptom_trigger = yes }
+					modifier = { factor = 1.25	has_injury_trigger = yes }
+					modifier = { factor = 1.25	is_maimed_trigger = yes }
+					modifier = { factor = 1.25	has_severe_disability_trigger = yes }
+					modifier = { factor = 0.9	is_fertile_trigger = yes }
+					modifier = { factor = 1.99	has_character_flag = race_changer }
+					modifier = { factor = 0.75	NOT = { any_child = { is_alive = yes } } }
+					modifier = { factor = 0.75 fertility > 0.9 }
+					modifier = { factor = 0.9 fertility < 0.9 fertility >= 0.8 }
+					modifier = { factor = 1.05 fertility < 0.8 fertility >= 0.7 }
+					modifier = { factor = 1.2 fertility < 0.7 fertility >= 0.6 }
+					modifier = { factor = 1.35 fertility < 0.6 fertility >= 0.5 }
+					modifier = { factor = 1.65 fertility < 0.5 fertility >= 0.4 }
+					modifier = { factor = 1.8 fertility < 0.4 fertility >= 0.3 }
+					modifier = { factor = 1.95 fertility < 0.3 fertility >= 0.2 }
+					modifier = { factor = 2.1 fertility < 0.2 fertility >= 0.1 }
+					modifier = { factor = 2.25 fertility < 0.1 fertility >= 0 }
+					modifier = { factor = 2.4 fertility < 0 }
+					modifier = { factor = 0.5 health >= 8.0 }
+					modifier = { factor = 0.6 health >= 7.0 health < 8.0 }
+					modifier = { factor = 0.7 health >= 6.0 health < 7.0 }
+					modifier = { factor = 0.8 health >= 5.0 health < 6.0 }
+					modifier = { factor = 0.9 health >= 4.0 health < 5.0 }
+					modifier = { factor = 1.0 health >= 3.0 health < 4.0 }
+					modifier = { factor = 2.0 health >= 2.0 health < 3.0 }
+					modifier = { factor = 3.0 health >= 1.0 health < 2.0 }
+					modifier = { factor = 5.0 health >= 0.0 health < 1.0 }
+					modifier = { factor = 10.0 health < 0 }
+					cancel_pregnancy = yes
+				}
+			}
+			else_if = {
+				limit = {
+					num_of_children == 1
+				}
+				random = {
+					chance = 25
+					modifier = { factor = 1.25 in_command = yes }
+					#Juvenile Mer Phase
+					modifier = { factor = 1.99	age <= 25 }
+					modifier = { factor = 1.95	age > 25 age <= 35 }
+					modifier = { factor = 1.9	age > 35 age <= 45 }
+					modifier = { factor = 1.85	age > 45 age <= 56 }
+					#Adult Mer Phase
+					modifier = { factor = 1.5	age > 56 age <= 70 }
+					modifier = { factor = 1.25	age > 70 age <= 80 }
+					modifier = { factor = 1.0	age > 80 age <= 100 }
+					modifier = { factor = 0.75	age > 100 age <= 135 }
+					modifier = { factor = 0.5	age > 135 age <= 156 }
+					#Aging Mer Phase
+					modifier = { factor = 0.75	age > 156 age <= 176 }
+					modifier = { factor = 1.0	age > 176 age <= 196 }
+					modifier = { factor = 1.25	age > 196 age <= 216 }
+					#Old Mer Phase
+					modifier = { factor = 1.5	age > 216 age <= 236 }
+					modifier = { factor = 1.75	age > 236 age <= 250 }
+					modifier = { factor = 1.9	age > 250 }
+					#Other Modifiers
+					modifier = { factor = 0.9	is_ruler = yes }
+					modifier = { factor = 0.95	has_focus = focus_family }
+					modifier = { factor = 0.85	trait = lucky }
+					modifier = { factor = 1.25	trait = unlucky }
+					modifier = { factor = 1.25	has_mental_disorder_trigger = yes }
+					modifier = { factor = 1.25	is_weak_trigger = yes }
+					modifier = { factor = 1.99	character_disease_trigger = yes }
+					modifier = { factor = 1.99	has_symptom_trigger = yes }
+					modifier = { factor = 1.25	has_injury_trigger = yes }
+					modifier = { factor = 1.25	is_maimed_trigger = yes }
+					modifier = { factor = 1.25	has_severe_disability_trigger = yes }
+					modifier = { factor = 0.9	is_fertile_trigger = yes }
+					modifier = { factor = 1.99	has_character_flag = race_changer }
+					modifier = { factor = 0.75	NOT = { any_child = { is_alive = yes } } }
+					modifier = { factor = 0.75 fertility > 0.9 }
+					modifier = { factor = 0.9 fertility < 0.9 fertility >= 0.8 }
+					modifier = { factor = 1.05 fertility < 0.8 fertility >= 0.7 }
+					modifier = { factor = 1.2 fertility < 0.7 fertility >= 0.6 }
+					modifier = { factor = 1.35 fertility < 0.6 fertility >= 0.5 }
+					modifier = { factor = 1.65 fertility < 0.5 fertility >= 0.4 }
+					modifier = { factor = 1.8 fertility < 0.4 fertility >= 0.3 }
+					modifier = { factor = 1.95 fertility < 0.3 fertility >= 0.2 }
+					modifier = { factor = 2.1 fertility < 0.2 fertility >= 0.1 }
+					modifier = { factor = 2.25 fertility < 0.1 fertility >= 0 }
+					modifier = { factor = 2.4 fertility < 0 }
+					modifier = { factor = 0.5 health >= 8.0 }
+					modifier = { factor = 0.6 health >= 7.0 health < 8.0 }
+					modifier = { factor = 0.7 health >= 6.0 health < 7.0 }
+					modifier = { factor = 0.8 health >= 5.0 health < 6.0 }
+					modifier = { factor = 0.9 health >= 4.0 health < 5.0 }
+					modifier = { factor = 1.0 health >= 3.0 health < 4.0 }
+					modifier = { factor = 2.0 health >= 2.0 health < 3.0 }
+					modifier = { factor = 3.0 health >= 1.0 health < 2.0 }
+					modifier = { factor = 5.0 health >= 0.0 health < 1.0 }
+					modifier = { factor = 10.0 health < 0 }
+					cancel_pregnancy = yes
+				}
+			}
+			else_if = {
+				limit = { num_of_children == 2 }
+				random = {
+					chance = 50
+					modifier = { factor = 1.25 in_command = yes }
+					#Juvenile Mer Phase
+					modifier = { factor = 1.99	age <= 25 }
+					modifier = { factor = 1.95	age > 25 age <= 35 }
+					modifier = { factor = 1.9	age > 35 age <= 45 }
+					modifier = { factor = 1.85	age > 45 age <= 56 }
+					#Adult Mer Phase
+					modifier = { factor = 1.5	age > 56 age <= 70 }
+					modifier = { factor = 1.25	age > 70 age <= 80 }
+					modifier = { factor = 1.0	age > 80 age <= 100 }
+					modifier = { factor = 0.75	age > 100 age <= 135 }
+					modifier = { factor = 0.5	age > 135 age <= 156 }
+					#Aging Mer Phase
+					modifier = { factor = 0.75	age > 156 age <= 176 }
+					modifier = { factor = 1.0	age > 176 age <= 196 }
+					modifier = { factor = 1.25	age > 196 age <= 216 }
+					#Old Mer Phase
+					modifier = { factor = 1.5	age > 216 age <= 236 }
+					modifier = { factor = 1.75	age > 236 age <= 250 }
+					modifier = { factor = 1.9	age > 250 }
+					#Other Modifiers
+					modifier = { factor = 0.9	is_ruler = yes }
+					modifier = { factor = 0.95	has_focus = focus_family }
+					modifier = { factor = 0.85	trait = lucky }
+					modifier = { factor = 1.25	trait = unlucky }
+					modifier = { factor = 1.25	has_mental_disorder_trigger = yes }
+					modifier = { factor = 1.25	is_weak_trigger = yes }
+					modifier = { factor = 1.99	character_disease_trigger = yes }
+					modifier = { factor = 1.99	has_symptom_trigger = yes }
+					modifier = { factor = 1.25	has_injury_trigger = yes }
+					modifier = { factor = 1.25	is_maimed_trigger = yes }
+					modifier = { factor = 1.25	has_severe_disability_trigger = yes }
+					modifier = { factor = 0.9	is_fertile_trigger = yes }
+					modifier = { factor = 1.99	has_character_flag = race_changer }
+					modifier = { factor = 1.25	any_child = { is_alive = yes } }
+					modifier = { factor = 0.75	NOT = { any_child = { is_alive = yes } } }
+					modifier = { factor = 0.75 fertility > 0.9 }
+					modifier = { factor = 0.9 fertility < 0.9 fertility >= 0.8 }
+					modifier = { factor = 1.05 fertility < 0.8 fertility >= 0.7 }
+					modifier = { factor = 1.2 fertility < 0.7 fertility >= 0.6 }
+					modifier = { factor = 1.35 fertility < 0.6 fertility >= 0.5 }
+					modifier = { factor = 1.65 fertility < 0.5 fertility >= 0.4 }
+					modifier = { factor = 1.8 fertility < 0.4 fertility >= 0.3 }
+					modifier = { factor = 1.95 fertility < 0.3 fertility >= 0.2 }
+					modifier = { factor = 2.1 fertility < 0.2 fertility >= 0.1 }
+					modifier = { factor = 2.25 fertility < 0.1 fertility >= 0 }
+					modifier = { factor = 2.4 fertility < 0 }
+					modifier = { factor = 0.5 health >= 8.0 }
+					modifier = { factor = 0.6 health >= 7.0 health < 8.0 }
+					modifier = { factor = 0.7 health >= 6.0 health < 7.0 }
+					modifier = { factor = 0.8 health >= 5.0 health < 6.0 }
+					modifier = { factor = 0.9 health >= 4.0 health < 5.0 }
+					modifier = { factor = 1.0 health >= 3.0 health < 4.0 }
+					modifier = { factor = 2.0 health >= 2.0 health < 3.0 }
+					modifier = { factor = 3.0 health >= 1.0 health < 2.0 }
+					modifier = { factor = 5.0 health >= 0.0 health < 1.0 }
+					modifier = { factor = 10.0 health < 0 }
+					cancel_pregnancy = yes
+				}
+			}
+			else_if = {
+				limit = { num_of_children == 3 }
+				random = {
+					chance = 70
+					modifier = { factor = 1.25 in_command = yes }
+					#Juvenile Mer Phase
+					modifier = { factor = 1.99	age <= 25 }
+					modifier = { factor = 1.95	age > 25 age <= 35 }
+					modifier = { factor = 1.9	age > 35 age <= 45 }
+					modifier = { factor = 1.85	age > 45 age <= 56 }
+					#Adult Mer Phase
+					modifier = { factor = 1.5	age > 56 age <= 70 }
+					modifier = { factor = 1.25	age > 70 age <= 80 }
+					modifier = { factor = 1.0	age > 80 age <= 100 }
+					modifier = { factor = 0.75	age > 100 age <= 135 }
+					modifier = { factor = 0.5	age > 135 age <= 156 }
+					#Aging Mer Phase
+					modifier = { factor = 0.75	age > 156 age <= 176 }
+					modifier = { factor = 1.0	age > 176 age <= 196 }
+					modifier = { factor = 1.25	age > 196 age <= 216 }
+					#Old Mer Phase
+					modifier = { factor = 1.5	age > 216 age <= 236 }
+					modifier = { factor = 1.75	age > 236 age <= 250 }
+					modifier = { factor = 1.9	age > 250 }
+					#Other Modifiers
+					modifier = { factor = 0.9	is_ruler = yes }
+					modifier = { factor = 0.95	has_focus = focus_family }
+					modifier = { factor = 0.85	trait = lucky }
+					modifier = { factor = 1.25	trait = unlucky }
+					modifier = { factor = 1.25	has_mental_disorder_trigger = yes }
+					modifier = { factor = 1.25	is_weak_trigger = yes }
+					modifier = { factor = 1.99	character_disease_trigger = yes }
+					modifier = { factor = 1.99	has_symptom_trigger = yes }
+					modifier = { factor = 1.25	has_injury_trigger = yes }
+					modifier = { factor = 1.25	is_maimed_trigger = yes }
+					modifier = { factor = 1.25	has_severe_disability_trigger = yes }
+					modifier = { factor = 0.9	is_fertile_trigger = yes }
+					modifier = { factor = 1.99	has_character_flag = race_changer }
+					modifier = { factor = 1.25	any_child = { is_alive = yes } }
+					modifier = { factor = 0.75	NOT = { any_child = { is_alive = yes } } }
+					modifier = { factor = 0.75 fertility > 0.9 }
+					modifier = { factor = 0.9 fertility < 0.9 fertility >= 0.8 }
+					modifier = { factor = 1.05 fertility < 0.8 fertility >= 0.7 }
+					modifier = { factor = 1.2 fertility < 0.7 fertility >= 0.6 }
+					modifier = { factor = 1.35 fertility < 0.6 fertility >= 0.5 }
+					modifier = { factor = 1.65 fertility < 0.5 fertility >= 0.4 }
+					modifier = { factor = 1.8 fertility < 0.4 fertility >= 0.3 }
+					modifier = { factor = 1.95 fertility < 0.3 fertility >= 0.2 }
+					modifier = { factor = 2.1 fertility < 0.2 fertility >= 0.1 }
+					modifier = { factor = 2.25 fertility < 0.1 fertility >= 0 }
+					modifier = { factor = 2.4 fertility < 0 }
+					modifier = { factor = 0.5 health >= 8.0 }
+					modifier = { factor = 0.6 health >= 7.0 health < 8.0 }
+					modifier = { factor = 0.7 health >= 6.0 health < 7.0 }
+					modifier = { factor = 0.8 health >= 5.0 health < 6.0 }
+					modifier = { factor = 0.9 health >= 4.0 health < 5.0 }
+					modifier = { factor = 1.0 health >= 3.0 health < 4.0 }
+					modifier = { factor = 2.0 health >= 2.0 health < 3.0 }
+					modifier = { factor = 3.0 health >= 1.0 health < 2.0 }
+					modifier = { factor = 5.0 health >= 0.0 health < 1.0 }
+					modifier = { factor = 10.0 health < 0 }
+					cancel_pregnancy = yes
+				}
+			}
+			else_if = {
+				limit = { num_of_children == 4 }
+				random = {
+					chance = 90
+					modifier = { factor = 1.25 in_command = yes }
+					#Juvenile Mer Phase
+					modifier = { factor = 1.99	age <= 25 }
+					modifier = { factor = 1.95	age > 25 age <= 35 }
+					modifier = { factor = 1.9	age > 35 age <= 45 }
+					modifier = { factor = 1.85	age > 45 age <= 56 }
+					#Adult Mer Phase
+					modifier = { factor = 1.5	age > 56 age <= 70 }
+					modifier = { factor = 1.25	age > 70 age <= 80 }
+					modifier = { factor = 1.0	age > 80 age <= 100 }
+					modifier = { factor = 0.75	age > 100 age <= 135 }
+					modifier = { factor = 0.5	age > 135 age <= 156 }
+					#Aging Mer Phase
+					modifier = { factor = 0.75	age > 156 age <= 176 }
+					modifier = { factor = 1.0	age > 176 age <= 196 }
+					modifier = { factor = 1.25	age > 196 age <= 216 }
+					#Old Mer Phase
+					modifier = { factor = 1.5	age > 216 age <= 236 }
+					modifier = { factor = 1.75	age > 236 age <= 250 }
+					modifier = { factor = 1.9	age > 250 }
+					#Other Modifiers
+					modifier = { factor = 0.9	is_ruler = yes }
+					modifier = { factor = 0.95	has_focus = focus_family }
+					modifier = { factor = 0.85	trait = lucky }
+					modifier = { factor = 1.25	trait = unlucky }
+					modifier = { factor = 1.25	has_mental_disorder_trigger = yes }
+					modifier = { factor = 1.25	is_weak_trigger = yes }
+					modifier = { factor = 1.99	character_disease_trigger = yes }
+					modifier = { factor = 1.99	has_symptom_trigger = yes }
+					modifier = { factor = 1.25	has_injury_trigger = yes }
+					modifier = { factor = 1.25	is_maimed_trigger = yes }
+					modifier = { factor = 1.25	has_severe_disability_trigger = yes }
+					modifier = { factor = 0.9	is_fertile_trigger = yes }
+					modifier = { factor = 1.99	has_character_flag = race_changer }
+					modifier = { factor = 1.25	any_child = { is_alive = yes } }
+					modifier = { factor = 0.75	NOT = { any_child = { is_alive = yes } } }
+					modifier = { factor = 0.75 fertility > 0.9 }
+					modifier = { factor = 0.9 fertility < 0.9 fertility >= 0.8 }
+					modifier = { factor = 1.05 fertility < 0.8 fertility >= 0.7 }
+					modifier = { factor = 1.2 fertility < 0.7 fertility >= 0.6 }
+					modifier = { factor = 1.35 fertility < 0.6 fertility >= 0.5 }
+					modifier = { factor = 1.65 fertility < 0.5 fertility >= 0.4 }
+					modifier = { factor = 1.8 fertility < 0.4 fertility >= 0.3 }
+					modifier = { factor = 1.95 fertility < 0.3 fertility >= 0.2 }
+					modifier = { factor = 2.1 fertility < 0.2 fertility >= 0.1 }
+					modifier = { factor = 2.25 fertility < 0.1 fertility >= 0 }
+					modifier = { factor = 2.4 fertility < 0 }
+					modifier = { factor = 0.5 health >= 8.0 }
+					modifier = { factor = 0.6 health >= 7.0 health < 8.0 }
+					modifier = { factor = 0.7 health >= 6.0 health < 7.0 }
+					modifier = { factor = 0.8 health >= 5.0 health < 6.0 }
+					modifier = { factor = 0.9 health >= 4.0 health < 5.0 }
+					modifier = { factor = 1.0 health >= 3.0 health < 4.0 }
+					modifier = { factor = 2.0 health >= 2.0 health < 3.0 }
+					modifier = { factor = 3.0 health >= 1.0 health < 2.0 }
+					modifier = { factor = 5.0 health >= 0.0 health < 1.0 }
+					modifier = { factor = 10.0 health < 0 }
+					cancel_pregnancy = yes
+				}
+			}
+			else_if = {
+				limit = { num_of_children > 4 }
+				random = {
+					chance = 99
+					modifier = { factor = 1.25 in_command = yes }
+					#Juvenile Mer Phase
+					modifier = { factor = 1.99	age <= 25 }
+					modifier = { factor = 1.95	age > 25 age <= 35 }
+					modifier = { factor = 1.9	age > 35 age <= 45 }
+					modifier = { factor = 1.85	age > 45 age <= 56 }
+					#Adult Mer Phase
+					modifier = { factor = 1.5	age > 56 age <= 70 }
+					modifier = { factor = 1.25	age > 70 age <= 80 }
+					modifier = { factor = 1.0	age > 80 age <= 100 }
+					modifier = { factor = 0.75	age > 100 age <= 135 }
+					modifier = { factor = 0.5	age > 135 age <= 156 }
+					#Aging Mer Phase
+					modifier = { factor = 0.75	age > 156 age <= 176 }
+					modifier = { factor = 1.0	age > 176 age <= 196 }
+					modifier = { factor = 1.25	age > 196 age <= 216 }
+					#Old Mer Phase
+					modifier = { factor = 1.5	age > 216 age <= 236 }
+					modifier = { factor = 1.75	age > 236 age <= 250 }
+					modifier = { factor = 1.9	age > 250 }
+					#Other Modifiers
+					modifier = { factor = 0.9	is_ruler = yes }
+					modifier = { factor = 0.95	has_focus = focus_family }
+					modifier = { factor = 0.85	trait = lucky }
+					modifier = { factor = 1.25	trait = unlucky }
+					modifier = { factor = 1.25	has_mental_disorder_trigger = yes }
+					modifier = { factor = 1.25	is_weak_trigger = yes }
+					modifier = { factor = 1.99	character_disease_trigger = yes }
+					modifier = { factor = 1.99	has_symptom_trigger = yes }
+					modifier = { factor = 1.25	has_injury_trigger = yes }
+					modifier = { factor = 1.25	is_maimed_trigger = yes }
+					modifier = { factor = 1.25	has_severe_disability_trigger = yes }
+					modifier = { factor = 0.9	is_fertile_trigger = yes }
+					modifier = { factor = 1.99	has_character_flag = race_changer }
+					modifier = { factor = 1.25	any_child = { is_alive = yes } }
+					modifier = { factor = 0.75	NOT = { any_child = { is_alive = yes } } }
+					modifier = { factor = 0.75 fertility > 0.9 }
+					modifier = { factor = 0.9 fertility < 0.9 fertility >= 0.8 }
+					modifier = { factor = 1.05 fertility < 0.8 fertility >= 0.7 }
+					modifier = { factor = 1.2 fertility < 0.7 fertility >= 0.6 }
+					modifier = { factor = 1.35 fertility < 0.6 fertility >= 0.5 }
+					modifier = { factor = 1.65 fertility < 0.5 fertility >= 0.4 }
+					modifier = { factor = 1.8 fertility < 0.4 fertility >= 0.3 }
+					modifier = { factor = 1.95 fertility < 0.3 fertility >= 0.2 }
+					modifier = { factor = 2.1 fertility < 0.2 fertility >= 0.1 }
+					modifier = { factor = 2.25 fertility < 0.1 fertility >= 0 }
+					modifier = { factor = 2.4 fertility < 0 }
+					modifier = { factor = 0.5 health >= 8.0 }
+					modifier = { factor = 0.6 health >= 7.0 health < 8.0 }
+					modifier = { factor = 0.7 health >= 6.0 health < 7.0 }
+					modifier = { factor = 0.8 health >= 5.0 health < 6.0 }
+					modifier = { factor = 0.9 health >= 4.0 health < 5.0 }
+					modifier = { factor = 1.0 health >= 3.0 health < 4.0 }
+					modifier = { factor = 2.0 health >= 2.0 health < 3.0 }
+					modifier = { factor = 3.0 health >= 1.0 health < 2.0 }
+					modifier = { factor = 5.0 health >= 0.0 health < 1.0 }
+					modifier = { factor = 10.0 health < 0 }
+					cancel_pregnancy = yes
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_pregnant = yes
+				OR = {
+					trait = polymorph_chicken
+					trait = undead
+					trait = lich
+					trait = sload
+					trait = dremora
+					NOT = { age > 16 }
+					father_of_unborn = {
+						OR = {
+							trait = polymorph_chicken
+							trait = undead
+							trait = lich
+							trait = sload
+							trait = dremora
+							NOT = { age > 16 }
+						}
+					}
+					AND = {
+						graphical_culture = argoniangfx
+						father_of_unborn = { NOT = { graphical_culture = argoniangfx } }
+					}
+					AND = {
+						NOT = { graphical_culture = argoniangfx }
+						father_of_unborn = { graphical_culture = argoniangfx }
+					}
+					AND = {
+						OR = {
+							graphical_culture = anequinagfx
+							graphical_culture = pellitinegfx
+							graphical_culture = kapotungfx
+						}
+						father_of_unborn = {
+							NOR = {
+								graphical_culture = anequinagfx
+								graphical_culture = pellitinegfx
+								graphical_culture = kapotungfx
+							}
+						}
+					}
+					AND = {
+						NOR = {
+							graphical_culture = anequinagfx
+							graphical_culture = pellitinegfx
+							graphical_culture = kapotungfx
+						}
+						father_of_unborn = {
+							OR = {
+								graphical_culture = anequinagfx
+								graphical_culture = pellitinegfx
+								graphical_culture = kapotungfx
+							}
+						}
+					}
+					AND = {
+						graphical_culture = tangmogfx
+						father_of_unborn = { NOT = { graphical_culture = tangmogfx } }
+					}
+					AND = {
+						NOT = { graphical_culture = tangmogfx }
+						father_of_unborn = { graphical_culture = tangmogfx }
+					}
+				}
+			}
+			cancel_pregnancy = yes
+		}
+		else_if = {
+			limit = { is_mer = no is_pregnant = yes }
+			random = {
+				chance = 5
+				modifier = { factor = 1.25 in_command = yes }
+				modifier = { factor = 1.25 any_child = { is_alive = yes } }
+				modifier = { factor = 0.5 NOT = { any_child = { is_alive = yes } } }
+				modifier = { factor = 1.1 num_of_children > 1 } modifier = { factor = 1.2 num_of_children > 2 }
+				modifier = { factor = 1.3 num_of_children > 3 } modifier = { factor = 1.4 num_of_children > 4 }
+				modifier = { factor = 1.5 num_of_children > 5 } modifier = { factor = 1.6 num_of_children > 6 }
+				modifier = { factor = 1.7 num_of_children > 7 } modifier = { factor = 1.8 num_of_children > 8 }
+				modifier = { factor = 1.9 num_of_children > 9 } modifier = { factor = 2.0 num_of_children > 10 }
+				modifier = { factor = 0.5 OR = { is_ruler = yes any_spouse = { is_ruler = yes } } }
+				modifier = { factor = 0.5 health >= 8.0 }
+				modifier = { factor = 0.6 health >= 7.0 health < 8.0 }
+				modifier = { factor = 0.7 health >= 6.0 health < 7.0 }
+				modifier = { factor = 0.8 health >= 5.0 health < 6.0 }
+				modifier = { factor = 0.9 health >= 4.0 health < 5.0 }
+				modifier = { factor = 1.0 health >= 3.0 health < 4.0 }
+				modifier = { factor = 2.0 health >= 2.0 health < 3.0 }
+				modifier = { factor = 3.0 health >= 1.0 health < 2.0 }
+				modifier = { factor = 5.0 health >= 0.0 health < 1.0 }
+				modifier = { factor = 10.0 health < 0 }
+				modifier = { factor = 1.1 trait = unlucky } modifier = { factor = 0.9 trait = lucky }
+				cancel_pregnancy = yes
+			}
+		}
+		else_if = {
+			limit = { any_artifact = { artifact_type = ring_impotence } }
+			cancel_pregnancy = yes
+		}
+	}
+}

@@ -1,0 +1,778 @@
+#Events specifically for or relating to Orgnum
+namespace = orgnum
+
+#Pyandonaeic worshipper chooses Orgnum as Patron Deity
+character_event = {
+	id = orgnum.0
+	desc = orgnum0d #Another sycophant has chosen to identify you as their patron God, adopting your teachings as the core elements of their worship and way of life.
+	picture = GFX_evt_knight_kneeling
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		name = excellent
+		piety = 10
+		#Orgnum will eventually get more powerful the more people that choose him as their patron god.
+	}
+}
+
+### DEATH OF ORGNUM
+# On death
+character_event = {
+	id = orgnum.1
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		character = 39000
+	}
+	
+	immediate = {
+		set_parent_religion = { religion = pyandoneaic parent = postorgnumic }
+		d_pyandoneaic = { destroy_landed_title = yes }
+		capital_holding = {
+			set_title_flag = orgnum_tomb
+			save_global_event_target_as = global_target_orgnum_tomb_holding
+			trigger_switch = {
+				on_trigger = holding_type
+				CITY = { add_building = ct_orgnum_tomb_0 }
+				CASTLE = { add_building = ca_orgnum_tomb_0 }
+				TEMPLE = { add_building = tp_orgnum_tomb_0 }
+				TRIBAL = { add_building = tb_orgnum_tomb_0 }
+			}
+		}
+		narrative_event = { id = orgnum.2 }
+	}
+}
+
+# Pyandoneaic religion becomes heresy of Post-Orgnum. Everyone gets a chance to convert to Post-Orgnum...
+narrative_event = {
+	id = orgnum.2
+	title = orgnum.2.title
+	desc = orgnum2
+	picture = GFX_evt_heretic
+	border = GFX_event_narrative_frame_religion	
+	
+	is_triggered_only = yes
+	major = yes
+	show_ROOT = yes
+	hide_new = yes
+	
+	only_rulers = yes
+	
+	immediate = {
+		any_courtier = {
+			limit = {
+				is_heresy_of = ROOT
+				employer = { character = ROOT }
+			}
+			religion = ROOT
+		}
+		any_dynasty_member = {
+			limit = {
+				is_heresy_of = ROOT
+				is_playable = no
+			}
+			religion = ROOT
+		}
+		any_vassal = {
+			limit = {
+				is_playable = no
+				is_heresy_of = ROOT
+			}
+			religion = ROOT
+		}
+		capital_scope = {
+			if = {
+				limit = { is_heresy_of = ROOT }
+				religion = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = orgnum2.accept # Rulers of the old Faith - Accept
+		trigger = {
+			is_heresy_of = postorgnumic # The old religion has become a heresy of the Reformed one
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 5
+				any_liege = { religion = ROOT }
+			}
+			modifier = {
+				factor = 2
+				same_realm = ROOT
+			}
+			modifier = {
+				factor = 5
+				trait = cynical
+			}
+			modifier = {
+				factor = 10
+				dynasty = ROOT
+			}
+			modifier = {
+				factor = 0.1
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+		}
+		
+		religion = postorgnumic
+		
+		any_courtier = {
+			religion = postorgnumic
+		}
+		any_realm_province = {
+			limit = { 
+				owner = { religion = postorgnumic}
+			}
+			religion = postorgnumic
+		}
+	}
+	option = {
+		name = orgnum2.decline # Rulers of the old Faith - Decline
+		trigger = {
+			is_heresy_of = postorgnumic # The old religion has become a heresy of the Reformed one
+		}
+		ai_chance = {
+			factor = 50
+			
+		}
+		tooltip = { religion = THIS }
+	}
+	option = {
+		name = orgnum2.others # Other playable rulers
+		trigger = {
+			NOT = { religion_group = maormer_religion }
+		}
+	}
+}
+
+### GOD-SLAYER
+character_event = { # Orgnum dies in personal duel
+	id = orgnum.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		character = 39000
+		OR = {
+			death_reason = death_duel
+			death_reason = death_mission_duel
+			death_reason = death_battle_duel
+			death_reason = death_legendary_fail_duel
+			death_reason = death_legendary_win_duel
+			death_reason = death_claim_duel_attacker
+			death_reason = death_claim_duel_defender
+		}
+		killer = {
+			is_alive = yes
+		}
+	}
+	
+	immediate = {
+		killer = { narrative_event = { id = orgnum.11 days = 3 random = 2 } }
+	}
+}
+
+narrative_event = {
+	id = orgnum.11
+	desc = orgnum.11.d
+	title = orgnum.11.t
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+
+	option = {
+		name = orgnum.11.optA
+		
+		prestige = 250
+		
+		if = {
+			limit = {
+				OR = {
+					religion = pyandoneaic
+					trait = p_orgnum
+				}
+			}
+			piety = -1000 #Killed their god
+		}
+		
+		create_bloodline = {
+			type = bloodline_godslayer
+		}
+		
+		give_nickname = nick_godslayer
+	}
+}
+
+### Gods list refresh due to BUG THANK YOU PARADOX SMH MY HEAD
+character_event = {
+	id = orgnum.19
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_global_flag = meridia_removed_pyandoneaic_pantheon
+			has_global_flag = hircine_worship_pyandoneaic_pantheon
+			has_global_flag = dragon_worship_pyandoneaic_pantheon
+		}
+	}
+	
+	immediate = {
+		pyandoneaic_update_gods = yes
+	}
+}
+
+### ORGNUM THE NECROMANCER
+# TODO:JJPERF
+long_character_event = {
+	id = orgnum.20
+	desc = orgnum.20.d
+	title = orgnum.20.t
+	
+	picture = GFX_evt_orgnum
+	
+	trigger = {
+		character = 39000
+		trait = necromancer
+		NOT = { has_global_flag = meridia_removed_pyandoneaic_pantheon }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+	
+	option = { # Remove Meridia from our pantheon
+		name = orgnum.20.optA
+		
+		piety = -250
+		
+		custom_tooltip = {
+			text = REMOVE_MERIDIA_PYANDONEAIC_PANTHEON_CT
+			hidden_tooltip = {
+				any_character = {
+					limit = {
+						religion_group = maormer_religion
+						trait = p_pmeridia
+					}
+					long_character_event = { id = orgnum.21 }
+				}
+				
+				any_character = {
+					limit = {
+						ai = no
+						NOT = { character = ROOT }
+					}
+					long_character_event = { id = orgnum.22 }
+				}
+				
+				set_global_flag = meridia_removed_pyandoneaic_pantheon
+				
+				pyandoneaic_update_gods = yes
+				
+				pyandoneaic = { update_faithful_religious_behaviour = yes }
+				postorgnumic = { update_faithful_religious_behaviour = yes }
+			}
+		}
+	}
+	
+	option = {
+		name = orgnum.20.optB
+		
+		piety = 100
+		lose_necromancer = yes
+	}
+}
+
+# Those with the Follower of Meridia trait have to lose the trait
+long_character_event = {
+	id = orgnum.21
+	desc = orgnum.21.d
+	title = orgnum.20.t
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.21.optA
+		
+		remove_trait = p_pmeridia
+	}
+}
+
+long_character_event = {
+	id = orgnum.22
+	desc = orgnum.22.d
+	title = orgnum.20.t
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.22.optA
+	}
+}
+
+### ORGNUM THE DRAGONBORN
+# TODO:JJPERF
+long_character_event = {
+	id = orgnum.30
+	desc = orgnum.30.d
+	title = orgnum.30.t
+	
+	picture = GFX_evt_orgnum
+	
+	trigger = {
+		#always = no # Yeah we'll see about that one day
+		character = 39000
+		trait = dragonborn
+		NOT = { has_global_flag = dragon_worship_pyandoneaic_pantheon }
+		NOT = { has_global_flag = refused_dragon_worship_pyandoneaic_pantheon }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+	
+	option = { # Permit the worship of the Dragons
+		name = orgnum.30.optA
+		
+		piety = -250
+		
+		custom_tooltip = {
+			text = ADD_DRAGONS_PYANDONEAIC_PANTHEON_CT
+			hidden_tooltip = {
+				any_character = {
+					limit = {
+						ai = no
+						NOT = { character = ROOT }
+					}
+					long_character_event = { id = orgnum.31 }
+				}
+				
+				set_global_flag = dragon_worship_pyandoneaic_pantheon
+				
+				pyandoneaic_update_gods = yes
+				
+				pyandoneaic = { update_faithful_religious_behaviour = yes }
+				postorgnumic = { update_faithful_religious_behaviour = yes }
+			}
+		}
+	}
+	
+	option = {
+		name = orgnum.30.optB
+		
+		piety = 100
+		
+		set_global_flag = refused_dragon_worship_pyandoneaic_pantheon
+	}
+}
+
+long_character_event = {
+	id = orgnum.31
+	desc = orgnum.31.d
+	title = orgnum.30.t
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.31.optA
+	}
+}
+
+### ORGNUM THE LYCANTHROPE
+# TODO:JJPERF
+long_character_event = {
+	id = orgnum.40
+	desc = orgnum.40.d
+	title = orgnum.40.t
+	
+	picture = GFX_evt_orgnum
+	
+	trigger = {
+		#always = no # Yeah we'll see about that one day
+		character = 39000
+		is_known_lycan = yes
+		NOT = { has_global_flag = hircine_worship_pyandoneaic_pantheon }
+		NOT = { has_global_flag = refused_hircine_worship_pyandoneaic_pantheon }
+	}
+
+	mean_time_to_happen = {
+		days = 14
+	}
+	
+	option = { # The Hunter shows us how to commune with the Nature
+		name = orgnum.40.optA
+		
+		piety = -250
+		
+		custom_tooltip = {
+			text = ADD_HIRCINE_PYANDONEAIC_PANTHEON_CT
+			hidden_tooltip = {
+				any_character = {
+					limit = {
+						ai = no
+						NOT = { character = ROOT }
+					}
+					long_character_event = { id = orgnum.41 }
+				}
+				
+				set_global_flag = hircine_worship_pyandoneaic_pantheon
+				
+				pyandoneaic_update_gods = yes
+				
+				pyandoneaic = { update_faithful_religious_behaviour = yes }
+				postorgnumic = { update_faithful_religious_behaviour = yes }
+			}
+		}
+	}
+	
+	option = {
+		name = orgnum.40.optB
+		
+		piety = 100
+		
+		set_global_flag = refused_hircine_worship_pyandoneaic_pantheon
+	}
+}
+
+long_character_event = {
+	id = orgnum.41
+	desc = orgnum.41.d
+	title = orgnum.40.t
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.41.optA
+	}
+}
+
+### Orgnum, God-King of all the Maormer
+narrative_event = {
+	id = orgnum.100
+	desc = orgnum.100.d
+	title = orgnum.100.t
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.100.optA
+		
+		prestige = 250
+		piety = 100
+		
+		set_global_flag = orgnum_god_king
+		name_orgnum_god_title = yes
+		
+		custom_tooltip = {
+			text = PYANDONEA_PROVINCES_PROSPERITY_BONUS_CT
+			
+			hidden_tooltip = {
+				any_realm_province = {
+					limit = {
+						kingdom = { title = k_pyandonea }
+						any_province_holding = {
+							OR = {
+								holding_type = city
+								holding_type = castle
+								holding_type = tribal
+							}
+						}
+						NOR = {
+							has_province_modifier = depopulated_1
+							has_province_modifier = depopulated_2
+							has_province_modifier = depopulated_3
+						}
+					}
+					change_variable = { which = prosperity_value value = 35 }
+				}
+				
+				if = {
+					limit = { has_claim = k_abbarbas }
+					remove_claim = k_abbarbas
+				}
+				
+				if = {
+					limit = { has_claim = k_pyrrahn }
+					remove_claim = k_pyrrahn
+				}
+				
+				if = {
+					limit = { has_claim = k_pontu }
+					remove_claim = k_pontu
+				}
+			}
+		}
+	}
+}
+
+### Claiming Alinor
+narrative_event = {
+	id = orgnum.110
+	title = orgnum.110.t
+	desc = orgnum.110.d
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.110.optA
+		
+		any_playable_ruler = {
+			limit = { ai = no }
+			narrative_event = { id = orgnum.111 }
+		}
+	}
+}
+
+narrative_event = {
+	id = orgnum.111
+	title = orgnum.110.1
+	desc = orgnum.111.d
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.111.optA
+	}
+}
+
+# Took control of Alinor (the county) and converted it => can give title_temple_orgnum_sacristan
+narrative_event = {
+	id = orgnum.115
+	title = orgnum.110.t
+	desc = orgnum.115.d
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.115.optA
+		
+		custom_tooltip = {
+			text = ORGNUM_CAN_GIVE_TEMPLE_ORGNUM_SACRISTAN_CT
+		}
+	}
+}
+
+# Total control over the Summerset Isles + big-ass statue built in Alinor
+narrative_event = {
+	id = orgnum.120
+	title = orgnum.110.t
+	desc = orgnum.120.d
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = orgnum.120.optA
+		
+		custom_tooltip = {
+			text = ORGNUM_RECLAIM_SUMMERSET_PART_2_CT
+		}
+		
+		if = {
+			limit = { real_tier = EMPEROR }
+			set_global_flag = orgnum_god_emperor
+			name_orgnum_god_title = yes
+		}
+	}
+}
+
+character_event = {
+	id = orgnum.121
+	desc = orgnum.121.d
+	
+	picture = GFX_evt_orgnum
+
+	is_triggered_only = yes
+	
+	trigger = {
+		character = 39000
+		real_tier = EMPEROR
+		NOT = { has_global_flag = orgnum_god_emperor }
+		has_global_flag = orgnum_alinor_controlled_part_2
+	}
+	
+	immediate = { set_global_flag = orgnum_god_emperor }
+	
+	option = {
+		name = orgnum.121.optA
+		
+		name_orgnum_god_title = yes
+	}
+}
+
+### The Great Temple of Orgnum
+# Getting it
+narrative_event = {
+	id = orgnum.200
+	title = orgnum.200.t
+	desc = orgnum.200.d
+	
+	picture = GFX_evt_orgnum
+
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_global_flag = orgnum_reclaimed_temple }
+		FROM = {
+			title = c_abbarbas
+			holder_scope = {
+				OR = {
+					character = 39000
+					any_liege = {
+						character = 39000
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = { set_global_flag = orgnum_reclaimed_temple }
+	
+	option = {
+		name = orgnum.200.optA
+		
+		prestige = 100
+		piety = 50
+	}
+}
+
+# Repairing it
+character_event = {
+	id = orgnum.201
+	title = orgnum.200.t
+	desc = orgnum.201.d
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		character = 39000
+		FROM = { has_wonder_flag = is_temple_orgnum }
+	
+		NOT = { has_global_flag = temple_orgnum_repair_start }
+	}
+	
+	immediate = { set_global_flag = temple_orgnum_repair_start }
+	
+	option = {
+		name = orgnum.201.optA
+	}
+}
+
+character_event = {
+	id = orgnum.202
+	title = orgnum.200.t
+	desc = orgnum.202.d
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		character = 39000
+		FROM = { has_wonder_flag = is_temple_orgnum }
+	
+		NOT = { has_global_flag = temple_orgnum_repair_finished }
+	}
+	
+	immediate = { set_global_flag = temple_orgnum_repair_finished }
+	
+	option = {
+		name = orgnum.202.optA
+	}
+}
+
+# Upgrading it
+character_event = {
+	id = orgnum.203
+	title = orgnum.200.t
+	desc = orgnum.203.d
+	
+	picture = GFX_evt_orgnum
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		character = 39000
+		FROM = {
+			has_wonder_flag = is_temple_orgnum
+			wonder_stage = 2
+		}
+	}
+	
+	option = {
+		trigger = { FROM = { wonder_stage = 2 NOT = { wonder_stage = 3 } } }
+		name = orgnum.203.optA
+		
+		custom_tooltip = {
+			text = COUNTRY_CONVERTED_CT
+			
+			hidden_tooltip = {
+				FROMFROM = { religion = ROOT }
+			}
+		}
+	}
+	
+	option = {
+		trigger = { FROM = { wonder_stage = 3 NOT = { wonder_stage = 4 } } }
+		name = orgnum.203.optA
+		
+		custom_tooltip = {
+			text = DUCHY_CONVERTED_CT
+			
+			hidden_tooltip = {
+				any_realm_province = {
+					limit = { duchy = { title = d_abbarbas } }
+					religion = ROOT
+				}
+			}
+		}
+	}
+	
+	option = {
+		trigger = { FROM = { wonder_stage = 4 } }
+		name = orgnum.203.optA
+		
+		custom_tooltip = {
+			text = KINGDOM_CONVERTED_CT
+			
+			hidden_tooltip = {
+				any_realm_province = {
+					limit = { kingdom = { title = k_pyandonea } }
+					religion = ROOT
+				}
+			}
+		}
+	}
+}

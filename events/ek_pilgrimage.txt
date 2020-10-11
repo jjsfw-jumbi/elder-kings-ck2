@@ -1,0 +1,2953 @@
+namespace = apilgrimage
+
+#Original events by Amauri, also includes updates by Etienne
+#Also includes special events for joining the Greybeards, based in part off of MNM assassins events
+
+#############################
+# Start Event
+#############################
+letter_event = {
+	id = apilgrimage.1
+	desc = nord_pilgrimage_start
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = apilgrimage.1.opta
+		piety = 5
+		set_character_flag = preparing_pilgrimage
+		clr_character_flag = activated_pilgrimage
+		hidden_tooltip = {
+			character_event = { id = apilgrimage.9 days = 12 }
+		}	
+	}
+}
+
+##########################################################################
+# Pilgrimage Starting!
+##########################################################################
+character_event = {
+	id = apilgrimage.9
+	desc = pilgrimage_ivarstead
+	picture = GFX_evt_rift_scape
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = apilgrimage.9.opta
+		clr_character_flag = preparing_pilgrimage
+		add_trait = on_pilgrimage
+		hidden_tooltip = {	
+			character_event = { id = apilgrimage.10 days = 10 } 
+		}
+	}
+	
+	option = {
+		name = apilgrimage.9.optb
+		clr_character_flag = preparing_pilgrimage
+		clr_character_flag = greybeards_initiation
+		clr_character_flag = society_join_block
+		random_list = {
+			5 = {  add_trait = content }
+			10 = {  add_trait = cynical }
+			15 = {  add_trait = slothful }
+		}
+	}
+}
+
+#First Emblem!
+character_event = {
+	id = apilgrimage.10
+	desc = pilgrimage_emblem_1
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.11 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 10
+	}
+}
+
+#Encounter 1 - Wolves on the Road (Up North)
+
+character_event = {
+	id = apilgrimage.11
+	desc = pilgrimage_11
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.12 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.13 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.12 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.11Alt"
+		trigger = {
+			OR = {
+				trait = brave
+				trait = wroth
+				trait = raht
+				trait = powerful_voice
+				trait = tall
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.14 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 1 - Victory!
+
+character_event = {
+	id = apilgrimage.12
+	desc = pilgrimage_12
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.12.Acknowledge"
+		character_event = { id = apilgrimage.15 days = 3 }
+	}
+}
+
+#Encounter 1 - Defeat!
+
+character_event = {
+	id = apilgrimage.13
+	desc = pilgrimage_13
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.13.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 1 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.14
+	desc = pilgrimage_14
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.14.Acknowledge"
+		character_event = { id = apilgrimage.15 days = 3 }
+	}
+}
+
+#Second Emblem!
+character_event = {
+	id = apilgrimage.15
+	desc = pilgrimage_emblem_2
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.16 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 20
+	}
+}
+
+#Encounter 2 - Bandits, you picked a bad time to get lost, friend!
+
+character_event = {
+	id = apilgrimage.16
+	desc = pilgrimage_16
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.17 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.18 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.17 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.16Alt"
+		trigger = {
+			OR = {
+				diplomacy = 15
+				intrigue = 15
+				trait = deceitful
+				trait = cruel
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.19 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 2 - Victory!
+
+character_event = {
+	id = apilgrimage.17
+	desc = pilgrimage_17
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.17.Acknowledge"
+		character_event = { id = apilgrimage.20 days = 3 }
+	}
+}
+
+#Encounter 2 - Defeat!
+
+character_event = {
+	id = apilgrimage.18
+	desc = pilgrimage_18
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.18.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 2 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.19
+	desc = pilgrimage_19
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.19.Acknowledge"
+		character_event = { id = apilgrimage.20 days = 3 }
+	}
+}
+
+#Third Emblem!
+character_event = {
+	id = apilgrimage.20
+	desc = pilgrimage_emblem_3
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.21 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 30
+	}
+}
+
+#Encounter 3 - A Bear, Bearing Down on You!
+
+character_event = {
+	id = apilgrimage.21
+	desc = pilgrimage_21
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.22 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.23 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.22 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.21Alt"
+		trigger = {
+			OR = {
+				martial = 15
+				intrigue = 15
+				trait = agile
+				trait = perceptive
+				trait = patient
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.24 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 3 - Victory!
+
+character_event = {
+	id = apilgrimage.22
+	desc = pilgrimage_22
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.22.Acknowledge"
+		character_event = { id = apilgrimage.25 days = 3 }
+	}
+}
+
+#Encounter 3 - Defeat!
+
+character_event = {
+	id = apilgrimage.23
+	desc = pilgrimage_23
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.23.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 3 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.24
+	desc = pilgrimage_24
+	picture = GFX_evt_forest_mountains
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.24.Acknowledge"
+		character_event = { id = apilgrimage.25 days = 3 }
+	}
+}
+
+#Fourth Emblem!
+character_event = {
+	id = apilgrimage.25
+	desc = pilgrimage_emblem_4
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.26 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 40
+	}
+}
+
+#Encounter 4 - Blizzard!
+
+character_event = {
+	id = apilgrimage.26
+	desc = pilgrimage_26
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.27 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.28 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Combat"
+		trigger = {
+			combat_rating = 44
+			is_immune_to_cold = no
+		}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.27 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.26Alt"
+		trigger = {
+			is_immune_to_cold = yes
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.29 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 4 - Victory!
+
+character_event = {
+	id = apilgrimage.27
+	desc = pilgrimage_27
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.27.Acknowledge"
+		character_event = { id = apilgrimage.30 days = 3 }
+	}
+}
+
+#Encounter 4 - Defeat!
+
+character_event = {
+	id = apilgrimage.28
+	desc = pilgrimage_28
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.28.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 4 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.29
+	desc = pilgrimage_29
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.29.Acknowledge"
+		character_event = { id = apilgrimage.30 days = 3 }
+	}
+}
+
+#Fifth Emblem!
+character_event = {
+	id = apilgrimage.30
+	desc = pilgrimage_emblem_5
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.31 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 50
+	}
+}
+
+#Encounter 5 - A crazed, diseased pilgrim in need of aid!
+
+character_event = {
+	id = apilgrimage.31
+	desc = pilgrimage_31
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.32 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.33 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.32 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.31Alt"
+		trigger = {
+			OR = {
+				diplomacy = 15
+				trait = kind
+				trait = charitable
+				trait = just
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.34 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 5 - Victory!
+
+character_event = {
+	id = apilgrimage.32
+	desc = pilgrimage_32
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.32.Acknowledge"
+		character_event = { id = apilgrimage.35 days = 3 }
+	}
+}
+
+#Encounter 5 - Defeat!
+
+character_event = {
+	id = apilgrimage.33
+	desc = pilgrimage_33
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.33.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 5 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.34
+	desc = pilgrimage_34
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.34.Acknowledge"
+		character_event = { id = apilgrimage.35 days = 3 }
+	}
+}
+
+
+#Sixth Emblem!
+character_event = {
+	id = apilgrimage.35
+	desc = pilgrimage_emblem_6
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.36 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 60
+	}	
+}
+
+#Encounter 6 - Rock Slide!
+
+character_event = {
+	id = apilgrimage.36
+	desc = pilgrimage_36
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.37 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.38 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.37 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.36Alt"
+		trigger = {
+			OR = {
+				trait = perceptive
+				trait = agile
+				trait = dwarf
+				trait = patient
+				trait = diligent
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.39 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 6 - Victory!
+
+character_event = {
+	id = apilgrimage.37
+	desc = pilgrimage_37
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.37.Acknowledge"
+		character_event = { id = apilgrimage.40 days = 3 }
+	}
+}
+
+#Encounter 6 - Defeat!
+
+character_event = {
+	id = apilgrimage.38
+	desc = pilgrimage_38
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.38.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 6 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.39
+	desc = pilgrimage_39
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.39.Acknowledge"
+		character_event = { id = apilgrimage.40 days = 3 }
+	}
+}
+
+#Seventh Emblem!
+character_event = {
+	id = apilgrimage.40
+	desc = pilgrimage_emblem_7
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.41 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 70
+	}	
+}
+
+#Encounter 7 - Necromancers!
+
+character_event = {
+	id = apilgrimage.41
+	desc = pilgrimage_41
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.42 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.43 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.42 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.41Alt"
+		trigger = {
+			OR = {
+				diplomacy = 15
+				intrigue = 15
+				trait = deceitful
+				trait = cynical
+				trait = necromancer
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.44 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 6 - Victory!
+
+character_event = {
+	id = apilgrimage.42
+	desc = pilgrimage_42
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.42.Acknowledge"
+		character_event = { id = apilgrimage.45 days = 3 }
+	}
+}
+
+#Encounter 6 - Defeat!
+
+character_event = {
+	id = apilgrimage.43
+	desc = pilgrimage_43
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.43.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 6 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.44
+	desc = pilgrimage_44
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.44.Acknowledge"
+		character_event = { id = apilgrimage.45 days = 3 }
+	}
+}
+
+#Eighth Emblem!
+character_event = {
+	id = apilgrimage.45
+	desc = pilgrimage_emblem_8
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.46 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 80
+	}
+}
+
+#Encounter 8 - A Zealot!
+
+character_event = {
+	id = apilgrimage.46
+	desc = pilgrimage_46
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.47 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.48 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.47 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.46Alt"
+		trigger = {
+			OR = {
+				trait = zealous
+				trait = ambitious
+				trait = diligent
+				trait = patient
+				trait = humble
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.49 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 8 - Victory!
+
+character_event = {
+	id = apilgrimage.47
+	desc = pilgrimage_47
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.47.Acknowledge"
+		character_event = { id = apilgrimage.50 days = 3 }
+	}
+}
+
+#Encounter 8 - Defeat!
+
+character_event = {
+	id = apilgrimage.48
+	desc = pilgrimage_48
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.48.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 8 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.49
+	desc = pilgrimage_49
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.49.Acknowledge"
+		character_event = { id = apilgrimage.50 days = 3 }
+	}
+}
+
+#Ninth Emblem!
+character_event = {
+	id = apilgrimage.50
+	desc = pilgrimage_emblem_9
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = apilgrimage.Continue #Continue up the steps
+		character_event = { id = apilgrimage.51 days = 3 }
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 90
+	}	
+}
+
+#Encounter 9 - A towering Frost Troll!
+
+character_event = {
+	id = apilgrimage.51
+	desc = pilgrimage_51
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					1 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					99 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 4
+			NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					10 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					90 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 8
+			NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					20 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					80 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 12
+			NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					30 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					70 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 16
+			NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					40 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					60 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 20
+			NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					50 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					50 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 24
+			NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					60 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					40 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 28
+			NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					70 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					30 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 32
+			NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					80 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					20 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 36
+			NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					10 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 40
+			NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				random_list = {
+					99 = { character_event = { id = apilgrimage.52 days = 3 } } #Victorious!
+					1 = { character_event = { id = apilgrimage.53 days = 3 } } #Defeated!
+				}
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Combat"
+		trigger = {
+			combat_rating = 44
+			}
+		custom_tooltip = {
+			text = "apilgrimage.CombatInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.52 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = "apilgrimage.51Alt"
+		trigger = {
+			OR = {
+				martial = 15
+				intrigue = 15
+				trait = patient
+				trait = craven
+				trait = agile
+			}
+		}
+		custom_tooltip = {
+			text = "apilgrimage.AltInfo"
+			hidden_tooltip = {
+				character_event = { id = apilgrimage.54 days = 3 } #The alternate path works!
+			}
+		}
+	}
+}
+
+#Encounter 9 - Victory!
+
+character_event = {
+	id = apilgrimage.52
+	desc = pilgrimage_52
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.52.Acknowledge"
+		character_event = { id = apilgrimage.55 days = 3 }
+	}
+}
+
+#Encounter 9 - Defeat!
+
+character_event = {
+	id = apilgrimage.53
+	desc = pilgrimage_53
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.53.Acknowledge"
+		death = { death_reason = death_accident }
+	}
+}
+
+#Encounter 9 - Alternate Victory!
+
+character_event = {
+	id = apilgrimage.54
+	desc = pilgrimage_54
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "apilgrimage.54.Acknowledge"
+		character_event = { id = apilgrimage.55 days = 3 }
+	}
+}
+
+#Tenth Emblem!
+character_event = {
+	id = apilgrimage.55
+	desc = pilgrimage_emblem_10
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	
+	option = {
+		name = apilgrimage.55.Continue #Enter High Hrothgar
+		if = {
+			limit = {
+				is_in_society = yes
+			}
+			character_event = { id = apilgrimage.56 days = 3 } #Normal Pilgrimage Outcome
+		}
+		if = {
+			limit = {
+				is_in_society = no
+			}
+			character_event = { id = ekgreybeards.5 } #Ping a Greybeard leader
+		}
+	}
+	
+	option = {
+		name = apilgrimage.End #End this
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+			}
+		}
+		piety = 300
+	}	
+}
+
+#Tenth Emblem Sucess! The Greybeards Welcome You!
+character_event = {
+	id = apilgrimage.56
+	desc = {
+		trigger = {
+			NOR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+		}
+		text = pilgrimage_emblem_10_greybeards
+	}
+	desc = {
+		trigger = {
+			OR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+		}
+		text = pilgrimage_emblem_10_greybeards_supreme
+	}
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	immediate = {
+		set_character_flag = visited_greybeards
+	}
+	
+	option = {
+		name = apilgrimage.56.Study
+		trigger = {
+			OR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+		}
+		character_event = { id = apilgrimage.57 days = 30 }
+	}
+	
+	option = {
+		name = apilgrimage.56.End
+		trigger = {
+			NOR = {
+				trait = dragonborn
+				trait = dragonborn_descendant
+				combat_rating = 120
+				piety = 5000
+				prestige = 5000
+			}
+		}
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+			}
+		}
+		piety = 250
+		prestige = 250
+	}	
+}
+
+#Perfect! The Thuum!
+character_event = {
+	id = apilgrimage.57
+	desc = apilgrimage_57
+	picture = GFX_evt_mountains_0
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	# trigger = {
+		# trait = on_pilgrimage
+		# is_ruler = yes
+	# }
+	
+	option = {
+		name = apilgrimage.57.End
+		custom_tooltip = {
+			text = end_pilgrimage
+			hidden_tooltip = { 
+				remove_trait = on_pilgrimage
+				add_trait = pilgrim
+				clr_character_flag = greybeards_initiation
+				clr_character_flag = society_join_block
+			}
+		}
+		piety = 250
+		prestige = 250
+		if = {
+			limit = {
+				NOR = {
+					trait = thuum_1
+					trait = thuum_2
+					trait = thuum_3
+				}
+			}
+			add_trait = thuum_1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = thuum_1
+			}
+			remove_trait = thuum_1
+			add_trait = thuum_2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = thuum_2
+			}
+			remove_trait = thuum_2
+			add_trait = thuum_3
+			break = yes
+		}
+	}
+}

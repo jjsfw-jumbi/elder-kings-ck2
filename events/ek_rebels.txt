@@ -1,0 +1,4930 @@
+#Rebel events
+#Old events ported (original author(s) not listed) and new events written by jjsfw/jumbi
+
+namespace = ekrevolts
+
+# Bandit Leader rises up
+province_event = {
+	id = ekrevolts.1
+	desc = ekrevolts1d
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_province_modifier = adventurers
+			has_province_modifier = highway_robber_band
+			has_province_modifier = smugglers_ring
+			has_province_modifier = thieves_guild
+		}
+		# Slave revolts and Sload invasions also have priority
+		NOR = {
+			province_has_slaves = yes
+			has_province_modifier = sload_scouts
+		}
+		NOT = { # Not if there is already an ongoing revolt
+			owner = {
+				top_liege = {
+					war = yes
+					
+					any_war = {
+						defender = { character = PREV }
+						OR = {
+							AND = {
+								using_cb = peasant_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = heretic_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = religious_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = bandit_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = warlord_conquest_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = slave_liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = undead_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = necromancer_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = vampire_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = lycan_revolt
+								war_title = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 27
+			attributes = {
+				martial = 7
+				intrigue = 6
+			}
+			trait = bandit_leader
+			trait = warrior_4
+		}
+			
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			create_title = {
+				tier = DUKE
+				landless = yes
+				temporary = yes
+				rebel = yes
+				culture = ROOT
+				name = "BANDIT_REVOLT"
+				holder = THIS
+			}
+				
+			random_list = {
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 8 8 }
+							light_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = bandit_leader
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = bandit_leader
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.0
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 8 8 }
+							light_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = bandit_leader					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = bandit_leader					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 6 6 }
+							light_infantry = { 24 24 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = bandit_leader					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = bandit_leader						
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.0
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 6 6 }
+							light_infantry = { 24 24 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = bandit_leader					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = bandit_leader					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_infantry = { 30 30 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = bandit_leader					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = bandit_leader				
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.0
+						troops = {
+							archers = { 10 10 }
+							light_infantry = { 30 30 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = bandit_leader
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = bandit_leader
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+			}
+			ROOT = {
+				owner = {
+					top_liege = {
+						#set_defacto_vassal = PREVPREVPREV
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = bandit_revolt
+							thirdparty_title = ROOT
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+		
+		owner = {
+			any_liege = {
+				character_event = {
+					id = ekrevolts.2
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dbandits
+	}
+}
+character_event = {
+	id = ekrevolts.2
+	desc = ekrevolts1d
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = dbandits
+	}
+}
+character_event = {
+	id = ekrevolts.3
+	picture = GFX_evt_siege
+	
+	hide_window = yes
+	is_triggered_only = yes
+	
+	desc = OK
+	
+	trigger = {
+		trait = bandit_leader
+		rebel = yes
+		location = { 
+			is_capital = yes # The capital holding
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			location = {
+				if = {
+					limit = {
+						NOT = { has_province_modifier = peasant_unrest }
+					}
+					add_province_modifier = {
+						name = peasant_unrest
+						duration = 730
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+province_event = {
+	id = ekrevolts.4
+	desc = ekrevolts4d
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			top_liege = {
+				war = yes
+				any_war = {
+					defender = { character = PREV }
+					using_cb = warlord_conquest_revolt
+					war_title = ROOT # The county
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		owner = {
+			top_liege = {
+				any_war = {
+					limit = {
+						defender = { character = PREV }
+						using_cb = warlord_conquest_revolt
+						war_title = ROOT # The county
+					}
+					attacker = {
+						random_list = {
+							17 = {
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 25
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 2.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 30
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 31
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+							}
+							17 = {
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 25
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 30
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 31
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+							}
+							16 = {
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 25
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 30
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 31
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+							}
+							17 = {
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 25
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 30
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 31
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+							}
+							16 = {
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 25
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 30
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 31
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 1.0
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+							}
+							17 = {
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 25
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 30
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+								create_character = {
+									random_traits = yes
+									dynasty = none
+									religion = THIS
+									culture = THIS
+									female = no
+									age = 31
+									trait = warrior_3
+								}
+								new_character = {
+									#assign_birthsign = yes
+									#assign_racial_trait = yes
+									spawn_unit = {
+										province = ROOT
+										home = ROOT
+										owner = PREV
+										scaled_by_biggest_garrison = 0.66
+										troops = {
+											archers = { 12 12 }
+											light_cavalry = { 10 10 }
+											light_infantry = { 30 30 }
+										}
+										attrition = 1.0
+										disband_on_peace = yes
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_TOG_1010
+	}
+}
+# Warlord Rises
+province_event = {
+	id = ekrevolts.10
+	title = warlordrising
+	desc = ekrevolts10d
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+	
+	trigger = {
+		# Slave revolts and Sload invasions also have priority
+		NOR = {
+			province_has_slaves = yes
+			has_province_modifier = sload_scouts
+		}
+		NOT = { # Not if there is already an ongoing revolt
+			owner = {
+				top_liege = {
+					war = yes
+					
+					any_war = {
+						defender = { character = PREV }
+						OR = {
+							AND = {
+								using_cb = peasant_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = heretic_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = religious_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = bandit_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = warlord_conquest_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = slave_liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = undead_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = necromancer_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = vampire_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = lycan_revolt
+								war_title = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		owner = {
+			NOT = { trait = diligent }
+			NOT = { trait = genius }
+			NOT = { trait = quick }
+			NOT = { realm_stewardship = 18 }
+			NOT = { demesne_efficiency = 1.0 }
+			OR = {
+				war = yes
+				trait = imbecile
+				trait = slow
+				trait = arbitrary
+				trait = absent_minded
+				trait = slothful
+				trait = incapable
+				trait = infirm
+				NOT = { age = 16 }
+			}
+		}
+		NOT = { year = 3830 }
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+		
+		modifier = {
+			any_province_character = {
+				has_job_action = action_assist_arrest
+			}
+			factor = 1.25
+		}
+		modifier = {
+			any_province_character = {
+				has_job_action = action_uncover_plots
+			}
+			factor = 1.15
+		}
+		modifier = {
+			any_province_character = {
+				has_job_action = action_root_cabals
+			}
+			factor = 1.1
+		}
+		modifier = {
+			owner = { realm_stewardship = 10 }
+			factor = 1.05
+		}		
+		modifier = {
+			owner = { realm_stewardship = 12 }
+			factor = 1.05
+		}
+		modifier = {
+			owner = { realm_stewardship = 14 }
+			factor = 1.05
+		}
+		modifier = {
+			owner = { realm_stewardship = 16 }
+			factor = 1.05
+		}
+		modifier = {
+			owner = {
+				ruled_years = 7
+				is_mer = no
+				NOT = { is_tsaesci = yes }
+				is_immortal = no
+			}
+			factor = 1.125
+		}
+		modifier = {
+			owner = {
+				ruled_years = 15
+				is_mer = no
+				NOT = { is_tsaesci = yes }
+				is_immortal = no
+			}
+			factor = 1.25
+		}
+		modifier = {
+			owner = {
+				ruled_years = 30
+				is_mer = no
+				NOT = { is_tsaesci = yes }
+				is_immortal = no
+			}
+			factor = 1.5
+		}
+		modifier = {
+			owner = {
+				ruled_years = 60
+				is_mer = no
+				NOT = { is_tsaesci = yes }
+				is_immortal = no
+			}
+			factor = 1.75
+		}
+		modifier = {
+			owner = {
+				ruled_years = 15
+				OR = {
+					is_mer = yes
+					is_tsaesci = yes
+					is_immortal = yes
+				}
+			}
+			factor = 1.125
+		}
+		modifier = {
+			owner = {
+				ruled_years = 30
+				OR = {
+					is_mer = yes
+					is_tsaesci = yes
+					is_immortal = yes
+				}
+			}
+			factor = 1.25
+		}
+		modifier = {
+			owner = {
+				ruled_years = 60
+				OR = {
+					is_mer = yes
+					is_tsaesci = yes
+					is_immortal = yes
+				}
+			}
+			factor = 1.5
+		}
+		modifier = {
+			owner = {
+				ruled_years = 120
+				OR = {
+					is_mer = yes
+					is_tsaesci = yes
+					is_immortal = yes
+				}
+			}
+			factor = 1.75
+		}
+		modifier = {
+			owner = { trait = infirm }
+			factor = 0.85
+		}
+		modifier = {
+			owner = { trait = incapable }
+			factor = 0.75
+		}
+		modifier = {
+			owner = { trait = imbecile }
+			factor = 0.85
+		}
+		modifier = {
+			owner = { NOT = { age = 16 } }
+			factor = 0.8
+		}
+		modifier = {
+			owner = { NOT = { demesne_efficiency = 0.75 } }
+			factor = 0.75
+		}
+		modifier = {
+			owner = { NOT = { demesne_efficiency = 0.5 } }
+			factor = 0.5
+		}
+		modifier = {
+			owner = { NOT = { demesne_efficiency = 0.25 } }
+			factor = 0.25
+		}
+		modifier = {
+			owner = {
+				ai = yes
+				independent = no
+			}
+			factor = 2
+		}
+		modifier = {
+			owner = {
+				ai = yes
+				demesne_efficiency = 0.5
+			}
+			factor = 3
+		}
+	}
+	
+	immediate = {
+		create_character = {
+			trait = warrior_4
+			trait = warlord
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 31
+			attributes = {
+				diplomacy = 4
+				martial = 8
+			}
+		}
+			
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			set_character_flag = warlord_rebel
+			create_title = {
+				tier = DUKE
+				landless = yes
+				temporary = yes
+				rebel = yes
+				culture = ROOT
+				name = "WARLORD_REVOLT"
+				holder = THIS
+			}
+				
+			random_list = {
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 3.0
+						troops = {
+							pikemen = { 4 4 }
+							light_infantry = { 6 6 }
+							battlemages = { 8 8 }
+							archers = { 12 12 }
+							light_cavalry = { 16 16 }
+							heavy_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.0
+						troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = warrior_4
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.0
+						troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.0
+						troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+						}
+						attrition = 1.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = warrior_4
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.0
+							troops = {
+								battlemages = { 3 3 }
+								archers = { 15 15 }
+								light_cavalry = { 12 12 }
+								heavy_infantry = { 20 20 }
+							}
+							attrition = 1.0
+							disband_on_peace = yes
+						}
+					}
+				}
+			}
+			ROOT = {
+				owner = {
+					top_liege = {
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = warlord_conquest_revolt
+							thirdparty_title = ROOT # The county...
+							tier = DUKE # ... but really the duchy
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+		
+		owner = {
+			any_liege = {
+				character_event = {
+					id = ekrevolts.11
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = damn
+	}
+}
+
+character_event = {
+	id = ekrevolts.11
+	desc = ekrevolts10d
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = damn
+	}
+}
+
+character_event = {
+	id = ekrevolts.13
+	desc = ekrevolts2d
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = dslaves
+	}
+}
+
+#Undead army musters
+province_event = {
+	id = ekrevolts.14
+	desc = EVTDESCekrevolts.14
+	picture = GFX_evt_undead
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_province_modifier = undead_infestation
+		
+		# Slave revolts and Sload invasions also have priority
+		NOR = {
+			province_has_slaves = yes
+			has_province_modifier = sload_scouts
+		}
+		
+		NOT = { # Not if there is already an ongoing revolt
+			owner = {
+				top_liege = {
+					war = yes
+					
+					any_war = {
+						defender = { character = PREV }
+						OR = {
+							AND = {
+								using_cb = peasant_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = heretic_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = religious_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = bandit_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = warlord_conquest_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = slave_liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = undead_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = necromancer_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = vampire_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = lycan_revolt
+								war_title = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#TESTING
+	#mean_time_to_happen = {
+	#	days = 5
+	#}
+	
+	immediate = {
+		
+		create_character = {
+			age = 100
+			dynasty = random
+			religion = king_of_worms_cult
+			culture = skeleton
+			female = no
+			trait = undead
+			trait = zealous
+			trait = warrior_4
+			random_traits = yes
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			create_title = {
+				tier = DUKE
+				name = "UNDEAD_UPRISING"
+				culture = skeleton
+				holder = THIS
+				landless = yes
+				rebel = yes
+				temporary = yes
+				landless = yes
+			}
+			
+			random_list = {
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 8 8 }
+							light_infantry = { 20 20 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 30
+						trait = undead
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 31
+						trait = undead
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 8 8 }
+							light_infantry = { 20 20 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 30
+						trait = undead	
+						trait = warrior_2					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 31
+						trait = undead
+						trait = warrior_4						
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 6 6 }
+							light_infantry = { 24 24 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 30
+						trait = undead	
+						trait = warrior_3						
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 31
+						trait = undead	
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 6 6 }
+							light_infantry = { 24 24 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 30
+						trait = undead	
+						trait = warrior_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 31
+						trait = undead	
+						trait = warrior_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_infantry = { 30 30 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 30
+						trait = undead
+						trait = warrior_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 31
+						trait = undead	
+						trait = warrior_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 10 10 }
+							light_infantry = { 30 30 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 30
+						trait = undead
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = skeleton
+						female = no
+						age = 31
+						trait = undead
+						trait = warrior_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+			}
+			ROOT = {
+				owner = {
+					top_liege = {
+						#set_defacto_vassal = PREVPREVPREV
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = undead_revolt
+							thirdparty_title = ROOT
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dundead
+	}
+}
+
+character_event = {
+	id = ekrevolts.15
+	desc = ekundead1
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = dundead
+	}
+}
+
+#Undead take county capital
+
+character_event = {
+	id = ekrevolts.16
+	picture = GFX_evt_siege
+	
+	hide_window = yes
+	is_triggered_only = yes
+	
+	desc = OK
+	
+	trigger = {
+		trait = undead
+		rebel = yes
+		location = { 
+			is_capital = yes # The capital holding
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			location = {
+				if = {
+					limit = {
+						NOT = { has_province_modifier = undead_infestation }
+					}
+					add_province_modifier = {
+						name = undead_infestation
+						duration = 730
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+#Necromancer Uprising
+
+province_event = {
+	id = ekrevolts.17
+	desc = EVTDESCekrevolts.17
+	picture = GFX_evt_undead
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_province_modifier = cabals
+		
+		# Slave revolts and Sload invasions also have priority
+		NOR = {
+			province_has_slaves = yes
+			has_province_modifier = sload_scouts
+		}
+		
+		NOT = { # Not if there is already an ongoing revolt
+			owner = {
+				top_liege = {
+					war = yes
+					
+					any_war = {
+						defender = { character = PREV }
+						OR = {
+							AND = {
+								using_cb = peasant_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = heretic_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = religious_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = bandit_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = warlord_conquest_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = slave_liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = undead_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = necromancer_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = vampire_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = lycan_revolt
+								war_title = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#TESTING
+	#mean_time_to_happen = {
+	#	days = 5
+	#}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 0
+			ROOT = {
+				owner = {
+					religion = king_of_worms_cult
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			ROOT = {
+				owner = {
+					trait = necromancer
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		create_character = {
+			age = 100
+			dynasty = random
+			religion = king_of_worms_cult
+			culture = ROOT
+			female = no
+			trait = necromancer
+			trait = zealous
+			trait = mage_4
+			random_traits = yes
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			create_title = {
+				tier = DUKE
+				name = "NECROMANCER_UPRISING"
+				holder = THIS
+				rebel = yes
+				landless = yes
+				temporary = yes
+				landless = yes
+			}
+			
+			random_list = {
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 8 8 }
+							light_infantry = { 20 20 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = necromancer
+						trait = mage_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = necromancer
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 8 8 }
+							light_infantry = { 20 20 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = necromancer		
+						trait = mage_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = necromancer	
+						trait = mage_3						
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 8 8 }
+								light_infantry = { 20 20 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 6 6 }
+							light_infantry = { 24 24 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = necromancer	
+						trait = mage_2							
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = necromancer	
+						trait = mage_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 10 10 }
+							light_cavalry = { 6 6 }
+							light_infantry = { 24 24 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = necromancer		
+						trait = warrior_3	
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = necromancer	
+						trait = warrior_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_cavalry = { 6 6 }
+								light_infantry = { 24 24 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 10 10 }
+							light_infantry = { 30 30 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = necromancer		
+						trait = warrior_1
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = necromancer		
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 10 10 }
+							light_infantry = { 30 30 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 30
+						trait = necromancer
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 31
+						trait = necromancer
+						trait = mage_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 10 10 }
+								light_infantry = { 30 30 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+			}
+			ROOT = {
+				owner = {
+					top_liege = {
+						#set_defacto_vassal = PREVPREVPREV
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = necromancer_revolt
+							thirdparty_title = ROOT
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dnecromancers
+	}
+}
+
+character_event = {
+	id = ekrevolts.18
+	desc = enecromancers1
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = dnecromancers
+	}
+}
+
+# Necromancers take county capital
+
+character_event = {
+	id = ekrevolts.19
+	picture = GFX_evt_siege
+	
+	hide_window = yes
+	is_triggered_only = yes
+	
+	desc = OK
+	
+	trigger = {
+		trait = necromancer
+		rebel = yes
+		location = { 
+			is_capital = yes # The capital holding
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			location = {
+				if = {
+					limit = {
+						NOT = { has_province_modifier = cabals }
+					}
+					add_province_modifier = {
+						name = cabals
+						duration = 730
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+#Sload Uprising
+province_event = {
+	id = ekrevolts.20
+	desc = EVTDESCekrevolts.20
+	picture = GFX_evt_undead
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_province_modifier = sload_scouts
+		
+		NOT = { # The Sload are ultimate opportunists, and are happy to invade someone fighting others
+			owner = {
+				top_liege = {
+					culture = sload #But they *do* care if you're a Sload
+				}
+			}
+		}
+	}
+	
+	#TESTING
+	#mean_time_to_happen = {
+	#	days = 5
+	#}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				create_character = {
+					age = 200
+					dynasty = random
+					religion = king_of_worms_cult
+					culture = sload
+					female = no
+					trait = necromancer
+					trait = patient
+					trait = mage_4
+					trait = sorcerer_2
+					random_traits = yes
+				}
+			}
+			50 = {
+				create_character = {
+					age = 200
+					dynasty = random
+					religion = king_of_worms_cult
+					culture = sload
+					female = yes
+					trait = necromancer
+					trait = patient
+					trait = mage_4
+					trait = sorcerer_2
+					random_traits = yes
+				}
+			}
+		}
+		new_character = {
+			#assign_birthsign = yes
+			assign_racial_trait = yes
+			create_title = {
+				tier = DUKE
+				name = "SLOAD_UPRISING"
+				holder = THIS
+				rebel = yes
+				landless = yes
+				temporary = yes
+				landless = yes
+			}
+			
+			random_list = {
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 10.0
+						troops = {
+							archers = { 10 10 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 20 20 }
+							battlemages = { 4 4 }
+						}
+						attrition = 0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = yes
+						age = 120
+						trait = necromancer
+						trait = mage_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 10.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = no
+						age = 135
+						trait = necromancer
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 10.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 8.0
+						troops = {
+							archers = { 10 10 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 20 20 }
+							battlemages = { 4 4 }
+						}
+						attrition = 0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = no
+						age = 120
+						trait = necromancer		
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 8.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = yes
+						age = 135
+						trait = necromancer	
+						trait = mage_3						
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 8.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 10.0
+						troops = {
+							archers = { 10 10 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 20 20 }
+							battlemages = { 4 4 }
+						}
+						attrition = 0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = yes
+						age = 120
+						trait = necromancer	
+						trait = mage_2							
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 10.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = no
+						age = 135
+						trait = necromancer	
+						trait = mage_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 10.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 8.0
+						troops = {
+							archers = { 10 10 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 20 20 }
+							battlemages = { 4 4 }
+						}
+						attrition = 0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = no
+						age = 120
+						trait = necromancer		
+						trait = mage_3	
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 8.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = yes
+						age = 135
+						trait = necromancer	
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 8.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 10.0
+						troops = {
+							archers = { 10 10 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 20 20 }
+							battlemages = { 4 4 }
+						}
+						attrition = 0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = yes
+						age = 120
+						trait = necromancer		
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 10.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = no
+						age = 135
+						trait = necromancer		
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 10.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 8.0
+						troops = {
+							archers = { 10 10 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 20 20 }
+							battlemages = { 4 4 }
+						}
+						attrition = 0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = no
+						age = 120
+						trait = necromancer
+						trait = mage_2
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 8.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = king_of_worms_cult
+						culture = sload
+						female = yes
+						age = 135
+						trait = necromancer
+						trait = mage_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 8.0
+							troops = {
+								archers = { 10 10 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 20 20 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0
+							disband_on_peace = yes
+						}
+					}
+				}
+			}
+			ROOT = {
+				owner = {
+					top_liege = {
+						#set_defacto_vassal = PREVPREVPREV
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = sload_invasion_revolt
+							thirdparty_title = ROOT
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+		
+		remove_province_modifier = sload_scouts #To prevent multiple Sload invasions from happening again and again
+		
+		owner = {
+			any_liege = {
+				character_event = {
+					id = ekrevolts.21
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dsloads
+	}
+}
+
+character_event = {
+	id = ekrevolts.21
+	desc = esloads1
+	picture = GFX_evt_adventurers
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = dsloads
+	}
+}
+
+#Vampire Uprising
+province_event = {
+	id = ekrevolts.22
+	desc = EVTDESCekrevolts.22
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_province_modifier = vampire_infestation
+		
+		# Slave revolts and Sload invasions also have priority
+		NOR = {
+			province_has_slaves = yes
+			has_province_modifier = sload_scouts
+		}
+		
+		NOT = { # Not if there is already an ongoing revolt
+			owner = {
+				top_liege = {
+					war = yes
+					
+					any_war = {
+						defender = { character = PREV }
+						OR = {
+							AND = {
+								using_cb = peasant_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = heretic_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = religious_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = bandit_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = warlord_conquest_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = slave_liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = undead_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = necromancer_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = vampire_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = lycan_revolt
+								war_title = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#TESTING
+	#mean_time_to_happen = {
+	#	days = 5
+	#}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		create_character = {
+			age = 100
+			dynasty = random
+			religion = ROOT
+			culture = ROOT
+			female = no
+			trait = necromancer
+			trait = vampire
+			trait = known_vampire
+			trait = mage_4
+			random_traits = yes
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			create_title = {
+				tier = DUKE
+				name = "VAMPIRE_UPRISING"
+				holder = THIS
+				rebel = yes
+				landless = yes
+				temporary = yes
+				landless = yes
+			}
+			
+			random_list = {
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						troops = {
+							archers = { 5 5 }
+							light_cavalry = { 5 5 }
+							heavy_infantry = { 5 5 }
+							light_infantry = { 10 10 }
+							battlemages = { 6 6 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 125
+						trait = vampire
+						trait = known_vampire
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 125
+						trait = vampire
+						trait = known_vampire
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 5 5 }
+							light_cavalry = { 5 5 }
+							heavy_infantry = { 5 5 }
+							light_infantry = { 10 10 }
+							battlemages = { 6 6 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 125
+						trait = warrior_2
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 105
+						trait = warrior_3
+						trait = vampire
+						trait = known_vampire						
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 5 5 }
+							light_cavalry = { 5 5 }
+							heavy_infantry = { 5 5 }
+							light_infantry = { 10 10 }
+							battlemages = { 6 6 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 125
+						trait = warrior_3
+						trait = vampire
+						trait = known_vampire					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 105
+						trait = warrior_2
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 5 5 }
+							light_cavalry = { 5 5 }
+							heavy_infantry = { 5 5 }
+							light_infantry = { 10 10 }
+							battlemages = { 6 6 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 125
+						trait = warrior_3
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 105
+						trait = warrior_2
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 5 5 }
+							light_cavalry = { 5 5 }
+							heavy_infantry = { 5 5 }
+							light_infantry = { 10 10 }
+							battlemages = { 6 6 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 125
+						trait = warrior_2
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 105
+						trait = warrior_3
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 5 5 }
+							light_cavalry = { 5 5 }
+							heavy_infantry = { 5 5 }
+							light_infantry = { 10 10 }
+							battlemages = { 6 6 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 125
+						trait = warrior_2
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 105
+						trait = warrior_2
+						trait = vampire
+						trait = known_vampire
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 5 5 }
+								light_cavalry = { 5 5 }
+								heavy_infantry = { 5 5 }
+								light_infantry = { 12 12 }
+								battlemages = { 4 4 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+			}
+			ROOT = {
+				owner = {
+					top_liege = {
+						#set_defacto_vassal = PREVPREVPREV
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = vampire_revolt
+							thirdparty_title = ROOT
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dvampires
+	}
+}
+
+character_event = {
+	id = ekrevolts.23
+	desc = EVTDESCekrevolts.23
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = dvampires
+	}
+}
+
+#Lycan Uprising
+province_event = {
+	id = ekrevolts.24
+	desc = EVTDESCekrevolts.24
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_province_modifier = lycan_infestation
+		
+		# Slave revolts and Sload invasions also have priority
+		NOR = {
+			province_has_slaves = yes
+			has_province_modifier = sload_scouts
+		}
+		
+		NOT = { # Not if there is already an ongoing revolt
+			owner = {
+				top_liege = {
+					war = yes
+					
+					any_war = {
+						defender = { character = PREV }
+						OR = {
+							AND = {
+								using_cb = peasant_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = heretic_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = religious_revolt
+								attacker = { religion = ROOT }
+							}
+							AND = {
+								using_cb = liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = bandit_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = warlord_conquest_revolt
+								war_title = ROOT # The county
+							}
+							AND = {
+								using_cb = slave_liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+							AND = {
+								using_cb = undead_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = necromancer_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = vampire_revolt
+								war_title = ROOT
+							}
+							AND = {
+								using_cb = lycan_revolt
+								war_title = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#TESTING
+	#mean_time_to_happen = {
+	#	days = 5
+	#}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		random_list = {
+			50 = {
+				create_character = {
+					age = 30
+					dynasty = random
+					religion = ROOT
+					culture = ROOT
+					female = no
+					attributes = {
+						martial = 12
+					}
+					trait = lycan
+					trait = known_lycan
+					trait = warrior_4
+					random_traits = yes
+				}
+			}
+			50 = {
+				create_character = {
+					age = 30
+					dynasty = random
+					religion = ROOT
+					culture = ROOT
+					female = yes
+					attributes = {
+						martial = 12
+					}
+					trait = lycan
+					trait = known_lycan
+					trait = warrior_4
+					random_traits = yes
+				}
+			}
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			create_title = {
+				tier = DUKE
+				name = "LYCAN_UPRISING"
+				holder = THIS
+				rebel = yes
+				landless = yes
+				temporary = yes
+				landless = yes
+			}
+			
+			random_list = {
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						troops = {
+							archers = { 4 4 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 10 10 }
+							pikemen = { 8 8 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 25
+						trait = lycan
+						trait = known_lycan
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 32
+						trait = lycan
+						trait = known_lycan
+						trait = warrior_3
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 4 4 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 10 10 }
+							pikemen = { 8 8 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 32
+						trait = warrior_2
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 24
+						trait = warrior_3
+						trait = lycan
+						trait = known_lycan						
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 4 4 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 10 10 }
+							pikemen = { 8 8 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 32
+						trait = warrior_3
+						trait = lycan
+						trait = known_lycan					
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 24
+						trait = warrior_2
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 4 4 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 10 10 }
+							pikemen = { 8 8 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 32
+						trait = warrior_3
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 24
+						trait = warrior_2
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				16 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 1.5
+						troops = {
+							archers = { 4 4 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 10 10 }
+							pikemen = { 8 8 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 32
+						trait = warrior_2
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 24
+						trait = warrior_3
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 1.5
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+				17 = {
+					spawn_unit = {
+						province = ROOT
+						home = ROOT
+						owner = THIS
+						leader = THIS
+						scaled_by_biggest_garrison = 0.0
+						troops = {
+							archers = { 4 4 }
+							heavy_infantry = { 8 8 }
+							light_infantry = { 10 10 }
+							pikemen = { 8 8 }
+						}
+						attrition = 0.0
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = yes
+						age = 32
+						trait = warrior_2
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+					create_character = {
+						random_traits = yes
+						dynasty = none
+						religion = THIS
+						culture = THIS
+						female = no
+						age = 24
+						trait = warrior_2
+						trait = lycan
+						trait = known_lycan
+					}
+					new_character = {
+						#assign_birthsign = yes
+						#assign_racial_trait = yes
+						spawn_unit = {
+							province = ROOT
+							home = ROOT
+							owner = PREV
+							scaled_by_biggest_garrison = 0.0
+							troops = {
+								archers = { 4 4 }
+								heavy_infantry = { 8 8 }
+								light_infantry = { 10 10 }
+								pikemen = { 8 8 }
+							}
+							attrition = 0.0
+							disband_on_peace = yes
+						}
+					}
+				}
+			}
+			ROOT = {
+				owner = {
+					top_liege = {
+						#set_defacto_vassal = PREVPREVPREV
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = lycan_revolt
+							thirdparty_title = ROOT
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dlycans
+	}
+}
+
+character_event = {
+	id = ekrevolts.25
+	desc = EVTDESCekrevolts.25
+	picture = GFX_evt_burning_house
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	option = {
+		name = dlycans
+	}
+}

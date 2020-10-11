@@ -1,0 +1,587 @@
+# Settlement decisions are possible vs _all_ settlements and are shown in the Settlement Diplomacy View, not the Intrigue View. The taker is in the FROM scope.
+#
+# filter = [capital/owned/vassal_owned/sub_realm_owned/realm_owned/dynasty_owned/all]
+# ai_target_filter = [capital/owned/vassal_owned/sub_realm_owned/realm_owned/dynasty_owned/all] (which settlements for which the AI evaluates the decision.)
+#	owned: all settlements owned by the AI
+#	vassal_owned: all settlements owned by direct vassal rulers of the AI's employer
+#	sub_realm_owned: all settlements below the AI's employer
+#	realm_owned: all settlements in the same top realm as the AI
+#	dynasty_owned: all settlements owned by members of the same dynasty
+#	all: all settlements (Avoid if possible. VERY CPU-HEAVY!)
+#	
+
+settlement_decisions = {
+
+	convert_tribal_to_castle = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = yes
+		ai_check_interval = 12
+		
+		from_potential = {
+			is_playable = yes
+			OR = {
+				is_feudal = yes
+				is_republic = yes
+				is_theocracy = yes
+			}
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			holding_type = tribal
+			holder_scope = {
+				character = FROM
+			}
+		}
+		allow = {
+			location = {
+				religion = FROM
+			}
+			OR = {
+				has_building = tb_hillfort_3
+				owner = {
+					capital_holding = {
+						OR = {
+							holding_type = city
+							holding_type = temple
+							holding_type = castle
+						}
+					}
+				}
+
+				location = {
+					culture_group = FROM
+				}
+			}
+			FROM = { wealth = 500 }
+		}
+		effect = {
+			FROM = { wealth = -500 }
+			convert_to = CASTLE
+			refill_holding_levy = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	convert_tribal_to_city = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = yes
+		ai_check_interval = 12
+		
+		from_potential = {
+			is_playable = yes
+			OR = {
+				is_feudal = yes
+				is_republic = yes
+				is_theocracy = yes
+			}
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			holding_type = tribal
+			holder_scope = {
+				character = FROM
+			}
+		}
+		allow = {
+			location = {
+				religion = FROM
+			}
+			OR = {
+				has_building = tb_market_town_3
+				owner = {
+					capital_holding = {
+						OR = {
+							holding_type = city
+							holding_type = temple
+							holding_type = castle
+						}
+					}
+				}
+			}
+			FROM = { wealth = 500 }
+		}
+		effect = {
+			FROM = { wealth = -500 }
+			convert_to = CITY
+			refill_holding_levy = yes
+		}
+
+		ai_will_do = {
+			factor = 1 # On average ca 1 year before taken
+		}
+	}
+	
+	convert_tribal_to_temple = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = yes
+		ai_check_interval = 12
+		
+		from_potential = {
+			is_playable = yes
+			OR = {
+				is_feudal = yes
+				is_republic = yes
+				is_theocracy = yes
+			}
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			holding_type = tribal
+			holder_scope = {
+				character = FROM
+			}
+		}
+		allow = {
+			location = {
+				religion = FROM
+			}
+			OR = {
+				has_building = tb_hillfort_3
+				owner = {
+					capital_holding = {
+						OR = {
+							holding_type = city
+							holding_type = temple
+							holding_type = castle
+						}
+					}
+				}
+			}
+			#is_landed = no
+			FROM = { wealth = 500 }
+		}
+		effect = {
+			FROM = { wealth = -500 }
+			convert_to = temple
+			refill_holding_levy = yes
+		}
+
+		ai_will_do = {
+			factor = 1 # On average ca 1 year before taken
+			modifier = {
+				factor = 0.1 # Modified down to ca 10 year average.
+			}
+		}
+	}
+	
+	make_primary = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 3
+		
+		from_potential = {
+			is_playable = yes
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			is_capital = no
+			holder_scope = {
+				character = FROM
+			}
+			dejure_liege_title = {
+				holder_scope = {
+					character = FROM
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				OR = {
+					AND = {
+						is_merchant_republic = no
+						is_nomadic = no
+					}
+					capital_scope = {
+						ROOT = {
+							location = {
+								NOT = { province = PREVPREV }
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			make_capital_holding = yes
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { # Not if this settlement is not allowed
+				factor = 0
+				NOT = { is_allowed_holding_type = FROM }
+			}
+			
+			modifier = { # Not if existing capital is preferred
+				factor = 0
+				defacto_liege_title = {
+					is_preferred_holding_type = FROM
+				}
+			}
+			
+			modifier = { # Not if this settlement is not preferred and another settlement is
+				factor = 0
+				NOT = { is_preferred_holding_type = FROM }
+				defacto_liege_title = {
+					any_direct_de_jure_vassal_title = {
+						holder = FROM
+						is_preferred_holding_type = FROM
+					}
+				}
+			}
+		}
+	}
+	
+	revoke_primary = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		
+		from_potential = {
+			is_playable = yes
+			is_nomadic = yes
+			has_dlc = "Horse Lords"
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			is_capital = yes
+			holder_scope = {
+				character = FROM
+				capital_holding = {
+					NOT = {
+						title = PREVPREV
+					}
+				}
+			}
+			capital_scope = {
+				has_empty_holding = yes
+			}
+			NOT = { holding_type = nomad }
+		}
+		effect = {
+			revoke_capital_holding = yes
+		}
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	pillage_settlement = {
+		only_independent = yes
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = yes
+		ai_check_interval = 3
+		
+		from_potential = {
+			is_playable = yes
+			OR = {
+				is_nomadic = yes
+				is_tribal = yes
+			}
+			has_dlc = "Horse Lords"
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			NOT = { holding_is_tower = yes }
+			NOT = { holding_type = nomad }
+			OR = {
+				NOT = { holding_type = tribal }
+				FROM = { is_tribal = no }
+			}
+			OR = {
+				FROM = { is_nomadic = yes }
+				location = {
+					num_of_settlements = 2
+				}
+			}
+			owner = { character = FROM }
+		}
+		
+		allow = {
+			NOT = { has_holding_modifier = recently_burnt_the_land }
+			owner = { independent = yes }
+			has_siege = no
+			custom_tooltip = {
+				text = stop_pillaging_custom_tooltip
+				hidden_tooltip = {
+					NOT = { has_holding_modifier = stop_burning_land }
+				}
+			}
+		}
+		
+		effect = {
+			
+			hidden_tooltip = {
+				location = { save_event_target_as = nickname_target }
+				FROM = { save_event_target_as = nickname_receiver }
+				if = {
+					limit = {
+						owner = {
+							has_nickname = no
+							is_adult = yes
+							NOT = { trait = incapable }
+						}
+					}
+					random_list = {
+						5 = {
+							owner = { give_nickname = nick_the_destroyer }
+						}
+						5 = {
+							owner = { give_nickname = nick_the_scourge_of_god }
+							modifier = {
+								factor = 0
+								event_target:nickname_target = { religion = FROM }
+							}
+						}
+						5 = {
+							owner = { give_nickname = nick_the_slayer_of_culture }
+							modifier = {
+								factor = 0
+								event_target:nickname_target = { culture = FROM }
+							}
+						}
+						5 = {
+							owner = { give_nickname = nick_the_terror_of_provincename }
+						}
+						5 = {
+							owner = { give_nickname = nick_the_culture_marauder }
+							modifier = {
+								factor = 0
+								event_target:nickname_target = { culture = FROM }
+							}
+						}
+						75 = {}
+					}
+				}
+			}
+			
+			if = {
+				limit = { NOT = { holding_type = tribal } }
+				FROM = {
+					wealth = 50
+				}
+				custom_tooltip = {
+					text = gain_tech_custom_tooltip
+					hidden_tooltip = {
+						FROM = {
+							random_list = {
+								10 = { military_techpoints = 5 }
+								10 = { economy_techpoints = 5 }
+								10 = { culture_techpoints = 5 }
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = { holding_type = tribal }
+				FROM = {
+					wealth = 25
+					population = 150
+				}
+			}
+			
+			custom_tooltip = {
+				text = "PILLAGE_DESTROY_BUILDINGS"
+				hidden_tooltip = {
+					destroy_random_building = THIS
+					destroy_random_building = THIS
+					add_holding_modifier = {
+						modifier = recently_burnt_the_land
+						months = 7
+					}
+				}
+			}
+			
+			hidden_tooltip = {
+			
+				location = {
+					add_province_modifier = {
+						modifier = rampaging_nomads
+						years = 10
+					}
+				}
+
+				location = {
+					add_province_modifier = {
+						modifier = burnt_the_land
+						years = 10
+					}
+				}
+			
+				if = {
+					limit = {
+						OR = {
+							FROM = {
+								NOT = { has_character_modifier = pillage_cooldown }
+							}
+							FROM = {
+								NOT = {
+									any_realm_province = {
+										any_province_holding = {
+											owner = { character = FROM }
+											has_holding_modifier = recently_burnt_the_land
+											NOT = { has_holding_modifier = stop_burning_land }
+										}
+									}
+								}
+							}
+						}
+					}
+#					FROM = { character_event = { id = HL.4800 days = 180 } }
+					FROM = {
+						add_character_modifier = {
+							modifier = pillage_cooldown
+							hidden = yes
+							months = 6
+						}
+					}
+				}
+			}
+			
+			if = {
+				limit = {
+					NOT = { has_any_building = yes }
+					owner = {
+						character = FROM
+					}
+				}
+#				hidden_tooltip = {
+#					location = {
+#						province_event = { id = HL.4810 days = 1 }
+#						province_event = { id = HL.4814 days = 2 random = 2 }
+#					}
+#				}
+				destroy_settlement = THIS
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { # Only for tribal holdings
+				factor = 0
+				NOT = { holding_type = tribal }
+			}
+		}
+	}
+	
+	stop_pillage_settlement = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		
+		from_potential = {
+			is_playable = yes
+			OR = {
+				is_nomadic = yes
+				is_tribal = yes
+			}
+			has_dlc = "Horse Lords"
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			has_holding_modifier = recently_burnt_the_land
+			NOT = { has_holding_modifier = stop_burning_land }
+			NOT = { holding_type = nomad }
+			OR = {
+				NOT = { holding_type = tribal }
+				FROM = { is_tribal = no }
+			}
+			owner = { character = FROM }
+		}
+		
+		allow = {
+			has_holding_modifier = recently_burnt_the_land
+			hidden_tooltip = {
+				NOT = { has_holding_modifier = stop_burning_land }
+			}
+		}
+		
+		effect = {
+			
+			hidden_tooltip = {
+				add_holding_modifier = {
+					modifier = stop_burning_land
+					hidden = yes
+					years = 1
+				}
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	
+	# Debug decision to fix holdings with a dead owner
+	fix_holding_with_dead_owner = {
+		
+		from_potential = {
+			is_playable = yes
+			ai = no
+		}
+		potential = {
+			holder_scope = {
+				is_alive = no
+			}
+		}
+		allow = {
+			holder_scope = {
+				is_alive = no
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					location = {
+						holder_scope = {
+							is_alive = yes
+						}
+					}
+				}
+				location = {
+					holder_scope = {
+						ROOT = {
+							grant_title = PREV
+						}
+					}
+				}
+				break = yes
+			}
+			grant_title = FROM
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}

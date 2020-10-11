@@ -1,0 +1,115 @@
+####Etienne's Daedric Events - Hircine ####
+
+namespace = hircine
+
+#### Become a Lycanthrope ####
+
+long_character_event = {
+	id = hircine.1
+	desc = Hircine1
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hircine1Accept"
+		long_character_event = { id = hircine.2 }
+	}
+	# option = {
+		# name = "Hircine1Decline"
+		# prestige = -50
+		# piety = -50
+		# custom_tooltip = {
+			# text = "Hircine1DeclineInfo"
+			# hidden_tooltip = {
+				# clr_character_flag = lycanthrope_decision
+			# }
+		# }
+	# }
+}
+
+long_character_event = {
+	id = hircine.2
+	desc = Hircine2
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hircine2Acknowledge"
+		trigger = {
+			is_undead = no
+			is_disease_immune = no
+		}
+		set_character_flag = lycan_disease
+		character_event = { id = hircine.3 days = 3 }
+	}
+	
+	option = {
+		name = "Hircine2Oops"
+		trigger = {
+			OR = {
+				is_undead = yes
+				is_disease_immune = yes
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = lycanthrope_decision
+		}
+	}
+}
+
+character_event = {
+	id = hircine.3
+	desc = {
+		text = Hircine3
+		trigger = {
+			is_undead = no
+			is_disease_immune = no
+		}
+	}
+	desc = {
+		text = Hircine3Alt
+		trigger = {
+			OR = {
+				is_undead = yes
+				is_disease_immune = yes
+			}
+		}
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Hircine3Acknowledge"
+		trigger = {
+			is_undead = no
+			is_disease_immune = no
+		}
+		hidden_tooltip = {
+			clr_character_flag = lycanthrope_decision
+			clr_character_flag = lycan_disease
+			remove_disease_trait_effect = yes
+			remove_treatment_modifiers_effect = yes
+			remove_disease_flags_effect = yes
+			add_trait = lycan
+			set_character_flag = lycan_level_1
+		}
+	}
+	option = {
+		name = "Hircine3Oops"
+		trigger = {
+			OR = {
+				is_undead = yes
+				is_disease_immune = yes
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = lycanthrope_decision
+			clr_character_flag = lycan_disease
+		}
+	}
+}

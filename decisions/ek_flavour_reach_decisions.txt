@@ -1,0 +1,1387 @@
+decisions = {
+	##### DE JURE REACH
+	### Create de De Jure Reach
+	reach_flavour_create_de_jure_reach = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			OR = {
+				has_the_reach_emperor_capital_in_reach = yes
+				AND = {
+					primary_title = {
+						tier = EMPEROR
+					}
+					any_realm_title = {
+						tier = COUNT
+						OR = {
+							region = nirn_tamriel_westernreach
+							region = nirn_tamriel_thereach
+						}
+					}
+				}
+			}
+			
+			# Nords won't break away from Skyrim and Bretons won't break away from High Rock
+			NOR = {
+				culture = nord
+				culture = breton
+			}
+			
+			has_submenu_open = no
+			
+			NOT = { has_global_flag = reach_de_jure_kingdom_formed }
+		}
+		
+		allow = {
+			completely_controls_region = nirn_tamriel_thereach
+			completely_controls_region = nirn_tamriel_westernreach
+			
+			OR = {
+				# Diplomatic way
+				trigger_if = {
+					limit = { diplomacy = 20 }
+					
+					OR = {
+						custom_tooltip = {
+							text = SKYRIM_TWO_KINGS_HIGH_OPINION_CT
+							hidden_tooltip = {
+								# 2 Jarls in Skyrim having >= 50 opinion of the Reach King
+								any_playable_ruler = {
+									count = 2
+									primary_title = { tier = KING }
+									capital_scope = {
+										de_jure_liege_or_above = k_skyrim
+									}
+									NOT = { character = ROOT }
+									opinion = { who = ROOT value = 50 }
+								}
+							}
+						}
+						
+						custom_tooltip = {
+							text = SKYRIM_HIGH_KING_HIGH_OPINION_CT
+							hidden_tooltip = {
+								# High King of Skyrim with >= 50 opinion of the Reach King
+								any_playable_ruler = {
+									has_landed_title = k_skyrim
+									NOT = { character = ROOT }
+									opinion = { who = ROOT value = 50 }
+								}
+							}
+						}
+						
+						custom_tooltip = {
+							text = SKYRIM_EMPEROR_HIGH_OPINION_CT
+							hidden_tooltip = {
+								# Emperor holding land in Skyrim
+								any_playable_ruler = {
+									primary_title = { tier = EMPEROR }
+									any_realm_province = {
+										de_jure_liege_or_above = k_skyrim
+									}
+									NOT = { character = ROOT }
+									opinion = { who = ROOT value = 50 }
+								}
+							}
+						}
+					}
+					
+					OR = {
+						custom_tooltip = {
+							text = HIGH_ROCK_TWO_KINGS_HIGH_OPINION_CT
+							hidden_tooltip = {
+								# 2 Kings in High Rock having >= 50 opinion of the Reach King
+								any_playable_ruler = {
+									count = 2
+									primary_title = { tier = KING }
+									capital_scope = {
+										de_jure_liege_or_above = k_highrock
+									}
+									NOT = { character = ROOT }
+									opinion = { who = ROOT value = 50 }
+								}
+							}
+						}
+						
+						custom_tooltip = {
+							text = HIGH_ROCK_HIGH_KING_HIGH_OPINION_CT
+							hidden_tooltip = {
+								# High King of High Rock with >= 50 opinion of the Reach King
+								any_playable_ruler = {
+									has_landed_title = k_highrock
+									NOT = { character = ROOT }
+									opinion = { who = ROOT value = 50 }
+								}
+							}
+						}
+						
+						custom_tooltip = {
+							text = HIGH_ROCK_EMPEROR_HIGH_OPINION_CT
+							hidden_tooltip = {
+								# Emperor holding land in High Rock
+								any_playable_ruler = {
+									primary_title = { tier = EMPEROR }
+									any_realm_province = {
+										de_jure_liege_or_above = k_highrock
+									}
+									NOT = { character = ROOT }
+									opinion = { who = ROOT value = 50 }
+								}
+							}
+						}
+					}
+				}
+				
+				trigger_else = {
+					custom_tooltip = {
+						text = REACH_FLAVOUR_DE_JURE_KINGDOM_DIPLOMATIC_WAY_CT
+						hidden_tooltip = { always = no }
+					}
+				}
+				
+				# Agressive way
+				trigger_if = {
+					limit = { martial = 20 }
+					
+					custom_tooltip = {
+						text = REACH_ALL_LAND_RIGHT_CULTURE_CT
+						hidden_tooltip = {
+							# No province of the Reach with a majority of non-ROOT culture [mostly Reachmen, but can be something else like Orc or Falmer, who am I to judge?]
+							NOT = {
+								any_realm_province = {
+									region = nirn_tamriel_thereach
+									
+									NOT = { culture = ROOT }
+								}
+							}
+							
+							NOT = {
+								any_realm_province = {
+									region = nirn_tamriel_westernreach
+									
+									NOT = { culture = ROOT }
+								}
+							}
+						}
+					}
+				}
+				
+				trigger_else = {
+					custom_tooltip = {
+						text = REACH_FLAVOUR_DE_JURE_KINGDOM_MILITARISTIC_WAY_CT
+						hidden_tooltip = { always = no }
+					}
+				}
+				
+				# Has total control over Skyrim and High Rock
+				AND = {
+					completely_controls_region = nirn_tamriel_eastern_skyrim
+					completely_controls_region = nirn_tamriel_western_skyrim
+					completely_controls_region = nirn_tamriel_highrock
+				}
+			}
+
+			prestige = 2000
+			
+			custom_tooltip = {
+				text = REACH_FLAVOUR_DE_JURE_KINGDOM_ELDER_COUNCIL_CT
+				hidden_tooltip = { always = yes }
+			}
+		}
+		
+		effect = {
+			narrative_event = { id = reach_flavour.1 }
+			
+			hidden_tooltip = {
+				any_playable_ruler = {
+					limit = {
+						ai = no
+					}
+					narrative_event = { id = reach_flavour.2 days = 3 }
+				}
+			}
+			
+			prestige = -2000
+		}
+	}
+	
+	# Get the Elder Counci to vote on the matter
+	ec_vote_de_jure_reach = {
+		ai_check_interval = 36
+		only_playable = yes
+		
+		potential = {
+			ec_can_propose_laws = yes
+			
+			OR = {
+				has_the_reach_emperor_capital_in_reach = yes
+				AND = {
+					primary_title = {
+						tier = EMPEROR
+					}
+					any_realm_province = {
+						OR = {
+							region = nirn_tamriel_westernreach
+							region = nirn_tamriel_thereach
+						}
+					}
+				}
+			}
+			
+			NOR = {
+				culture = nord
+				culture = breton
+			}
+			
+			NOT = { has_global_flag = reach_de_jure_kingdom_formed }
+		}
+
+		allow = {
+			ec_influence_4000 = yes
+			ec_not_voting = yes
+			ec_voting_cooldown = yes
+			
+			completely_controls_region = nirn_tamriel_thereach
+			completely_controls_region = nirn_tamriel_westernreach
+		}
+
+		effect = {
+			ec_sub_influence_4000 = yes
+			custom_tooltip = {
+				text = elder_council_will_consider
+				hidden_tooltip = {
+					set_global_flag = ec_voting
+					if = {
+						limit = {
+							NOT = {
+								society_member_of = elder_council
+							}
+						}
+						elder_council = {
+							any_society_member = {
+								limit = {
+									is_society_grandmaster = yes
+								}
+								character_event = { id = reach_flavour.4 }
+							}
+						}
+					}
+					else = {
+						if = {
+							limit = {
+								ec_recognises_emperor = no
+							}
+							character_event = { id = reach_flavour.4 }
+						}
+						else = {
+							if = {
+								limit = {
+									e_cyrodiil = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_cyrodiil = {
+									holder_scope = {
+										character_event = { id = reach_flavour.3 }
+									}
+								}
+							}
+							else_if = {
+								limit = {
+									e_tamriel = {
+										has_title_flag = elder_council_empire
+										has_holder = yes
+									}
+								}
+								e_tamriel = {
+									holder_scope = {
+										character_event = { id = reach_flavour.3 }
+									}
+								}
+							}
+							else_if = {
+								limit= {
+									e_pretender_empire = {
+										has_holder = yes
+									}
+								}
+								e_pretender_empire = {
+									holder_scope = {
+										character_event = { id = reach_flavour.3 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 0
+				NOT = {
+					trait = councilist
+				}
+			}
+		}
+	}
+	
+	# Integrate other duchies in the Reach (Haafingar, Falkreath, Dorvan, Evermore)
+	reach_integrate_haafingar = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			has_global_flag = reach_de_jure_kingdom_formed
+			has_the_reach_emperor_capital_in_reach = yes
+			any_realm_title = {
+				de_jure_liege_or_above = d_haafingar
+			}
+			
+			NOT = { d_haafingar = { de_jure_liege_or_above = k_thereach } }		
+		}
+		
+		allow = {
+			completely_controls = d_haafingar
+			war = no
+			prestige = 500
+		}
+		
+		effect = {
+			prestige = -500
+			d_haafingar = {
+				de_jure_liege = k_thereach
+			}
+		}
+	}
+	
+	reach_integrate_falkreath = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			has_global_flag = reach_de_jure_kingdom_formed
+			has_the_reach_emperor_capital_in_reach = yes
+			any_realm_title = {
+				de_jure_liege_or_above = d_falkreath
+			}
+			NOT = { d_falkreath = { de_jure_liege_or_above = k_thereach } }
+		}
+		
+		allow = {
+			completely_controls = d_falkreath
+			war = no
+			prestige = 500
+		}
+		
+		effect = {
+			prestige = -500
+			d_falkreath = {
+				de_jure_liege = k_thereach
+			}
+		}
+	}
+	
+	reach_integrate_dorven = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			has_global_flag = reach_de_jure_kingdom_formed
+			has_the_reach_emperor_capital_in_reach = yes
+			any_realm_title = {
+				de_jure_liege_or_above = d_dorven
+			}
+			NOT = { d_dorven = { de_jure_liege_or_above = k_thereach } }
+		}
+		
+		allow = {
+			completely_controls = d_dorven
+			war = no
+			prestige = 500
+		}
+		
+		effect = {
+			prestige = -500
+			d_dorven = {
+				de_jure_liege = k_thereach
+			}
+		}
+	}
+	
+	reach_integrate_evermore = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			has_global_flag = reach_de_jure_kingdom_formed
+			has_the_reach_emperor_capital_in_reach = yes
+			any_realm_title = {
+				de_jure_liege_or_above = d_evermore
+			}
+			NOT = { d_evermore = { de_jure_liege_or_above = k_thereach } }
+		}
+		
+		allow = {
+			completely_controls = d_evermore
+			war = no
+			prestige = 500
+		}
+		
+		effect = {
+			prestige = -500
+			d_evermore = {
+				de_jure_liege = k_thereach
+			}
+		}
+	}
+	
+	### Bretons and Nords can reintegrate their regions
+	break_de_jure_reach = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			has_global_flag = reach_de_jure_kingdom_formed
+			OR = {
+				culture = breton
+				culture = nord
+			}
+			OR = {
+				has_landed_title = k_highrock
+				has_landed_title = k_skyrim
+				primary_title = { tier = EMPEROR }
+			}
+		}
+		
+		allow = {
+			completely_controls_region = nirn_tamriel_thereach
+			completely_controls_region = nirn_tamriel_westernreach
+			
+			prestige = 1000
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = DE_JURE_REACH_BROKEN
+				
+				hidden_tooltip = {
+					d_reach = { de_jure_liege = k_skyrim }
+					d_bleakwind = { de_jure_liege = k_skyrim }
+					d_scarhammer = { de_jure_liege = k_skyrim }
+					d_volskygge = { de_jure_liege = k_skyrim }
+					d_sunderstone = { de_jure_liege = k_skyrim }
+					
+					d_jehenna = { de_jure_liege = k_highrock }
+					d_farrun = { de_jure_liege = k_highrock }
+					d_dunkarn = { de_jure_liege = k_highrock }
+				}
+			}
+			
+			prestige = -1000
+			
+			clr_global_flag = reach_de_jure_kingdom_formed
+		}
+	}
+	
+	### Form an Empire in the Reach
+	form_reach_empire = {
+		is_high_prio = yes
+		
+		potential = {
+			independent = yes
+			NOT = { primary_title = { tier = EMPEROR } }
+			e_thereach = { has_holder = no }
+			has_landed_title = k_thereach
+			has_global_flag = reach_de_jure_kingdom_formed
+			OR = {
+				num_of_king_titles = 2
+				AND = {
+					d_haafingar = { de_jure_liege_or_above = k_thereach }
+					d_falkreath = { de_jure_liege_or_above = k_thereach }
+					d_dorven = { de_jure_liege_or_above = k_thereach }
+					d_evermore = { de_jure_liege_or_above = k_thereach }
+				}
+			}
+			
+			### cultural Empire too close
+			NOR = {
+				culture = nord
+				culture = breton
+				culture = imperial
+				culture = colovian
+				culture_group = yokudan_group
+			}
+					
+			has_submenu_open = no
+		}
+		allow = {
+			calc_true_if = {
+				NOT = { custom_tooltip = { text = calctrueif2 } } #NOT blocks to prevent it from serving as a 'fulfilled condition'.
+				amount = 2
+				has_landed_title = k_thereach
+				has_landed_title = k_skyrim
+				has_landed_title = k_highrock
+			}
+			
+			can_create_empire_general = yes
+		}
+		effect = {
+			wealth = -1000
+			piety = -250
+			prestige = 200
+			primary_title = {
+				e_thereach = {
+					grant_title = ROOT
+					copy_title_laws = PREV
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_thereach } }
+				k_thereach = { de_jure_liege = e_thereach }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_highrock } }
+				k_highrock = { de_jure_liege = e_thereach }
+			}
+			if = {
+				limit = { ROOT = { has_landed_title = k_skyrim } }
+				k_skyrim = { de_jure_liege = e_thereach }
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+						# TODO:JJ empire created while a pretender exists
+					}
+					if = {
+						limit = {
+							e_pretender_empire = {
+								holder = ROOT
+							}
+							e_tangmo = {
+								has_title_flag = elder_council_empire
+							}
+						}
+						e_tangmo = {
+							copy_title_history = e_pretender_empire
+						}
+						e_pretender_empire = {
+							set_name = ""
+							destroy_landed_title = THIS
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 100
+		}
+	}
+	
+	### Claim Red Eagle Sword
+	claim_redeagle = {
+		is_high_prio = yes
+		
+		potential = {
+			#NOT = { has_dlc = "Jade Dragon" } #For when the Hagravens will be an offmap power
+			religion = forsworn_heresy
+			controls_religion = no
+			NOT = { has_global_flag = weapon_redeagle_granted }
+			has_submenu_open = no
+			is_adult = yes
+			
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel_thereach
+					region = nirn_tamriel_westernreach
+				}
+			}
+		}
+		
+		allow = {
+			piety = 750
+			prestige = 250
+			
+			OR = {
+				has_the_reach_emperor_capital_in_reach = yes
+				trait = briarheart
+				trait = hagraven
+			}
+		}
+		
+		effect = {
+			add_artifact = weapon_redeagle
+			set_global_flag = weapon_redeagle_granted
+			piety = -750
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				random = 1
+			}
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}
+		}
+	}
+	
+	### Claim the Armor of the Old Gods
+	claim_armor_of_the_old_gods = {
+		is_high_prio = yes
+		
+		potential = {
+			#NOT = { has_dlc = "Jade Dragon" } #For when the Hagravens will be an offmap power
+			religion = old_gods
+			controls_religion = no
+			NOT = { has_global_flag = armor_of_the_old_gods_granted }
+			has_submenu_open = no
+			is_adult = yes
+			
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel_thereach
+					region = nirn_tamriel_westernreach
+				}
+			}
+		}
+		
+		allow = {
+			piety = 750
+			prestige = 250
+			
+			OR = {
+				has_the_reach_emperor_capital_in_reach = yes
+				trait = briarheart
+				trait = hagraven
+			}
+		}
+		
+		effect = {
+			add_artifact = armor_of_the_old_gods
+			set_global_flag = armor_of_the_old_gods_granted
+			piety = -750
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				random = 1
+			}
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}
+		}
+	}
+	
+	### Become Faolan reborn
+	# Based on becoming the Saosyant
+	become_faolan_reborn = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			is_random_world = no
+			religion = forsworn_heresy
+			NOT = { has_global_flag = faolan_reborn_appears }
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			has_the_reach_emperor_capital_in_reach = yes
+		}
+		allow = {
+			custom_tooltip = {
+				text = REACH_LIBERATED_CT
+				hidden_tooltip = {
+					completely_controls_region = nirn_tamriel_thereach
+					completely_controls_region = nirn_tamriel_westernreach
+				}
+			}
+			custom_tooltip = {
+				text = REACH_DE_JURE_KINGDOM_CT
+				hidden_tooltip = {
+					has_global_flag = reach_de_jure_kingdom_formed
+				}
+			}
+			custom_tooltip = {
+				text = ALLIANCE_WITH_THE_HAGRAVENS_CT
+				hidden_tooltip = {
+					has_character_flag = formed_alliance_with_hagravens
+				}
+			}
+			has_artifact = weapon_redeagle
+			piety = 1500
+		}
+		effect = {
+			custom_tooltip = {
+				text = SECOND_COMING_OF_FAOLAN_CT
+				hidden_tooltip = {
+					narrative_event = { id = reach_flavour.10 }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	### Seek an Hagraven Coven
+	seek_hagravens_coven = {
+		ai_check_interval = 96
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			age = 16
+			has_submenu_open = no
+			religion_group = reach_faiths
+			
+			OR = {
+				AND = {
+					piety = 250
+					religion = forsworn_heresy
+					NOR = {
+						trait = briarheart
+						trait = hagraven
+					}
+				}
+				has_the_reach_emperor_capital_in_reach = yes
+			}
+			
+			NOR = {
+				has_character_flag = is_in_hagraven_coven
+				has_character_flag = formed_alliance_with_hagravens
+			}
+			
+			OR = { #To exclude lycans, vampires, that kind of stuff
+				is_disease_immune = no
+				trait = briarheart
+				trait = hagraven
+			}
+		}
+		
+		allow = {
+			OR = {
+				AND = {
+					piety = 1000
+					religion = forsworn_heresy
+					NOR = {
+						trait = briarheart
+						trait = hagraven
+					}
+				}
+				has_the_reach_emperor_capital_in_reach = yes
+			}
+		}
+		
+		effect = {
+			set_character_flag = is_in_hagraven_coven
+			
+			character_event = {
+				id = reach_flavour.12
+				days = 3
+				random = 2
+				tooltip = ABARGAIN
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+		}
+	}
+	
+	### Vassalize the Hagravens
+	vassalize_hagravens = {
+		is_high_prio = yes
+		only_playable = yes
+		
+		potential = {
+			culture = reachmen
+			religion_group = reach_faiths
+			
+			has_the_reach_emperor_capital_in_reach = yes
+			
+			NOR = {
+				any_demesne_title = { title = d_hagraven }
+				any_vassal = { has_landed_title = d_hagraven }
+			}
+			
+			has_submenu_open = no
+		}
+		
+		allow = {
+			custom_tooltip = {
+				text = VASSALIZE_HAGRAVENS_HIGH_OPINION_HIGH_CRONE_CT
+				hidden_tooltip = {
+					d_hagraven = {
+						owner = {
+							opinion = {
+								who = ROOT
+								value = 50
+							}
+						}
+					}
+				}
+			}
+			
+			custom_tooltip = {
+				text = VASSALIZE_HAGRAVENS_HRAGGEN_OWNED_CT
+				hidden_tooltip = {
+					OR = {
+						d_hagraven = {
+							owner = {
+								any_realm_title = { title = c_hraggen }
+							}
+						}
+						
+						ROOT = {
+							any_demesne_title = { title = c_hraggen }
+						}
+					}
+				}
+			}
+			
+			custom_tooltip = {
+				text = VASSALIZE_HAGRAVENS_SCARHAMMER_OWNED_CT
+				hidden_tooltip = {
+					OR = {
+						d_hagraven = {
+							owner = {
+								any_realm_title = { title = c_scarhammer }
+							}
+						}
+						
+						ROOT = {
+							any_demesne_title = { title = c_scarhammer }
+						}
+					}
+				}
+			}
+			
+			custom_tooltip = {
+				text = VASSALIZE_HAGRAVENS_IRONHEIM_OWNED_CT
+				hidden_tooltip = {
+					OR = {
+						d_hagraven = {
+							owner = {
+								any_realm_title = { title = c_ironheim }
+							}
+						}
+						
+						ROOT = {
+							any_demesne_title = { title = c_ironheim }
+						}
+					}
+				}
+			}
+			
+			controls_three_holy_sites = yes
+			
+			trigger_if = {
+				limit = { religion = forsworn_heresy }
+				piety = 500
+			}
+			
+			trigger_else = {
+				piety = 1000
+			}
+		}
+		
+		effect = {
+			piety = -500
+			
+			custom_tooltip = { text = VASSALIZE_HAGRAVENS_HIGH_CRONE_BECOMES_VASSAL_CT }
+			custom_tooltip = { text = VASSALIZE_HAGRAVENS_HIGH_CRONE_GETS_SCARHAMMER_DUCHY_CT }
+				
+			hidden_tooltip = {
+				d_hagraven = {
+					owner = { save_event_target_as = high_crone }
+				}
+				
+				if = {
+					limit = {
+						has_landed_title = c_hraggen
+					}
+
+					c_hraggen = {
+						grant_title = event_target:high_crone
+					}
+				}
+				
+				if = {
+					limit = {
+						has_landed_title = c_scarhammer
+					}
+					
+					c_scarhammer = {
+						grant_title = event_target:high_crone
+					}
+				}
+				
+				if = {
+					limit = {
+						has_landed_title = c_ironheim
+					}
+					
+					c_ironheim = {
+						grant_title = event_target:high_crone
+					}
+				}
+				
+				if = {
+					limit = {
+						has_landed_title = d_scarhammer
+					}
+					
+					d_scarhammer = {
+						grant_title = event_target:high_crone
+					}
+				}
+				
+				event_target:high_crone = {
+					set_defacto_liege = ROOT
+				}
+			}
+		}
+	}
+	
+	### Vassalize the Holy Orders
+	vassalize_d_chosenoldgods = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 60
+
+		potential = {
+			is_title_active = d_chosenoldgods
+
+			any_demesne_title = {
+				tier = COUNT
+				NOT = {
+					title = c_glenmoril
+				}
+			}
+
+			any_demesne_title = {
+				higher_tier_than = DUKE
+				region = nirn_tamriel_thereach
+			}
+			
+			religion = old_gods
+
+			d_chosenoldgods = {
+				holder_scope = {
+					independent = yes
+				}
+			}
+
+			NOT = {
+				d_chosenoldgods = {
+					owner = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = opinion_unfit_ruler
+						}
+					}
+				}
+			}
+
+			OR = {
+				has_landed_title = c_glenmoril
+				any_realm_lord = {
+					has_landed_title = c_glenmoril
+				}
+				d_chosenoldgods = {
+					owner = {
+						has_landed_title = c_glenmoril
+					}
+				}
+			}
+
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			war = no
+			wealth = 300
+			is_heretic = no
+			culture_group = reachmen
+			independent = yes
+
+			conditional_tooltip = {
+				trigger = {
+					NOT = {
+						d_chosenoldgods = {
+							holder_scope = {
+								opinion = {
+									who = ROOT
+									value = 25
+								}
+							}
+						}
+					}
+				}
+
+				custom_tooltip = {
+					text = VASSALIZE_CHOSEN_OLD_GODS_OPINION_CT
+
+					d_chosenoldgods = {
+						holder_scope = {
+							opinion = {
+								who = ROOT
+								value = 25
+							}
+						}
+					}
+				}
+			}
+
+			custom_tooltip = {
+				text = only_one_vassalized_holy_order_TT
+
+				NOT = {
+					any_realm_lord = {
+						holy_order = yes
+					}
+				}
+			}
+		}
+		effect = {
+			wealth = -300
+
+			d_chosenoldgods = {
+				show_scope_change = no
+				holder_scope = {
+					show_scope_change = no
+					grant_title_no_opinion = c_glenmoril
+				}
+			}
+
+			hidden_tooltip = {
+				d_chosenoldgods = {
+					save_event_target_as = chosenoldgods_holder
+					holder_scope = {
+						wealth = 300
+					}
+					set_defacto_liege = ROOT
+				}
+
+				c_glenmoril = {
+					any_direct_de_jure_vassal_title = {
+						limit = {
+							owner = {
+								OR = {
+									character = ROOT
+									any_liege = {
+										character = ROOT
+									}
+								}
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									character = ROOT
+								}
+							}
+							if = {
+								limit = {
+									holding_type = CITY
+								}
+								create_random_steward = {
+									random_traits = yes
+									dynasty = random
+								}
+							}
+							else_if = {
+								limit = {
+									holding_type = TEMPLE
+								}
+								create_random_priest = {
+									random_traits = yes
+									dynasty = random
+								}
+							}
+							else = {
+								create_random_soldier = {
+									random_traits = yes
+									dynasty = random
+								}
+							}
+							new_character = {
+								grant_title_no_opinion = PREV
+								set_defacto_liege = event_target:chosenoldgods_holder
+							}
+						}
+						else_if = {
+							limit = {
+								owner = {
+									NOT = {
+										character = ROOT
+									}
+								}
+							}
+							owner = {
+								set_defacto_liege = event_target:chosenoldgods_holder
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	vassalize_d_forsworn = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 60
+
+		potential = {
+			is_title_active = d_forsworn
+
+			any_demesne_title = {
+				tier = COUNT
+				NOT = {
+					title = c_glenmoril
+				}
+			}
+
+			any_demesne_title = {
+				higher_tier_than = DUKE
+				region = nirn_tamriel_thereach
+			}
+			
+			religion = forsworn_heresy
+
+			d_forsworn = {
+				holder_scope = {
+					independent = yes
+				}
+			}
+
+			NOT = {
+				d_forsworn = {
+					owner = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = opinion_unfit_ruler
+						}
+					}
+				}
+			}
+
+			OR = {
+				has_landed_title = c_glenmoril
+				any_realm_lord = {
+					has_landed_title = c_glenmoril
+				}
+				d_forsworn = {
+					owner = {
+						has_landed_title = c_glenmoril
+					}
+				}
+			}
+
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			war = no
+			wealth = 300
+			is_heretic = no
+			culture_group = reachmen
+			independent = yes
+
+			conditional_tooltip = {
+				trigger = {
+					NOT = {
+						d_forsworn = {
+							holder_scope = {
+								opinion = {
+									who = ROOT
+									value = 25
+								}
+							}
+						}
+					}
+				}
+
+				custom_tooltip = {
+					text = VASSALIZE_FORSWORN_OPINION_CT
+
+					d_forsworn = {
+						holder_scope = {
+							opinion = {
+								who = ROOT
+								value = 25
+							}
+						}
+					}
+				}
+			}
+
+			custom_tooltip = {
+				text = only_one_vassalized_holy_order_TT
+
+				NOT = {
+					any_realm_lord = {
+						holy_order = yes
+					}
+				}
+			}
+		}
+		effect = {
+			wealth = -300
+
+			d_forsworn = {
+				show_scope_change = no
+				holder_scope = {
+					show_scope_change = no
+					grant_title_no_opinion = c_glenmoril
+				}
+			}
+
+			hidden_tooltip = {
+				d_forsworn = {
+					save_event_target_as = forsworn_holder
+					holder_scope = {
+						wealth = 300
+					}
+					set_defacto_liege = ROOT
+				}
+
+				c_glenmoril = {
+					any_direct_de_jure_vassal_title = {
+						limit = {
+							owner = {
+								OR = {
+									character = ROOT
+									any_liege = {
+										character = ROOT
+									}
+								}
+							}
+						}
+						if = {
+							limit = {
+								owner = {
+									character = ROOT
+								}
+							}
+							if = {
+								limit = {
+									holding_type = CITY
+								}
+								create_random_steward = {
+									random_traits = yes
+									dynasty = random
+								}
+							}
+							else_if = {
+								limit = {
+									holding_type = TEMPLE
+								}
+								create_random_priest = {
+									random_traits = yes
+									dynasty = random
+								}
+							}
+							else = {
+								create_random_soldier = {
+									random_traits = yes
+									dynasty = random
+								}
+							}
+							new_character = {
+								grant_title_no_opinion = PREV
+								set_defacto_liege = event_target:forsworn_holder
+							}
+						}
+						else_if = {
+							limit = {
+								owner = {
+									NOT = {
+										character = ROOT
+									}
+								}
+							}
+							owner = {
+								set_defacto_liege = event_target:forsworn_holder
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	### Found your own Hagraven Coven
+	become_hagraven_coven = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 120
+		
+		potential = {
+			always = no
+			trait = hagraven
+			is_feudal = yes
+			holy_order = no
+			
+			OR = {
+				tier = KING
+				any_demesne_title = { title = d_hagraven }
+			}
+			
+			is_adult = yes
+			prisoner = no
+			
+			NOT = { trait = incapable }
+			
+			NOT = { government = hagraven_coven_government }
+		}
+		
+		allow = {
+			trigger_if = {
+				# Easier if is the High Crone
+				any_demesne_title = { title = d_hagraven }
+				piety = 250
+			}
+			
+			trigger_else = {
+				prestige = 500
+				piety = 500
+			}
+		}
+		
+		effect = {
+			set_government_type = hagraven_coven_government
+			add_law = {
+				law = succ_primogeniture
+				cooldown = no
+				opinion_effect = no
+			}
+		}
+	}
+}

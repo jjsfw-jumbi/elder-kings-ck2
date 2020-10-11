@@ -1,0 +1,81 @@
+decisions = {
+
+	select_patron_deity = {
+		potential = {
+			NOT = { has_character_flag = choosing_patron_deity }
+			ai = no
+			is_marriage_adult = yes
+			is_pantheon_religion = yes
+			has_patron_deity = no
+			NOT = { trait = mane }
+			has_submenu_open = no
+			NOT = { character = 39000 }
+		}
+		allow = {
+			custom_tooltip = {
+				text = spdtt
+				hidden_tooltip = {
+					has_patron_deity = no
+				}
+			}
+			NOT = { trait = cynical }
+		}
+		effect = {
+			custom_tooltip = {
+				text = ekpatronsdecisiontt #Choose your patron deity.
+				hidden_tooltip = {
+					set_character_flag = choosing_patron_deity
+					character_event = { id = ekpatrons.0 }
+					set_character_flag = set_patron_deity
+				}
+			}
+		}
+	}
+	
+	change_patron_deity = { #Fork of the above
+		potential = {
+			NOT = { has_character_flag = choosing_patron_deity }
+			ai = no
+			is_marriage_adult = yes
+			is_pantheon_religion = yes
+			has_patron_deity = yes
+			NOT = { trait = mane }
+			has_character_flag = title_open #Will leave the main decision out of the submenu since it's far more important.
+			NOT = { character = 39000 }
+			OR = {
+				had_character_flag = {
+					flag = set_patron_deity
+					days = 3650
+				}
+				AND = { #Legacy band-aid for save compatibility and history-based characters with patrons.
+					has_patron_deity = yes
+					NOT = { has_character_flag = set_patron_deity }
+				}
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				text = spdtt
+				hidden_tooltip = {
+					has_patron_deity = yes
+				}
+			}
+			NOR = {
+				trait = zealous
+				trait = cynical
+			}
+		}
+		effect = {
+			custom_tooltip = {
+				text = ekpatronsdecisiontt #Choose your patron deity.
+				hidden_tooltip = {
+					set_character_flag = choosing_patron_deity
+					character_event = { id = ekpatrons.0 }
+					remove_patron_deity = yes
+					set_character_flag = set_patron_deity
+				}
+			}
+			piety = -110
+		}
+	}
+}

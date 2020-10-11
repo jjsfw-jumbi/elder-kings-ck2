@@ -1,0 +1,194 @@
+execution_method = {
+	death = death_execution_blood_drain
+	weight_multiplier = {
+		factor = 200
+		modifier = {
+			factor = 0
+			is_undead = yes
+		}
+	}
+	trigger = {
+		FROM = {
+			culture = tsaesci
+		}
+	}
+}
+execution_method = {
+	death = death_execution_sea_serpents
+	weight_multiplier = {
+		factor = 50
+		modifier = {
+			factor = 8
+			FROM = {
+				trait = cruel
+			}
+		}
+		modifier = {
+			factor = 3
+			FROM = {
+				trait = hunter
+			}
+		}
+	}
+	trigger = {
+		FROM = {
+			culture = maormer
+			capital_scope = {
+				port = yes
+			}
+		}
+	}
+}
+execution_method = {
+	death = death_execution_sharks
+	weight_multiplier = {
+		factor = 50
+		modifier = {
+			factor = 8
+			FROM = {
+				trait = cruel
+			}
+		}
+		modifier = {
+			factor = 3
+			FROM = {
+				trait = hunter
+			}
+		}
+	}
+	trigger = {
+		FROM = {
+			culture = quey
+			capital_scope = {
+				port = yes
+			}
+		}
+	}
+}
+execution_method = {
+	death = death_execution_shouted_fall
+	weight_multiplier = {
+		factor = 300
+		modifier = {
+			factor = 5
+			FROM = {
+				trait = dragonborn
+			}
+		}
+	}
+	trigger = {
+		FROM = {
+			has_thuum = yes
+		}
+	}
+}
+execution_method = {
+	death = death_execution_shouted_to_pieces
+	weight_multiplier = {
+		factor = 300
+		modifier = {
+			factor = 5
+			FROM = {
+				trait = dragonborn
+			}
+		}
+	}
+	trigger = {
+		FROM = {
+			has_thuum = yes
+		}
+	}
+}
+execution_method = {
+	death = death_execution_wamasu
+	weight_multiplier = {
+		factor = 50
+		modifier = {
+			factor = 3
+			FROM = {
+				trait = cruel
+			}
+		}
+		modifier = {
+			factor = 8
+			FROM = {
+				trait = hunter
+			}
+		}
+	}
+	trigger = {
+		FROM = {
+			capital_scope = {
+				region = nirn_tamriel_argonia
+			}
+		}
+	}
+}
+
+execution_method = {
+	death = death_execution_skyforge_chamber
+	weight_multiplier = {
+		factor = 300
+		modifier = { factor = 4 FROM = { trait = cruel } }
+		modifier = { factor = 3 FROM = { trait = ruthless } }
+		modifier = { factor = 5 FROM = { trait = impaler } }
+		modifier = { factor = 2 FROM = { trait = reckless } }
+		modifier = { factor = 2 FROM = { trait = wroth } }
+		modifier = {
+			factor = 0.1
+			FROM = {
+				NOR = {
+					trait = cruel
+					trait = ruthless
+					trait = impaler
+					trait = reckless
+					trait = wroth
+				}
+			}
+		}
+		modifier = { factor = 0.5 FROM = { trait = temperate } }
+		modifier = {
+			factor = 2
+			FROM = {
+				any_demesne_title = {
+					ROOT = { is_pretender = yes }
+				}
+				OR = {
+					trait = envious
+					trait = greedy
+					trait = ruthless
+					trait = paranoid
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				OR = {
+					any_spouse = { any_lover = { character = ROOT } }
+					any_lover = { any_spouse = { character = ROOT } }
+				}
+				trait = envious
+			}
+		}
+		modifier = {
+			factor = 2
+			OR = {
+				FROM = { is_foe = ROOT }
+				ROOT = { is_foe = FROM }
+			}
+		}
+	}
+	trigger = {
+		FROM = {
+			NOR = {
+				trait = kind
+				trait = charitable
+			}
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = execution_chamber
+				is_active = yes
+			}
+		}
+	}
+}

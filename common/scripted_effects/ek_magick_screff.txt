@@ -1,0 +1,420 @@
+#Define the Magicka pool using Learning as the base value, multiplied by 2 ; 1 Learning = 2 Magicka.
+set_magicka = {
+	set_variable = { which = magicka_max value = 0 }
+	export_to_variable = { which = magicka_max value = learning }
+	multiply_variable = { which = magicka_max value = 2 }
+	set_variable = { which = magicka_current value = 0 }
+	
+	#Artifact Bonuses
+	if = {
+		limit = {
+			any_artifact = {
+				artifact_type = amulet_of_julianos
+				is_artifact_equipped = yes
+			}
+		}
+		change_variable = { which = magicka_max value = 6 }
+	}
+	
+	#Artifact Maluses
+	if = {
+		limit = {
+			any_artifact = {
+				artifact_type = weapon_forkh
+				is_artifact_equipped = yes
+			}
+			check_variable = { which = magicka_max value = 2 }
+		}
+		divide_variable = { which = magicka_max value = 2 }
+	}
+}
+refresh_max_magicka = {
+	set_variable = { which = magicka_max value = 0 }
+	export_to_variable = { which = magicka_max value = learning }
+	multiply_variable = { which = magicka_max value = 2 }
+
+	#Artifact Bonuses
+	if = {
+		limit = {
+			any_artifact = {
+				artifact_type = amulet_of_julianos
+				is_artifact_equipped = yes
+			}
+		}
+		change_variable = { which = magicka_max value = 6 }
+	}
+	#Artifact Maluses
+	if = {
+		limit = {
+			any_artifact = {
+				artifact_type = weapon_forkh
+				is_artifact_equipped = yes
+			}
+			check_variable = { which = magicka_max value = 2 }
+		}
+		divide_variable = { which = magicka_max value = 2 }
+	}
+	
+	if = {
+		limit = {
+			check_variable = { which = magicka_current which = magicka_max } #Actually checks if the variable is equal to or greater than.
+		}
+		set_variable = { which = magicka_current which = magicka_max } #This forces it to be equal if it is equal to or greater than.
+	}
+}
+
+#Magicka regeneration effect.
+regen_magicka_effect = {
+	if = {
+		limit = {
+			NOT = { check_variable = { which = magicka_current which = magicka_max } }
+		}
+		trigger_switch = {
+			on_trigger = learning
+			56 = { change_variable = { which = magicka_current value = 8 } }
+			48 = { change_variable = { which = magicka_current value = 7 } }
+			40 = { change_variable = { which = magicka_current value = 6 } }
+			32 = { change_variable = { which = magicka_current value = 5 } }
+			24 = { change_variable = { which = magicka_current value = 4 } }
+			16 = { change_variable = { which = magicka_current value = 3 } }
+			8 = { change_variable = { which = magicka_current value = 2 } }
+			0 = { change_variable = { which = magicka_current value = 1 } }
+		}
+		
+		#Artifacts that boost regen
+		if = {
+			limit = {
+				any_artifact = {
+					artifact_type = amulet_of_alessia
+					is_artifact_equipped = yes
+				}
+			}
+			change_variable = { which = magicka_current value = 2 }
+		}
+		if = {
+			limit = {
+				any_artifact = {
+					artifact_type = amulet_of_akatosh
+					is_artifact_equipped = yes
+				}
+			}
+			trigger_switch = {
+				on_trigger = learning
+				30 = { change_variable = { which = magicka_current value = 3 } }
+				15 = { change_variable = { which = magicka_current value = 2 } }
+				0 = { change_variable = { which = magicka_current value = 1 } }
+			}
+		}
+		if = {
+			limit = {
+				any_artifact = {
+					artifact_type = amulet_of_hagraven
+					is_artifact_equipped = yes
+				}
+			}
+			change_variable = { which = magicka_current value = 1 }
+		}
+		if = {
+			limit = {
+				any_artifact = {
+					artifact_type = ring_of_erudite
+					is_artifact_equipped = yes
+				}
+			}
+			change_variable = { which = magicka_current value = 2 }
+		}
+	}
+	
+	else_if = {
+		limit = { check_variable = { which = magicka_current which = magicka_max } }
+		set_variable = { which = magicka_current which = magicka_max }
+	}
+}
+
+#Spellcosts
+spell_cost_1 = { subtract_variable = { which = magicka_current value = 1 } }
+spell_cost_2 = { subtract_variable = { which = magicka_current value = 2 } }
+spell_cost_3 = { subtract_variable = { which = magicka_current value = 3 } }
+spell_cost_4 = { subtract_variable = { which = magicka_current value = 4 } }
+spell_cost_5 = { subtract_variable = { which = magicka_current value = 5 } }
+spell_cost_6 = { subtract_variable = { which = magicka_current value = 6 } }
+spell_cost_7 = { subtract_variable = { which = magicka_current value = 7 } }
+spell_cost_8 = { subtract_variable = { which = magicka_current value = 8 } }
+spell_cost_9 = { subtract_variable = { which = magicka_current value = 9 } }
+spell_cost_10 = { subtract_variable = { which = magicka_current value = 10 } }
+spell_cost_11 = { subtract_variable = { which = magicka_current value = 11 } }
+spell_cost_12 = { subtract_variable = { which = magicka_current value = 12 } }
+spell_cost_13 = { subtract_variable = { which = magicka_current value = 13 } }
+spell_cost_14 = { subtract_variable = { which = magicka_current value = 14 } }
+spell_cost_15 = { subtract_variable = { which = magicka_current value = 15 } }
+spell_cost_16 = { subtract_variable = { which = magicka_current value = 16 } }
+spell_cost_17 = { subtract_variable = { which = magicka_current value = 17 } }
+spell_cost_18 = { subtract_variable = { which = magicka_current value = 18 } }
+spell_cost_19 = { subtract_variable = { which = magicka_current value = 19 } }
+spell_cost_20 = { subtract_variable = { which = magicka_current value = 20 } }
+spell_cost_21 = { subtract_variable = { which = magicka_current value = 21 } }
+spell_cost_22 = { subtract_variable = { which = magicka_current value = 22 } }
+spell_cost_23 = { subtract_variable = { which = magicka_current value = 23 } }
+spell_cost_24 = { subtract_variable = { which = magicka_current value = 24 } }
+spell_cost_25 = { subtract_variable = { which = magicka_current value = 25 } }
+spell_cost_26 = { subtract_variable = { which = magicka_current value = 26 } }
+spell_cost_27 = { subtract_variable = { which = magicka_current value = 27 } }
+spell_cost_28 = { subtract_variable = { which = magicka_current value = 28 } }
+spell_cost_29 = { subtract_variable = { which = magicka_current value = 29 } }
+spell_cost_30 = { subtract_variable = { which = magicka_current value = 30 } }
+spell_cost_31 = { subtract_variable = { which = magicka_current value = 31 } }
+spell_cost_32 = { subtract_variable = { which = magicka_current value = 32 } }
+spell_cost_33 = { subtract_variable = { which = magicka_current value = 33 } }
+spell_cost_34 = { subtract_variable = { which = magicka_current value = 34 } }
+spell_cost_35 = { subtract_variable = { which = magicka_current value = 35 } }
+spell_cost_36 = { subtract_variable = { which = magicka_current value = 36 } }
+spell_cost_37 = { subtract_variable = { which = magicka_current value = 37 } }
+spell_cost_38 = { subtract_variable = { which = magicka_current value = 38 } }
+spell_cost_39 = { subtract_variable = { which = magicka_current value = 39 } }
+spell_cost_40 = { subtract_variable = { which = magicka_current value = 40 } }
+spell_cost_41 = { subtract_variable = { which = magicka_current value = 41 } }
+spell_cost_42 = { subtract_variable = { which = magicka_current value = 42 } }
+spell_cost_43 = { subtract_variable = { which = magicka_current value = 43 } }
+spell_cost_44 = { subtract_variable = { which = magicka_current value = 44 } }
+spell_cost_45 = { subtract_variable = { which = magicka_current value = 45 } }
+spell_cost_46 = { subtract_variable = { which = magicka_current value = 46 } }
+spell_cost_47 = { subtract_variable = { which = magicka_current value = 47 } }
+spell_cost_48 = { subtract_variable = { which = magicka_current value = 48 } }
+spell_cost_49 = { subtract_variable = { which = magicka_current value = 49 } }
+spell_cost_50 = { subtract_variable = { which = magicka_current value = 50 } }
+spell_cost_51 = { subtract_variable = { which = magicka_current value = 51 } }
+spell_cost_52 = { subtract_variable = { which = magicka_current value = 52 } }
+spell_cost_53 = { subtract_variable = { which = magicka_current value = 53 } }
+spell_cost_54 = { subtract_variable = { which = magicka_current value = 54 } }
+spell_cost_55 = { subtract_variable = { which = magicka_current value = 55 } }
+spell_cost_56 = { subtract_variable = { which = magicka_current value = 56 } }
+spell_cost_57 = { subtract_variable = { which = magicka_current value = 57 } }
+spell_cost_58 = { subtract_variable = { which = magicka_current value = 58 } }
+spell_cost_59 = { subtract_variable = { which = magicka_current value = 59 } }
+spell_cost_60 = { subtract_variable = { which = magicka_current value = 60 } }
+spell_cost_61 = { subtract_variable = { which = magicka_current value = 61 } }
+spell_cost_62 = { subtract_variable = { which = magicka_current value = 62 } }
+spell_cost_63 = { subtract_variable = { which = magicka_current value = 63 } }
+spell_cost_64 = { subtract_variable = { which = magicka_current value = 64 } }
+spell_cost_65 = { subtract_variable = { which = magicka_current value = 65 } }
+spell_cost_66 = { subtract_variable = { which = magicka_current value = 66 } }
+spell_cost_67 = { subtract_variable = { which = magicka_current value = 67 } }
+spell_cost_68 = { subtract_variable = { which = magicka_current value = 68 } }
+spell_cost_69 = { subtract_variable = { which = magicka_current value = 69 } }
+spell_cost_70 = { subtract_variable = { which = magicka_current value = 70 } }
+spell_cost_71 = { subtract_variable = { which = magicka_current value = 71 } }
+spell_cost_72 = { subtract_variable = { which = magicka_current value = 72 } }
+spell_cost_73 = { subtract_variable = { which = magicka_current value = 73 } }
+spell_cost_74 = { subtract_variable = { which = magicka_current value = 74 } }
+spell_cost_75 = { subtract_variable = { which = magicka_current value = 75 } }
+spell_cost_76 = { subtract_variable = { which = magicka_current value = 76 } }
+spell_cost_77 = { subtract_variable = { which = magicka_current value = 77 } }
+spell_cost_78 = { subtract_variable = { which = magicka_current value = 78 } }
+spell_cost_79 = { subtract_variable = { which = magicka_current value = 79 } }
+spell_cost_80 = { subtract_variable = { which = magicka_current value = 80 } }
+
+
+
+
+remove_congenital_traits_racechange = {
+	remove_trait = clubfooted
+	remove_trait = harelip
+	remove_trait = hunchback
+	remove_trait = lisp
+	remove_trait = fair
+	remove_trait = ugly
+	remove_trait = strong
+	remove_trait = weak
+	remove_trait = agile
+	remove_trait = melodious_voice
+	remove_trait = powerful_voice
+	remove_trait = perceptive
+	remove_trait = fortitude
+	remove_trait = wrymouth
+	
+	## Height has been made its own thing
+	#remove_trait = dwarf
+	#remove_trait = giant
+	#remove_trait = tall
+	#remove_trait = short
+}
+assign_random_congenital_racechange = {
+	random_list = {
+		19 = { add_trait = ugly }
+		12 = { add_trait = hunchback }
+		14 = { add_trait = harelip }
+		10 = { add_trait = weak }
+		15 = { add_trait = wrymouth }
+		30 = {}
+	}
+}
+
+become_necromancer = {
+	add_trait = necromancer
+	character_event = { id = necromancy.100 }
+}
+
+lose_necromancer = {
+	remove_trait = necromancer
+	character_event = { id = necromancy.103 }
+}
+
+calculate_necromantic_charges = {
+	set_variable = { which = necromantic_charges value = 0 }
+	
+	# 10 learning = 1 charge
+	export_to_variable = { which = learningVar value = learning }
+	
+	while = {
+		limit = {
+			check_variable = {
+				which = learningVar
+				value = 10
+			}
+		}    
+		subtract_variable = {
+			which = learningVar
+			value = 10
+		}
+		change_variable = { which = necromantic_charges value = 1 }
+	}
+	
+	# Liches get a boost
+	if = {
+		limit = { trait = lich }
+		change_variable = { which = necromantic_charges value = 1 }
+	}
+	
+	# Artifact with necromantic_artifact_necro_charge = 1 charge
+	while = {
+		limit = {
+			any_artifact = {
+				has_artifact_flag = necromantic_artifact_necro_charge
+				is_artifact_equipped = yes
+				NOT = { has_artifact_flag = artifact_counted }
+			}
+		}
+		change_variable = { which = necromantic_charges value = 1 }
+		random_artifact = {
+			limit = {
+				has_artifact_flag = necromantic_artifact_necro_charge
+				is_artifact_equipped = yes
+				NOT = { has_artifact_flag = artifact_counted }
+			}
+			set_artifact_flag = artifact_counted
+		}
+	}
+	
+	any_artifact = {
+		limit = { has_artifact_flag = artifact_counted }
+		clr_artifact_flag = artifact_counted
+	}
+	
+	# Wonder upgrade with necromantic_upgrade_necro_charge = 1 charge
+	while = {
+		limit = {
+			any_realm_wonder = {
+				has_wonder_upgrade_flag = necromantic_upgrade_necro_charge
+				is_active = yes
+				NOT = { has_wonder_flag = wonder_counted }
+			}
+		}
+		change_variable = { which = necromantic_charges value = 1 }
+		random_realm_wonder = {
+			limit = {
+				has_wonder_upgrade_flag = necromantic_upgrade_necro_charge
+				is_active = yes
+				NOT = { has_wonder_flag = wonder_counted }
+			}
+			set_wonder_flag = wonder_counted
+		}
+	}
+	
+	any_realm_wonder = {
+		limit = { has_wonder_flag = wonder_counted }
+		clr_wonder_flag = wonder_counted
+	}
+	
+	# Finally, set the max number of risen dead armies + 1 (cause check_variable is >=)
+	set_variable = { which = risen_dead_armies_limit which = necromantic_charges }
+	change_variable = { which = risen_dead_armies_limit value = 1 }
+}
+
+calculate_risen_dead_armies = {
+	custom_tooltip = {
+		text = CALCULATE_RISEN_DEAD_ARMIES_CT
+		
+		hidden_tooltip = {
+			set_variable = { which = number_risen_dead_army value = 0 }
+			
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_10 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_9 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_8 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_7 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_6 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_5 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_4 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_3 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_2 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+			if = {
+				limit = { has_earmarked_regiments = risen_dead_army_1 }
+				change_variable = { which = number_risen_dead_army value = 1 }
+			}
+		}
+	}
+}
+
+### Race transformation
+pre_race_transform = {
+	custom_tooltip = {
+		text = MAGICKA_COST_55
+		
+		hidden_tooltip = {
+			save_height = yes
+			spell_cost_55 = yes		
+			remove_racial_trait = yes
+		}
+	}
+}
+
+post_race_transform = {
+	custom_tooltip = {
+		text = CONGENITAL_TRAITS_CHANGE
+		hidden_tooltip = {
+			assign_racial_trait = yes
+			set_character_flag = race_changer
+			
+			remove_congenital_traits_racechange = yes
+			assign_random_congenital_racechange = yes
+			
+			apply_height = yes
+		}
+	}
+}

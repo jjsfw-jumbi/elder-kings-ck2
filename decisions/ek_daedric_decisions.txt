@@ -1,0 +1,724 @@
+decisions = {
+
+	clavicus_make_deal = {
+		only_playable = yes
+		
+		potential = {
+			NOT = { has_dlc = "Jade Dragon" }
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			religion = daedra_clavicus
+			NOT = { has_character_modifier = clavicus_cooldown }
+			NOT = { has_character_flag = clavicus_deal }
+			has_submenu_open = no
+			is_daedric_prince = no
+		}
+		allow = {
+			scaled_wealth = 1
+			is_adult = yes
+		}
+		effect = {
+			scaled_wealth = -1
+			set_character_flag = clavicus_deal
+			if = {
+				limit = { ai = no }
+				character_event = { id = clavicus.1 }
+			}
+			if = {
+				limit = { ai = yes }
+				character_event = { id = clavicus.5 }
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.05
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}
+		}
+	}
+	
+	hermaeus_consult_black_book = {
+		only_playable = yes
+		
+		potential = {
+			NOT = { has_dlc = "Jade Dragon" }
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			religion = daedra_hermaeus
+			NOT = { has_character_modifier = hermaeus_cooldown }
+			NOT = { has_character_flag = black_book }
+			has_submenu_open = no
+			is_daedric_prince = no
+		}
+		allow = {
+			piety = 400
+			is_adult = yes
+			check_variable = { which = black_books_read value < 8 }
+		}
+		effect = {
+			piety = -400
+			set_character_flag = black_book
+			long_character_event = { id = hermaeus.1 days = 3 }
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}
+		}
+	}
+	
+	hircine_become_lycanthrope = {
+		only_playable = yes
+		
+		potential = {
+			NOT = { has_dlc = "Jade Dragon" }
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			NOT = { trait = lycan }
+			is_disease_immune = no
+			is_undead = no
+			religion = daedra_hircine
+			NOT = { has_character_flag = lycanthrope_decision }
+			has_submenu_open = no
+			is_daedric_prince = no
+		}
+		allow = {
+			piety = 800
+			is_adult = yes
+		}
+		effect = {
+			piety = -800
+			long_character_event = { id = hircine.1 days = 3 }
+			set_character_flag = lycanthrope_decision
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 10
+				has_character_flag = ambitious
+			}
+		}
+	}
+	
+	molag_pureblood_vampirism = {
+		only_playable = yes
+		
+		potential = {
+			NOT = { has_dlc = "Jade Dragon" }
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			religion = daedra_molag
+			NOT = { has_character_modifier = pureblood_vampire }
+			NOT = { has_character_flag = pureblood_decision }
+			has_submenu_open = no
+			OR = { #Normal vampires get upgraded. No other disease immune character can take this decision.
+				is_disease_immune = no
+				AND = {
+					is_disease_immune = yes
+					is_vampire = yes
+				}
+			}
+		}
+		allow = {
+			piety = 3000
+			is_adult = yes
+		}
+		effect = {
+			piety = -3000
+			long_character_event = { id = molag.1 days = 3 }
+			set_character_flag = pureblood_decision
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 10
+				has_character_flag = vampire
+			}
+		}
+	}
+
+	namira_vows_of_squalor ={
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			religion = daedra_namira
+			NOT = { has_character_modifier = namira_vow_1 }
+			NOT = { has_character_modifier = namira_vow_2 }
+			NOT = { has_character_modifier = namira_vow_3 }
+			NOT = { has_character_flag = namira_decision }
+			has_submenu_open = no
+			is_daedric_prince = no
+		}
+		allow = {
+			is_adult = yes
+		}
+		effect = {
+			hidden_tooltip = {
+				set_character_flag = namira_decision
+				character_event = { id = namira.1 }
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.05
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}
+		}
+	}
+
+	namira_end_vows = {
+		only_playable = yes
+		
+		potential = {
+			religion = daedra_namira
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			OR = {
+				has_character_modifier = namira_vow_1
+				has_character_modifier = namira_vow_2
+				has_character_modifier = namira_vow_3
+			}
+			NOT = { has_character_flag = namira_decision }
+			has_submenu_open = no
+			is_daedric_prince = no
+		}
+		allow = {
+			is_adult = yes
+		}
+		effect = {
+			set_character_flag = namira_decision
+			character_event = { id = namira.2 }
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}
+		}
+	}
+	
+	peryite_immunize_province = {
+		only_playable = yes
+		only_rulers = yes
+		
+		potential = {
+			NOT = { has_dlc = "Jade Dragon" }
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			religion = daedra_peryite
+			NOT = { has_character_modifier = called_on_peryite }
+			NOT = { has_character_flag = peryite_deal }
+			has_submenu_open = no
+			is_daedric_prince = no
+		}
+		allow = {
+			is_adult = yes
+			scaled_wealth = 0.5
+		}
+		effect = {
+			set_character_flag = peryite_deal
+			character_event = { id = peryite.1 }
+		}
+
+		ai_will_do = {
+			factor = 0.15
+		}
+	}
+	
+	deactivate_tower = {
+		only_playable = yes
+		only_rulers = yes
+		
+		potential = {
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			OR = {
+				true_religion_group = daedra
+				religion_group = daedra
+			}
+			has_submenu_open = no
+			is_daedric_prince = no
+			calc_true_if = {
+				amount = 1
+				NOT = { has_global_flag = adamantine_deactivated }
+				NOT = { has_global_flag = whitegold_deactivated }
+				NOT = { has_global_flag = greensap_deactivated }
+				NOT = { has_global_flag = snowthroat_deactivated }
+				NOT = { has_global_flag = redtower_deactivated }
+				NOT = { has_global_flag = crystal_deactivated }
+			}
+		}
+		allow = {
+			is_adult = yes
+			religion_group = daedra
+			independent = yes
+			custom_tooltip = {
+				text = is_daedra_herald_text
+				is_daedra_herald = yes
+			}
+			NOT = { has_character_modifier = tower_timer }
+			scaled_wealth = { value = 0.5 min = 2000 }
+			OR = {
+				AND = {
+					prestige = 5000
+					piety = 5000
+				}
+				custom_tooltip = {
+					text = has_grace_massive_daedra
+					has_grace_massive_trigger = yes
+				}
+			}
+			OR = {
+				AND = {
+					OR = {
+						has_landed_title = c_balfiera
+						any_realm_character = { has_landed_title = c_balfiera }
+					}	
+					OR = {
+						has_landed_title = b_direnni
+						any_realm_character = { has_landed_title = b_direnni }
+					}
+					NOT = { has_global_flag = adamantine_deactivated }
+				}
+				AND = {
+					OR = {
+						has_landed_title = c_imperialisle
+						any_realm_character = { has_landed_title = c_imperialisle }
+					}
+					OR = {
+						has_landed_title = b_whitegold
+						any_realm_character = { has_landed_title = b_whitegold }
+					}
+					NOT = { has_global_flag = whitegold_deactivated }
+				}
+				AND = {
+					OR = {
+						has_landed_title = c_ivarstead
+						any_realm_character = { has_landed_title = c_ivarstead }
+					}
+					OR = {
+						has_landed_title = b_seventhousandsteps
+						any_realm_character = { has_landed_title = b_seventhousandsteps }
+					}
+					NOT = { has_global_flag = snowthroat_deactivated }
+				}
+				AND = {
+					OR = {
+						has_landed_title = c_falinesti
+						any_realm_character = { has_landed_title = c_falinesti }
+					}
+					OR = {
+						has_landed_title = b_falinesti
+						any_realm_character = { has_landed_title = b_falinesti }
+					}
+					NOT = { has_global_flag = greensap_deactivated }
+				}
+				AND = {
+					OR = {
+						has_landed_title = c_kingshaven
+						any_realm_character = { has_landed_title = c_kingshaven }
+					}
+					OR = {
+						has_landed_title = b_crystal
+						any_realm_character = { has_landed_title = b_crystal }
+					}
+					NOT = { has_global_flag = crystal_deactivated }
+				}
+				AND = {
+					OR = {
+						has_landed_title = c_ascadian
+						any_realm_character = { has_landed_title = c_ascadian}
+					}
+					OR = {
+						has_landed_title = c_almalexia
+						any_realm_character = { has_landed_title = c_almalexia }
+					}
+					calc_true_if = {
+						amount = 3
+						OR = {
+							has_landed_title = c_molagamur
+							any_realm_character = { has_landed_title = c_molagamur }
+						}
+						OR = {
+							has_landed_title = c_grazelands
+							any_realm_character = { has_landed_title = c_grazelands}
+						}
+						OR = {
+							has_landed_title = c_aldruhn
+							any_realm_character = { has_landed_title = c_aldruhn }
+						}
+						OR = {
+							has_landed_title = c_ashlands
+							any_realm_character = { has_landed_title = c_ashlands }
+						}
+						OR = {
+							has_landed_title = c_maargan
+							any_realm_character = { has_landed_title = c_maargan }
+						}
+					}	
+					NOT = { has_global_flag = redtower_deactivated }
+				}
+			}
+		}
+		effect = {
+			scaled_wealth = { value = -0.5 min = -2000 }
+			prestige = -3000
+			piety = -3000
+			character_event = { id = ektowers.0 }
+			add_character_modifier = {
+				name = tower_timer
+				duration = 730
+				hidden = yes
+			}
+			custom_tooltip = {
+				text = detract_grace_massive_text
+				detract_grace_massive_effect = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 75
+		}
+	}
+	
+	destroy_mundus = {
+		only_playable = yes
+		only_rulers = yes
+		
+		potential = {
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			OR = {
+				true_religion_group = daedra
+				religion_group = daedra
+			}
+			has_submenu_open = no
+			is_daedric_prince = no
+			calc_true_if = {
+				amount = 1
+				has_global_flag = adamantine_deactivated
+				has_global_flag = whitegold_deactivated
+				has_global_flag = greensap_deactivated
+				has_global_flag = snowthroat_deactivated
+				has_global_flag = redtower_deactivated
+				has_global_flag = crystal_deactivated
+			}
+		}
+		allow = {
+			is_adult = yes
+			religion_group = daedra
+			custom_tooltip = {
+				text = is_daedra_herald_text
+				is_daedra_herald = yes
+			}
+			independent = yes
+			NOT = { has_character_modifier = tower_timer }
+			scaled_wealth = { value = 0.5 min = 2000 }
+			OR = {
+				AND = {
+					prestige = 5000
+					piety = 5000
+				}
+				custom_tooltip = {
+					text = has_grace_massive_daedra
+					has_grace_massive_trigger = yes
+				}
+			}
+			calc_true_if = {
+				amount = 5
+				has_global_flag = adamantine_deactivated
+				has_global_flag = whitegold_deactivated
+				has_global_flag = greensap_deactivated
+				has_global_flag = snowthroat_deactivated
+				has_global_flag = redtower_deactivated
+				has_global_flag = crystal_deactivated
+			}
+		}
+		effect = {
+			scaled_wealth = { value = -0.5 min = -2000 }
+			prestige = -5000
+			piety = -5000
+			character_event = { id = ektowers.100 }
+			add_character_modifier = {
+				name = tower_timer
+				duration = 730
+				hidden = yes
+			}
+			detract_grace_massive_effect = yes
+		}
+
+		ai_will_do = {
+			factor = 75
+		}
+	}
+	
+	activate_tower = {
+		only_playable = yes
+		only_rulers = yes
+		
+		potential = {
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			NOT = { true_religion_group = daedra }
+			has_submenu_open = no
+			is_daedric_prince = no
+			calc_true_if = {
+				amount = 1
+				has_global_flag = adamantine_deactivated
+				has_global_flag = whitegold_deactivated
+				has_global_flag = greensap_deactivated
+				# has_global_flag = snowthroat_deactivated
+				# has_global_flag = redtower_deactivated
+				has_global_flag = crystal_deactivated
+			}
+		}
+		allow = {
+			is_adult = yes
+			NOT = { religion_group = daedra }
+			NOT = { has_character_modifier = tower_timer }
+			NOT = { any_liege = { religion_group = daedra } }
+			scaled_wealth = { value = 0.5 min = 2500 }
+			prestige = 2000
+			piety = 2000
+			OR = {
+				AND = {
+					OR = {
+						has_landed_title = c_balfiera
+						any_realm_character = { has_landed_title = c_balfiera }
+					}	
+					OR = {
+						b_direnni = { has_holder = no }
+						has_landed_title = b_direnni
+						any_realm_character = { has_landed_title = b_direnni }
+					}
+					has_global_flag = adamantine_deactivated
+				}
+				AND = {
+					OR = {
+						has_landed_title = c_imperialisle
+						any_realm_character = { has_landed_title = c_imperialisle }
+					}
+					OR = {
+						b_whitegold = { has_holder = no }
+						has_landed_title = b_whitegold
+						any_realm_character = { has_landed_title = b_whitegold }
+					}
+					has_global_flag = whitegold_deactivated
+				}
+				# AND = {
+					# OR = {
+						# has_landed_title = c_ivarstead
+						# any_realm_character = { has_landed_title = c_ivarstead }
+					# }
+					# OR = {
+						# has_landed_title = b_seventhousandsteps
+						# any_realm_character = { has_landed_title = b_seventhousandsteps }
+					# }
+					# has_global_flag = snowthroat_deactivated
+				# }
+				AND = {
+					OR = {
+						has_landed_title = c_falinesti
+						any_realm_character = { has_landed_title = c_falinesti }
+					}
+					OR = {
+						b_falinesti = { has_holder = no }
+						has_landed_title = b_falinesti
+						any_realm_character = { has_landed_title = b_falinesti }
+					}
+					has_global_flag = greensap_deactivated
+				}
+				AND = {
+					OR = {
+						has_landed_title = c_kingshaven
+						any_realm_character = { has_landed_title = c_kingshaven }
+					}
+					OR = {
+						b_crystal = { has_holder = no }
+						has_landed_title = b_crystal
+						any_realm_character = { has_landed_title = b_crystal }
+					}
+					has_global_flag = crystal_deactivated
+				}
+				# AND = {
+					# OR = {
+						# has_landed_title = c_ascadian
+						# any_realm_character = { has_landed_title = c_ascadian }
+					# }
+					# OR = {
+						# has_landed_title = c_almalexia
+						# any_realm_character = { has_landed_title = c_almalexia }
+					# }
+					# calc_true_if = {
+						# amount = 3
+						# OR = {
+							# has_landed_title = c_molagamur
+							# any_realm_character = { has_landed_title = c_molagamur }
+						# }
+						# OR = {
+							# has_landed_title = c_grazelands
+							# any_realm_character = { has_landed_title = c_grazelands }
+						# }
+						# OR = {
+							# has_landed_title = c_aldruhn
+							# any_realm_character = { has_landed_title = c_aldruhn }
+						# }
+						# OR = {
+							# has_landed_title = c_ashlands
+							# any_realm_character = { has_landed_title = c_ashlands }
+						# }
+						# OR = {
+							# has_landed_title = c_maargan
+							# any_realm_character = { has_landed_title = c_maargan }
+						# }
+					# }	
+					# has_global_flag = redtower_deactivated
+				# }
+			}
+		}
+		effect = {
+			scaled_wealth = { value = -0.5 min = -2500 }
+			prestige = -2000
+			piety = -2000
+			character_event = { id = ektowers.200 }
+			add_character_modifier = {
+				name = tower_timer
+				duration = 730
+				hidden = yes
+			}
+		}
+
+		ai_will_do = {
+			factor = 75
+		}
+	}
+	
+}
+
+settlement_decisions = {
+	
+	sanguine_fund_revelry = {
+		ai_target_filter = owned
+		filter = owned
+		
+		only_playable = yes
+		
+		from_potential = {
+			is_playable = yes
+			is_incapable = no
+			is_adult = yes
+			is_inaccessible_trigger = no
+			religion = daedra_sanguine
+			has_submenu_open = no
+			is_daedric_prince = no
+		}
+		
+		potential = {
+			holder_scope = { character = FROM }
+		}
+		allow = {
+			holder_scope = {	
+				is_adult = yes
+				scaled_wealth = 0.5
+			}
+			location = {
+				NOR = {
+					has_province_modifier = sanguine_revelry_hedonistic
+					has_province_modifier = sanguine_revelry_normal
+					has_province_modifier = sanguine_revelry_prudish
+				}
+			}
+		}
+		
+		effect = {
+			holder_scope = { scaled_wealth = -0.5 }
+			location = {
+				if = {
+					limit = {
+						is_hedonistic_religion = yes
+					}
+					add_province_modifier = {
+						name = sanguine_revelry_hedonistic
+						duration = 1825
+					}
+				}
+				if = {
+					limit = {
+						is_hedonistic_religion = no
+						is_prudish_religion = no
+					}
+					add_province_modifier = {
+						name = sanguine_revelry_normal
+						duration = 1825
+					}
+				}
+				if = {
+					limit = { is_prudish_religion = yes }
+					add_province_modifier = {
+						name = sanguine_revelry_prudish
+						duration = 1825
+					}
+				}
+			}
+		}
+		
+
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { #No point in doing it with such low revolt risk
+				factor = 0
+				location = {
+					NOT = { revolt_risk = 0.01 }
+				}
+			}
+			modifier = { #No point in doing it with such low revolt risk
+				factor = 5
+				location = {
+					revolt_risk = 0.01
+					NOT = { revolt_risk = 0.1 }
+				}
+			}
+			modifier = { #No point in doing it with such low revolt risk
+				factor = 10
+				location = {
+					revolt_risk = 0.10
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,2659 @@
+#############################################
+#############################################
+#                                         	#
+# ZE Education Trait Events				  	#
+# ID ZE.14000-ZE.14999                    	#
+#                                         	#
+#############################################
+#############################################
+
+# Written by Tobias Bodlund
+
+namespace = ZE
+
+#############################################
+# Diplomacy									#
+#############################################
+
+character_event = {
+	id = ZE.14100
+	picture = GFX_evt_council_speaker
+	border = GFX_event_normal_frame_diplomacy
+
+	desc = {
+		text = EVTDESCA_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		has_focus = focus_ed_diplomacy
+		NOT ={
+			has_character_flag = is_child_of_destiny
+		}
+	}
+	
+	immediate = {
+		set_character_flag = is_being_graded
+		educator = { save_event_target_as = education_outcome_educator }
+		clear_focus = yes
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						is_smart_trigger = yes
+						trait = diligent
+					}
+				}
+				modifier = {
+					factor = 0.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 2
+					trait = slothful
+				}
+				modifier = {
+					factor = 1.5
+					AND = {
+						OR = {
+							has_character_flag = was_willful
+							trait = willful
+						}
+						OR = {
+							has_character_flag = was_fussy
+							trait = fussy
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_willful
+						trait = willful
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_fussy
+						trait = fussy
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_affectionate
+							trait = affectionate
+						}
+						OR = {
+							has_character_flag = was_curious
+							trait = curious
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_affectionate
+						trait = affectionate
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_curious
+						trait = curious
+					}
+				}
+				set_character_flag = education_outcome_level_1
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				set_character_flag = education_outcome_level_2
+			}
+			15 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 1.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 1.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.7
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.5
+					AND = {
+						OR = {
+							has_character_flag = was_willful
+							trait = willful
+						}
+						OR = {
+							has_character_flag = was_fussy
+							trait = fussy
+						}
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_willful
+						trait = willful
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_fussy
+						trait = fussy
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_affectionate
+							trait = affectionate
+						}
+						OR = {
+							has_character_flag = was_curious
+							trait = curious
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_affectionate
+						trait = affectionate
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_curious
+						trait = curious
+					}
+				}
+				set_character_flag = education_outcome_level_3
+			}
+			10 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 2.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 2.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.4
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_willful
+							trait = willful
+						}
+						OR = {
+							has_character_flag = was_fussy
+							trait = fussy
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_willful
+						trait = willful
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_fussy
+						trait = fussy
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_affectionate
+							trait = affectionate
+						}
+						OR = {
+							has_character_flag = was_curious
+							trait = curious
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_affectionate
+						trait = affectionate
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_curious
+						trait = curious
+					}
+				}
+				modifier = {
+					factor = 20
+					has_character_flag = is_child_of_destiny
+				}
+				set_character_flag = education_outcome_level_4
+			}
+		}
+		clr_character_flag = education_effect_imprisoned
+		clr_character_flag = was_willful
+		clr_character_flag = was_brooding
+		clr_character_flag = was_indolent
+		clr_character_flag = was_playful
+		clr_character_flag = was_conscientious
+		clr_character_flag = was_fussy
+		clr_character_flag = was_curious
+		clr_character_flag = was_idolizer
+		clr_character_flag = was_haughty
+		clr_character_flag = was_affectionate
+		clr_character_flag = was_timid
+		clr_character_flag = was_rowdy
+		remove_trait = diplomat_1
+		remove_trait = diplomat_2
+		remove_trait = diplomat_3
+		remove_trait = diplomat_4
+		remove_trait = diplomat_5
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+		add_trait = diplomat_1
+		clr_character_flag = education_outcome_level_1
+	}
+	option = {
+		name = EVTOPTB_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+		add_trait = diplomat_2
+		clr_character_flag = education_outcome_level_2
+	}
+	option = {
+		name = EVTOPTC_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+		add_trait = diplomat_3
+		clr_character_flag = education_outcome_level_3
+	}
+	option = {
+		name = EVTOPTD_ZE_14100
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+		add_trait = diplomat_4
+		clr_character_flag = education_outcome_level_4
+	}
+	
+	after = {
+		clr_character_flag = is_being_graded
+		hidden_tooltip = { 
+			# Notify educator
+			event_target:education_outcome_educator = { character_event = { id = ZE.14110 } } 
+			if = {
+				limit = { # Notify mother if primary heir
+					mother = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					} 
+				}
+				mother = {
+					character_event = { id = ZE.14110 }
+				}
+			}
+			if = {
+				limit = { # Notify father if primary heir
+					father = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				father = {
+					character_event = { id = ZE.14110 }
+				}
+			}
+		}
+	}
+}
+
+# Notify educator
+character_event = {
+	id = ZE.14110
+	picture = GFX_evt_council_speaker
+	border = GFX_event_normal_frame_diplomacy
+
+	desc = {
+		text = EVTDESCA_ZE_14110
+		trigger = {
+			FROM = { trait = diplomat_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14110
+		trigger = {
+			FROM = { trait = diplomat_2 }
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14110
+		trigger = {
+			FROM = { trait = diplomat_3 }
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14110
+		trigger = {
+			FROM = { trait = diplomat_4 }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_14110
+		trigger = {
+			FROM = { trait = diplomat_1 }
+		}
+		tooltip = { FROM = { add_trait = diplomat_1 } }
+	}
+	option = {
+		name = EVTOPTB_ZE_14110
+		trigger = {
+			FROM = { trait = diplomat_2 }
+		}
+		tooltip = { FROM = { add_trait = diplomat_2 } }
+	}
+	option = {
+		name = EVTOPTC_ZE_14110
+		trigger = {
+			FROM = { trait = diplomat_3 }
+		}
+		tooltip = { FROM = { add_trait = diplomat_3 } }
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			FROM = { trait = diplomat_4 }
+		}
+		tooltip = { FROM = { add_trait = diplomat_4 } }
+	}
+}
+
+
+
+#############################################
+# Martial									#
+#############################################
+
+character_event = {
+	id = ZE.14200
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+
+	desc = {
+		text = EVTDESCA_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		has_focus = focus_ed_martial
+		NOT ={
+			has_character_flag = is_child_of_destiny
+		}
+	}
+	
+	immediate = {
+		set_character_flag = is_being_graded
+		educator = { save_event_target_as = education_outcome_educator }
+		clear_focus = yes
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						is_smart_trigger = yes
+						trait = diligent
+					}
+				}
+				modifier = {
+					factor = 0.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 2
+					trait = slothful
+				}
+				modifier = {
+					factor = 1.5
+					AND = {
+						OR = {
+							has_character_flag = was_timid
+							trait = timid
+						}
+						OR = {
+							has_character_flag = was_idolizer
+							trait = idolizer
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_timid
+						trait = timid
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_idolizer
+						trait = idolizer
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_rowdy
+							trait = rowdy
+						}
+						OR = {
+							has_character_flag = was_willful
+							trait = willful
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_rowdy
+						trait = rowdy
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_willful
+						trait = willful
+					}
+				}
+				set_character_flag = education_outcome_level_1
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				set_character_flag = education_outcome_level_2
+			}
+			15 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 1.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 1.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.7
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.5
+					AND = {
+						OR = {
+							has_character_flag = was_timid
+							trait = timid
+						}
+						OR = {
+							has_character_flag = was_idolizer
+							trait = idolizer
+						}
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_timid
+						trait = timid
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_idolizer
+						trait = idolizer
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_rowdy
+							trait = rowdy
+						}
+						OR = {
+							has_character_flag = was_willful
+							trait = willful
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_rowdy
+						trait = rowdy
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_willful
+						trait = willful
+					}
+				}
+				set_character_flag = education_outcome_level_3
+			}
+			10 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 2.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 2.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.4
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_timid
+							trait = timid
+						}
+						OR = {
+							has_character_flag = was_idolizer
+							trait = idolizer
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_timid
+						trait = timid
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_idolizer
+						trait = idolizer
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_rowdy
+							trait = rowdy
+						}
+						OR = {
+							has_character_flag = was_willful
+							trait = willful
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_rowdy
+						trait = rowdy
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_willful
+						trait = willful
+					}
+				}
+				modifier = {
+					factor = 20
+					has_character_flag = is_child_of_destiny
+				}
+				set_character_flag = education_outcome_level_4
+			}
+		}
+		clr_character_flag = education_effect_imprisoned
+		clr_character_flag = was_willful
+		clr_character_flag = was_brooding
+		clr_character_flag = was_indolent
+		clr_character_flag = was_playful
+		clr_character_flag = was_conscientious
+		clr_character_flag = was_fussy
+		clr_character_flag = was_curious
+		clr_character_flag = was_idolizer
+		clr_character_flag = was_haughty
+		clr_character_flag = was_affectionate
+		clr_character_flag = was_timid
+		clr_character_flag = was_rowdy
+		remove_trait = warrior_1
+		remove_trait = warrior_2
+		remove_trait = warrior_3
+		remove_trait = warrior_4
+		remove_trait = warrior_5
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+		add_trait = warrior_1
+		clr_character_flag = education_outcome_level_1
+	}
+	option = {
+		name = EVTOPTB_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+		add_trait = warrior_2
+		clr_character_flag = education_outcome_level_2
+	}
+	option = {
+		name = EVTOPTC_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+		add_trait = warrior_3
+		clr_character_flag = education_outcome_level_3
+	}
+	option = {
+		name = EVTOPTD_ZE_14200
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+		add_trait = warrior_4
+		hidden_tooltip = {
+			random_list = {
+				10 = { add_trait = light_foot_leader }
+				10 = { add_trait = heavy_infantry_leader }
+				10 = { add_trait = cavalry_leader }
+				10 = { add_trait = inspiring_leader }
+				10 = { add_trait = trickster }
+				10 = { add_trait = organizer }
+				10 = { add_trait = defensive_leader }
+				10 = { add_trait = experimenter }
+				10 = { add_trait = flanker }
+				10 = { add_trait = aggressive_leader }
+				10 = { add_trait = siege_leader }
+			}
+		}
+		clr_character_flag = education_outcome_level_4
+	}
+
+	after = {
+		clr_character_flag = is_being_graded
+		hidden_tooltip = { 
+			# Notify educator
+			event_target:education_outcome_educator = { character_event = { id = ZE.14210 } } 
+			if = {
+				limit = { # Notify mother if primary heir
+					mother = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				mother = {
+					character_event = { id = ZE.14210 }
+				}
+			}
+			if = {
+				limit = { # Notify father if primary heir
+					father = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				father = {
+					character_event = { id = ZE.14210 }
+				}
+			}
+		}
+	}
+}
+
+# Notify educator
+character_event = {
+	id = ZE.14210
+	picture = GFX_evt_war_planning
+	border = GFX_event_normal_frame_war
+
+	desc = {
+		text = EVTDESCA_ZE_14210
+		trigger = {
+			FROM = { trait = warrior_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14210
+		trigger = {
+			FROM = { trait = warrior_2 }
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14210
+		trigger = {
+			FROM = { trait = warrior_3 }
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14210
+		trigger = {
+			FROM = { trait = warrior_4 }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_14110
+		trigger = {
+			FROM = { trait = warrior_1 }
+		}
+		tooltip = { FROM = { add_trait = warrior_1 } }
+	}
+	option = {
+		name = EVTOPTB_ZE_14110
+		trigger = {
+			FROM = { trait = warrior_2 }
+		}
+		tooltip = { FROM = { add_trait = warrior_2 } }
+	}
+	option = {
+		name = EVTOPTC_ZE_14110
+		trigger = {
+			FROM = { trait = warrior_3 }
+		}
+		tooltip = { FROM = { add_trait = warrior_3 } }
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			FROM = { trait = warrior_4 }
+		}
+		tooltip = { FROM = { add_trait = warrior_4 } }
+	}
+}
+
+
+
+#############################################
+# Stewardship								#
+#############################################
+
+character_event = {
+	id = ZE.14300
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+
+	desc = {
+		text = EVTDESCA_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		has_focus = focus_ed_stewardship
+		NOT ={
+			has_character_flag = is_child_of_destiny
+		}
+	}
+	
+	immediate = {
+		set_character_flag = is_being_graded
+		educator = { save_event_target_as = education_outcome_educator }
+		clear_focus = yes
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						is_smart_trigger = yes
+						trait = diligent
+					}
+				}
+				modifier = {
+					factor = 0.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 2
+					trait = slothful
+				}
+				modifier = {
+					factor = 1.5
+					AND = {
+						OR = {
+							has_character_flag = was_indolent
+							trait = indolent
+						}
+						OR = {
+							has_character_flag = was_haughty
+							trait = haughty
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_indolent
+						trait = indolent
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_haughty
+						trait = haughty
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_brooding
+							trait = brooding
+						}
+						OR = {
+							has_character_flag = was_conscientious
+							trait = conscientious
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_brooding
+						trait = brooding
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_conscientious
+						trait = conscientious
+					}
+				}
+				set_character_flag = education_outcome_level_1
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				set_character_flag = education_outcome_level_2
+			}
+			15 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 1.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 1.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.7
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.5
+					AND = {
+						OR = {
+							has_character_flag = was_indolent
+							trait = indolent
+						}
+						OR = {
+							has_character_flag = was_haughty
+							trait = haughty
+						}
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_indolent
+						trait = indolent
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_haughty
+						trait = haughty
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_brooding
+							trait = brooding
+						}
+						OR = {
+							has_character_flag = was_conscientious
+							trait = conscientious
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_brooding
+						trait = brooding
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_conscientious
+						trait = conscientious
+					}
+				}
+				set_character_flag = education_outcome_level_3
+			}
+			10 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 2.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 2.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.4
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_indolent
+							trait = indolent
+						}
+						OR = {
+							has_character_flag = was_haughty
+							trait = haughty
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_indolent
+						trait = indolent
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_haughty
+						trait = haughty
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_brooding
+							trait = brooding
+						}
+						OR = {
+							has_character_flag = was_conscientious
+							trait = conscientious
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_brooding
+						trait = brooding
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_conscientious
+						trait = conscientious
+					}
+				}
+				modifier = {
+					factor = 20
+					has_character_flag = is_child_of_destiny
+				}
+				set_character_flag = education_outcome_level_4
+			}
+		}
+		clr_character_flag = education_effect_imprisoned
+		clr_character_flag = was_willful
+		clr_character_flag = was_brooding
+		clr_character_flag = was_indolent
+		clr_character_flag = was_playful
+		clr_character_flag = was_conscientious
+		clr_character_flag = was_fussy
+		clr_character_flag = was_curious
+		clr_character_flag = was_idolizer
+		clr_character_flag = was_haughty
+		clr_character_flag = was_affectionate
+		clr_character_flag = was_timid
+		clr_character_flag = was_rowdy
+		remove_trait = magistrate_1
+		remove_trait = magistrate_2
+		remove_trait = magistrate_3
+		remove_trait = magistrate_4
+		remove_trait = magistrate_5
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+		add_trait = magistrate_1
+		clr_character_flag = education_outcome_level_1
+	}
+	option = {
+		name = EVTOPTB_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+		add_trait = magistrate_2
+		clr_character_flag = education_outcome_level_2
+	}
+	option = {
+		name = EVTOPTC_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+		add_trait = magistrate_3
+		clr_character_flag = education_outcome_level_3
+	}
+	option = {
+		name = EVTOPTD_ZE_14300
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+		add_trait = magistrate_4
+		clr_character_flag = education_outcome_level_4
+	}
+	
+	after = {
+		clr_character_flag = is_being_graded
+		hidden_tooltip = { 
+			# Notify educator
+			event_target:education_outcome_educator = { character_event = { id = ZE.14310 } } 
+			if = {
+				limit = { # Notify mother if primary heir
+					mother = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				mother = {
+					character_event = { id = ZE.14310 }
+				}
+			}
+			if = {
+				limit = { # Notify father if primary heir
+					father = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				father = {
+					character_event = { id = ZE.14310 }
+				}
+			}
+		}
+	}
+}
+
+# Notify educator
+character_event = {
+	id = ZE.14310
+	picture = GFX_evt_relaxed_ruler
+	border = GFX_event_normal_frame_economy
+
+	desc = {
+		text = EVTDESCA_ZE_14310
+		trigger = {
+			FROM = { trait = magistrate_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14310
+		trigger = {
+			FROM = { trait = magistrate_2 }
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14310
+		trigger = {
+			FROM = { trait = magistrate_3 }
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14310
+		trigger = {
+			FROM = { trait = magistrate_4 }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_14110
+		trigger = {
+			FROM = { trait = magistrate_1 }
+		}
+		tooltip = { FROM = { add_trait = magistrate_1 } }
+	}
+	option = {
+		name = EVTOPTB_ZE_14110
+		trigger = {
+			FROM = { trait = magistrate_2 }
+		}
+		tooltip = { FROM = { add_trait = magistrate_2 } }
+	}
+	option = {
+		name = EVTOPTC_ZE_14110
+		trigger = {
+			FROM = { trait = magistrate_3 }
+		}
+		tooltip = { FROM = { add_trait = magistrate_3 } }
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			FROM = { trait = magistrate_4 }
+		}
+		tooltip = { FROM = { add_trait = magistrate_4 } }
+	}
+}
+
+#############################################
+# Intrigue									#
+#############################################
+
+character_event = {
+	id = ZE.14400
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_intrigue
+
+	desc = {
+		text = EVTDESCA_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		has_focus = focus_ed_intrigue
+		NOT ={
+			has_character_flag = is_child_of_destiny
+		}
+	}
+	
+	immediate = {
+		set_character_flag = is_being_graded
+		educator = { save_event_target_as = education_outcome_educator }
+		clear_focus = yes
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						is_smart_trigger = yes
+						trait = diligent
+					}
+				}
+				modifier = {
+					factor = 0.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 2
+					trait = slothful
+				}
+				modifier = {
+					factor = 1.5
+					AND = {
+						OR = {
+							has_character_flag = was_rowdy
+							trait = rowdy
+						}
+						OR = {
+							has_character_flag = was_affectionate
+							trait = affectionate
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_rowdy
+						trait = rowdy
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_affectionate
+						trait = affectionate
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_playful
+							trait = playful
+						}
+						OR = {
+							has_character_flag = was_fussy
+							trait = fussy
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_playful
+						trait = playful
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_fussy
+						trait = fussy
+					}
+				}
+				set_character_flag = education_outcome_level_1
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				set_character_flag = education_outcome_level_2
+			}
+			15 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 1.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 1.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.7
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.5
+					AND = {
+						OR = {
+							has_character_flag = was_rowdy
+							trait = rowdy
+						}
+						OR = {
+							has_character_flag = was_affectionate
+							trait = affectionate
+						}
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_rowdy
+						trait = rowdy
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_affectionate
+						trait = affectionate
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_playful
+							trait = playful
+						}
+						OR = {
+							has_character_flag = was_fussy
+							trait = fussy
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_playful
+						trait = playful
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_fussy
+						trait = fussy
+					}
+				}
+				set_character_flag = education_outcome_level_3
+			}
+			10 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 2.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 2.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.4
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_rowdy
+							trait = rowdy
+						}
+						OR = {
+							has_character_flag = was_affectionate
+							trait = affectionate
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_rowdy
+						trait = rowdy
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_affectionate
+						trait = affectionate
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_playful
+							trait = playful
+						}
+						OR = {
+							has_character_flag = was_fussy
+							trait = fussy
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_playful
+						trait = playful
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_fussy
+						trait = fussy
+					}
+				}
+				modifier = {
+					factor = 20
+					has_character_flag = is_child_of_destiny
+				}
+				set_character_flag = education_outcome_level_4
+			}
+		}
+		clr_character_flag = education_effect_imprisoned
+		clr_character_flag = was_willful
+		clr_character_flag = was_brooding
+		clr_character_flag = was_indolent
+		clr_character_flag = was_playful
+		clr_character_flag = was_conscientious
+		clr_character_flag = was_fussy
+		clr_character_flag = was_curious
+		clr_character_flag = was_idolizer
+		clr_character_flag = was_haughty
+		clr_character_flag = was_affectionate
+		clr_character_flag = was_timid
+		clr_character_flag = was_rowdy
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+		add_trait = agent_1
+		hidden_tooltip = {
+			remove_trait = agent_2
+			remove_trait = agent_3
+			remove_trait = agent_4
+			remove_trait = agent_5
+		}
+		clr_character_flag = education_outcome_level_1
+	}
+	option = {
+		name = EVTOPTB_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+		add_trait = agent_2
+		hidden_tooltip = {
+			remove_trait = agent_1
+			remove_trait = agent_3
+			remove_trait = agent_4
+			remove_trait = agent_5
+		}
+		clr_character_flag = education_outcome_level_2
+	}
+	option = {
+		name = EVTOPTC_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+		add_trait = agent_3
+		hidden_tooltip = {
+			remove_trait = agent_1
+			remove_trait = agent_2
+			remove_trait = agent_4
+			remove_trait = agent_5
+		}
+		clr_character_flag = education_outcome_level_3
+	}
+	option = {
+		name = EVTOPTD_ZE_14400
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+		add_trait = agent_4
+		hidden_tooltip = {
+			remove_trait = agent_1
+			remove_trait = agent_2
+			remove_trait = agent_3
+			remove_trait = agent_5
+		}
+		clr_character_flag = education_outcome_level_4
+	}
+	
+	after = {
+		clr_character_flag = is_being_graded
+		hidden_tooltip = { 
+			# Notify educator
+			event_target:education_outcome_educator = { character_event = { id = ZE.14410 } } 
+			if = {
+				limit = { # Notify mother if primary heir
+					mother = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				mother = {
+					character_event = { id = ZE.14410 }
+				}
+			}
+			if = {
+				limit = { # Notify father if primary heir
+					father = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					} 
+				}
+				father = {
+					character_event = { id = ZE.14410 }
+				}
+			}
+		}
+	}
+}
+
+# Notify educator
+character_event = {
+	id = ZE.14410
+	picture = GFX_evt_shadowy_cabal
+	border = GFX_event_normal_frame_intrigue
+
+	desc = {
+		text = EVTDESCA_ZE_14410
+		trigger = {
+			FROM = { trait = agent_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14410
+		trigger = {
+			FROM = { trait = agent_2 }
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14410
+		trigger = {
+			FROM = { trait = agent_3 }
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14410
+		trigger = {
+			FROM = { trait = agent_4 }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_14110
+		trigger = {
+			FROM = { trait = agent_1 }
+		}
+		tooltip = { FROM = { add_trait = agent_1 } }
+	}
+	option = {
+		name = EVTOPTB_ZE_14110
+		trigger = {
+			FROM = { trait = agent_2 }
+		}
+		tooltip = { FROM = { add_trait = agent_2 } }
+	}
+	option = {
+		name = EVTOPTC_ZE_14110
+		trigger = {
+			FROM = { trait = agent_3 }
+		}
+		tooltip = { FROM = { add_trait = agent_3 } }
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			FROM = { trait = agent_4 }
+		}
+		tooltip = { FROM = { add_trait = agent_4 } }
+	}
+}
+
+#############################################
+# Learning									#
+#############################################
+
+character_event = {
+	id = ZE.14500
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESCA_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Zeus"
+		has_focus = focus_ed_learning
+		NOT ={
+			has_character_flag = is_child_of_destiny
+		}
+	}
+	
+	immediate = {
+		set_character_flag = is_being_graded
+		educator = { save_event_target_as = education_outcome_educator }
+		clear_focus = yes
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						is_smart_trigger = yes
+						trait = diligent
+					}
+				}
+				modifier = {
+					factor = 0.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 2
+					trait = slothful
+				}
+				modifier = {
+					factor = 1.5
+					AND = {
+						OR = {
+							has_character_flag = was_brooding
+							trait = brooding
+						}
+						OR = {
+							has_character_flag = was_playful
+							trait = playful
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_brooding
+						trait = brooding
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						has_character_flag = was_playful
+						trait = playful
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_idolizer
+							trait = idolizer
+						}
+						OR = {
+							has_character_flag = was_timid
+							trait = timid
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_idolizer
+						trait = idolizer
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_timid
+						trait = timid
+					}
+				}
+				set_character_flag = education_outcome_level_1
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				set_character_flag = education_outcome_level_2
+			}
+			15 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 1.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 1.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.7
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.5
+					AND = {
+						OR = {
+							has_character_flag = was_brooding
+							trait = brooding
+						}
+						OR = {
+							has_character_flag = was_playful
+							trait = playful
+						}
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_brooding
+						trait = brooding
+					}
+				}
+				modifier = {
+					factor = 0.7
+					OR = {
+						has_character_flag = was_playful
+						trait = playful
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_idolizer
+							trait = idolizer
+						}
+						OR = {
+							has_character_flag = was_timid
+							trait = timid
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_idolizer
+						trait = idolizer
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_timid
+						trait = timid
+					}
+				}
+				set_character_flag = education_outcome_level_3
+			}
+			10 = {
+				modifier = {
+					factor = 0.2
+					has_character_flag = education_effect_imprisoned
+				}
+				modifier = {
+					factor = 2.5
+					is_smart_trigger = yes
+				}
+				modifier = {
+					factor = 2.5
+					trait = diligent
+				}
+				modifier = {
+					factor = 0.4
+					trait = slothful
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = incapable
+						trait = imbecile
+						trait = inbred
+					}
+				}
+				modifier = {
+					factor = 0.2
+					AND = {
+						OR = {
+							has_character_flag = was_brooding
+							trait = brooding
+						}
+						OR = {
+							has_character_flag = was_playful
+							trait = playful
+						}
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_brooding
+						trait = brooding
+					}
+				}
+				modifier = {
+					factor = 0.5
+					OR = {
+						has_character_flag = was_playful
+						trait = playful
+					}
+				}
+				modifier = {
+					factor = 2
+					AND = {
+						OR = {
+							has_character_flag = was_idolizer
+							trait = idolizer
+						}
+						OR = {
+							has_character_flag = was_timid
+							trait = timid
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_idolizer
+						trait = idolizer
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_character_flag = was_timid
+						trait = timid
+					}
+				}
+				modifier = {
+					factor = 20
+					has_character_flag = is_child_of_destiny
+				}
+				set_character_flag = education_outcome_level_4
+			}
+		}
+		clr_character_flag = education_effect_imprisoned
+		clr_character_flag = was_willful
+		clr_character_flag = was_brooding
+		clr_character_flag = was_indolent
+		clr_character_flag = was_playful
+		clr_character_flag = was_conscientious
+		clr_character_flag = was_fussy
+		clr_character_flag = was_curious
+		clr_character_flag = was_idolizer
+		clr_character_flag = was_haughty
+		clr_character_flag = was_affectionate
+		clr_character_flag = was_timid
+		clr_character_flag = was_rowdy
+		remove_trait = mage_1
+		remove_trait = mage_2
+		remove_trait = mage_3
+		remove_trait = mage_4
+		remove_trait = mage_5
+	}
+	
+	option = {
+		name = EVTOPTA_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_1
+		}
+		add_trait = mage_1
+		clr_character_flag = education_outcome_level_1
+	}
+	option = {
+		name = EVTOPTB_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_2
+		}
+		add_trait = mage_2
+		clr_character_flag = education_outcome_level_2
+	}
+	option = {
+		name = EVTOPTC_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_3
+		}
+		add_trait = mage_3
+		clr_character_flag = education_outcome_level_3
+	}
+	option = {
+		name = EVTOPTD_ZE_14500
+		trigger = {
+			has_character_flag = education_outcome_level_4
+		}
+		add_trait = mage_4
+		clr_character_flag = education_outcome_level_4
+	}
+	
+	after = {
+		clr_character_flag = is_being_graded
+		hidden_tooltip = { 
+			# Notify educator
+			event_target:education_outcome_educator = { character_event = { id = ZE.14510 } } 
+			if = {
+				limit = { # Notify mother if primary heir
+					mother = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				mother = {
+					character_event = { id = ZE.14510 }
+				}
+			}
+			if = {
+				limit = { # Notify father if primary heir
+					father = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				father = {
+					character_event = { id = ZE.14510 }
+				}
+			}
+		}
+	}
+}
+
+# Notify educator
+character_event = {
+	id = ZE.14510
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = EVTDESCA_ZE_14510
+		trigger = {
+			FROM = { trait = mage_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14510
+		trigger = {
+			FROM = { trait = mage_2 }
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14510
+		trigger = {
+			FROM = { trait = mage_3 }
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14510
+		trigger = {
+			FROM = { trait = mage_4 }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_14110
+		trigger = {
+			FROM = { trait = mage_1 }
+		}
+		tooltip = { FROM = { add_trait = mage_1 } }
+	}
+	option = {
+		name = EVTOPTB_ZE_14110
+		trigger = {
+			FROM = { trait = mage_2 }
+		}
+		tooltip = { FROM = { add_trait = mage_2 } }
+	}
+	option = {
+		name = EVTOPTC_ZE_14110
+		trigger = {
+			FROM = { trait = mage_3 }
+		}
+		tooltip = { FROM = { add_trait = mage_3 } }
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			FROM = { trait = mage_4 }
+		}
+		tooltip = { FROM = { add_trait = mage_4 } }
+	}
+}
+
+#############################################
+# No education focus selected               #
+#############################################
+
+character_event = {
+	id = ZE.14700
+	picture = GFX_evt_noble_in_castle
+	
+	is_triggered_only = yes
+
+	desc = {
+		text = EVTDESCA_ZE_14700
+		trigger = {
+			has_character_flag = education_diplomacy
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14700
+		trigger = {
+			has_character_flag = education_martial
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14700
+		trigger = {
+			has_character_flag = education_stewardship
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14700
+		trigger = {
+			has_character_flag = education_intrigue
+		}
+	}
+	desc = {
+		text = EVTDESCE_ZE_14700
+		trigger = {
+			has_character_flag = education_learning
+		}
+	}
+	
+	trigger = { # Make sure we have no education focus and no education outcome already set
+		has_dlc = "Zeus"
+		NOR = {
+			has_character_flag = is_being_graded
+			has_focus = focus_ed_diplomacy
+			has_focus = focus_ed_martial
+			has_focus = focus_ed_stewardship
+			has_focus = focus_ed_intrigue
+			has_focus = focus_ed_learning
+			trait = diplomat_1
+			trait = diplomat_2
+			trait = diplomat_3
+			trait = diplomat_4
+			trait = warrior_1
+			trait = warrior_2
+			trait = warrior_3
+			trait = warrior_4
+			trait = magistrate_1
+			trait = magistrate_2
+			trait = magistrate_3
+			trait = magistrate_4
+			trait = agent_1
+			trait = agent_2
+			trait = agent_3
+			trait = agent_4
+			trait = mage_1
+			trait = mage_2
+			trait = mage_3
+			trait = mage_4
+		}
+		NOT ={
+			has_character_flag = is_child_of_destiny
+		}
+	}
+
+	immediate = {
+		educator = { save_event_target_as = education_outcome_educator }
+		random_list = {
+			10 = {
+				set_character_flag = education_diplomacy
+			}
+			10 = {
+				set_character_flag = education_martial
+			}
+			10 = {
+				set_character_flag = education_stewardship
+			}
+			10 = {
+				set_character_flag = education_intrigue
+			}
+			10 = {
+				set_character_flag = education_learning
+			}
+		}
+		clr_character_flag = education_effect_imprisoned
+		clr_character_flag = was_willful
+		clr_character_flag = was_brooding
+		clr_character_flag = was_indolent
+		clr_character_flag = was_playful
+		clr_character_flag = was_conscientious
+		clr_character_flag = was_fussy
+		clr_character_flag = was_curious
+		clr_character_flag = was_idolizer
+		clr_character_flag = was_haughty
+		clr_character_flag = was_affectionate
+		clr_character_flag = was_timid
+		clr_character_flag = was_rowdy
+		remove_trait = magistrate_1
+		remove_trait = magistrate_2
+		remove_trait = magistrate_3
+		remove_trait = magistrate_4
+		remove_trait = magistrate_5
+		remove_trait = agent_1
+		remove_trait = agent_2
+		remove_trait = agent_3
+		remove_trait = agent_4
+		remove_trait = agent_5
+		remove_trait = mage_1
+		remove_trait = mage_2
+		remove_trait = mage_3
+		remove_trait = mage_4
+		remove_trait = mage_5
+		remove_trait = diplomat_1
+		remove_trait = diplomat_2
+		remove_trait = diplomat_3
+		remove_trait = diplomat_4
+		remove_trait = diplomat_5
+		remove_trait = warrior_1
+		remove_trait = warrior_2
+		remove_trait = warrior_3
+		remove_trait = warrior_4
+		remove_trait = warrior_5
+	}
+
+	option = {
+		name = EVTOPTA_ZE_14700
+		trigger = {
+			has_character_flag = education_diplomacy
+		}
+		add_trait = diplomat_1
+		clr_character_flag = education_diplomacy
+	}
+
+	option = {
+		name = EVTOPTA_ZE_14700
+		trigger = {
+			has_character_flag = education_martial
+		}
+		add_trait = warrior_1
+		clr_character_flag = education_martial
+	}
+	option = {
+		name = EVTOPTA_ZE_14700
+		trigger = {
+			has_character_flag = education_stewardship
+		}
+		add_trait = magistrate_1
+		clr_character_flag = education_stewardship
+	}
+	option = {
+		name = EVTOPTA_ZE_14700
+		trigger = {
+			has_character_flag = education_intrigue
+		}
+		add_trait = agent_1
+		clr_character_flag = education_intrigue
+	}
+	option = {
+		name = EVTOPTA_ZE_14700
+		trigger = {
+			has_character_flag = education_learning
+		}
+		add_trait = mage_1
+		clr_character_flag = education_learning
+	}
+
+	after = {
+		hidden_tooltip = { 
+			# Notify educator
+			event_target:education_outcome_educator = { character_event = { id = ZE.14710 } } 
+			if = {
+				limit = { # Notify mother if primary heir
+					mother = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					}
+				}
+				mother = {
+					character_event = { id = ZE.14710 }
+				}
+			}
+			if = {
+				limit = { # Notify father if primary heir
+					father = {
+						event_target:education_outcome_educator = {
+							NOT = { character = PREV }
+						}
+						ROOT = {
+							is_primary_heir = PREV
+						}
+					} 
+				}
+				father = {
+					character_event = { id = ZE.14710 }
+				}
+			}
+		}
+	}
+}
+
+# Notify educator
+character_event = {
+	id = ZE.14710
+	picture = GFX_evt_noble_in_castle
+
+	desc = {
+		text = EVTDESCA_ZE_14710
+		trigger = {
+			FROM = { trait = diplomat_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCB_ZE_14710
+		trigger = {
+			FROM = { trait = warrior_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCC_ZE_14710
+		trigger = {
+			FROM = { trait = magistrate_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCD_ZE_14710
+		trigger = {
+			FROM = { trait = agent_1 }
+		}
+	}
+	desc = {
+		text = EVTDESCE_ZE_14710
+		trigger = {
+			FROM = { trait = mage_1 }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZE_14710
+		trigger = {
+			FROM = { trait = diplomat_1 }
+		}
+		tooltip = { FROM = { add_trait = diplomat_1 } }
+	}
+	option = {
+		name = EVTOPTA_ZE_14710
+		trigger = {
+			FROM = { trait = warrior_1 }
+		}
+		tooltip = { FROM = { add_trait = warrior_1 } }
+	}
+	option = {
+		name = EVTOPTA_ZE_14710
+		trigger = {
+			FROM = { trait = magistrate_1 }
+		}
+		tooltip = { FROM = { add_trait = magistrate_1 } }
+	}
+	option = {
+		name = EVTOPTA_ZE_14710
+		trigger = {
+			FROM = { trait = agent_1 }
+		}
+		tooltip = { FROM = { add_trait = agent_1 } }
+	}
+	option = {
+		name = EVTOPTA_ZE_14710
+		trigger = {
+			FROM = { trait = mage_1 }
+		}
+		tooltip = { FROM = { add_trait = mage_1 } }
+	}
+}
+
+#############################################
+# Set flags affecting outcomes				#
+#############################################
+
+# Imprisoned (from on_action)
+character_event = {
+	id = ZE.14600
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_adult = no
+		age = 12
+	}
+	
+	immediate = {
+		set_character_flag = education_effect_imprisoned
+	}
+}
+
+
+
+
+
+
+

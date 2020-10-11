@@ -1,0 +1,442 @@
+namespace = ekrebel
+
+#####Slave rebel events adopted from rebel_events_the_old_gods (Written by Henrik Fåhraeus)#####
+
+# Slave rebels rise up to create a kingdom (temporary rebel title created, with a leader and a war)
+# Triggered from "on_rebel_revolt"
+province_event = {
+	id = ekrebel.1
+	desc = EKRebel1
+	picture = GFX_evt_siege
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "The Old Gods"
+
+		province_has_slaves = yes
+		
+		# Sload invasions have priority
+		NOT = {
+			has_province_modifier = sload_scouts
+		}
+		
+		NOT = { # Not if there is already an ongoing revolt
+			owner = {
+				top_liege = {
+					war = yes
+					any_war = {
+						defender = { character = PREV }
+						OR = {
+							AND = {
+								using_cb = heretic_revolt
+								attacker = { culture = ROOT }
+							}
+							AND = {
+								using_cb = liberation_revolt
+								thirdparty_title_scope = {
+									ROOT = {
+										kingdom = {
+											title = PREVPREV
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		ROOT = { save_event_target_as = province_with_slaves }
+		local_get_enslaved_culture = yes
+		
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = ROOT
+			culture = event_target:enslaved_culture
+			age = 20
+			health = 7
+			fertility = 0.7
+			trait = rebel_slave
+			trait = warrior_3
+		}
+		
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			set_character_flag = slave_rebel
+			
+			create_title = {
+				tier = DUKE
+				landless = yes
+				temporary = yes
+				rebel = yes
+				culture = event_target:enslaved_culture
+				name = "SLAVE_REVOLT"
+				holder = THIS
+			}
+			
+			spawn_unit = {
+				province = ROOT
+				home = ROOT
+				owner = THIS
+				#leader = THIS
+				scaled_by_biggest_garrison = 1.25
+				troops = {
+					archers = { 3 3 }
+					light_infantry = { 8 8 }
+					pikemen = { 3 3 }
+				}
+				attrition = 1.0
+			}
+			
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = ROOT
+				culture = event_target:enslaved_culture
+				age = 34
+				attributes = {
+					martial = 5
+				}
+				trait = warrior_2
+				trait = rebel_slave
+			}
+			new_character = {
+				#assign_birthsign = yes
+				#assign_racial_trait = yes
+				spawn_unit = {
+					province = ROOT
+					home = ROOT
+					owner = PREV
+					#leader = THIS
+					scaled_by_biggest_garrison = 1.25
+					troops = {
+						archers = { 3 3 }
+						light_infantry = { 8 8 }
+						pikemen = { 3 3 }
+					}
+				}
+			}
+			
+			create_character = {
+				random_traits = yes
+				dynasty = none
+				religion = ROOT
+				culture = event_target:enslaved_culture
+				age = 23
+				attributes = {
+					martial = 5
+				}
+				trait = warrior_2
+				trait = rebel_slave
+			}
+			new_character = {
+				#assign_birthsign = yes
+				#assign_racial_trait = yes
+				spawn_unit = {
+					province = ROOT
+					home = ROOT
+					owner = PREV
+					#leader = THIS
+					scaled_by_biggest_garrison = 1.25
+					troops = {
+						archers = { 3 3 }
+						light_infantry = { 8 8 }
+						pikemen = { 3 3 }
+					}
+				}
+			}
+			
+			# DoW on the province top liege
+			ROOT = {
+				owner = {
+					top_liege = {
+						reverse_war = {
+							target = PREVPREVPREV
+							casus_belli = slave_liberation_revolt
+							thirdparty_title = ROOT # The county...
+							tier = KING # ... but really the de jure kingdom
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+		
+		owner = {
+			any_liege = { # Inform the lieges
+				character_event = {
+					id = ekrebel.50
+				}
+			}
+		}
+		liberate_province = yes
+	}
+	
+	option = {
+		name = EKRebel1Acknowledge
+	}
+}
+
+character_event = {
+	id = ekrebel.50
+	desc = EKRebel50
+	picture = GFX_evt_siege
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKRebel50Acknowledge
+	}
+}
+
+# Slave Rebels seize a holding. Fired from 'on_siege_over_winner'.
+character_event = {
+	id = ekrebel.60
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		rebel = yes
+		FROM = { 
+			is_capital = yes # The capital holding
+			location = {
+				province_has_slaves = yes
+			}
+		}
+		any_war = {
+			attacker = { character = ROOT }
+			using_cb = slave_liberation_revolt
+		}
+	}
+	
+	immediate = {
+		FROM = { location = { save_event_target_as = province_with_slaves } }
+		local_get_enslaved_culture = yes
+		local_slave_generals = yes
+		FROM = {
+			location = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.1
+						attrition = 1.0
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.1
+						attrition = 1.0
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						home = PREV
+						owner = THIS
+						#leader = none
+						match_character = THIS
+						match_mult = 0.1
+						attrition = 1.0
+						disband_on_peace = yes
+					}
+				}
+			}
+		}
+		FROM = {
+			location = {
+				liberate_province = yes
+			}
+		}
+	}
+}
+
+# Slave Rebels rise up to reinforce an ongoing revolt
+# Triggered from "on_rebel_revolt"
+province_event = {
+	id = ekrebel.75
+	desc = EKRebel75
+	picture = GFX_evt_siege
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_dlc = "The Old Gods"
+
+		province_has_slaves = yes
+		
+		# There is already an ongoing slave revolt for the same kingdom
+		owner = {
+			top_liege = {
+				war = yes
+				any_war = {
+					defender = { character = PREV }
+					using_cb = slave_liberation_revolt
+					thirdparty_title_scope = {
+						ROOT = {
+							kingdom = {
+								title = PREVPREV
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		ROOT = { save_event_target_as = province_with_slaves }
+		local_get_enslaved_culture = yes
+		add_province_modifier = {
+			name = recent_county_uprising
+			duration = 1825 # Five years of -100% revolt risk in this county
+		}
+		owner = {
+			top_liege = {
+				any_war = {
+					limit = {
+						defender = { character = PREV }
+						using_cb = slave_liberation_revolt
+						thirdparty_title_scope = {
+							ROOT = {
+								kingdom = {
+									title = PREVPREV
+								}
+							}
+						}
+					}
+					attacker = {
+						create_character = {
+							random_traits = yes
+							dynasty = none
+							religion = ROOT
+							culture = event_target:enslaved_culture
+							age = 24
+							attributes = {
+								martial = 5
+							}
+							trait = warrior_2
+							trait = rebel_slave
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+							spawn_unit = {
+								province = ROOT
+								home = ROOT
+								owner = PREV
+								#leader = THIS
+								scaled_by_biggest_garrison = 1.25
+								troops = {
+									archers = { 3 3 }
+									light_infantry = { 8 8 }
+									pikemen = { 3 3 }
+								}
+							}
+						}
+						create_character = {
+							random_traits = yes
+							dynasty = none
+							religion = ROOT
+							culture = event_target:enslaved_culture
+							age = 27
+							attributes = {
+								martial = 5
+							}
+							trait = warrior_2
+							trait = rebel_slave
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+							spawn_unit = {
+								province = ROOT
+								home = ROOT
+								owner = PREV
+								#leader = THIS
+								scaled_by_biggest_garrison = 1.25
+								troops = {
+									archers = { 3 3 }
+									light_infantry = { 8 8 }
+									pikemen = { 3 3 }
+								}
+							}
+						}
+						create_character = {
+							random_traits = yes
+							dynasty = none
+							religion = ROOT
+							culture = event_target:enslaved_culture
+							age = 30
+							attributes = {
+								martial = 5
+							}
+							trait = warrior_2
+							trait = rebel_slave
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+							spawn_unit = {
+								province = ROOT
+								home = ROOT
+								owner = PREV
+								#leader = THIS
+								scaled_by_biggest_garrison = 1.25
+								troops = {
+									archers = { 3 3 }
+									light_infantry = { 8 8 }
+									pikemen = { 3 3 }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		owner = {
+			any_liege = { # Inform the lieges
+				character_event = {
+					id = ekrebel.125
+				}
+			}
+		}
+		liberate_province = yes
+	}
+	
+	option = {
+		name = "EKRebel75Acknowledge"
+	}
+}
+
+character_event = {
+	id = ekrebel.125
+	desc = EKRebel125Acknowledge
+	picture = GFX_evt_siege
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKRebel125Acknowledge
+	}
+}

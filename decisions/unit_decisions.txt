@@ -1,0 +1,649 @@
+decisions = {
+
+	conscript_merchant_ships = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 12
+
+		potential = {
+			is_playable = yes
+			NOT = {
+				has_earmarked_regiments = conscripted_merchant_ships
+			}
+			OR = {
+				has_overseas_holdings = yes
+				any_current_enemy = { has_overseas_holdings = yes }
+			}
+			has_submenu_open = no
+		}
+		allow = {
+			war = yes
+			OR = {
+				ai = yes #AI can't manage money...
+				wealth = 100
+			}
+		}
+		effect = {
+			if = {
+				limit = { ai = no }
+				wealth = -100
+			}
+			if = {
+				limit = { ai = yes }
+				wealth = -50
+			}
+			spawn_fleet = {
+				province = closest # closest sea zone
+				owner = ROOT
+				disband_on_peace = yes
+				earmark = conscripted_merchant_ships
+				troops =
+				{
+					galleys = { 100 100 }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = {
+					any_war = {
+						OR = {
+							defender = { character = ROOT }
+							attacker = { character = ROOT }
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	raise_tribal_units = {
+		only_playable = yes
+		is_high_prio = yes
+		is_mercenary = yes
+		ai_check_interval = 12
+
+		potential = {
+			# TODO:COMPATCH only if Legacy of Rome is had once tribal retinues are in
+			is_playable = yes
+			is_tribal = yes
+			is_landed = yes
+			OR = {
+				ai = no
+				any_war = {
+					OR = {
+						any_defender = {
+							character = ROOT
+							is_primary_war_defender = yes
+						}
+						any_attacker = {
+							character = ROOT
+							is_primary_war_attacker = yes
+						}
+					}
+				}
+			}
+			has_submenu_open = no
+		}
+		allow = {
+			war = yes
+			prestige = 500
+		}
+		effect = {
+			prestige = -500
+			capital_scope = {
+				PREV = {
+					spawn_unit = {
+						owner = ROOT
+						province = PREV
+						home = PREV
+						troops = {
+							archers = { 250 250 }
+							light_infantry = { 500 500 }
+							heavy_infantry = { 100 100 }
+							light_cavalry = { 50 50 }
+						}
+						attrition = 1.0
+						disband_on_peace = yes
+						maintenance_multiplier = 0.5
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0 # decisions with the "is_mercenary" will not be calculated from the script
+		}
+	}
+
+	raise_defensive_unit = {
+		only_playable = yes
+		is_high_prio = yes
+		is_mercenary = yes
+		ai_check_interval = 12
+
+		potential = {
+			has_dlc = "The Old Gods"
+			# TODO:COMPATCH only if Legacy of Rome is had once retinues are in
+			is_playable = yes
+			is_tribal = yes
+			is_landed = yes
+			OR = {
+				religion_group = reach_faiths
+				religion = daedra_malacath
+				religion = nerevarine
+				religion_group = tangmo_religions
+				religion_group = hist_group
+			}
+			has_submenu_open = no
+		}
+
+		allow = {
+			war = yes
+			
+			custom_tooltip = {
+				text = raise_defensive_unit_tooltip
+
+				hidden_tooltip = {
+					any_war = {
+						any_defender = {
+							character = ROOT
+							is_primary_war_defender = yes
+						}
+
+						#Defending against heathen
+						OR = {
+							#Defender is reach_faiths but attacker is not
+							AND = {
+								ROOT = {
+									religion_group = reach_faiths
+								}
+								attacker = {
+									NOT = { religion_group = reach_faiths }
+								}
+							}
+
+							#Defender is daedra_malacath but attacker is not
+							AND = {
+								ROOT = {
+									religion = daedra_malacath
+								}
+								attacker = {
+									NOT = { religion = daedra_malacath }
+								}
+							}
+
+							#Defender is nerevarine but attacker is not
+							AND = {
+								ROOT = {
+									religion = nerevarine
+								}
+								attacker = {
+									NOT = { religion = nerevarine }
+								}
+							}
+
+							#Defender is tangmo but attacker is not
+							AND = {
+								ROOT = {
+									religion_group = tangmo_religions
+								}
+								attacker = {
+									NOT = { religion_group = tangmo_religions }
+								}
+							}
+							#Defender is hist but attacker is not
+							AND = {
+								ROOT = {
+									religion_group = hist_group
+								}
+								attacker = {
+									NOT = { religion_group = hist_group }
+								}
+							}
+						}
+					}
+				}
+			}
+			piety = 200	
+		}
+
+		effect = {
+			custom_tooltip = { text = summon_defensive_unit }
+			piety = -200
+
+			hidden_tooltip = {
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							owner = ROOT
+							home = PREV
+							province = PREV
+							disband_on_peace = yes
+							maintenance_multiplier = 0.25
+							attrition = 1.0
+
+							troops = {
+								archers = { 400 400 }
+								light_infantry = { 1000 1000 }
+								heavy_infantry = { 350 350 }
+								light_cavalry = { 250 250 }
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	winter_wind_raise_defensive_undead = {
+		only_playable = yes
+		is_high_prio = yes
+		is_mercenary = yes
+
+		potential = {
+			# TODO:COMPATCH LoR check for retinue-based troops instead, as above
+			has_dlc = "The Old Gods"
+			is_playable = yes
+			is_landed = yes
+			religion = winter_wind
+			has_submenu_open = no
+		}
+
+		allow = {
+			war = yes
+
+			capital_scope = {
+				region = nirn_akavir_kamal
+			}
+			
+			custom_tooltip = {
+				text = raise_defensive_unit_tooltip
+
+				hidden_tooltip = {
+					any_war = {
+						any_defender = {
+							character = ROOT
+							is_primary_war_defender = yes
+						}
+						attacker = {
+							NOT = {
+								religion = winter_wind
+							}
+						}
+					}
+				}
+			}
+			piety = 400
+		}
+
+		effect = {
+			custom_tooltip = { text = summon_defensive_unit }
+			piety = -400
+
+			hidden_tooltip = {
+				capital_scope = {
+					ROOT = {
+						spawn_unit = {
+							owner = ROOT
+							home = PREV
+							province = PREV
+							disband_on_peace = yes
+							maintenance_multiplier = 0.25
+							attrition = 0.25
+
+							troops = {
+								undead_troop = { 2500 2500 }
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 5
+				piety = 1000
+			}
+			modifier = {
+				factor = 3
+				piety = 750
+			}
+			modifier = {
+				factor = 2
+				piety = 500
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { piety = 301 }
+			}
+			modifier = {
+				factor = 2
+				trait = necromancer
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.5 # Slow it down a bit
+			}
+		}
+	}
+
+	employ_adventurers = {
+		is_mercenary = yes
+		only_playable = yes
+		potential = {
+			any_demesne_province = { has_province_modifier = adventurers }
+			NOT = { has_character_modifier = employed_mercs_timer }
+			has_submenu_open = no
+		}
+		allow = {
+			wealth = 150
+			war = yes
+		}
+		effect = {
+			wealth = -150
+			hidden_tooltip = { add_character_modifier = { name = employed_mercs_timer duration = 3650 hidden = yes } }
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						attrition = 0.25
+						troops = {
+							battlemages = { 50 50 }
+							light_cavalry = { 100 100 }
+							archers = { 125 125 }
+							light_infantry = { 100 100 }
+							heavy_infantry = { 125 125 }
+						}
+						disband_on_peace = yes
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				war = no
+			}
+			modifier = {
+				factor = 5
+				wealth = 1000
+			}
+			modifier = {
+				factor = 3
+				wealth = 750
+			}
+			modifier = {
+				factor = 2
+				wealth = 500
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { wealth = 301 }
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { wealth = 200 }
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { wealth = 150 }
+			}
+			modifier = {
+				factor = 2
+				trait = adventurer
+			}
+			modifier = {
+				factor = 2
+				trait = diligent
+			}
+			modifier = {
+				factor = 0.5 # Slow it down a bit
+			}
+		}
+	}
+
+	employ_bandits = {
+		is_mercenary = yes
+		only_playable = yes
+		potential = {
+			any_demesne_province = { has_province_modifier = highway_robber_band }
+			NOT = { has_character_modifier = employed_mercs_timer }
+			has_submenu_open = no
+		}
+		allow = {
+			wealth = 150
+			war = yes
+		}
+		effect = {
+			wealth = -150
+			hidden_tooltip = { add_character_modifier = { name = employed_mercs_timer duration = 3650 hidden = yes } }
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						attrition = 0.5
+						troops = {
+							battlemages = { 20 20 }
+							light_cavalry = { 50 50 }
+							archers = { 105 105 }
+							light_infantry = { 200 200 }
+							heavy_infantry = { 125 125 }
+						}
+						disband_on_peace = yes
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				war = no
+			}
+			modifier = {
+				factor = 5
+				wealth = 1000
+			}
+			modifier = {
+				factor = 3
+				wealth = 750
+			}
+			modifier = {
+				factor = 2
+				wealth = 500
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { wealth = 301 }
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { wealth = 200 }
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { wealth = 150 }
+			}
+			modifier = {
+				factor = 2
+				trait = adventurer
+			}
+			modifier = {
+				factor = 2
+				trait = diligent
+			}
+			modifier = {
+				factor = 0.5 # Slow it down a bit
+			}
+		}
+	}
+
+	raise_dragon_levy = {
+		is_mercenary = yes
+		only_playable = yes
+		potential = {
+			has_character_flag = Nafaalilargus
+			has_submenu_open = no
+		}
+		allow = {
+		}
+		effect = {
+			clr_character_flag = Nafaalilargus
+			capital_scope = {
+				ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						troops =
+						{
+							dragon = { 2500 2500 }
+						}
+						earmark = Nahfahlaar
+						attrition = 0
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				war = no
+			}
+		}
+	}
+
+	lower_dragon_levy = {
+		potential = {
+			has_earmarked_regiments = Nahfahlaar
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+		}
+		effect = {
+			set_character_flag = Nafaalilargus
+			disband_event_forces = Nahfahlaar
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
+
+settlement_decisions = {
+	
+	requisition_fishing_boats = {
+		only_playable = yes
+		filter = vassal_owned
+		ai_target_filter = owned
+		is_high_prio = yes
+		
+		from_potential = {
+			is_playable = yes
+			is_feudal = yes
+			higher_tier_than = BARON
+			war = yes
+		}
+		potential = {
+			holding_type = city
+			location = { port = yes }
+		}
+		allow = {
+			FROM = {
+				war = yes
+				wealth = 15
+			}
+			custom_tooltip = {
+				text = rfsct
+				hidden_tooltip = {
+					NOT = { has_holding_modifier = requisitioned_fishing_ships_cooldown_timer }
+				}
+			}
+			owner = {
+				OR = {
+					character = FROM
+					is_liege_or_above = FROM
+				}
+			}
+		}
+		
+		effect = {
+			FROM = {
+				wealth = -15
+				spawn_fleet = {
+					province = closest # closest sea zone
+					owner = THIS
+					disband_on_peace = yes
+					troops =
+					{
+						galleys = { 10 10 }
+					}
+				}
+			}
+			location = {
+				add_province_modifier = {
+					name = requisitioned_fishing_ships
+					duration = 1095
+					stacking = yes
+				}
+			}
+			hidden_tooltip = {
+				add_holding_modifier = {
+					name = requisitioned_fishing_ships_cooldown_timer
+					duration = 180
+					#hidden = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = { any_current_enemy = { has_overseas_holdings = yes } }
+			}
+			modifier = {
+				factor = 0
+				FROM = { NOT = { wealth = 60 } }
+			}
+		}
+	}
+
+}

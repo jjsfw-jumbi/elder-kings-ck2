@@ -1,0 +1,2207 @@
+#Event chain for necromancers dealing with the Ideal Masters and the joy that comes with it
+#Written by jjsfw/jumbi
+
+namespace = ideal_masters
+
+#Necromancer converts to the Ideal Masters faith
+character_event = {
+	id = ideal_masters.1
+	desc = ideal_masters.1.desc
+	picture = GFX_evt_ideal_masters
+
+	#Fast Triggers
+	min_age = 16
+	only_rulers = yes
+	only_capable = yes
+
+	trigger = {
+		trait = necromancer
+		NOT = {
+			trait = undead
+			has_character_flag = necromantic_revelation
+			# religion = ideal_masters
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 120
+
+		modifier = {
+			factor = 0.7
+
+			trait = lunatic
+		}
+
+		modifier = {
+			factor = 0.8
+
+			true_religion = king_of_worms_cult
+		}
+
+		modifier = {
+			factor = 2
+
+			true_religion = ideal_masters
+		}
+
+		modifier = {
+			factor = 0.8
+
+			learning = 20
+		}
+		modifier = {
+			factor = 0.9
+
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.9
+
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.85
+
+			trait = ruthless
+		}
+		modifier = {
+			factor = 0.85
+
+			trait = scholar
+		}
+	}
+
+	immediate = {
+		set_character_flag = necromantic_revelation
+	}
+
+	option = {
+		name = ideal_masters.1.ideal
+
+		trigger = {
+			NOR = {
+				religion = ideal_masters
+				secret_religion = ideal_masters
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.2
+				trait = content
+			}
+			modifier = {
+				factor = 0.2
+				trait = kind
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+				NOT = {
+					true_religion = king_of_worms_cult
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = zealous
+				true_religion = king_of_worms_cult
+			}
+			modifier = {
+				factor = 3
+				trait = ambitious
+			}
+			modifier = {
+				factor = 3
+				trait = mystic
+			}
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			modifier = {
+				factor = 2
+				trait = ruthless
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+		}
+
+		#set_character_flag = dealing_with_masters
+		set_secret_religion = ideal_masters
+		hidden_tooltip = { #Re-add necromancer once religion change removes it
+			become_necromancer = yes
+		}
+	}
+
+	option = {
+		name = ideal_masters.1.worms
+		
+		trigger = {
+			NOR = {
+				religion = king_of_worms_cult
+				secret_religion = king_of_worms_cult
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.2
+				trait = content
+			}
+			modifier = {
+				factor = 0.2
+				trait = kind
+			}
+			modifier = {
+				factor = 0
+				trait = zealous
+				NOT = {
+					true_religion = ideal_masters
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = zealous
+				true_religion = ideal_masters
+			}
+			modifier = {
+				factor = 3
+				trait = ambitious
+			}
+			modifier = {
+				factor = 3
+				trait = mystic
+			}
+			modifier = {
+				factor = 2
+				trait = erudite
+			}
+			modifier = {
+				factor = 2
+				trait = proud
+			}
+			modifier = {
+				factor = 1.5
+				trait = patient
+			}
+			modifier = {
+				factor = 1.5
+				trait = scholar
+			}
+		}
+
+		set_secret_religion = king_of_worms_cult
+		hidden_tooltip = { #Re-add necromancer once religion change removes it
+			become_necromancer = yes
+		}
+	}
+
+	option = {
+		#name = ideal_masters.1.refuse
+		name = {
+			text = ideal_masters.1.refuse
+			trigger = {
+				NOR = {
+					true_religion = ideal_masters
+					true_religion = king_of_worms_cult
+				}
+			}
+		}
+		name = {
+			text = ideal_masters.1.refuse.is_ideal
+			trigger = {
+				true_religion = ideal_masters
+			}
+		}
+		name = {
+			text = ideal_masters.1.refuse.is_worms
+			trigger = {
+				true_religion = king_of_worms_cult
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 10
+				true_religion = ideal_masters
+			}
+		}
+	}
+}
+
+#Masters offer great power to one of their followers - NON JADE DRAGON, for Jade Dragon, use offmap interactions instead
+character_event = {
+	id = ideal_masters.2
+	desc = ideal_masters.2.desc
+	picture = GFX_evt_ideal_masters
+
+	#Fast Triggers
+	min_age = 16
+	only_rulers = yes
+	only_capable = yes
+	lacks_dlc = "Jade Dragon"
+
+	trigger = {
+		trait = necromancer
+		religion = ideal_masters
+		#has_character_flag = dealing_with_masters
+		piety = 0 #Don't want them dying instantly
+		NOT = {
+			has_global_flag = ideal_deal_made
+		}
+		NOT = {
+			OR = {
+				trait = lich
+				trait = undead
+			}
+		}
+		OR = {
+			has_game_rule = { name = ideal_masters_deal value = unrestricted }
+			AND = {
+				has_game_rule = { name = ideal_masters_deal value = restricted }
+				ai = no
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 300
+
+		modifier = {
+			factor = 0.6
+
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.7
+
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.7
+
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.65
+
+			trait = mage_4
+		}
+		modifier = {
+			factor = 0.7
+
+			OR = {
+				trait = priest_3
+				trait = battlemage_3
+				trait = sorcerer_3
+				trait = nightblade_3
+			}
+		}
+		modifier = {
+			factor = 0.5
+
+			trait = mage_5
+		}
+		modifier = {
+			factor = 2
+
+			trait = content
+		}
+		modifier = {
+			factor = 2
+
+			trait = kind
+		}
+		modifier = {
+			factor = 0.8
+
+			trait = warlord
+		}
+	}
+
+	option = {
+			name = ideal_masters.2.accept
+
+			ai_chance = {
+				factor = 20
+
+				modifier = {
+					factor = 0
+
+					OR = {
+						trait = kind
+						trait = content
+					}
+				}
+				modifier = {
+					factor = 1.5
+
+					trait = ruthless
+				}
+				modifier = {
+					factor = 2
+
+					trait = reckless
+				}
+				modifier = {
+					factor = 5
+
+					trait = ambitious
+				}
+				modifier = {
+					factor = 5
+
+					trait = zealous
+				}
+			}
+
+			set_character_flag = soul_sold
+			set_global_flag = ideal_deal_made
+			piety = 1000
+			character_event = { id = ideal_masters.3 days = 30}
+		}
+	option = {
+		name = ideal_masters.2.refuse
+
+		ai_chance = {
+			factor = 50
+		}
+		prestige = 50
+		piety = -50
+		add_trait = content
+		clr_character_flag = dealing_with_masters
+		remove_trait = zealous
+	}
+}
+
+#Courtiers from the Soul Cairn arrive
+character_event = {
+	id = ideal_masters.3
+	desc = ideal_masters.3.desc
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.3.acknowledge
+
+		save_event_target_as = target_ideal_invader
+		set_character_flag = soul_sold # here too for debugging
+
+		wealth = 2500
+
+		character_event = { id = ideal_masters.4 days = 30 }
+
+		hidden_tooltip = {
+			religion = ideal_masters # you're loyalties are definitely known now
+			any_player = {
+				limit = {
+					NOT = {
+						character = ROOT 
+					}
+				}
+				narrative_event = { id = ideal_masters.200 days = 30 }
+			}
+		}
+
+		create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = ROOT
+				trait = undead
+				age = 200
+			}
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = ROOT
+				trait = undead
+				age = 200
+			}
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = ROOT
+				trait = undead
+				age = 200
+			}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = orsimer
+				trait = orsimer
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 20
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = altmer
+				trait = altmer
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 20
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = bosmer
+				trait = bosmer
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = falmer
+				trait = falmer
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 20
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = dunmer
+				trait = dunmer
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = imperial
+				trait = imperial
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = nibenean
+				trait = imperial
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = colovian
+				trait = imperial
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 20
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = nord
+				trait = nord
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = crown
+				trait = redguard
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = forebear
+				trait = redguard
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = yokudan
+				trait = redguard
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = reachmen
+				trait = reachman
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 20
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = breton
+				trait = breton
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = anequinan
+				trait = khajiit
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = pellitinian
+				trait = khajiit
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = maormer
+				trait = maormer
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = chimer
+				trait = chimer
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = skaal
+				trait = nord
+				trait = undead
+				age = 200
+			}
+		}
+		random = {
+			chance = 10
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = atmoran
+				trait = nord
+				trait = undead
+				age = 200
+			}
+		}
+	}
+}
+
+#Soldiers arrive, empire granted
+character_event = {
+	id = ideal_masters.4
+	desc = ideal_masters.4.desc
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.4.acknowledge
+
+		custom_tooltip = {
+				text = ideal_vassal_independence
+				hidden_tooltip = {
+					any_realm_lord = {
+						limit = {
+							NOT = {
+								religion = ideal_masters
+							}
+							liege = {
+								religion = ideal_masters
+							}
+						}
+						set_defacto_liege = THIS
+					}
+				}
+			}
+
+		#Soul demand - better hop to it
+		character_event = { id = ideal_masters.20 days = 365  tooltip = soul_demand_start_warning }
+
+		activate_title = { title = e_undead_army status = yes}
+		
+		hidden_tooltip  = {
+			add_trait = ideal_warlord # increases aggression
+		}
+
+		culture = outsider #Make AI appoint outsider lords by changing their culture
+
+		e_undead_army = {
+			grant_title = PREV
+			succession = turkish_succession
+		}
+		#Spawn fleet if coastal capital
+		if = {
+			limit = {
+				capital_scope = {
+					port = yes
+				}
+			}
+			spawn_fleet = {
+				province = closest
+				earmark = ideal_army
+				owner = ROOT
+				troops = {
+					galleys = { 94 94 }
+				}
+			}
+		}
+		add_character_modifier = { name = ideal_soul_harvest_1 duration = -1 }
+		hidden_tooltip = {
+			character_event = { id = ideal_masters.110 days = 30 }
+		}
+		#Commanders and armies - Based off of code converted by EvilCatInTheHat based off of that of The Sunset Invasion event chain by Henrik Fåhraeus and Henrik Eklund
+		custom_tooltip = {
+			text = ideal_invasion_tooltip
+			hidden_tooltip  = {
+				capital_scope = {
+					create_character = {
+						employer = e_undead_army
+						random_traits = yes
+						dynasty = random
+						religion = ideal_masters
+						culture = outsider
+						age = 800
+						immortal_age = 100
+						attributes = {
+							martial = 12
+						}
+						trait = warrior_4
+						trait = veteran_leader_5
+						trait = undead
+					}
+					new_character = {
+						give_minor_title = title_commander
+						spawn_unit = {
+							owner = ROOT
+							province = PREV
+							home = e_undead_army
+							earmark = ideal_army
+							troops = {
+								#heavy_infantry = { 2800 2800 }
+								#light_infantry = { 1400 1400 }
+								#archers = { 1400 1400 }
+								undead_troop = { 8000 8000 }
+								light_infantry = { 2000 2000 }
+								battlemages = { 500 500 }
+							}
+							attrition  = 0
+						}
+					}
+					create_character = {
+						employer = e_undead_army
+						random_traits = yes
+						dynasty = random
+						religion = ideal_masters
+						culture = outsider
+						age = 800
+						immortal_age = 100
+						attributes = {
+							martial = 12
+						}
+						trait = warrior_4
+						trait = veteran_leader_5
+						trait = undead
+					}
+					new_character = {
+						give_minor_title = title_commander
+						spawn_unit = {
+							owner = ROOT
+							province = PREV
+							home = e_undead_army
+							earmark = ideal_army
+							troops = {
+								#heavy_infantry = { 2800 2800 }
+								#light_infantry = { 1400 1400 }
+								#archers = { 1400 1400 }
+								undead_troop = { 8000 8000 }
+								light_infantry = { 2000 2000 }
+								battlemages = { 500 500 }
+							}
+							attrition  = 0
+						}
+					}
+					create_character = {
+						employer = e_undead_army
+						random_traits = yes
+						dynasty = random
+						religion = ideal_masters
+						culture = outsider
+						age = 800
+						immortal_age = 100
+						attributes = {
+							martial = 12
+						}
+						trait = warrior_4
+						trait = veteran_leader_5
+						trait = undead
+					}
+					new_character = {
+						give_minor_title = title_commander
+						spawn_unit = {
+							owner = ROOT
+							province = PREV
+							home = e_undead_army
+							earmark = ideal_army
+							troops = {
+								#heavy_infantry = { 2800 2800 }
+								#light_infantry = { 1400 1400 }
+								#archers = { 1400 1400 }
+								undead_troop = { 8000 8000 }
+								light_infantry = { 2000 2000 }
+								battlemages = { 500 500 }
+							}
+							attrition  = 0
+						}
+					}
+					create_character = {
+						employer = e_undead_army
+						random_traits = yes
+						dynasty = random
+						religion = ideal_masters
+						culture = outsider
+						age = 800
+						immortal_age = 100
+						attributes = {
+							martial = 12
+						}
+						trait = warrior_4
+						trait = veteran_leader_5
+						trait = undead
+					}
+					new_character = {
+						give_minor_title = title_commander
+						spawn_unit = {
+							owner = ROOT
+							province = PREV
+							home = e_undead_army
+							earmark = ideal_army
+							troops = {
+								#heavy_infantry = { 2800 2800 }
+								#light_infantry = { 1400 1400 }
+								#archers = { 1400 1400 }
+								undead_troop = { 8000 8000 }
+								light_infantry = { 2000 2000 }
+								battlemages = { 500 500 }
+							}
+							attrition  = 0
+						}
+					}
+					create_character = {
+						employer = e_undead_army
+						random_traits = yes
+						dynasty = random
+						religion = ideal_masters
+						culture = outsider
+						age = 800
+						immortal_age = 100
+						attributes = {
+							martial = 12
+						}
+						trait = warrior_4
+						trait = veteran_leader_5
+						trait = undead
+					}
+					new_character = {
+						give_minor_title = title_commander
+						spawn_unit = {
+							owner = ROOT
+							province = PREV
+							home = e_undead_army
+							earmark = ideal_army
+							troops = {
+								#heavy_infantry = { 2800 2800 }
+								#light_infantry = { 1400 1400 }
+								#archers = { 1400 1400 }
+								undead_troop = { 8000 8000 }
+								light_infantry = { 2000 2000 }
+								battlemages = { 500 500 }
+							}
+							attrition  = 0
+						}
+					}
+					create_character = {
+						employer = e_undead_army
+						random_traits = yes
+						dynasty = random
+						religion = ideal_masters
+						culture = outsider
+						age = 800
+						immortal_age = 100
+						attributes = {
+							martial = 12
+						}
+						trait = warrior_4
+						trait = veteran_leader_5
+						trait = undead
+					}
+					new_character = {
+						give_minor_title = title_commander
+						spawn_unit = {
+							owner = ROOT
+							province = PREV
+							home = e_undead_army
+							earmark = ideal_army
+							troops = {
+								#heavy_infantry = { 2800 2800 }
+								#light_infantry = { 1400 1400 }
+								#archers = { 1400 1400 }
+								undead_troop = { 8000 8000 }
+								light_infantry = { 2000 2000 }
+								battlemages = { 500 500 }
+							}
+							attrition  = 0
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#Negative piety - Ideal Masters take your souk
+character_event = {
+	id = ideal_masters.5
+	desc = ideal_masters.5.desc
+	picture = GFX_evt_ideal_masters
+
+	has_character_flag = soul_sold
+
+	trigger = {
+		NOT = {
+			piety = 0
+		}
+		OR = {
+			has_character_modifier = soul_demand10
+			has_character_modifier = soul_demand9
+			has_character_modifier = soul_demand8
+			has_character_modifier = soul_demand7
+			has_character_modifier = soul_demand6
+			has_character_modifier = soul_demand5
+			has_character_modifier = soul_demand4
+			has_character_modifier = soul_demand3
+			has_character_modifier = soul_demand2
+			has_character_modifier = soul_demand1
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 2 #A small window to get the souls you need
+	}
+
+	option = {
+		name = ideal_masters.5.death
+
+		ROOT = {
+			death = {
+				death_reason = death_sacrificed
+			}
+		}
+	}
+}
+
+#Offer to renew deal with successor
+character_event = {
+	id = ideal_masters.6
+	desc = ideal_masters.6.desc
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	trigger = {
+		#FROM = {
+		#	title = e_undead_army
+		#}
+		
+	}
+
+	option = {
+		name = ideal_masters.6.renew
+
+		hidden_tooltip = {
+			remove_character_modifier = failed_invasion_dark_memory
+		}
+
+		ai_chance = {
+			factor = 20
+
+			modifier = {
+				factor = 0
+
+				OR = {
+					trait = kind
+					trait = content
+				}
+			}
+			modifier = {
+				factor = 10
+
+				AND = {
+					trait = necromancer
+					religion = ideal_masters
+				}
+			}
+			modifier = {
+				factor = 5
+
+				trait = necromancer
+				NOT = {
+					religion = ideal_masters
+				}
+			}
+			modifier = {
+				factor = 5
+
+				religion = ideal_masters
+				NOT = {
+					trait = necromancer
+				}
+			}
+			modifier = {
+				factor = 5
+
+				AND = {
+					trait = zealous
+					religion = ideal_masters
+				}
+			}
+		}
+
+		add_trait = ideal_warlord
+		save_event_target_as = target_ideal_invader
+
+		if = {
+			limit = {
+				ai = yes
+			}
+			culture = outsider
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					religion = ideal_masters
+				}
+			}
+			religion = ideal_masters
+		}
+		
+
+		set_character_flag = soul_sold
+
+		#Soul demand
+		character_event = { id = ideal_masters.20 days = 365  tooltip = soul_demand_start_warning }
+		add_character_modifier = { name = ideal_soul_harvest_1 duration = -1 }
+		hidden_tooltip = {
+			
+			character_event = { id = ideal_masters.110 days = 30 }
+ 			#New courtiers to replace those who died alongside the previous ruler
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = ideal_masters
+				culture = outsider
+				age = 800
+				immortal_age = 100
+				attributes = {
+					martial = 12
+				}
+				trait = warrior_4
+				trait = veteran_leader_5
+				trait = undead
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = ideal_masters
+				culture = outsider
+				age = 800
+				immortal_age = 100
+				attributes = {
+					martial = 12
+				}
+				trait = warrior_4
+				trait = veteran_leader_5
+				trait = undead
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = ideal_masters
+				culture = outsider
+				age = 800
+				immortal_age = 100
+				attributes = {
+					martial = 12
+				}
+				trait = warrior_4
+				trait = veteran_leader_5
+				trait = undead
+			}
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = ROOT
+				trait = undead
+				age = 200
+			}
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = ROOT
+				trait = undead
+				age = 200
+			}
+			create_character = {
+				random_traits = yes
+				religion = ideal_masters
+				culture = ROOT
+				trait = undead
+				age = 200
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = orsimer
+					trait = orsimer
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 20
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = altmer
+					trait = altmer
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 20
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = bosmer
+					trait = bosmer
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = falmer
+					trait = falmer
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 20
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = dunmer
+					trait = dunmer
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = imperial
+					trait = imperial
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = nibenean
+					trait = imperial
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = colovian
+					trait = imperial
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 20
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = nord
+					trait = nord
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = crown
+					trait = redguard
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = forebear
+					trait = redguard
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = yokudan
+					trait = redguard
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = reachmen
+					trait = reachman
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 20
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = breton
+					trait = breton
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = anequinan
+					trait = khajiit
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = pellitinian
+					trait = khajiit
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = maormer
+					trait = maormer
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = chimer
+					trait = chimer
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = skaal
+					trait = nord
+					trait = undead
+					age = 200
+				}
+			}
+			random = {
+				chance = 10
+				create_character = {
+					random_traits = yes
+					religion = ideal_masters
+					culture = atmoran
+					trait = nord
+					trait = undead
+					age = 200
+				}
+			}
+		}
+	}
+	option = {
+		name = ideal_masters.6.refuse
+
+		if = {
+			limit = {
+				religion = ideal_masters
+			}
+			piety = -500
+		}
+		character_event = { id = ideal_masters.7 }
+	}
+}
+
+#Deal renewal refused/new ruler does not match criteria for renewal
+character_event = {
+	id = ideal_masters.7
+	desc = ideal_masters.7.desc
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	#trigger = {
+	#	FROM = {
+	#		title = e_undead_army
+	#	}
+	#	NOT = {
+	#		OR = {
+	#			trait = necromancer
+	#			trait = ambitious
+	#			trait = greedy
+	#			trait = ruthless
+	#			trait = reckless
+	#			trait = cruel
+	#			religion = ideal_masters
+	#			religion = king_of_worms_cult
+	#		}
+	#	}
+	#	NOT = {
+	#		has_character_flag = soul_sold
+	#	}
+	#}
+
+	option = {
+		name = ideal_masters.7.acknowledge
+
+		wealth = -2500
+		disband_event_forces = ideal_army
+
+		hidden_tooltip = {
+			any_player = {
+				narrative_event = { id = ideal_masters.201 }
+			}
+		}
+
+		add_character_modifier = {
+			inherit = yes # stigma stays with your heir
+			name = failed_invasion_dark_memory
+			duration = 18250
+		}
+
+		any_realm_lord = {
+			limit = {
+				OR = {
+					trait = undead
+					culture = outsider
+					AND = {
+						religion = ideal_masters
+						trait = zealous
+					}
+					AND = {
+						religion = ideal_masters
+						trait = necromancer
+					}
+				}
+				liege = {
+					OR = {
+						has_character_modifier = failed_invasion_dark_memory
+						NOT = {
+							OR = {
+								trait = undead
+								culture = outsider
+								AND = {
+									religion = ideal_masters
+									trait = zealous
+								}
+								AND = {
+									religion = ideal_masters
+									trait = necromancer
+								}
+							}
+						}
+					}
+				}
+			}
+			# character_event = { id = ideal_masters.220 }
+			set_defacto_liege = THIS
+		}
+
+		# handle any direct undead vassals that will become independent from the empire being destroyed
+		any_vassal = {
+			limit = {
+				OR = {
+					trait = undead
+					culture = outsider
+					AND = {
+						religion = ideal_masters
+						trait = zealous
+					}
+					AND = {
+						religion = ideal_masters
+						trait = necromancer
+					}
+				}
+			}
+			# character_event = { id = ideal_masters.220 }
+		}
+		
+		activate_title = { title = e_undead_army status = no }
+		e_undead_army = {
+			destroy_landed_title = THIS
+		}
+
+		any_courtier = {
+			limit = {
+				trait = undead
+			}
+			e_soul_cairn = {
+				holder_scope = {
+					PREVPREV = {
+						move_character = PREV
+					}
+				}
+			}
+		}
+	}
+}
+
+#on_death of Chosen
+character_event = {
+	id = ideal_masters.8
+	# desc = ideal_masters.8.desc
+	# picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		piety = -100000 #The trigger block doesnt seem to be recognised without inputting a piety conditon O.o
+		has_landed_title = e_undead_army
+	}
+
+	immediate = {
+		#name = ideal_masters.8.acknowledge
+		current_heir = {
+			add_character_modifier = { # Here too to make sure opinion updates to prevent day 1 re-vassalisation
+				inherit = yes # stigma stays with your heir
+				name = failed_invasion_dark_memory
+				duration = 18250
+			}
+			if = {
+				limit = {
+					age = 16
+					dynasty = ROOT
+					piety = 0
+					OR = {
+						trait = necromancer
+						religion = ideal_masters
+						AND = {
+							religion = king_of_worms_cult
+								OR = {
+								trait = greedy
+								trait = ruthless
+								trait = reckless
+								trait = cruel
+								trait = ambitious
+							}
+						}
+					}
+					NOR = {
+						trait = content
+						trait = kind
+						AND = {
+							trait = zealous
+							NOR = {
+								religion = ideal_masters
+								religion = king_of_worms_cult
+							}
+						}
+					}
+				}
+				character_event = { id = ideal_masters.6 days = 1 }
+				break = yes
+			}
+			character_event = { id = ideal_masters.7 days = 1 }
+		}
+	}
+}
+
+#Switched religion - Ideal Masters take your souk [sic]
+character_event = {
+	id = ideal_masters.9
+	desc = ideal_masters.9.desc
+	picture = GFX_evt_ideal_masters
+
+	#has_character_flag = soul_sold
+	only_playable = yes
+
+	trigger = {
+		has_landed_title = e_undead_army
+		has_character_flag = soul_sold
+		NOT = {
+			religion = ideal_masters
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 2 #A small window to repent
+	}
+
+	option = {
+		name = ideal_masters.9.repent
+		trigger = {
+			piety = 5000
+		}
+
+		piety = -5000
+		religion = ideal_masters
+	}
+	option = {
+		name = ideal_masters.9.refuse
+		trigger = {
+			piety = 5000
+		}
+
+		death = {
+				death_reason = death_sacrificed
+			}
+	}
+	option = {
+		name = ideal_masters.9.death
+		trigger = {
+			NOT = {
+				piety = 5000
+			}
+		}
+		ROOT = {
+			death = {
+				death_reason = death_sacrificed
+			}
+		}
+	}
+}
+
+########## Soul Demand Events 20-99 ##########
+
+#AI start with extra souls and an extra 2 years in between each demand, with the gap closing by half a year with each demand
+character_event = {
+	id = ideal_masters.20
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand1
+			duration = -1
+		}
+		if = {
+			limit = {
+				ai = yes
+			}
+			piety = 2000
+			character_event = { id = ideal_masters.21 days = 1095 }
+			break = yes
+		}
+		character_event = { id = ideal_masters.21 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.21
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand2
+			duration = -1
+		}
+		remove_character_modifier = soul_demand1
+		if = {
+			limit = {
+				ai = yes
+			}
+			character_event = { id = ideal_masters.22 days = 913 }
+			break = yes
+		}
+		character_event = { id = ideal_masters.22 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.22
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand3
+			duration = -1
+		}
+		remove_character_modifier = soul_demand2
+		if = {
+			limit = {
+				ai = yes
+			}
+			character_event = { id = ideal_masters.23 days = 730 }
+			break = yes
+		}
+		character_event = { id = ideal_masters.23 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.23
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand4
+			duration = -1
+		}
+		remove_character_modifier = soul_demand3
+		if = {
+			limit = {
+				ai = yes
+			}
+			character_event = { id = ideal_masters.24 days = 548 }
+			break = yes
+		}
+		character_event = { id = ideal_masters.24 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.24
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand5
+			duration = -1
+		}
+		remove_character_modifier = soul_demand4
+		character_event = { id = ideal_masters.25 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.25
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand6
+			duration = -1
+		}
+		remove_character_modifier = soul_demand5
+		character_event = { id = ideal_masters.26 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.26
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand7
+			duration = -1
+		}
+		remove_character_modifier = soul_demand6
+		character_event = { id = ideal_masters.27 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.27
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand8
+			duration = -1
+		}
+		remove_character_modifier = soul_demand7
+		character_event = { id = ideal_masters.28 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.28
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand9
+			duration = -1
+		}
+		remove_character_modifier = soul_demand8
+		character_event = { id = ideal_masters.29 days = 365 }
+	}
+}
+
+character_event = {
+	id = ideal_masters.29
+	desc = ideal_masters.desc.20
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.20.acknowledge
+		add_character_modifier = {
+			name = soul_demand10
+			duration = -1
+		}
+		remove_character_modifier = soul_demand9
+		#character_event = { id = ideal_masters.29 days = 365 }
+	}
+}
+
+########## Harvest Events 100-199 ##########
+
+# Give provinces conquered by player to undead courtier (can't grant titles to undead normally as player, AI can do it)
+province_event = {
+	id = ideal_masters.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		e_undead_army = {
+			holder_scope = {
+				if = {
+					limit = {
+						ai = no
+					}
+					spawn_unit = {
+						owner = THIS
+						province = ROOT
+						home = e_undead_army
+						earmark = ideal_army
+						troops = {
+							undead_troop = { 80 80 }
+							light_infantry = { 20 20 }
+							battlemages = { 5 5 }
+						}
+						scaled_by_biggest_garrison = 0.5
+						attrition  = 0
+					}
+					create_character = {
+						random_traits = yes
+						employer = e_undead_army
+						religion = ideal_masters
+						culture = outsider
+						trait = undead
+						age = 200
+					}
+					new_character = {
+						ROOT = {
+							county = {
+								grant_title = PREVPREV
+							}
+							any_province_holding = {
+								grant_title = PREVPREV
+							}
+						}
+					}
+				}
+				else = {
+					spawn_unit = {
+						owner = THIS
+						province = ROOT
+						home = e_undead_army
+						earmark = ideal_army
+						troops = {
+							undead_troop = { 80 80 }
+							light_infantry = { 20 20 }
+							battlemages = { 5 5 }
+						}
+						scaled_by_biggest_garrison = 2
+						attrition  = 0
+					}
+				}
+			}
+		}
+	}
+}
+
+# Depopulation due to harvesting
+
+# Increase chance of depop based on current prosperity/devastation?
+
+# Light harvesting - p = 0.03 of depop each month
+province_event = {
+	id = ideal_masters.101
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			97 = {}
+			3 = {
+				ideal_harvest_depopulation = yes
+			}
+		}
+	}
+}
+
+# Medium harvesting - p = 0.07 of depop each month
+province_event = {
+	id = ideal_masters.102
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			93 = {}
+			7 = {
+				ideal_harvest_depopulation = yes
+			}
+		}
+	}
+}
+
+# Heavy harvesting - p = 0.33 chance of depop each month
+province_event = {
+	id = ideal_masters.103
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			80 = {}
+			20 = {
+				ideal_harvest_depopulation = yes
+			}
+		}
+	}
+}
+
+# "Monthly" harvest update
+character_event = {
+	id = ideal_masters.110
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		remove_character_modifiers = { modifier = ideal_invasion_harvest amount = 9999 } # this should hopefully get all of them
+
+		export_to_variable = { which = ideal_realm_size value = realm_size }
+
+		# subtract already harvested provinces
+		any_realm_province = {
+			limit = {	
+				OR = {
+					has_province_modifier = depopulated_province
+					has_province_modifier = population_decimated
+				}
+			}
+			export_to_variable = { which = local_decimated_holdings value = num_of_settlements }
+			holder_scope = {
+				top_liege = {
+					subtract_variable = { which = ideal_realm_size which = local_decimated_holdings }
+				}
+			}
+		}
+
+		# multiply based on harvest level
+		if = {
+			limit = {
+				has_character_modifier = ideal_soul_harvest_2
+			}
+			multiply_variable = { which = ideal_realm_size value = 6 }
+			any_realm_province = {
+				limit = {
+					NOT = {
+						has_province_modifier = population_decimated
+					}
+				}
+				province_event = { id = ideal_masters.102 }
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_modifier = ideal_soul_harvest_3
+			}
+			multiply_variable = { which = ideal_realm_size value = 15 }
+			any_realm_province = {
+				limit = {
+					NOT = {
+						has_province_modifier = population_decimated
+					}
+				}
+				province_event = { id = ideal_masters.103 }
+			}
+		}
+		else = { # normal harvesting
+			any_realm_province = {
+				limit = {
+					NOT = {
+						has_province_modifier = population_decimated
+					}
+				}
+				province_event = { id = ideal_masters.101 }
+			}
+		}
+
+		set_variable = { which = offmap_souls which = ideal_realm_size }
+		set_variable = { which = souls_from_invasion which = ideal_realm_size }
+		oblivion_ideal_masters = {
+			offmap_ruler = {
+				change_variable = { which = offmap_souls which = ROOT }
+				change_variable = { which = souls_from_invasion which = ROOT }
+			}
+		}
+
+		while = {
+			limit = {
+				check_variable = { which = ideal_realm_size value = 1 }
+			}
+			subtract_variable = { which = ideal_realm_size value = 1 }
+			add_character_modifier = { 
+				name = ideal_invasion_harvest
+				duration = -1
+				stacking = yes
+				hidden = yes # let's try and leave some room for other modifiers
+			}
+		}
+		set_character_flag = debug_got_110
+		character_event = { id = ideal_masters.110 days = 30 }
+	}
+}
+
+
+########## Narrative Information Events 200-219 ##########
+
+#Inform the world of the undead
+narrative_event = {
+	id = ideal_masters.200
+	title = ideal_masters.200.title
+	desc = ideal_masters.200.desc
+	picture = GFX_evt_undead2
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.200.acknowledge
+	}
+}
+
+#Inform the world of the Wretched disbanding
+narrative_event = {
+	id = ideal_masters.201
+	title = ideal_masters.201.title
+	desc = ideal_masters.201.desc
+	picture = GFX_evt_invaders
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.201.acknowledge
+	}
+}
+
+########## Post-Wretched Splinter Events 220-239 ##########
+
+# Outsider/Necromancer warlord gain event troops to counteract their awful demesne
+character_event = {
+	id = ideal_masters.220
+	desc = ideal_masters.220.desc
+	picture = GFX_evt_undead
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_masters.220.accept
+		trigger = {
+			tier = baron
+		}
+
+		#set_character_flag = debug_ideal_splinter
+
+		# some event troops to counteract their useless provinces
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					owner = ROOT
+					province = PREV
+
+					#absolute
+					troops = {
+						#light_infantry = { 400 400 }
+						#archers = { 100 100 }
+						undead_troop = { 800 800 }
+					}
+
+					# scaled
+					#match_character = ROOT
+					#match_mult = 2.0 # their holding will almost certainly be worthless
+					#scaled_by_biggest_garrison = 2.0
+					#match_min = 1200
+					#match_max = 3600
+
+					attrition = 0.2
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ideal_masters.220.accept
+		trigger = {
+			tier = count
+		}
+
+		#set_character_flag = debug_ideal_splinter
+
+		# some event troops to counteract their useless provinces
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					owner = ROOT
+					province = PREV
+
+					#absolute
+					troops = {
+						#light_infantry = { 900 900 }
+						#archers = { 600 600 }
+						undead_troop = { 1900 1900 }
+					}
+
+					# scaled
+					#match_character = ROOT
+					#match_mult = 2.0 # their holding will almost certainly be worthless
+					#scaled_by_biggest_garrison = 2.0
+					#match_min = 1200
+					#match_max = 3600
+
+					attrition = 0.2
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ideal_masters.220.accept
+		trigger = {
+			tier = duke
+		}
+
+		#set_character_flag = debug_ideal_splinter
+
+		# some event troops to counteract their useless provinces
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					owner = ROOT
+					province = PREV
+
+					#absolute
+					troops = {
+						#light_infantry = { 1500 1500 }
+						#archers = { 1000 1000 }
+						undead_troop = { 3100 3100 }
+					}
+
+					# scaled
+					#match_character = ROOT
+					#match_mult = 2.0 # their holding will almost certainly be worthless
+					#scaled_by_biggest_garrison = 2.0
+					#match_min = 1200
+					#match_max = 3600
+
+					attrition = 0.2
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ideal_masters.220.accept
+		trigger = {
+			tier = king
+		}
+
+		#set_character_flag = debug_ideal_splinter
+
+		# some event troops to counteract their useless provinces
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					owner = ROOT
+					province = PREV
+
+					#absolute
+					troops = {
+						#light_infantry = { 2200 2200 }
+						#archers = { 1300 1300 }
+						undead_troop = { 4200 4200 }
+					}
+
+					# scaled
+					#match_character = ROOT
+					#match_mult = 2.0 # their holding will almost certainly be worthless
+					#scaled_by_biggest_garrison = 2.0
+					#match_min = 1200
+					#match_max = 3600
+
+					attrition = 0.2
+				}
+			}
+		}
+	}
+}

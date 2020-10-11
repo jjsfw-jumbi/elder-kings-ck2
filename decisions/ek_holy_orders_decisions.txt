@@ -1,0 +1,73 @@
+### Forming new Holy Orders
+# Based on the vanilla decisions like Forming the Order of St Anthony
+# Requires 1k piety, 500 gold, at least one holy site controlled and 50% religious authority
+
+decisions = {
+	# Form the Forsworn - Hagraven Cults
+	form_forsworn = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 60
+
+		potential = {
+			religion = forsworn_heresy
+			NOT = { is_title_active = d_forsworn }
+			is_heretic = no
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			has_submenu_open = no
+		}
+		
+		allow = {
+			piety = 1000
+			wealth = 500
+			num_of_holy_sites = 1
+			religion_authority = 0.5
+		}
+		
+		effect = {
+			piety = -1000
+			wealth = -500
+			narrative_event = { id = ek_holy_orders.1 }
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	# Form the Chosen of the Old Gods - Old Gods
+	form_chosenoldgods = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 60
+
+		potential = {
+			religion = old_gods
+			NOT = { is_title_active = d_chosenoldgods }
+			is_heretic = no
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			has_submenu_open = no
+		}
+		
+		allow = {
+			piety = 1000
+			wealth = 500
+			num_of_holy_sites = 1
+			religion_authority = 0.5
+		}
+		
+		effect = {
+			piety = -1000
+			wealth = -500
+			narrative_event = { id = ek_holy_orders.2 }
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

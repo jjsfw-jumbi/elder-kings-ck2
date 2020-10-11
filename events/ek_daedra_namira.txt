@@ -1,0 +1,161 @@
+####Etienne's Namira Events####
+
+namespace = namira
+
+#Triggered by Vow of Squalor Decision
+
+character_event = {
+	id = namira.1
+	desc = Namira1
+	picture = GFX_evt_drunk
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Namira1Vow1"
+		add_character_modifier = { name = namira_vow_1 duration = -1 }
+		clr_character_flag = namira_decision
+	}
+	option = {
+		name = "Namira1Vow2"
+		add_character_modifier = { name = namira_vow_2 duration = -1 }
+		clr_character_flag = namira_decision
+	}
+	option = {
+		name = "Namira1Vow3"
+		add_character_modifier = { name = namira_vow_3 duration = -1 }
+		clr_character_flag = namira_decision
+	}
+	option = {
+		name = "Namira1VowRefuse"
+		clr_character_flag = namira_decision
+	}
+}
+
+character_event = {
+	id = namira.2
+	desc = Namira2
+	picture = GFX_evt_drunk
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Namira2Acknowledge"
+		if = {
+			limit = { has_character_modifier = namira_vow_1 }
+			remove_character_modifier = namira_vow_1
+		}
+		if = {
+			limit = { has_character_modifier = namira_vow_2 }
+			remove_character_modifier = namira_vow_2
+		}
+		if = {
+			limit = { has_character_modifier = namira_vow_3 }
+			remove_character_modifier = namira_vow_3
+		}
+		clr_character_flag = namira_decision
+	}
+	option = {
+		name = "Namira2Refuse"
+		clr_character_flag = namira_decision
+	}
+}
+
+#Events for Vow of Squalor ending when ruler is no longer Cult of Namira
+
+character_event = {
+	id = namira.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { religion = daedra_namira }
+		OR = {
+			has_character_modifier = namira_vow_1
+			has_character_modifier = namira_vow_2
+			has_character_modifier = namira_vow_3
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_character_modifier = namira_vow_1 }
+			remove_character_modifier = namira_vow_1
+		}
+		if = {
+			limit = { has_character_modifier = namira_vow_2 }
+			remove_character_modifier = namira_vow_2
+		}
+		if = {
+			limit = { has_character_modifier = namira_vow_3 }
+			remove_character_modifier = namira_vow_3
+		}
+	}
+}
+
+#Death Feeds Life: the Reapers Due version
+character_event = {
+	id = namira.10
+	desc = Namira10
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	trigger = {
+		has_dlc = "Reapers"
+	}
+	
+	option = {
+		name = Namira10Accept
+		clr_character_flag = namira_deal
+		any_demesne_province = {
+			province_event = { id = RIP.11701 days = 90 random = 30 }
+		}
+	}
+}
+#Vanilla version
+character_event = {
+	id = namira.15
+	desc = Namira15
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	trigger = {
+		NOT = { has_dlc = "Reapers" }
+	}
+	
+	option = {
+		name = Namira15Accept
+		clr_character_flag = namira_deal
+		any_demesne_province = {
+			province_event = { id = namira.20 days = 90 random = 30 }
+		}
+	}
+}
+province_event = {
+	id = namira.20
+	desc = Namira20
+	picture = GFX_evt_garden
+	
+	is_triggered_only = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	option = {
+		name = Namira20Accept
+		add_province_modifier = {
+			name = namira_new_life
+			duration = 1825
+		}
+	}
+}

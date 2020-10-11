@@ -1,0 +1,2838 @@
+offmap_decisions = {
+	#Azura
+	oblivion_azuras_star = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_azura = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_azura
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_azura = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_azura }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_azura }
+				oblivion_azura_boon_decisions_enabled_trigger = yes
+				oblivion_azura = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = azuras_star
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_azura = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = azuras_star }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+
+	#Boethiah
+	oblivion_armor_ebony_mail = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_boethiah = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_boethiah
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_boethiah = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_boethiah }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_boethiah }
+				oblivion_boethiah_boon_decisions_enabled_trigger = yes
+				oblivion_boethiah = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = armor_ebonymail
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_boethiah = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = armor_ebonymail }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	oblivion_weapon_goldbrand = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_boethiah = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_boethiah
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_boethiah = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_boethiah }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_boethiah }
+				oblivion_boethiah_boon_decisions_enabled_trigger = yes
+				oblivion_boethiah = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_goldbrand
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_boethiah = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_goldbrand }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	#Clavicus Vile
+	oblivion_masque_of_clavicus_vile = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_clavicus = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_clavicus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_clavicus = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_clavicus }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_clavicus }
+				oblivion_clavicus_boon_decisions_enabled_trigger = yes
+				oblivion_clavicus = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = masque_of_clavicus_vile
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_clavicus = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = masque_of_clavicus_vile }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	oblivion_weapon_umbra = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_clavicus = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_clavicus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_clavicus = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_clavicus }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_clavicus }
+				oblivion_clavicus_boon_decisions_enabled_trigger = yes
+				oblivion_clavicus = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_umbra
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_clavicus = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_umbra }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	#Hermaeus Mora
+	oblivion_book_oghma_infinium = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_hermaeus = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_hermaeus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_hermaeus = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_hermaeus }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 12000 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 8000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 4000 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_hermaeus }
+				oblivion_hermaeus_boon_decisions_enabled_trigger = yes
+				oblivion_hermaeus = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = book_oghma_infinium
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -12000
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -8000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -4000
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_hermaeus = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = book_oghma_infinium }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	
+	#Hircine
+	oblivion_armor_saviors_hide = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_hircine = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_hircine
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_hircine = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_hircine }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_hircine }
+				oblivion_hircine_boon_decisions_enabled_trigger = yes
+				oblivion_hircine = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = armor_saviors_hide
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_hircine = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = armor_saviors_hide }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	oblivion_ring_of_hircine = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_hircine = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_hircine
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_hircine = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_hircine }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_hircine }
+				oblivion_hircine_boon_decisions_enabled_trigger = yes
+				oblivion_hircine = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = ring_of_hircine
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_hircine = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = ring_of_hircine }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	
+	#Malacath
+	oblivion_weapon_mace_scourge = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_malacath = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_malacath
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_malacath = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_malacath }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_malacath }
+				oblivion_malacath_boon_decisions_enabled_trigger = yes
+				oblivion_malacath = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_mace_scourge
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_malacath = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_mace_scourge }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	oblivion_weapon_volendrung = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_malacath = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_malacath
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_malacath = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_malacath }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_malacath }
+				oblivion_malacath_boon_decisions_enabled_trigger = yes
+				oblivion_malacath = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_volendrung
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_malacath = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_volendrung }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	#Mehrunes Dagon
+	oblivion_weapon_mehrunes_razor = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_mehrunes = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_mehrunes
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_mehrunes = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_mehrunes }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_mehrunes }
+				oblivion_mehrunes_boon_decisions_enabled_trigger = yes
+				oblivion_mehrunes = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_mehrunes_razor
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_mehrunes = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_mehrunes_razor }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	
+	#Mephala
+	oblivion_ring_khajiiti = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_mephala = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_mephala
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_mephala = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_mephala }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_mephala }
+				oblivion_mephala_boon_decisions_enabled_trigger = yes
+				oblivion_mephala = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = ring_of_khajiiti
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_mephala = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = ring_of_khajiiti }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	oblivion_weapon_ebony_blade = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_mephala = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_mephala
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_mephala = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_mephala }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_mephala }
+				oblivion_mephala_boon_decisions_enabled_trigger = yes
+				oblivion_mephala = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_ebonyblade
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_mephala = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_ebonyblade }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	#Meridia
+	oblivion_weapon_dawnbreaker = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_meridia = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_meridia
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_meridia = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_meridia }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_meridia }
+				oblivion_meridia_boon_decisions_enabled_trigger = yes
+				oblivion_meridia = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_dawnbreaker
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_meridia = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_dawnbreaker }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	
+	#Molag Bal
+	oblivion_weapon_mace_molag = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_molag = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_molag
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_molag = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_molag }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_molag }
+				oblivion_molag_boon_decisions_enabled_trigger = yes
+				oblivion_molag = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_mace_molag
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_molag = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_mace_molag }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	#Namira
+	oblivion_ring_namira = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_namira = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_namira
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_namira = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_namira }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_namira }
+				oblivion_namira_boon_decisions_enabled_trigger = yes
+				oblivion_namira = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = ring_of_namira
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_namira = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = ring_of_namira }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	
+	#Nocturnal
+	oblivion_skeleton_key = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_nocturnal = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_nocturnal
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_nocturnal = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_nocturnal }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_nocturnal }
+				oblivion_nocturnal_boon_decisions_enabled_trigger = yes
+				oblivion_nocturnal = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = skeleton_key
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_nocturnal = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = skeleton_key }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	#Peryite
+	oblivion_shield_spellbreaker = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_peryite = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_peryite
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_peryite = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_peryite }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_peryite }
+				oblivion_peryite_boon_decisions_enabled_trigger = yes
+				oblivion_peryite = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = shield_spellbreaker
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_peryite = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = shield_spellbreaker }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+
+
+	#Sanguine
+	oblivion_weapon_sanguinerose = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_sanguine = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_sanguine
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_sanguine = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_sanguine }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_sanguine }
+				oblivion_sanguine_boon_decisions_enabled_trigger = yes
+				oblivion_sanguine = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_sanguinerose
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_sanguine = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_sanguinerose }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	
+	#Sheogorath
+	oblivion_amulet_mad_charity = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_sheogorath = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_sheogorath
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_sheogorath = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_sheogorath }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_sheogorath }
+				oblivion_sheogorath_boon_decisions_enabled_trigger = yes
+				oblivion_sheogorath = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = amulet_of_charitymad
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_sheogorath = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = amulet_of_charitymad }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	oblivion_weapon_fork_h = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_sheogorath = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_sheogorath
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_sheogorath = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_sheogorath }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_sheogorath }
+				oblivion_sheogorath_boon_decisions_enabled_trigger = yes
+				oblivion_sheogorath = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_forkh
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+				
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_sheogorath = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_forkh }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	oblivion_weapon_wabbajack = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_sheogorath = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_sheogorath
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_sheogorath = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_sheogorath }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_sheogorath }
+				oblivion_sheogorath_boon_decisions_enabled_trigger = yes
+				oblivion_sheogorath = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_wabbajack
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_sheogorath = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_wabbajack }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	
+	#Vaermina
+	oblivion_weapon_skull_of_corruption = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_vaermina = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_vaermina
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				OR = {
+					trait = dragonborn
+					AND = {
+						worships_vaermina = yes
+						has_secret_religion = no
+					}
+				}
+				ROOT = { is_offmap_tag = oblivion_vaermina }
+				
+				trigger_if = {
+					limit = { is_immortal = yes }
+					has_offmap_currency = { offmap = ROOT value = 7500 }
+				}
+				
+				trigger_else_if = {
+					limit = { is_long_lived = yes }
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 2500 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			AND = {
+				ROOT = { is_offmap_tag = oblivion_vaermina }
+				oblivion_vaermina_boon_decisions_enabled_trigger = yes
+				oblivion_vaermina = {
+					NOT = { has_status = oblivion_cataclysm }
+					offmap_ruler = {
+						has_artifact = weapon_skull_of_corruption
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				if = {
+					limit = { is_immortal = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -7500
+					}
+				}
+				
+				else_if = {
+					limit = { is_long_lived = yes }
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -5000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -2500
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+				}
+				oblivion_vaermina = {
+					offmap_ruler = {
+						save_event_target_as = ek_artifact_origin
+					}
+				}
+				event_target:ek_artifact_origin = {
+					random_artifact = {
+						limit = { artifact_type = weapon_skull_of_corruption }
+						transfer_artifact = {
+							from = event_target:ek_artifact_origin
+							to = FROM
+						}
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+}

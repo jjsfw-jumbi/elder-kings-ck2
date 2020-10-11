@@ -1,0 +1,2122 @@
+###Skyforge
+wonder_skyforge = { #Now Jorrvaskr
+	picture = GFX_wonder_strip_jorrvaskr
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_skyforge_master }
+					
+					AND = {
+						society_member_of = companions_tamriel
+						is_society_grandmaster = yes
+					}
+				}
+			}
+			OR = { #Has to have an atmoran-derived culture or religion, or be a member of the Companions. Or AI and not a mer or beast, because AI needs easy mode.
+				trigger_if = {
+					limit = { ai = no }
+					OR = {
+						society_member_of = companions_tamriel
+						culture = atmoran
+						culture = nord
+						culture = skaal
+						culture = reachmen
+						religion_group = atmoran_pantheon
+					}
+				}
+				trigger_else = {
+					is_mer = no
+					is_beast = no
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		is_destructible
+		cost_medium
+		inspires_greatness
+		is_skyforge
+	}
+	available_upgrades = {
+		upgrade_skyforge_master #Actually skyforge now
+		upgrade_sacrificial_altar
+		upgrade_execution_chamber
+		upgrade_retinue_skyforge
+		upgrade_roads
+		upgrade_road_tolls
+		upgrade_watchtower_network
+		upgrade_tower
+		upgrade_historical_mural
+		upgrade_siege_engine_workshop_sf
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		upgrade_brewery
+		upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		upgrade_hypocausts
+		upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		#upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 360
+		gold_cost_flat = 600
+		gold_cost_ticking = 3
+		restore_time = 300
+		loot_time = 20
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.0125
+			heavy_infantry = 22
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_modifier = 1
+			drunkard_opinion = 1
+			nord_opinion = 1
+			custom_modifier_text = tavern_custom_modifier_tt
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 650
+		gold_cost_ticking = 3
+		restore_time = 240
+		loot_time = 20
+		restore_cost_flat = 450
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.0125
+			heavy_infantry = 22
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_modifier = 1
+			drunkard_opinion = 1
+			nord_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 240
+		gold_cost_flat = 750
+		gold_cost_ticking = 3
+		restore_time = 180
+		loot_time = 6
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.0125
+			heavy_infantry = 22
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_modifier = 1
+			drunkard_opinion = 1
+			nord_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 240
+		gold_cost_flat = 750
+		gold_cost_ticking = 3
+		restore_time = 180
+		loot_time = 6
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.0125
+			heavy_infantry = 22
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_modifier = 2
+			drunkard_opinion = 2
+			nord_opinion = 2
+		}
+	}
+}
+####Senchal Port
+wonder_senchal = { #Great Ports of Senchal
+	picture = GFX_wonder_strip_harbour
+	is_in_water = yes
+	show_model = no
+	allow_construction = no
+	potential = {
+		FROMFROMFROM = { is_coastal = yes }
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_portmaster_senchal }
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		is_destructible
+		cost_high
+		is_senchal
+	}
+	available_upgrades = {
+		# UNIQUE:
+		upgrade_lighthouse
+		upgrade_military_wharf
+		upgrade_port_master
+		upgrade_cothon
+		upgrade_piers
+		upgrade_office_harbor
+		upgrade_walls_sea
+		upgrade_warehouse_senchal
+		upgrade_black_market
+		upgrade_roads
+		upgrade_road_tolls
+		upgrade_watchtower_network
+		upgrade_tower
+		upgrade_retinue_senchal
+		upgrade_tavern
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		upgrade_brewery
+		upgrade_meadery
+		upgrade_vineyard
+		upgrade_rice_field
+		upgrade_coconut_orchard
+		upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		upgrade_aqueduct_system
+		upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		#upgrade_investment_quarry
+	}
+	
+	stage = {
+		allow = {
+		}
+		build_time = 325
+		gold_cost_flat = 2000
+		gold_cost_ticking = 5
+		restore_time = 150
+		loot_time = 12
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 3
+		local_modifier = {
+			local_tax_modifier = 0.05
+			tradevalue = 35
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 375
+		gold_cost_flat = 2200
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 12
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.05
+			tradevalue = 35
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 375
+		gold_cost_flat = 2400
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 12
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.05
+			tradevalue = 35
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 325
+		gold_cost_flat = 2600
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 2
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 3
+		local_modifier = {
+			local_tax_modifier = 0.05
+			tradevalue = 35
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+		}
+	}
+}
+####Mane's Palace
+wonder_mane_palace = { #Palace of the Mane
+	picture = GFX_wonder_strip_hindu_temple
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			religion = riddlethar
+			controls_religion = yes
+			
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		is_destructible
+		holy_building
+		inspires_piety
+		inspires_contentedness
+		inspires_relaxing
+		cost_high
+		is_mane_palace
+	}
+	available_upgrades = {
+		upgrade_moonsugar_gardens
+		upgrade_statue_mane
+		upgrade_retinue_mane
+		upgrade_lunar_lattice
+		upgrade_relic_tomb
+		upgrade_inner_sanctuary_mane
+		upgrade_moonsugar_distillery
+		upgrade_spikes
+		upgrade_torture_chamber
+		upgrade_roads
+		upgrade_road_tolls
+		upgrade_watchtower_network
+		upgrade_tower
+		upgrade_historical_mural
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		#upgrade_runestones
+		upgrade_necromancer_retinue
+		upgrade_brewery
+		upgrade_meadery
+		upgrade_vineyard
+		upgrade_rice_field
+		upgrade_coconut_orchard
+		upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		upgrade_aqueduct_system
+		upgrade_freshwater_fountains
+		upgrade_sewers
+		upgrade_investment_logging
+		#upgrade_investment_quarry
+	}
+	
+	stage = {
+		allow = {
+		}
+		build_time = 325
+		gold_cost_flat = 2000
+		gold_cost_ticking = 5
+		restore_time = 150
+		loot_time = 12
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 3
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tech_growth_modifier_culture = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			monthly_character_piety = 0.05
+			court_size_modifier = 3
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 375
+		gold_cost_flat = 2200
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 12
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tech_growth_modifier_culture = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			monthly_character_piety = 0.05
+			court_size_maintenance_cost_modifier = -0.05
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 375
+		gold_cost_flat = 2400
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 12
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.05
+			tech_growth_modifier_culture = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			monthly_character_piety = 0.05
+			court_size_modifier = 3
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 325
+		gold_cost_flat = 2600
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 2
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 3
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tech_growth_modifier_culture = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			monthly_character_piety = 0.05
+			court_size_maintenance_cost_modifier = -0.05
+		}
+	}
+}
+###Palace of Kings
+wonder_palace_of_kings = {
+	picture = GFX_wonder_strip_palace_of_kings
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_pok_custodian }
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		is_destructible
+		cost_high
+		inspires_greatness
+		is_palace_of_kings
+	}
+	available_upgrades = {
+		upgrade_throne_fancy
+		upgrade_skull_throne
+		upgrade_golden_throne
+		upgrade_automata_throne
+		upgrade_historical_mural
+		upgrade_torture_chamber
+		upgrade_vault
+		upgrade_giant_banners
+		upgrade_watch_tower
+		upgrade_roads
+		upgrade_spikes
+		upgrade_tower
+		upgrade_road_tolls
+		upgrade_war_room
+		upgrade_barracks_pok
+		upgrade_bloodworks
+		upgrade_pok_castellan
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		upgrade_brewery
+		upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		upgrade_dairy_brewer
+		upgrade_drainage_channels
+		upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 325
+		gold_cost_flat = 2000
+		gold_cost_ticking = 5
+		restore_time = 150
+		loot_time = 12
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 3
+		local_modifier = {
+			tech_growth_modifier_military = 0.025
+		}
+		owner_modifier = {
+			retinuesize = 100
+			monthly_character_prestige = 0.1
+			court_size_modifier = 5
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 375
+		gold_cost_flat = 2200
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 12
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			tech_growth_modifier_military = 0.025
+		}
+		owner_modifier = {
+			retinuesize = 100
+			monthly_character_prestige = 0.1
+			court_size_maintenance_cost_modifier = -0.05
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 375
+		gold_cost_flat = 2400
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 12
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			tech_growth_modifier_military = 0.025
+		}
+		owner_modifier = {
+			retinuesize = 100
+			monthly_character_prestige = 0.1
+			court_size_modifier = 5
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 325
+		gold_cost_flat = 2600
+		gold_cost_ticking = 5
+		restore_time = 200
+		loot_time = 2
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 3
+		local_modifier = {
+			tech_growth_modifier_military = 0.025
+		}
+		owner_modifier = {
+			retinuesize = 100
+			monthly_character_prestige = 0.1
+			court_size_maintenance_cost_modifier = -0.05
+			land_morale = 0.025
+		}
+	}
+}
+####The Imperial City
+wonder_imperial_city = {
+	picture = GFX_wonder_strip_imperial_city
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_ic_custodian }
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		is_destructible
+		cost_high
+		is_imperial_city
+	}
+	available_upgrades = {
+		upgrade_black_market
+		upgrade_roads
+		#upgrade_road_tolls
+		#upgrade_watchtower_network
+		#upgrade_giant_banners
+		upgrade_lighthouse
+		upgrade_temple_of_the_one
+		upgrade_imperial_arboretum
+		upgrade_imperial_arena
+		upgrade_office_of_commerce
+		upgrade_imperial_prison
+		upgrade_ip_bastion
+		upgrade_imperial_chapel
+		upgrade_noble_manors
+		upgrade_stable
+		upgrade_great_aqueduct
+		upgrade_imperial_hospital
+		upgrade_imperial_sewers
+		upgrade_imperial_guard
+		upgrade_ic_custodian
+		upgrade_tavern
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		#upgrade_brewery
+		#upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		#upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		#upgrade_sewers
+		#upgrade_investment_logging
+		#upgrade_investment_quarry
+	}
+	
+	stage = {
+		allow = {
+		}
+		build_time = 360
+		gold_cost_flat = 2000
+		gold_cost_ticking = 5
+		restore_time = 240
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 2
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			#vassal_limit = 2
+			demesne_size = 1
+			culture_flex = -0.025
+			religion_flex = -0.025
+			global_levy_size = 0.01
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 480
+		gold_cost_flat = 2000
+		gold_cost_ticking = 6
+		restore_time = 120
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 3
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			#vassal_limit = 2
+			demesne_size = 1
+			culture_flex = -0.025
+			religion_flex = -0.025
+			global_levy_size = 0.01
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 600
+		gold_cost_flat = 2000
+		gold_cost_ticking = 7
+		restore_time = 120
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 4
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			#vassal_limit = 2
+			demesne_size = 1
+			culture_flex = -0.025
+			religion_flex = -0.025
+			global_levy_size = 0.01
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 720
+		gold_cost_flat = 2000
+		gold_cost_ticking = 8
+		restore_time = 120
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 5
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			#vassal_limit = 2
+			demesne_size = 1
+			culture_flex = -0.025
+			religion_flex = -0.025
+			global_levy_size = 0.01
+		}
+	}
+}
+####Understone
+wonder_understone = {
+	picture = GFX_wonder_strip_undergroundcity
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_guardian_of_the_deep }
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		defensive
+		cost_medium
+		is_understone
+	}
+	available_upgrades = {
+		upgrade_caves_natural
+		upgrade_tunnels_travel
+		upgrade_metal_mine_precious
+		upgrade_dungeon
+		upgrade_retinue_understone
+		upgrade_torture_chamber
+		upgrade_historical_mural
+		upgrade_spikes
+		upgrade_tavern
+		upgrade_siege_engine_workshop_understone
+		upgrade_automata_throne
+		upgrade_war_room
+		upgrade_hidden_gates
+		upgrade_traps
+		upgrade_dwemer_walls
+		upgrade_dwemer_cannon
+		upgrade_guardian_of_the_deep
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		upgrade_brewery
+		upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		upgrade_hypocausts
+		upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 200
+		gold_cost_flat = 2000
+		gold_cost_ticking = 3
+		restore_time = 150
+		loot_time = 200
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			siege_defence = 0.025
+			local_tax_modifier = 0.01
+			garrison_size = 0.025
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_maintenance_cost_modifier = -0.025
+			tech_growth_modifier = 0.0125
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 2050
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 200
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			siege_defence = 0.025
+			local_tax_modifier = 0.01
+			garrison_size = 0.025
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_modifier = 2
+			tech_growth_modifier = 0.0125
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 400
+		gold_cost_flat = 2100
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			siege_defence = 0.025
+			local_tax_modifier = 0.01
+			garrison_size = 0.025
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_maintenance_cost_modifier = -0.025
+			tech_growth_modifier = 0.0125
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 500
+		gold_cost_flat = 2150
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			siege_defence = 0.025
+			local_tax_modifier = 0.01
+			garrison_size = 0.025
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			court_size_modifier = 2
+			tech_growth_modifier = 0.0125
+		}
+	}
+}
+####Shipyards of Jylkurfyk
+wonder_jylkurfyk = {
+	picture = GFX_wonder_strip_harbour
+	show_model = no
+	allow_construction = no
+	is_in_water = yes
+	potential = {
+		FROMFROMFROM = { is_coastal = yes }
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_master_shipwright_jyl }
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		defensive
+		cost_medium
+		is_jylkurfyk
+	}
+	available_upgrades = {
+		upgrade_cothon
+		upgrade_piers
+		upgrade_military_wharf
+		upgrade_retinue_jylkurfyk
+		upgrade_historical_mural
+		upgrade_spikes
+		upgrade_tavern
+		upgrade_roads
+		upgrade_road_tolls
+		upgrade_tower
+		upgrade_watchtower_network
+		upgrade_lighthouse
+		upgrade_siege_engine_workshop
+		upgrade_master_shipwright
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		upgrade_brewery
+		upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		upgrade_hypocausts
+		upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		upgrade_sewers
+		upgrade_investment_logging
+		upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 250
+		gold_cost_flat = 1900
+		gold_cost_ticking = 3
+		restore_time = 150
+		loot_time = 100
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			galleys = 15
+			tradevalue = 12
+			global_supply_limit = 0.05
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			build_cost_modifier = -0.0125
+			tech_growth_modifier_military = 0.0125
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 100
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			galleys = 15
+			tradevalue = 12
+			global_supply_limit = 0.05
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			build_cost_modifier = -0.0125
+			tech_growth_modifier_military = 0.0125
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			galleys = 20
+			tradevalue = 12
+			global_supply_limit = 0.05
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			build_cost_modifier = -0.0125
+			tech_growth_modifier_military = 0.0125
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			galleys = 25
+			tradevalue = 12
+			global_supply_limit = 0.05
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.05
+			build_cost_modifier = -0.0125
+			tech_growth_modifier_military = 0.0125
+		}
+	}
+}
+#Necropolis of Motalion
+wonder_motalion = {
+	picture = GFX_wonder_strip_motalion
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			religion_group = yokudan_pantheon
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_motalion_overseer }
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		burial_ground
+		is_destructible
+		cost_high
+		holy_building
+		inspires_piety
+		is_motalion
+	}
+	available_upgrades = {
+		upgrade_motalion_overseer
+		upgrade_tomb_blessed_interment
+		upgrade_crypt_virtuous_maidens
+		upgrade_temple_tuwhacca
+		upgrade_statues_dead
+		upgrade_crypt_of_the_forgotten
+		upgrade_mythological_beast
+		upgrade_sacrificial_altar
+		upgrade_traps
+		upgrade_retinue_motalion
+		upgrade_historical_mural
+		upgrade_spikes
+		upgrade_roads
+		upgrade_road_tolls
+		upgrade_tower
+		upgrade_watchtower_network
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		#upgrade_brewery
+		#upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		#upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		upgrade_aqueduct_system
+		upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 250
+		gold_cost_flat = 1900
+		gold_cost_ticking = 3
+		restore_time = 150
+		loot_time = 100
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			culture_techpoints = 0.025
+			local_revolt_risk = -0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.025
+			monthly_character_piety = 0.05
+			alikr_opinion = 1
+			satakal_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 100
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			culture_techpoints = 0.025
+			local_revolt_risk = -0.005
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.025
+			monthly_character_piety = 0.05
+			alikr_opinion = 1
+			satakal_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			culture_techpoints = 0.025
+			local_revolt_risk = -0.005
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.025
+			monthly_character_piety = 0.05
+			alikr_opinion = 1
+			satakal_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			culture_techpoints = 0.025
+			local_revolt_risk = -0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.025
+			monthly_character_piety = 0.05
+			alikr_opinion = 1
+			satakal_opinion = 1
+		}
+	}
+}
+
+### Temple of Orgnum
+wonder_temple_orgnum = {
+	picture = GFX_wonder_strip_hindu_temple
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			OR = {
+				character = 39000
+				any_owned_bloodline = {
+					OR = {
+						has_bloodline_flag = bloodline_orgnum
+						has_bloodline_flag = godslayer_bloodline
+					}
+				}
+			}
+			
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_sacristan_orgnum }
+					
+					trigger_if = {
+						limit = { character = 39000 }
+						
+						custom_tooltip = {
+							text = NAMED_GOD_EMPEROR_CT
+							AND = {
+								character = 39000
+								has_global_flag = orgnum_god_emperor
+								real_tier = EMPEROR
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		burial_ground
+		is_destructible
+		cost_high
+		holy_building
+		inspires_piety
+		is_temple_orgnum
+	}
+	available_upgrades = {
+		upgrade_divine_statues
+		upgrade_great_serpent_hall
+		upgrade_divine_guard
+		upgrade_heralds
+		upgrade_sacristan_orgnum
+		
+		# Common Upgrades
+		upgrade_historical_mural
+		upgrade_war_room
+		upgrade_giant_banners
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		#upgrade_brewery
+		#upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		#upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		upgrade_hypocausts
+		upgrade_heating_pipes
+		upgrade_aqueduct_system
+		upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 250
+		gold_cost_flat = 1900
+		gold_cost_ticking = 3
+		restore_time = 150
+		loot_time = 100
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.025
+			local_revolt_risk = -0.01
+		}
+		owner_modifier = {
+			monthly_character_piety = 0.05
+			pyandoneaic_opinion = 2
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 100
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.025
+			local_revolt_risk = -0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.025
+			monthly_character_piety = 0.05
+			pyandoneaic_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.025
+			local_revolt_risk = -0.015
+		}
+		owner_modifier = {
+			monthly_character_piety = 0.05
+			pyandoneaic_opinion = 2
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.025
+			local_revolt_risk = -0.015
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.025
+			monthly_character_piety = 0.05
+			pyandoneaic_opinion = 1
+		}
+	}
+}
+
+### Cath Bedraud
+wonder_cath_bedraud = {
+	picture = GFX_wonder_strip_cath_bedraud
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_sexton_cath_bedraud }
+					
+					### High Rock is primary title/Emperor and holds High Rock
+					primary_title = { title = k_highrock }
+					AND = {
+						real_tier = EMPEROR
+						any_demesne_title = { title = k_highrock }
+					}
+				}
+			}
+			
+			OR = {
+				culture_group = nedic
+				dynasty = 120001 #Direnni
+			}
+		}
+	}
+	flags = {
+		is_historical
+		burial_ground
+		is_destructible
+		cost_high
+		holy_building
+		inspires_piety
+		is_cath_bedraud
+	}
+	available_upgrades = {
+		# Common Upgrades
+		upgrade_historical_mural
+		upgrade_statues_ancestors
+		upgrade_gargoyles
+		upgrade_relic_tomb
+		upgrade_unmarked_tombs
+		upgrade_catacombs
+		
+		upgrade_sexton_cath_bedraud
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		#upgrade_brewery
+		#upgrade_meadery
+		#upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		#upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		#upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 250
+		gold_cost_flat = 1900
+		gold_cost_ticking = 3
+		restore_time = 150
+		loot_time = 100
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.01
+		}
+		owner_modifier = {
+			monthly_character_piety = 0.05
+			breton_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 100
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			culture_techpoints = 0.025
+			local_revolt_risk = -0.005
+		}
+		owner_modifier = {
+			monthly_character_piety = 0.1
+			human_pantheon_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.01
+		}
+		owner_modifier = {
+			monthly_character_piety = 0.05
+			breton_opinion = 1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.025
+			local_revolt_risk = -0.01
+		}
+		owner_modifier = {
+			monthly_character_piety = 0.1
+			human_pantheon_opinion = 1
+		}
+	}
+}
+
+### Menagerie of Sil-Var-Woad
+wonder_menagerie_silvarwoad = {
+	picture = GFX_wonder_strip_menagerie_silvarwoad
+	show_model = no
+	allow_construction = no
+	potential = {
+		always = no
+	}
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_zookeeper_silvarwoad }
+				
+					### Alinor is primary title/Emperor and holds Alinor
+					primary_title = { title = k_summerset }
+					AND = {
+						real_tier = EMPEROR
+						any_demesne_title = { title = k_summerset }
+					}
+				}
+			}
+		}
+	}
+	flags = {
+		is_historical
+		inspires_relaxing
+		inspires_contentedness
+		cost_high
+		is_zoo_silvarwoad
+	}
+	available_upgrades = {
+		# Unique Upgrades
+		upgrade_senche_pen
+		upgrade_mammoth_paddock
+		upgrade_jungle_enclosure
+		
+		# Common Upgrades
+		upgrade_sacred_grove
+		upgrade_animal_cages
+		upgrade_theater_stage
+		upgrade_hanging_gardens
+		upgrade_mythological_beast
+		
+		upgrade_zookeeper_silvarwoad
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		upgrade_runestones
+		upgrade_necromancer_retinue
+		#upgrade_brewery
+		#upgrade_meadery
+		upgrade_vineyard
+		#upgrade_rice_field
+		#upgrade_coconut_orchard
+		#upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		upgrade_sewers
+		#upgrade_investment_logging
+		#upgrade_investment_quarry
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 250
+		gold_cost_flat = 1900
+		gold_cost_ticking = 3
+		restore_time = 150
+		loot_time = 100
+		restore_cost_flat = 400
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.01
+			culture_techpoints = 0.025	
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 100
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.05
+			culture_techpoints = 0.025	
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.2
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_revolt_risk = -0.01
+			culture_techpoints = 0.025	
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 300
+		gold_cost_flat = 1000
+		gold_cost_ticking = 3
+		restore_time = 200
+		loot_time = 20
+		restore_cost_flat = 500
+		restore_cost_ticking = 2
+		upgrade_slots = 2
+		local_modifier = {
+			local_tax_modifier = 0.05
+			culture_techpoints = 0.025	
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.2
+		}
+	}
+}
+
+### Volwesi
+wonder_volwesi = {
+	picture = GFX_wonder_strip_volwesi
+	show_model = no
+	allow_construction = no
+	
+	potential = {
+		always = no
+	}
+
+	active = {
+		ROOT = {
+			trigger_if = {
+				limit = { has_game_rule = { name = great_work_limit value = any } }
+				has_game_rule = { name = great_work_limit value = any }
+			}
+			
+			trigger_else = {
+				OR = {
+					trigger_if = {
+						limit = { has_game_rule = { name = great_work_limit value = capital } }
+						has_game_rule = { name = great_work_limit value = capital }
+						custom_tooltip = {
+							text = WONDER_IN_CAPITAL_CT
+							FROMFROM = { location = { ROOT = { capital_scope = { province = PREVPREV } } } }
+						}
+					}
+					
+					trigger_else_if = {
+						limit = { has_game_rule = { name = great_work_limit value = demesne } }
+						has_game_rule = { name = great_work_limit value = demesne }
+						custom_tooltip = {
+							text = WONDER_IN_DEMESNE_CT
+							FROMFROM = { location = { ROOT = { any_demesne_province = { province = PREVPREV } } } }
+						}
+					}
+					
+					any_courtier_or_vassal = { has_minor_title = title_volwesi_governor }
+				}
+			}
+		}
+	}
+
+	flags = {
+		is_historical
+		is_destructible
+		cost_high
+		is_volwesi
+	}
+
+	available_upgrades = {
+		# Special
+		upgrade_volwesi_canals
+		upgrade_dragonguard
+		upgrade_high_commissioners_bureau
+		upgrade_haematic_temple
+		upgrade_akaviri_memorial
+		upgrade_serpentine_palace
+		upgrade_ginyeom_palace
+		upgrade_volwesi_palace_generic
+		upgrade_scaled_wales
+
+		# Minor title
+		upgrade_volwesi_governor
+
+		# Generic
+		upgrade_black_market
+		upgrade_roads
+		upgrade_road_tolls
+		upgrade_watchtower_network
+		upgrade_giant_banners
+		upgrade_lighthouse
+		upgrade_noble_manors
+		upgrade_stable
+		upgrade_tavern
+		
+		#Cultural/Religion/Regional/Special Global Upgrades
+		#upgrade_runestones
+		upgrade_necromancer_retinue
+		#upgrade_brewery
+		#upgrade_meadery
+		#upgrade_vineyard
+		upgrade_rice_field
+		#upgrade_coconut_orchard
+		#upgrade_dairy_brewer
+		#upgrade_drainage_channels
+		#upgrade_tree_plantation
+		#upgrade_hypocausts
+		#upgrade_heating_pipes
+		#upgrade_aqueduct_system
+		#upgrade_freshwater_fountains
+		#upgrade_sewers
+		#upgrade_investment_logging
+		#upgrade_investment_quarry
+	}
+	
+	stage = {
+		allow = {
+		}
+		build_time = 360
+		gold_cost_flat = 2000
+		gold_cost_ticking = 5
+		restore_time = 240
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 2
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			levy_size = 0.05
+			demesne_size = 1
+			global_levy_size = 0.01
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 480
+		gold_cost_flat = 2000
+		gold_cost_ticking = 6
+		restore_time = 120
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 3
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			levy_size = 0.05
+			demesne_size = 1
+			global_levy_size = 0.01
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 600
+		gold_cost_flat = 2000
+		gold_cost_ticking = 7
+		restore_time = 120
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 4
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			levy_size = 0.05
+			demesne_size = 1
+			global_levy_size = 0.01
+		}
+	}
+	stage = {
+		allow = {
+		}
+		build_time = 720
+		gold_cost_flat = 2000
+		gold_cost_ticking = 8
+		restore_time = 120
+		loot_time = 12
+		restore_cost_flat = 1000
+		restore_cost_ticking = 5
+		upgrade_slots = 4
+		local_modifier = {
+			local_tax_modifier = 0.025
+			tradevalue = 25
+			tech_growth_modifier = 0.01
+		}
+		owner_modifier = {
+			monthly_character_prestige = 0.1
+			levy_size = 0.05
+			vassal_opinion = 3
+			demesne_size = 1
+			global_levy_size = 0.01
+		}
+	}
+}

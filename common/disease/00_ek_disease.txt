@@ -1,0 +1,772 @@
+#The Legendary Knahaten Flu
+knahaten_flu = {
+	rip = yes
+	contagiousness = 0.40
+	outbreak_chance = 0.20
+	effect = {
+		castle_levy_size = -0.75
+		city_levy_size = -0.85
+		temple_levy_size = -0.35
+		levy_reinforce_rate = -1
+		garrison_size = -0.75
+		local_build_time_modifier = 2
+		local_build_cost_modifier = 2
+		city_tax_modifier = -1
+		castle_tax_modifier = -1
+		temple_tax_modifier = -1
+		tax_income = -1
+		supply_limit = -10
+		max_attrition = 0.1
+		tech_growth_modifier = -1
+		disease_defence = 0.1
+	}
+	yearly_province_pulse = {
+		random_list = {		
+			30 = {
+				modifier = {
+					factor = 1.1
+					hospital_level = 1
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 2
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 3
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 4
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 5
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 6
+				}
+			}
+			70 = {
+				increase_depopulation_effect = yes
+			}
+		}
+	}
+	icon = 4
+	tooltip = KNAHATEN_FLU_INFO
+	months = 60 #5years
+	trait = has_knahaten_flu
+	character_infection_chances = {
+		months = 3
+	}
+	on_character_infection = {
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = immune_knahaten_flu
+					trait = knahaten_immune
+					has_character_flag = got_knahaten_flu
+					trait = has_knahaten_flu
+					graphical_culture = argoniangfx
+					is_disease_immune = yes
+				}
+			}
+			random_list = {
+				90 = { # Get the disease
+					modifier = {
+						factor = 0
+						has_character_modifier = in_seclusion
+					}
+					modifier = {
+						factor = 0
+						AND = {
+							is_nomadic = yes
+							NOT = { is_unimportant_trigger = yes }
+						}
+					}
+					modifier = {
+						factor = 0.5
+						AND = {
+							is_tribal = yes
+							NOT = { is_unimportant_trigger = yes }
+						}
+					}
+					modifier = {
+						factor = 5000
+						is_unimportant_trigger = yes
+					}
+					#clr_character_flag = got_knahaten_flu #clear out other diseases
+					clr_character_flag = got_aztec_disease
+					clr_character_flag = got_bubonic_plague
+					clr_character_flag = got_smallpox
+					clr_character_flag = got_measles
+					clr_character_flag = got_typhus
+					clr_character_flag = got_typhoid_fever
+					clr_character_flag = got_tuberculosis
+					clr_character_flag = got_swamp_rot
+					clr_character_flag = got_syphilis
+					clr_character_flag = got_pneumonia
+					clr_character_flag = got_cancer
+					clr_character_flag = got_rabies
+					clr_character_flag = got_gout
+					clr_character_flag = got_flu
+					clr_character_flag = got_dysentery
+					clr_character_flag = got_food_poisoning
+					clr_character_flag = got_cholera
+					clr_character_flag = got_dampworm
+					clr_character_flag = got_witches_pox
+					clr_character_flag = got_greenspore
+					clr_character_flag = got_rockjoint
+					clr_character_flag = got_stomach_rot
+					clr_character_flag = got_chrondiasis
+					clr_character_flag = disease_not_serious
+					
+					set_character_flag = got_knahaten_flu
+					set_character_flag = developing_illness
+					character_event = { id = ekrip.510 }
+				}
+				10 = { # Nothing happens
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = knahaten_flu_happened }
+			}
+			set_global_flag = knahaten_flu_happened
+		}
+	}
+	on_province_infection = {
+		province_event = { id = RIP.10000 }
+		province_event = { id = RIP.10005 }
+		province_event = { id = RIP.11703 } #prosperity ended by epidemic
+	}
+	always_get_message = yes
+	color = { 255 0 0 }
+	major = yes
+	
+	timeperiod = {	# Dynamic Knahaten outbreak
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		outbreak_chance = 0.01
+		
+		can_outbreak = {
+			total_years_played = 50
+			NOT = { has_global_flag = knahaten_flu_happened }
+			has_game_rule = {
+				name = epidemics
+				value = dynamic
+			}
+		}
+		
+		min_nb_province = 1		# ignored if 0
+		max_nb_province = 15	# ignored if 0
+
+		one_only = yes
+
+		province_infection_duration = 36
+		
+		outbreak_scenario = { # Classic Knahaten, misses Akavir, Atmora, Pyandonea, Roscrea and Yokuda
+			chance = 0.30
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_akavir nirn_atmora nirn_roscrea nirn_tamriel_pyandonea nirn_yokuda
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Akavir
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_akavir
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Atmora and Roscrea
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_atmora nirn_roscrea
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Pyandonea
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_tamriel_pyandonea
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Yokuda
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_yokuda
+			}
+		}
+		
+		outbreak_scenario = { # Spreads throughout Nirn
+			chance = 0.30
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+			
+			}
+		}
+		
+	}
+	
+	timeperiod = {	# Delayed Dynamic Knahaten outbreak
+		start_date = 3525.1.1
+		end_date = 4025.1.1
+		
+		outbreak_chance = 0.01
+		
+		can_outbreak = {
+			total_years_played = 25
+			NOT = { has_global_flag = knahaten_flu_happened }
+			has_game_rule = {
+				name = epidemics
+				value = delayed_dynamic
+			}
+		}
+		
+		min_nb_province = 1		# ignored if 0
+		max_nb_province = 15	# ignored if 0
+
+		one_only = yes
+
+		province_infection_duration = 36
+		
+		outbreak_scenario = { # Classic Knahaten, misses Akavir, Atmora, Pyandonea, Roscrea and Yokuda
+			chance = 0.30
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_akavir nirn_atmora nirn_roscrea nirn_tamriel_pyandonea nirn_yokuda
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Akavir
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_akavir
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Atmora and Roscrea
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_atmora nirn_roscrea
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Pyandonea
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_tamriel_pyandonea
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Yokuda
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_yokuda
+			}
+		}
+		
+		outbreak_scenario = { # Spreads throughout Nirn
+			chance = 0.30
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+			
+			}
+		}
+	}
+
+	timeperiod = {	# Dynamic historical Knahaten
+		start_date = 3480.1.1
+		end_date = 3500.1.1
+
+		can_outbreak = {
+			total_years_played = 50
+			NOT = { has_global_flag = knahaten_flu_happened }
+			has_game_rule = {
+				name = epidemics
+				value = dynamic
+			}
+		}
+		
+		min_nb_province = 1		# ignored if 0
+		max_nb_province = 15	# ignored if 0
+
+		one_only = yes
+		
+		outbreak_scenario = { # Classic Knahaten, misses Akavir, Atmora, Pyandonea, Roscrea and Yokuda
+			chance = 0.30
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_akavir nirn_atmora nirn_roscrea nirn_tamriel_pyandonea nirn_yokuda
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Akavir
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_akavir
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Atmora and Roscrea
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_atmora nirn_roscrea
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Pyandonea
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_tamriel_pyandonea
+			}
+		}
+		
+		outbreak_scenario = { # Classic Knahaten, misses Yokuda
+			chance = 0.10
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_yokuda
+			}
+		}
+		
+		outbreak_scenario = { # Spreads throughout Nirn
+			chance = 0.30
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+			
+			}
+		}
+	}
+	
+	timeperiod = {	# Purely historical Knahaten
+		start_date = 3480.1.1
+		end_date = 3485.1.1
+		
+		outbreak_chance = 1
+
+		can_outbreak = {
+			NOT = { has_global_flag = knahaten_flu_happened }
+			has_game_rule = {
+				name = epidemics
+				value = historical
+			}
+		}
+		
+		min_nb_province = 1		# ignored if 0
+		max_nb_province = 15	# ignored if 0
+
+		one_only = yes
+		
+		outbreak_scenario = { # Classic Knahaten
+			chance = 1
+			start_provinces = {
+				107
+			}
+			excluded_regions = {
+				nirn_akavir nirn_atmora nirn_roscrea nirn_tamriel_pyandonea nirn_yokuda
+			}
+		}
+	}
+	
+	timeperiod = {	# Dynamic Knahaten - becomes endemic 
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		max_total_provinces = 35
+		
+		months = 24
+		
+		outbreak_chance = 0.00075
+		
+		can_outbreak = {			
+			had_global_flag = { flag = knahaten_flu_happened days = 18250 }
+			has_game_rule = {
+				name = epidemics
+				value = dynamic
+			}
+		}
+		
+		min_nb_province = 1		# ignored if 0
+		max_nb_province = 10	# ignored if 0
+
+		one_only = no
+
+		province_infection_duration = 30
+		
+	}
+	
+	timeperiod = {	# Absurdly deadly Knahaten - doesn't care if it's happened before!
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		months = 50
+		
+		outbreak_chance = 0.0008
+		
+		min_nb_province = 1		# ignored if 0
+		max_nb_province = 15	# ignored if 0
+
+		can_outbreak = {
+			total_years_played = 20
+			has_game_rule = {
+				name = epidemics
+				value = deadly
+			}
+		}
+		
+		one_only = no
+		
+	}
+	
+	disease_gfx = disease_gfx_bubonic_plague
+}
+
+swamp_rot = {
+	rip = yes
+	contagiousness = 0.25
+	outbreak_chance = 0.005
+	effect = {
+		castle_levy_size = -0.45
+		city_levy_size = -0.15
+		levy_reinforce_rate = -0.5
+		garrison_size = -0.4
+		#garrison_growth = -0.5
+		city_tax_modifier = -0.5
+		castle_tax_modifier = -0.75
+		temple_tax_modifier = -0.25
+		supply_limit = -8
+		max_attrition = 0.05
+		disease_defence = 0.1
+	}
+	yearly_province_pulse = {
+		random_list = {		
+			92 = {
+				modifier = {
+					factor = 1.1
+					hospital_level = 1
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 2
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 3
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 4
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 5
+				}
+				modifier = {
+					factor = 1.1
+					hospital_level = 6
+				}
+			}
+			8 = {
+				increase_depopulation_effect = yes
+			}
+		}
+	}
+	icon = 8
+	tooltip = SWAMP_ROT_INFO
+	months = 12
+	trait = has_swamp_rot
+	character_infection_chances = {
+		months = 3
+	}
+	on_character_infection = {
+		if = {
+			limit = {
+				NOR = {
+					has_character_flag = immune_swamp_rot
+					has_character_flag = got_swamp_rot
+					trait = has_swamp_rot
+					is_disease_immune = yes
+					
+					has_character_flag = got_bubonic_plague
+					has_character_flag = got_knahaten_flu
+					has_character_flag = got_aztec_disease
+					has_character_flag = got_smallpox
+					has_character_flag = got_measles
+					has_character_flag = got_typhus
+					has_character_flag = got_typhoid_fever
+					has_character_flag = got_syphilis
+					has_character_flag = got_pneumonia
+					has_character_flag = got_cancer
+					has_character_flag = got_rabies
+					has_character_flag = got_gout
+					has_character_flag = got_flu
+					has_character_flag = got_dysentery
+					has_character_flag = got_food_poisoning
+					has_character_flag = got_cholera
+					has_character_flag = got_dampworm
+					has_character_flag = got_witches_pox
+					has_character_flag = got_greenspore
+					has_character_flag = got_rockjoint
+					has_character_flag = got_stomach_rot
+					has_character_flag = got_chrondiasis
+				}
+			}			
+			random_list = {
+				10 = { # Get the disease
+					modifier = {
+						factor = 0
+						has_character_modifier = in_seclusion
+					}
+					modifier = {
+						factor = 0.1
+						AND = {
+							is_nomadic = yes
+							NOT = { is_unimportant_trigger = yes }
+						}
+					}
+					modifier = {
+						factor = 0.5
+						AND = {
+							is_tribal = yes
+							NOT = { is_unimportant_trigger = yes }
+						}
+					}
+					modifier = {
+						factor = 50
+						is_unimportant_trigger = yes
+					}
+					clr_character_flag = disease_not_serious
+					set_character_flag = got_swamp_rot
+					set_character_flag = developing_illness
+					character_event = { id = RIP.5015 }
+				}
+				90 = { # Nothing happens
+				}
+			}
+		}
+	}
+	on_province_infection = {
+		province_event = {
+			id = RIP.11703 #prosperity ended by epidemic
+		}
+	}
+	always_get_message = no
+	color = { 0 0 255 }
+	
+	timeperiod = { # Minor Outbreak
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		outbreak_chance = 0.0075
+		
+		can_outbreak = {
+			NOT = {
+				has_game_rule = {
+					name = minor_epidemics
+					value = fewer
+				}
+			}
+		}
+
+		max_total_provinces = 5
+		
+		spread_through_water = no
+		
+		min_nb_province = 1	# ignored if 0
+		max_nb_province = 1	# ignored if 0
+
+		one_only = no
+	}
+
+	timeperiod = { # Normal Outbreak
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		outbreak_chance = 0.004
+
+		max_total_provinces = 10
+		
+		min_nb_province = 1	# ignored if 0
+		max_nb_province = 1	# ignored if 0
+
+		one_only = no
+	}
+	
+	timeperiod = { # 'More' Normal Outbreak
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		outbreak_chance = 0.0025
+		
+		can_outbreak = {
+			has_game_rule = {
+				name = minor_epidemics
+				value = more
+			}
+		}
+
+		max_total_provinces = 10
+		
+		min_nb_province = 1	# ignored if 0
+		max_nb_province = 1	# ignored if 0
+
+		one_only = no
+	}
+	
+	timeperiod = { # Major Outbreak
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		outbreak_chance = 0.0005
+		
+		can_outbreak = {
+			NOT = {
+				has_game_rule = {
+					name = minor_epidemics
+					value = fewer
+				}
+			}
+		}
+		
+		months = 36
+
+		max_total_provinces = 25
+		
+		min_nb_province = 2	# ignored if 0
+		max_nb_province = 4	# ignored if 0
+
+		one_only = no
+	}
+	
+	timeperiod = { # 'More' Major Outbreak
+		start_date = 3370.1.1
+		end_date = 5000.1.1
+		
+		outbreak_chance = 0.001
+		
+		can_outbreak = {
+			has_game_rule = {
+				name = minor_epidemics
+				value = more
+			}
+		}
+		
+		months = 36
+
+		max_total_provinces = 25
+		
+		min_nb_province = 2	# ignored if 0
+		max_nb_province = 4	# ignored if 0
+
+		one_only = no
+	}
+	disease_gfx = disease_gfx_tuberculosis
+}
+
+peryite_plague = {
+	rip = yes
+	contagiousness = 0
+	outbreak_chance = 0.005
+	effect = {
+		disease_defence = 0.99
+		local_revolt_risk = 0.05
+		levy_reinforce_rate = -0.05
+		garrison_size = -0.05
+		#garrison_growth = -0.25
+		city_tax_modifier = -0.75
+		castle_tax_modifier = -0.35
+		temple_tax_modifier = -0.35
+		supply_limit = -4
+		max_attrition = 0.025
+	}
+	yearly_province_pulse = {
+
+	}
+	icon = 10
+	tooltip = PERYITE_PLAGUE_INFO
+	months = 60
+	trait = has_peryite_plague
+	on_character_infection = {}
+	on_province_infection = {
+		province_event = {
+			id = RIP.11703 #prosperity ended by epidemic
+		}
+	}
+	always_get_message = no
+	color = { 142 152 25 }
+	
+	active = no
+	
+	timeperiod = { # Normal Outbreak
+		start_date = 2.1.1
+		end_date = 3.1.1
+		
+		outbreak_chance = 0.0
+		
+		can_outbreak = {
+			has_global_flag = aztec_arrival
+		}
+		
+		max_total_provinces = 15
+		
+		min_nb_province = 2	# ignored if 0
+		max_nb_province = 5	# ignored if 0
+
+		one_only = no
+	}
+	disease_gfx = disease_gfx_syphilis
+}

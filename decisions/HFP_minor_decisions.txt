@@ -1,0 +1,205 @@
+
+decisions = {
+	celibate_mom_dec = {
+		is_high_prio = yes
+		ai_check_interval = 30 #check only once every 30 months.
+		only_playable = yes
+		potential = {
+			#ai = no
+			age = 16
+			prisoner = no
+			OR = {
+				has_character_flag = survivor_mom
+				num_of_children = 6
+			}
+			is_ruler = yes
+			is_female = yes
+			NOT = { trait = incapable }
+			NOT = { trait = celibate }
+			NOT = { has_character_flag = survivor_mom_broken_vow }
+			has_submenu_open = no
+		}
+		allow = {
+			OR = {
+				has_character_flag = survivor_mom
+				num_of_children = 6
+			}
+			OR = {
+				is_married = no
+				spouse = { is_ruler = no }
+				# has_law = status_of_women_4
+				# has_religion_feature = religion_matriarchal
+			}
+			is_female = yes
+		}
+		effect = {
+			prestige = -150
+			add_trait = celibate
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				 factor = 0.5
+				 NOT = { trait = infirm }
+			}
+			modifier = {
+				 factor = 0.25
+				 trait = lustful #can't help it
+			}
+			modifier = {
+				 factor = 0.25
+				 trait = hedonist #can't help it
+			}
+			modifier = {
+				 factor = 2
+				 trait = craven
+			}
+			modifier = {
+				 factor = 0.5
+				 is_married = no
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = shy
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = chaste
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = paranoid
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = infirm
+			}
+			modifier = {
+				 factor = 1.25
+				has_scarred_trait_trigger = yes
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = maimed
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = weak
+			}
+			modifier = {
+				 factor = 0.75
+				 trait = strong
+			}
+			modifier = {
+				 factor = 0.75
+				 trait = possessed
+			}
+			modifier = {
+				 factor = 0.75
+				 trait = lunatic
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = slothful
+			}
+			modifier = {
+				 factor = 0.9
+				 trait = brave
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = arbitrary
+			}
+			modifier = {
+				 factor = 1.1
+				 trait = blinded
+			}
+			modifier = {
+				 factor = 1.1
+				 trait = hunchback
+			}
+			modifier = {
+				 factor = 1.1
+				 trait = dwarf
+			}
+			modifier = {
+				 factor = 1.1
+				 trait = clubfooted
+			}
+			modifier = {
+				 factor = 1.25
+				 trait = quick
+			}
+			modifier = {
+				 factor = 1.5
+				 trait = genius
+			}
+			modifier = {
+				 factor = 1.5
+				num_of_children = 1
+				any_child = { is_female = no }
+			}
+			modifier = {
+				 factor = 1.5
+				num_of_children = 2
+				any_child = { is_female = no }
+			}
+			modifier = {
+				factor = 0.75
+				OR = {
+					AND = {
+						NOT = { age = 20 }
+						is_long_lived = no
+					}
+					AND = {
+						NOT = { age = 60 }
+						is_long_lived = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 0.85
+				OR = {
+					AND = {
+						age = 20
+						NOT = { age = 30 }
+						is_long_lived = no
+					}
+					AND = {
+						age = 60
+						NOT = { age = 90 }
+						is_long_lived = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 0.95
+				OR = {
+					AND = {
+						age = 30
+						NOT = { age = 40 }
+						is_long_lived = no
+					}
+					AND = {
+						age = 90
+						NOT = { age = 125 }
+						is_long_lived = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				OR = {
+					AND = {
+						age = 40
+						is_long_lived = no
+					}
+					AND = {
+						age = 125
+						is_long_lived = yes
+					}
+				}
+			}
+		}
+	}
+}

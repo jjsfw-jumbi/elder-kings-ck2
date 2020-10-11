@@ -1,0 +1,45 @@
+###DIPLOMACY EVENTS FOR CHINA OFF-MAP POWER###
+
+#Written by:
+#Milla Isaksson
+#Joel Hansson
+#Mathilda Bjarnehed
+#Drikus Kuiper
+#Daniel Moore
+#Alexander Oltner
+
+namespace = JD
+
+################
+# Suzerain dies, inform tributary relationship ends
+character_event = {
+    id = JD.60015
+    is_triggered_only = yes
+    hide_window = yes
+    only_rulers = yes
+
+    trigger = {
+        any_tributary = {
+            ai = no
+            is_tributary = { type = default }
+        }
+    }
+
+    immediate = {
+        any_tributary = {
+            limit = {
+                ai = no
+                is_tributary = { type = default }
+            }
+            character_event = { id = JD.60016 }
+        }
+    }
+}
+character_event = {
+    id = JD.60016
+    desc = EVT_DESC_JD_60016
+    picture = GFX_evt_bandits
+    is_triggered_only = yes
+    notification = yes
+    option = { }
+}

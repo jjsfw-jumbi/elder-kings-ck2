@@ -1,0 +1,721 @@
+namespace = startup
+
+#Initialisation Event
+character_event = {
+	id = startup.0
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = { #Will not fire on loading a savegame, use for init but not maintenance.
+		is_save_game = no
+		OR = {
+			AND = {
+				multiplayer = no
+				ai = no
+			}
+			AND = {
+				multiplayer = yes
+				is_multiplayer_host_character = yes
+			}
+		}
+	}
+	
+	immediate = {
+	
+		##Remove Bloodline Trait (Holy Fury)
+		#holy_fury_bloodlines_test = yes
+		
+		#Generate three Sybils of Dibella
+		generate_sybil_of_dibella = yes
+		
+		#Create the Imperial Geographical Society
+		if = {
+			limit = {
+				year = 3492
+				NOT = { has_global_flag = igs_created }
+			}
+			set_global_flag = igs_created
+		}
+		
+		#Kickstarts Varen's Rebellion
+		if = {
+			limit = {
+				year = 3496
+				NOT = { year = 3497 }
+				e_cyrodiil = { holder_scope = { has_character_flag = leovic_longhouse } }
+				k_colovia = { holder_scope = { has_character_flag = varen_aquilarios } }
+			}
+			k_colovia = { holder_scope = { narrative_event = { id = eso.91 days = 2 } } }
+		}
+		
+		#Set Great Houses Status
+		set_global_flag = house_veloth_extinct
+		set_global_flag = house_sul_extinct
+		if = {
+			limit = {
+				OR = {
+					NOT = { year = 3802 }
+					year = 4243
+				}
+				NOT = { has_global_flag = house_dagoth_extinct }
+			}
+			set_global_flag = house_dagoth_extinct
+		}
+		if = {
+			limit = {
+				year = 4254
+				NOT = { has_global_flag = house_hlaalu_extinct }
+			}
+			set_global_flag = house_hlaalu_extinct
+		}
+		if = {
+			limit = {
+				NOT = { year = 4254 }
+				NOT = { has_global_flag = house_sadras_extinct }
+			}
+			set_global_flag = house_sadras_extinct
+		}
+		
+		#Ban Necromancy in each continent if it is otherwise not legalized
+		if = {
+			limit = {
+				NOR = {
+					has_global_flag = mages_tamriel_necromancy_allowed
+					has_global_flag = mages_tamriel_necromancy_banned
+				}
+			}
+			set_global_flag = mages_tamriel_necromancy_banned
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_global_flag = mages_akavir_necromancy_allowed
+					has_global_flag = mages_akavir_necromancy_banned
+				}
+			}
+			set_global_flag = mages_akavir_necromancy_banned
+		}
+		
+		#Set Global Seed
+		if = {
+			limit = {
+				OR = {
+					multiplayer = no
+					AND = {
+						multiplayer = yes
+						is_multiplayer_host_character = yes
+					}
+				}
+			}
+			random_list = {
+				#1 = { set_variable = { which = global_seed value = 0 } }
+				#1 = { set_variable = { which = global_seed value = 1 } }
+				#1 = { set_variable = { which = global_seed value = 2 } }
+				#1 = { set_variable = { which = global_seed value = 3 } }
+				#1 = { set_variable = { which = global_seed value = 4 } }
+				#1 = { set_variable = { which = global_seed value = 5 } }
+				1 = { set_variable = { which = global_seed value = 6 } }
+				1 = { set_variable = { which = global_seed value = 7 } }
+				1 = { set_variable = { which = global_seed value = 8 } }
+				1 = { set_variable = { which = global_seed value = 9 } }
+				1 = { set_variable = { which = global_seed value = 10 } }
+				1 = { set_variable = { which = global_seed value = 11 } }
+				1 = { set_variable = { which = global_seed value = 12 } }
+				1 = { set_variable = { which = global_seed value = 13 } }
+				1 = { set_variable = { which = global_seed value = 14 } }
+				1 = { set_variable = { which = global_seed value = 15 } }
+				1 = { set_variable = { which = global_seed value = 16 } }
+				1 = { set_variable = { which = global_seed value = 17 } }
+				1 = { set_variable = { which = global_seed value = 18 } }
+				1 = { set_variable = { which = global_seed value = 19 } }
+				1 = { set_variable = { which = global_seed value = 20 } }
+				1 = { set_variable = { which = global_seed value = 21 } }
+				1 = { set_variable = { which = global_seed value = 22 } }
+				1 = { set_variable = { which = global_seed value = 23 } }
+				1 = { set_variable = { which = global_seed value = 24 } }
+				1 = { set_variable = { which = global_seed value = 25 } }
+				1 = { set_variable = { which = global_seed value = 26 } }
+				1 = { set_variable = { which = global_seed value = 27 } }
+				1 = { set_variable = { which = global_seed value = 28 } }
+				1 = { set_variable = { which = global_seed value = 29 } }
+				1 = { set_variable = { which = global_seed value = 30 } }
+				1 = { set_variable = { which = global_seed value = 31 } }
+				1 = { set_variable = { which = global_seed value = 32 } }
+				1 = { set_variable = { which = global_seed value = 33 } }
+				1 = { set_variable = { which = global_seed value = 34 } }
+				1 = { set_variable = { which = global_seed value = 35 } }
+				1 = { set_variable = { which = global_seed value = 36 } }
+				1 = { set_variable = { which = global_seed value = 37 } }
+				1 = { set_variable = { which = global_seed value = 38 } }
+				1 = { set_variable = { which = global_seed value = 39 } }
+				1 = { set_variable = { which = global_seed value = 40 } }
+				1 = { set_variable = { which = global_seed value = 41 } }
+				1 = { set_variable = { which = global_seed value = 42 } }
+				1 = { set_variable = { which = global_seed value = 43 } }
+				1 = { set_variable = { which = global_seed value = 44 } }
+				1 = { set_variable = { which = global_seed value = 45 } }
+				1 = { set_variable = { which = global_seed value = 46 } }
+				1 = { set_variable = { which = global_seed value = 47 } }
+				1 = { set_variable = { which = global_seed value = 48 } }
+				1 = { set_variable = { which = global_seed value = 49 } }
+				1 = { set_variable = { which = global_seed value = 50 } }
+				1 = { set_variable = { which = global_seed value = 51 } }
+				1 = { set_variable = { which = global_seed value = 52 } }
+				1 = { set_variable = { which = global_seed value = 53 } }
+				1 = { set_variable = { which = global_seed value = 54 } }
+				1 = { set_variable = { which = global_seed value = 55 } }
+				1 = { set_variable = { which = global_seed value = 56 } }
+				1 = { set_variable = { which = global_seed value = 57 } }
+				1 = { set_variable = { which = global_seed value = 58 } }
+				1 = { set_variable = { which = global_seed value = 59 } }
+				1 = { set_variable = { which = global_seed value = 60 } }
+				1 = { set_variable = { which = global_seed value = 61 } }
+				1 = { set_variable = { which = global_seed value = 62 } }
+				1 = { set_variable = { which = global_seed value = 63 } }
+				1 = { set_variable = { which = global_seed value = 64 } }
+				1 = { set_variable = { which = global_seed value = 65 } }
+				1 = { set_variable = { which = global_seed value = 66 } }
+				1 = { set_variable = { which = global_seed value = 67 } }
+				1 = { set_variable = { which = global_seed value = 68 } }
+				1 = { set_variable = { which = global_seed value = 69 } }
+				1 = { set_variable = { which = global_seed value = 70 } }
+				1 = { set_variable = { which = global_seed value = 71 } }
+				1 = { set_variable = { which = global_seed value = 72 } }
+				1 = { set_variable = { which = global_seed value = 73 } }
+				1 = { set_variable = { which = global_seed value = 74 } }
+				1 = { set_variable = { which = global_seed value = 75 } }
+				1 = { set_variable = { which = global_seed value = 76 } }
+				1 = { set_variable = { which = global_seed value = 77 } }
+				1 = { set_variable = { which = global_seed value = 78 } }
+				1 = { set_variable = { which = global_seed value = 79 } }
+				1 = { set_variable = { which = global_seed value = 80 } }
+				1 = { set_variable = { which = global_seed value = 81 } }
+				1 = { set_variable = { which = global_seed value = 82 } }
+				1 = { set_variable = { which = global_seed value = 83 } }
+				1 = { set_variable = { which = global_seed value = 84 } }
+				1 = { set_variable = { which = global_seed value = 85 } }
+				1 = { set_variable = { which = global_seed value = 86 } }
+				1 = { set_variable = { which = global_seed value = 87 } }
+				1 = { set_variable = { which = global_seed value = 88 } }
+				1 = { set_variable = { which = global_seed value = 89 } }
+				1 = { set_variable = { which = global_seed value = 90 } }
+				1 = { set_variable = { which = global_seed value = 91 } }
+				1 = { set_variable = { which = global_seed value = 92 } }
+				1 = { set_variable = { which = global_seed value = 93 } }
+				1 = { set_variable = { which = global_seed value = 94 } }
+				1 = { set_variable = { which = global_seed value = 95 } }
+				1 = { set_variable = { which = global_seed value = 96 } }
+				1 = { set_variable = { which = global_seed value = 97 } }
+				1 = { set_variable = { which = global_seed value = 98 } }
+				1 = { set_variable = { which = global_seed value = 99 } }
+				1 = { set_variable = { which = global_seed value = 100 } }
+				1 = { set_variable = { which = global_seed value = 101 } }
+				1 = { set_variable = { which = global_seed value = 102 } }
+				1 = { set_variable = { which = global_seed value = 103 } }
+				1 = { set_variable = { which = global_seed value = 104 } }
+				1 = { set_variable = { which = global_seed value = 105 } }
+				1 = { set_variable = { which = global_seed value = 106 } }
+				1 = { set_variable = { which = global_seed value = 107 } }
+				1 = { set_variable = { which = global_seed value = 108 } }
+				1 = { set_variable = { which = global_seed value = 109 } }
+				1 = { set_variable = { which = global_seed value = 110 } }
+				1 = { set_variable = { which = global_seed value = 111 } }
+				1 = { set_variable = { which = global_seed value = 112 } }
+				1 = { set_variable = { which = global_seed value = 113 } }
+				1 = { set_variable = { which = global_seed value = 114 } }
+				1 = { set_variable = { which = global_seed value = 115 } }
+				1 = { set_variable = { which = global_seed value = 116 } }
+				1 = { set_variable = { which = global_seed value = 117 } }
+				1 = { set_variable = { which = global_seed value = 118 } }
+				1 = { set_variable = { which = global_seed value = 119 } }
+				1 = { set_variable = { which = global_seed value = 120 } }
+				1 = { set_variable = { which = global_seed value = 121 } }
+				1 = { set_variable = { which = global_seed value = 122 } }
+				1 = { set_variable = { which = global_seed value = 123 } }
+				1 = { set_variable = { which = global_seed value = 124 } }
+				1 = { set_variable = { which = global_seed value = 125 } }
+				1 = { set_variable = { which = global_seed value = 126 } }
+				1 = { set_variable = { which = global_seed value = 127 } }
+				1 = { set_variable = { which = global_seed value = 128 } }
+			}
+		}
+
+		# Set culture nativity flags
+		set_startup_nativity_flags = yes
+		
+		# Set the ruins
+		1 = { province_event = { id = ekruins.15 } }
+		
+		# Is the Three Banners War over?
+		if = {
+			limit = { start_date > 3503.1.1 }
+			set_global_flag = three_alliances_war_ended
+		}
+	}
+}
+
+#Sets default feudal succession law to Confirmation
+#Based on True Cognatic game rule for optimization
+character_event = {
+	id = startup.1
+	hide_window = yes
+	
+	ai = no
+	only_playable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			multiplayer = no
+			AND = {
+				multiplayer = yes
+				is_multiplayer_host_character = yes
+			}
+		}
+		is_save_game = no
+	}
+	
+	immediate = {
+		any_title = {
+			limit = { 
+				has_law = succ_gavelkind 
+				higher_tier_than = COUNT 
+				owner = { government = feudal_government }
+			}
+			add_law = {
+				law = succ_feudal_confirmation
+				cooldown = no
+				opinion_effect = no
+			}
+		}
+	}
+}
+
+long_character_event = {
+	id = startup.2
+	title = startup.2.title #DERPMAN DETECTED
+	desc = startup.2.desc
+	picture = GFX_evt_derpman
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		is_ironman = yes
+	}
+	
+	option = {
+		name = startup.2.opt1
+		custom_tooltip = {
+			text = startup2opt1tt
+		}
+	}
+	option = {
+		name = startup.2.opt2
+		custom_tooltip = {
+			text = startup2opt2tt
+			any_dynasty_member = { death = { death_reason = death_accident } }
+			death = { death_reason = death_accident }
+		}
+	}
+}
+
+#This only fires on game initialization
+# character_event = {
+	# id = startup.2
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# min_age = 17
+	
+	# trigger = {
+		# is_mer = yes
+		# NOT = { trait = dremora }
+		# is_save_game = no
+	# }
+	
+	# immediate = {
+		# if = {
+			# limit = {
+				# is_altmer = yes
+			# }
+			# add_altmer_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_ayleid = yes
+			# }
+			# add_ayleid_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_bosmer = yes
+			# }
+			# add_bosmer_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_chimer = yes
+			# }
+			# add_chimer_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_dunmer = yes
+			# }
+			# add_dunmer_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_dwemer = yes
+			# }
+			# add_dwemer_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_falmer = yes
+			# }
+			# add_falmer_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_maormer = yes
+			# }
+			# add_maormer_trait = yes
+		# }
+		# if = {
+			# limit = {
+				# is_tsaesci = yes
+			# }
+			# add_tsaesci_trait = yes
+		# }
+	# }
+# }
+
+# character_event = { #Maintenance events
+	# id = startup.3
+	# hide_window = yes
+	# is_triggered_only = yes
+	
+	# immediate = {
+		# #Magicka Initialistion - also useful as maintenance.
+		# if = {
+			# limit = {
+				# ai = no
+				# age = 16
+				# is_spellcaster = yes
+				# NOT = { has_character_modifier = magicka_counter }
+			# }
+			# character_event = { id = magicka.0 }
+		# }
+		# #Missing Education Maintenance
+		# if = { limit = { has_education = no age = 16 } add_random_education = yes }
+		# #Missing Birth Seed Maintenance
+		# if = { limit = { check_variable = { which = birth_seed value == 0 } } assign_birth_seed = yes }
+	# }
+# }
+
+character_event = {
+	id = startup.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = { #Will not fire on loading a savegame, use for init but not maintenance.
+		is_save_game = no
+		year = 3450
+		NOT = { year = 4435 } #No more dragonborn candidates can be born after
+		
+		NOR = { #No "Special" traits prior to becoming dragonborn.
+			is_undead = yes
+			is_vampire = yes
+			is_unknown_vampire = yes
+			is_lycan = yes
+			is_disease_immune = yes
+			culture_group = undead
+			culture_group = daedra
+			trait = clone
+			is_dragonblood = yes #Descedants of dragonborns cannot become candidates as they technically already are.
+			has_character_flag = daedric_herald #This person leads a Daedric invasion of Nirn, not exactly someone who'd be favored by the Divines
+		}
+	}
+	
+	immediate = {	
+		random_list = {
+			1 = {
+			#Certain races get a bonus chance
+				modifier = {
+					is_human = yes
+					factor = 1.1
+				}
+				modifier = {
+					is_beast = yes
+					factor = 0.5
+				}
+				modifier = {
+					OR = {
+						trait = breton
+						trait = nord
+						trait = reachman
+						trait = imperial
+						trait = redguard
+					}
+					factor = 1.5
+				}
+				modifier = {
+					is_mer = yes
+					factor = 0.75
+				}
+			#Mortals get a bonus
+				modifier = {
+					is_mortal_race = yes
+					factor = 1.25
+				}
+				modifier = {
+					is_long_lived = yes
+					factor = 0.75
+				}
+			#Certain religions get a bonus
+				modifier = {
+					OR = {
+						religion = eight_divines
+						religion = nine_divines
+					}
+					factor = 1.25
+				}
+				modifier = {
+					OR = { 
+						religion_group = yokudan_pantheon
+						religion_group = atmoran_pantheon
+					}
+					factor = 1.15
+				}
+				modifier = {
+					OR = {
+						religion_group = mer_pantheon
+						religion_group = khajiit_pantheon
+					}
+					factor = 1.1
+				}
+				modifier = {
+					religion_group = hist_group
+					factor = 0.5
+				}
+				modifier = {
+					OR = {
+						religion_group = oblivion_religions
+						religion_group = old_faith
+						religion_group = reach_faiths
+						religion_group = daedra
+						religion_group = tribunal
+					}
+					factor = 0.75
+				}
+			#Bloodlines get a bonus
+				modifier = {
+					has_bloodline = yes
+					factor = 2
+				}
+				modifier = {
+					is_divine_bloodline = yes
+					factor = 10
+				}
+			#Negative Congenitals
+				modifier = {
+					OR = {
+						trait = imbecile
+						trait = inbred
+						trait = hunchback
+						trait = harelip
+						trait = clubfooted
+					}
+					factor = 0.1
+				}
+				modifier = {
+					OR = {
+						trait = slow
+						trait = weak
+						trait = stutter
+						trait = lisp
+						trait = mute
+						trait = deaf
+						trait = wrymouth
+						trait = feeble
+						trait = dull
+					}
+					factor = 0.5
+				}
+				modifier = {
+					trait = dwarf
+					factor = 0.95
+				}
+			#Positive Congenitals
+				modifier = {
+					OR = {
+						trait = fortitude
+						trait = perceptive
+						trait = agile
+						trait = genius
+						trait = quick
+						trait = raht
+						trait = strong
+						trait = robust
+						trait = shrewd
+					}
+					factor = 1.2
+				}
+				modifier = {
+					trait = lucky
+					factor = 2
+				}
+				modifier = {
+					trait = powerful_voice
+					factor = 1.25
+				}
+				modifier = { 	#Player characters get a bonus
+					ai = no
+					factor = 2.5
+				}
+				modifier = {	#Adult characters during a crisis get a bonus
+					is_adult = yes
+					OR = {
+						has_global_flag = oblivion_invasion_azura
+						has_global_flag = oblivion_invasion_boethiah
+						has_global_flag = oblivion_invasion_clavicus
+						has_global_flag = oblivion_invasion_hermaeus
+						has_global_flag = oblivion_invasion_hircine
+						has_global_flag = oblivion_invasion_malacath
+						has_global_flag = oblivion_invasion_mehrunes
+						has_global_flag = oblivion_invasion_mephala
+						has_global_flag = oblivion_invasion_meridia
+						has_global_flag = oblivion_invasion_molag
+						has_global_flag = oblivion_invasion_namira
+						has_global_flag = oblivion_invasion_nocturnal
+						has_global_flag = oblivion_invasion_peryite
+						has_global_flag = oblivion_invasion_sanguine
+						has_global_flag = oblivion_invasion_sheogorath
+						has_global_flag = oblivion_invasion_vaermina
+					}
+					factor = 5
+				}
+				set_character_flag = dragonborn_candidate
+			}
+			99 = { } #Do nothing
+		}
+	}
+}
+
+#Almsivi rulers need Ardor to prevent snowballing
+character_event = {
+	id = startup.6
+	hide_window = yes
+	
+	only_rulers = yes
+	religion = almsivi
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_dlc = "Jade Dragon"
+		is_save_game = no
+		year = 689
+		NOT = { year = 4254 }
+	}
+	
+	immediate = {
+		if = {
+			limit = { tier = COUNT }
+			add_offmap_currency = { offmap = tribunal_almalexia value = 250 }
+			add_offmap_currency = { offmap = tribunal_sothasil value = 250 }
+			add_offmap_currency = { offmap = tribunal_vivec value = 250 }
+		}
+		if = {
+			limit = { tier = DUKE }
+			add_offmap_currency = { offmap = tribunal_almalexia value = 500 }
+			add_offmap_currency = { offmap = tribunal_sothasil value = 500 }
+			add_offmap_currency = { offmap = tribunal_vivec value = 500 }
+		}
+		if = {
+			limit = {
+				OR = {
+					tier = KING
+					tier = EMPEROR
+				}
+			}
+			add_offmap_currency = { offmap = tribunal_almalexia value = 750 }
+			add_offmap_currency = { offmap = tribunal_sothasil value = 750 }
+			add_offmap_currency = { offmap = tribunal_vivec value = 750 }
+		}
+	}
+}
+
+# Immortal rulers aren't actually disabled
+character_event = {
+	id = startup.7
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		trait = disabler
+		is_save_game = no
+	}
+
+	immediate = {
+		remove_trait = disabler
+	}
+}
+
+# Immortal ruler portrait fix - failsafe in case startup.7 misses anything
+#character_event = {
+#	id = startup.8
+#	hide_window = yes
+#	
+#	min_age = 16
+#
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		immortal = yes
+#		immortal_age < 16
+#	}
+#
+#	immediate = {
+#		remove_racial_trait_plus_immortal = yes
+#	}
+#	
+#	after = {
+#		assign_racial_trait = yes
+#		death = { death_reason = death_accident }
+#	}
+#}
+
+# Loading maintenance event
+character_event = {
+	id = startup.9
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			AND = {
+				multiplayer = no
+				ai = no
+			}
+			AND = {
+				multiplayer = yes
+				is_multiplayer_host_character = yes
+			}
+		}
+	}
+
+	immediate = {
+		# I have given up hope on culture flags being fixed - have a hack solution instead!
+		fix_nativity_culture_flags = yes
+	}
+}

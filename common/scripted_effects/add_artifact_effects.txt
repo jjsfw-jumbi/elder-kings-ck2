@@ -1,0 +1,917 @@
+add_amulet_of_kings = {
+	letter_event = { id = ekartnote.0 }
+	set_global_flag = amulet_of_kings_active
+}
+add_urshilaku_amulet = { letter_event = { id = ekartnote.1 } }
+add_zainab_amulet = { letter_event = { id = ekartnote.2 } }
+add_ahemmusa_amulet = { letter_event = { id = ekartnote.3 } }
+
+##############################
+### Loot Generation Tables ###
+##############################
+
+generate_loot_argonian_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 60}
+		30 = {generate_loot_generic = yes}
+		30 = {generate_loot_jewelry = yes}
+		20 = {generate_weapon_sword_argonian = yes}
+		15 = {generate_armor_argonian = yes}
+		5 = {generate_weapon_sword_ebony = yes} #Just so that it's not entirely worthless for non-argonians
+		2 = {generate_armor_ebony = yes}
+	}
+}
+
+generate_loot_ayleid_ruin = { #Largely Elven with some Daedric influence - also serves as a standin for Altmer ruins.
+	random_list = {
+		200 = {wealth = 20}
+		160 = {wealth = 30}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		30 = {generate_loot_ring = yes}
+		20 = {generate_loot_amulet = yes}
+		15 = {generate_weapon_sword_ayleid = yes} #These will be replaced with Ayleid artifacts once they're done.
+		10 = {generate_armor_ayleid = yes} #Oh wait, they are done. Funny, that.
+		5 = {generate_weapon_sword_daedric = yes}
+		3 = {generate_armor_daedric = yes}
+	}
+}
+
+generate_loot_daedric_ruin = { #Largely Daedric with some Daedric influence :^)
+	random_list = {
+		240 = {wealth = 25}
+		200 = {wealth = 50}
+		160 = {wealth = 75}
+		30 = {generate_loot_generic = yes}
+		30 = {generate_loot_jewelry = yes}
+		30 = {generate_loot_generic_uncommon = yes}
+		25 = {generate_armor_dwarven = yes}
+		20 = {generate_weapon_sword_dwarven = yes}
+		5 = {generate_weapon_sword_daedric = yes}
+		5 = {generate_loot_generic_rare = yes} #Double-dipping for above-stated reason.
+		2 = {generate_armor_daedric = yes}
+		2 = {generate_loot_generic_legendary = yes} #Ditto
+	}
+}
+
+generate_loot_dwemer_ruin = {
+	random_list = {
+		200 = {wealth = 20}
+		160 = {wealth = 30}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		30 = {generate_loot_amulet = yes}
+		20 = {generate_loot_magic_ring = yes}
+		20 = {generate_weapon_sword_dwarven = yes}
+		#20 = {add_artifact = weapon_axe_dwarven}
+		15 = {add_artifact = dwemer_schematics}
+		15 = {generate_armor_dwarven = yes}
+		15 = {add_artifact = dwemer_puzzle_cube}
+		5 = {generate_armor_ancient_falmer = yes} #Maybe a bit cruel...
+		5 = {generate_weapon_sword_ancient_falmer = yes}
+	}
+}
+
+generate_loot_khajiit_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 60}
+		30 = {generate_loot_generic = yes}
+		30 = {generate_loot_jewelry = yes}
+		20 = {generate_weapon_sword_khajiit = yes}
+		15 = {generate_armor_khajiit = yes}
+		5 = {generate_weapon_sword_ebony = yes}
+		5 = {generate_armor_ebony = yes}
+	}
+}
+
+generate_loot_nord_ruin = { #Ancient Nord - Atmoran
+	random_list = { #Wealth of artifacts resulting in lower amounts of currency to compensate
+		240 = {wealth = 10}
+		200 = {wealth = 20}
+		160 = {wealth = 30}
+		30 = {generate_loot_generic = yes}
+		25 = {generate_weapon_sword_steel = yes}
+		20 = {generate_weapon_sword_atmoran = yes}
+		20 = {generate_loot_mundane_ring = yes}
+		20 = {add_artifact = amulet_of_nord}
+		20 = {add_artifact = amulet_of_skaal}
+		20 = {generate_armor_ancient_nord = yes}
+		20 = {generate_armor_nord_carved = yes}
+		20 = {generate_armor_skaal_coat = yes}
+		10 = {generate_armor_ancient_falmer = yes}
+		5 = {generate_loot_magic_ring = yes}
+		5 = {generate_loot_amulet = yes}
+		5 = {generate_weapon_sword_dragonbone = yes}
+		2 = {generate_armor_dragonbone = yes}
+	}
+}
+
+generate_loot_akaviri_ruin = {
+	random_list = {
+		200 = {wealth = 20}
+		160 = {wealth = 30}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		25 = {generate_loot_jewelry = yes}
+		20 = {generate_weapon_sword_akaviri = yes}
+		15 = {generate_armor_akaviri = yes}
+		10 = {generate_armor_akaviri_metal = yes}
+		5 = {generate_weapon_sword_blades = yes}
+		3 = {generate_armor_blades = yes}
+		2 = {generate_armor_dragonbone = yes}
+		2 = {generate_weapon_sword_dragonbone = yes}
+	}
+}
+
+generate_loot_aldmer_ruin = { #Similar to the Ayleids but without the Daedric influence
+	random_list = {
+		200 = {wealth = 20}
+		160 = {wealth = 30}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		30 = {generate_loot_magic_ring = yes}
+		20 = {generate_loot_amulet = yes}
+		20 = {generate_weapon_sword_elven = yes}
+		#20 = {add_artifact = weapon_axe_elven}
+		15 = {generate_armor_elven = yes}
+		15 = {generate_loot_mundane_ring = yes}
+		5 = {generate_weapon_sword_ebony = yes}
+		#5 = {add_artifact = weapon_axe_ebony}
+		2 = {generate_armor_ebony = yes}
+	}
+}
+
+generate_loot_yokudan_ruin = {
+	random_list = {
+		200 = {wealth = 25}
+		160 = {wealth = 40}
+		120 = {wealth = 55}
+		30 = {generate_loot_generic = yes}
+		25 = {generate_loot_mundane_ring = yes}
+		20 = {add_artifact = amulet_of_the_ansei}
+		20 = {generate_armor_yokudan = yes}
+		20 = {generate_weapon_sword_yokudan = yes}
+	}
+}
+
+generate_loot_bosmeri_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 40}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		20 = {generate_armor_bosmer = yes}
+		15 = {generate_weapon_sword_bosmer = yes}
+	}
+}
+
+generate_loot_imperial_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 40}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		20 = {generate_armor_imperial = yes}
+		15 = {generate_weapon_sword_imperial = yes}
+		10 = {generate_armor_2e_legate = yes}
+		10 = {generate_armor_mithril = yes}
+		5 = {generate_armor_blades = yes}
+		5 = {generate_armor_legate = yes}
+		2 = {generate_weapon_sword_blades = yes}
+	}
+}
+
+generate_loot_breton_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 40}
+		120 = {wealth = 50}
+		30 = {generate_loot_jewelry = yes}
+		30 = {generate_loot_generic = yes}
+		20 = {generate_armor_breton = yes}
+		15 = {generate_weapon_sword_breton = yes}
+	}
+}
+
+generate_loot_generic_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 40}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+	}
+}
+
+generate_loot_velothi_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 40}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		20 = {generate_armor_chitin = yes}
+		15 = {generate_armor_bonemold = yes}
+		15 = {generate_weapon_sword_velothi = yes}
+	}
+}
+
+generate_loot_orsimer_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 40}
+		120 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		20 = {generate_armor_orcish = yes}
+		15 = {generate_weapon_sword_orcish = yes}
+	}
+}
+
+generate_loot_falmer_ruin = {
+	random_list = {
+		200 = {wealth = 30}
+		160 = {wealth = 40}
+		140 = {wealth = 50}
+		30 = {generate_loot_generic = yes}
+		20 = {generate_armor_ancient_falmer = yes}
+		15 = {generate_weapon_sword_ancient_falmer = yes}
+	}
+}
+	
+
+#############################
+### Non-ruins loot tables ###
+#############################
+
+#Generic
+
+generate_loot_generic = { #For those times when 'any and all' applies.
+	custom_tooltip = { text = generate_loot_generic_text }
+	hidden_tooltip = {
+		random_list = { #Or when you decide "Wow, it's really inconsistent individually referencing each generic rarity level inside every ruins loot table, better streamline it"
+			40 = {generate_loot_generic_common = yes}
+			30 = {generate_loot_generic_uncommon = yes}
+			20 = {generate_loot_generic_rare = yes}
+			10 = {generate_loot_generic_legendary = yes}
+		}
+	}
+}
+
+generate_loot_generic_common = {
+	random_list = {
+		160 = {wealth = 10}
+		140 = {wealth = 30}
+		120 = {wealth = 50}
+		40 = {generate_loot_ring = yes}
+		10 = {generate_loot_amulet = yes}
+	}
+}
+
+generate_loot_generic_uncommon = {
+	random_list = {
+		140 = {wealth = 50}
+		120 = {wealth = 75}
+		100 = {wealth = 100}
+		40 = {generate_loot_ring = yes}
+		30 = {generate_loot_amulet = yes}
+		30 = {add_artifact = dwemer_schematics}
+		30 = {generate_EK_lore_book = yes}
+		30 = {
+			random_list = {
+				20 = {generate_weapon_sword_silver = yes}
+				20 = {generate_weapon_sword_steel = yes}
+				15 = {generate_weapon_sword_orcish = yes}
+				15 = {generate_weapon_sword_nord = yes}
+				10 = {generate_weapon_sword_dwarven = yes}
+				15 = {generate_armor_steel = yes}
+				10 = {generate_armor_nord_carved = yes}
+				10 = {generate_armor_orcish = yes}
+				05 = {generate_armor_dwarven = yes}
+			}
+		}
+	}
+}
+
+generate_loot_generic_rare = {
+	random_list = {
+		140 = {wealth = 100}
+		120 = {wealth = 150}
+		100 = {wealth = 200}
+		30 = {generate_loot_magic_ring = yes}
+		30 = {
+			random_list = {
+				20 = {generate_weapon_sword_elven = yes}
+				20 = {generate_weapon_sword_atmoran = yes}
+				15 = {generate_weapon_sword_ayleid = yes}
+				15 = {generate_weapon_sword_glass = yes}
+				10 = {generate_weapon_sword_ebony = yes}
+				20 = {generate_armor_elven = yes}
+				15 = {generate_armor_ayleid = yes}
+				15 = {generate_armor_glass = yes}
+				10 = {generate_armor_mithril = yes}
+				05 = {generate_armor_ebony = yes}
+			}
+		}
+		20 = {add_artifact = unreadable_string}
+		20 = {generate_loot_amulet = yes}
+		10 = {generate_loot_mundane_ring = yes}
+	}
+}
+
+generate_loot_generic_legendary = {
+	random_list = {
+		140 = {wealth = 250}
+		120 = {wealth = 375}
+		100 = {wealth = 500}
+		50 = {wealth = 1200}
+		30 = {
+			random_list = {
+				10 = {generate_loot_amulet = yes}
+				10 = {generate_loot_magic_ring = yes}
+				10 = {add_artifact = ring_gold}
+				10 = {add_artifact = ring_ebony}
+			}
+		}
+		20 = {
+			random_list = {
+				25 = {generate_weapon_sword_glass = yes}
+				20 = {generate_weapon_sword_ebony = yes}
+				15 = {generate_weapon_sword_daedric = yes}
+				10 = {generate_weapon_sword_dragonbone = yes}
+			}
+		}
+		20 = {
+			random_list = { #Breaking this into multiple lists for increased artifact chance - Legendary loot rollers deserve it.
+				25 = {generate_armor_glass = yes}
+				20 = {generate_armor_ebony = yes}
+				15 = {generate_armor_daedric = yes}
+				10 = {generate_armor_dragonbone = yes}
+			}
+		}
+	}
+}
+
+generate_EK_lore_book = {
+	random_list = {
+		1 = { add_artifact = book_abcs_for_barbarians }
+		1 = { add_artifact = book_hanging_gardens }
+		1 = { add_artifact = book_nchunaks_fire_and_faith }
+		1 = { add_artifact = book_the_lusty_argonian_maid }
+		1 = { add_artifact = book_father_of_the_niben }
+		1 = { add_artifact = book_rislav_the_righteous }
+		1 = { add_artifact = book_fall_of_the_snow_prince }
+		1 = { add_artifact = book_smithing_a_worthy_endeavor }
+		1 = { add_artifact = book_strakes_and_futtocks }
+		1 = { add_artifact = book_the_buying_game }
+		1 = { add_artifact = book_chances_folly }
+		1 = { add_artifact = book_wulfmares_guide }
+		1 = { add_artifact = book_boethiah_pillow_book }
+		1 = { add_artifact = book_fundaments_of_alchemy }
+		1 = { add_artifact = book_notes_on_racial_phylogeny }
+		1 = { add_artifact = book_liminal_bridges }
+		1 = { add_artifact = book_withershins }
+		1 = { add_artifact = book_ngasta_kvata_kvakis }
+		1 = { add_artifact = book_gods_and_worship }
+		1 = { add_artifact = book_remanada }
+		1 = { add_artifact = book_spirit_of_nirn }
+		1 = { add_artifact = book_song_of_askelde_men }
+	}
+}
+
+#Misc
+
+generate_loot_wealth_of_oblivion = { #Removed cash chance from WOOb to make aritfact gain a little more reliable in the face of artifact gain nerfs from other ruins
+	random_list = {
+		35 = {
+			random_list = {
+				15 = {generate_loot_amulet = yes}
+				15 = {generate_loot_magic_ring = yes}
+				15 = {add_artifact = ring_ebony}
+			}
+		}
+		25 = {
+			random_list = {
+				10 = {generate_weapon_sword_dwarven = yes}
+				5 = {generate_armor_dwarven = yes}
+			}
+		}
+		20 = {
+			random_list = {
+				10 = {generate_weapon_sword_ayleid = yes}
+				5 = {generate_armor_ayleid = yes}
+			}
+		}
+		15 = {
+			random_list = {
+				10 = {generate_weapon_sword_glass = yes}
+				5 = {generate_armor_glass = yes}
+			}
+		}
+		10 = {
+			random_list = {
+				10 = {generate_weapon_sword_ebony = yes}
+				5 = {generate_armor_ebony = yes}
+			}
+		}
+		5 = {
+			random_list = {
+				10 = {generate_weapon_sword_daedric = yes}
+				5 = {generate_armor_daedric = yes}
+			}
+		}
+	}
+}
+	
+
+	
+	
+######################################
+### 'Ev is Lazy' generation tables ###
+######################################
+
+#Jewelry
+
+generate_loot_mundane_ring = {
+	custom_tooltip = {
+		text = GENERATE_LOOT_MUNDANE_RING_CT
+		hidden_tooltip = {
+			random_list = {
+				40 = {add_artifact = ring_copper}
+				30 = {add_artifact = ring_silver}
+				20 = {add_artifact = ring_gold}
+				10 = {add_artifact = ring_ebony}
+			}
+		}
+	}
+}
+	
+generate_loot_magic_ring = {
+	custom_tooltip = {
+		text = GENERATE_LOOT_MAGIC_RING_CT
+		hidden_tooltip = {
+			random_list = {
+				10 = {add_artifact = ring_of_necromancy}
+				10 = {add_artifact = ring_of_arcana}
+				10 = {add_artifact = ring_of_sunfire}
+				10 = {add_artifact = ring_aegis}
+				10 = {add_artifact = ring_omnipotence}
+				10 = {add_artifact = ring_impotence}
+				10 = {add_artifact = ring_transmutation}
+				10 = {add_artifact = ring_happiness}
+				10 = {add_artifact = pentamagic_loop}
+				10 = {add_artifact = weatherward_circlet}
+				10 = {add_artifact = ring_lordship}
+				10 = {add_artifact = ring_blackband}
+			}
+		}
+	}
+}
+
+generate_loot_ring = {
+	random_list = {
+		70 = {generate_loot_mundane_ring = yes}
+		30 = {generate_loot_magic_ring = yes}
+	}
+}
+
+generate_loot_amulet = {
+	custom_tooltip = {
+		text = GENERATE_LOOT_AMULET_CT
+		hidden_tooltip = {
+			random_list = {
+				10 = {add_artifact = amulet_of_unity}
+				10 = {add_artifact = amulet_of_domination}
+				10 = {add_artifact = amulet_of_swords}
+				10 = {add_artifact = amulet_of_spelldrinker}
+				10 = {add_artifact = amulet_of_articulation}
+			}
+		}
+	}
+}
+
+generate_loot_jewelry = {
+	random_list = {
+		50 = {generate_loot_ring = yes}
+		50 = {generate_loot_amulet = yes}
+	}
+}
+
+#Weapons
+
+generate_weapon_sword_silver = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_silver}
+		20 = {add_artifact = weapon_sword_silver_superior}
+		10 = {add_artifact = weapon_sword_silver_flawless}
+	}
+}
+
+generate_weapon_sword_steel = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_steel}
+		20 = {add_artifact = weapon_sword_steel_superior}
+		10 = {add_artifact = weapon_sword_steel_flawless}
+	}
+}
+
+generate_weapon_sword_orcish = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_orcish}
+		20 = {add_artifact = weapon_sword_orcish_superior}
+		10 = {add_artifact = weapon_sword_orcish_flawless}
+	}
+}
+
+generate_weapon_sword_dwarven = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_dwarven}
+		20 = {add_artifact = weapon_sword_dwarven_superior}
+		10 = {add_artifact = weapon_sword_dwarven_flawless}
+	}
+}
+
+generate_weapon_sword_elven = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_elven}
+		20 = {add_artifact = weapon_sword_elven_superior}
+		10 = {add_artifact = weapon_sword_elven_flawless}
+	}
+}
+
+generate_weapon_sword_akaviri = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_akaviri}
+		20 = {add_artifact = weapon_sword_akaviri_superior}
+		10 = {add_artifact = weapon_sword_akaviri_flawless}
+	}
+}
+
+generate_weapon_sword_atmoran = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_atmoran}
+		20 = {add_artifact = weapon_sword_atmoran_superior}
+		10 = {add_artifact = weapon_sword_atmoran_flawless}
+	}
+}
+
+generate_weapon_sword_blades = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_blades}
+		20 = {add_artifact = weapon_sword_blades_superior}
+		10 = {add_artifact = weapon_sword_blades_flawless}
+	}
+}
+
+generate_weapon_sword_yokudan = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_yokudan}
+		20 = {add_artifact = weapon_sword_yokudan_superior}
+		10 = {add_artifact = weapon_sword_yokudan_flawless}
+	}
+}
+
+generate_weapon_sword_glass = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_glass}
+		20 = {add_artifact = weapon_sword_glass_superior}
+		10 = {add_artifact = weapon_sword_glass_flawless}
+	}
+}
+
+generate_weapon_sword_ebony = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_ebony}
+		20 = {add_artifact = weapon_sword_ebony_superior}
+		10 = {add_artifact = weapon_sword_ebony_flawless}
+	}
+}
+
+generate_weapon_sword_daedric = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_daedric}
+		20 = {add_artifact = weapon_sword_daedric_superior}
+		10 = {add_artifact = weapon_sword_daedric_flawless}
+	}
+}
+
+generate_weapon_sword_dragonbone = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_dragonbone}
+		20 = {add_artifact = weapon_sword_dragonbone_superior}
+		10 = {add_artifact = weapon_sword_dragonbone_flawless}
+	}
+}
+
+generate_weapon_sword_ayleid = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_ayleid}
+		20 = {add_artifact = weapon_sword_ayleid_superior}
+		10 = {add_artifact = weapon_sword_ayleid_flawless}
+	}
+}
+
+generate_weapon_sword_bosmer = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_bosmer}
+		20 = {add_artifact = weapon_sword_bosmer_superior}
+		10 = {add_artifact = weapon_sword_bosmer_flawless}
+	}
+}
+
+generate_weapon_sword_nord = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_nord}
+		20 = {add_artifact = weapon_sword_nord_superior}
+		10 = {add_artifact = weapon_sword_nord_flawless}
+	}
+}
+
+generate_weapon_axe_nord = {
+	random_list = {
+		70 = {add_artifact = weapon_axe_nord}
+		20 = {add_artifact = weapon_axe_nord_superior}
+		10 = {add_artifact = weapon_axe_nord_flawless}
+	}
+}
+
+generate_weapon_sword_breton = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_breton}
+		20 = {add_artifact = weapon_sword_breton_superior}
+		10 = {add_artifact = weapon_sword_breton_flawless}
+	}
+}
+
+generate_weapon_sword_imperial = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_imperial}
+		20 = {add_artifact = weapon_sword_imperial_superior}
+		10 = {add_artifact = weapon_sword_imperial_flawless}
+	}
+}
+
+generate_weapon_sword_khajiit = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_khajiit}
+		20 = {add_artifact = weapon_sword_khajiit_superior}
+		10 = {add_artifact = weapon_sword_khajiit_flawless}
+	}
+}
+
+generate_weapon_sword_argonian = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_argonian}
+		20 = {add_artifact = weapon_sword_argonian_superior}
+		10 = {add_artifact = weapon_sword_argonian_flawless}
+	}
+}
+
+generate_weapon_sword_ancient_falmer = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_ancient_falmer}
+		20 = {add_artifact = weapon_sword_ancient_falmer_superior}
+		10 = {add_artifact = weapon_sword_ancient_falmer_flawless}
+	}
+}
+
+generate_weapon_sword_velothi = {
+	random_list = {
+		70 = {add_artifact = weapon_sword_velothi}
+		20 = {add_artifact = weapon_sword_velothi_superior}
+		10 = {add_artifact = weapon_sword_velothi_flawless}
+	}
+}
+
+#Armor
+
+generate_armor_legate = {
+	random_list = {
+		70 = {add_artifact = armor_legate}
+		20 = {add_artifact = armor_legate_superior}
+		10 = {add_artifact = armor_legate_flawless}
+	}
+}
+
+generate_armor_2e_legate = {
+	random_list = {
+		70 = {add_artifact = armor_2e_legate}
+		20 = {add_artifact = armor_2e_legate_superior}
+		10 = {add_artifact = armor_2e_legate_flawless}
+	}
+}
+
+generate_armor_skaal_coat = {
+	random_list = {
+		70 = {add_artifact = armor_skaal_coat}
+		20 = {add_artifact = armor_skaal_coat_superior}
+		10 = {add_artifact = armor_skaal_coat_flawless}
+	}
+}
+
+generate_armor_mithril = {
+	random_list = {
+		70 = {add_artifact = armor_mithril}
+		20 = {add_artifact = armor_mithril_superior}
+		10 = {add_artifact = armor_mithril_flawless}
+	}
+}
+
+generate_armor_imperial = {
+	random_list = {
+		70 = {add_artifact = armor_imperial}
+		20 = {add_artifact = armor_imperial_superior}
+		10 = {add_artifact = armor_imperial_flawless}
+	}
+}
+
+generate_armor_ancient_nord = {
+	random_list = {
+		70 = {add_artifact = armor_ancient_nord}
+		20 = {add_artifact = armor_ancient_nord_superior}
+		10 = {add_artifact = armor_ancient_nord_flawless}
+	}
+}
+
+generate_armor_elven = {
+	random_list = {
+		70 = {add_artifact = armor_elven}
+		20 = {add_artifact = armor_elven_superior}
+		10 = {add_artifact = armor_elven_flawless}
+	}
+}
+
+generate_armor_shrouded = {
+	random_list = {
+		70 = {add_artifact = armor_shrouded}
+		20 = {add_artifact = armor_shrouded_superior}
+		10 = {add_artifact = armor_shrouded_flawless}
+	}
+}
+
+generate_armor_akaviri = {
+	random_list = {
+		70 = {add_artifact = armor_akaviri}
+		20 = {add_artifact = armor_akaviri_superior}
+		10 = {add_artifact = armor_akaviri_flawless}
+	}
+}
+
+generate_armor_dwarven = {
+	random_list = {
+		70 = {add_artifact = armor_dwarven}
+		20 = {add_artifact = armor_dwarven_superior}
+		10 = {add_artifact = armor_dwarven_flawless}
+	}
+}
+
+generate_armor_bonemold = {
+	random_list = {
+		70 = {add_artifact = armor_bonemold}
+		20 = {add_artifact = armor_bonemold_superior}
+		10 = {add_artifact = armor_bonemold_flawless}
+	}
+}
+
+generate_armor_glass = {
+	random_list = {
+		70 = {add_artifact = armor_glass}
+		20 = {add_artifact = armor_glass_superior}
+		10 = {add_artifact = armor_glass_flawless}
+	}
+}
+
+generate_armor_akaviri_metal = {
+	random_list = {
+		70 = {add_artifact = armor_akaviri_metal}
+		20 = {add_artifact = armor_akaviri_metal_superior}
+		10 = {add_artifact = armor_akaviri_metal_flawless}
+	}
+}
+
+generate_armor_blades = {
+	random_list = {
+		70 = {add_artifact = armor_blades}
+		20 = {add_artifact = armor_blades_superior}
+		10 = {add_artifact = armor_blades_flawless}
+	}
+}
+
+generate_armor_ancient_falmer = {
+	random_list = {
+		70 = {add_artifact = armor_ancient_falmer}
+		20 = {add_artifact = armor_ancient_falmer_superior}
+		10 = {add_artifact = armor_ancient_falmer_flawless}
+	}
+}
+
+generate_armor_chitin = {
+	random_list = {
+		70 = {add_artifact = armor_chitin}
+		20 = {add_artifact = armor_chitin_superior}
+		10 = {add_artifact = armor_chitin_flawless}
+	}
+}
+
+generate_armor_orcish = {
+	random_list = {
+		70 = {add_artifact = armor_orcish}
+		20 = {add_artifact = armor_orcish_superior}
+		10 = {add_artifact = armor_orcish_flawless}
+	}
+}
+
+generate_armor_steel = {
+	random_list = {
+		70 = {add_artifact = armor_steel}
+		20 = {add_artifact = armor_steel_superior}
+		10 = {add_artifact = armor_steel_flawless}
+	}
+}
+
+generate_armor_nord_carved = {
+	random_list = {
+		70 = {add_artifact = armor_nord_carved}
+		20 = {add_artifact = armor_nord_carved_superior}
+		10 = {add_artifact = armor_nord_carved_flawless}
+	}
+}
+
+generate_armor_ebony = {
+	random_list = {
+		70 = {add_artifact = armor_ebony}
+		20 = {add_artifact = armor_ebony_superior}
+		10 = {add_artifact = armor_ebony_flawless}
+	}
+}
+
+generate_armor_dragonbone = {
+	random_list = {
+		70 = {add_artifact = armor_dragonbone}
+		20 = {add_artifact = armor_dragonbone_superior}
+		10 = {add_artifact = armor_dragonbone_flawless}
+	}
+}
+
+generate_armor_daedric = {
+	random_list = {
+		70 = {add_artifact = armor_daedric}
+		20 = {add_artifact = armor_daedric_superior}
+		10 = {add_artifact = armor_daedric_flawless}
+	}
+}
+
+generate_armor_breton = {
+	random_list = {
+		70 = {add_artifact = armor_breton}
+		20 = {add_artifact = armor_breton_superior}
+		10 = {add_artifact = armor_breton_flawless}
+	}
+}
+
+generate_armor_yokudan = {
+	random_list = {
+		70 = {add_artifact = armor_yokudan}
+		20 = {add_artifact = armor_yokudan_superior}
+		10 = {add_artifact = armor_yokudan_flawless}
+	}
+}
+
+generate_armor_ayleid = {
+	random_list = {
+		70 = {add_artifact = armor_ayleid}
+		20 = {add_artifact = armor_ayleid_superior}
+		10 = {add_artifact = armor_ayleid_flawless}
+	}
+}
+
+generate_armor_bosmer = {
+	random_list = {
+		70 = {add_artifact = armor_bosmer}
+		20 = {add_artifact = armor_bosmer_superior}
+		10 = {add_artifact = armor_bosmer_flawless}
+	}
+}
+
+generate_armor_khajiit = {
+	random_list = {
+		70 = {add_artifact = armor_khajiit}
+		20 = {add_artifact = armor_khajiit_superior}
+		10 = {add_artifact = armor_khajiit_flawless}
+	}
+}
+
+generate_armor_argonian = {
+	random_list = {
+		70 = {add_artifact = armor_argonian}
+		20 = {add_artifact = armor_argonian_superior}
+		10 = {add_artifact = armor_argonian_flawless}
+	}
+}
+
+generate_shield_nord = {
+	random_list = {
+		70 = {add_artifact = shield_nord}
+		20 = {add_artifact = shield_nord_superior}
+		10 = {add_artifact = shield_nord_flawless}
+	}
+}

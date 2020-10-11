@@ -1,0 +1,447 @@
+####Etienne's Daedric Events - Malacath ####
+
+namespace = malacath
+
+# Malacath supports a strong chief! #
+
+character_event = {
+	id = malacath.1
+	desc = Malacath1
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_malacath
+		OR = {
+			trait = strong
+			trait = fortitude
+			trait = reckless
+			trait = brave
+			trait = wroth
+			trait = zealous
+			trait = robust
+			martial = 15
+			combat_rating = 40
+		}
+		NOT = {	trait = weak }
+		NOT = { trait = feeble }
+		NOT = { trait = craven }
+		NOT = { trait = slothful }
+		NOT = { has_character_modifier = orsimer_cowardly_ruler }
+		NOT = { has_character_modifier = malacath_strong_chief }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = "Malacath1Acknowledge"
+		add_character_modifier = { name = malacath_strong_chief duration = -1 }
+		hidden_tooltip = {
+			if = {
+				limit = { has_character_modifier = malacath_weak_chief }
+				remove_character_modifier = malacath_weak_chief
+			}
+		}
+	}
+}
+
+# Malacath berates a weak chief! #
+
+character_event = {
+	id = malacath.2
+	desc = Malacath2
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		religion = daedra_malacath
+		OR = {
+			trait = weak
+			trait = feeble
+			trait = craven
+			trait = slothful
+			has_character_modifier = orsimer_cowardly_ruler
+		}
+		NOT = { has_character_modifier = malacath_weak_chief }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = "Malacath2Acknowledge"
+		add_character_modifier = { name = malacath_weak_chief duration = -1 }
+		hidden_tooltip = {
+			if = {
+				limit = { has_character_modifier = malacath_strong_chief }
+				remove_character_modifier = malacath_strong_chief
+			}
+		}
+	}
+}
+
+# Hidden event for people who are no longer Cult of Malacath
+
+character_event = {
+	id = malacath.3
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { religion = daedra_malacath }
+		OR = {
+			has_character_modifier = malacath_strong_chief
+			has_character_modifier = malacath_weak_chief
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_character_modifier = malacath_strong_chief }
+			remove_character_modifier = malacath_strong_chief
+		}
+		if = {
+			limit = { has_character_modifier = malacath_weak_chief }
+			remove_character_modifier = malacath_weak_chief
+		}
+		if = {
+			limit = { has_character_modifier = orsimer_unproven_ruler }
+			remove_character_modifier = orsimer_unproven_ruler
+		}
+		if = {
+			limit = { has_character_modifier = orsimer_cowardly_ruler }
+			remove_character_modifier = orsimer_cowardly_ruler
+		}
+	}
+}
+
+# Strong Chief Events - You want these to happen! #
+
+#Orcish adventurers arrive at your capital
+
+character_event = {
+	id = malacath.25
+	desc = Malacath25
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_malacath
+		has_character_modifier = malacath_strong_chief
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	option = {
+		name = "Malacath25Acknowledge"
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.05
+					match_min = 75
+					match_max = 350
+					attrition = 1
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.05
+					match_min = 75
+					match_max = 350
+					attrition = 1
+				}
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					match_character = ROOT
+					match_mult = 0.05
+					match_min = 75
+					match_max = 350
+					attrition = 1
+				}
+			}
+		}
+	}
+}
+
+#A master smith provides you with a fine weapon or armour
+
+character_event = {
+	id = malacath.26
+	desc = Malacath26
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_malacath
+		has_character_modifier = malacath_strong_chief
+		num_of_artifacts < 1
+		NOT = { has_character_flag = malacath_weapon_smith }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	option = {
+		name = "Malacath26Accept"
+		trigger = {
+			scaled_wealth = 0.5
+		}
+		scaled_wealth = -0.5
+		random_list = {
+			50 = { add_artifact = weapon_sword_orcish }
+			50 = { add_artifact = armor_orcish }
+		}
+		
+		set_character_flag = malacath_weapon_smith
+	}
+	
+	option = {
+		name = "Malacath26AcceptInvitation"
+		trigger = {
+			scaled_wealth = 1
+		}
+		scaled_wealth = -1
+		random_list = {
+			50 = { add_artifact = weapon_sword_orcish }
+			50 = { add_artifact = armor_orcish }
+		}
+		
+		set_character_flag = malacath_weapon_smith
+		create_character = {
+			random_traits = yes
+			dynasty = NONE
+			age = 35
+			religion = daedra_malacath
+			culture = orsimer
+			trait = magistrate_2
+			trait = trader_2
+			trait = patient
+			trait = diligent
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	
+	option = {
+		name = "Malacath26Decline"
+		prestige = -5
+	}
+}
+
+#A master fighter arrives at court
+
+character_event = {
+	id = malacath.27
+	desc = Malacath27
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_malacath
+		has_character_modifier = malacath_strong_chief
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	option = {
+		name = "Malacath27Accept"
+		trigger = {
+			scaled_wealth = 1
+		}
+		scaled_wealth = -1
+		create_character = {
+			dynasty = NONE
+			age = 25
+			religion = daedra_malacath
+			culture = orsimer
+			trait = warrior_4
+			trait = brave
+			trait = wroth
+			trait = ambitious
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			random_list = {
+				10 = {add_trait = battlemage_3}
+				20 = {add_trait = barbarian_3}
+				20 = {add_trait = knight_3}
+				10 = {add_trait = scout_3}
+			}
+		}
+	}
+	
+	option = {
+		name = "Malacath27Decline"
+		prestige = -5
+	}
+}
+
+# Weak chief events...you don't want these to happen!
+
+#Able-bodied warriors desert!
+
+province_event = {
+	id = malacath.50
+	desc = Malacath50
+	picture = GFX_evt_two_moon_aurora
+	
+	trigger = {
+		owner = {
+			is_ruler = yes
+			is_adult = yes
+			higher_tier_than = BARON
+			religion = daedra_malacath
+			has_character_modifier = malacath_weak_chief
+		}
+		NOT = { has_province_modifier = malacath_desertion }
+		NOT = { has_province_modifier = enforced_martiallaw }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	option = {
+		name = "Malacath50Acknowledge"
+		add_province_modifier = {
+			name = malacath_desertion
+			duration = 730
+		}
+	}
+}
+
+#Goblin-Ken Army
+
+character_event = {
+	id = malacath.100
+	desc = Malacath100
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	option = {
+		name = Malacath100Accept
+		clr_character_flag = malacath_deal
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						light_infantry = { 700 700 }
+						heavy_infantry = { 20 20 }
+						archers = { 200 200 }
+						battlemages = { 10 10 }
+						pikemen = { 70 70 }
+					}
+					attrition = 1.0
+					maintenance_multiplier = 0.33
+					cannot_inherit = yes
+				}
+			}
+		}
+		any_demesne_province = {
+			limit = {
+				has_province_modifier = goblin_infestation
+			}
+			remove_province_modifier = goblin_infestation
+			owner = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						light_infantry = { 350 350 }
+						heavy_infantry = { 10 10 }
+						archers = { 100 100 }
+						battlemages = { 5 5 }
+						pikemen = { 35 35 }
+					}
+					attrition = 1.0
+					maintenance_multiplier = 0.33
+					cannot_inherit = yes
+				}
+			}
+		}
+		any_demesne_province = {
+			limit = {
+				has_province_modifier = orsimer_goblin_migration
+			}
+			remove_province_modifier = orsimer_goblin_migration
+			owner = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						light_infantry = { 350 350 }
+						heavy_infantry = { 10 10 }
+						archers = { 100 100 }
+						battlemages = { 5 5 }
+						pikemen = { 35 35 }
+					}
+					attrition = 1.0
+					maintenance_multiplier = 0.33
+					cannot_inherit = yes
+				}
+			}
+		}
+		any_demesne_province = {
+			limit = {
+				has_province_modifier = orsimer_ogre_migration
+			}
+			remove_province_modifier = orsimer_ogre_migration
+			owner = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						heavy_infantry = { 200 200 }
+						pikemen = { 50 50 }
+					}
+					attrition = 1.0
+					maintenance_multiplier = 0.33
+					cannot_inherit = yes
+				}
+			}
+		}
+	}
+}

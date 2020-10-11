@@ -1,0 +1,116 @@
+### Unique
+
+weapon_staff_orgnum = {
+	monthly_character_prestige = 0.5
+	martial = 3
+	learning = 3
+	combat_rating = 20
+	command_modifier = {
+		damage = 0.02
+		morale_offence = 0.02
+	}
+	
+	indestructible = yes
+	no_shield_2hand = 1 #This was originally much funnier.
+	summon_sea_serpents_modifier = 1
+	
+	active = {
+		trigger_if = {
+			limit = {
+				character = 39000
+			}
+			custom_tooltip = {
+				text = ORGNUM_ARTIFACT_HELD_ORGNUM_CT
+				always = yes
+			}
+		}
+		
+		trigger_else = {
+			AND = {
+				custom_tooltip = {
+					text = HAS_ORGNUM_GODSLAYER_BLOODLINE_CT
+					any_owned_bloodline = {
+						OR = {
+							has_bloodline_flag = bloodline_orgnum
+							has_bloodline_flag = godslayer_bloodline
+						}
+					}
+				}
+				learning = 30
+				martial = 30
+			}
+			
+			can_use_staves = yes
+		}
+	}
+	
+	picture = "GFX_weapon_spear_snowprince"
+	stacking = no
+	slot = weapon
+	quality = 10
+	flags = {
+		unique
+		combat_weapon
+		staff
+		theft_dr_extreme
+		quality_legendary
+		no_shield
+	}
+}
+weapon_staff_llothis = {
+	monthly_character_prestige = 0.10
+	monthly_character_piety = 0.50
+	martial = -2
+	combat_rating = -10
+	health = -1.0 #This should have hilarious results.
+	
+	tribunal_opinion = 20
+	
+	active = {
+		can_use_staves = yes
+	}
+	
+	picture = "GFX_weapon_sword_glass"
+	stacking = no
+	slot = weapon
+	quality = 4
+	indestructible = yes
+	
+	flags = {
+		combat_weapon
+		staff
+		unique
+		theft_dr_extreme
+		quality_legendary
+	}
+}
+
+### Non-unique
+weapon_staff_goblin = {
+	monthly_character_prestige = 0.05
+	martial = 1
+	
+	command_modifier = {
+		morale_offence = 0.01
+	}
+	
+	summon_goblin_tribe_modifier = 1
+	
+	combat_rating = 5
+	
+	active = {
+		can_use_staves = yes
+	}
+
+	picture = "GFX_weapon_staff_goblin"
+	stacking = yes
+	slot = weapon
+	quality = 3
+	
+	flags = {
+		combat_weapon
+		staff
+		theft_dr_average
+		quality_normal
+	}
+}

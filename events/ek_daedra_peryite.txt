@@ -1,0 +1,141 @@
+#### Etienne's Peryite Events #####
+
+namespace = peryite
+
+#Triggered by Decision
+
+character_event = {
+	id = peryite.1
+	desc = Peryite1
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Peryite1Accept"
+		trigger = {
+			has_dlc = "Reapers"
+		}
+		any_demesne_province = {
+			spawn_disease = peryite_plague 
+		}
+		hidden_tooltip = {
+			clr_character_flag = peryite_deal
+			add_character_modifier = {
+				name = called_on_peryite
+				months = 60
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "Peryite1Accept"
+		trigger = {
+			NOT = { has_dlc = "Reapers" }
+		}
+		scaled_wealth = -0.5
+		hidden_tooltip = {
+			clr_character_flag = peryite_deal
+			add_character_modifier = {
+				name = called_on_peryite
+				months = 60
+				hidden = yes
+			}
+		}
+		random_list = {
+			25 = {
+				any_demesne_province = {
+				add_province_modifier = {
+					name = peryite_plague_minor
+					duration = 1825
+					}
+				}
+			}
+			50 = {
+				any_demesne_province = {
+				add_province_modifier = {
+					name = peryite_plague_major
+					duration = 1825
+					}
+				}
+			}
+			25 = {
+				any_demesne_province = {
+				add_province_modifier = {
+					name = peryite_plague_severe
+					duration = 1825
+					}
+				}
+			}
+		}
+	}
+}
+
+# character_event = {
+	# id = peryite.2
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = "Peryite2Acknowledge"
+		# trigger = {
+			# has_dlc = "Reapers"
+		# }
+		# any_demesne_province = {
+			# spawn_disease = peryite_plague 
+		# }
+		# hidden_tooltip = {
+			# clr_character_flag = peryite_deal
+			# add_character_modifier = {
+				# name = called_on_peryite
+				# months = 60
+				# hidden = yes
+			# }
+		# }
+	# }
+	
+	# option = {
+		# name = "Peryite2Acknowledge"
+		# trigger = {
+			# NOT = { has_dlc = "Reapers" }
+		# }
+		# hidden_tooltip = {
+			# clr_character_flag = peryite_deal
+			# add_character_modifier = {
+				# name = called_on_peryite
+				# months = 60
+				# hidden = yes
+			# }
+		# }
+		# random_list = {
+			# 25 = {
+				# any_demesne_province = {
+				# add_province_modifier = {
+					# name = peryite_plague_minor
+					# duration = 1825
+					# }
+				# }
+			# }
+			# 50 = {
+				# any_demesne_province = {
+				# add_province_modifier = {
+					# name = peryite_plague_major
+					# duration = 1825
+					# }
+				# }
+			# }
+			# 25 = {
+				# any_demesne_province = {
+				# add_province_modifier = {
+					# name = peryite_plague_severe
+					# duration = 1825
+					# }
+				# }
+			# }
+		# }
+	# }
+# }

@@ -1,0 +1,1671 @@
+#
+upgrade_statues_ancestors = {
+	#....
+	picture = GFX_upgrade_icon_bust
+
+	potential = { }
+	allow = { }
+	active = { }
+
+	flags = {
+		statues
+		is_plural
+	}
+	build_time = 36
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	owner_modifier = {
+		dynasty_opinion = 3
+		vassal_opinion = 1
+	}
+	ai_will_do = {
+		factor = 1.0
+		modifier = {
+			factor = 3.0
+			OR = {
+				culture = dunmer
+				culture = ashlander
+				culture = chimer
+				culture_group = yokudan_group
+			}
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				culture = ayleid
+				culture = altmer
+				culture = imperial
+				culture = nibenean
+				culture = breton
+				culture = kamal
+			}
+		}
+		modifier = {
+			factor = 0.0
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 0.5
+			trait = content
+		}
+		modifier = {
+			factor = 0.75
+			trait = temperate
+		}
+		modifier = { factor = 0.0 is_supernatural = yes }
+		modifier = { factor = 0.0 is_total_bastard = yes }
+		modifier = { factor = 0.0 is_blinded_trigger = yes }
+		modifier = { factor = 0.0 is_undead = yes }
+		modifier = { factor = 2.0 has_bloodline = yes }
+		modifier = {
+			factor = 2.0
+			trait = proud
+		}
+	}
+}
+upgrade_plating_ebony = {
+	picture = GFX_upgrade_icon_ingots_ebony
+
+	potential = { }
+	allow = {
+		custom_tooltip = {
+			text = no_other_plating_tt
+			hidden_trigger = {
+				NOT = {
+					FROMFROM = { has_wonder_upgrade_flag = plating }
+				}
+			}
+		}
+	}
+	active = { }
+
+	flags = {
+		plating
+		is_singular
+		ebony
+	}
+	build_time = 36
+	gold_cost_flat = 600
+	gold_cost_ticking = 2
+	owner_modifier = {
+		monthly_character_prestige = 0.5
+		general_opinion = 1
+		vain_opinion = 3
+	}
+	ai_will_do = {
+		factor = 1.0
+		modifier = {
+			factor = 0.0
+			wealth < 1000
+		}
+		modifier = {
+			factor = 0.0
+			monthly_income < 12.0
+		}
+		modifier = {
+			factor = 5.0
+			trait = envious
+		}
+		modifier = {
+			factor = 3.0
+			trait = proud
+		}
+		modifier = {
+			factor = 2.0
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.0
+			trait = humble
+		}
+		modifier = {
+			factor = 0.0
+			trait = content
+		}
+		modifier = {
+			factor = 0.1
+			trait = temperate
+		}
+		modifier = { factor = 0.0 is_blinded_trigger = yes }
+		modifier = { factor = 0.0 is_undead = yes }
+		modifier = { factor = 2.0 has_bloodline = yes }
+	}
+}
+upgrade_execution_chamber = {
+	picture = GFX_upgrade_icon_flaming_skull
+
+	potential = {
+		ROOT = {
+			OR = {
+				has_evil_trait_trigger = yes
+				trait = ruthless
+			}
+		}
+	}
+	allow = {
+		FROMFROM = {
+			has_wonder_upgrade = upgrade_skyforge_master
+			is_active = yes
+		}
+		ROOT = {
+			OR = {
+				has_evil_trait_trigger = yes
+				trait = ruthless
+			}
+		}
+	}
+	active = {
+		FROMFROM = {
+			has_wonder_upgrade = upgrade_skyforge_master
+			is_active = yes
+		}
+		ROOT = { NOT = { trait = kind } }
+	}
+
+	flags = {
+		scary
+		is_singular
+		execution_chamber
+	}
+	build_time = 24
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+		local_revolt_risk = -0.005
+	}
+	owner_modifier = {
+		custom_modifier_text = execution_possible_modifier_tt
+		custom_modifier_text = intimidate_possible_modifier_tt
+		impaler_opinion = 3
+	}
+	ai_will_do = {
+		factor = 0.5
+		modifier = {
+			factor = 3
+			trait = impaler
+		}
+		modifier = {
+			factor = 1.5
+			trait = ruthless
+		}
+		modifier = {
+			factor = 2
+			trait = cruel
+		}
+		modifier = {
+			factor = 1.25
+			trait = wroth
+		}
+	}
+}
+
+upgrade_warehouse_senchal = {
+	picture = GFX_upgrade_icon_building2
+	potential = { }
+	allow = {
+	}
+	active = {
+	}
+	flags = {
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 300
+	gold_cost_ticking = 1
+	local_modifier = {
+		tradevalue = 15
+		supply_limit = 0.25
+	}
+	owner_modifier = {
+	}
+}
+
+upgrade_moonsugar_gardens = {
+	picture = GFX_upgrade_icon_sugarcane
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+		secluded
+		contemplative
+	}
+	build_time = 36
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+		local_tax_modifier = 0.05
+		local_revolt_risk = -0.005
+	}
+	owner_modifier = {
+		monthly_character_piety = 0.05
+	}
+}
+upgrade_statue_mane = {
+	picture = GFX_upgrade_icon_cathead
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+		decorative
+		statues
+		contemplative
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+	}
+	owner_modifier = {
+		monthly_character_prestige = 0.05
+		same_religion_opinion = 3
+		zealous_opinion = 3
+	}
+}
+
+upgrade_lunar_lattice = {
+	picture = GFX_upgrade_icon_moons
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+		decorative
+		mural
+		valuable
+		holy
+		contemplative
+	}
+	build_time = 36
+	gold_cost_flat = 600
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+		culture_techpoints = 0.05
+	}
+	owner_modifier = {
+		scholar_opinion = 2
+		theologian_opinion = 2
+		khajiit_opinion = 3
+		monthly_character_piety = 0.05
+		monthly_character_prestige = 0.05
+	}
+}
+upgrade_inner_sanctuary_mane = {
+	picture = GFX_upgrade_icon_doorway
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+		secluded
+		room
+		contemplative
+		inner_sanctuary
+	}
+	build_time = 36
+	gold_cost_flat = 450
+	gold_cost_ticking = 1
+	
+	local_modifier = {}
+	owner_modifier = {
+		intrigue = 1
+		court_size_modifier = 3
+		custom_modifier_text = unlock_meditative_retreat_tt #Unlocks Meditative Retreat.
+		custom_modifier_text = private_talk_possible_modifier_tt
+	}
+}
+upgrade_moonsugar_distillery = {
+	picture = GFX_upgrade_icon_skooma
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+		produces_skooma
+		entertainment
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+		local_tax_modifier = 0.125
+		economy_techpoints = 0.025
+	}
+	owner_modifier = {
+		monthly_character_piety = 0.05
+		skooma_addiction_opinion = 10
+		custom_modifier_text = produces_skooma_modifier_tt
+	}
+}
+
+upgrade_bloodworks = {
+	picture = GFX_upgrade_icon_crossed_swords
+	potential = { }
+	allow = { }
+	active = { }
+
+	flags = {
+		is_singular
+		entertainment
+	}
+	build_time = 24
+	gold_cost_flat = 450
+	gold_cost_ticking = 1
+	local_modifier = {
+		local_revolt_risk = -0.01
+	}
+	owner_modifier = {
+		custom_modifier_text = unlock_force_duel_decision_tt
+		custom_modifier_text = unlock_trial_by_combat_tt
+		duelist_opinion = 3
+		gladiator_opinion = 3
+		gambler_opinion = 3
+	}
+}
+upgrade_war_room = {
+	picture = GFX_upgrade_icon_warroom
+	potential = { }
+	allow = { }
+	active = { }
+
+	flags = {
+		is_singular
+	}
+	build_time = 36
+	gold_cost_flat = 450
+	gold_cost_ticking = 1
+	local_modifier = {
+	}
+	owner_modifier = {
+		land_organisation = 0.05
+		land_morale = 0.05
+		tech_growth_modifier_military = 0.025	
+	}
+}
+upgrade_black_market = {
+	picture = GFX_upgrade_icon_scattered_coins
+	potential = {
+		ROOT = {
+			NAND = {
+				trait = just
+				trait = honest
+			}
+		}
+	}
+	allow = {
+		ROOT = {
+			NAND = {
+				trait = just
+				trait = honest
+			}
+		}
+	}
+	active = {
+		ROOT = {
+			NAND = {
+				trait = just
+				trait = honest
+			}
+		}
+	}
+
+	flags = {
+		is_singular
+	}
+	build_time = 36
+	gold_cost_flat = 450
+	gold_cost_ticking = 1
+	local_modifier = {
+	}
+	owner_modifier = {
+		custom_modifier_text = unlocks_black_market_decision_tt
+	}
+}
+
+#Imperial City Upgrades
+upgrade_temple_of_the_one = {
+	picture = GFX_upgrade_icon_dome
+	potential = {
+		religion_group = human_pantheon
+	}
+	allow = {
+		religion_group = human_pantheon
+	}
+	active = {
+		religion_group = human_pantheon
+		NOT = { FROMFROM = { has_wonder_upgrade_flag = ic_other_temple } }
+		#The Remans were known to use the temple despite not following the Alessian teachings.
+		#Tiber also restored it when he took the throne.
+	}
+
+	flags = {
+		is_singular
+		contemplative
+		holy
+	}
+	build_time = 48
+	gold_cost_flat = 600
+	gold_cost_ticking = 1
+	local_modifier = {
+		local_revolt_risk = -0.01
+	}
+	owner_modifier = {
+		global_revolt_risk = -0.01
+		monthly_character_piety = 0.05
+		monthly_character_prestige = 0.05
+		tech_growth_modifier_culture = 0.01
+		maruhkati_opinion = 5
+	}
+	
+	ai_will_do = {
+		factor = 1.0
+		modifier = {
+			factor = 100.0
+			religion = maruhkati
+		}
+		modifier = {
+			factor = 3.0
+			religion_group = human_pantheon
+		}
+		modifier = {
+			factor = 0.0
+			OR = {
+				religion_group = tribunal
+				religion_group = mer_pantheon
+				religion_group = hist_group
+			}
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				culture = ayleid
+				culture = altmer
+				culture = imperial
+				culture = nibenean
+				culture = breton
+				culture = kamal
+			}
+		}
+		modifier = {
+			factor = 2.0
+			culture = nibenean
+		}
+	}
+}
+upgrade_imperial_arboretum = {
+	picture = GFX_upgrade_icon_pavilion
+	potential = {
+		#Either has to have an interest in gardening themselves.
+		#Or have someone close who has an interest in gardening.
+		OR = {
+			trait = gardener
+			any_spouse_even_if_dead = { trait = gardener }
+			any_lover = { trait = gardener }
+			any_child_even_if_dead = { trait = gardener }
+		}
+	}
+	allow = {
+		#Either has to have an interest in gardening themselves.
+		#Or have someone close who has an interest in gardening.
+		OR = {
+			trait = gardener
+			any_spouse_even_if_dead = { trait = gardener }
+			any_lover = { trait = gardener }
+			any_child_even_if_dead = { trait = gardener }
+		}
+	}
+	active = {}
+
+	flags = {
+		is_singular
+		contemplative
+		decorative
+		romantic
+		nature
+	}
+	build_time = 24
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+	}
+	owner_modifier = {
+		monthly_character_prestige = 0.05
+		diplomacy = 1
+		general_opinion = 2
+		gardener_opinion = 3
+	}
+	ai_will_do = {
+		factor = 2.0
+		modifier = {
+			factor = 3.0
+			trait = gardener
+		}
+		modifier = {
+			factor = 2.0
+			trait = poet
+		}
+		modifier = {
+			factor = 2.0
+			trait = painter
+		}
+		modifier = {
+			factor = 2.0
+			OR = {
+				any_spouse_even_if_dead = { trait = gardener }
+				any_lover = { trait = gardener }
+				any_child_even_if_dead = { trait = gardener }
+			}
+		}
+	}
+}
+upgrade_imperial_arena = {
+	picture = GFX_upgrade_icon_crossed_swords
+	potential = { }
+	allow = { }
+	active = { }
+
+	flags = {
+		is_singular
+		summon_commander
+		entertainment
+	}
+	build_time = 48
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+		local_revolt_risk = -0.01
+	}
+	owner_modifier = {
+		custom_modifier_text = recruit_gladiator_modifier_tt
+		custom_modifier_text = fight_to_death_execution_tt
+		combat_rating = 1
+		duelist_opinion = 3
+		gladiator_opinion = 3
+		gambler_opinion = 3
+	}
+	ai_will_do = {
+		factor = 2.0
+		modifier = {
+			factor = 2.0
+			trait = gladiator
+		}
+		modifier = {
+			factor = 2.0
+			trait = equestrian
+		}
+		modifier = {
+			factor = 2.0
+			trait = gambler
+		}
+		modifier = {
+			factor = 2.0
+			has_martial_inclination_mercenary_trigger = yes
+		}
+		modifier = {
+			factor = 3.0
+			OR = {
+				culture = imperial
+				culture = colovian
+				culture = akaviri
+				culture = ayleid
+				culture = nord
+				culture = orsimer
+			}
+		}
+		modifier = {
+			factor = 2.0
+			OR = {
+				culture = skaal
+				culture = atmoran
+				culture = reachmen
+				culture_group = yokudan_group
+			}
+		}
+	}
+}
+upgrade_office_of_commerce = {
+	picture = GFX_upgrade_icon_building4
+	potential = {
+		OR = {
+			is_magistrate = yes
+			is_trader = yes
+			is_patrician = yes
+			is_smart_trigger = yes
+			trait = diligent
+		}
+	}
+	allow = {
+		OR = {
+			is_magistrate = yes
+			is_trader = yes
+			is_patrician = yes
+			is_smart_trigger = yes
+			trait = diligent
+		}
+	}
+	active = {}
+
+	flags = {
+		is_singular
+		valuable
+	}
+	build_time = 36
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+		economy_techpoints = 0.05
+	}
+	owner_modifier = {
+		global_tax_modifier = 0.01
+		tech_growth_modifier_economy = 0.05
+		stewardship = 1
+		diligent_opinion = 2
+	}
+	ai_will_do = {
+		factor = 2.0
+		modifier = {
+			factor = 2.0
+			trait = diligent
+		}
+		modifier = {
+			factor = 2.0
+			trait = greedy
+		}
+		modifier = {
+			factor = 2.0
+			is_trader = yes
+		}
+		modifier = {
+			factor = 2.0
+			is_magistrate = yes
+		}
+	}
+}
+upgrade_imperial_prison = {
+	picture = GFX_upgrade_icon_chains
+	potential = {}
+	allow = {}
+	active = {}
+
+	flags = {
+		is_singular
+		scary
+		imperial_prison_flag
+	}
+	build_time = 72
+	gold_cost_flat = 600
+	gold_cost_ticking = 1
+	local_modifier = {
+		local_revolt_risk = -0.01
+	}
+	owner_modifier = {
+		global_revolt_risk = -0.01
+		arrest_chance_modifier = 0.1
+		defensive_plot_power_modifier = 0.05
+		court_size_maintenance_cost_modifier = -0.01
+		custom_modifier_text = send_to_imperial_prison_modifier_tt
+		ruthless_opinion = 1
+	}
+	ai_will_do = {
+		factor = 2.0
+		modifier = {
+			factor = 2.0
+			trait = wroth
+		}
+		modifier = {
+			factor = 2.0
+			trait = ruthless
+		}
+		modifier = {
+			factor = 2.0
+			trait = diligent
+		}
+		modifier = {
+			factor = 2.0
+			trait = paranoid
+		}
+		modifier = {
+			factor = 2.0
+			num_of_rivals >= 1
+		}
+		modifier = {
+			factor = 2.0
+			num_of_prisoners >= 3
+		}
+	}
+}
+upgrade_ip_bastion = {#
+	picture = GFX_upgrade_icon_tower
+
+	potential = { }
+	allow = { }
+	active = { }
+
+	flags = {
+		towering
+		is_singular
+	}
+	build_time = 60
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+		siege_defence = 0.1
+	}
+	owner_modifier = {
+		monthly_character_prestige = 0.01
+		land_organisation = 0.05
+	}
+	ai_will_do = {
+		factor = 2.0
+		modifier = {
+			factor = 2.0
+			trait = former_soldier
+		}
+		modifier = {
+			factor = 2.0
+			trait = warlord
+		}
+		modifier = {
+			factor = 2.0
+			trait = gambler
+		}
+		modifier = {
+			factor = 2.0
+			has_martial_inclination_mercenary_trigger = yes
+		}
+		modifier = {
+			factor = 3.0
+			OR = {
+				culture = imperial
+				culture = colovian
+				culture = akaviri
+				culture = ayleid
+				culture = orsimer
+			}
+		}
+	}
+}
+upgrade_imperial_chapel = {
+	picture = GFX_upgrade_icon_chapel
+	potential = {
+		is_divines_worshipper = yes
+	}
+	allow = {
+		is_divines_worshipper = yes
+	}
+	active = {
+		is_divines_worshipper = yes
+	}
+
+	flags = {
+		is_singular
+		contemplative
+		holy
+		ic_other_temple
+	}
+	build_time = 36
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+		local_revolt_risk = -0.005
+	}
+	owner_modifier = {
+		monthly_character_piety = 0.05
+		monthly_character_prestige = 0.025
+		tech_growth_modifier_culture = 0.01
+		eight_divines_opinion = 3
+		nine_divines_opinion = 3
+		maruhkati_opinion = -5
+	}
+	ai_will_do = {
+		factor = 3.0
+		modifier = {
+			factor = 2.0
+			OR = {
+				culture = imperial
+				culture = nibenean
+				culture = breton
+				culture = colovian
+			}
+		}
+		modifier = {
+			factor = 3.0
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.0
+			trait = cynical
+		}
+	}
+}
+upgrade_noble_manors = {
+	picture = GFX_upgrade_icon_building3
+	potential = {
+	}
+	allow = {
+	}
+	active = {
+	}
+
+	flags = {
+		is_plural
+		secluded
+	}
+	build_time = 36
+	gold_cost_flat = 400
+	gold_cost_ticking = 1
+	local_modifier = {}
+	owner_modifier = {
+		monthly_character_prestige = 0.05
+		vassal_opinion = 3
+		defensive_plot_power_modifier = 0.05
+		plot_power_modifier = 0.05
+	}
+}
+
+upgrade_great_aqueduct = {
+	picture = GFX_upgrade_icon_water
+
+	potential = {}
+	allow = {}
+	active = {}
+
+	flags = {
+		is_singular
+	}
+	build_time = 36
+	gold_cost_flat = 450
+	gold_cost_ticking = 1
+	local_modifier = {
+		disease_defence = 0.03
+		supply_limit = 1
+	}
+}
+upgrade_imperial_hospital = {
+	picture = GFX_upgrade_icon_heal
+
+	potential = {}
+	allow = {}
+	active = {}
+
+	flags = {
+		is_singular
+		hospital
+	}
+	build_time = 24
+	gold_cost_flat = 400
+	gold_cost_ticking = 1
+	local_modifier = {
+		disease_defence = 0.025
+	}
+	owner_modifier = {
+		levy_reinforce_rate = 0.025
+		kind_opinion = 2
+		charitable_opinion = 2
+		custom_modifier_text = can_recruit_physician_custom_tt
+	}
+	ai_will_do = {
+		factor = 2.0
+		modifier = {
+			factor = 3.0
+			is_healer = yes
+		}
+		modifier = {
+			factor = 2.0
+			trait = physician
+		}
+		modifier = {
+			factor = 2.0
+			trait = charitable
+		}
+		modifier = {
+			factor = 2.0
+			trait = kind
+		}
+		modifier = {
+			factor = 2.0
+			has_disease_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			has_minor_disease_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			trait = infection
+		}
+		modifier = {
+			factor = 2.0
+			has_injury_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			has_disability_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			has_mental_disorder_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			any_spouse = {
+				OR = {
+					has_mental_disorder_trigger = yes
+					has_disability_trigger = yes
+					is_maimed_trigger = yes
+					has_injury_trigger = yes
+					has_minor_disease_trigger = yes
+					has_disease_trigger = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 2.0
+			any_lover = {
+				OR = {
+					has_mental_disorder_trigger = yes
+					has_disability_trigger = yes
+					is_maimed_trigger = yes
+					has_injury_trigger = yes
+					has_minor_disease_trigger = yes
+					has_disease_trigger = yes
+				}
+			}
+		}
+		modifier = {
+			factor = 2.0
+			any_child = {
+				OR = {
+					has_mental_disorder_trigger = yes
+					has_disability_trigger = yes
+					is_maimed_trigger = yes
+					has_injury_trigger = yes
+					has_minor_disease_trigger = yes
+					has_disease_trigger = yes
+				}
+			}
+		}
+	}
+}
+upgrade_imperial_sewers = {
+	picture = GFX_upgrade_icon_tunnel
+
+	potential = {}
+	allow = {}
+	active = {}
+
+	flags = {
+		is_singular
+	}
+	build_time = 36
+	gold_cost_flat = 450
+	gold_cost_ticking = 1
+	local_modifier = {
+		disease_defence = 0.05
+	}
+	owner_modifier = {
+		defensive_plot_power_modifier = 0.025
+		town_opinion = 3
+	}
+	ai_will_do = {
+		factor = 2.0
+		modifier = {
+			factor = 2.0
+			any_realm_province = {
+				has_epidemic = yes
+			}
+		}
+		modifier = {
+			factor = 2.0
+			any_realm_province = {
+				has_disease = yes
+			}
+		}
+		modifier = {
+			factor = 2.0
+			trait = diligent
+		}
+		modifier = {
+			factor = 2.0
+			trait = groomed
+		}
+		modifier = {
+			factor = 2.0
+			trait = vain
+		}
+	}
+}
+
+upgrade_dwemer_walls = {
+	picture = GFX_upgrade_icon_walls
+
+	potential = {
+		FROMFROMFROM = {
+			OR = {
+				province_id = 148 #Markarth
+				has_dwemer_ruins = yes
+			}
+		}
+	}
+	allow = {
+		FROMFROMFROM = {
+			OR = {
+				province_id = 148 #Markarth
+				has_province_modifier = ruins_dwemer_2
+				has_province_modifier = ruins_dwemer_3
+			}
+		}
+	}
+	build_time = 60
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+
+	owner_modifier = {}
+	local_modifier = {
+		fort_level = 3
+	}
+	flags = {
+		is_plural
+	}
+	active = {
+		FROMFROMFROM = {
+			OR = {
+				province_id = 148 #Markarth
+				has_province_modifier = ruins_dwemer_2
+				has_province_modifier = ruins_dwemer_3
+			}
+		}
+	}
+}
+upgrade_dwemer_cannon = {
+	picture = GFX_upgrade_icon_cannon
+
+	potential = {
+		FROMFROMFROM = {
+			OR = {
+				province_id = 148 #Markarth
+				has_dwemer_ruins = yes
+			}
+		}
+	}
+	allow = {
+		FROMFROMFROM = {
+			OR = {
+				province_id = 148 #Markarth
+				has_province_modifier = ruins_dwemer_2
+				has_province_modifier = ruins_dwemer_3
+			}
+		}
+	}
+	build_time = 60
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+
+	owner_modifier = {
+		siege_speed = 0.1
+		custom_modifier_text = gives_dwemer_cannon_artifact_tt
+	}
+	local_modifier = {
+		siege_defence = 0.1
+	}
+	flags = {
+		is_singular
+		valuable
+	}
+	active = {
+		FROMFROMFROM = {
+			OR = {
+				province_id = 148 #Markarth
+				has_province_modifier = ruins_dwemer_2
+				has_province_modifier = ruins_dwemer_3
+			}
+		}
+	}
+}
+
+upgrade_tomb_blessed_interment = {
+	picture = GFX_upgrade_icon_pyramid
+
+	potential = {
+	}
+	allow = {
+	}
+	build_time = 30
+	gold_cost_flat = 450
+	gold_cost_ticking = 1
+
+	owner_modifier = {
+		church_opinion = 3
+		same_religion_opinion = 3
+		monthly_character_prestige = 0.05
+		monthly_character_piety = 0.01
+		custom_modifier_text = less_likely_to_be_looted_modifier_tt
+	}
+	local_modifier = {
+	}
+	flags = {
+		is_singular
+		valuable
+	}
+	active = {
+	}
+}
+upgrade_crypt_virtuous_maidens = {
+	picture = GFX_upgrade_icon_roses_white
+
+	potential = {
+	}
+	allow = {
+	}
+	build_time = 30
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+
+	owner_modifier = {
+		monthly_character_piety = 0.05
+		diplomacy = 1
+		health = 0.5
+		custom_modifier_text = private_talk_possible_modifier_tt
+	}
+	local_modifier = {
+		local_revolt_risk = -0.005
+	}
+	flags = {
+		is_singular
+		valuable
+	}
+	active = {
+	}
+}
+upgrade_temple_tuwhacca = {
+	picture = GFX_upgrade_icon_doorway
+
+	potential = {
+		religion_group = yokudan_pantheon
+	}
+	allow = {
+		religion_group = yokudan_pantheon
+	}
+	build_time = 30
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+
+	owner_modifier = {
+		tech_growth_modifier_culture = 0.01
+		monthly_character_piety = 0.05
+	}
+	local_modifier = {
+		local_revolt_risk = -0.005
+	}
+	flags = {
+		is_singular
+		valuable
+	}
+	active = {
+		religion_group = yokudan_pantheon
+	}
+}
+upgrade_crypt_of_the_forgotten = {
+	picture = GFX_upgrade_icon_dark_cave
+
+	potential = {
+	}
+	allow = {
+	}
+	build_time = 24
+	gold_cost_flat = 300
+	gold_cost_ticking = 1
+
+	owner_modifier = {
+		defensive_plot_power_modifier = 0.05
+		plot_power_modifier = 0.05
+		court_size_maintenance_cost_modifier = -0.01
+	}
+	local_modifier = {
+		local_revolt_risk = -0.005
+	}
+	flags = {
+		is_singular
+		body_stash
+	}
+	active = {
+	}
+}
+upgrade_ancestral_crypt_motalion = {
+	picture = GFX_upgrade_icon_funerary_mask
+
+	potential = {
+	}
+	allow = {
+	}
+	build_time = 24
+	gold_cost_flat = 300
+	gold_cost_ticking = 1
+
+	owner_modifier = {
+		monthly_character_prestige = 0.05
+		dynasty_opinion = 5
+		custom_modifier_text = ancestral_burial_motalion_text
+	}
+	local_modifier = {
+	}
+	flags = {
+		is_singular
+		
+	}
+	active = {
+	}
+}
+upgrade_divine_statues = {
+	picture = GFX_upgrade_icon_statue
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+		decorative
+		statues
+		contemplative
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+	}
+	owner_modifier = {
+		monthly_character_piety = 0.5
+		same_religion_opinion = 3
+		zealous_opinion = 2
+	}
+}
+upgrade_great_serpent_hall = {
+	picture = GFX_upgrade_icon_statue
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+		galleys_perc = 0.5
+		galleys = 25
+	}
+	owner_modifier = {
+		craven_opinion = 3
+	}
+}
+upgrade_heralds = {
+	picture = GFX_upgrade_icon_statue
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_plural
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+	}
+	owner_modifier = {
+		global_revolt_risk = -0.01
+		tech_growth_modifier = 0.02
+	}
+}
+
+# Menagerie of Sil-Var-Woad
+upgrade_senche_pen = {
+	picture = GFX_upgrade_icon_statue
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+	}
+	owner_modifier = {
+		khajiit_opinion  = -2
+		monthly_character_prestige = 0.25
+	}
+}
+upgrade_mammoth_paddock = {
+	picture = GFX_upgrade_icon_statue
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+	}
+	owner_modifier = {
+		nord_opinion  = 1
+		atmoran_opinion  = 1
+		skaal_opinion  = 1
+		monthly_character_prestige = 0.2
+	}
+}
+upgrade_jungle_enclosure = {
+	picture = GFX_upgrade_icon_statue
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+	}
+	owner_modifier = {
+		bosmer_opinion = 1
+		ayleid_opinion = 1
+		monthly_character_prestige = 0.2
+	}
+}
+
+### Cathedral
+upgrade_shrines_divines = {
+	picture = GFX_upgrade_icon_statue
+	potential = {}
+	allow = {}
+	active = {}
+	
+	flags = {
+		is_plural
+	}
+	build_time = 24
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+	
+	local_modifier = {
+	}
+	owner_modifier = {
+		monthly_character_piety = 0.25
+	}
+}
+upgrade_volwesi_canals = {
+	picture = GFX_upgrade_icon_canals
+	
+	potential = { }
+	allow = { }
+	active = { }
+
+	flags = {
+		is_plural
+	}
+	build_time = 48
+	gold_cost_flat = 600
+	gold_cost_ticking = 1
+	local_modifier = {
+		local_movement_speed = 0.1
+		local_tax_modifier = 0.05
+		tradevalue = 15
+	}
+}
+upgrade_high_commissioners_bureau = {
+	picture = GFX_upgrade_icon_coins
+	potential = {
+		OR = {
+			is_magistrate = yes
+			is_trader = yes
+			is_patrician = yes
+			is_smart_trigger = yes
+		}
+	}
+	allow = {
+		OR = {
+			is_magistrate = yes
+			is_trader = yes
+			is_patrician = yes
+			is_smart_trigger = yes
+		}
+	}
+	active = {}
+
+	flags = {
+		is_singular
+		valuable
+	}
+	build_time = 36
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+		economy_techpoints = 0.05
+	}
+	owner_modifier = {
+		global_tax_modifier = 0.01
+		tech_growth_modifier_economy = 0.05
+		local_build_cost_modifier = -0.05
+	}
+}
+upgrade_haematic_temple = {
+	picture = GFX_upgrade_icon_tsaesci_funeral
+	potential = {
+		OR = {
+			culture = tsaesci
+			religion = five_courts
+		}
+	}
+	allow = {
+		OR = {
+			culture = tsaesci
+			religion = five_courts
+		}
+	}
+	active = {
+		OR = {
+			culture = tsaesci
+			religion = five_courts
+		}
+	}
+
+	flags = {
+		is_singular
+		contemplative
+		holy
+	}
+	build_time = 36
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	owner_modifier = {
+		custom_modifier_text = tsaesci_drink_blood_bonus_tt
+		monthly_character_piety = 0.05
+		monthly_character_prestige = 0.025
+		akaviri_opinion = -5
+		tsaesci_opinion = 3
+		five_courts_opinion = 3
+	}
+}
+upgrade_akaviri_memorial = {
+	picture = GFX_upgrade_icon_altar
+	potential = {
+		culture = akaviri
+	}
+	allow = {
+		FROMFROMFROM = {
+			culture = akaviri
+		}
+	}
+	active = {
+		OR = {
+			culture = akaviri
+			FROMFROMFROM = {
+				culture = akaviri
+			}
+		}
+	}
+
+	flags = {
+		is_singular
+		contemplative
+	}
+
+	build_time = 30
+	gold_cost_flat = 350
+	gold_cost_ticking = 1
+
+	owner_modifier = {
+		akaviri_opinion = 5
+	}
+	local_modifier = {
+		local_revolt_risk = -0.005
+		siege_defence = 0.05
+	}
+}
+upgrade_serpentine_palace = {
+	picture = GFX_upgrade_icon_throne2
+	potential = {
+		culture = tsaesci
+		NOT = {
+			FROMFROM = {
+				OR = {
+					has_wonder_upgrade = upgrade_volwesi_palace_generic
+					has_wonder_upgrade = upgrade_ginyeom_palace
+				}
+			}
+		}
+	}
+	allow = { }
+	active = {
+		# Non-Tsaesci culture can benefit from the palace but only build the generic variant if it's destroyed
+		NOT = {
+			culture = akaviri
+		}
+	}
+
+	flags = {
+		valuable
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 700
+	gold_cost_ticking = 2
+	owner_modifier = {
+		monthly_character_prestige = 0.1
+		court_size_maintenance_cost_modifier = -0.05
+	}
+}
+upgrade_ginyeom_palace = {
+	picture = GFX_upgrade_icon_throne2
+	potential = {
+		culture = akaviri
+		NOT = {
+			FROMFROM = {
+				OR = {
+					has_wonder_upgrade = upgrade_volwesi_palace_generic
+					has_wonder_upgrade = upgrade_serpentine_palace
+				}
+			}
+		}
+	}
+	allow = { }
+	active = {
+		# Non-Tsaesci culture can benefit from the palace but only build the generic variant if it's destroyed
+		NOT = {
+			culture = tsaesci
+		}
+	}
+
+	flags = {
+		valuable
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 700
+	gold_cost_ticking = 2
+	owner_modifier = {
+		monthly_character_prestige = 0.1
+		court_size_maintenance_cost_modifier = -0.05
+	}
+}
+upgrade_volwesi_palace_generic = {
+	picture = GFX_upgrade_icon_throne2
+	potential = {
+		NOR = {
+			culture = akaviri
+			culture = tsaesci
+		}
+		NOT = {
+			FROMFROM = {
+				OR = {
+					has_wonder_upgrade = upgrade_serpentine_palace
+					has_wonder_upgrade = upgrade_ginyeom_palace
+				}
+			}
+		}
+	}
+	allow = {}
+	active = {}
+
+	flags = {
+		valuable
+		is_singular
+	}
+	build_time = 24
+	gold_cost_flat = 700
+	gold_cost_ticking = 2
+	owner_modifier = {
+		monthly_character_prestige = 0.05
+		court_size_maintenance_cost_modifier = -0.025
+	}
+}
+upgrade_scaled_wales = {
+	picture = GFX_upgrade_icon_walls
+
+	potential = { }
+	allow = { }
+	active = { }
+
+	flags = {
+		towering
+		is_singular
+	}
+	build_time = 60
+	gold_cost_flat = 500
+	gold_cost_ticking = 1
+	local_modifier = {
+		siege_defence = 0.1
+		fort_level = 1
+	}
+	owner_modifier = {
+		monthly_character_prestige = 0.01
+	}
+}

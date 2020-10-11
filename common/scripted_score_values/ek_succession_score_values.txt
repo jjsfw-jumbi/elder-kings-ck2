@@ -1,0 +1,2455 @@
+# Root scope - Voter, the character voting in the election
+# From scope - Candidate, Character considered for the title
+# FromFrom scope - The title the nomination is for
+# FromFromFrom scope - The title owner's candidate
+
+succession_nordic_values_score = {
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_nordic_traditional_jarls_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROMFROM = { 
+			OR = {
+				title = k_skyrim
+				title = e_nordic
+			}
+		}
+		FROM = {
+			OR = {
+				has_landed_title = d_winterhold
+				has_landed_title = d_whiterun
+				has_landed_title = d_haafingar
+				has_landed_title = d_hjaalmarch
+				has_landed_title = d_falkreath
+				has_landed_title = d_reach
+				has_landed_title = d_therift
+				has_landed_title = d_eastmarch
+				has_landed_title = d_thepale
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_nordic_other_jarls_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			NOR = {
+				has_landed_title = d_winterhold
+				has_landed_title = d_whiterun
+				has_landed_title = d_haafingar
+				has_landed_title = d_hjaalmarch
+				has_landed_title = d_falkreath
+				has_landed_title = d_reach
+				has_landed_title = d_therift
+				has_landed_title = d_eastmarch
+				has_landed_title = d_thepale
+			}
+			real_tier = DUKE
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_legitimate_prince_score
+		NOT = { character = FROM }
+		FROM = { NOT = { trait = bastard } }
+		FROMFROM = { holder_scope = { FROM = { is_child_of = PREV } } }
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_legitimate_grand_prince_score
+		NOT = { character = FROM }
+		FROM = { NOT = { trait = bastard } }
+		FROMFROM = { holder_scope = { FROM = { is_grandchild_of = PREV } } }
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_legitimate_dynast
+		NOT = { character = FROM }
+		FROM = { NOT = { trait = bastard } }
+		FROMFROM = { holder_scope = { FROM = { dynasty = PREV } } }
+		NOR = { 
+			FROMFROM = { holder_scope = { FROM = { is_grandchild_of = PREV } } }
+			FROMFROM = { holder_scope = { FROM = { is_child_of = PREV } } }
+		}
+	}
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_nordic_not_jarl_score
+		NOT = { character = FROM }
+		higher_real_tier_than = COUNT
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			OR = {
+				lower_real_tier_than = DUKE
+				is_landed = no
+			}
+		}
+		NOR = { 
+			FROMFROM = { holder_scope = { FROM = { is_grandchild_of = PREV } } }
+			FROMFROM = { holder_scope = { FROM = { is_child_of = PREV } } }
+		}
+	}
+	additive_modifier = { 
+		value = -20
+		localisation_key = tooltip_nordic_not_jarl_score
+		NOT = { character = FROM }
+		real_tier = COUNT
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			OR = {
+				lower_real_tier_than = DUKE
+				is_landed = no
+			}
+		}
+		NOR = { 
+			FROMFROM = { holder_scope = { FROM = { is_grandchild_of = PREV } } }
+			FROMFROM = { holder_scope = { FROM = { is_child_of = PREV } } }
+		}
+	}
+	additive_modifier = { 
+		value = -10
+		localisation_key = tooltip_nordic_not_jarl_score
+		NOT = { character = FROM }
+		real_tier = BARON
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			OR = {
+				lower_real_tier_than = DUKE
+				is_landed = no
+			}
+		}
+		NOR = { 
+			FROMFROM = { holder_scope = { FROM = { is_grandchild_of = PREV } } }
+			FROMFROM = { holder_scope = { FROM = { is_child_of = PREV } } }
+		}
+	}
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_house_redoran_vote_negative_warrior
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			NOR = {
+				has_acceptable_fighters_specialisation = yes
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				trait = duelist
+				trait = equestrian
+				martial = 25
+				combat_rating = 30
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_nordic_dragonborn_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			trait = dragonborn
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_nordic_dragonblood_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			is_dragonblood = yes
+			NOT = { trait = dragonborn }
+		}
+	}
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_nordic_hero_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			trait = hero
+			NOT = { is_dragonblood = yes }
+		}
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_nordic_thuum_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			OR = {
+				trait = thuum_1
+				trait = thuum_2
+				trait = thuum_3
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_nordic_society_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			society_rank >= 2
+			OR = {
+				society_member_of = companions_tamriel
+				society_member_of = greybeards_tamriel
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_nordic_housecarl_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = { has_minor_title = title_housecarl }
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_nordic_commander_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			OR = {
+				has_minor_title = title_commander
+				has_job_title = job_marshal
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 5
+		localisation_key = tooltip_nordic_meadery_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = { has_minor_title = title_master_of_the_meadery }
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_nordic_bloodline_score
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			any_owned_bloodline = {
+				has_bloodline_flag = nord_bloodline
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_nordic_freydis_crown
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			has_artifact = head_crown_verity
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_nordic_jagged_crown
+		NOT = { character = FROM }
+		OR = {
+			culture = nord
+			culture = atmoran
+			culture = skaal
+		}
+		FROM = {
+			has_artifact = head_crown_jagged
+		}
+	}
+}
+
+### Great House Values
+
+# All Great Houses
+great_house_values_score = {
+	additive_modifier = { 
+		value = -200
+		localisation_key = tooltip_great_house_vote_houseless
+		NOT = { character = FROM }
+		OR = {
+			FROM = { trait = houseless_dunmer }
+			AND = { trait = house_hlaalu FROM = { NOT = { trait = house_hlaalu } } }
+			AND = { trait = house_redoran FROM = { NOT = { trait = house_redoran } } }
+			AND = { trait = house_telvanni FROM = { NOT = { trait = house_telvanni } } }
+			AND = { trait = house_dres FROM = { NOT = { trait = house_dres } } }
+			AND = { trait = house_indoril FROM = { NOT = { trait = house_indoril } } }
+			AND = { trait = house_sadras FROM = { NOT = { trait = house_sadras } } }
+			AND = { trait = house_dagoth FROM = { NOT = { trait = house_dagoth } } }
+			AND = { trait = house_sul FROM = { NOT = { trait = house_sul } } }
+			AND = { trait = house_veloth FROM = { NOT = { trait = house_veloth } } }
+		}
+	}
+	additive_modifier = { 
+		value = -150
+		localisation_key = tooltip_great_house_death_disrespect
+		NOT = { character = FROM }
+		NOR = {
+			trait = house_telvanni
+			trait = house_dagoth
+			trait = necromancer
+			trait = briarheart
+			trait = undead
+			trait = lich
+			true_religion = daedra_namira
+			true_religion = king_of_worms_cult
+		}
+		FROM = {
+			OR = {
+				trait = necromancer
+				trait = briarheart
+				trait = undead
+				trait = lich
+				religion = daedra_namira
+				religion = king_of_worms_cult
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_great_house_vote_very_unfit
+		NOT = { character = FROM }
+		NOR = {
+			is_beast = yes
+			is_incapacitated = yes
+			is_batshit_crazy = yes
+			trait = known_lycan
+			trait = known_vampire
+			trait = known_vampire_benevolent
+		}
+		FROM = {
+			OR = {
+				is_beast = yes
+				is_incapacitated = yes
+				is_batshit_crazy = yes
+				trait = known_lycan
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -75
+		localisation_key = tooltip_great_house_vote_unfit
+		NOT = { character = FROM }
+		NOR = {
+			is_human = yes
+			trait = orsimer
+			is_tsaesci = yes
+			is_away = yes
+			is_mute = yes
+			is_total_bastard = yes
+			is_blinded_trigger = yes
+			is_rebel_leader_trigger = yes
+			trait = known_lycan_benevolent
+		}
+		FROM = {
+			OR = {
+				is_human = yes
+				trait = orsimer
+				is_tsaesci = yes
+				is_away = yes
+				is_mute = yes
+				is_total_bastard = yes
+				is_blinded_trigger = yes
+				is_rebel_leader_trigger = yes
+				trait = known_lycan_benevolent
+			}
+		}
+		FROM = {
+			NOR = {
+				is_beast = yes
+				is_incapacitated = yes
+				is_batshit_crazy = yes
+				trait = known_lycan
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -50
+		localisation_key = tooltip_great_house_vote_not_council
+		NOT = { character = FROM }
+		FROM = {
+			NOR = {
+				society_member_of = house_hlaalu_council
+				society_member_of = house_redoran_council
+				society_member_of = house_dres_council
+				society_member_of = house_telvanni_council
+				society_member_of = house_indoril_council
+				society_member_of = house_sadras_council
+				society_member_of = house_veloth_council
+				society_member_of = house_sul_council
+				society_member_of = house_dagoth_council
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_great_house_vote_traditional_dynasty
+		NOT = { character = FROM }
+		NOR = {
+			dynasty = 160002
+			dynasty = 160001
+			dynasty = 160005
+			dynasty = 160003
+			dynasty = 160004
+			dynasty = 160773
+			dynasty = 160777
+			dynasty = 160775
+			dynasty = 160662
+		}
+		OR = {
+			AND = { trait = house_hlaalu FROM = { dynasty = 160002 } }
+			AND = { trait = house_redoran FROM = { dynasty = 160001 } }
+			AND = { trait = house_telvanni FROM = { dynasty = 160005 } }
+			AND = { trait = house_dres FROM = { dynasty = 160003 } }
+			AND = { trait = house_indoril FROM = { dynasty = 160004 } }
+			AND = { trait = house_sadras FROM = { dynasty = 160773 } }
+			AND = { trait = house_dagoth FROM = { dynasty = 160777 } }
+			AND = { trait = house_sul FROM = { dynasty = 160775 } }
+			AND = { trait = house_veloth FROM = { dynasty = 160662 } }
+		}
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_great_house_vote_rank_1
+		NOT = { character = FROM }
+		FROM = {
+			society_rank == 1
+			OR = {
+				society_member_of = house_hlaalu_council
+				society_member_of = house_redoran_council
+				society_member_of = house_dres_council
+				society_member_of = house_telvanni_council
+				society_member_of = house_indoril_council
+				society_member_of = house_sadras_council
+				society_member_of = house_veloth_council
+				society_member_of = house_sul_council
+				society_member_of = house_dagoth_council
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_great_house_vote_rank_2
+		NOT = { character = FROM }
+		FROM = {
+			society_rank == 2
+			OR = {
+				society_member_of = house_hlaalu_council
+				society_member_of = house_redoran_council
+				society_member_of = house_dres_council
+				society_member_of = house_telvanni_council
+				society_member_of = house_indoril_council
+				society_member_of = house_sadras_council
+				society_member_of = house_veloth_council
+				society_member_of = house_sul_council
+				society_member_of = house_dagoth_council
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_great_house_vote_rank_2
+		NOT = { character = FROM }
+		FROM = {
+			society_rank == 3
+			OR = {
+				society_member_of = house_hlaalu_council
+				society_member_of = house_redoran_council
+				society_member_of = house_dres_council
+				society_member_of = house_telvanni_council
+				society_member_of = house_indoril_council
+				society_member_of = house_sadras_council
+				society_member_of = house_veloth_council
+				society_member_of = house_sul_council
+				society_member_of = house_dagoth_council
+			}
+		}
+	}
+}
+
+# House Hlaalu
+hlaalu_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_hlaalu_vote_negative
+		NOT = { character = FROM }
+		trait = house_hlaalu
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_hlaalu_vote_small
+		NOT = { character = FROM }
+		trait = house_hlaalu
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_hlaalu_vote_medium
+		NOT = { character = FROM }
+		trait = house_hlaalu
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_hlaalu_vote_large
+		NOT = { character = FROM }
+		trait = house_hlaalu
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				trait = agent_3
+				trait = agent_4
+				trait = agent_5
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_hlaalu_vote_max
+		NOT = { character = FROM }
+		trait = house_hlaalu
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+}
+
+# House Redoran
+redoran_values_score = {
+	additive_modifier = { 
+		value = -50
+		localisation_key = tooltip_house_redoran_vote_negative_warrior
+		NOT = { character = FROM }
+		trait = house_redoran
+		FROM = {
+			NOR = {
+				has_acceptable_fighters_specialisation = yes
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				trait = duelist
+				trait = equestrian
+				martial = 25
+				combat_rating = 30
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_redoran_vote_negative
+		NOT = { character = FROM }
+		trait = house_redoran
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_redoran_vote_small
+		NOT = { character = FROM }
+		trait = house_redoran
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_redoran_vote_medium
+		NOT = { character = FROM }
+		trait = house_redoran
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_redoran_vote_large
+		NOT = { character = FROM }
+		trait = house_redoran
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_redoran_vote_max
+		NOT = { character = FROM }
+		trait = house_redoran
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+}
+
+# House Dres
+dres_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_dres_vote_negative
+		NOT = { character = FROM }
+		trait = house_dres
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = envious
+				trait = proud
+				trait = greedy
+				trait = diligent
+				trait = content
+				trait = cruel
+				trait = slaver
+				#Lifestyles
+				trait = administrator
+				trait = architect
+				trait = gamer
+				trait = gardener
+				trait = hunter
+				trait = impaler
+				trait = saboteur
+				trait = smuggler
+				#Attribute
+				stewardship = 20
+				#Education
+				is_magistrate = yes
+				#Specialization
+				is_wayfarer = yes
+				is_acrobat = yes
+				is_scout = yes
+				is_healer = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_dres_vote_small
+		NOT = { character = FROM }
+		trait = house_dres
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = envious
+				trait = proud
+				trait = greedy
+				trait = diligent
+				trait = content
+				trait = cruel
+				trait = slaver
+				#Lifestyles
+				trait = administrator
+				trait = architect
+				trait = gamer
+				trait = gardener
+				trait = hunter
+				trait = impaler
+				trait = saboteur
+				trait = smuggler
+				#Attribute
+				stewardship = 20
+				#Education
+				is_magistrate = yes
+				#Specialization
+				is_wayfarer = yes
+				is_acrobat = yes
+				is_scout = yes
+				is_healer = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_dres_vote_medium
+		NOT = { character = FROM }
+		trait = house_dres
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = envious
+				trait = proud
+				trait = greedy
+				trait = diligent
+				trait = content
+				trait = cruel
+				trait = slaver
+				#Lifestyles
+				trait = administrator
+				trait = architect
+				trait = gamer
+				trait = gardener
+				trait = hunter
+				trait = impaler
+				trait = saboteur
+				trait = smuggler
+				#Attribute
+				stewardship = 20
+				#Education
+				is_magistrate = yes
+				#Specialization
+				is_wayfarer = yes
+				is_acrobat = yes
+				is_scout = yes
+				is_healer = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_dres_vote_large
+		NOT = { character = FROM }
+		trait = house_dres
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = envious
+				trait = proud
+				trait = greedy
+				trait = diligent
+				trait = content
+				trait = cruel
+				trait = slaver
+				#Lifestyles
+				trait = administrator
+				trait = architect
+				trait = gamer
+				trait = gardener
+				trait = hunter
+				trait = impaler
+				trait = saboteur
+				trait = smuggler
+				#Attribute
+				stewardship = 20
+				#Education
+				is_magistrate = yes
+				#Specialization
+				is_wayfarer = yes
+				is_acrobat = yes
+				is_scout = yes
+				is_healer = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_dres_vote_max
+		NOT = { character = FROM }
+		trait = house_dres
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = envious
+				trait = proud
+				trait = greedy
+				trait = diligent
+				trait = content
+				trait = cruel
+				trait = slaver
+				#Lifestyles
+				trait = administrator
+				trait = architect
+				trait = gamer
+				trait = gardener
+				trait = hunter
+				trait = impaler
+				trait = saboteur
+				trait = smuggler
+				#Attribute
+				stewardship = 20
+				#Education
+				is_magistrate = yes
+				#Specialization
+				is_wayfarer = yes
+				is_acrobat = yes
+				is_scout = yes
+				is_healer = yes
+			}
+		}
+	}
+}
+
+# House Indoril
+indoril_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_indoril_vote_negative
+		NOT = { character = FROM }
+		trait = house_indoril
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_indoril_vote_small
+		NOT = { character = FROM }
+		trait = house_indoril
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_indoril_vote_medium
+		NOT = { character = FROM }
+		trait = house_indoril
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_indoril_vote_large
+		NOT = { character = FROM }
+		trait = house_indoril
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_indoril_vote_max
+		NOT = { character = FROM }
+		trait = house_indoril
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+}
+
+# House Telvanni
+telvanni_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_telvanni_vote_negative_mage
+		NOT = { character = FROM }
+		trait = house_telvanni
+		FROM = {
+			NOR = {
+				is_mage = yes
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_witchhunter = yes
+				is_spellsword = yes
+				is_healer = yes
+				trait = magician
+				trait = necromancer
+				trait = alchemist
+				trait = mystic
+				learning = 25
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_telvanni_vote_negative
+		NOT = { character = FROM }
+		trait = house_telvanni
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_telvanni_vote_small
+		NOT = { character = FROM }
+		trait = house_telvanni
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_telvanni_vote_medium
+		NOT = { character = FROM }
+		trait = house_telvanni
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_telvanni_vote_large
+		NOT = { character = FROM }
+		trait = house_telvanni
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_telvanni_vote_max
+		NOT = { character = FROM }
+		trait = house_telvanni
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+}
+
+# House Sadras
+sadras_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_sadras_vote_negative
+		NOT = { character = FROM }
+		trait = house_sadras
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+			#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_sadras_vote_small
+		NOT = { character = FROM }
+		trait = house_sadras
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_sadras_vote_medium
+		NOT = { character = FROM }
+		trait = house_sadras
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_sadras_vote_large
+		NOT = { character = FROM }
+		trait = house_sadras
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_sadras_vote_max
+		NOT = { character = FROM }
+		trait = house_sadras
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = gregarious
+				trait = lustful
+				trait = greedy
+				trait = deceitful
+				trait = diligent
+				trait = patient
+				trait = paranoid
+				trait = charitable
+				#Lifestyles
+				trait = administrator
+				trait = engineer
+				trait = gambler
+				trait = hedonist
+				trait = seducer
+				trait = seductress
+				trait = saboteur
+				trait = schemer
+				trait = socializer
+				trait = smuggler
+				#Attribute
+				intrigue = 20
+				#Education
+				is_agent = yes
+				#Specialization
+				is_assassin = yes
+				is_thief = yes
+				is_witchhunter = yes
+				is_trader = yes
+			}
+		}
+	}
+}
+
+# House Sul
+sul_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_sul_vote_negative
+		NOT = { character = FROM }
+		trait = house_sul
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_sul_vote_small
+		NOT = { character = FROM }
+		trait = house_sul
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_sul_vote_medium
+		NOT = { character = FROM }
+		trait = house_sul
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_sul_vote_large
+		NOT = { character = FROM }
+		trait = house_sul
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_sul_vote_max
+		NOT = { character = FROM }
+		trait = house_sul
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = just
+				trait = brave
+				trait = humble
+				trait = diligent
+				trait = honest
+				trait = zealous
+				trait = patient
+				#Lifestyles
+				trait = adventurer
+				trait = blacksmith
+				trait = duelist
+				trait = equestrian
+				trait = gamer
+				trait = gladiator
+				trait = hunter
+				trait = strategist
+				#Attribute
+				martial = 20
+				#Education
+				is_warrior = yes
+				#Specialization
+				is_knight = yes
+				is_crusader = yes
+				is_barbarian = yes
+				is_rogue = yes
+			}
+		}
+	}
+}
+
+#House Veloth
+veloth_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_veloth_vote_negative
+		NOT = { character = FROM }
+		trait = house_veloth
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_veloth_vote_small
+		NOT = { character = FROM }
+		trait = house_veloth
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_veloth_vote_medium
+		NOT = { character = FROM }
+		trait = house_veloth
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_veloth_vote_large
+		NOT = { character = FROM }
+		trait = house_veloth
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_veloth_vote_max
+		NOT = { character = FROM }
+		trait = house_veloth
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = zealous
+				trait = proud
+				trait = charitable
+				trait = diligent
+				trait = patient
+				trait = brave
+				trait = temperate
+				#Lifestyles
+				trait = adventurer
+				trait = magician
+				trait = musician
+				trait = mystic
+				trait = painter
+				trait = scholar
+				trait = strategist
+				trait = theologian
+				#Attribute
+				diplomacy = 20
+				#Education
+				is_diplomat = yes
+				#Specialization
+				is_bard = yes
+				is_savant = yes
+				is_priest_education = yes
+				is_monk_education = yes
+			}
+		}
+	}
+}
+
+#House Dagoth
+dagoth_values_score = {
+	additive_modifier = { 
+		value = -100
+		localisation_key = tooltip_house_dagoth_vote_negative
+		NOT = { character = FROM }
+		trait = house_dagoth
+		FROM = {
+			calc_true_if = {
+				amount <= 1
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_house_dagoth_vote_small
+		NOT = { character = FROM }
+		trait = house_dagoth
+		FROM = {
+			calc_true_if = {
+				amount == 2
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_house_dagoth_vote_medium
+		NOT = { character = FROM }
+		trait = house_dagoth
+		FROM = {
+			calc_true_if = {
+				amount == 3
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 40
+		localisation_key = tooltip_house_dagoth_vote_large
+		NOT = { character = FROM }
+		trait = house_dagoth
+		FROM = {
+			calc_true_if = {
+				amount == 4
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_house_dagoth_vote_max
+		NOT = { character = FROM }
+		trait = house_dagoth
+		FROM = {
+			calc_true_if = {
+				amount == 5
+				#Personality
+				trait = ruthless
+				trait = proud
+				trait = deceitful
+				trait = envious
+				trait = paranoid
+				trait = ambitious
+				trait = cynical
+				trait = erudite
+				#Lifestyles
+				trait = alchemist
+				trait = magician
+				trait = architect
+				trait = engineer
+				trait = gardener
+				trait = mystic
+				trait = necromancer
+				trait = schemer
+				trait = scholar
+				#Attribute
+				learning = 20
+				#Education
+				is_mage = yes
+				#Specialization
+				is_battlemage = yes
+				is_sorcerer = yes
+				is_nightblade = yes
+				is_spellsword = yes
+			}
+		}
+	}
+}
+
+#Dragonblood
+succession_candidate_dragonblood_score = {
+	additive_modifier = { #Dragonborn, Dragonborn, by their honor is sworn...
+		value = 300
+		localisation_key = tooltip_feudal_elector_vote_dragonborn
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = dragonborn
+		}
+	}
+	additive_modifier = { #"So long as the Blood of the Dragon runs strong in her rulers, the glory of the Empire shall extend in unbroken years..."
+		value = 200
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = dragonborn_g_1
+		}
+	}
+	additive_modifier = { #"So long as the Blood of the Dragon runs strong in her rulers, the glory of the Empire shall extend in unbroken years..."
+		value = 80
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = dragonborn_g_2
+		}
+	}
+	additive_modifier = { #"So long as the Blood of the Dragon runs strong in her rulers, the glory of the Empire shall extend in unbroken years..."
+		value = 60
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = dragonborn_g_3
+		}
+	}
+	additive_modifier = { #"So long as the Blood of the Dragon runs strong in her rulers, the glory of the Empire shall extend in unbroken years..."
+		value = 40
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = dragonborn_g_4
+		}
+	}
+	additive_modifier = { #"So long as the Blood of the Dragon runs strong in her rulers, the glory of the Empire shall extend in unbroken years..."
+		value = 30
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = dragonborn_g_5
+		}
+	}
+	additive_modifier = { #"So long as the Blood of the Dragon runs strong in her rulers, the glory of the Empire shall extend in unbroken years..."
+		value = 20
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = dragonborn_descendant
+		}
+	}
+	additive_modifier = { #"So long as the Blood of the Dragon runs strong in her rulers, the glory of the Empire shall extend in unbroken years..."
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = {
+			is_divine_bloodline = yes
+			NOR = {
+				trait = dragonborn
+				trait = dragonborn_g_1
+				trait = dragonborn_g_2
+				trait = dragonborn_g_3
+				trait = dragonborn_g_4
+				trait = dragonborn_g_5
+				trait = dragonborn_descendant
+			}
+		}
+	}
+	additive_modifier = { #No Dragonblood = no thanks
+		value = -100
+		localisation_key = tooltip_feudal_elector_vote_no_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = {
+			NOR = {
+				is_dragonblood = yes
+				is_divine_bloodline = yes
+				trait = hero
+			}
+		}
+	}
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_dragonblood
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = {
+			is_divine_bloodline = yes
+			NOR = {
+				trait = dragonborn
+				trait = dragonborn_g_1
+				trait = dragonborn_g_2
+				trait = dragonborn_g_3
+				trait = dragonborn_g_4
+				trait = dragonborn_g_5
+				trait = dragonborn_descendant
+			}
+			trait = hero
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_hero
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = {
+			NOR = {
+				is_divine_bloodline = yes
+				trait = dragonborn
+				trait = dragonborn_g_1
+				trait = dragonborn_g_2
+				trait = dragonborn_g_3
+				trait = dragonborn_g_4
+				trait = dragonborn_g_5
+				trait = dragonborn_descendant
+			}
+			trait = hero
+		}
+	}
+}

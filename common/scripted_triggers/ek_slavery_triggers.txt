@@ -1,0 +1,99 @@
+is_slaving_culture = {
+	OR = {
+		culture = ayleid
+		culture = maormer
+		culture = dunmer
+		culture = kamal
+		culture = dwemer
+		culture_group = undead
+		culture_group = daedra
+		culture_group = sload
+	}
+}
+is_proslavery_culture = {
+	OR = {
+		culture = tsaesci
+		culture = quey
+		culture = altmer	#ESO establishes that they kept Goblin slaves, Skyrim establishes that they had Dunmer slaves.
+		culture = potun
+		culture = chimer
+		culture = ashlander
+		culture = yokudan
+		culture = crown		#ESO makes it seem like slavery is "legal" outside of the Forebear King's territory. Elaborating this to the Crowns and original Yokudans as being "proslavery" to differentiate a little between Crowns and Forebears (could also be an element of their internal conflict).
+		culture = reachmen 	#ESO establishes the Reachmen practiced slavery.
+		culture = falmer
+		culture = archein
+	}
+}
+is_antislavery_culture = {
+	OR = {
+		culture = colovian
+		culture = imperial
+		culture = nibenean
+		culture = nord
+		culture = atmoran
+		culture = skaal
+		culture = breton
+		culture = akaviri
+		culture = tangmo
+		culture = forebear
+		culture = lhotunic
+		culture = bosmer	#Not really sure about the Bosmer... Might as well have at least one antislavery mer culture though...
+		culture = orsimer
+		culture = lukiul
+		culture = sarpa
+		culture = naga
+		culture = agaceph
+		culture = paatru
+		culture_group = khajiit
+	}
+}
+
+
+province_has_slaves = {
+	has_province_modifier = province_has_slaves
+}
+
+province_is_enslaved = {
+	has_province_modifier = province_enslaved
+}
+
+culture_can_be_enslaved = {
+	NOR = {
+		culture_group = undead
+		culture_group = daedra
+		culture_group = sload_group
+	}
+}
+
+province_can_be_enslaved = {
+	culture_can_be_enslaved = yes
+	NOT = { province_is_enslaved = yes }
+}
+
+character_is_known_liberator = {
+	OR = {
+		trait = liberator
+		any_owned_bloodline = {
+			has_bloodline_flag = liberator_bloodline
+			bloodline_is_active_for = PREV
+		}
+	}
+}
+
+character_is_known_slaver = {
+	OR = {
+		trait = slaver
+		any_owned_bloodline = {
+			has_bloodline_flag = slaver_bloodline
+			bloodline_is_active_for = PREV
+		}
+	}
+}
+
+character_dabbles_in_slavery = {
+	OR = {
+		has_law = slavery_1
+		check_variable = { which = numeroussecretslaveraidsonargonia value = 1 }
+	}
+}

@@ -1,0 +1,688 @@
+#Special events for The Companions
+
+namespace = ekcompanions
+
+#A witch with a request...
+long_character_event = {
+	id = ekcompanions.10
+	desc = EKCompanions10
+	picture = GFX_evt_two_moon_aurora
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { has_global_flag = companions_are_werewolves }
+		is_in_society = yes
+		society_member_of = companions_tamriel
+		is_society_grandmaster = yes
+		has_any_quest = no
+		is_disease_immune = no
+		NOT = { has_character_flag = rejected_glenmoril }
+		NOT = { has_character_flag = lycan_disease }
+	}
+	
+	mean_time_to_happen = {
+		months = 180
+		
+		modifier = {
+			factor = 0.75
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.5
+			is_werewolf_true_religion = yes
+		}
+	}
+	
+	option = {
+		name = "EKCompanions10Accept"
+		society_quest_event = { id = ekcompanions.15 }
+	}
+	option = {
+		name = "EKCompanions10Decline"
+		set_character_flag = rejected_glenmoril
+	}
+}
+#Accept or decline the quest
+society_quest_event = {
+	id = ekcompanions.15
+	desc = EKCompanions15
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ACCEPT
+		ai_chance = {
+			factor = 1
+		}
+		set_quest = quest_companions_glenmoril
+		long_character_event = { id = ekcompanions.20 }
+	}
+	option = {
+		name = DECLINE
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+long_character_event = {
+	id = ekcompanions.20
+	desc = EKCompanions20
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKCompanions20Accept
+		if = {
+			limit = {
+				NOT = { combat_rating = 28 }
+			}
+			random_list = {
+				50 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				20 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				10 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 28
+				NOT = { combat_rating = 32 }
+			}
+			random_list = {
+				40 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				30 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				10 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 32
+				NOT = { combat_rating = 36 }
+			}
+			random_list = {
+				30 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				35 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				15 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 36
+				NOT = { combat_rating = 40 }
+			}
+			random_list = {
+				25 = { 
+					death = { death_reason = death_battle }
+				}
+				15 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				40 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				20 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 40
+				NOT = { combat_rating = 44 }
+			}
+			random_list = {
+				20 = { 
+					death = { death_reason = death_battle }
+				}
+				10 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				45 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				25 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 44
+				NOT = { combat_rating = 48 }
+			}
+			random_list = {
+				10 = { 
+					death = { death_reason = death_battle }
+				}
+				10 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				45 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				35 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 48
+				NOT = { combat_rating = 52 }
+			}
+			random_list = {
+				5 = { 
+					death = { death_reason = death_battle }
+				}
+				5 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				40 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				50 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 52
+				NOT = { combat_rating = 56 }
+			}
+			random_list = {
+				1 = { 
+					death = { death_reason = death_battle }
+				}
+				9 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				30 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				60 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 56
+				NOT = { combat_rating = 60 }
+			}
+			random_list = {
+				5 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				25 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				70 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 60
+				NOT = { combat_rating = 64 }
+			}
+			random_list = {
+				1 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = ekcompanions.25 }
+				}
+				19 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				80 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 64
+				NOT = { combat_rating = 68 }
+			}
+			random_list = {
+				10 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				90 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 68
+				NOT = { combat_rating = 72 }
+			}
+			random_list = {
+				5 = { 
+					add_trait = wounded
+					long_character_event = { id = ekcompanions.25 }
+				}
+				95 = { long_character_event = { id = ekcompanions.26 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 72
+			}
+			long_character_event = { id = ekcompanions.26 }
+		}
+	}
+}
+long_character_event = {
+	id = ekcompanions.25
+	desc = EKCompanions25
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions25Accept"
+		scaled_wealth = 1.5
+		clr_quest = quest_companions_glenmoril
+		long_character_event = { id = ekcompanions.30 }
+	}
+}
+long_character_event = {
+	id = ekcompanions.26
+	desc = EKCompanions26
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions26Accept"
+		scaled_wealth = 1.5
+		clr_quest = quest_companions_glenmoril
+		long_character_event = { id = ekcompanions.30 }
+	}
+}
+#A gift from Hircine
+long_character_event = {
+	id = ekcompanions.30
+	desc = EKCompanions30
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions30Accept"
+		long_character_event = { id = ekcompanions.35 }
+	}
+	option = {
+		name = "EKCompanions30Decline"
+		set_character_flag = rejected_glenmoril
+	}
+}
+#The Circle members can accept or decline, declining doesn't make them lose rank
+long_character_event = {
+	id = ekcompanions.35
+	desc = EKCompanions35
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions35OptA"
+		ai_chance = {
+			factor = 50
+		}
+		add_trait = lycan
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		clr_character_flag = lycan_level_1
+		clr_character_flag = lycan_level_2
+		clr_character_flag = lycan_level_3
+		clr_character_flag = lycan_level_4
+		clr_character_flag = lycan_level_5
+		clr_character_flag = lycan_level_6
+		clr_character_flag = lycan_level_7
+		clr_character_flag = lycan_level_8
+		clr_character_flag = lycan_level_9
+		set_character_flag = lycan_level_10
+		any_society_member = {
+			limit = {
+				society_member_of = companions_tamriel
+				society_rank == 3
+				is_society_grandmaster = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				is_undead = no
+			}
+			narrative_event = { id = ekcompanions.40 }
+		}
+	}
+	option = {
+		name = "EKCompanions35OptB"
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 0
+				OR = {
+					is_werewolf_religion = yes
+					is_werewolf_secret_religion = yes
+				}
+			}
+		}
+		add_trait = lycan
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		clr_character_flag = lycan_level_1
+		clr_character_flag = lycan_level_2
+		clr_character_flag = lycan_level_3
+		clr_character_flag = lycan_level_4
+		clr_character_flag = lycan_level_5
+		clr_character_flag = lycan_level_6
+		clr_character_flag = lycan_level_7
+		clr_character_flag = lycan_level_8
+		clr_character_flag = lycan_level_9
+		set_character_flag = lycan_level_10
+		set_character_flag = rejected_glenmoril
+	}
+	option = {
+		name = "EKCompanions35Decline"
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 0
+				OR = {
+					is_werewolf_religion = yes
+					is_werewolf_secret_religion = yes
+				}
+			}
+		}
+		add_trait = lycan
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		clr_character_flag = lycan_level_1
+		clr_character_flag = lycan_level_2
+		clr_character_flag = lycan_level_3
+		clr_character_flag = lycan_level_4
+		clr_character_flag = lycan_level_5
+		clr_character_flag = lycan_level_6
+		clr_character_flag = lycan_level_7
+		clr_character_flag = lycan_level_8
+		clr_character_flag = lycan_level_9
+		set_character_flag = lycan_level_10
+		set_character_flag = rejected_glenmoril
+		prestige = -50
+		piety = -50
+		death = { death_reason = death_suicide }
+	}
+}
+narrative_event = {
+	id = ekcompanions.40
+	desc = EKCompanions40
+	title = EKCompanions40Title
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = companions_are_werewolves
+	}
+	
+	option = {
+		name = "EKCompanions40OptA"
+		trigger = {
+			is_lycan = no
+		}
+		ai_chance = {
+			factor = 5
+		}
+		long_character_event = { id = ekcompanions.45 }
+	}
+	option = {
+		name = "EKCompanions40OptB" #If you're already a werewolf
+		trigger = {
+			is_lycan = yes
+		}
+		long_character_event = { id = ekcompanions.45 }
+	}
+	option = {
+		name = "EKCompanions40Decline"
+		trigger = {
+			is_lycan = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				OR = {
+					is_werewolf_religion = yes
+					is_werewolf_secret_religion = yes
+				}
+			}
+		}
+		set_character_flag = rejected_glenmoril
+	}
+}
+long_character_event = {
+	id = ekcompanions.45
+	desc = {
+		text = EKCompanions45A
+		trigger = {
+			is_lycan = no
+		}
+	}
+	desc = {
+		text = EKCompanions45B
+		trigger = {
+			is_lycan = yes
+		}
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions45Accept"
+		add_trait = lycan
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		clr_character_flag = lycan_level_1
+		clr_character_flag = lycan_level_2
+		clr_character_flag = lycan_level_3
+		clr_character_flag = lycan_level_4
+		clr_character_flag = lycan_level_5
+		clr_character_flag = lycan_level_6
+		clr_character_flag = lycan_level_7
+		clr_character_flag = lycan_level_8
+		clr_character_flag = lycan_level_9
+		set_character_flag = lycan_level_10
+	}
+}
+
+#Joining the Circle, post-Glenmoril
+
+#Circle/Harbinger gets rank request
+character_event = {
+	id = ekcompanions.80
+	desc = EKCompanions80
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions80Accept"
+		hidden_tooltip = {
+			FROM = {
+				long_character_event = { id = ekcompanions.85 }
+			}
+		}
+	}
+}
+#Applicant learns...
+long_character_event = {
+	id = ekcompanions.85
+	desc = {
+		text = EKCompanions85
+		trigger = {
+			is_disease_immune_except_lycan = no
+		}
+	}
+	desc = {
+		text = EKCompanions85Void
+		trigger = {
+			is_disease_immune_except_lycan = yes
+		}
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions85Accept"
+		trigger = {
+			is_disease_immune_except_lycan = no
+		}
+		ai_chance = {
+			factor = 15
+		}
+		long_character_event = { id = ekcompanions.90 }
+	}
+	option = {
+		name = "EKCompanions85Decline"
+		trigger = {
+			is_disease_immune_except_lycan = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				OR = {
+					is_werewolf_religion = yes
+					is_werewolf_secret_religion = yes
+				}
+			}
+		}
+		clr_character_flag = has_sent_request_to_rank_up
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = ekcompanions.96 }
+			}
+		}
+	}
+	option = {
+		name = "EKCompanions85Voided"
+		trigger = {
+			is_disease_immune_except_lycan = yes
+		}
+		add_character_modifier = {
+			name = companions_beast_blood_timer
+			months = 36
+			hidden = yes
+		}
+	}
+}
+#The ritual
+long_character_event = {
+	id = ekcompanions.90
+	desc = {
+		text = EKCompanions90A
+		trigger = {
+			is_lycan = no
+		}
+	}
+	desc = {
+		text = EKCompanions90B
+		trigger = {
+			is_lycan = yes
+		}
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions90Accept"
+		add_trait = lycan
+		society_rank_up = 1
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		clr_character_flag = lycan_level_1
+		clr_character_flag = lycan_level_2
+		clr_character_flag = lycan_level_3
+		clr_character_flag = lycan_level_4
+		clr_character_flag = lycan_level_5
+		clr_character_flag = lycan_level_6
+		clr_character_flag = lycan_level_7
+		clr_character_flag = lycan_level_8
+		clr_character_flag = lycan_level_9
+		set_character_flag = lycan_level_10
+		clr_character_flag = has_sent_request_to_rank_up
+		FROMFROM = {
+			character_event = { id = ekcompanions.95 }
+		}
+	}
+}
+#Patron gets feedback
+character_event = {
+	id = ekcompanions.95
+	desc = EKCompanions95
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions95Accept"
+	}
+}
+#Beast-Blood Declined
+character_event = {
+	id = ekcompanions.96
+	desc = EKCompanions96
+	picture = GFX_evt_courtiers_talking
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EKCompanions96Accept"
+		add_character_modifier = {
+			name = companions_beast_blood_timer
+			months = 36
+			hidden = yes
+		}
+	}
+}

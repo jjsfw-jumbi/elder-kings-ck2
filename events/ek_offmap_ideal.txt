@@ -1,0 +1,1100 @@
+# Offmap events unique to Ideal Masters offmap power
+# Written by jjsfw
+# Many events adapted from ek_offmap_events by Etienne(?)
+
+namespace = ideal_offmap
+
+# Lesser Undead Horde
+character_event = {
+	id = ideal_offmap.10
+	has_dlc = "Jade Dragon"
+    desc = ideal_offmap.10.desc
+	picture = GFX_evt_ideal_masters
+	
+	is_triggered_only = yes
+	hide_from = yes
+
+	immediate = {
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = PREV
+					owner = ROOT
+					troops = {
+						#light_infantry = { 800 800 }
+						#heavy_infantry = { 200 200 }
+						#archers = { 250 250 }
+						undead_troop = { 1875 1875 }
+					}
+					attrition = 0.1
+					earmark = ideal_boon_troops
+					# if ruler is in debt or heir is infidel, will disband and infest the capital.
+					#cannot_inherit = yes
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ideal_offmap.10.accept
+		hidden_tooltip = {
+			character_event = { id = ideal_offmap.11 days = 30 }
+		}
+		custom_tooltip = {
+			text = oblivion_undead_horde_lesser_arrived
+		}
+	}
+}
+
+# Check to make sure the army can still be held
+character_event = {
+	id = ideal_offmap.11
+	has_dlc = "Jade Dragon"
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_earmarked_regiments = ideal_boon_troops
+			}
+			if = {
+				limit = {
+					worships_ideal_masters = no
+				}
+				# disband - undead infest capital
+				character_event = { id = ideal_offmap.12 }
+			}
+			# soul favour requirement disabled for now, might reenable later if different controls are put in place
+			#else_if = {
+			#	limit = {
+			#		NOT = {
+			#			has_offmap_currency = { offmap = oblivion_ideal_masters value = 1 }
+			#		}
+			#	}
+			#	# disband peacefully
+			#	character_event = { id = ideal_offmap.13 }
+			#}
+			else = {
+				# check again in a month
+				character_event = { id = ideal_offmap.11 days = 30 }
+			}
+		}
+	}
+}
+
+# Inform that troops are infesting capital
+character_event = {
+	id = ideal_offmap.12
+	desc = ideal_offmap.12.desc
+	picture = GFX_evt_undead2
+
+	is_triggered_only = yes
+
+	immediate = {
+		disband_event_forces = ideal_boon_troops
+	}
+
+	option = {
+		name = ideal_offmap.12.accept
+		custom_tooltip = {
+			text = ideal_offmap.disband
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = undead_infestation
+				duration = 7300
+			}
+		}
+	}
+}
+
+# Out of Soul Favour - inform that Ideal Masters took back troops (favour requirement disabled for now)
+character_event = {
+	id = ideal_offmap.13
+	desc = ideal_offmap.13.desc
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	immediate = {
+		disband_event_forces = ideal_boon_troops
+	}
+
+	option = {
+		name = ideal_offmap.13.accept
+		custom_tooltip = {
+			text = ideal_offmap.disband
+		}
+	}
+}
+
+# Depopulation from offmap harvest
+character_event = {
+	id = ideal_offmap.100
+	has_dlc = "Jade Dragon"
+	#desc = ideal_offmap.100.desc
+	#picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_playable = yes
+	min_age = 16
+
+	trigger = {
+		has_character_modifier = ideal_offmap_harvest
+	}
+
+	immediate = {
+		if = { # in case the player converts away while still harvesting
+			limit = {
+				NOT = {
+					worships_ideal_masters = yes
+				}
+			}
+			remove_character_modifier = ideal_offmap_harvest
+			add_character_modifier = {
+				inherit = yes
+				name = ideal_offmap_harvest_dark_memory
+				duration = 3650
+			}
+			break = yes
+		}
+		any_demesne_province = {
+			# Soul update
+			ROOT = {
+				add_offmap_currency = {
+					offmap = oblivion_ideal_masters
+					value = 6 # 0.5/month
+				}
+			}
+			oblivion_ideal_masters = {
+				offmap_ruler = {
+					change_variable = {
+						which = offmap_souls
+						value = 6
+					}
+					change_variable = { which = souls_from_harvest value = 6 }
+				}
+			}
+			# Depop
+			random_list = {
+				10 = {
+					increase_depopulation_effect = yes
+				}
+				90 = {}
+			}
+		}
+		# Increase Ideal souls
+	}
+}
+
+########## Debt & Boon Revocation Events 150-199 ##########
+
+# Monthly debt handling
+character_event = {
+	id = ideal_offmap.150
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		# Still faithful
+		if = {
+			limit = {
+				worships_ideal_masters = yes
+			}
+			while = {
+				limit = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 1 }
+					check_variable = { which = ideal_soul_debt value > 0 }
+				}
+				add_offmap_currency = { offmap = oblivion_ideal_masters value = -1 }
+				subtract_variable = { which = ideal_soul_debt value = 1 }
+				oblivion_ideal_masters = {
+					offmap_ruler = {
+						change_variable = { which = souls_from_loan value = 1 }
+					}
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { which = ideal_soul_debt value > 0 }
+				}
+				character_event = { id = ideal_offmap.150 days = 30 }
+			}
+			else = {
+				clr_character_flag = ideal_debt
+				character_event = { id = ideal_offmap.151 }
+			}
+		}
+		# Converted away - consequences
+		else = {
+			if = {
+				limit = { # check again for debt in case some other effect remove it
+					check_variable = { which = ideal_soul_debt value > 0 }
+				}
+				set_variable = { which = defaulted_souls which = ideal_soul_debt } # debug counter
+				oblivion_ideal_masters = {
+					offmap_ruler = {
+						change_variable = { which = defaulted_souls which = ROOT }
+					}
+				}
+				if = {
+					limit = {
+						check_variable = { which = ideal_soul_debt value = 1250 }
+					}
+					character_event = { id = ideal_offmap.159 }
+				}
+				else_if = {
+					limit = {
+						check_variable = { which = ideal_soul_debt value = 750 }
+					}
+					character_event = { id = ideal_offmap.158 }
+				}
+				else_if = {
+					limit = {
+						check_variable = { which = ideal_soul_debt value = 500 }
+					}
+					character_event = { id = ideal_offmap.157 }
+				}
+				else_if = {
+					limit = {
+						check_variable = { which = ideal_soul_debt value = 250 }
+					}
+					character_event = { id = ideal_offmap.156 }
+				}
+				else = {
+					character_event = { id = ideal_offmap.155 }
+				}
+				set_variable = { which = ideal_soul_debt value = 0 }
+			}
+		}
+	}
+}
+
+# Debt repaid notification
+character_event = {
+	id = ideal_offmap.151
+	desc = ideal_offmap.151.desc
+	picture = GFX_evt_ideal_masters
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_offmap.151.accept
+	}
+}
+
+# Die while in debt - revoke boons
+character_event = {
+	id = ideal_offmap.152
+	desc = {
+		trigger = {
+			worships_ideal_masters = yes
+		}
+		text = ideal_offmap.152.desc.ideal
+	}
+	desc = {
+		trigger = {
+			worships_ideal_masters = no
+		}
+		text = ideal_offmap.152.desc.non_ideal
+	}
+	picture = GFX_evt_soul_cairn
+
+	is_triggered_only = yes
+
+	immediate = {
+		disband_event_forces = ideal_boon_troops
+		any_courtier_or_vassal = {
+			limit = {
+				has_character_flag = ideal_servant
+			}
+			death = {
+				death_reason = death_missing
+			}
+		}
+	}
+
+	option = {
+		name = ideal_offmap.152.accept
+		custom_tooltip = {
+			text = revoke_ideal_boons
+		}
+	}
+}
+
+# Successor does not worship the Masters - revoke boons
+character_event = {
+	id = ideal_offmap.153
+	desc = ideal_offmap.153.desc
+	picture = GFX_evt_soul_cairn
+
+	is_triggered_only = yes
+
+	immediate = {
+		disband_event_forces = ideal_boon_troops
+		any_courtier_or_vassal = {
+			limit = {
+				has_character_flag = ideal_servant
+			}
+			death = {
+				death_reason = death_missing
+			}
+		}
+	}
+
+	option = {
+		name = ideal_offmap.153.accept
+		custom_tooltip = {
+			text = revoke_ideal_boons
+		}
+	}
+}
+
+# Death checker
+character_event = {
+	id = ideal_offmap.154
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_playable = yes
+	has_dlc = "Jade Dragon"
+
+	trigger = {
+		worships_ideal_masters = yes
+	}
+
+	immediate = {
+		if = {
+			limit = { # safety check to make sure they're still in debt
+				check_variable = { which = ideal_soul_debt value > 0 }
+			}
+			set_variable = { which = unpaid_debtor_died which = ideal_soul_debt } # debug counter
+			oblivion_ideal_masters = {
+				offmap_ruler = {
+					change_variable = { which = unpaid_debtor_died which = ROOT }
+				}
+			}
+			current_heir = {
+				character_event = { id = ideal_offmap.152 days = 1 }
+				add_character_modifier = {
+					inherit = yes # stigma stays with your heir
+					name = ideal_offmap_harvest_dark_memory
+					duration = 3650
+				}
+			}	
+		}
+		else_if = {
+			limit = { # no boons for life-lovers
+				current_heir = {
+					worships_ideal_masters = no
+				}
+				OR = {
+					has_earmarked_regiments = ideal_boon_troops
+					any_courtier_or_vassal = {
+						has_character_flag = ideal_servant
+					}
+				}
+			}
+			current_heir = {
+				character_event = { id = ideal_offmap.153 days = 1 }
+			}
+		}
+	}
+}
+
+# Convert away while in debt - consequences
+# All add forced soul drain modifier
+
+# 000 - 250 Undead infestation in capital
+character_event = {
+	id = ideal_offmap.155
+	desc = ideal_offmap.155.desc
+	picture = GFX_evt_undead2
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_offmap.155.accept
+		add_character_modifier = {
+			name = defaulted_drain_minor
+			duration = 7500
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = undead_infestation
+				duration = 7300
+			}
+		}
+	}
+}
+
+# 250 - 499 Undead infestation in demesne
+character_event = {
+	id = ideal_offmap.156
+	desc = ideal_offmap.156.desc
+	picture = GFX_evt_undead2
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_offmap.156.accept
+		add_character_modifier = {
+			name = defaulted_drain_minor
+			duration = 15000
+		}
+		custom_tooltip = {
+			text = ideal_offmap.156.info
+			hidden_tooltip = {
+				any_demesne_province = {
+					add_province_modifier = {
+						name = undead_infestation
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+}
+
+# 500 - 749 Undead infestation in realm
+character_event = {
+	id = ideal_offmap.157
+	desc = ideal_offmap.157.desc
+	picture = GFX_evt_undead2
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_offmap.157.accept
+		add_character_modifier = {
+			name = defaulted_drain_minor
+			duration = 22500
+		}
+		custom_tooltip = {
+			text = ideal_offmap.157.info
+			hidden_tooltip = {
+				any_realm_province = {
+					add_province_modifier = {
+						name = undead_infestation
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+}
+
+# 750 - 1249  Undead infestation in realm, necromancer cabal in capital
+character_event = {
+	id = ideal_offmap.158
+	desc = ideal_offmap.158.desc
+	picture = GFX_evt_undead2
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_offmap.158.accept
+		add_character_modifier = {
+			name = defaulted_drain_minor
+			duration = 37500
+		}
+		capital_scope = {
+			add_province_modifier = {
+				name = cabals
+				duration = 7300
+			}
+		}
+		custom_tooltip = {
+			text = ideal_offmap.158.info
+			hidden_tooltip = {
+				any_realm_province = {
+					add_province_modifier = {
+						name = undead_infestation
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+}
+
+# 1250+ All above, major soul drain
+character_event = {
+	id = ideal_offmap.159
+	desc = ideal_offmap.159.desc
+	picture = GFX_evt_undead2
+
+	is_triggered_only = yes
+
+	option = {
+		name = ideal_offmap.159.accept
+		add_character_modifier = {
+			name = defaulted_drain_major
+			duration = 37500
+		}
+		custom_tooltip = {
+			text = ideal_offmap.159.info
+			hidden_tooltip = {
+				any_realm_province = {
+					add_province_modifier = {
+						name = undead_infestation
+						duration = 7300
+					}
+				}
+				capital_scope = {
+					add_province_modifier = {
+						name = cabals
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+}
+
+########## Ideal Soul Stock Management 200-249 ##########
+
+# Starting soul count
+character_event = {
+	id = ideal_offmap.200
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = ideal_initial_souls
+		}
+	}
+
+	immediate = {
+		oblivion_ideal_masters = {
+			offmap_ruler = {
+				set_variable = { which = offmap_souls value = 1000 }
+			}
+		}
+		set_global_flag = ideal_initial_souls
+	}
+}
+
+# Souls gained on worshipper death
+character_event = {
+	id = ideal_offmap.201
+	has_dlc = "Jade Dragon"
+
+	is_triggered_only = yes
+	hide_window = yes
+	only_playable = yes # "courtiers have weak souls" -the ideal masters, probably
+
+	religion = ideal_masters # add in secret worshippers too?
+	min_age = 16 # only adults
+
+	trigger = {
+		NOT = {
+			trait = undead # no souls
+		}
+	}
+
+	immediate = {
+		# sum character attributes
+		export_to_variable = { which = s_martial value = martial }
+		export_to_variable = { which = s_diplomacy value = diplomacy }
+		export_to_variable = { which = s_stewardship value = stewardship }
+		export_to_variable = { which = s_learning value = learning }
+		export_to_variable = { which = s_intrigue value = intrigue }
+		export_to_variable = { which = s_piety value = piety }
+		divide_variable = { which = s_piety value = 10 }
+
+		set_variable = { which = offmap_souls value = 0 }
+		change_variable = { which = offmap_souls which = s_diplomacy }
+		change_variable = { which = offmap_souls which = s_martial }
+		change_variable = { which = offmap_souls which = s_stewardship }
+		change_variable = { which = offmap_souls which = s_intrigue }
+		change_variable = { which = offmap_souls which = s_learning }
+		change_variable = { which = offmap_souls which = s_piety }
+		set_variable = { which = souls_from_death which = offmap_souls }
+		oblivion_ideal_masters = {
+			offmap_ruler = {
+				change_variable = { which = offmap_souls which = ROOT }
+				change_variable = { which = souls_from_death which = ROOT }
+			}
+		}
+	}
+}
+
+########## Ideal Courtiers 250-299 ##########
+
+# Ideal General
+character_event = {
+	id = ideal_offmap.250
+	has_dlc = "Jade Dragon"
+	desc = ideal_offmap.250.desc
+	picture = GFX_evt_soul_cairn
+
+	hide_from = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			# random undead general
+			100 = { 
+				create_random_soldier = {
+					age = 800
+					immortal_age = 100
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 12
+					}
+					trait = undead
+				}
+			}
+			# Harald, Nordic King - disabled as he would likely be in Sovngarde
+			#1 = { 
+			#	create_character = {
+			#		age = 3257
+			#		immortal_age = 100
+			#		name = "Lord Harald"
+			#		dynasty = NONE
+			#		religion = ideal_masters
+			#		culture = outsider
+			#		random_traits = yes
+			#		attributes = {
+			#			martial = 15
+			#		}
+			#		trait = veteran_leader_5
+			#		trait = warrior_5
+			#		trait = barbarian_3 # Nordic emperor
+			#		trait = undead
+			#		flag = ideal_easter_egg_courtier
+			#	}
+			#}
+			# Eplear, First Camoran
+			1 = { 
+				create_character = {
+					age = 3370
+					immortal_age = 100
+					name = "Eplear Camoran"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = wayfarer_3 # Peaceful ruler
+					trait = undead
+					trait = kind
+					trait = trickster_3
+					trait = jungle_terrain_leader
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Tharhan the Mutilant, possibly Tharanus Ye Redde-Hand
+			1 = { 
+				create_character = {
+					age = 3163
+					immortal_age = 100
+					name = "Tharhan the Mutilant"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = priest_3 # Cleric for Ayleids
+					trait = undead
+					trait = holy_warrior
+					trait = aggressive_leader_3
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Aiden Direnni, defender of Altmer High Rock
+			1 = { 
+				create_character = {
+					age = 3370
+					immortal_age = 100
+					name = "Aiden Direnni"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = knight_3 # Great general
+					trait = undead
+					trait = defensive_leader_3
+					trait = mountain_terrain_leader
+					trait = unyielding_leader
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# King Thagore of Daggerfall
+			1 = { 
+				create_character = {
+					age = 2801
+					immortal_age = 100
+					name = "Thagore of Daggerfall"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = knight_3 # Great general
+					trait = undead
+					trait = rough_terrain_leader
+					trait = inspiring_leader_3
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Mansel Sesnit, Elden Yokeda
+			1 = { 
+				create_character = {
+					age = 2801
+					immortal_age = 100
+					name = "Mansel Sesnit"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = swordsinger_3 # Yokudan
+					trait = undead
+					trait = desert_terrain_leader
+					trait = lead_from_fore
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Randic Torn, Elden Yokeda
+			1 = { 
+				create_character = {
+					age = 2793
+					immortal_age = 100
+					name = "Randic Torn"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = swordsinger_3 # Yokudan
+					trait = undead
+					trait = lead_from_rear
+					trait = organizer_3
+					trait = desert_terrain_leader
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Frandar Hunding, master sword-singer
+			1 = { 
+				create_character = {
+					age = 2650
+					immortal_age = 100
+					name = "Frandar Hunding"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = ansei_3 # Yokudan
+					trait = undead
+					trait = inspiring_leader_3
+					trait = lead_from_fore
+					trait = desert_terrain_leader
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Divad Hunding, master sword-singer
+			1 = { 
+				create_character = {
+					age = 2610
+					immortal_age = 100
+					name = "Divad Hunding"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = ansei_3 # Yokudan
+					trait = undead
+					trait = inspiring_leader_3
+					trait = lead_from_fore
+					trait = desert_terrain_leader
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Gaiden Shinji, redguard blademaster
+			1 = { 
+				create_character = {
+					age = 2462
+					immortal_age = 100
+					name = "Gaiden Shinji"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = assassin_3 # ninja?
+					trait = undead
+					trait = lead_from_fore
+					trait=  inspiring_leader_3
+					trait = light_foot_leader_3
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Red Bramman, argonian pirate
+			1 = { 
+				create_character = {
+					age = 2357
+					immortal_age = 100
+					name = "Red Bramman"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = thief_3 # Pirate
+					trait = undead
+					trait = pirate
+					trait = trickster_3
+					trait = light_foot_leader_3
+					trait = swamp_terrain_leader
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Ceyran Rolanyil, ayleid warlord
+			1 = { 
+				create_character = {
+					age = 3370
+					immortal_age = 100
+					name = "Ceyran Rolanyil"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = battlemage_3
+					trait = undead
+					trait = jungle_terrain_leader
+					trait = aggressive_leader_3
+					flag = ideal_easter_egg_courtier
+				}
+			}
+			# Darloc Brae, khajiit warlord
+			1 = { 
+				create_character = {
+					age = 2949
+					immortal_age = 100
+					name = "Darloc Brae"
+					dynasty = NONE
+					religion = ideal_masters
+					culture = outsider
+					random_traits = yes
+					attributes = {
+						martial = 15
+					}
+					trait = veteran_leader_5
+					trait = warrior_5
+					trait = crusader_3
+					trait = undead
+					trait = desert_terrain_leader
+					trait = aggressive_leader_3
+					flag = ideal_easter_egg_courtier
+				}
+			}
+		}
+		new_character = {
+			save_event_target_as = ideal_servant
+			#assign_birthsign = yes
+			if = {
+				limit = {
+					NOT = {
+						has_character_flag = ideal_easter_egg_courtier
+					}
+				}
+				remove_trait = warrior_1
+				remove_trait = warrior_2
+				remove_trait = warrior_3
+				remove_trait = warrior_4
+				remove_trait = warrior_5
+				random_list = {
+					60 = {
+						add_trait = warrior_3
+					}
+					40 = {
+						add_trait = warrior_4
+					}
+				}
+				random_list = {
+					60 = {
+						add_trait = veteran_leader_2
+					}
+					60 = {
+						add_trait = veteran_leader_3
+					}
+					40 = {
+						add_trait = veteran_leader_4
+					}
+					20 = {
+						add_trait = veteran_leader_5
+					}
+				}
+			}
+			clr_character_flag = ideal_easter_egg_courtier
+			set_character_flag = ideal_servant
+			opinion = {
+				modifier = opinion_bound_ideal
+				who = ROOT
+				years = 1000
+			}
+			character_event = { id = ideal_offmap.251 days = 30 } # check to make sure liege is still valid
+		}
+	}
+
+	option = {
+		name = ideal_offmap.250.accept
+	}
+}
+
+# Check to make sure that courtiers will still serve - ROOT is the courtier (in case court changes)
+character_event = {
+	id = ideal_offmap.251
+	has_dlc = "Jade Dragon"
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				liege = {
+					worships_ideal_masters = no
+				}
+			}
+			death = {
+				death_reason = death_missing
+			}
+		}
+		else = {
+			character_event = { id = ideal_offmap.251 days = 30 }
+		}
+	}
+}
+
+########## DEBUG 1000+ ##########
+
+# DEBUG - reset offmap souls to 0
+character_event = {
+	id = ideal_offmap.1000
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		oblivion_ideal_masters = {
+			offmap_ruler = {
+				set_variable = { which = offmap_souls value = 0 }
+			}
+		}
+	}
+}
+
+# DEBUG - add 250 offmap souls
+character_event = {
+	id = ideal_offmap.1001
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		oblivion_ideal_masters = {
+			offmap_ruler = {
+				change_variable = { which = offmap_souls value = 250 }
+			}
+		}
+	}
+}
+
+# DEBUG - subtract 250 debt
+character_event = {
+	id = ideal_offmap.1002
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		subtract_variable = { which = ideal_soul_debt value = 250 }
+	}
+}
+
+# DEBUG - subtract 50 debt
+character_event = {
+	id = ideal_offmap.1003
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		subtract_variable = { which = ideal_soul_debt value = 50 }
+	}
+}
+
+# DEBUG - subtract 10 debt
+character_event = {
+	id = ideal_offmap.1004
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		subtract_variable = { which = ideal_soul_debt value = 10 }
+	}
+}

@@ -1,0 +1,199 @@
+#Personal retainers of a Dunmer ruler responsible for hunting criminals, fighting against rivals, etc.
+title_lawman = {
+	dignity = 0.075
+	grant_limit = 4
+	opinion_effect = 5
+	
+	is_unique = yes
+	
+	monthly_salary = 0.025
+	monthly_prestige = 0.05
+	
+	allowed_to_hold = {
+		NOT = { 
+			primary_title = { temporary = yes } 
+		}
+		is_adult = yes
+		NOT = { trait = incapable }
+		NOR = {
+			society_member_of = house_dres_council
+			society_member_of = house_hlaalu_council
+			society_member_of = house_indoril_council
+			society_member_of = house_redoran_council
+			society_member_of = house_telvanni_council
+			society_member_of = house_sadras_council
+			society_member_of = house_dagoth_council
+			society_member_of = house_veloth_council
+			society_member_of = house_sul_council
+		}
+	}
+	allowed_to_grant = {
+		OR = {
+			society_member_of = house_dres_council
+			society_member_of = house_hlaalu_council
+			society_member_of = house_indoril_council
+			society_member_of = house_redoran_council
+			society_member_of = house_telvanni_council
+			society_member_of = house_sadras_council
+			society_member_of = house_dagoth_council
+			society_member_of = house_veloth_council
+			society_member_of = house_sul_council
+			has_landed_title = k_hlaalu
+			has_landed_title = d_hlaalu
+			has_landed_title = k_indoril
+			has_landed_title = d_indoril
+			has_landed_title = k_dres
+			has_landed_title = d_dres
+			has_landed_title = k_redoran
+			has_landed_title = d_redoran
+			has_landed_title = k_telvanni
+			has_landed_title = d_telvanni
+			has_landed_title = k_sul
+			has_landed_title = d_sul
+			has_landed_title = k_sadras
+			has_landed_title = d_sadras
+			has_landed_title = k_dagoth
+			has_landed_title = d_dagoth
+			has_landed_title = k_veloth
+			has_landed_title = d_veloth
+		}
+	}
+	
+	gain_effect = { 
+	}
+	lose_effect = { 
+	}
+	
+	message = no
+}
+
+#The personal speaker of a particular Dunmer ruler; traditionally but not exclusively used quite prominently by the Telvanni
+title_mouth = {
+	dignity = 0.15
+	grant_limit = 1
+	opinion_effect = 15
+	message = yes
+	is_high_prio = yes
+	
+	is_unique = yes
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.20
+	
+	allowed_to_hold = {
+		NOT = { 
+			primary_title = { temporary = yes }
+			primary_title = { higher_tier_than = COUNT }
+		}
+		ai = yes
+		is_adult = yes
+		is_theocracy = no
+		NOT = { trait = incapable }
+		OR = {
+			AND = {
+				trait = house_hlaalu
+				liege = { trait = house_hlaalu }
+			}
+			AND = {
+				trait = house_redoran
+				liege = { trait = house_redoran }
+			}
+			AND = {
+				trait = house_telvanni
+				liege = { trait = house_telvanni }
+			}
+			AND = {
+				trait = house_dres
+				liege = { trait = house_dres }
+			}
+			AND = {
+				trait = house_indoril
+				liege = { trait = house_indoril }
+			}
+			AND = {
+				trait = house_sadras
+				liege = { trait = house_sadras }
+			}
+			AND = {
+				trait = house_sul
+				liege = { trait = house_sul }
+			}
+			AND = {
+				trait = house_veloth
+				liege = { trait = house_veloth }
+			}
+			AND = {
+				trait = house_dagoth
+				liege = { trait = house_dagoth }
+			}
+		}
+	}
+	
+	allowed_to_grant = {
+		OR = {
+			AND = {
+				OR = {
+					society_member_of = house_dres_council
+					society_member_of = house_hlaalu_council
+					society_member_of = house_indoril_council
+					society_member_of = house_redoran_council
+					society_member_of = house_telvanni_council
+					society_member_of = house_sadras_council
+					society_member_of = house_dagoth_council
+					society_member_of = house_veloth_council
+					society_member_of = house_sul_council
+				}
+				society_rank >= 2
+			}
+			has_landed_title = k_hlaalu
+			has_landed_title = d_hlaalu
+			has_landed_title = k_indoril
+			has_landed_title = d_indoril
+			has_landed_title = k_dres
+			has_landed_title = d_dres
+			has_landed_title = k_redoran
+			has_landed_title = d_redoran
+			has_landed_title = k_telvanni
+			has_landed_title = d_telvanni
+			has_landed_title = k_sul
+			has_landed_title = d_sul
+			has_landed_title = k_sadras
+			has_landed_title = d_sadras
+			has_landed_title = k_dagoth
+			has_landed_title = d_dagoth
+			has_landed_title = k_veloth
+			has_landed_title = d_veloth
+		}
+	}
+	
+	revoke_trigger = {
+		liege = {
+			is_incapacitated = no
+		}
+	}
+	
+	gain_effect = {	
+		character_event = { id = ekgreathouses.95 days = 1 }
+	}
+	lose_effect = { 
+		remove_special_character_title = mouth
+		if = { 
+			limit = { has_character_flag = mouth_in_council } 
+			character_event = { id = ekgreathouses.96 days = 1 }
+		}
+	}
+	retire_effect = {
+		remove_special_character_title = mouth
+		if = { 
+			limit = { has_character_flag = mouth_in_council } 
+			character_event = { id = ekgreathouses.96 days = 1 }
+		}
+	}
+	death_effect = {
+		remove_special_character_title = mouth
+		if = { 
+			limit = { has_character_flag = mouth_in_council } 
+			character_event = { id = ekgreathouses.100 }
+		}
+	}
+}

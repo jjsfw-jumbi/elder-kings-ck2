@@ -1,0 +1,109 @@
+decisions = {
+	#Close Submenus
+	close_submenu = {
+		is_high_prio = yes
+		potential = {
+			has_submenu_open = yes
+			NOT = { is_in_marketplace_shop = yes }
+			NOT = { has_character_flag = spellbook_open }
+		}
+		allow = {}
+		effect = {
+			close_submenu = yes
+		}
+		ai_will_do = { factor = 0 }
+		
+	}
+	#Open Submenus
+	open_employment = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			has_submenu_open = no
+		}
+		allow = {}
+		effect = { set_character_flag = employment_open }
+		ai_will_do = { factor = 0 }
+		
+	}
+	open_title = { #Ruler decisions - abdication, abandoning claims, changing government types, patron selection, etc. Might put empire formation here too? Dunno. -Ev.
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			has_submenu_open = no
+		}
+		allow = {}
+		effect = { set_character_flag = title_open }
+		ai_will_do = { factor = 0 }
+		
+	}
+	open_society = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			has_submenu_open = no
+			is_in_society = yes
+		}
+		allow = {}
+		effect = { set_character_flag = society_open }
+		ai_will_do = { factor = 0 }
+		
+	}
+	open_marketplace = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			has_submenu_open = no
+		}
+		allow = {}
+		effect = { set_character_flag = marketplace_open }
+		ai_will_do = { factor = 0 }
+		
+	}
+	open_adventure = { #Adventuring - Sub of Market
+		ai_check_interval = 6000
+		potential = {
+			has_character_flag = evtestadventuring #Not ready yet! :)
+			ai = no
+			has_character_flag = marketplace_open
+		}
+		allow = {}
+		effect = {
+			clr_character_flag = marketplace_open
+			set_character_flag = adventuring_open
+		}
+		ai_will_do = { factor = 0 }
+		
+	}
+	open_alchemist = { #Visit Apothecary - Sub of market.
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			has_character_flag = marketplace_open
+		}
+		allow = {
+			is_adult = yes
+		}
+		effect = {
+			clr_character_flag = marketplace_open
+			set_character_flag = alchemist_open
+		}
+		ai_will_do = { factor = 0 }
+		
+	}
+	open_supernatural = { # Supernatural decisions - Lycans & Vampires
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			has_submenu_open = no
+			OR = {
+				trait = vampire
+				trait = lycan
+			}
+		}
+		allow = {}
+		effect = { set_character_flag = supernatural_open }
+		ai_will_do = { factor = 0 }
+		
+	}
+}

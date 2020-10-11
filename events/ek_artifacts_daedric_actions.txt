@@ -1,0 +1,769 @@
+namespace = ekartifactdaedra
+
+#Manipulating the Oghma Infinium
+character_event = {
+	id = ekartifactdaedra.0
+	title = ekartifactdaedra.0.t #Manipulating the Oghma Infinium
+	desc = ekartifactdaedra.0.d #The Oghma Infinium sits before you. It seems to shimmer and pulsate with swirling currents of magickal energy. Thus far you have read only small excerpts, granting you limited pieces of the Oghma's power but you have the choice of absorbing the Oghma's knowledge and power in it's entirity. Doing so will "destroy" the artifact but grant you near godlike powers.
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekartifactdaedra.0.o1a #I will unlock all of it's secrets and become a God in my own right!
+		trigger = {
+			NOT = { has_dlc = "Jade Dragon" }
+		}
+		unsafe_destroy_artifact = book_oghma_infinium
+		clr_global_flag = oghma_infinium_granted
+		custom_tooltip = {
+			text = ekartifactdaedra.0.o1tt #Black tentacle like strands of cold energy reach forth from the book, worming their way into your mind.
+			hidden_tooltip = {
+				if = { 
+					limit = { ai = no } 
+					character_event = { id = ekartifactdaedra.1 }
+				}
+				if = { 
+					limit = { ai = yes } 
+					character_event = { id = ekartifactdaedra.5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ekartifactdaedra.0.o1b #I will unlock all of it's secrets and become a God in my own right!
+		trigger = {
+			has_dlc = "Jade Dragon"
+		}
+		oblivion_hermaeus = {
+			offmap_ruler = {
+				save_event_target_as = ek_artifact_return_hermaeus
+			}
+		}
+		random_artifact = {
+			limit = { artifact_type = book_oghma_infinium }
+			transfer_artifact = {
+				from = ROOT
+				to = event_target:ek_artifact_return_hermaeus
+			}
+		}
+		custom_tooltip = {
+			text = ekartifactdaedra.0.o1tt #Black tentacle like strands of cold energy reach forth from the book, worming their way into your mind.
+			hidden_tooltip = {
+				if = { 
+					limit = { ai = no } 
+					character_event = { id = ekartifactdaedra.1 }
+				}
+				if = { 
+					limit = { ai = yes } 
+					character_event = { id = ekartifactdaedra.5 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ekartifactdaedra.0.o2 #I must restrain myself, the Oghma Infinium is too precious to be lost.
+	}
+}
+character_event = {
+	id = ekartifactdaedra.1
+	title = ekartifactdaedra.0.t #Manipulating the Oghma Infinium
+	desc = ekartifactdaedra.1.d1new
+	# desc = {
+		# text = ekartifactdaedra.1.d1 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant wakes you from your unconcious state, sprawled and drooling as you were upon the hard floor.\nAs you take to your feet, you feel renewed, strong, powerful. All the knowledge of a thousand worlds flows freely in your mind, and you look upon the world around you for what it really is, an illusion, a forgery. It is but a game, and now you are the player.
+		# trigger = { OR = { has_character_flag = oghma_demigod_outcome has_character_flag = oghma_good_outcome } }
+	# }
+	# desc = {
+		# text = ekartifactdaedra.1.d2 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant finds your corpse, foamed drool oozing from your mouth and a foul smelling grey-brown liquid seeping from your nose and ears. Your mind was incapable of containing all that the Oghma Infinium had to share.
+		# trigger = { has_character_flag = oghma_reallybad_outcome }
+	# }
+	# desc = {
+		# text = ekartifactdaedra.1.d3 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant find gibbering and drooling in the corner about "Crusaders", "Paradoxes" and someone called "Todd the Liar". Unfortunately it seems the Oghma Infinium has permanently destroyed you, whatever secrets it shared are sadly lost somewhere in that shattered mind.
+		# trigger = { has_character_flag = oghma_bad_outcome }
+	# }
+	# desc = {
+		# text = ekartifactdaedra.1.d3 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant finds you aggressively conversing with yourself in a mirror. Though the Oghma Infinium has shared it's knowledge and power with you it has also broken your mind.
+		# trigger = { has_character_flag = oghma_crazy_outcome }
+	# }
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	# immediate = {
+		# random_list = {
+			# 7 = {
+				# modifier = { factor = 1.25 trait = dragonborn true_religion = daedra_hermaeus }
+				# set_character_flag = oghma_demigod_outcome
+			# }
+			# 25 = {
+				# modifier = { factor = 1.25 is_dragonblood = yes true_religion = daedra_hermaeus }
+				# modifier = { factor = 1.25 OR = { trait = quick trait = genius trait = perceptive } }
+				# modifier = { factor = 1.25 trait = erudite }
+				# modifier = { factor = 1.25 trait = scholar }
+				# set_character_flag = oghma_good_outcome
+			# }
+			# 29 = {
+				# modifier = { factor = 2.0 NOR = { true_religion = daedra_hermaeus is_dragonblood = yes } }
+				# modifier = { factor = 1.25 OR = { trait = quick trait = genius trait = perceptive } }
+				# modifier = { factor = 1.25 trait = erudite }
+				# modifier = { factor = 1.25 trait = scholar }
+				# set_character_flag = oghma_crazy_outcome
+			# }
+			# 22 = {
+				# modifier = { factor = 2.0 NOR = { true_religion = daedra_hermaeus is_dragonblood = yes } }
+				# modifier = { factor = 1.25 OR = { trait = quick trait = genius trait = perceptive } }
+				# set_character_flag = oghma_bad_outcome
+			# }
+			# 17 = {
+				# modifier = { factor = 2.0 NOR = { true_religion = daedra_hermaeus is_dragonblood = yes } }
+				# modifier = { factor = 1.25 trait = inbred }
+				# modifier = { factor = 1.5 trait = imbecile }
+				# modifier = { factor = 1.25 trait = slow }
+				# modifier = { factor = 0.75 trait = erudite }
+				# modifier = { factor = 0.75 trait = scholar }
+				# set_character_flag = oghma_reallybad_outcome
+			# }
+		# }
+	# }
+	
+	option = { #The Path of Guile!
+		name = ekartifactdaedra.PathOfGuile
+		random = {
+			chance = 20
+			custom_tooltip = {
+				text = forbiddenknowledge
+				hidden_tooltip = { add_trait_lunatic_effect = yes }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					is_diplomat = no
+					trait = diplomat_1
+				}
+			}
+			clear_education_trait = yes
+			add_trait = diplomat_2
+			change_diplomacy = 3
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = diplomat_2
+			}
+			clear_education_trait = yes
+			add_trait = diplomat_3
+			change_diplomacy = 2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = diplomat_3
+			}
+			clear_education_trait = yes
+			add_trait = diplomat_4
+			change_diplomacy = 1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = diplomat_4
+			}
+			clear_education_trait = yes
+			add_trait = diplomat_5
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = diplomat_5
+			}
+			change_diplomacy = 3
+			break = yes
+		}
+	}
+	option = { #The Path of Might!
+		name = ekartifactdaedra.PathOfMight
+		random = {
+			chance = 20
+			custom_tooltip = {
+				text = forbiddenknowledge
+				hidden_tooltip = { add_trait_lunatic_effect = yes }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					is_warrior = no
+					trait = warrior_1
+				}
+			}
+			clear_education_trait = yes
+			add_trait = warrior_2
+			change_martial = 3
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = warrior_2
+			}
+			clear_education_trait = yes
+			add_trait = warrior_3
+			change_martial = 2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = warrior_3
+			}
+			clear_education_trait = yes
+			add_trait = warrior_4
+			change_martial = 1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = warrior_4
+			}
+			clear_education_trait = yes
+			add_trait = warrior_5
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = warrior_5
+			}
+			change_martial = 3
+			break = yes
+		}
+	}
+	option = { #The Path of Wealth!
+		name = ekartifactdaedra.PathOfWealth
+		random = {
+			chance = 20
+			custom_tooltip = {
+				text = forbiddenknowledge
+				hidden_tooltip = { add_trait_lunatic_effect = yes }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					is_magistrate = no
+					trait = magistrate_1
+				}
+			}
+			clear_education_trait = yes
+			add_trait = magistrate_2
+			change_stewardship = 3
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = magistrate_2
+			}
+			clear_education_trait = yes
+			add_trait = magistrate_3
+			change_stewardship = 2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = magistrate_3
+			}
+			clear_education_trait = yes
+			add_trait = magistrate_4
+			change_stewardship = 1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = magistrate_4
+			}
+			clear_education_trait = yes
+			add_trait = magistrate_5
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = magistrate_5
+			}
+			change_stewardship = 3
+			break = yes
+		}
+	}
+	option = { #More Options
+		name = ekartifactdaedra.Wrap
+		character_event = { id = ekartifactdaedra.2 }
+	}
+}
+character_event = {
+	id = ekartifactdaedra.2
+	title = ekartifactdaedra.0.t #Manipulating the Oghma Infinium
+	desc = ekartifactdaedra.1.d1new
+	# desc = {
+		# text = ekartifactdaedra.1.d1 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant wakes you from your unconcious state, sprawled and drooling as you were upon the hard floor.\nAs you take to your feet, you feel renewed, strong, powerful. All the knowledge of a thousand worlds flows freely in your mind, and you look upon the world around you for what it really is, an illusion, a forgery. It is but a game, and now you are the player.
+		# trigger = { OR = { has_character_flag = oghma_demigod_outcome has_character_flag = oghma_good_outcome } }
+	# }
+	# desc = {
+		# text = ekartifactdaedra.1.d2 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant finds your corpse, foamed drool oozing from your mouth and a foul smelling grey-brown liquid seeping from your nose and ears. Your mind was incapable of containing all that the Oghma Infinium had to share.
+		# trigger = { has_character_flag = oghma_reallybad_outcome }
+	# }
+	# desc = {
+		# text = ekartifactdaedra.1.d3 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant find gibbering and drooling in the corner about "Crusaders", "Paradoxes" and someone called "Todd the Liar". Unfortunately it seems the Oghma Infinium has permanently destroyed you, whatever secrets it shared are sadly lost somewhere in that shattered mind.
+		# trigger = { has_character_flag = oghma_bad_outcome }
+	# }
+	# desc = {
+		# text = ekartifactdaedra.1.d3 #Black tentacle like strands of cold energy reach forth from the book. You recoil in agony as they pierce your mind, worming their way into your thoughts. Your vision fades to absolute black, you blink and open your eyes to an infinite starry abyss. You blink again and feel your brain boil in your skull as a thousand symbols, images, sounds and thoughts echo through the abyss...\nHours later a startled servant finds you aggressively conversing with yourself in a mirror. Though the Oghma Infinium has shared it's knowledge and power with you it has also broken your mind.
+		# trigger = { has_character_flag = oghma_crazy_outcome }
+	# }
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	# immediate = {
+		# random_list = {
+			# 7 = {
+				# modifier = { factor = 1.25 trait = dragonborn true_religion = daedra_hermaeus }
+				# set_character_flag = oghma_demigod_outcome
+			# }
+			# 25 = {
+				# modifier = { factor = 1.25 is_dragonblood = yes true_religion = daedra_hermaeus }
+				# modifier = { factor = 1.25 OR = { trait = quick trait = genius trait = perceptive } }
+				# modifier = { factor = 1.25 trait = erudite }
+				# modifier = { factor = 1.25 trait = scholar }
+				# set_character_flag = oghma_good_outcome
+			# }
+			# 29 = {
+				# modifier = { factor = 2.0 NOR = { true_religion = daedra_hermaeus is_dragonblood = yes } }
+				# modifier = { factor = 1.25 OR = { trait = quick trait = genius trait = perceptive } }
+				# modifier = { factor = 1.25 trait = erudite }
+				# modifier = { factor = 1.25 trait = scholar }
+				# set_character_flag = oghma_crazy_outcome
+			# }
+			# 22 = {
+				# modifier = { factor = 2.0 NOR = { true_religion = daedra_hermaeus is_dragonblood = yes } }
+				# modifier = { factor = 1.25 OR = { trait = quick trait = genius trait = perceptive } }
+				# set_character_flag = oghma_bad_outcome
+			# }
+			# 17 = {
+				# modifier = { factor = 2.0 NOR = { true_religion = daedra_hermaeus is_dragonblood = yes } }
+				# modifier = { factor = 1.25 trait = inbred }
+				# modifier = { factor = 1.5 trait = imbecile }
+				# modifier = { factor = 1.25 trait = slow }
+				# modifier = { factor = 0.75 trait = erudite }
+				# modifier = { factor = 0.75 trait = scholar }
+				# set_character_flag = oghma_reallybad_outcome
+			# }
+		# }
+	# }
+	
+	option = { #The Path of Shadow!
+		name = ekartifactdaedra.PathOfShadow
+		random = {
+			chance = 20
+			custom_tooltip = {
+				text = forbiddenknowledge
+				hidden_tooltip = { add_trait_lunatic_effect = yes }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					is_agent = no
+					trait = agent_1
+				}
+			}
+			clear_education_trait = yes
+			add_trait = agent_2
+			change_intrigue = 3
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = agent_2
+			}
+			clear_education_trait = yes
+			add_trait = agent_3
+			change_intrigue = 2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = agent_3
+			}
+			clear_education_trait = yes
+			add_trait = agent_4
+			change_intrigue = 1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = agent_4
+			}
+			clear_education_trait = yes
+			add_trait = agent_5
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = agent_5
+			}
+			change_intrigue = 3
+			break = yes
+		}
+	}
+	option = { #The Path of Magic!
+		name = ekartifactdaedra.PathOfMagic
+		random = {
+			chance = 20
+			custom_tooltip = {
+				text = forbiddenknowledge
+				hidden_tooltip = { add_trait_lunatic_effect = yes }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					is_mage = no
+					trait = mage_1
+				}
+			}
+			clear_education_trait = yes
+			add_trait = mage_2
+			change_learning = 3
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = mage_2
+			}
+			clear_education_trait = yes
+			add_trait = mage_3
+			change_learning = 2
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = mage_3
+			}
+			clear_education_trait = yes
+			add_trait = mage_4
+			change_learning = 1
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = mage_4
+			}
+			clear_education_trait = yes
+			add_trait = mage_5
+			break = yes
+		}
+		if = {
+			limit = {
+				trait = mage_5
+			}
+			change_learning = 3
+			break = yes
+		}
+	}
+	option = { #More Options
+		name = ekartifactdaedra.Wrap
+		character_event = { id = ekartifactdaedra.1 }
+	}
+}
+
+#The AI will get a randomly selected option. They will never change education if they're a Master/Legendary anything
+character_event = {
+	id = ekartifactdaedra.5
+	hide_window = yes
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					OR = {
+						is_master_warrior = yes
+						is_master_magistrate = yes
+						is_master_agent = yes
+						is_master_mage = yes
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							is_diplomat = no
+							trait = diplomat_1
+						}
+					}
+					clear_education_trait = yes
+					add_trait = diplomat_2
+					change_diplomacy = 3
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = diplomat_2
+					}
+					clear_education_trait = yes
+					add_trait = diplomat_3
+					change_diplomacy = 2
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = diplomat_3
+					}
+					clear_education_trait = yes
+					add_trait = diplomat_4
+					change_diplomacy = 1
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = diplomat_4
+					}
+					clear_education_trait = yes
+					add_trait = diplomat_5
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = diplomat_5
+					}
+					change_diplomacy = 3
+					break = yes
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					OR = {
+						is_master_diplomat = yes
+						is_master_magistrate = yes
+						is_master_agent = yes
+						is_master_mage = yes
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							is_warrior = no
+							trait = warrior_1
+						}
+					}
+					clear_education_trait = yes
+					add_trait = warrior_2
+					change_martial = 3
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = warrior_2
+					}
+					clear_education_trait = yes
+					add_trait = warrior_3
+					change_martial = 2
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = warrior_3
+					}
+					clear_education_trait = yes
+					add_trait = warrior_4
+					change_martial = 1
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = warrior_4
+					}
+					clear_education_trait = yes
+					add_trait = warrior_5
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = warrior_5
+					}
+					change_martial = 3
+					break = yes
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					OR = {
+						is_master_diplomat = yes
+						is_master_warrior = yes
+						is_master_agent = yes
+						is_master_mage = yes
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							is_magistrate = no
+							trait = magistrate_1
+						}
+					}
+					clear_education_trait = yes
+					add_trait = magistrate_2
+					change_stewardship = 3
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = magistrate_2
+					}
+					clear_education_trait = yes
+					add_trait = magistrate_3
+					change_stewardship = 2
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = magistrate_3
+					}
+					clear_education_trait = yes
+					add_trait = magistrate_4
+					change_stewardship = 1
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = magistrate_4
+					}
+					clear_education_trait = yes
+					add_trait = magistrate_5
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = magistrate_5
+					}
+					change_stewardship = 3
+					break = yes
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					OR = {
+						is_master_diplomat = yes
+						is_master_warrior = yes
+						is_master_magistrate = yes
+						is_master_mage = yes
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							is_agent = no
+							trait = agent_1
+						}
+					}
+					clear_education_trait = yes
+					add_trait = agent_2
+					change_intrigue = 3
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = agent_2
+					}
+					clear_education_trait = yes
+					add_trait = agent_3
+					change_intrigue = 2
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = agent_3
+					}
+					clear_education_trait = yes
+					add_trait = agent_4
+					change_intrigue = 1
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = agent_4
+					}
+					clear_education_trait = yes
+					add_trait = agent_5
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = agent_5
+					}
+					change_intrigue = 3
+					break = yes
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					OR = {
+						is_master_diplomat = yes
+						is_master_warrior = yes
+						is_master_magistrate = yes
+						is_master_agent = yes
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							is_mage = no
+							trait = mage_1
+						}
+					}
+					clear_education_trait = yes
+					add_trait = mage_2
+					change_learning = 3
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = mage_2
+					}
+					clear_education_trait = yes
+					add_trait = mage_3
+					change_learning = 2
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = mage_3
+					}
+					clear_education_trait = yes
+					add_trait = mage_4
+					change_learning = 1
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = mage_4
+					}
+					clear_education_trait = yes
+					add_trait = mage_5
+					break = yes
+				}
+				if = {
+					limit = {
+						trait = mage_5
+					}
+					change_learning = 3
+					break = yes
+				}
+			}
+		}
+	}
+	
+}

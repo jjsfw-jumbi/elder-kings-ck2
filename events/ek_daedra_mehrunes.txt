@@ -1,0 +1,148 @@
+####Etienne's Daedric Events - Mehrunes Dagon####
+
+namespace = mehrunes
+
+###Angry Revolutionaries Strike Back Against Occupation### 
+character_event = {
+	id = mehrunes.1
+	desc = "Mehrunes1"
+	picture = GFX_evt_battle
+	
+	only_playable = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { religion = daedra_mehrunes }
+		any_war = {
+			OR = {
+				defender = {
+					religion = daedra_mehrunes
+				}
+				attacker = {
+					religion = daedra_mehrunes
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = {
+		name = "Mehrunes1Acknowledge"
+		random_list = {
+			70 = {
+				add_character_modifier = {
+					name = mehrunes_foe_of_rebels_1
+					months = 24
+				}
+			}
+			30 = {
+				add_character_modifier = {
+					name = mehrunes_foe_of_rebels_2
+					months = 24
+				}
+			}
+		}
+	}
+}
+
+###Mehrunes Dagon Rallies Rebel Forces### 
+long_character_event = {
+	id = mehrunes.4
+	desc = "Mehrunes4"
+	picture = GFX_evt_battle
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		religion = daedra_mehrunes
+		in_revolt = yes
+		NOT = {
+			has_character_modifier = mehrunes_rally_rebels
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 0.8
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.9
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.9
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.9
+			trait = envious
+		}
+		modifier = {
+			factor = 0.85
+			trait = reckless
+		}
+		modifier = {
+			factor = 1.1
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			trait = kind
+		}
+		modifier = {
+			factor = 1.25
+			trait = charitable
+		}
+	}
+	
+	immediate = {
+		set_character_flag = mehrunes_rallies
+	}
+	
+	option = {
+		name = "Mehrunes4Acknowledge"
+		add_character_modifier = {
+			name = mehrunes_rally_rebels
+			months = 60
+		}
+	}
+}
+
+#Lost Mehrunes Rally Rebels Modifier
+character_event = {
+	id = mehrunes.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_character_modifier = mehrunes_rally_rebels
+	}
+}
+
+long_character_event = {
+	id = mehrunes.10
+	desc = Mehrunes10
+	picture = GFX_evt_comet
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	option = {
+		name = Mehrunes10Accept
+		set_character_flag = mehrunes_agent_of_change
+		clr_character_flag = mehrunes_deal
+	}
+}

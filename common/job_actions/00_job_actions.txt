@@ -1,0 +1,188 @@
+##########################################
+# COUNCILLOR ACTIONS
+##########################################
+# attribute = [diplomacy/stewardship/intrigue/martial/learning] - Character attribute is multiplied with the modifiers
+# trigger = Province scope trigger to determine if the action is meaningful in a province (the player character is FROM, the councillor is in 'new_character')
+# Events that can trigger off this action. This info is only used by the GUI.
+# All modifiers (like 'local_build_time_modifier') are multiplied by the attribute
+
+
+#Job actions split to individual files
+action_clan_sentiment = {
+	attribute = diplomacy
+	
+	potential = {
+		always = no
+		FROM = {
+			is_nomadic = yes
+		}
+	}
+	
+	trigger = {
+		owner = {
+			is_nomadic = yes
+			NOT = { character = FROM }
+
+			FROM = {
+				job_chancellor = {
+					NOT = { character = PREVPREV } # Can't be sent to improve relations with himself...
+				}
+			}
+			
+			OR = {
+				vassal_of = FROM
+				same_liege = FROM
+				overlord_of = FROM
+			}
+		}
+	}
+	
+	events = { 20235 }
+}
+
+action_collect_tribute = {
+	attribute = stewardship
+
+	potential = {
+		always = no
+		FROM = {
+			is_nomadic = yes
+		}
+	}
+
+	trigger = {
+		num_of_settlements = 1
+		any_province_lord = {
+			NOT = { character = FROM }
+			
+			FROM = {
+				job_treasurer = {
+					NOT = { character = PREVPREV } # Can't be sent to himself...
+				}
+			}
+			
+			OR = {
+				vassal_of = FROM
+				pays_tribute_to = FROM
+			}
+			capital_scope = {
+				province = ROOT
+			}
+		}
+	}
+	
+	events = { 20225 }
+}
+
+action_settle_tribe = {
+	attribute = stewardship
+
+	potential = {
+		always = no
+		FROM = {
+			is_tribal = yes
+		}
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		NOT = { culture = FROM }
+		OR = {
+			NOT = { 
+				has_game_rule = {
+					name = culture_conversion
+					value = restricted
+				}
+			}
+			any_neighbor_province = { culture = FROM } 
+			any_neighbor_province = { port = yes } 
+		}
+	}
+	
+	events = { 925 20206 }
+}
+action_build_legend = {
+	attribute = stewardship
+
+	potential = {
+		always = no
+		FROM = {
+			is_tribal = yes
+		}
+	}
+
+	trigger = {
+		FROM = {
+			is_capital = PREV
+		}
+	}
+	
+	monthly_character_prestige = 0.1
+	
+	events = { 20208 }
+}
+
+action_incite_revolt = {
+	attribute = martial
+	
+	potential = {
+		always = no
+		FROM = {
+			is_tribal = yes
+		}
+	}
+	
+	trigger = {
+		any_province_lord = {
+			NOT = { is_liege_or_above = FROM }
+			NOT = { character = FROM }
+		}
+		is_within_diplo_range = FROM
+	}
+	
+	#local_revolt_risk = 0.025
+	
+	events = { }
+}
+action_train_troops_nomadic = {
+	attribute = martial
+	
+	potential = {
+		always = no
+		FROM = {
+			is_nomadic = yes
+		}
+	}
+
+	trigger = {
+		FROM = {
+			is_capital = ROOT
+		}
+	}
+	
+	manpower_growth = 0.015
+	
+	events = { }
+}
+action_build_zeal = {
+	attribute = learning
+
+	potential = {
+		always = no
+		FROM = {
+			is_tribal = yes
+		}
+	}
+
+	trigger = {
+		FROM = {
+			is_capital = PREV
+		}
+	}
+	
+	monthly_character_piety = 0.05
+	
+	events = { 20218 }
+}

@@ -1,0 +1,114 @@
+decisions = {
+
+	#GENERAL
+	
+	white_gold_coronation = {
+		is_high_prio = yes
+		potential = {
+			has_submenu_open = no
+			NOT = {
+				has_landed_title = e_potentate
+			}
+			OR = {
+				has_landed_title = e_tamriel
+				has_landed_title = k_cyrodiil
+				has_landed_title = e_cyrodiil
+				has_landed_title = e_pretender_empire
+				AND = {
+					tier = EMPEROR
+					OR = {
+						OR = {
+							is_former_emperor_bloodline = yes
+							is_potential_emperor_bloodline = yes
+						}
+						is_dragonblood = yes
+					}
+				}
+			}
+			OR = {
+				has_landed_title = c_imperialisle
+				any_vassal = {
+					has_landed_title = c_imperialisle
+				}
+			}
+			independent = yes
+			NOT = { trait = incapable }
+			NOT = { is_inaccessible_trigger = yes }
+			NOT = { has_character_flag = crowned_emperor }
+			NOT = { has_character_flag = wants_coronation }
+		}
+		allow = {
+			prisoner = no
+			scaled_wealth = 0.5				
+		}
+		effect = {
+			scaled_wealth = -0.5
+			set_character_flag = wants_coronation
+			character_event = { id = aflavor.2 }
+		}
+		ai_will_do = {
+			factor = 1000
+		}
+	}
+
+	light_dragonfires = {
+		is_high_prio = yes
+
+		potential = {
+			has_character_flag = crowned_emperor # If uncrowned, take the White-Gold coronation decision instead
+			NOT = {
+				has_submenu_open = yes
+				has_character_flag = lighting_dragonfires
+			}
+			NOT = { religion_group = daedra }
+			NOT = {
+				event_target:lit_dragonfires = {
+					is_alive = yes
+				}
+			}
+		}
+
+		allow = {
+			OR = {
+				has_landed_title = c_imperialisle
+				any_vassal = {
+					has_landed_title = c_imperialisle
+				}
+			}
+			OR = {
+				is_former_emperor_bloodline = yes
+				is_dragonblood = yes
+			}
+			has_artifact = amulet_of_kings
+			NOT = { trait = incapable }
+			NOT = { is_inaccessible_trigger = yes }
+		}
+
+		effect = {
+			set_character_flag = lighting_dragonfires
+			character_event = { id = aflavor.8 }
+		}
+	}
+	
+	#ev_renounce_bloodline = { #Obsolete with Holy Fury
+	#	ai = no
+	#	
+	#	potential = {
+	#		has_bloodline = yes
+	#		has_character_flag = title_open #Close enough.
+	#	}
+	#	allow = {
+	#		prisoner = no
+	#		prestige = 100
+	#	}
+	#	effect = {
+	#		character_event = { id = bloodlines.1 }
+	#	}
+	#}
+	
+	#ev_snow_prince_mausoleum = { #For Falmer
+	#}
+	
+	#ev_falmer_museum = { #For Non-Falmer
+	#}
+}

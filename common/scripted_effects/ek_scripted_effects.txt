@@ -1,0 +1,3509 @@
+vampire_stage_reset = {
+	if = {
+		limit = { 
+			has_character_modifier = pureblood_vampire 
+		}
+		remove_trait = stressed
+	}
+	if = {
+		limit = { 
+			has_character_flag = stage_2_vampire 
+		}
+		clr_character_flag = stage_2_vampire
+		set_character_flag = stage_1_vampire
+		change_diplomacy = 1
+		change_intrigue = -1
+		change_learning = -1
+	}
+	if = {
+		limit = { 
+			has_character_flag = stage_3_vampire 
+		}
+		clr_character_flag = stage_3_vampire
+		set_character_flag = stage_1_vampire
+		change_diplomacy = 2
+		change_martial = -1
+		change_intrigue = -2
+		change_learning = -1
+		break = yes
+	}
+	if = {
+		limit = { 
+			has_character_flag = stage_4_vampire 
+		}
+		clr_character_flag = stage_4_vampire
+		set_character_flag = stage_1_vampire
+		change_diplomacy = 3
+		change_martial = -2
+		change_intrigue = -2
+		change_learning = -2
+	}
+}
+
+roll_for_vampirism = {
+	custom_tooltip = {
+		text = ROLL_FOR_VAMPIRISM_CT
+		
+		random = {
+			chance = 50
+			modifier = {
+				factor = 0.5
+				trait = argonian
+			}
+			modifier = {
+				factor = 0
+				is_disease_immune = yes
+			}
+			modifier = {
+				factor = 0
+				any_artifact = {
+					has_artifact_flag = vampirism_immunity
+				}
+			}
+			modifier = {
+				factor = 0
+				has_character_flag = vampirism_immune
+			}
+			modifier = {
+				factor = 1.5
+				has_character_flag = child_of_night
+			}
+			set_character_flag = vampire_disease
+			character_event = { id = vamp.15 days = 3 }
+		}
+	}
+}
+roll_for_lycanthropy = {
+	custom_tooltip = {
+		text = ROLL_FOR_VAMPIRISM_CT
+
+		random = {
+			chance = 50
+			modifier = {
+				factor = 0.5
+				trait = argonian
+			}
+			modifier = {
+				factor = 0
+				is_disease_immune = yes
+			}
+			modifier = {
+				factor = 0
+				any_artifact = {
+					has_artifact_flag = lycanthropy_immunity
+				}
+			}
+			modifier = {
+				factor = 0
+				has_character_flag = lycanthropy_immune
+			}
+			modifier = {
+				factor = 1.5
+				has_character_flag = child_of_wild
+			}
+			set_character_flag = lycan_disease
+			long_character_event = { id = lycan.15 days = 3 }
+		}
+	}
+}
+
+add_pureblooded_vampirism_effect = {
+	if = {
+		limit = {
+			NOT = { trait = vampire }
+		}
+		add_trait = vampire
+	}
+	add_character_modifier = { name = pureblood_vampire duration = -1 hidden = yes }
+	change_diplomacy = 2
+	change_martial = 2
+	change_intrigue = 2
+	change_learning = 2
+}
+
+add_agent = {
+	hidden_tooltip = {
+		remove_trait = agent_1
+		remove_trait = agent_2
+		remove_trait = agent_3
+		remove_trait = agent_4
+		remove_trait = agent_5
+	}
+	random_list = {
+		22 = { add_trait = agent_1 }
+		28 = { add_trait = agent_2 }
+		32 = { add_trait = agent_3 }
+		16 = { add_trait = agent_4 }
+		2 = { add_trait = agent_5 }
+	}
+}
+add_diplomat = {
+	hidden_tooltip = {
+		remove_trait = diplomat_1
+		remove_trait = diplomat_2
+		remove_trait = diplomat_3
+		remove_trait = diplomat_4
+		remove_trait = diplomat_5
+	}
+	random_list = {
+		25 = { add_trait = diplomat_1 }
+		28 = { add_trait = diplomat_2 }
+		30 = { add_trait = diplomat_3 }
+		15 = { add_trait = diplomat_4 }
+		2 = { add_trait = diplomat_5 }
+	}
+}
+add_mage = {
+	hidden_tooltip = {
+		remove_trait = mage_1
+		remove_trait = mage_2
+		remove_trait = mage_3
+		remove_trait = mage_4
+		remove_trait = mage_5
+	}
+	random_list = {
+		32 = { add_trait = mage_1 }
+		29 = { add_trait = mage_2 }
+		26 = { add_trait = mage_3 }
+		12 = { add_trait = mage_4 }
+		1 = { add_trait = mage_5 }
+	}
+}
+add_magistrate = {
+	hidden_tooltip = {
+		remove_trait = magistrate_1
+		remove_trait = magistrate_2
+		remove_trait = magistrate_3
+		remove_trait = magistrate_4
+		remove_trait = magistrate_5
+	}
+	random_list = {
+		25 = { add_trait = magistrate_1 }
+		28 = { add_trait = magistrate_2 }
+		30 = { add_trait = magistrate_3 }
+		15 = { add_trait = magistrate_4 }
+		2 = { add_trait = magistrate_5 }
+	}
+}
+add_warrior = {
+	hidden_tooltip = {
+		remove_trait = warrior_1
+		remove_trait = warrior_2
+		remove_trait = warrior_3
+		remove_trait = warrior_4
+		remove_trait = warrior_5
+	}
+	random_list = {
+		22 = { add_trait = warrior_1 }
+		28 = { add_trait = warrior_2 }
+		32 = { add_trait = warrior_3 }
+		16 = { add_trait = warrior_4 }
+		2 = { add_trait = warrior_5 }
+	}
+}
+
+add_random_education = {
+	random_list = {
+		#Agent
+		22 = {
+			add_agent = yes
+		}
+		#Diplomat
+		21 = {
+			add_diplomat = yes
+		}
+		#Mage
+		12 = {
+			modifier = {
+				factor = 2
+				OR = {
+					dynasty = 160005
+					trait = house_telvanni
+				}
+			}
+			modifier = {
+				factor = 1.25
+				culture = breton
+			}
+			modifier = {
+				factor = 1.5
+				culture = nibenean
+			}
+			modifier = {
+				factor = 1.5
+				culture = kamal
+			}
+			modifier = {
+				factor = 1.25
+				culture_group = argonian
+			}
+			modifier = {
+				factor = 2
+				culture = sload
+			}
+			add_mage = yes
+		}
+		#Magistrate
+		23 = {
+			add_magistrate = yes
+		}
+		#Warrior
+		22 = {
+			add_warrior = yes
+		}
+	}
+}
+
+legion_decrease_prosperity = {
+	if = {
+		limit = { has_province_modifier = prosperity_modifier_3 }
+		remove_province_modifier = prosperity_modifier_3
+		add_province_modifier = { name = prosperity_modifier_2 duration = -1 }
+		break = yes
+	}
+	if = {
+		limit = { has_province_modifier = prosperity_modifier_2 }
+		remove_province_modifier = prosperity_modifier_2
+		add_province_modifier = { name = prosperity_modifier_1 duration = -1 }
+		break = yes
+	}
+	if = {
+		limit = { has_province_modifier = prosperity_modifier_1 }
+		remove_province_modifier = prosperity_modifier_1
+		break = yes
+	}
+	if = {
+		limit = {
+			NOR = {
+				has_province_modifier = prosperity_modifier_1
+				has_province_modifier = prosperity_modifier_2
+				has_province_modifier = prosperity_modifier_3
+				has_province_modifier = depopulated_3
+				has_province_modifier = depopulated_2
+				has_province_modifier = depopulated_1
+			}
+		}
+		add_province_modifier = {
+			name = depopulated_1
+			duration = -1
+		}
+		set_province_flag = recent_depopulation_1
+		break = yes
+	}
+	if = {
+		limit = { has_province_modifier = depopulated_1 }
+		remove_province_modifier = depopulated_1
+		add_province_modifier = {
+			name = depopulated_2
+			duration = -1
+		}
+		clr_province_flag = recent_depopulation_1
+		set_province_flag = recent_depopulation_2
+		break = yes
+	}
+	if = {
+		limit = { has_province_modifier = depopulated_2 }
+		remove_province_modifier = depopulated_2
+		add_province_modifier = {
+			name = depopulated_3
+			duration = -1
+		}
+		clr_province_flag = recent_depopulation_2
+		set_province_flag = recent_depopulation_3
+		break = yes
+	}
+}
+
+### Illness ###
+
+add_knahaten_flu_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = cough
+			}
+			character_event = { id = RIP.5000 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = rash
+			}
+			character_event = { id = RIP.5007 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fatigue
+			}
+			character_event = { id = RIP.5009 }
+		}
+	}
+}
+
+add_swamp_rot_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = cramps
+			}
+			character_event = { id = RIP.5006 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fatigue
+			}
+			character_event = { id = RIP.5009 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = malaise
+			}
+			character_event = { id = RIP.5010 }
+		}
+	}
+}
+
+add_cholera_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = diarrhea
+			}
+			character_event = { id = RIP.5002 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = vomiting
+			}
+			character_event = { id = RIP.5003 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = abdominal_pain
+			}
+			character_event = { id = RIP.5008 }
+		}
+	}
+}
+
+add_dampworm_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = cramps
+			}
+			character_event = { id = RIP.5006 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fatigue
+			}
+			character_event = { id = RIP.5009 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = malaise
+			}
+			character_event = { id = RIP.5010 }
+		}
+	}
+}
+
+add_witches_pox_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = rash
+			}
+			character_event = { id = RIP.5007 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fatigue
+			}
+			character_event = { id = RIP.5009 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = malaise
+			}
+			character_event = { id = RIP.5010 }
+		}
+	}
+}
+
+add_greenspore_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = headache
+			}
+			character_event = { id = RIP.5004 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = chest_pain
+			}
+			character_event = { id = RIP.5005 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = malaise
+			}
+			character_event = { id = RIP.5010 }
+		}
+	}
+}
+
+add_rockjoint_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = headache
+			}
+			character_event = { id = RIP.5004 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fatigue
+			}
+			character_event = { id = RIP.5009 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = malaise
+			}
+			character_event = { id = RIP.5010 }
+		}
+	}
+}
+
+add_stomach_rot_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = diarrhea
+			}
+			character_event = { id = RIP.5002 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = vomiting
+			}
+			character_event = { id = RIP.5003 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = abdominal_pain
+			}
+			character_event = { id = RIP.5008 }
+		}
+	}
+}
+
+add_chrondiasis_symptom_effect = {
+	random_list = {
+		10 = {
+			modifier = {
+				factor = 0
+				trait = cough
+			}
+			character_event = { id = RIP.5000 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = fever
+			}
+			character_event = { id = RIP.5001 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = headache
+			}
+			character_event = { id = RIP.5004 }
+		}
+		10 = {
+			modifier = {
+				factor = 0
+				trait = chest_pain
+			}
+			character_event = { id = RIP.5005 }
+		}
+	}
+}
+
+give_has_knahaten_flu_effect = {
+	if = {
+		limit = {
+			NOT = { trait = has_knahaten_flu }
+			is_disease_immune = no
+		}
+
+		if = {
+			limit = { 
+				has_dlc = "Reapers"
+				NOT = { has_character_flag = developing_illness }
+				NOT = { has_character_flag = disease_not_serious } 
+			}
+			set_character_flag = got_knahaten_flu
+			set_character_flag = developing_illness
+			hidden_tooltip = { character_event = { id = RIP.5012 days = 3 random = 10 } }
+		}
+		if = {
+			limit = { NOT = { has_dlc = "Reapers" } }
+			add_trait = has_knahaten_flu
+		}
+	}
+}
+
+give_has_swamp_rot_effect = {
+	if = {
+		limit = {
+			NOT = { trait = has_swamp_rot }
+			is_disease_immune = no
+		}
+
+		if = {
+			limit = { 
+				has_dlc = "Reapers"
+				NOT = { has_character_flag = developing_illness }
+				NOT = { has_character_flag = disease_not_serious } 
+			}
+			set_character_flag = got_swamp_rot
+			set_character_flag = developing_illness
+			hidden_tooltip = { character_event = { id = ekrip.200 days = 3 random = 10 } }
+		}
+		if = {
+			limit = { NOT = { has_dlc = "Reapers" } }
+			add_trait = has_swamp_rot
+		}
+	}
+}
+
+give_cholera_effect = {
+	if = {
+		limit = { 
+			NOT = { trait = cholera } 
+			has_dlc = "Reapers"
+			NOT = { has_character_flag = developing_illness }
+			NOT = { has_character_flag = disease_not_serious }
+			is_disease_immune = no
+		}
+
+		set_character_flag = got_cholera
+		set_character_flag = developing_illness
+		hidden_tooltip = { character_event = { id = ekrip.210 days = 3 random = 10 } }
+	}
+}
+
+give_dampworm_effect = {
+	if = {
+		limit = { 
+			NOT = { trait = dampworm } 
+			has_dlc = "Reapers"
+			NOT = { has_character_flag = developing_illness }
+			NOT = { has_character_flag = disease_not_serious }
+			is_disease_immune = no
+		}
+
+		set_character_flag = got_dampworm
+		set_character_flag = developing_illness
+		hidden_tooltip = { character_event = { id = ekrip.220 days = 3 random = 10 } }
+	}
+}
+
+give_witches_pox_effect = {
+	if = {
+		limit = { 
+			NOT = { trait = witches_pox } 
+			has_dlc = "Reapers"
+			NOT = { has_character_flag = developing_illness }
+			NOT = { has_character_flag = disease_not_serious }
+			is_disease_immune = no
+		}
+
+		set_character_flag = got_witches_pox
+		set_character_flag = developing_illness
+		hidden_tooltip = { character_event = { id = ekrip.230 days = 3 random = 10 } }
+	}
+}
+
+give_greenspore_effect = {
+	if = {
+		limit = { 
+			NOT = { trait = greenspore } 
+			has_dlc = "Reapers"
+			NOT = { has_character_flag = developing_illness }
+			NOT = { has_character_flag = disease_not_serious }
+			is_disease_immune = no
+		}
+
+		set_character_flag = got_greenspore
+		set_character_flag = developing_illness
+		hidden_tooltip = { character_event = { id = ekrip.240 days = 3 random = 10 } }
+	}
+}
+
+give_rockjoint_effect = {
+	if = {
+		limit = { 
+			NOT = { trait = rockjoint } 
+			has_dlc = "Reapers"
+			NOT = { has_character_flag = developing_illness }
+			NOT = { has_character_flag = disease_not_serious }
+			is_disease_immune = no
+		}
+
+		set_character_flag = got_rockjoint
+		set_character_flag = developing_illness
+		hidden_tooltip = { character_event = { id = ekrip.250 days = 3 random = 10 } }
+	}
+}
+
+give_stomach_rot_effect = {
+	if = {
+		limit = { 
+			NOT = { trait = stomach_rot } 
+			has_dlc = "Reapers"
+			NOT = { has_character_flag = developing_illness }
+			NOT = { has_character_flag = disease_not_serious }
+			is_disease_immune = no
+		}
+
+		set_character_flag = got_stomach_rot
+		set_character_flag = developing_illness
+		hidden_tooltip = { character_event = { id = ekrip.260 days = 3 random = 10 } }
+	}
+}
+
+give_chrondiasis_effect = {
+	if = {
+		limit = { 
+			NOT = { trait = chrondiasis } 
+			has_dlc = "Reapers"
+			NOT = { has_character_flag = developing_illness }
+			NOT = { has_character_flag = disease_not_serious }
+			is_disease_immune = no
+		}
+
+		set_character_flag = got_chrondiasis
+		set_character_flag = developing_illness
+		hidden_tooltip = { character_event = { id = ekrip.270 days = 3 random = 10 } }
+	}
+}
+
+
+### Infrastructure ###
+
+build_infrastructure = {
+	location = {
+		if = {
+			limit = { NOT = { has_infrastructure = yes } }
+			add_province_modifier = {
+				name = infrastructure_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = infrastructure_1 }
+			add_province_modifier = {
+				name = infrastructure_2
+				duration = -1
+			}
+			remove_province_modifier = infrastructure_1
+		}
+		else_if = {
+			limit = { has_province_modifier = infrastructure_2 }
+			add_province_modifier = {
+				name = infrastructure_3
+				duration = -1
+			}
+			remove_province_modifier = infrastructure_2
+		}
+		else_if = {
+			limit = { has_province_modifier = infrastructure_3 }
+			add_province_modifier = {
+				name = infrastructure_4
+				duration = -1
+			}
+			remove_province_modifier = infrastructure_3
+		}
+		
+		add_province_modifier = {
+			name = infrastructure_construction
+			duration = 720
+		}
+		
+		province_event = { id = ek_infrastructure.1 days = 720 }
+	}
+}
+###
+repair_infrastructure = {
+	if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_1_damaged }
+		}
+		location = {
+			remove_province_modifier = infrastructure_1_damaged
+			add_province_modifier = {
+				name = infrastructure_construction
+				duration = 720
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_2_damaged }
+		}
+		location = {
+			remove_province_modifier = infrastructure_2_damaged
+			add_province_modifier = {
+				name = infrastructure_construction
+				duration = 720
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_3_damaged }
+		}
+		location = {
+			remove_province_modifier = infrastructure_3_damaged
+			add_province_modifier = {
+				name = infrastructure_construction
+				duration = 720
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_4_damaged }
+		}
+		location = {
+			remove_province_modifier = infrastructure_4_damaged
+			add_province_modifier = {
+				name = infrastructure_construction
+				duration = 720
+			}
+		}
+	}
+}
+###
+damage_infrastructure = {
+	if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_1 }
+		}
+		location = {
+			add_province_modifier = {
+				name = infrastructure_1_damaged
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_2 }
+		}
+		location = {
+			add_province_modifier = {
+				name = infrastructure_2_damaged
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_3 }
+		}
+		location = {
+			add_province_modifier = {
+				name = infrastructure_3_damaged
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = { has_province_modifier = infrastructure_4 }
+		}
+		location = {
+			add_province_modifier = {
+				name = infrastructure_4_damaged
+				duration = -1
+			}
+		}
+	}
+}
+
+### Ruins ###
+
+create_ruins = {
+	if = {
+		limit = {
+			location = {
+				culture_group = argonian
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_argonian_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture = ayleid
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_ayleid_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture_group = daedric
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_daedric_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture = dwemer
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_dwemer_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture_group = khajiit
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_khajiit_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				OR = {
+					culture = nord
+					culture = skaal
+					culture = atmoran
+				}
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_nord_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				OR = {
+					culture_group = tsaesci_group
+					culture_group = kamal_group
+					culture_group = tangmo_group
+					culture_group = potun_group
+					culture_group = islander_group
+				}
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_akaviri_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				OR = {
+					culture = altmer
+					culture = maormer
+					#culture = falmer
+				}
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_aldmer_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture_group = yokudan_group
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_yokudan_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture = bosmer
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_bosmeri_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				OR = {
+					culture = imperial
+					culture = colovian
+					culture = nibenean
+				}
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_imperial_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				OR = {
+					culture = breton
+					culture = reachmen
+				}
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_breton_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				or = {
+					culture = dunmer
+					culture = chimer
+					culture = ashlander
+				}
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_velothi_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture = orsimer
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_orsimer_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				culture = falmer
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_falmer_0
+				duration = -1
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			location = {
+				NOT = { has_ruins = yes }
+			}
+		}
+		location = {
+			add_province_modifier = {
+				name = ruins_generic_0
+				duration = -1
+			}
+		}
+	}
+}
+
+destroy_ruins = { #I don't currently have a use for this but I imagine I will eventually. 
+	custom_tooltip = {
+		text = destroy_ruins_tooltip
+		location = {
+			remove_province_modifier = ruins_argonian_0
+			remove_province_modifier = ruins_argonian_1
+			remove_province_modifier = ruins_argonian_2
+			remove_province_modifier = ruins_argonian_3
+			remove_province_modifier = ruins_ayleid_0
+			remove_province_modifier = ruins_ayleid_1
+			remove_province_modifier = ruins_ayleid_2
+			remove_province_modifier = ruins_ayleid_3
+			remove_province_modifier = ruins_daedric_0
+			remove_province_modifier = ruins_daedric_1
+			remove_province_modifier = ruins_daedric_2
+			remove_province_modifier = ruins_daedric_3
+			remove_province_modifier = ruins_dwemer_0
+			remove_province_modifier = ruins_dwemer_1
+			remove_province_modifier = ruins_dwemer_2
+			remove_province_modifier = ruins_dwemer_3
+			remove_province_modifier = ruins_khajiit_0
+			remove_province_modifier = ruins_khajiit_1
+			remove_province_modifier = ruins_khajiit_2
+			remove_province_modifier = ruins_khajiit_3
+			remove_province_modifier = ruins_nord_0
+			remove_province_modifier = ruins_nord_1
+			remove_province_modifier = ruins_nord_2
+			remove_province_modifier = ruins_nord_3
+			remove_province_modifier = ruins_akaviri_0
+			remove_province_modifier = ruins_akaviri_1
+			remove_province_modifier = ruins_akaviri_2
+			remove_province_modifier = ruins_akaviri_3
+			remove_province_modifier = ruins_aldmer_0
+			remove_province_modifier = ruins_aldmer_1
+			remove_province_modifier = ruins_aldmer_2
+			remove_province_modifier = ruins_aldmer_3
+			remove_province_modifier = ruins_yokudan_0
+			remove_province_modifier = ruins_yokudan_1
+			remove_province_modifier = ruins_yokudan_2
+			remove_province_modifier = ruins_yokudan_3
+			remove_province_modifier = ruins_bosmeri_0
+			remove_province_modifier = ruins_bosmeri_1
+			remove_province_modifier = ruins_bosmeri_2
+			remove_province_modifier = ruins_bosmeri_3
+			remove_province_modifier = ruins_imperial_0
+			remove_province_modifier = ruins_imperial_1
+			remove_province_modifier = ruins_imperial_2
+			remove_province_modifier = ruins_imperial_3
+			remove_province_modifier = ruins_breton_0
+			remove_province_modifier = ruins_breton_1
+			remove_province_modifier = ruins_breton_2
+			remove_province_modifier = ruins_breton_3
+			remove_province_modifier = ruins_generic_0
+			remove_province_modifier = ruins_generic_1
+			remove_province_modifier = ruins_generic_2
+			remove_province_modifier = ruins_generic_3
+			remove_province_modifier = ruins_velothi_0
+			remove_province_modifier = ruins_velothi_1
+			remove_province_modifier = ruins_velothi_2
+			remove_province_modifier = ruins_velothi_3
+			remove_province_modifier = ruins_orsimer_0
+			remove_province_modifier = ruins_orsimer_1
+			remove_province_modifier = ruins_orsimer_2
+			remove_province_modifier = ruins_orsimer_3
+			remove_province_modifier = ruins_falmer_0
+			remove_province_modifier = ruins_falmer_1
+			remove_province_modifier = ruins_falmer_2
+			remove_province_modifier = ruins_falmer_3
+		}
+	}
+}
+
+downgrade_ruins = { #I think my wrists will regret this quickly.
+#Nevermind, I can just replace in selection once I have the first set done.
+	location = {
+		if = {
+			limit = { has_province_modifier = ruins_argonian_1 }
+			remove_province_modifier = ruins_argonian_1
+			add_province_modifier = {
+				name = ruins_argonian_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_argonian_2 }
+			remove_province_modifier = ruins_argonian_2
+			add_province_modifier = {
+				name = ruins_argonian_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_argonian_3 }
+			remove_province_modifier = ruins_argonian_3
+			add_province_modifier = {
+				name = ruins_argonian_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_ayleid_1 }
+			remove_province_modifier = ruins_ayleid_1
+			add_province_modifier = {
+				name = ruins_ayleid_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_ayleid_2 }
+			remove_province_modifier = ruins_ayleid_2
+			add_province_modifier = {
+				name = ruins_ayleid_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_ayleid_3 }
+			remove_province_modifier = ruins_ayleid_3
+			add_province_modifier = {
+				name = ruins_ayleid_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_daedric_1 }
+			remove_province_modifier = ruins_daedric_1
+			add_province_modifier = {
+				name = ruins_daedric_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_daedric_2 }
+			remove_province_modifier = ruins_daedric_2
+			add_province_modifier = {
+				name = ruins_daedric_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_daedric_3 }
+			remove_province_modifier = ruins_daedric_3
+			add_province_modifier = {
+				name = ruins_daedric_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_dwemer_1 }
+			remove_province_modifier = ruins_dwemer_1
+			add_province_modifier = {
+				name = ruins_dwemer_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_dwemer_2 }
+			remove_province_modifier = ruins_dwemer_2
+			add_province_modifier = {
+				name = ruins_dwemer_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_dwemer_3 }
+			remove_province_modifier = ruins_dwemer_3
+			add_province_modifier = {
+				name = ruins_dwemer_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_khajiit_1 }
+			remove_province_modifier = ruins_khajiit_1
+			add_province_modifier = {
+				name = ruins_khajiit_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_khajiit_2 }
+			remove_province_modifier = ruins_khajiit_2
+			add_province_modifier = {
+				name = ruins_khajiit_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_khajiit_3 }
+			remove_province_modifier = ruins_khajiit_3
+			add_province_modifier = {
+				name = ruins_khajiit_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_nord_1 }
+			remove_province_modifier = ruins_nord_1
+			add_province_modifier = {
+				name = ruins_nord_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_nord_2 }
+			remove_province_modifier = ruins_nord_2
+			add_province_modifier = {
+				name = ruins_nord_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_nord_3 }
+			remove_province_modifier = ruins_nord_3
+			add_province_modifier = {
+				name = ruins_nord_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_akaviri_1 }
+			remove_province_modifier = ruins_akaviri_1
+			add_province_modifier = {
+				name = ruins_akaviri_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_akaviri_2 }
+			remove_province_modifier = ruins_akaviri_2
+			add_province_modifier = {
+				name = ruins_akaviri_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_akaviri_3 }
+			remove_province_modifier = ruins_akaviri_3
+			add_province_modifier = {
+				name = ruins_akaviri_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_aldmer_1 }
+			remove_province_modifier = ruins_aldmer_1
+			add_province_modifier = {
+				name = ruins_aldmer_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_aldmer_2 }
+			remove_province_modifier = ruins_aldmer_2
+			add_province_modifier = {
+				name = ruins_aldmer_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_aldmer_3 }
+			remove_province_modifier = ruins_aldmer_3
+			add_province_modifier = {
+				name = ruins_aldmer_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_yokudan_1 }
+			remove_province_modifier = ruins_yokudan_1
+			add_province_modifier = {
+				name = ruins_yokudan_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_yokudan_2 }
+			remove_province_modifier = ruins_yokudan_2
+			add_province_modifier = {
+				name = ruins_yokudan_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_yokudan_3 }
+			remove_province_modifier = ruins_yokudan_3
+			add_province_modifier = {
+				name = ruins_yokudan_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_bosmeri_1 }
+			remove_province_modifier = ruins_bosmeri_1
+			add_province_modifier = {
+				name = ruins_bosmeri_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_bosmeri_2 }
+			remove_province_modifier = ruins_bosmeri_2
+			add_province_modifier = {
+				name = ruins_bosmeri_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_bosmeri_3 }
+			remove_province_modifier = ruins_bosmeri_3
+			add_province_modifier = {
+				name = ruins_bosmeri_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_imperial_1 }
+			remove_province_modifier = ruins_imperial_1
+			add_province_modifier = {
+				name = ruins_imperial_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_imperial_2 }
+			remove_province_modifier = ruins_imperial_2
+			add_province_modifier = {
+				name = ruins_imperial_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_imperial_3 }
+			remove_province_modifier = ruins_imperial_3
+			add_province_modifier = {
+				name = ruins_imperial_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_breton_1 }
+			remove_province_modifier = ruins_breton_1
+			add_province_modifier = {
+				name = ruins_breton_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_breton_2 }
+			remove_province_modifier = ruins_breton_2
+			add_province_modifier = {
+				name = ruins_breton_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_breton_3 }
+			remove_province_modifier = ruins_breton_3
+			add_province_modifier = {
+				name = ruins_breton_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_generic_1 }
+			remove_province_modifier = ruins_generic_1
+			add_province_modifier = {
+				name = ruins_generic_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_generic_2 }
+			remove_province_modifier = ruins_generic_2
+			add_province_modifier = {
+				name = ruins_generic_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_generic_3 }
+			remove_province_modifier = ruins_generic_3
+			add_province_modifier = {
+				name = ruins_generic_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_velothi_1 }
+			remove_province_modifier = ruins_velothi_1
+			add_province_modifier = {
+				name = ruins_velothi_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_velothi_2 }
+			remove_province_modifier = ruins_velothi_2
+			add_province_modifier = {
+				name = ruins_velothi_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_velothi_3 }
+			remove_province_modifier = ruins_velothi_3
+			add_province_modifier = {
+				name = ruins_velothi_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_orsimer_1 }
+			remove_province_modifier = ruins_orsimer_1
+			add_province_modifier = {
+				name = ruins_orsimer_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_orsimer_2 }
+			remove_province_modifier = ruins_orsimer_2
+			add_province_modifier = {
+				name = ruins_orsimer_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_orsimer_3 }
+			remove_province_modifier = ruins_orsimer_3
+			add_province_modifier = {
+				name = ruins_orsimer_2
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_falmer_1 }
+			remove_province_modifier = ruins_falmer_1
+			add_province_modifier = {
+				name = ruins_falmer_0
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_falmer_2 }
+			remove_province_modifier = ruins_falmer_2
+			add_province_modifier = {
+				name = ruins_falmer_1
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = { has_province_modifier = ruins_falmer_3 }
+			remove_province_modifier = ruins_falmer_3
+			add_province_modifier = {
+				name = ruins_falmer_2
+				duration = -1
+			}
+		}
+	}
+
+}
+
+### We live in a society ###
+
+society_rank_up_rewards_effect = {
+	#Companions
+	if = {
+		limit = {
+			society_member_of = companions_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			20 = { add_artifact = weapon_sword_steel_superior }
+			15 = { add_artifact = weapon_sword_silver_superior }
+			10 = { add_artifact = book_father_of_the_niben }
+			5 = { add_artifact = book_rislav_the_righteous }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = companions_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			10 = { add_artifact = weapon_sword_steel_superior }
+			10 = { add_artifact = weapon_sword_silver_superior }
+			20 = { add_artifact = weapon_sword_steel_flawless }
+			10 = { add_artifact = armor_steel_superior }
+			5 = { add_artifact = book_father_of_the_niben }
+			7 = { add_artifact = book_rislav_the_righteous }
+			5 = { add_artifact = book_fall_of_the_snow_prince }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Sword-Singers
+	if = {
+		limit = {
+			society_member_of = ansei_guild_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = weapon_sword_steel }
+			3 = { add_artifact = weapon_sword_steel_superior }
+			5 = { add_artifact = weapon_sword_silver }
+			3 = { add_artifact = weapon_sword_yokudan }
+			5 = { add_artifact = armor_steel }
+			4 = { add_artifact = armor_steel_superior }
+			4 = { add_artifact = armor_yokudan }
+			4 = { add_artifact = armor_mithril }
+			3 = { add_artifact = book_father_of_the_niben }
+			2 = { add_artifact = book_rislav_the_righteous }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = ansei_guild_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = weapon_sword_steel_superior }
+			3 = { add_artifact = weapon_sword_silver_superior }
+			5 = { add_artifact = weapon_sword_yokudan }
+			3 = { add_artifact = weapon_sword_yokudan_superior }
+			3 = { add_artifact = armor_steel_superior }
+			3 = { add_artifact = armor_mithril_superior }
+			5 = { add_artifact = armor_yokudan }
+			3 = { add_artifact = armor_yokudan_superior }
+			4 = { add_artifact = book_father_of_the_niben }
+			5 = { add_artifact = book_rislav_the_righteous }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = ansei_guild_tamriel
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = weapon_sword_yokudan_superior }
+			3 = { add_artifact = weapon_sword_yokudan_flawless }
+			3 = { add_artifact = armor_yokudan_superior }
+			3 = { add_artifact = armor_yokudan_flawless }
+			1 = { add_artifact = book_rislav_the_righteous }
+			4 = { add_artifact = book_fall_of_the_snow_prince }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Fighters Guild Tamriel
+	if = {
+		limit = {
+			society_member_of = fighters_guild_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = weapon_sword_steel }
+			3 = { add_artifact = weapon_sword_steel_superior }
+			5 = { add_artifact = weapon_sword_silver }
+			3 = { add_artifact = weapon_sword_silver_superior }
+			5 = { add_artifact = armor_steel }
+			3 = { add_artifact = armor_steel_superior }
+			5 = { add_artifact = armor_mithril }
+			3 = { add_artifact = armor_mithril_superior }
+			3 = { add_artifact = book_father_of_the_niben }
+			2 = { add_artifact = book_rislav_the_righteous }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = fighters_guild_tamriel
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = weapon_sword_steel }
+			5 = { add_artifact = weapon_sword_steel_superior }
+			3 = { add_artifact = weapon_sword_silver }
+			5 = { add_artifact = weapon_sword_silver_superior }
+			3 = { add_artifact = armor_steel }
+			5 = { add_artifact = armor_steel_superior }
+			3 = { add_artifact = armor_mithril }
+			5 = { add_artifact = armor_mithril_superior }
+			4 = { add_artifact = book_father_of_the_niben }
+			5 = { add_artifact = book_rislav_the_righteous }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = fighters_guild_tamriel
+			society_rank == 5
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = weapon_sword_steel_superior }
+			3 = { add_artifact = weapon_sword_silver_superior }
+			3 = { add_artifact = armor_steel_superior }
+			3 = { add_artifact = armor_mithril_superior }
+			4 = { add_artifact = book_father_of_the_niben }
+			5 = { add_artifact = book_rislav_the_righteous }
+			3 = { add_artifact = book_fall_of_the_snow_prince }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = fighters_guild_tamriel
+			society_rank == 6
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			2 = { add_artifact = weapon_sword_steel_superior }
+			2 = { add_artifact = weapon_sword_silver_superior }
+			2 = { add_artifact = armor_steel_superior }
+			2 = { add_artifact = armor_mithril_superior }
+			2 = { add_artifact = book_father_of_the_niben }
+			2 = { add_artifact = book_rislav_the_righteous }
+			5 = { add_artifact = book_fall_of_the_snow_prince }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Union of the Iron Hilts
+	if = {
+		limit = {
+			society_member_of = fighters_guild_akavir
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		add_artifact = weapon_sword_iron_hilt
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = fighters_guild_akavir
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = armor_akaviri }
+			5 = { add_artifact = armor_akaviri_superior }
+			3 = { add_artifact = armor_akaviri_metal }
+			5 = { add_artifact = armor_akaviri_metal_superior }
+			4 = { add_artifact = book_father_of_the_niben }
+			5 = { add_artifact = book_rislav_the_righteous }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = fighters_guild_akavir
+			society_rank == 5
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = armor_akaviri_superior }
+			5 = { add_artifact = armor_akaviri_metal_superior }
+			4 = { add_artifact = book_father_of_the_niben }
+			5 = { add_artifact = book_rislav_the_righteous }
+			3 = { add_artifact = book_fall_of_the_snow_prince }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = fighters_guild_akavir
+			society_rank == 6
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = weapon_sword_akaviri_flawless }
+			4 = { add_artifact = armor_akaviri_flawless }
+			4 = { add_artifact = armor_akaviri_metal_flawless }
+			2 = { add_artifact = book_father_of_the_niben }
+			2 = { add_artifact = book_rislav_the_righteous }
+			3 = { add_artifact = book_fall_of_the_snow_prince }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	
+	#Mages Guild Tamriel
+	if = {
+		limit = {
+			society_member_of = mages_guild_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = ring_of_shardbolt }
+			3 = { add_artifact = ring_of_sunfire }
+			5 = { add_artifact = ring_aegis }
+			5 = { add_artifact = amulet_of_spelldrinker }
+			10 = { add_artifact = book_fundaments_of_alchemy }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = mages_guild_tamriel
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			2 = { add_artifact = ring_of_shardbolt }
+			2 = { add_artifact = ring_of_sunfire }
+			3 = { add_artifact = ring_aegis }
+			3 = { add_artifact = amulet_of_spelldrinker }
+			3 = { add_artifact = amulet_of_unity }
+			5 = { add_artifact = book_fundaments_of_alchemy }
+			5 = { add_artifact = book_notes_on_racial_phylogeny }
+			5 = { add_artifact = book_liminal_bridges }
+			1 = { add_artifact = book_ngasta_kvata_kvakis }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = mages_guild_tamriel
+			society_rank == 5
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = amulet_of_spelldrinker }
+			5 = { add_artifact = amulet_of_unity }
+			5 = { add_artifact = book_notes_on_racial_phylogeny }
+			5 = { add_artifact = book_liminal_bridges }
+			5 = { add_artifact = book_ngasta_kvata_kvakis }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Transcendent Architects (aka Mages Akavir)
+	if = {
+		limit = {
+			society_member_of = mages_guild_akavir
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = ring_aegis }
+			5 = { add_artifact = amulet_of_spelldrinker }
+			10 = { add_artifact = book_fundaments_of_alchemy }
+			5 = { add_artifact = book_notes_on_racial_phylogeny }
+			5 = { add_artifact = book_liminal_bridges } 
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = mages_guild_akavir
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = ring_aegis }
+			5 = { add_artifact = amulet_of_spelldrinker }
+			5 = { add_artifact = amulet_of_unity }
+			5 = { add_artifact = book_fundaments_of_alchemy }
+			7 = { add_artifact = book_notes_on_racial_phylogeny }
+			7 = { add_artifact = book_liminal_bridges } 
+			10 = { add_artifact = book_ngasta_kvata_kvakis }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	
+	#Mercantile Guild of Tamriel
+	if = {
+		limit = {
+			society_member_of = mercantile_guild_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			10 = { add_artifact = container_lockbox }
+			5 = { add_artifact = container_chest }
+			10 = { add_artifact = map_of_tamriel }
+			8 = { add_artifact = map_of_nirn }
+			10 = { add_artifact = book_smithing_a_worthy_endeavor }
+			5 = { add_artifact = book_strakes_and_futtocks }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = mercantile_guild_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = container_lockbox }
+			7 = { add_artifact = container_chest }
+			5 = { add_artifact = container_safe }
+			5 = { add_artifact = map_of_tamriel }
+			5 = { add_artifact = map_of_nirn }
+			5 = { add_artifact = map_collection }
+			5 = { add_artifact = book_smithing_a_worthy_endeavor }
+			7 = { add_artifact = book_strakes_and_futtocks }
+			5 = { add_artifact = book_the_buying_game }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Navigators of Akavir
+	if = {
+		limit = {
+			society_member_of = mercantile_guild_akavir
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			10 = { add_artifact = container_lockbox }
+			5 = { add_artifact = container_chest }
+			10 = { add_artifact = map_of_akavir }
+			8 = { add_artifact = map_of_nirn }
+			10 = { add_artifact = book_smithing_a_worthy_endeavor }
+			5 = { add_artifact = book_strakes_and_futtocks }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = mercantile_guild_akavir
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = container_lockbox }
+			7 = { add_artifact = container_chest }
+			5 = { add_artifact = container_safe }
+			5 = { add_artifact = map_of_akavir }
+			5 = { add_artifact = map_of_nirn }
+			5 = { add_artifact = map_collection }
+			5 = { add_artifact = book_smithing_a_worthy_endeavor }
+			7 = { add_artifact = book_strakes_and_futtocks }
+			5 = { add_artifact = book_the_buying_game }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Scenarist Guild of Tamriel
+	if = {
+		limit = {
+			society_member_of = scenarist_guild_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			10 = { add_artifact = ring_happiness }
+			5 = { add_artifact = ring_of_shardbolt }
+			10 = { add_artifact = map_of_tamriel }
+			8 = { add_artifact = map_of_nirn }
+			10 = { add_artifact = book_abcs_for_barbarians }
+			5 = { add_artifact = book_hanging_gardens }
+			5 = { add_artifact = book_nchunaks_fire_and_faith }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = scenarist_guild_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = ring_happiness }
+			5 = { add_artifact = ring_of_shardbolt }
+			5 = { add_artifact = ring_of_sunfire }
+			5 = { add_artifact = map_of_tamriel }
+			5 = { add_artifact = map_of_nirn }
+			5 = { add_artifact = map_collection }
+			5 = { add_artifact = book_abcs_for_barbarians }
+			5 = { add_artifact = book_hanging_gardens }
+			5 = { add_artifact = book_nchunaks_fire_and_faith }
+			7 = { add_artifact = book_the_lusty_argonian_maid }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Ephemeral Wardens
+	if = {
+		limit = {
+			society_member_of = scenarist_guild_akavir
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			10 = { add_artifact = ring_happiness }
+			5 = { add_artifact = ring_of_shardbolt }
+			10 = { add_artifact = map_of_akavir }
+			8 = { add_artifact = map_of_nirn }
+			10 = { add_artifact = book_abcs_for_barbarians }
+			5 = { add_artifact = book_hanging_gardens }
+			5 = { add_artifact = book_nchunaks_fire_and_faith }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = scenarist_guild_akavir
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = ring_happiness }
+			5 = { add_artifact = ring_of_shardbolt }
+			5 = { add_artifact = ring_of_sunfire }
+			5 = { add_artifact = map_of_akavir }
+			5 = { add_artifact = map_of_nirn }
+			5 = { add_artifact = map_collection }
+			5 = { add_artifact = book_abcs_for_barbarians }
+			5 = { add_artifact = book_hanging_gardens }
+			5 = { add_artifact = book_nchunaks_fire_and_faith }
+			7 = { add_artifact = book_the_lusty_argonian_maid }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	
+	#The Greybeards
+	if = {
+		limit = {
+			society_member_of = greybeards_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		if = {
+			limit = { trait = p_akatosh }
+			add_artifact = amulet_of_akatosh
+		}
+		else_if = {
+			limit = { trait = p_arkay }
+			add_artifact = amulet_of_arkay
+		}
+		else_if = {
+			limit = { trait = p_dibella }
+			add_artifact = amulet_of_dibella
+		}
+		else_if = {
+			limit = { trait = p_julianos }
+			add_artifact = amulet_of_julianos
+		}
+		else_if = {
+			limit = { trait = p_kynareth }
+			add_artifact = amulet_of_kynareth
+		}
+		else_if = {
+			limit = { trait = p_mara }
+			add_artifact = amulet_of_mara
+		}
+		else_if = {
+			limit = { trait = p_stendarr }
+			add_artifact = amulet_of_stendarr
+		}
+		else_if = {
+			limit = { trait = p_talos }
+			add_artifact = amulet_of_talos
+		}
+		else_if = {
+			limit = { trait = p_zenithar }
+			add_artifact = amulet_of_zenithar
+		}
+		else = {
+			add_artifact = book_gods_and_worship
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = greybeards_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			10 = { add_artifact = book_remanada }
+			10 = { add_artifact = book_spirit_of_nirn }
+			10 = { add_artifact = book_song_of_askelde_men }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = greybeards_tamriel
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = book_nchunaks_fire_and_faith }
+			5 = { add_artifact = book_fall_of_the_snow_prince }
+			5 = { add_artifact = book_the_buying_game }
+			5 = { add_artifact = book_notes_on_racial_phylogeny }
+			5 = { add_artifact = book_remanada }
+			5 = { add_artifact = book_spirit_of_nirn }
+			5 = { add_artifact = book_song_of_askelde_men }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Cult of the Ancestor Moth
+	if = {
+		limit = {
+			society_member_of = moth_priests_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		if = {
+			limit = { trait = p_akatosh }
+			add_artifact = amulet_of_akatosh
+		}
+		else_if = {
+			limit = { trait = p_arkay }
+			add_artifact = amulet_of_arkay
+		}
+		else_if = {
+			limit = { trait = p_dibella }
+			add_artifact = amulet_of_dibella
+		}
+		else_if = {
+			limit = { trait = p_julianos }
+			add_artifact = amulet_of_julianos
+		}
+		else_if = {
+			limit = { trait = p_kynareth }
+			add_artifact = amulet_of_kynareth
+		}
+		else_if = {
+			limit = { trait = p_mara }
+			add_artifact = amulet_of_mara
+		}
+		else_if = {
+			limit = { trait = p_stendarr }
+			add_artifact = amulet_of_stendarr
+		}
+		else_if = {
+			limit = { trait = p_talos }
+			add_artifact = amulet_of_talos
+		}
+		else_if = {
+			limit = { trait = p_zenithar }
+			add_artifact = amulet_of_zenithar
+		}
+		else = {
+			add_artifact = book_gods_and_worship
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = moth_priests_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = book_hanging_gardens }
+			5 = { add_artifact = book_nchunaks_fire_and_faith }
+			5 = { add_artifact = book_rislav_the_righteous }
+			5 = { add_artifact = book_strakes_and_futtocks }
+			5 = { add_artifact = book_wulfmares_guide }
+			5 = { add_artifact = book_notes_on_racial_phylogeny }
+			5 = { add_artifact = book_liminal_bridges }
+			10 = { add_artifact = book_remanada }
+			10 = { add_artifact = book_spirit_of_nirn }
+			10 = { add_artifact = book_song_of_askelde_men }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	
+	#Thieves Guild
+	if = {
+		limit = {
+			society_member_of = thieves_guild_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = amulet_of_articulation }
+			5 = { add_artifact = amulet_of_swords }
+			10 = { add_artifact = book_chances_folly }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = thieves_guild_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = amulet_of_articulation }
+			3 = { add_artifact = amulet_of_swords }
+			4 = { add_artifact = armor_elven }
+			2 = { add_artifact = armor_elven_superior }
+			4 = { add_artifact = armor_bosmer }
+			2 = { add_artifact = armor_bosmer_superior }
+			4 = { add_artifact = armor_khajiit }
+			2 = { add_artifact = armor_khajiit_superior }
+			5 = { add_artifact = book_chances_folly }
+			7 = { add_artifact = book_wulfmares_guide }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = thieves_guild_tamriel
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			1 = { add_artifact = amulet_of_articulation }
+			1 = { add_artifact = amulet_of_swords }
+			1 = { add_artifact = armor_elven }
+			4 = { add_artifact = armor_elven_superior }
+			1 = { add_artifact = armor_bosmer }
+			4 = { add_artifact = armor_bosmer_superior }
+			1 = { add_artifact = armor_khajiit }
+			4 = { add_artifact = armor_khajiit_superior }
+			1 = { add_artifact = book_chances_folly }
+			2 = { add_artifact = book_wulfmares_guide }
+			3 = { add_artifact = book_boethiah_pillow_book }
+			3 = { add_artifact = book_the_lusty_argonian_maid }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Camonna Tong: Only Velothi/Dunmer goodies included
+	if = {
+		limit = {
+			society_member_of = camonna_tong_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			4 = { add_artifact = armor_chitin }
+			2 = { add_artifact = armor_chitin_superior }
+			4 = { add_artifact = armor_bonemold }
+			2 = { add_artifact = armor_bonemold_superior }
+			4 = { add_artifact = weapon_sword_velothi }
+			2 = { add_artifact = weapon_sword_velothi_superior }
+			3 = { add_artifact = book_chances_folly }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = camonna_tong_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			1 = { add_artifact = armor_chitin }
+			3 = { add_artifact = armor_chitin_superior }
+			1 = { add_artifact = armor_bonemold }
+			3 = { add_artifact = armor_bonemold_superior }
+			1 = { add_artifact = weapon_sword_velothi }
+			3 = { add_artifact = weapon_sword_velothi_superior }
+			3 = { add_artifact = book_chances_folly }
+			3 = { add_artifact = book_boethiah_pillow_book }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	
+	#Dark Brotherhood - Mostly specialty items
+	if = {
+		limit = {
+			society_member_of = dark_brotherhood_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		add_artifact = armor_shrouded
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = dark_brotherhood_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = ring_blackband }
+			2 = { add_artifact = weapon_sword_argonian }
+			2 = { add_artifact = weapon_sword_argonian_superior }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = dark_brotherhood_tamriel
+			society_rank == 4
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			5 = { add_artifact = amulet_of_sithis }
+			2 = { add_artifact = armor_shrouded_superior }
+			2 = { add_artifact = weapon_sword_argonian_superior }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	#Morag Tong - Dunmer + Intrigue type items
+	if = {
+		limit = {
+			society_member_of = morag_tong_tamriel
+			society_rank == 2
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			3 = { add_artifact = armor_chitin }
+			3 = { add_artifact = armor_chitin_superior }
+			3 = { add_artifact = armor_bonemold }
+			3 = { add_artifact = armor_bonemold_superior }
+			2 = { add_artifact = weapon_sword_dwarven }
+			4 = { add_artifact = weapon_sword_dwarven_superior }
+			2 = { add_artifact = weapon_sword_velothi }
+			4 = { add_artifact = weapon_sword_velothi_superior }
+			10 = { add_artifact = book_chances_folly }
+			5 = { add_artifact = book_wulfmares_guide }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+	if = {
+		limit = {
+			society_member_of = morag_tong_tamriel
+			society_rank == 3
+			check_variable = { which = society_rewards value < 5 }
+		}
+		random_list = {
+			1 = { add_artifact = armor_chitin }
+			3 = { add_artifact = armor_chitin_superior }
+			1 = { add_artifact = armor_bonemold }
+			3 = { add_artifact = armor_bonemold_superior }
+			1 = { add_artifact = weapon_sword_velothi }
+			3 = { add_artifact = weapon_sword_velothi_superior }
+			1 = { add_artifact = weapon_sword_dwarven }
+			3 = { add_artifact = weapon_sword_dwarven_superior }
+			1 = { add_artifact = book_chances_folly }
+			4 = { add_artifact = book_wulfmares_guide }
+			5 = { add_artifact = book_boethiah_pillow_book }
+		}
+		change_variable = { which = society_rewards value = 1 }
+	}
+}
+
+clear_specialization_flags = {
+	clr_character_flag = fighters_guild_assassin
+	clr_character_flag = fighters_guild_barbarian
+	clr_character_flag = fighters_guild_battlemage
+	clr_character_flag = fighters_guild_crusader
+	clr_character_flag = fighters_guild_knight
+	clr_character_flag = fighters_guild_monk
+	clr_character_flag = fighters_guild_rogue
+	clr_character_flag = fighters_guild_scout
+	clr_character_flag = fighters_guild_spellsword
+	clr_character_flag = fighters_guild_wayfarer
+	clr_character_flag = mages_guild_bard
+	clr_character_flag = mages_guild_battlemage
+	clr_character_flag = mages_guild_crusader
+	clr_character_flag = mages_guild_healer
+	clr_character_flag = mages_guild_nightblade
+	clr_character_flag = mages_guild_priest
+	clr_character_flag = mages_guild_savant
+	clr_character_flag = mages_guild_sorcerer
+	clr_character_flag = mages_guild_spellsword
+	clr_character_flag = mages_guild_witchhunter
+	clr_character_flag = mercantile_guild_acrobat
+	clr_character_flag = mercantile_guild_barbarian
+	clr_character_flag = mercantile_guild_healer
+	clr_character_flag = mercantile_guild_monk
+	clr_character_flag = mercantile_guild_nightblade
+	clr_character_flag = mercantile_guild_scout
+	clr_character_flag = mercantile_guild_sorcerer
+	clr_character_flag = mercantile_guild_thief
+	clr_character_flag = mercantile_guild_trader
+	clr_character_flag = mercantile_guild_witchhunter
+	clr_character_flag = scenarist_guild_acrobat
+	clr_character_flag = scenarist_guild_assassin
+	clr_character_flag = scenarist_guild_bard
+	clr_character_flag = scenarist_guild_knight
+	clr_character_flag = scenarist_guild_priest
+	clr_character_flag = scenarist_guild_rogue
+	clr_character_flag = scenarist_guild_savant
+	clr_character_flag = scenarist_guild_thief
+	clr_character_flag = scenarist_guild_trader
+	clr_character_flag = scenarist_guild_wayfarer
+	clr_character_flag = thieves_guild_acrobat
+	clr_character_flag = thieves_guild_assassin
+	clr_character_flag = thieves_guild_bard
+	clr_character_flag = thieves_guild_monk
+	clr_character_flag = thieves_guild_nightblade
+	clr_character_flag = thieves_guild_rogue
+	clr_character_flag = thieves_guild_savant
+	clr_character_flag = thieves_guild_thief
+	clr_character_flag = thieves_guild_trader
+	clr_character_flag = thieves_guild_wayfarer
+	clr_character_flag = assassins_guild_acrobat
+	clr_character_flag = assassins_guild_assassin
+	clr_character_flag = assassins_guild_barbarian
+	clr_character_flag = assassins_guild_battlemage
+	clr_character_flag = assassins_guild_nightblade
+	clr_character_flag = assassins_guild_rogue
+	clr_character_flag = assassins_guild_scout
+	clr_character_flag = assassins_guild_sorcerer
+	clr_character_flag = assassins_guild_thief
+	clr_character_flag = assassins_guild_witchhunter
+	clr_character_flag = monastic_order_bard
+	clr_character_flag = monastic_order_battlemage
+	clr_character_flag = monastic_order_crusader
+	clr_character_flag = monastic_order_healer
+	clr_character_flag = monastic_order_monk
+	clr_character_flag = monastic_order_priest
+	clr_character_flag = monastic_order_savant
+	clr_character_flag = monastic_order_spellsword
+	clr_character_flag = monastic_order_wayfarer
+	clr_character_flag = monastic_order_witchhunter
+	clr_character_flag = house_dres_acrobat
+	clr_character_flag = house_dres_barbarian
+	clr_character_flag = house_dres_healer
+	clr_character_flag = house_dres_knight
+	clr_character_flag = house_dres_monk
+	clr_character_flag = house_dres_scout
+	clr_character_flag = house_dres_sorcerer
+	clr_character_flag = house_dres_spellsword
+	clr_character_flag = house_dres_trader
+	clr_character_flag = house_dres_wayfarer
+	clr_character_flag = house_hlaalu_acrobat
+	clr_character_flag = house_hlaalu_assassin
+	clr_character_flag = house_hlaalu_bard
+	clr_character_flag = house_hlaalu_crusader
+	clr_character_flag = house_hlaalu_monk
+	clr_character_flag = house_hlaalu_nightblade
+	clr_character_flag = house_hlaalu_savant
+	clr_character_flag = house_hlaalu_thief
+	clr_character_flag = house_hlaalu_trader
+	clr_character_flag = house_hlaalu_witchhunter
+	clr_character_flag = house_indoril_bard
+	clr_character_flag = house_indoril_crusader
+	clr_character_flag = house_indoril_healer
+	clr_character_flag = house_indoril_knight
+	clr_character_flag = house_indoril_priest
+	clr_character_flag = house_indoril_rogue
+	clr_character_flag = house_indoril_savant
+	clr_character_flag = house_indoril_thief
+	clr_character_flag = house_indoril_trader
+	clr_character_flag = house_indoril_wayfarer
+	clr_character_flag = house_redoran_assassin
+	clr_character_flag = house_redoran_barbarian
+	clr_character_flag = house_redoran_battlemage
+	clr_character_flag = house_redoran_crusader
+	clr_character_flag = house_redoran_knight
+	clr_character_flag = house_redoran_priest
+	clr_character_flag = house_redoran_rogue
+	clr_character_flag = house_redoran_scout
+	clr_character_flag = house_redoran_spellsword
+	clr_character_flag = house_redoran_witchhunter
+	clr_character_flag = house_telvanni_assassin
+	clr_character_flag = house_telvanni_battlemage
+	clr_character_flag = house_telvanni_healer
+	clr_character_flag = house_telvanni_priest
+	clr_character_flag = house_telvanni_monk
+	clr_character_flag = house_telvanni_nightblade
+	clr_character_flag = house_telvanni_savant
+	clr_character_flag = house_telvanni_sorcerer
+	clr_character_flag = house_telvanni_spellsword
+	clr_character_flag = house_telvanni_witchhunter
+	clr_character_flag = house_sadras_acrobat
+	clr_character_flag = house_sadras_assassin
+	clr_character_flag = house_sadras_bard
+	clr_character_flag = house_sadras_crusader
+	clr_character_flag = house_sadras_monk
+	clr_character_flag = house_sadras_nightblade
+	clr_character_flag = house_sadras_savant
+	clr_character_flag = house_sadras_thief
+	clr_character_flag = house_sadras_trader
+	clr_character_flag = house_sadras_witchhunter
+	clr_character_flag = house_sul_assassin
+	clr_character_flag = house_sul_barbarian
+	clr_character_flag = house_sul_battlemage
+	clr_character_flag = house_sul_crusader
+	clr_character_flag = house_sul_knight
+	clr_character_flag = house_sul_priest
+	clr_character_flag = house_sul_rogue
+	clr_character_flag = house_sul_scout
+	clr_character_flag = house_sul_spellsword
+	clr_character_flag = house_sul_witchhunter
+	clr_character_flag = house_veloth_bard
+	clr_character_flag = house_veloth_crusader
+	clr_character_flag = house_veloth_healer
+	clr_character_flag = house_veloth_knight
+	clr_character_flag = house_veloth_priest
+	clr_character_flag = house_veloth_rogue
+	clr_character_flag = house_veloth_savant
+	clr_character_flag = house_veloth_thief
+	clr_character_flag = house_veloth_trader
+	clr_character_flag = house_veloth_wayfarer
+	clr_character_flag = house_dagoth_assassin
+	clr_character_flag = house_dagoth_battlemage
+	clr_character_flag = house_dagoth_healer
+	clr_character_flag = house_dagoth_priest
+	clr_character_flag = house_dagoth_monk
+	clr_character_flag = house_dagoth_nightblade
+	clr_character_flag = house_dagoth_savant
+	clr_character_flag = house_dagoth_sorcerer
+	clr_character_flag = house_dagoth_spellsword
+	clr_character_flag = house_dagoth_witchhunter
+	clr_character_flag = elder_council_bard
+	clr_character_flag = elder_council_battlemage
+	clr_character_flag = elder_council_crusader
+	clr_character_flag = elder_council_knight
+	clr_character_flag = elder_council_nightblade
+	clr_character_flag = elder_council_savant
+	clr_character_flag = elder_council_scout
+	clr_character_flag = elder_council_sorcerer
+	clr_character_flag = elder_council_thief
+	clr_character_flag = elder_council_trader
+}
+
+# THIS is a culture
+# PREV is a title to which it is native
+fix_nativity_effect = {
+	if = {
+		limit = {
+			has_flag = native_to_@PREV
+		}
+		while = {
+			limit = {
+				has_flag = native_to_@PREV
+			}
+			clr_flag = native_to_@PREV
+		}
+		set_flag = native_to_@PREV
+	}
+}
+
+fix_nativity_culture_flags = {
+	any_landed_title = {
+		limit = {
+			higher_real_tier_than = COUNT
+		}
+		# I wish any_culture was a thing :(
+		imperial = {
+			fix_nativity_effect = yes
+		}
+		nibenean = {
+			fix_nativity_effect = yes
+		}
+		colovian = {
+			fix_nativity_effect = yes
+		}
+		nord = {
+			fix_nativity_effect = yes
+		}
+		skaal = {
+			fix_nativity_effect = yes
+		}
+		breton = {
+			fix_nativity_effect = yes
+		}
+		reachmen = {
+			fix_nativity_effect = yes
+		}
+		atmoran = {
+			fix_nativity_effect = yes
+		}
+		yokudan = {
+			fix_nativity_effect = yes
+		}
+		forebear = {
+			fix_nativity_effect = yes
+		}
+		crown = {
+			fix_nativity_effect = yes
+		}
+		lhotunic = {
+			fix_nativity_effect = yes
+		}
+		bosmer = {
+			fix_nativity_effect = yes
+		}
+		ayleid = {
+			fix_nativity_effect = yes
+		}
+		altmer = {
+			fix_nativity_effect = yes
+		}
+		maormer = {
+			fix_nativity_effect = yes
+		}
+		falmer = {
+			fix_nativity_effect = yes
+		}
+		dwemer = {
+			fix_nativity_effect = yes
+		}
+		orsimer = {
+			fix_nativity_effect = yes
+		}
+		ashlander = {
+			fix_nativity_effect = yes
+		}
+		dunmer = {
+			fix_nativity_effect = yes
+		}
+		chimer = {
+			fix_nativity_effect = yes
+		}
+		agaceph = {
+			fix_nativity_effect = yes
+		}
+		archein = {
+			fix_nativity_effect = yes
+		}
+		paatru = {
+			fix_nativity_effect = yes
+		}
+		sarpa = {
+			fix_nativity_effect = yes
+		}
+		naga = {
+			fix_nativity_effect = yes
+		}
+		lukiul = {
+			fix_nativity_effect = yes
+		}
+		pellitinian = {
+			fix_nativity_effect = yes
+		}
+		anequinan = {
+			fix_nativity_effect = yes
+		}
+		tsaesci = {
+			fix_nativity_effect = yes
+		}
+		kamal = {
+			fix_nativity_effect = yes
+		}
+		tangmo = {
+			fix_nativity_effect = yes
+		}
+		potun = {
+			fix_nativity_effect = yes
+		}
+		akaviri = {
+			fix_nativity_effect = yes
+		}
+		quey = {
+			fix_nativity_effect = yes
+		}
+		sload = {
+			fix_nativity_effect = yes
+		}
+		draugr = {
+			fix_nativity_effect = yes
+		}
+		skeleton = {
+			fix_nativity_effect = yes
+		}
+		outsider = {
+			fix_nativity_effect = yes
+		}
+		dremora = {
+			fix_nativity_effect = yes
+		}
+		daedric = {
+			fix_nativity_effect = yes
+		}
+		dovah = {
+			fix_nativity_effect = yes
+		}
+	}
+}
+
+# Startup flags indicating who's native to where
+set_startup_nativity_flags = {
+	# Set native culture locations
+	# Kingdoms
+	k_cyrodiil = {
+		imperial = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		nibenean = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		colovian = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_skyrim = {
+		nord = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		reachmen = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_thereach = {
+		nord = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		breton = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		reachmen = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_argonia = {
+		agaceph = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		archein = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		paatru = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		sarpa = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		naga = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		lukiul = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_morrowind = {
+		dunmer = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_vvardenfell = {
+		ashlander = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_highrock = {
+		breton = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		reachmen = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_hammerfell = {
+		forebear = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		crown = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		lhotunic = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_valenwood = {
+		bosmer = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_summerset = {
+		altmer = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_elsweyr = {
+		pellitinian = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		anequinan = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_solstheim = {
+		skaal = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		atmoran = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_atmora = {
+		atmoran = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_pyandonea = {
+		maormer = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_yokuda = {
+		yokudan = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_cathnoquey = {
+		quey = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		chimer = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_yneslea = {
+		quey = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_esroniet = {
+		quey = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		akaviri = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_zasho = {
+		akaviri = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_kamipara = {
+		akaviri = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+		tsaesci = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_gorkota = {
+		tsaesci = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_panman = {
+		tsaesci = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_nuku = {
+		tsaesci = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_beidao = {
+		potun = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_gucun = {
+		potun = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_xieyang = {
+		potun = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_phaedin = {
+		tangmo = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_sungkwa = {
+		tangmo = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_langdin = {
+		tangmo = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_ryzgaley = {
+		kamal = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_kamalettan = {
+		kamal = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_mehekbaz = {
+		kamal = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+	k_kamaleimirvuk = {
+		kamal = {
+			if = {
+				limit = {
+					NOT = {
+						has_flag = native_to_@PREV
+					}
+				}
+				set_flag = native_to_@PREV
+			}
+		}
+	}
+}
+
+roll_hagraven_appearance = {
+	random_list = {
+		1 = { add_trait = hagraven_1 }
+		1 = { add_trait = hagraven_2 }
+		1 = { add_trait = hagraven_3 }
+	}
+}
+
+roll_hagraven_briarheart_transformation_survival_chance = {
+	export_to_variable = {
+		which = health_char
+		value = health
+		who = ROOT
+	}
+	
+	roll_d10 = yes
+	
+	set_variable = {
+		which = transformation_success
+		which = health_char
+	}
+	
+	subtract_variable = {
+		which = transformation_success
+		which = d10
+	}
+}
+
+# You need to use roll_hagraven_briarheart_transformation_survival_chance before
+roll_hagraven_briarheart_transformation = {
+	custom_tooltip = {
+		text = CEREMONY_SURVIVAL_DEPENDS_ON_HEALTH_CT
+		
+		hidden_tooltip = {
+			if = { # Survived the ceremony
+				limit = {
+					check_variable = {
+						which = transformation_success
+						value = 0
+					}
+				}
+				
+				if = {
+					limit = { is_female = no }
+					add_trait = briarheart
+				}
+				
+				else = {
+					add_trait = hagraven
+					roll_hagraven_appearance = yes
+				}
+			}
+			
+			else = { # Died in the process
+				death = { death_reason = death_sacrificed }
+				
+				break = yes
+			}
+		}
+	}
+	
+	custom_tooltip = {
+		text = BRIARHEART_HAGRAVEN_FORCED_RELIGION_CT
+		hidden_tooltip = { religion = forsworn_heresy }
+		hidden_tooltip = { character_event = { id = reach_flavour.15 } }
+	}
+}
+
+### Province conversion effects
+# Nothing special if culture converting (yet)
+province_convert_to_owner_culture = {
+	owner = { ROOT = { culture = PREV } }
+}
+# Gets ardor if religion converting
+province_convert_to_owner_religion = {
+	owner = { ROOT = { religion = PREV } }
+	
+	owner = { get_minor_ardor_boost = yes }
+}
+
+get_minor_ardor_boost = {
+	# Daedra
+	if = {
+		limit = { officially_worships_azura = yes }
+		add_offmap_currency = { offmap = oblivion_azura value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_boethiah = yes }
+		add_offmap_currency = { offmap = oblivion_boethiah value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_clavicus = yes }
+		add_offmap_currency = { offmap = oblivion_clavicus value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_hermaeus = yes }
+		add_offmap_currency = { offmap = oblivion_hermaeus value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_hircine = yes }
+		add_offmap_currency = { offmap = oblivion_hircine value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_malacath = yes }
+		add_offmap_currency = { offmap = oblivion_malacath value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_mehrunes = yes }
+		add_offmap_currency = { offmap = oblivion_mehrunes value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_mephala = yes }
+		add_offmap_currency = { offmap = oblivion_mephala value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_meridia = yes }
+		add_offmap_currency = { offmap = oblivion_meridia value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_molag = yes }
+		add_offmap_currency = { offmap = oblivion_molag value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_namira = yes }
+		add_offmap_currency = { offmap = oblivion_namira value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_nocturnal = yes }
+		add_offmap_currency = { offmap = oblivion_nocturnal value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_peryite = yes }
+		add_offmap_currency = { offmap = oblivion_peryite value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_sanguine = yes }
+		add_offmap_currency = { offmap = oblivion_sanguine value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_sheogorath = yes }
+		add_offmap_currency = { offmap = oblivion_sheogorath value = 100 }
+	}
+	
+	if = {
+		limit = { officially_worships_vaermina = yes }
+		add_offmap_currency = { offmap = oblivion_vaermina value = 100 }
+	}
+	
+	# Tribunal
+	if = {
+		limit = { religion = almsivi }
+		# Lower ardor boost per Tribune, but x3 so higher in total
+		add_offmap_currency = { offmap = tribunal_almalexia value = 50 }
+		add_offmap_currency = { offmap = tribunal_sothasil value = 50 }
+		add_offmap_currency = { offmap = tribunal_vivec value = 50 }
+	}
+}
+
+disband_religious_event_troops = {
+	if = {
+		limit = {
+			has_dragons_summoned = yes
+			religion_can_summon_dragons = no
+		}
+		disband_event_forces = dragon_cult_dragon_0
+		disband_event_forces = dragon_cult_dragon_1
+		disband_event_forces = dragon_cult_dragon_2
+		disband_event_forces = dragon_cult_dragon_3
+	}
+}
+
+### Bottom Text ###

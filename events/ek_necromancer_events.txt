@@ -1,0 +1,2740 @@
+### Events about Necromancy and Necromancers
+namespace = necromancy
+
+### Starts studying Necromancy - by decision
+# Works a lot like seclusion/penance: Has opportunities to get/lose seclusion/penance points, if loses too much -> fails (can't try again for some years), if has won enough -> success (becomes a Necromancer)
+long_character_event = {
+	id = necromancy.1
+	desc = necromancy.1.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy.1.optA
+		
+		custom_tooltip = {
+			text = NECROMANCY_STUDYING_BEGINS_CT
+			hidden_tooltip = {
+				set_variable = { which = necromancy_studying_points value = 25 }
+				
+				character_event = {
+					id = necromancy.10
+					days = 40
+					random = 10
+				}
+			}
+		}
+		
+		add_character_modifier = {
+			name = learning_necromancy_modifier
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = necromancy.1.optB
+		
+		hidden_tooltip = {
+			clr_character_flag = is_studying_necromancy_flag
+		}
+	}
+}
+
+# Success
+long_character_event = {
+	id = necromancy.2
+	desc = necromancy.2.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy.2.optA
+		
+		become_necromancer = yes
+		
+		hidden_tooltip = {
+			clr_character_flag = is_studying_necromancy_flag
+			remove_character_modifier = learning_necromancy_modifier
+		}
+	}
+}
+
+# Utter failure - Shame on you, you're very bad at it >:C 
+long_character_event = {
+	id = necromancy.3
+	desc = necromancy.3.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy.3.optA
+		
+		prestige = -50
+		
+		custom_tooltip = {
+			text = NECROMANCY_STUDYING_FAILURE_CT
+			hidden_tooltip = {
+				clr_character_flag = is_studying_necromancy_flag
+				set_character_flag = has_failed_necromancy_flag
+				remove_character_modifier = learning_necromancy_modifier
+			}
+		}
+	}
+}
+
+# Opportunity - Small success
+character_event = {
+	id = necromancy.4
+	desc = necromancy.4.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = { change_variable = { which = necromancy_studying_points value = 10 } }
+}
+
+# Opportunity - Small setback
+character_event = {
+	id = necromancy.5
+	desc = necromancy.5.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {  }
+}
+
+# Opportunity - Big success
+character_event = {
+	id = necromancy.6
+	desc = necromancy.6.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = { change_variable = { which = necromancy_studying_points value = 20 } }
+}
+
+# Opportunity - Big setback
+character_event = {
+	id = necromancy.7
+	desc = necromancy.7.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = { change_variable = { which = necromancy_studying_points value = -20 } }
+}
+
+# Test event for the opportunities
+long_character_event = {
+	id = necromancy.9
+	desc = necromancy.9.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy.9.optA
+		
+		custom_tooltip = {
+			text = NECROMANCY_STUDYING_SMALL_SUCCESS_CT
+			hidden_tooltip = {
+				change_variable = { which = necromancy_studying_points value = 1 }
+			}
+		}
+	}
+	
+	option = {
+		name = necromancy.9.optB
+		
+		change_variable = { which = necromancy_studying_points value = -1 }
+	}
+}
+
+##### Opportunities
+### Tombola
+long_character_event = {
+	id = necromancy.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = is_studying_necromancy_flag
+	}
+	
+	immediate = {
+		if = {
+			limit = { NOT = { check_variable = { which = necromancy_studying_points value = 1 } } }
+			long_character_event = { id = necromancy.3 days = 7 random = 3 }
+		}
+		
+		else_if = {
+			limit = { check_variable = { which = necromancy_studying_points value = 100 } }
+			long_character_event = { id = necromancy.50 days = 7 random = 3 }
+		}
+		
+		else = {
+			### What opportunity?
+			random_list = {
+				50 = {
+					modifier = {
+						factor = 1.2
+						trait = ambitious
+					}
+					
+					modifier = {
+						factor = 1.2
+						trait = diligent
+					}
+					
+					random_list = {
+						0 = {
+							modifier = {
+								factor = 0
+								NOT = { has_character_flag = necromancy_studying_test_flag }
+							}
+							long_character_event = { id = necromancy.9 }
+						}
+					
+						# Soul shaken
+						10 = {
+							modifier = {
+								factor = 0
+								has_character_flag = opportunity_soul_shaken
+							}
+							set_character_flag = opportunity_soul_shaken
+							long_character_event = { id = necromancy.11 }
+						}
+						
+						# (Not so) fresh corpses handling
+						10 = {
+							modifier = {
+								factor = 0
+								has_character_flag = opportunity_corpses_handling
+							}
+							set_character_flag = opportunity_corpses_handling
+							long_character_event = { id = necromancy.13 }
+						}
+						
+						# Reading Dark Books
+						10 = {
+							modifier = {
+								factor = 0
+								has_character_flag = opportunity_dark_books
+							}
+							set_character_flag = opportunity_dark_books
+							long_character_event = { id = necromancy.15 }
+						}
+					}
+				}
+				
+				# Small bonus
+				25 = {
+					long_character_event = { id = necromancy.17 }
+				}
+				
+				# Nothing
+				25 = {
+					modifier = {
+						factor = 1.2
+						trait = content
+					}
+					
+					modifier = {
+						factor = 2
+						trait = absent_minded
+					}
+					
+					modifier = {
+						factor = 2
+						trait = slothful
+					}
+					
+					modifier = {
+						factor = 1.5
+						trait = mage_1
+					}
+					
+					modifier = {
+						factor = 1.2
+						trait = mage_2
+					}
+					
+					modifier = {
+						factor = 0.8
+						trait = mage_4
+					}
+					
+					modifier = {
+						factor = 0.5
+						trait = mage_5
+					}
+					
+					long_character_event = { id = necromancy.18 }
+				}
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = opportunity_soul_shaken
+					has_character_flag = opportunity_corpses_handling
+					has_character_flag = opportunity_dark_books
+				}
+				clr_character_flag = opportunity_soul_shaken
+				clr_character_flag = opportunity_corpses_handling
+				clr_character_flag = opportunity_dark_books
+			}
+				
+			# Next event plox
+			long_character_event = {
+				id = necromancy.10
+				days = 40
+				random = 10
+			}
+		}
+	}
+}
+
+### Soul shaken by the practices you learn and see
+long_character_event = {
+	id = necromancy.11
+	desc = necromancy.11.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = { # Take it slowly...
+		name = necromancy.11.optA
+		
+		random_list = {
+			70 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_SOUL_SHAKEN_SLOWLY_SUCCESS_CT
+					set_character_flag = small_success
+				}
+			}
+			30 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_SOUL_SHAKEN_SLOWLY_FAILURE_CT
+					set_character_flag = small_failure
+				}
+			}
+		}
+	}
+	
+	option = { # Press forward, my soul be damned!
+		name = necromancy.11.optB
+		
+		random_list = {
+			40 = {
+				modifier = {
+					factor = 1.25
+					trait = cruel
+				}
+				modifier = {
+					factor = 1.25
+					trait = ruthless
+				}
+				modifier = {
+					factor = 1.25
+					trait = ambitious
+				}
+				modifier = {
+					factor = 1.25
+					trait = envious
+				}
+				modifier = {
+					factor = 1.25
+					trait = reckless
+				}
+				modifier = {
+					factor = 1.25
+					trait = impaler
+				}
+				
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_SOUL_SHAKEN_PRESS_SUCCESS_CT
+					set_character_flag = big_success
+				}
+			}
+			60 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_SOUL_SHAKEN_PRESS_FAILURE_CT
+					set_character_flag = big_failure
+				}
+			}
+		}
+	}
+	
+	after = {
+		long_character_event = { id = necromancy.12 days = 14 }
+	}
+}
+
+# Event result
+long_character_event = {
+	id = necromancy.12
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { has_character_flag = small_success }
+		text = necromancy.12.d.1
+	}
+	
+	desc = {
+		trigger = { has_character_flag = small_failure }
+		text = necromancy.12.d.2
+	}
+	
+	desc = {
+		trigger = { has_character_flag = big_success }
+		text = necromancy.12.d.3
+	}
+	
+	desc = {
+		trigger = { has_character_flag = big_failure }
+		text = necromancy.12.d.4
+	}
+	
+	option = {
+		trigger = { has_character_flag = small_success }
+		
+		name = necromancy_small_success
+		
+		necromancy_learning_small_success = yes
+	}
+	
+	option = {
+		trigger = { has_character_flag = small_failure }
+		
+		name = necromancy_small_failure
+		
+		necromancy_learning_small_setback = yes
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_success }
+		
+		name = necromancy_big_success
+		
+		necromancy_learning_big_success = yes
+		
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					trait = ambitious
+				}
+				add_trait = ambitious
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = cruel
+				}
+				add_trait = cruel
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = ruthless
+				}
+				add_trait = ruthless
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = envious
+				}
+				add_trait = envious
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = reckless
+				}
+				add_trait = reckless
+			}
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_failure }
+		
+		name = necromancy_big_failure
+		
+		necromancy_learning_big_setback = yes
+		
+		if = {
+			limit = { NOT = { trait = stressed } }
+			random = {
+				chance = 50
+				add_stressed = yes
+			}
+		}
+		
+		else_if = {
+			limit = { NOT = { trait = lunatic } }
+			random = {
+				chance = 25
+				add_trait = lunatic
+			}
+		}
+	}
+	
+	after = {
+		clr_character_flag = small_success
+		clr_character_flag = small_failure
+		clr_character_flag = big_success
+		clr_character_flag = big_failure
+	}
+}
+
+### Handling corpses, disgusting and unclean - but necessary
+long_character_event = {
+	id = necromancy.13
+	desc = necromancy.13.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = { # Spend less time around corpses
+		name = necromancy.13.optA
+		
+		random_list = {
+			70 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_CORPSES_HANDLING_SLOWLY_SUCCESS_CT
+					set_character_flag = small_success
+				}
+			}
+			30 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_CORPSES_HANDLING_SLOWLY_FAILURE_CT
+					set_character_flag = small_failure
+				}
+			}
+		}
+	}
+	
+	option = { # Who cares about appearances or health?
+		name = necromancy.13.optB
+		
+		random_list = {
+			40 = {
+				modifier = {
+					factor = 1.25
+					trait = uncouth
+				}
+				modifier = {
+					factor = 1.25
+					trait = slovenly
+				}
+				modifier = {
+					factor = 1.25
+					health > 5
+				}
+				modifier = {
+					factor = 1.25
+					health > 6
+				}
+				modifier = {
+					factor = 1.25
+					health > 7
+				}
+				modifier = {
+					factor = 1.25
+					health > 8
+				}
+				modifier = {
+					factor = 2
+					is_disease_immune = yes
+				}
+				
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_CORPSES_HANDLING_PRESS_SUCCESS_CT
+					set_character_flag = big_success
+				}
+			}
+			60 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_CORPSES_HANDLING_PRESS_FAILURE_CT
+					set_character_flag = big_failure
+				}
+			}
+		}
+	}
+	
+	after = {
+		long_character_event = { id = necromancy.14 days = 14 }
+	}
+}
+
+# Event result
+long_character_event = {
+	id = necromancy.14
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { has_character_flag = small_success }
+		text = necromancy.14.d.1
+	}
+	
+	desc = {
+		trigger = { has_character_flag = small_failure }
+		text = necromancy.14.d.2
+	}
+	
+	desc = {
+		trigger = { has_character_flag = big_success }
+		text = necromancy.14.d.3
+	}
+	
+	desc = {
+		trigger = { has_character_flag = big_failure }
+		text = necromancy.14.d.4
+	}
+	
+	option = {
+		trigger = { has_character_flag = small_success }
+		
+		name = necromancy_small_success
+		
+		necromancy_learning_small_success = yes
+	}
+	
+	option = {
+		trigger = { has_character_flag = small_failure }
+		
+		name = necromancy_small_failure
+		
+		necromancy_learning_small_setback = yes
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_success }
+		
+		name = necromancy_big_success
+		
+		necromancy_learning_big_success = yes
+		
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					trait = uncouth
+				}
+				add_trait = uncouth
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					trait = slovenly
+				}
+				add_trait = slovenly
+			}
+			10 = {
+				health = 0.5
+			}
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_failure }
+		
+		name = necromancy_big_failure
+		
+		necromancy_learning_big_setback = yes
+		
+		random_list = {
+			25 = {
+				modifier = {
+					factor = 0
+					is_disease_immune = yes
+				}
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_CORPSES_HANDLING_PRESS_FAILURE_DISEASE_CT
+					hidden_tooltip = {
+						character_event = { id = 6010 }
+					}
+				}
+			}
+			75 = { health = -0.5 }
+		}
+	}
+	
+	after = {
+		clr_character_flag = small_success
+		clr_character_flag = small_failure
+		clr_character_flag = big_success
+		clr_character_flag = big_failure
+	}
+}
+
+### Reading Dark Books, too difficult to understand
+long_character_event = {
+	id = necromancy.15
+	desc = necromancy.15.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = { # Put the books aside for a while
+		name = necromancy.15.optA
+		
+		random_list = {
+			70 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_DARK_BOOKS_SLOWLY_SUCCESS_CT
+					set_character_flag = small_success
+				}
+			}
+			30 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_DARK_BOOKS_SLOWLY_FAILURE_CT
+					set_character_flag = small_failure
+				}
+			}
+		}
+	}
+	
+	option = { # I *NEED* to understand!
+		name = necromancy.15.optB
+		
+		random_list = {
+			40 = {
+				modifier = {
+					factor = 1.25
+					learning = 15
+				}
+				modifier = {
+					factor = 1.25
+					learning = 20
+				}
+				modifier = {
+					factor = 1.25
+					learning = 25
+				}
+				modifier = {
+					factor = 1.25
+					learning = 30
+				}
+				modifier = {
+					factor = 1.25
+					learning = 35
+				}
+				modifier = {
+					factor = 1.25
+					trait = erudite
+				}
+				
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_DARK_BOOKS_PRESS_SUCCESS_CT
+					set_character_flag = big_success
+				}
+			}
+			
+			60 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_DARK_BOOKS_PRESS_FAILURE_CT
+					set_character_flag = big_failure
+				}
+			}
+		}
+	}
+	
+	option = { # Maybe someone at the Guild can help me..?
+		trigger = {
+			OR = {
+				AND = {
+					society_member_of = mages_guild_tamriel
+					has_global_flag = mages_tamriel_necromancy_allowed
+				}
+				AND = {
+					society_member_of = mages_guild_akavir
+					has_global_flag = mages_akavir_necromancy_allowed
+				}
+			}
+		}
+		
+		name = necromancy.15.optC
+		
+		random_list = {
+			70 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_BIG_SUCCESS_CT
+					hidden_tooltip = {
+						set_character_flag = big_success_special
+					}
+				}
+			}
+			
+			30 = {
+				custom_tooltip = {
+					set_character_flag = small_failure_special
+				}
+			}
+		}
+	}
+	
+	after = {
+		long_character_event = { id = necromancy.16 days = 14 }
+	}
+}
+
+# Event result
+long_character_event = {
+	id = necromancy.16
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { has_character_flag = small_success }
+		text = necromancy.16.d.1
+	}
+	
+	desc = {
+		trigger = { has_character_flag = small_failure }
+		text = necromancy.16.d.2
+	}
+	
+	desc = {
+		trigger = { has_character_flag = big_success }
+		text = necromancy.16.d.3
+	}
+	
+	desc = {
+		trigger = { has_character_flag = big_failure }
+		text = necromancy.16.d.4
+	}
+	
+	desc = {
+		trigger = { has_character_flag = big_success_special }
+		text = necromancy.16.d.5
+	}
+	
+	desc = {
+		trigger = { has_character_flag = small_failure_special }
+		text = necromancy.16.d.6
+	}
+	
+	option = {
+		trigger = { has_character_flag = small_success }
+		
+		name = necromancy_small_success
+		
+		necromancy_learning_small_success = yes
+	}
+	
+	option = {
+		trigger = { has_character_flag = small_failure }
+		
+		name = necromancy_small_failure
+		
+		necromancy_learning_small_setback = yes
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_success }
+		
+		name = necromancy_big_success
+		
+		necromancy_learning_big_success = yes
+		
+		random = {
+			chance = 10
+			add_trait = erudite
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_failure }
+		
+		name = necromancy_big_failure
+		
+		necromancy_learning_big_setback = yes
+		
+		random = {
+			chance = 10
+			add_trait = dull
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_success_special }
+		
+		name = necromancy_big_success
+		
+		necromancy_learning_big_success = yes
+	}
+	
+	option = {
+		trigger = { has_character_flag = small_failure_special }
+		
+		name = necromancy_small_failure
+		
+		necromancy_learning_small_setback = yes
+	}
+	
+	after = {
+		clr_character_flag = small_success
+		clr_character_flag = small_failure
+		clr_character_flag = big_success
+		clr_character_flag = big_failure
+		
+		clr_character_flag = big_success_special
+		clr_character_flag = small_failure_special
+	}
+}
+
+### Free small success
+long_character_event = {
+	id = necromancy.17
+	desc = necromancy.17.d
+	
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy_small_success
+		
+		necromancy_learning_small_success = yes
+	}
+}
+
+### Lost your time
+long_character_event = {
+	id = necromancy.18
+	desc = necromancy.18.d
+	
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy_small_failure
+		
+		necromancy_learning_small_setback = yes
+	}
+}
+
+### Final test...
+long_character_event = {
+	id = necromancy.50
+	desc = necromancy.50.d
+	title = necromancy.50.t
+	
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy.50.optA
+		
+		random_list = {
+			20 = {
+				# Learning
+				modifier = {
+					factor = 1.1
+					learning = 10
+				}
+				modifier = {
+					factor = 1.1
+					learning = 15
+				}
+				modifier = {
+					factor = 1.1
+					learning = 20
+				}
+				modifier = {
+					factor = 1.1
+					learning = 25
+				}
+				modifier = {
+					factor = 1.1
+					learning = 30
+				}
+				modifier = {
+					factor = 1.1
+					learning = 35
+				}
+				# Education
+				modifier = {
+					factor = 1.1
+					trait = mage_2
+				}
+				modifier = {
+					factor = 1.1
+					trait = mage_3
+				}
+				modifier = {
+					factor = 1.1
+					trait = mage_4
+				}
+				modifier = {
+					factor = 1.1
+					trait = mage_5
+				}
+				# Personality
+				modifier = {
+					factor = 1.1
+					trait = ambitious
+				}
+				modifier = {
+					factor = 1.1
+					trait = cruel
+				}
+				modifier = {
+					factor = 1.1
+					trait = ruthless
+				}
+				modifier = {
+					factor = 1.1
+					trait = envious
+				}
+				modifier = {
+					factor = 1.1
+					trait = reckless
+				}
+				modifier = {
+					factor = 1.1
+					trait = impaler
+				}
+				# Congenital
+				modifier = {
+					factor = 1.1
+					trait = quick
+				}
+				modifier = {
+					factor = 1.2
+					trait = genius
+				}
+				# Other
+				modifier = {
+					factor = 1.25
+					trait = erudite
+				}
+				
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_FINAL_SUCCESS_CT
+					set_character_flag = big_success
+				}
+			}
+			
+			80 = {
+				custom_tooltip = {
+					text = NECROMANCY_STUDYING_LEARNING_DARK_FINAL_SETBACK_CT
+					set_character_flag = big_failure
+				}
+			}
+		}
+	}
+	
+	after = {
+		long_character_event = { id = necromancy.51 days = 7 random = 3 }
+	}
+}
+
+long_character_event = {
+	id = necromancy.51
+	title = necromancy.50.t
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { has_character_flag = big_success }
+		text = necromancy.51.d.1
+	}
+	desc = {
+		trigger = { has_character_flag = big_failure }
+		text = necromancy.51.d.2
+	}
+	
+	
+	option = {
+		trigger = { has_character_flag = big_success }
+		
+		name = necromancy.51.optA
+		
+		custom_tooltip = {
+			text = necromancy_studies_finished_success
+			long_character_event = { id = necromancy.2 days = 7 random = 2 }
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = big_failure }
+		
+		name = necromancy.51.optB
+		
+		necromancy_learning_big_setback = yes
+		
+		long_character_event = { id = necromancy.10 days = 20 random = 5 }
+	}
+	
+	after = {
+		clr_character_flag = big_success
+		clr_character_flag = big_failure
+	}
+}
+
+##### Necromantic charges
+### NC give free undead troops to necromancers (cannot disband them, cannot inherit them, they spawn at mid strength and replenish over time)
+### NC are tied to your learning, artifacts, wonders, that kind of things
+### Losing necromantic charges will disband an undead stack at random until you have enough charges to maintain your grip on your army
+character_event = {
+	id = necromancy.100
+	desc = necromancy.100.d
+	picture = GFX_evt_library
+
+	only_rulers = yes
+	
+	trigger = {
+		trait = necromancer
+		NOT = { has_character_flag = necromantic_charges_flag }
+	}
+	
+	mean_time_to_happen = { days = 1 } # In case a Necromancer becomes landed after being given the trait
+	
+	immediate = {
+		set_character_flag = necromantic_charges_flag
+		
+		character_event = { id = necromancy.101 }
+		# Also fired through the on_actions in the yearly_scope
+		
+		set_variable = { which = number_risen_dead_army value = 0 }
+	}
+	
+	option = {
+		name = necromancy.100.optA
+		
+		custom_tooltip = { text = necromantic_charges_ct }
+	}
+}
+
+character_event = {
+	id = necromancy.101
+	desc = necromancy.101.d
+	picture = GFX_evt_library
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = necromancer
+		is_landed = yes
+	}
+	
+	immediate = {
+		calculate_necromantic_charges = yes
+		calculate_risen_dead_armies = yes
+		repeat_event = { id = necromancy.101 days = 30 }
+	}
+}
+
+character_event = {
+	id = necromancy.102
+	desc = necromancy.102.d
+	picture = GFX_evt_library
+
+	only_rulers = yes
+	
+	trigger = {
+		trait = necromancer
+		OR = {
+			has_earmarked_regiments = risen_dead_army_1
+			has_earmarked_regiments = risen_dead_army_2
+			has_earmarked_regiments = risen_dead_army_3
+			has_earmarked_regiments = risen_dead_army_4
+			has_earmarked_regiments = risen_dead_army_5
+			has_earmarked_regiments = risen_dead_army_6
+			has_earmarked_regiments = risen_dead_army_7
+			has_earmarked_regiments = risen_dead_army_8
+			has_earmarked_regiments = risen_dead_army_9
+			has_earmarked_regiments = risen_dead_army_10
+		}
+		
+		check_variable = { which = number_risen_dead_army which = risen_dead_armies_limit }
+	}
+	
+	mean_time_to_happen = { days = 7 }
+	
+	option = {
+		name = necromancy.102.optA
+		
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_10 }
+			disband_event_forces = risen_dead_army_10
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_9 }
+			disband_event_forces = risen_dead_army_9
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_8 }
+			disband_event_forces = risen_dead_army_8
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_7 }
+			disband_event_forces = risen_dead_army_7
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_6 }
+			disband_event_forces = risen_dead_army_6
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_5 }
+			disband_event_forces = risen_dead_army_5
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_4 }
+			disband_event_forces = risen_dead_army_4
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_3 }
+			disband_event_forces = risen_dead_army_3
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_2 }
+			disband_event_forces = risen_dead_army_2
+			break = yes
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_1 }
+			disband_event_forces = risen_dead_army_1
+			break = yes
+		}
+	}
+	
+	after = { calculate_risen_dead_armies = yes }
+}
+
+character_event = {
+	id = necromancy.103
+	desc = necromancy.103.d
+	picture = GFX_evt_library
+
+	only_rulers = yes
+	
+	trigger = {
+		OR = {
+			NOT = { trait = necromancer }
+		}
+		OR = {
+			has_earmarked_regiments = risen_dead_army_1
+			has_earmarked_regiments = risen_dead_army_2
+			has_earmarked_regiments = risen_dead_army_3
+			has_earmarked_regiments = risen_dead_army_4
+			has_earmarked_regiments = risen_dead_army_5
+			has_earmarked_regiments = risen_dead_army_6
+			has_earmarked_regiments = risen_dead_army_7
+			has_earmarked_regiments = risen_dead_army_8
+			has_earmarked_regiments = risen_dead_army_9
+			has_earmarked_regiments = risen_dead_army_10
+		}
+	}
+	
+	mean_time_to_happen = { days = 7 }
+	
+	option = {
+		name = necromancy.103.optA
+		
+		clr_character_flag = necromantic_charges_flag
+		set_variable = { which = number_risen_dead_army value = 0 }
+		
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_10 }
+			disband_event_forces = risen_dead_army_10
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_9 }
+			disband_event_forces = risen_dead_army_9
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_8 }
+			disband_event_forces = risen_dead_army_8
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_7 }
+			disband_event_forces = risen_dead_army_7
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_6 }
+			disband_event_forces = risen_dead_army_6
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_5 }
+			disband_event_forces = risen_dead_army_5
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_4 }
+			disband_event_forces = risen_dead_army_4
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_3 }
+			disband_event_forces = risen_dead_army_3
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_2 }
+			disband_event_forces = risen_dead_army_2
+		}
+		if = {
+			limit = { has_earmarked_regiments = risen_dead_army_1 }
+			disband_event_forces = risen_dead_army_1
+		}
+		
+		calculate_risen_dead_armies = yes
+	}
+}
+
+## Corrupting an artifact
+character_event = {
+	id = necromancy.200
+	desc = necromancy.200.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	# Corrupt a ring!
+	option = {
+		trigger = {
+			NAND = {
+				any_artifact = {
+					artifact_type = ring_tainted
+				}
+				any_artifact = {
+					artifact_type = ring_dark
+				}
+				any_artifact = {
+					artifact_type = ring_of_necromancy
+				}
+			}
+		}
+		
+		name = necromancy.200.optA
+		
+		custom_tooltip = { text = CORRUPT_RING_CT }
+		
+		set_character_flag = corrupts_ring
+		
+		character_event = { id = necromancy.201 days = 3 }
+	}
+	
+	# Corrupt an amulet!
+	option = {
+		trigger = {
+			NAND = {
+				any_artifact = {
+					artifact_type = amulet_tainted
+				}
+				any_artifact = {
+					artifact_type = amulet_dark
+				}
+				any_artifact = {
+					artifact_type = amulet_of_necromancy
+				}
+			}
+		}
+		
+		name = necromancy.200.optB
+		
+		custom_tooltip = { text = CORRUPT_AMULET_CT }
+		
+		set_character_flag = corrupts_amulet
+		
+		character_event = { id = necromancy.201 days = 3 }
+	}
+	
+	# Let's forget about it
+	option = {
+		name = necromancy.200.optC
+		
+		clr_character_flag = is_corrupting_artifact
+	}
+}
+
+character_event = {
+	id = necromancy.201
+	desc = necromancy.201.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_variable = { which = corruption_quality value = 2 }
+		
+		# If there already is a ring to be corrupted, we save it juuust in case
+		if = {
+			limit = {
+				any_artifact = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must be wearing it
+					is_artifact_equipped = yes
+					NOT = { has_artifact_flag = artifact_counted_1 }
+				}
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must be wearing it
+					is_artifact_equipped = yes
+				}
+				
+				set_artifact_flag = artifact_counted_1
+				save_event_target_as = artifact_to_be_corrupted_1
+			}
+		}
+		
+		if = {
+			limit = {
+				any_artifact = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must be wearing it
+					is_artifact_equipped = yes
+					NOR = {
+						has_artifact_flag = artifact_counted_1
+						has_artifact_flag = artifact_counted_2
+					}
+				}
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must be wearing it
+					is_artifact_equipped = yes
+				}
+		
+				set_artifact_flag = artifact_counted_2
+				save_event_target_as = artifact_to_be_corrupted_2
+			}
+		}
+	}
+	
+	# Use the 1st ring I'm currently wearing
+	option = {
+		trigger = {
+			event_target:artifact_to_be_corrupted_1 = { always = yes }
+		}
+		
+		name = necromancy.201.optA
+		
+		# Let's destroy the artifact and change the corruption result with its quality
+		if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 4 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 2 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 3 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 1 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 2 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_NO_CHANGE_CT
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 1 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_MINUS_CT
+				
+				change_variable = { which = corruption_quality value = -1 }
+			}
+		}
+		
+		event_target:artifact_to_be_corrupted_1 = { destroy_artifact = yes }
+		
+		# Skip directly to the lifeforce payment
+		character_event = { id = necromancy.204 days = 3 }
+	}
+	
+	# Use the 2nd ring I'm currently wearing
+	option = {
+		trigger = {
+			event_target:artifact_to_be_corrupted_2 = { always = yes }
+		}
+		
+		name = necromancy.201.optB
+		
+		# Let's destroy the artifact and change the corruption result with its quality
+		if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 4 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 2 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 3 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 1 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 2 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_NO_CHANGE_CT
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 1 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_MINUS_CT
+				
+				change_variable = { which = corruption_quality value = -1 }
+			}
+		}
+		
+		event_target:artifact_to_be_corrupted_2 = { destroy_artifact = yes }
+		
+		# Skip directly to the lifeforce payment
+		character_event = { id = necromancy.204 days = 3 }
+	}
+	
+	# Use a ring I'm not currently wearing
+	option = {
+		trigger = {
+			any_artifact = {
+				OR = {
+					AND = {
+						ROOT = { has_character_flag = corrupts_ring }
+						ring_can_be_corrupted = yes
+					}
+					AND = {
+						ROOT = { has_character_flag = corrupts_amulet }
+						amulet_can_be_corrupted = yes
+					}
+				}
+				# Must not be wearing it
+				NOT = { is_artifact_equipped = yes }
+			}
+		}
+		
+		name = necromancy.201.optC
+		
+		character_event = { id = necromancy.202 days = 3 }
+	}
+	
+	# I'll buy a ring on the market
+	option = {
+		name = necromancy.201.optD
+		
+		custom_tooltip = { text = CORRUPT_ARTIFACT_BUY_CT }
+		
+		character_event = { id = necromancy.203 days = 3 }
+	}
+}
+
+# We will target up to 3 random rings not currently worn by the Necromancer
+# Should they have more, and the one they want to corrupt isn't there, they will be able to get this event again
+# Some may ask why this isn't a targetted decision or something like that, and they would perhaps be right
+character_event = {
+	id = necromancy.202
+	desc = necromancy.202.d
+	picture = GFX_evt_library
+
+	is_triggered_only = yes
+	
+	immediate = {
+		# We clear the previous flags, if any
+		clear_event_target = artifact_to_be_corrupted_1
+		clear_event_target = artifact_to_be_corrupted_2
+		clear_event_target = artifact_to_be_corrupted_3
+		clear_event_target = artifact_to_be_corrupted_final
+		
+		any_artifact = {
+			clr_artifact_flag = artifact_counted_1
+			clr_artifact_flag = artifact_counted_2
+			clr_artifact_flag = artifact_counted_3
+		}
+		
+		clr_character_flag = may_need_more_events
+		
+		if = {
+			limit = {
+				any_artifact = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					count = 3
+				}
+			}
+			
+			if = {
+				limit = {
+					any_artifact = {
+						OR = {
+							AND = {
+								ROOT = { has_character_flag = corrupts_ring }
+								ring_can_be_corrupted = yes
+							}
+							AND = {
+								ROOT = { has_character_flag = corrupts_amulet }
+								amulet_can_be_corrupted = yes
+							}
+						}
+						# Must NOT be wearing it
+						NOT = { is_artifact_equipped = yes }
+						
+						count = 4
+					}
+				}
+				
+				set_character_flag = may_need_more_events
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					NOR = {
+						has_artifact_flag = artifact_counted_1
+						has_artifact_flag = artifact_counted_2
+						has_artifact_flag = artifact_counted_3
+					}
+				}
+				
+				set_artifact_flag = artifact_counted_1
+				save_event_target_as = artifact_to_be_corrupted_1
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					NOR = {
+						has_artifact_flag = artifact_counted_1
+						has_artifact_flag = artifact_counted_2
+						has_artifact_flag = artifact_counted_3
+					}
+				}
+				
+				set_artifact_flag = artifact_counted_2
+				save_event_target_as = artifact_to_be_corrupted_2
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					NOR = {
+						has_artifact_flag = artifact_counted_1
+						has_artifact_flag = artifact_counted_2
+						has_artifact_flag = artifact_counted_3
+					}
+				}
+				
+				set_artifact_flag = artifact_counted_3
+				save_event_target_as = artifact_to_be_corrupted_3
+			}
+		}
+	
+		else_if = {
+			limit = {
+				any_artifact = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					count = 2
+				}
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					NOR = {
+						has_artifact_flag = artifact_counted_1
+						has_artifact_flag = artifact_counted_2
+					}
+				}
+				
+				set_artifact_flag = artifact_counted_1
+				save_event_target_as = artifact_to_be_corrupted_1
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					NOR = {
+						has_artifact_flag = artifact_counted_1
+						has_artifact_flag = artifact_counted_2
+					}
+				}
+				
+				set_artifact_flag = artifact_counted_2
+				save_event_target_as = artifact_to_be_corrupted_2
+			}
+		}
+		
+		# 1 ring
+		else_if = {
+			limit = {
+				any_artifact = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					count = 1
+				}
+			}
+			
+			random_artifact = {
+				limit = {
+					OR = {
+						AND = {
+							ROOT = { has_character_flag = corrupts_ring }
+							ring_can_be_corrupted = yes
+						}
+						AND = {
+							ROOT = { has_character_flag = corrupts_amulet }
+							amulet_can_be_corrupted = yes
+						}
+					}
+					# Must NOT be wearing it
+					NOT = { is_artifact_equipped = yes }
+					
+					NOR = {
+						has_artifact_flag = artifact_counted_1
+					}
+				}
+				
+				set_artifact_flag = artifact_counted_1
+				save_event_target_as = artifact_to_be_corrupted_1
+			}
+		}
+	}
+	
+	option = {
+		name = necromancy.202.optA
+
+		# Let's destroy the artifact and change the corruption result with its quality
+		if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 4 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 2 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 3 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 1 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 2 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_NO_CHANGE_CT
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_1 = { quality == 1 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_MINUS_CT
+				
+				change_variable = { which = corruption_quality value = -1 }
+			}
+		}
+		
+		event_target:artifact_to_be_corrupted_1 = { destroy_artifact = yes }
+		
+		# Skip directly to the lifeforce payment
+		character_event = { id = necromancy.204 days = 3 }
+		
+		hidden_tooltip = {
+			clear_event_target = artifact_to_be_corrupted_1
+			clear_event_target = artifact_to_be_corrupted_2
+			clear_event_target = artifact_to_be_corrupted_3
+			clear_event_target = artifact_to_be_corrupted_final
+			
+			any_artifact = {
+				clr_artifact_flag = artifact_counted_1
+				clr_artifact_flag = artifact_counted_2
+				clr_artifact_flag = artifact_counted_3
+			}
+			
+			clr_character_flag = may_need_more_events
+		}
+	}
+	
+	# Use 2nd ring
+	option = {
+		trigger = {
+			event_target:artifact_to_be_corrupted_2 = { always = yes }
+		}
+		
+		name = necromancy.202.optB
+		
+		# Let's destroy the artifact and change the corruption result with its quality
+		if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 4 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 2 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 3 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 1 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 2 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_NO_CHANGE_CT
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_2 = { quality == 1 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_MINUS_CT
+				
+				change_variable = { which = corruption_quality value = -1 }
+			}
+		}
+		
+		event_target:artifact_to_be_corrupted_2 = { destroy_artifact = yes }
+		
+		# Skip directly to the lifeforce payment
+		character_event = { id = necromancy.204 days = 3 }
+		
+		hidden_tooltip = {
+			clear_event_target = artifact_to_be_corrupted_1
+			clear_event_target = artifact_to_be_corrupted_2
+			clear_event_target = artifact_to_be_corrupted_3
+			clear_event_target = artifact_to_be_corrupted_final
+			
+			any_artifact = {
+				clr_artifact_flag = artifact_counted_1
+				clr_artifact_flag = artifact_counted_2
+				clr_artifact_flag = artifact_counted_3
+			}
+			
+			clr_character_flag = may_need_more_events
+		}
+	}
+	
+	# Use 3rd ring
+	option = {
+		trigger = {
+			event_target:artifact_to_be_corrupted_3 = { always = yes }
+		}
+		
+		name = necromancy.202.optC
+		
+		# Let's destroy the artifact and change the corruption result with its quality
+		if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_3 = { quality == 4 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 2 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_3 = { quality == 3 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_PLUS_CT
+				
+				change_variable = { which = corruption_quality value = 1 }
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_3 = { quality == 2 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_NO_CHANGE_CT
+			}
+		}
+		
+		else_if = {
+			limit = {
+				event_target:artifact_to_be_corrupted_3 = { quality == 1 }
+			}
+			custom_tooltip = {
+				text = CORRUPTION_QUALITY_MINUS_CT
+				
+				change_variable = { which = corruption_quality value = -1 }
+			}
+		}
+		
+		event_target:artifact_to_be_corrupted_3 = { destroy_artifact = yes }
+		
+		# Skip directly to the lifeforce payment
+		character_event = { id = necromancy.204 days = 3 }
+		
+		hidden_tooltip = {
+			clear_event_target = artifact_to_be_corrupted_1
+			clear_event_target = artifact_to_be_corrupted_2
+			clear_event_target = artifact_to_be_corrupted_3
+			clear_event_target = artifact_to_be_corrupted_final
+			
+			any_artifact = {
+				clr_artifact_flag = artifact_counted_1
+				clr_artifact_flag = artifact_counted_2
+				clr_artifact_flag = artifact_counted_3
+			}
+			
+			clr_character_flag = may_need_more_events
+		}
+	}
+	
+	# Redo it plox
+	option = {
+		trigger = { has_character_flag = may_need_more_events }
+		
+		name = necromancy.202.optD
+		
+		custom_tooltip = { text = CORRUPT_ARTIFACT_REROLL_CT }
+		character_event = { id = necromancy.202 days = 2 }
+	}
+}
+
+# Get a ring from a local market
+character_event = {
+	id = necromancy.203
+	desc = necromancy.203.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = necromancy.203.optA
+		
+		scaled_wealth = { value = -0.25 min = -5  max = -50}
+
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_MINUS_CT
+			
+			change_variable = { which = corruption_quality value = -1 }
+		}
+		
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+		}
+	}
+	
+	option = {
+		name = necromancy.203.optB
+		
+		scaled_wealth = { value = -0.5 min = -20  max = -200}
+
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_NO_CHANGE_CT
+		}
+		
+		ai_chance = {
+			factor = 70
+			modifier = {
+				factor = 0
+				NOT = { scaled_wealth = { value = -0.5 min = -20  max = -200 } }
+			}
+		}
+	}
+	
+	option = {
+		name = necromancy.203.optC
+		
+		scaled_wealth = { value = -1 min = -50  max = -500}
+
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_PLUS_CT
+			
+			change_variable = { which = corruption_quality value = 1 }
+		}
+		
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				NOT = { scaled_wealth = { value = -1 min = -50  max = -500 } }
+			}
+		}
+	}
+	
+	after = {
+		character_event = { id = necromancy.204 days = 3 }
+	}
+}
+
+# Phew, quality with sacrifice of artifact = DONE
+# Now let's do the lifeforce payment. Should be easier right? Please be easier
+character_event = {
+	id = necromancy.204
+	desc = necromancy.204.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	# A minor tribute
+	option = {
+		name = necromancy.204.optA
+		
+		add_character_modifier = {
+			name = corruption_ritual_health_tribute_minor
+			years = 2
+		}
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_MINUS_CT
+			
+			change_variable = { which = corruption_quality value = -1 }
+		}
+		
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				trait = craven
+			}
+		}
+	}
+	
+	# As much as required
+	option = {
+		name = necromancy.204.optB
+		
+		add_character_modifier = {
+			name = corruption_ritual_health_tribute_medium
+			years = 2
+		}
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_NO_CHANGE_CT
+		}
+		
+		ai_chance = {
+			factor = 45
+		}
+	}
+	
+	# I would trade my life if needed!
+	option = {
+		name = necromancy.204.optC
+		
+		add_character_modifier = {
+			name = corruption_ritual_health_tribute_major
+			years = 2
+		}
+		
+		health = -0.5
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_PLUS_CT
+			
+			change_variable = { which = corruption_quality value = 1 }
+		}
+		
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 2
+				is_batshit_crazy = yes
+			}
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = necromancy.205 days = 7 } }
+				33 = { character_event = { id = necromancy.206 days = 7 } }
+				33 = { character_event = { id = necromancy.210 days = 7 } }
+			}
+		}
+	}
+}
+
+# That was easy
+# Now, random events which can influence the quality of the resulting artifact
+# Another Necromancer wishes to trade his services
+character_event = {
+	id = necromancy.205
+	desc = necromancy.205.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	# Sure
+	option = {
+		name = necromancy.205.optA
+		
+		scaled_wealth = { value = -0.5 min = -20  max = -200}
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_PLUS_CT
+			
+			change_variable = { which = corruption_quality value = 1 }
+		}
+	}
+	
+	# Go away please
+	option = {
+		name = necromancy.205.optB
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_NO_CHANGE_CT
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = necromancy.206 days = 7 } }
+				33 = { character_event = { id = necromancy.207 days = 7 } }
+				33 = { character_event = { id = necromancy.210 days = 7 } }
+			}
+		}
+	}
+}
+
+# The ritual is tainting your body and soul
+character_event = {
+	id = necromancy.206
+	desc = necromancy.206.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	# Take it easy
+	option = {
+		name = necromancy.206.optA
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_MINUS_CT
+			
+			change_variable = { which = corruption_quality value = -1 }
+		}
+		
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				trait = craven
+			}
+		}
+	}
+	
+	# Press forward
+	option = {
+		name = necromancy.206.optB
+		
+		if = {
+			limit = { NOT = { trait = stressed } }
+			random = {
+				chance = 50
+				add_stressed = yes
+			}
+		}
+		
+		else = {
+			health = -0.5
+		}
+		
+		ai_chance = {
+			factor = 45
+		}
+	}
+	
+	# Go even harder
+	option = {
+		name = necromancy.206.optC
+		
+		if = {
+			limit = { NOT = { trait = stressed } }
+			add_stressed = yes
+		}
+		
+		if = {
+			limit = { NOT = { trait = lunatic } }
+			random = {
+				chance = 25
+				add_trait = lunatic
+			}
+		}
+		
+		if = {
+			limit = { NOT = { trait = depressed } }
+			random = {
+				chance = 25
+				add_depressed = yes
+			}
+		}
+		
+		if = {
+			limit = { NOT = { trait = possessed } }
+			random = {
+				chance = 25
+				add_trait = possessed
+			}
+		}
+		
+		health = -0.5
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_PLUS_CT
+			
+			change_variable = { which = corruption_quality value = 1 }
+		}
+		
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 2
+				is_batshit_crazy = yes
+			}
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				33 = { character_event = { id = necromancy.207 days = 7 } }
+				#33 = { character_event = { id = necromancy.208 days = 7 } }
+				33 = { character_event = { id = necromancy.210 days = 7 } }
+			}
+		}
+	}
+}
+
+# Rumors of an old ritual requiring a... Sacrifice
+character_event = {
+	id = necromancy.207
+	desc = necromancy.207.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	# That won't be necessary
+	option = {
+		name = necromancy.207.optA
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_NO_CHANGE_CT
+		}
+		
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				trait = craven
+			}
+		}
+	}
+	
+	# A small sacrifice maybe...
+	option = {
+		name = necromancy.207.optB
+		
+		add_trait_wounded_effect = yes
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_PLUS_CT
+			
+			change_variable = { which = corruption_quality value = 1 }
+		}
+		
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 0.5
+				OR = {
+					has_injury_trigger = yes
+					is_maimed_trigger = yes
+				}
+			}
+		}
+	}
+	
+	# Everything for the Dark Arts
+	option = {
+		name = necromancy.207.optC
+		
+		add_maimed_trait_effect = yes
+		
+		custom_tooltip = {
+			text = CORRUPTION_QUALITY_PLUS_PLUS_CT
+			
+			change_variable = { which = corruption_quality value = 2 }
+		}
+		
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0.1
+				OR = {
+					has_injury_trigger = yes
+					is_maimed_trigger = yes
+				}
+			}
+		}
+	}
+	
+	after = {
+		hidden_tooltip = {
+			random_list = {
+				#33 = { character_event = { id = necromancy.208 days = 7 } }
+				#33 = { character_event = { id = necromancy.209 days = 7 } }
+				33 = { character_event = { id = necromancy.210 days = 7 } }
+			}
+		}
+	}
+}
+
+# The result!
+character_event = {
+	id = necromancy.210
+	desc = necromancy.210.d
+	picture = GFX_evt_library
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				check_variable = { which = corruption_quality value <= 0 }
+			}
+			set_character_flag = give_no_artifact
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					check_variable = { which = corruption_quality value == 1 }
+					check_variable = { which = corruption_quality value == 2 }
+				}
+			}
+			set_character_flag = give_artifact_tainted
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					check_variable = { which = corruption_quality value == 3 }
+					check_variable = { which = corruption_quality value == 4 }
+				}
+			}
+			set_character_flag = give_artifact_dark
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					check_variable = { which = corruption_quality value == 5 }
+					check_variable = { which = corruption_quality value >= 6 }
+					#check_variable = { which = corruption_quality value == 6 }
+				}
+			}
+			set_character_flag = give_artifact_of_necromancy
+		}
+		
+		#else_if = {
+		#	limit = {
+		#		check_variable = { which = corruption_quality value >= 7 }
+		#	}
+		#	set_character_flag = give_artifact_necromancer
+		#}
+	}
+	
+	option = {
+		trigger = { has_character_flag = give_no_artifact }
+		name = necromancy.210.optA
+		
+		prestige = -50
+	}
+	
+	option = {
+		trigger = { has_character_flag = give_artifact_tainted }
+		name = necromancy.210.optB
+		
+		if = {
+			limit = { has_character_flag = corrupts_ring }
+			add_artifact = ring_tainted
+		}
+		
+		else_if = {
+			limit = { has_character_flag = corrupts_amulet }
+			add_artifact = amulet_tainted
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = give_artifact_dark }
+		name = necromancy.210.optC
+		
+		if = {
+			limit = { has_character_flag = corrupts_ring }
+			add_artifact = ring_dark
+		}
+		
+		else_if = {
+			limit = { has_character_flag = corrupts_amulet }
+			add_artifact = amulet_dark
+		}
+	}
+	
+	option = {
+		trigger = { has_character_flag = give_artifact_of_necromancy }
+		name = necromancy.210.optD
+		
+		if = {
+			limit = { has_character_flag = corrupts_ring }
+			add_artifact = ring_of_necromancy
+		}
+		
+		else_if = {
+			limit = { has_character_flag = corrupts_amulet }
+			add_artifact = amulet_of_necromancy
+		}
+	}
+	
+	#option = {
+	#	trigger = { has_character_flag = give_artifact_necromancer }
+	#	name = necromancy.210.optE
+	#	
+	#	if = {
+	#		limit = { has_character_flag = corrupts_ring }
+	#		add_artifact = ring_necromancer
+	#	}
+	#	
+	#	else_if = {
+	#		limit = { has_character_flag = corrupts_amulet }
+	#		add_artifact = amulet_necromancer
+	#	}
+	#}
+	
+	after = {
+		# I actually did forget about it
+		clr_character_flag = is_corrupting_artifact
+		# Woopsie doopsie
+		clr_character_flag = give_no_artifact
+		clr_character_flag = give_artifact_tainted
+		clr_character_flag = give_artifact_dark
+		clr_character_flag = give_artifact_of_necromancy
+		clr_character_flag = corrupts_ring
+		clr_character_flag = corrupts_amulet
+	}
+}				
+
+### Old events DO NOT TOUCH
+# The event below has been replaced by the decision and event chain!
+#character_event = {
+#	id = 516001
+#	desc = EVTDESC5160001
+#	picture = GFX_evt_library
+	
+#	min_age = 25
+#	capable_only = yes
+#	prisoner = no
+	
+#	trigger = {
+#		in_command = no
+#		OR = {
+#			trait = ambitious
+#			trait = cruel
+#			trait = ruthless
+#			trait = envious
+#			trait = reckless
+#			trait = impaler
+#			has_character_flag = studying_necromancy
+#		}
+#		OR = {
+#			trait = mage_1
+#			trait = mage_2
+#			trait = mage_3
+#			trait = mage_4
+#			trait = mage_5
+#		}
+#		NOT = { trait = kind }
+#		NOT = { trait = just }
+#		NOT = { religion = daedra_meridia }
+#		NOT = { trait = necromancer }
+#		NOT = { has_character_flag = darkevilnecromancy }
+#	}
+	
+#	mean_time_to_happen = {
+#		months = 300
+
+#		modifier = {
+#			factor = 1.2
+#			trait = content
+#		}
+#		modifier = {
+#			factor = 2
+#			trait = absent_minded
+#		}
+#		modifier = {
+#			factor = 1.4
+#			trait = cynical
+#		}
+#		modifier = {
+#			factor = 2
+#			trait = zealous
+#		}
+#	}
+	
+#	option = {
+#		name = EVTOPTA5160001
+#		become_necromancer = yes
+#		set_character_flag = darkevilnecromancy
+#	}
+#	option = {
+#		name = EVTOPTB5160001
+#		piety = 50
+#		set_character_flag = darkevilnecromancy
+#	}
+#}
+
+character_event = {
+	id = 516002
+	desc = azo_meridia_rebuke_necromancer
+	picture = GFX_evt_undead
+
+
+	trigger = {
+		trait = necromancer
+		religion = daedra_meridia
+		NOT = { trait = lich }
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	option = {
+		name = azo_meridia_necromancer_forgive
+		piety = 1000
+		lose_necromancer = yes
+	}
+	
+	option = {
+		name = azo_meridia_necromancer_reject
+		custom_tooltip = { text = "Never! I will not..."	
+			hidden_tooltip = {
+				death = { death_reason = death_sacrificed }
+			}
+		}
+	}
+}

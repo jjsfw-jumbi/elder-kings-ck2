@@ -1,0 +1,500 @@
+namespace = story_blackdrake
+
+##### Start up events
+narrative_event = {
+	id = story_blackdrake.1
+	desc = story_blackdrake.1.d
+	title = story_blackdrake.1.t
+	
+	trigger = {
+		start_date = 3461.1.1 #The Black Drake
+		c_18040 = { character = ROOT }
+		
+		is_save_game = no
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		any_war = {
+			limit = { is_primary_war_attacker = yes }
+			set_flag = flag_war_reachman_invasion_of_evermore
+		}
+	}
+	
+	option = {
+		name = story_blackdrake.1.optA
+	}
+}
+
+##### The Black Drake
+### The High Crone considers an alliance
+narrative_event = {
+	id = story_blackdrake.10
+	desc = story_blackdrake.10.d
+	title = story_blackdrake.10.t
+	
+	trigger = {
+		has_landed_title = d_hagraven
+		start_date = 3461.1.1 #The Black Drake
+		
+		NOT = { has_global_flag = story_blackdrake_highcrone_troops }
+		
+		c_18040 = {
+			any_demesne_title = { title = d_scarhammer } #The duchy in question
+			
+			any_war = { has_flag = flag_war_reachman_invasion_of_evermore }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = { set_global_flag = story_blackdrake_highcrone_troops }
+	
+	option = { # Send an envoy to the so called Black Drake
+		name = story_blackdrake.10.optA
+		
+		c_18040 = { #Durcorach
+			narrative_event = { id = story_blackdrake.11 days = 7 random = 3 }
+		}
+	}
+	
+	option = { # Nah
+		trigger = { ai = no }
+		name = "No"
+	}
+}
+
+# The Black Drake received the proposal - Give the Duchy of Scarhammer and the High Crone will send an army of Hagraven and Briarhearts
+narrative_event = {
+	id = story_blackdrake.11
+	desc = story_blackdrake.11.d
+	title = story_blackdrake.10.t
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = story_blackdrake.11.optA
+		
+		prestige = 100
+		piety = 50
+		
+		custom_tooltip = {
+			text = story_blackdrake_SCARHAMMER_FOR_TROOPS
+			hidden_tooltip = {
+				d_hagraven = {
+					owner = { save_event_target_as = high_crone }
+				}
+				
+				# Give Scarhammer and everything under it
+				d_scarhammer = {
+					grant_title = event_target:high_crone
+				}
+				
+				c_scarhammer = {
+					grant_title = event_target:high_crone
+				}
+				
+				c_ironheim = {
+					grant_title = event_target:high_crone
+				}
+				
+				c_hraggen = {
+					save_event_target_as = army_spawn_county
+				}
+				
+				spawn_unit = {
+					province = event_target:army_spawn_county
+					owner = ROOT
+					troops = {
+						heavy_infantry = { 500 500 }
+						light_infantry = { 750 750 }
+						battlemages = { 250 250 }
+					}
+					maintenance_multiplier = 0.1
+					attrition = 0.25
+				}
+				
+				spawn_unit = {
+					province = event_target:army_spawn_county
+					owner = ROOT
+					troops = {
+						heavy_infantry = { 500 500 }
+						light_infantry = { 750 750 }
+						battlemages = { 250 250 }
+					}
+					maintenance_multiplier = 0.1
+					attrition = 0.25
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = story_blackdrake.11.optB
+		
+		prestige = 250
+		piety = -50
+		
+		add_trait = zealous
+	}
+}
+
+##### Durcorach invasions
+### The end of the Invasion of Evermore - Durcorach victorious
+# Evermore gets the notice
+narrative_event = {
+	id = story_blackdrake.12
+	desc = story_blackdrake.12.d
+	title = story_blackdrake.12.t
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		start_date = 3461.1.1 #The Black Drake
+		
+		FROM = {
+			has_landed_title = e_cyrodiil
+			
+			culture = reachmen
+			
+			religion_group = reach_faiths
+		}
+		
+		ROOT = {
+			has_landed_title = k_evermore
+			any_war = {
+				using_cb = reachman_invasion_cb
+				FROM = { is_primary_war_attacker = yes }
+			}
+		}
+	}
+
+	option = { # We will bide our time...
+		name = story_blackdrake.12.optA
+		
+		ROOT = {
+			prestige = -100
+			piety = -50
+		}
+		
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = story_blackdrake.13 days = 2 } }
+		}
+		
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# Durcorach has won
+narrative_event = {
+	id = story_blackdrake.13
+	desc = story_blackdrake.13.d
+	title = story_blackdrake.12.t
+	
+	is_triggered_only = yes
+
+	immediate = {
+		add_character_modifier = {
+			name = ek_story_blackdrake_subjugated_evermore
+			years = 10
+		}
+	}
+	
+	option = { # Now, to Skyrim!
+		name = story_blackdrake.13.optA
+		
+		prestige = 500
+		piety = 250
+		
+		k_solitude = {
+			holder_scope = {
+				ROOT = {
+					unsafe_war = {
+						target = PREV
+						casus_belli = reachman_invasion_cb
+						thirdparty_title = PREVPREV
+						tier = KING
+					}
+				}
+				
+				narrative_event = {
+					id = story_blackdrake.20
+					days = 3
+				}
+			}
+		}
+	}
+	
+	option = { # Now is not the time...
+		name = story_blackdrake.13.optB
+		
+		prestige = 100
+	}
+}
+
+### The end of the Invasion of Evermore - Durcorach has been defeated
+# Evermore gets the notice
+narrative_event = {
+	id = story_blackdrake.14
+	desc = story_blackdrake.14.d
+	title = story_blackdrake.14.t
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		start_date = 3461.1.1 #The Black Drake
+		
+		FROM = {
+			has_landed_title = e_cyrodiil
+			
+			culture = reachmen
+			
+			religion_group = reach_faiths
+		}
+		
+		ROOT = { 
+			has_landed_title = k_evermore
+			any_war = {
+				using_cb = reachman_invasion_cb
+				any_attacker = { character = FROM }
+			}
+		}
+	}
+
+	option = { # We have proven to the lords of High Rock that they can count on us.
+		name = story_blackdrake.14.optA
+		
+		prestige = 250
+		piety = 100
+		
+		add_claim = k_highrock
+		
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = story_blackdrake.15 } }
+		}
+		
+		add_character_modifier = {
+			name = ek_story_blackdrake_defended_high_rock
+			years = 10
+		}
+	}
+}
+
+# Durcorach lost
+narrative_event = {
+	id = story_blackdrake.15
+	desc = story_blackdrake.15.d
+	title = story_blackdrake.14.t
+	
+	is_triggered_only = yes
+
+	option = { # Cyrodill will be hard to keep
+		name = story_blackdrake.15.optA
+		
+		prestige = -500
+		piety = -250
+	}
+}
+
+### The end of the Invasion of Solitude - Durcorach victorious
+# Solitude gets the notice
+narrative_event = {
+	id = story_blackdrake.16
+	desc = story_blackdrake.16.d
+	title = story_blackdrake.16.t
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		start_date = 3461.1.1 #The Black Drake
+		
+		FROM = {
+			has_landed_title = e_cyrodiil
+			
+			culture = reachmen
+			
+			religion_group = reach_faiths
+		}
+		
+		ROOT = { 
+			has_landed_title = k_solitude
+			any_war = {
+				using_cb = reachman_invasion_cb
+				any_attacker = { character = FROM }
+			}
+		}
+	}
+
+	option = { # We will bide our time...
+		name = story_blackdrake.16.optA
+		
+		ROOT = {
+			prestige = -100
+			piety = -50
+		}
+		
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = story_blackdrake.17 days = 2 } }
+		}
+	}
+}
+
+# Durcorach has won
+narrative_event = {
+	id = story_blackdrake.17
+	desc = story_blackdrake.17.d
+	title = story_blackdrake.16.t
+	
+	is_triggered_only = yes
+
+	immediate = {
+		add_character_modifier = {
+			name = ek_story_blackdrake_subjugated_solitude
+			years = 10
+		}
+	}
+	
+	option = { # The Reachmen are triumphant!
+		name = story_blackdrake.17.optA
+		
+		prestige = 250
+		
+		ec_add_influence_250 = yes
+		
+		set_character_flag = story_blackdrake_triumphant_reachmen
+	}
+}
+
+### The end of the Invasion of Solitude - Durcorach has been defeated
+# Solitude gets the notice
+narrative_event = {
+	id = story_blackdrake.18
+	desc = story_blackdrake.18.d
+	title = story_blackdrake.18.t
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		start_date = 3461.1.1 #The Black Drake
+		
+		FROM = {
+			has_landed_title = e_cyrodiil
+			
+			culture = reachmen
+			
+			religion_group = reach_faiths
+		}
+		
+		ROOT = { 
+			has_landed_title = k_solitude
+			any_war = {
+				using_cb = reachman_invasion_cb
+				any_attacker = { character = FROM }
+			}
+		}
+	}
+
+	option = { # Skyrim will never bow to the Reachmen
+		name = story_blackdrake.18.optA
+		
+		prestige = 250
+		piety = 100
+		
+		add_claim = k_skyrim
+		
+		hidden_tooltip = {
+			FROM = { narrative_event = { id = story_blackdrake.19 } }
+		}
+		
+		add_character_modifier = {
+			name = ek_story_blackdrake_defended_skyrim
+			years = 10
+		}
+	}
+}
+
+# Durcorach lost
+narrative_event = {
+	id = story_blackdrake.19
+	desc = story_blackdrake.19.d
+	title = story_blackdrake.18.t
+	
+	is_triggered_only = yes
+
+	option = { # A serious blow to our ambition
+		name = story_blackdrake.19.optA
+		
+		prestige = -500
+		piety = -250
+	}
+}
+
+### War has been declared on Solitude - Jarl of Solitude gets the notice
+narrative_event = {
+	id = story_blackdrake.20
+	desc = story_blackdrake.20.d
+	title = story_blackdrake.20.t
+	
+	is_triggered_only = yes
+	
+	option = { # Call the other Jarls to arms!
+		name = story_blackdrake.20.optA
+		
+		custom_tooltip = {
+			text = STORY_BLACKDRAKE_CALLTOARMS_JARLSSKYRIM
+			
+			hidden_tooltip = {
+				any_independent_ruler = {
+					limit = {
+						war = no
+						NOT = { has_landed_title = k_solitude }
+						
+						is_landed = yes
+						primary_title = { higher_tier_than = BARON }
+						
+						capital_scope = {
+							region = nirn_tamriel_skyrim
+						}
+						
+						culture = nord
+						religion_group = human_pantheon #Harkon should probably not join
+					}
+					
+					narrative_event = {
+						id = story_blackdrake.21
+						days = 2
+					}
+				}
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = story_blackdrake.21
+	desc = story_blackdrake.21.d
+	title = story_blackdrake.20.t
+	
+	is_triggered_only = yes
+	
+	option = { # Defend Solitude
+		name = story_blackdrake.21.optA
+		
+		join_defender_wars = FROM
+	}
+	
+	option = { # They are on their own
+		name = story_blackdrake.21.optA
+		
+		join_defender_wars = FROM
+		
+		ai_chance = {
+			factor = 0
+		}
+	}
+}

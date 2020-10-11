@@ -1,0 +1,87 @@
+####Etienne's Daedric Events - Mephala ####
+
+namespace = mephala
+
+###Mephala boosts Intrigue###
+
+character_event = {
+	id = mephala.10
+	desc = "Mephala10"
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		NOT = { has_dlc = "Jade Dragon" }
+		intrigue = 12
+		religion = daedra_mephala
+		NOT = {
+			has_character_modifier = mephala_shadows
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		
+		modifier = {
+			factor = 0.9
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.9
+			trait = lustful
+		}
+		modifier = {
+			factor = 0.9
+			trait = ruthless
+		}
+		modifier = {
+			factor = 0.9
+			trait = schemer
+		}
+		modifier = {
+			factor = 0.9
+			trait = seducer
+		}
+		modifier = {
+			factor = 0.9
+			trait = seductress
+		}
+		modifier = {
+			factor = 1.5
+			trait = content
+		}
+		modifier = {
+			factor = 1.5
+			trait = kind
+		}
+	}
+	
+	option = {
+		name = "Mephala10Acknowledge"
+		hidden_tooltip = {
+			add_character_modifier = { name = mephala_shadows months = 60 }
+		}	
+	}
+}
+
+character_event = {
+	id = mephala.25
+	desc = Mephala25
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes
+	
+	has_dlc = "Jade Dragon"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Mephala25Accept
+		add_character_modifier = { name = mephala_seduction months = 120 }
+		clr_character_flag = mephala_deal
+	}
+}

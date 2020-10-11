@@ -1,0 +1,1316 @@
+####Etienne's Almsivi Events####
+
+namespace = almsivi
+
+###Vivec Summons Daedra for Tribunal Temple on defensive against heathens or heretics### 
+
+character_event = {
+	id = almsivi.1
+	desc = Almsivi1
+	picture = GFX_evt_battle
+	
+	only_rulers = yes
+	prisoner = no
+	religion = almsivi
+	
+	trigger = {
+		has_landed_title = k_almsivi
+		NOT = { has_character_modifier = almsivi_army }
+		NOT = { has_dlc = "Jade Dragon" }
+		any_war = {
+			defender = {
+				character = ROOT
+			}
+			attacker = {
+				NOT = {
+					religion = almsivi
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+		
+		modifier = {
+			factor = 1.5
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+	}
+	
+	option = {
+		name = "Almsivi1Acknowledge"
+		hidden_tooltip = {
+			add_character_modifier = { name = almsivi_army months = 10 hidden = yes }
+			capital_scope = {
+					ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.25
+						match_min = 250
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.25
+						match_min = 250
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.25
+						match_min = 250
+						match_max = 1500
+						attrition = 1
+						disband_on_peace = yes
+					}
+				}	
+			}
+		}	
+	}
+}
+
+###Lady Almalexia summons Daedra to aid independent Almsivi realms in times of crisis###
+
+character_event = {
+	id = almsivi.2
+	desc = Almsivi2
+	picture = GFX_evt_battle
+	
+	only_rulers = yes
+	prisoner = no
+	religion = almsivi
+	
+	trigger = {
+		independent = yes
+		NOT = {	has_landed_title = k_almsivi }
+		NOT = { has_character_modifier = almsivi_army }
+		NOT = { has_dlc = "Jade Dragon" }
+			any_war = {
+				defender = {
+					character = ROOT
+				}
+				attacker = {
+					NOT = {
+						religion = almsivi
+					}
+				}
+			}
+		}
+	
+	mean_time_to_happen = {
+		months = 10
+		
+		modifier = {
+			factor = 1.5
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.8
+			trait = content
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+	}
+	
+	option = {
+		name = "Almsivi2Acknowledge"
+		hidden_tooltip = {
+			add_character_modifier = { name = almsivi_army months = 24 hidden = yes }
+			capital_scope = {
+					ROOT = {
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.25
+						match_min = 250
+						match_max = 1000
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.25
+						match_min = 250
+						match_max = 1000
+						attrition = 1
+						disband_on_peace = yes
+					}
+					spawn_unit = {
+						province = PREV
+						owner = ROOT
+						match_character = ROOT
+						match_mult = 0.25
+						match_min = 250
+						match_max = 1000
+						attrition = 1
+						disband_on_peace = yes
+					}
+				}	
+			}
+		}	
+	}
+}
+
+###Vivec holds a parade in your capital###
+
+character_event = {
+	id = almsivi.4
+	desc = Almsivi4
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	prisoner = no
+	capable_only = yes
+	religion = almsivi
+	
+	
+	trigger = {
+		war = no
+		NOT = { 
+			has_character_flag = vivec_parade
+			has_character_modifier = vivec_parade
+		}
+		is_inaccessible_trigger = no
+	}
+	
+	mean_time_to_happen = {
+		months = 400
+		
+		modifier = {
+			factor = 0.9
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.9
+			trait = greedy
+		}
+	}
+	
+	immediate = {
+		set_character_flag = vivec_parade
+	}
+	
+	option = {
+		name = "Almsivi4Lavish"
+		trigger = { scaled_wealth = 1 }
+		ai_chance = {
+
+			factor = 1
+
+			modifier = {
+				factor = 1.5
+				trait = charitable
+			}
+			modifier = {
+				factor = 1.5
+				trait = kind
+			}
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.5
+				trait = content
+			}
+		}
+		scaled_wealth = -1
+		piety = 25
+		hidden_tooltip = {
+			long_character_event = { id = almsivi.5 days = 3 }
+		}	
+	}
+	option = {
+		name = "Almsivi4Moderate"
+		trigger = { scaled_wealth = 0.5 }
+		ai_chance = {
+
+			factor = 1
+			
+			modifier = {
+				factor = 1.15
+				trait = charitable
+			}
+			modifier = {
+				factor = 1.15
+				trait = kind
+			}
+			modifier = {
+				factor = 1.15
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.15
+				trait = content
+			}
+		}
+		scaled_wealth = -0.5
+		piety = 10
+		hidden_tooltip = {
+			long_character_event = { id = almsivi.6 days = 3 }
+		}	
+	}
+	option = {
+		name = "Almsivi4Cheap"
+		trigger = { scaled_wealth = 0.25 }
+		ai_chance = {
+
+			factor = 1
+
+			modifier = {
+				factor = 1.25
+				trait = cynical
+			}
+			modifier = {
+				factor = 1.25
+				trait = greedy
+			}
+			modifier = {
+				factor = 1.05
+				trait = envious
+			}
+		}
+		scaled_wealth = -0.25
+		piety = 5
+		hidden_tooltip = {
+			long_character_event = { id = almsivi.7 days = 3 }
+		}	
+	}
+	option = {
+		name = "Almsivi4None"
+		ai_chance = {
+
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.15
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = greedy
+			}
+			modifier = {
+				factor = 1.15
+				trait = envious
+			}
+		}
+		piety = -25
+		hidden_tooltip = {
+			long_character_event = { id = almsivi.8 days = 3 }
+		}	
+	}
+}
+
+long_character_event = {
+	id = almsivi.5
+	desc = Almsivi5
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Almsivi5Acknowledge"
+		trigger = { NOT = { has_dlc = "Jade Dragon" } }
+		prestige = 25
+		piety = 25
+		clr_character_flag = vivec_parade
+		add_character_modifier = { name = vivec_parade months = 6 }
+	}
+	option = {
+		name = "Almsivi5Acknowledge"
+		trigger = { has_dlc = "Jade Dragon" }
+		prestige = 25
+		piety = 25
+		clr_character_flag = vivec_parade
+		if = {
+			limit = {
+				tribunal_almalexia = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_almalexia
+				value = 25
+			}
+		}
+		if = {
+			limit = {
+				tribunal_sothasil = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_sothasil
+				value = 25
+			}
+		}
+		if = {
+			limit = {
+				tribunal_vivec = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_vivec
+				value = 50
+			}
+		}
+		add_character_modifier = { name = vivec_parade months = 6 }
+	}
+}
+
+long_character_event = {
+	id = almsivi.6
+	desc = Almsivi6
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Almsivi6Acknowledge"
+		trigger = { NOT = { has_dlc = "Jade Dragon" } }
+		prestige = 10
+		piety = 10
+		clr_character_flag = vivec_parade
+		add_character_modifier = { name = vivec_parade months = 6 }
+	}
+	option = {
+		name = "Almsivi6Acknowledge"
+		trigger = { has_dlc = "Jade Dragon" }
+		prestige = 10
+		piety = 10
+		clr_character_flag = vivec_parade
+		if = {
+			limit = {
+				tribunal_almalexia = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_almalexia
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				tribunal_sothasil = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_sothasil
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				tribunal_vivec = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_vivec
+				value = 25
+			}
+		}
+		add_character_modifier = { name = vivec_parade months = 6 }
+	}
+}
+
+long_character_event = {
+	id = almsivi.7
+	desc = Almsivi7
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Almsivi7Acknowledge"
+		trigger = { NOT = { has_dlc = "Jade Dragon" } }
+		prestige = 5
+		piety = 5
+		clr_character_flag = vivec_parade
+		add_character_modifier = { name = vivec_parade months = 6 }
+	}
+	option = {
+		name = "Almsivi7Acknowledge"
+		trigger = { has_dlc = "Jade Dragon" }
+		prestige = 5
+		piety = 5
+		clr_character_flag = vivec_parade
+		if = {
+			limit = {
+				tribunal_vivec = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_vivec
+				value = 15
+			}
+		}
+		add_character_modifier = { name = vivec_parade months = 6 }
+	}
+}
+
+long_character_event = {
+	id = almsivi.8
+	desc = Almsivi8
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Almsivi8Acknowledge"
+		trigger = { NOT = { has_dlc = "Jade Dragon" } }
+		prestige = -10
+		clr_character_flag = vivec_parade
+	}
+	option = {
+		name = "Almsivi8Acknowledge"
+		trigger = { has_dlc = "Jade Dragon" }
+		prestige = -10
+		if = {
+			limit = {
+				tribunal_vivec = {
+					NOT = { has_status = tribunal_0 }
+				}
+			}
+			add_offmap_currency = {
+				offmap = tribunal_vivec
+				value = -10
+			}
+		}
+		clr_character_flag = vivec_parade
+	}
+}
+
+###Almsivi pilgrims stop at court to rest###
+
+character_event = {
+	id = almsivi.9
+	desc = Almsivi9
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	prisoner = no
+	religion = almsivi
+	
+	trigger = {
+		war = no
+		in_command = no
+		is_inaccessible_trigger = no
+	}
+	
+	mean_time_to_happen = {
+		months = 720
+	}
+	
+	option = {
+		name = "Almsivi9Accept"
+		piety = 10
+		prestige = -5
+		scaled_wealth = -0.05
+		random = {
+			chance = 25
+			add_trait = charitable
+		}
+	}
+	
+	option = {
+		name = "Almsivi9Decline"
+		piety = -10
+		random = {
+			chance = 10
+			add_trait = cruel
+		}
+	}
+}
+
+###Is Almalexia's Levitation graceful or imposing?###
+
+character_event = {
+	id = almsivi.10
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	religion = almsivi
+	
+	trigger = {
+		NOT = { trait = cynical }
+		liege = {
+			religion = almsivi
+			NOT = { trait = incapable }
+			is_adult = yes
+			any_courtier = {
+				is_adult = yes
+				prisoner = no
+				religion = almsivi
+				NOT = { trait = incapable }
+				NOT = { trait = cynical }
+				NOT = {
+					character = ROOT
+					has_character_flag = almsivi_convo
+				}
+				ai = yes
+			}
+		}
+		ai = yes
+	}
+	
+	mean_time_to_happen = {
+		years = 500
+	}
+	
+	immediate = {
+		save_event_target_as = almsivi_convo_1
+		set_character_flag = almsivi_convo
+		liege = {
+			any_courtier = {
+				limit = {
+					is_adult = yes
+					prisoner = no
+					religion = almsivi
+					NOT = { trait = incapable }
+					NOT = { trait = cynical }
+					NOT = {
+						character = ROOT
+					}
+					ai = yes
+				}
+				save_event_target_as = almsivi_convo_2
+				set_character_flag = almsivi_convo
+			}
+			character_event = { id = almsivi.11 }
+		}
+	}
+}
+
+#They ask the liege about Almalexia
+character_event = {
+	id = almsivi.11
+	desc = Almsivi11
+	picture = GFX_evt_throne_room
+	
+#	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Almsivi11OptionOne
+		prestige = 5
+		event_target:almsivi_convo_1 = {
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 1
+			}
+			prestige = 5
+		}
+	}
+	option = {
+		name = Almsivi11OptionTwo
+		prestige = 5
+		event_target:almsivi_convo_2 = {
+			opinion = {
+				modifier = opinion_approves
+				who = ROOT
+				years = 1
+			}
+			prestige = 5
+		}
+	}
+	option = {
+		name = Almsivi11OptionThree
+		piety = 10
+		event_target:almsivi_convo_1 = {
+			opinion = {
+				modifier = opinion_impressed
+				who = ROOT
+				months = 6
+			}
+		}
+		event_target:almsivi_convo_2 = {
+			opinion = {
+				modifier = opinion_impressed
+				who = ROOT
+				months = 6
+			}
+		}
+	}
+	option = {
+		name = Almsivi11OptionFour
+		piety = -10
+		random = {
+			chance = 10
+			add_trait = cynical
+		}
+		event_target:almsivi_convo_1 = {
+			opinion = {
+				modifier = opinion_annoyed
+				who = ROOT
+				months = 6
+			}
+		}
+		event_target:almsivi_convo_2 = {
+			opinion = {
+				modifier = opinion_annoyed
+				who = ROOT
+				months = 6
+			}
+		}
+	}
+}
+
+#Vivec protects his city
+
+# character_event = {
+# 	id = almsivi.20
+# 	desc = Almsivi20
+# 	picture = GFX_evt_tribunal
+	
+# 	is_triggered_only = yes
+	
+# 	trigger = {
+# 		is_ruler = yes
+# 		religion = almsivi
+# 		owns = 166
+# 		any_war = {
+# 			defender = { 
+# 				character = ROOT
+# 			}
+# 			attacker = {
+# 				NOT = {
+# 					religion = almsivi
+# 				}
+# 			}
+# 		}
+# 	}
+	
+# 	option = {
+# 		name = Almsivi20Acknowledge
+# 		hidden_tooltip = {
+# 			166 = {
+# 				add_province_modifier = { name = vivec_defenses duration = -1 }
+# 			}
+# 		}
+# 	}
+# }
+
+# province_event = {
+# 	id = almsivi.21
+# 	# desc = Almsivi21
+# 	# picture = GFX_evt_tribunal
+	
+# 	hide_window = yes
+	
+# 	trigger = {
+# 		has_province_modifier = vivec_defenses
+# 		owner = {
+# 			OR = {
+# 				war = no
+# 				NOT = {
+# 					religion = almsivi
+# 				}
+# 			}
+# 		}
+# 	}
+	
+# 	mean_time_to_happen = {
+# 		days = 1
+# 	}
+	
+# 	immediate = {
+# 		# name = Almsivi21Acknowledge
+# 		hidden_tooltip = {
+# 			remove_province_modifier = vivec_defenses
+# 		}	
+# 	}
+# }
+
+#Almalexia protects her city
+
+# character_event = {
+# 	id = almsivi.25
+# 	desc = Almsivi25
+# 	picture = GFX_evt_tribunal
+	
+# 	is_triggered_only = yes
+	
+# 	trigger = {
+# 		is_ruler = yes
+# 		religion = almsivi
+# 		owns = 87
+# 		any_war = {
+# 			defender = { 
+# 				character = ROOT
+# 				}
+# 			attacker = {
+# 				NOT = {
+# 				religion = almsivi
+# 				}
+# 			}
+# 		}
+# 	}
+	
+# 	option = {
+# 		name = Almsivi25Acknowledge
+# 		hidden_tooltip = {
+# 		 87 = {
+# 			add_province_modifier = { name = almalexia_defenses duration = -1 }
+# 			}
+# 		}	
+# 	}
+# }
+
+# province_event = {
+# 	id = almsivi.26
+# 	# desc = Almsivi26
+# 	# picture = GFX_evt_tribunal
+	
+# 	hide_window = yes
+	
+# 	trigger = {
+# 		has_province_modifier = almalexia_defenses
+# 		owner = {
+# 		OR = {
+# 		war = no
+# 		NOT = {
+# 		religion = almsivi
+# 				}
+# 			}
+# 		}
+# 	}
+	
+# 	mean_time_to_happen = {
+# 		months = 1
+# 	}
+	
+# 	immediate = {
+# 		# name = Almsivi26Acknowledge
+# 		hidden_tooltip = {
+# 			remove_province_modifier = almalexia_defenses
+# 		}	
+# 	}
+# }
+
+# Sotha Sil's Arcane Insights
+
+character_event = {
+	id = almsivi.30
+	desc = Almsivi30
+	picture = GFX_evt_two_moon_aurora
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		war = no
+		is_ruler = yes
+		religion = almsivi
+	}
+	
+	mean_time_to_happen = {
+		years = 415
+	}
+	
+	option = {
+		name = "Almsivi30Accept"
+		wealth = -250
+		change_learning = 1
+	}
+	
+	option = {
+		name = "Almsivi30Decline"
+	}
+}
+
+#Almalexia slays cabals
+
+province_event = {
+	id = almsivi.35
+	# desc = Almsivi35
+	# picture = GFX_evt_tribunal
+	
+	hide_window = yes
+	
+	trigger = {
+		owner = { religion = almsivi }
+		NOT = { has_dlc = "Jade Dragon" }
+		OR = {
+			has_province_modifier = goblin_infestation
+			has_province_modifier = falmer_infestation
+			has_province_modifier = skeever_infestation
+			has_province_modifier = kwama_infestation
+			has_province_modifier = undead_infestation
+			has_province_modifier = lycan_infestation
+			has_province_modifier = vampire_infestation
+			has_province_modifier = highway_robber_band
+			has_province_modifier = trolls
+			has_province_modifier = giants
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	immediate = {
+		# name = Almsivi35Acknowledge
+		if = {
+			limit = { has_province_modifier = goblin_infestation }
+			remove_province_modifier = goblin_infestation
+		}
+		if = {
+			limit = { has_province_modifier = falmer_infestation }
+			remove_province_modifier = falmer_infestation
+		}
+		if = {
+			limit = { has_province_modifier = skeever_infestation }
+			remove_province_modifier = skeever_infestation
+		}
+		if = {
+			limit = { has_province_modifier = kwama_infestation }
+			remove_province_modifier = kwama_infestation
+		}
+		if = {
+			limit = { has_province_modifier = undead_infestation }
+			remove_province_modifier = undead_infestation
+		}
+		if = {
+			limit = { has_province_modifier = lycan_infestation }
+			remove_province_modifier = lycan_infestation
+		}
+		if = {
+			limit = { has_province_modifier = vampire_infestation }
+			remove_province_modifier = vampire_infestation
+		}
+		if = {
+			limit = { has_province_modifier = highway_robber_band }
+			remove_province_modifier = highway_robber_band
+		}
+		if = {
+			limit = { has_province_modifier = trolls }
+			remove_province_modifier = trolls
+		}
+		if = {
+			limit = { has_province_modifier = giants }
+			remove_province_modifier = giants
+		}
+	}
+}
+
+#Vivec slays cabals
+
+province_event = {
+	id = almsivi.36
+	# desc = Almsivi36
+	# picture = GFX_evt_tribunal
+	
+	hide_window = yes
+	
+	trigger = {
+		owner = { religion = almsivi }
+		NOT = { has_dlc = "Jade Dragon" }
+		OR = {
+			has_province_modifier = goblin_infestation
+			has_province_modifier = falmer_infestation
+			has_province_modifier = skeever_infestation
+			has_province_modifier = kwama_infestation
+			has_province_modifier = undead_infestation
+			has_province_modifier = lycan_infestation
+			has_province_modifier = vampire_infestation
+			has_province_modifier = highway_robber_band
+			has_province_modifier = trolls
+			has_province_modifier = giants
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	immediate = {
+		# name = Almsivi35Acknowledge
+		if = {
+			limit = { has_province_modifier = goblin_infestation }
+			remove_province_modifier = goblin_infestation
+		}
+		if = {
+			limit = { has_province_modifier = falmer_infestation }
+			remove_province_modifier = falmer_infestation
+		}
+		if = {
+			limit = { has_province_modifier = skeever_infestation }
+			remove_province_modifier = skeever_infestation
+		}
+		if = {
+			limit = { has_province_modifier = kwama_infestation }
+			remove_province_modifier = kwama_infestation
+		}
+		if = {
+			limit = { has_province_modifier = undead_infestation }
+			remove_province_modifier = undead_infestation
+		}
+		if = {
+			limit = { has_province_modifier = lycan_infestation }
+			remove_province_modifier = lycan_infestation
+		}
+		if = {
+			limit = { has_province_modifier = vampire_infestation }
+			remove_province_modifier = vampire_infestation
+		}
+		if = {
+			limit = { has_province_modifier = highway_robber_band }
+			remove_province_modifier = highway_robber_band
+		}
+		if = {
+			limit = { has_province_modifier = trolls }
+			remove_province_modifier = trolls
+		}
+		if = {
+			limit = { has_province_modifier = giants }
+			remove_province_modifier = giants
+		}
+	}
+}
+
+#Sotha Sil slays cabals
+
+province_event = {
+	id = almsivi.37
+	# desc = Almsivi37
+	# picture = GFX_evt_tribunal
+	
+	hide_window = yes
+	
+	trigger = {
+		owner = { religion = almsivi }
+		NOT = { has_dlc = "Jade Dragon" }
+		OR = {
+			has_province_modifier = goblin_infestation
+			has_province_modifier = falmer_infestation
+			has_province_modifier = skeever_infestation
+			has_province_modifier = kwama_infestation
+			has_province_modifier = undead_infestation
+			has_province_modifier = lycan_infestation
+			has_province_modifier = vampire_infestation
+			has_province_modifier = highway_robber_band
+			has_province_modifier = trolls
+			has_province_modifier = giants
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	immediate = {
+		# name = Almsivi35Acknowledge
+		if = {
+			limit = { has_province_modifier = goblin_infestation }
+			remove_province_modifier = goblin_infestation
+		}
+		if = {
+			limit = { has_province_modifier = falmer_infestation }
+			remove_province_modifier = falmer_infestation
+		}
+		if = {
+			limit = { has_province_modifier = skeever_infestation }
+			remove_province_modifier = skeever_infestation
+		}
+		if = {
+			limit = { has_province_modifier = kwama_infestation }
+			remove_province_modifier = kwama_infestation
+		}
+		if = {
+			limit = { has_province_modifier = undead_infestation }
+			remove_province_modifier = undead_infestation
+		}
+		if = {
+			limit = { has_province_modifier = lycan_infestation }
+			remove_province_modifier = lycan_infestation
+		}
+		if = {
+			limit = { has_province_modifier = vampire_infestation }
+			remove_province_modifier = vampire_infestation
+		}
+		if = {
+			limit = { has_province_modifier = highway_robber_band }
+			remove_province_modifier = highway_robber_band
+		}
+		if = {
+			limit = { has_province_modifier = trolls }
+			remove_province_modifier = trolls
+		}
+		if = {
+			limit = { has_province_modifier = giants }
+			remove_province_modifier = giants
+		}
+	}
+}
+
+#A new Archcanon
+character_event = {
+	id = almsivi.100
+	desc = Almsivi100
+	picture = GFX_evt_throne_room_dunmer
+	
+	is_triggered_only = yes
+	
+	only_rulers = yes
+	religion = almsivi
+	
+	trigger = {
+		FROM = { title = k_almsivi }
+	}
+	
+	option = {
+		name = Almsivi100Acknowledge
+		any_independent_ruler = {
+			limit = {
+				is_landed = yes
+				independent = yes
+				controls_religion = no
+				is_tributary = no
+				religion = almsivi
+				OR = {
+					has_landed_title = d_dres
+					has_landed_title = k_dres
+					has_landed_title = d_indoril
+					has_landed_title = k_indoril
+					has_landed_title = d_redoran
+					has_landed_title = k_redoran
+					has_landed_title = d_telvanni
+					has_landed_title = k_telvanni
+					has_landed_title = d_hlaalu
+					has_landed_title = k_hlaalu
+					has_landed_title = d_sadras
+					has_landed_title = k_sadras
+					capital_scope = {
+						region = nirn_tamriel_morrowind
+					}
+					any_neighbor_province = {
+						is_tributary = { type = tribunal_temple }
+					}
+				}
+				NOR = {
+					is_liege_of = ROOT
+					war_with = ROOT
+				}
+			}
+			character_event = { id = almsivi.110 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = almsivi.110
+	desc = Almsivi110
+	picture = GFX_evt_throne_room_dunmer
+	is_triggered_only = yes
+	
+	trigger = {
+		is_landed = yes
+		independent = yes
+		controls_religion = no
+		is_tributary = no
+		religion = almsivi
+		k_almsivi = { has_holder = yes }
+		OR = {
+			has_landed_title = d_dres
+			has_landed_title = k_dres
+			has_landed_title = d_indoril
+			has_landed_title = k_indoril
+			has_landed_title = d_redoran
+			has_landed_title = k_redoran
+			has_landed_title = d_telvanni
+			has_landed_title = k_telvanni
+			has_landed_title = d_hlaalu
+			has_landed_title = k_hlaalu
+			has_landed_title = d_sadras
+			has_landed_title = k_sadras
+			capital_scope = {
+				region = nirn_tamriel_morrowind
+			}
+			any_realm_province = {
+				any_neighbor_province = { 
+					owner = { 
+						is_tributary = { type = tribunal_temple } 
+					} 
+				}
+			}
+			NOT = { has_any_opinion_modifier = opinion_temple_refused_to_tribute }
+			NOT = { has_any_opinion_modifier = opinion_temple_no_tribute }
+		}		
+	}
+	
+	option = {
+		name = Almsivi110OptA
+		ai_chance = {
+			factor = 50
+		}
+		k_almsivi = {
+			holder_scope = {
+				make_tributary = { 
+					who = ROOT
+					tributary_type = tribunal_temple
+				}
+				reverse_opinion = {
+					modifier = opinion_temple_appreciates_tribute
+					who = THIS
+					months = 600
+				}
+				opinion = {
+					modifier = opinion_temple_happy_to_tribute
+					who = THIS
+					months = 600
+				}
+			}
+		}
+	}
+	option = {
+		name = Almsivi110OptB
+		trigger = {
+			scaled_wealth = 1
+		}
+		ai_chance = {
+			factor = 50
+			
+			modifier = {
+				factor = 2.5
+				trait = charitable
+			}
+			modifier = {
+				factor = 2.5
+				trait = zealous
+			}
+		}
+		k_almsivi = {
+			holder_scope = {
+				make_tributary = { 
+					who = ROOT
+					tributary_type = tribunal_temple
+				}
+				transfer_scaled_wealth = { to = THIS value = 1 }
+				reverse_opinion = {
+					modifier = opinion_temple_appreciates_tribute_and_gift
+					who = THIS
+					months = 600
+				}
+				opinion = {
+					modifier = opinion_temple_happy_to_tribute_and_gift
+					who = THIS
+					months = 600
+				}
+			}
+		}
+	}
+	option = {
+		name = Almsivi110OptC
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.1
+				OR = {
+					AND = {
+						trait = house_dres
+						k_almsivi = { holder_scope = { trait = house_dres } }
+					}
+					AND = {
+						trait = house_hlaalu
+						k_almsivi = { holder_scope = { trait = house_hlaalu } }
+					}
+					AND = {
+						trait = house_indoril
+						k_almsivi = { holder_scope = { trait = house_indoril } }
+					}
+					AND = {
+						trait = house_redoran
+						k_almsivi = { holder_scope = { trait = house_redoran } }
+					}
+					AND = {
+						trait = house_telvanni
+						k_almsivi = { holder_scope = { trait = house_telvanni } }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				trait = charitable
+			}
+			modifier = {
+				factor = 0.1
+				OR = {
+					trait = house_indoril
+					trait = house_redoran
+				}
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					trait = house_dres
+					trait = house_hlaalu
+				}
+			}
+			modifier = {
+				factor = 1.5
+				trait = greedy
+			}
+			modifier = {
+				factor = 2.5
+				trait = house_telvanni
+			}
+		}
+		k_almsivi = {
+			holder_scope = {
+				reverse_opinion = {
+					modifier = opinion_temple_no_tribute
+					who = THIS
+					months = 600
+				}
+				opinion = {
+					modifier = opinion_temple_refused_to_tribute
+					who = THIS
+					months = 600
+				}
+			}
+		}
+	}
+}

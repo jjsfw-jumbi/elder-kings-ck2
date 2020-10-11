@@ -1,0 +1,999 @@
+namespace = eknotify
+
+#eknotify.0 ~ Character Education Level Increase.
+#eknotify.10-19 ~ Courtier/Character arrival notifications.
+#eknotify.200-299 ~ Disease Notifications.
+
+#Character Education Level Increases
+character_event = {
+	id = eknotify.0
+	desc = knotify6000d
+	picture = GFX_evt_monk
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = knotify6000o
+		improve_education = yes
+	}
+}
+
+
+##########################################
+#Courtier/Character arrival notifications.
+##########################################
+#Adopted Child
+character_event = { #Ping event to get portrait.
+	id = eknotify.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		liege = { letter_event = { id = eknotify.5003 } }
+	}
+}
+letter_event = { #Actual notification.
+	id = eknotify.11
+	desc = knotify5002d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+	}
+}
+#Courtier Employed Notification, called from the Employment Decisions
+character_event = {
+	id = eknotify.12
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		liege = { letter_event = { id = eknotify.13 } }
+		hidden_tooltip = {
+			#Stat booster, to increase viability of employment.
+			#Also random artifact seeding.
+			if = {
+				limit = {
+					has_character_flag = steward_recruit_flag
+					NOT = { stewardship = 8 }
+				}
+				random_list = {
+					1 = { change_stewardship = 10 }
+					2 = { change_stewardship = 9 }
+					3 = { change_stewardship = 8 }
+					4 = { change_stewardship = 7 }
+					5 = { change_stewardship = 6 }
+					6 = { change_stewardship = 5 }
+					7 = { change_stewardship = 4 }
+					8 = { change_stewardship = 3 }
+					9 = { change_stewardship = 2 }
+					10 = { change_stewardship = 1 }
+				}
+				clr_character_flag = steward_recruit_flag
+			}
+			if = {
+				limit = {
+					has_character_flag = chancellor_recruit_flag
+					NOT = { diplomacy = 8 }
+				}
+				random_list = {
+					1 = { change_diplomacy = 10 }
+					2 = { change_diplomacy = 9 }
+					3 = { change_diplomacy = 8 }
+					4 = { change_diplomacy = 7 }
+					5 = { change_diplomacy = 6 }
+					6 = { change_diplomacy = 5 }
+					7 = { change_diplomacy = 4 }
+					8 = { change_diplomacy = 3 }
+					9 = { change_diplomacy = 2 }
+					10 = { change_diplomacy = 1 }
+				}
+				clr_character_flag = chancellor_recruit_flag
+			}
+			if = {
+				limit = {
+					OR = {
+						has_character_flag = priest_recruit_flag
+						has_character_flag = mage_recruit_flag
+					}
+					NOT = { learning = 8 }
+				}
+				random_list = {
+					1 = { change_learning = 10 }
+					2 = { change_learning = 9 }
+					3 = { change_learning = 8 }
+					4 = { change_learning = 7 }
+					5 = { change_learning = 6 }
+					6 = { change_learning = 5 }
+					7 = { change_learning = 4 }
+					8 = { change_learning = 3 }
+					9 = { change_learning = 2 }
+					10 = { change_learning = 1 }
+				}
+				clr_character_flag = mage_recruit_flag
+			}
+			if = {
+				limit = {
+					OR = {
+						has_character_flag = marshal_recruit_flag
+						has_character_flag = assassin_recruit_flag
+					}
+					NOT = { martial = 8 }
+				}
+				random_list = {
+					1 = { change_martial = 10 }
+					2 = { change_martial = 9 }
+					3 = { change_martial = 8 }
+					4 = { change_martial = 7 }
+					5 = { change_martial = 6 }
+					6 = { change_martial = 5 }
+					7 = { change_martial = 4 }
+					8 = { change_martial = 3 }
+					9 = { change_martial = 2 }
+					10 = { change_martial = 1 }
+				}
+				clr_character_flag = marshal_recruit_flag
+				clr_character_flag = assassin_recruit_flag
+			}
+			if = {
+				limit = {
+					OR = {
+						has_character_flag = spymaster_recruit_flag
+						has_character_flag = assassin_recruit_flag
+					}
+					NOT = { intrigue = 8 }
+				}
+				random_list = {
+					1 = { change_intrigue = 10 }
+					2 = { change_intrigue = 9 }
+					3 = { change_intrigue = 8 }
+					4 = { change_intrigue = 7 }
+					5 = { change_intrigue = 6 }
+					6 = { change_intrigue = 5 }
+					7 = { change_intrigue = 4 }
+					8 = { change_intrigue = 3 }
+					9 = { change_intrigue = 2 }
+					10 = { change_intrigue = 1 }
+				}
+				clr_character_flag = spymaster_recruit_flag
+				clr_character_flag = assassin_recruit_flag
+			}
+		}
+	}
+}
+letter_event = {
+	id = eknotify.13
+	desc = knotify5001d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+	}
+}
+
+######################
+#Disease Notifications
+######################
+#eknotify.200 ~ has_tuberculosis
+#eknotify.201 ~ has_typhoid_fever
+#eknotify.202 ~ has_typhus
+#eknotify.203 ~ has_bubonic_plague
+#eknotify.204 ~ has_measles
+#eknotify.205 ~ has_small_pox
+#eknotify.206 ~ leper
+#eknotify.207 ~ pneumonic
+#eknotify.208 ~ syphilitic
+#eknotify.209 ~ has_knahaten_flu
+#eknotify.210 ~ has_swamp_rot
+#eknotify.211 ~ cholera
+#eknotify.212 ~ dampworm
+#eknotify.213 ~ witches_pox
+#eknotify.214 ~ greenspore
+#eknotify.215 ~ rockjoint
+#eknotify.216 ~ stomach_rot
+#eknotify.217 ~ chrondiasis
+#eknotify.218 ~ ill
+character_event = {
+	id = eknotify.200
+	desc = knotify200
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_tuberculosis
+	}
+}
+character_event = {
+	id = eknotify.201
+	desc = knotify201
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_typhoid_fever
+	}
+}
+character_event = {
+	id = eknotify.202
+	desc = knotify202
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_typhus
+	}
+}
+character_event = {
+	id = eknotify.203
+	desc = knotify203
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_bubonic_plague
+	}
+}
+character_event = {
+	id = eknotify.204
+	desc = knotify204
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_measles
+	}
+}
+character_event = {
+	id = eknotify.205
+	desc = knotify205
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_small_pox
+	}
+}
+character_event = {
+	id = eknotify.206
+	desc = knotify206
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = leper
+	}
+}
+character_event = {
+	id = eknotify.207
+	desc = knotify207
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = pneumonic
+	}
+}
+character_event = {
+	id = eknotify.208
+	desc = knotify208
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = syphilitic
+	}
+}
+character_event = {
+	id = eknotify.209
+	desc = knotify209
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_knahaten_flu
+	}
+}
+character_event = {
+	id = eknotify.210
+	desc = knotify210
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = has_swamp_rot
+	}
+}
+character_event = {
+	id = eknotify.211
+	desc = knotify211
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = cholera
+	}
+}
+character_event = {
+	id = eknotify.212
+	desc = knotify212
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = dampworm
+	}
+}
+character_event = {
+	id = eknotify.213
+	desc = knotify213
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = witches_pox
+	}
+}
+character_event = {
+	id = eknotify.214
+	desc = knotify214
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = greenspore
+	}
+}
+character_event = {
+	id = eknotify.215
+	desc = knotify215
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = rockjoint
+	}
+}
+character_event = {
+	id = eknotify.216
+	desc = knotify216
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = stomach_rot
+	}
+}
+character_event = {
+	id = eknotify.217
+	desc = knotify217
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		add_trait = chrondiasis
+	}
+}
+character_event = {
+	id = eknotify.218
+	desc = knotify218
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		if = {
+			limit = {
+				NOT = {
+					has_dlc = "Reapers"
+				}
+			}
+			add_trait = ill
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			add_symptom_effect = yes
+		}
+	}
+}
+
+##
+#Cult Notifications
+##
+character_event = {
+	id = eknotify.500
+	desc = knotify500d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_azura
+	}
+}
+character_event = {
+	id = eknotify.501
+	desc = knotify501d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_boethiah
+	}
+}
+character_event = {
+	id = eknotify.502
+	desc = knotify502d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_clavicus
+	}
+}
+character_event = {
+	id = eknotify.503
+	desc = knotify503d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_hermaeus
+	}
+}
+character_event = {
+	id = eknotify.504
+	desc = knotify504d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_hircine
+	}
+}
+character_event = {
+	id = eknotify.505
+	desc = knotify505d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_mehrunes
+	}
+}
+character_event = {
+	id = eknotify.506
+	desc = knotify506d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_mephala
+	}
+}
+character_event = {
+	id = eknotify.507
+	desc = knotify507d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_mephala
+	}
+}
+character_event = {
+	id = eknotify.508
+	desc = knotify508d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_meridia
+	}
+}
+character_event = {
+	id = eknotify.509
+	desc = knotify509d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_molag
+	}
+}
+character_event = {
+	id = eknotify.510
+	desc = knotify510d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_namira
+	}
+}
+character_event = {
+	id = eknotify.511
+	desc = knotify511d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_nocturnal
+	}
+}
+character_event = {
+	id = eknotify.512
+	desc = knotify512d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_peryite
+	}
+}
+character_event = {
+	id = eknotify.513
+	desc = knotify513d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_sanguine
+	}
+}
+character_event = {
+	id = eknotify.514
+	desc = knotify514d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_sheogorath
+	}
+}
+character_event = {
+	id = eknotify.515
+	desc = knotify515d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_jyggalag
+	}
+}
+character_event = {
+	id = eknotify.516
+	desc = knotify516d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_vaermina
+	}
+}
+character_event = {
+	id = eknotify.517
+	desc = knotify517d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = daedra_malacath
+	}
+}
+character_event = {
+	id = eknotify.518
+	desc = knotify518d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = eight_divines
+	}
+}
+character_event = {
+	id = eknotify.519
+	desc = knotify519d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = nine_divines
+	}
+}
+character_event = {
+	id = eknotify.520
+	desc = knotify520d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = maruhkati
+	}
+}
+character_event = {
+	id = eknotify.522
+	desc = knotify522d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = alikr
+	}
+}
+character_event = {
+	id = eknotify.523
+	desc = knotify523d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = satakal
+	}
+}
+character_event = {
+	id = eknotify.524
+	desc = knotify524d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = auriel
+	}
+}
+character_event = {
+	id = eknotify.525
+	desc = knotify525d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = green_pact
+	}
+}
+character_event = {
+	id = eknotify.526
+	desc = knotify526d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = almsivi
+	}
+}
+character_event = {
+	id = eknotify.527
+	desc = knotify527d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = nerevarine
+	}
+}
+character_event = {
+	id = eknotify.528
+	desc = knotify528d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = almsivi_old_velothi
+	}
+}
+character_event = {
+	id = eknotify.529
+	desc = knotify529d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = reclamationist
+	}
+}
+character_event = {
+	id = eknotify.530
+	desc = knotify530d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = riddlethar
+	}
+}
+character_event = {
+	id = eknotify.531
+	desc = knotify531d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = alkosh
+	}
+}
+character_event = {
+	id = eknotify.532
+	desc = knotify532d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = baan_dar
+	}
+}
+character_event = {
+	id = eknotify.533
+	desc = knotify533d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = hist
+	}
+}
+character_event = {
+	id = eknotify.534
+	desc = knotify534d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = old_gods
+	}
+}
+character_event = {
+	id = eknotify.535
+	desc = knotify535d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = forsworn_heresy
+	}
+}
+character_event = {
+	id = eknotify.536
+	desc = knotify536d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = king_of_worms_cult
+	}
+}
+character_event = {
+	id = eknotify.537
+	desc = knotify537
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = sithis
+	}
+}
+character_event = {
+	id = eknotify.538
+	desc = knotify538
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = animism
+	}
+}
+character_event = {
+	id = eknotify.539
+	desc = knotify539
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = dragon_cult
+	}
+}
+character_event = {
+	id = eknotify.540
+	desc = knotify540
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = anuic_skaal
+	}
+}
+character_event = {
+	id = eknotify.541
+	desc = knotify541
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = pyandoneaic
+	}
+}
+character_event = {
+	id = eknotify.542
+	desc = knotify542
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = postorgnumic
+	}
+}
+character_event = {
+	id = eknotify.543
+	desc = knotify543d
+	picture = GFX_evt_knight_kneeling
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		religion = sixth_house
+	}
+}
+
+
+letter_event = {
+	id = eknotify.5003
+	desc = eknotify5003d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+	}
+}
+
+#Ring of Happiness
+# character_event = {
+	# id = eknotify.6001
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# any_courtier = {
+			# has_artifact = ring_happiness
+			# OR = {
+				# trait = stressed
+				# trait = depressed
+			# }
+		# }
+	# }
+	
+	# immediate = {
+		# any_courtier = {
+			# limit = {
+				# has_artifact = ring_happiness
+			# }
+			# ring_happiness_effect = yes
+		# }
+	# }
+# }

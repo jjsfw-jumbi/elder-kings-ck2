@@ -1,0 +1,58 @@
+namespace = tribunal_flavour
+
+character_event = {
+	id = tribunal_flavour.1
+	desc = tribunal_flavour.1.d
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { title = k_almsivi }
+	}
+	
+	immediate = {
+		clr_global_flag = vvardenfell_colonisation_allowed
+	}
+	
+	option = {
+		name = tribunal_flavour.1.optA
+		
+		set_global_flag = vvardenfell_colonisation_allowed
+	}
+	
+	option = {
+		name = tribunal_flavour.1.optB
+	}
+	
+	after = {
+		any_playable_ruler = {
+			limit = { is_dunmer = yes }
+			character_event = { id = tribunal_flavour.2 }
+		}
+	}
+}
+
+character_event = {
+	id = tribunal_flavour.2
+	desc = tribunal_flavour.2.d
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = { has_global_flag = vvardenfell_colonisation_allowed }
+		
+		name = tribunal_flavour.2.optA
+		
+		custom_tooltip = { text = VVARDENFELL_COLONISATION_ALLOWED_CT }
+	}
+	
+	option = {
+		trigger = { NOT = { has_global_flag = vvardenfell_colonisation_allowed } }
+		
+		name = tribunal_flavour.2.optB
+		
+		custom_tooltip = { text = VVARDENFELL_COLONISATION_FORBIDDEN_CT }
+	}
+}

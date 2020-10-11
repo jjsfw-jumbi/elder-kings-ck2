@@ -1,0 +1,672 @@
+####Etienne's Daedric Events - Boethiah ####
+
+namespace = boethiah
+
+# Are you worthy to rule? # - Duel Challenge for Titles based on jjsfw/jumbi's Orsimer custom government events and WOL War Events by Joel Hansson
+
+character_event = {
+	id = boethiah.1
+	desc = Boethiah1
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = { #CHALLENGE
+		name = Boethiah1Accept
+		ai_chance = {
+			factor = 1000
+		}
+		prestige = 5
+		
+		FROM = {
+			save_event_target_as = boethiah_challenger
+			character_event = { id = boethiah.2 days = 3 }
+		}
+	}
+	option = { #DONT CHALLENGE
+		name = Boethiah1Decline
+		ai_chance = {
+			factor = 1
+		}
+		prestige = -5
+	}
+}
+
+#The current title holder must fight!
+
+character_event = {
+	id = boethiah.2
+	desc = Boethiah2
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = { #FIGHT
+		name = Boethiah2Accept
+		
+		save_event_target_as = boethiah_opponent
+		FROM = {
+			save_event_target_as = boethiah_challenger
+			character_event = { id = boethiah.4 }
+		}
+	}
+}
+
+character_event = { #Start the duel - Opponent receives event BASED OFF OF WOL DUEL CHAIN BY JOEL HANSSON
+	id = boethiah.4
+	desc = Boethiah4
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Boethiah4Acknowledge
+		character_event = { id = boethiah.5 }
+	}
+}
+
+character_event = { #Challenger
+	id = boethiah.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { NOT = { has_character_modifier = recent_duel_timer } }
+			add_character_modifier = {
+				modifier = recent_duel_timer
+				hidden = yes
+				duration = 365
+			}
+		}
+		event_target:boethiah_opponent = {
+			if = {
+				limit = { NOT = { has_character_modifier = recent_duel_timer } }
+				add_character_modifier = {
+					modifier = recent_duel_timer
+					hidden = yes
+					duration = 365
+				}
+			}
+		}
+		opinion = {
+			modifier = opinion_fought_duel
+			who = event_target:boethiah_opponent
+			years = 150
+		}
+		if = {
+			limit = {
+				has_character_modifier = recent_duel_victory
+			}
+			remove_character_modifier = recent_duel_victory
+		}
+		event_target:boethiah_opponent = {
+			opinion = {
+				modifier = opinion_fought_duel
+				who = ROOT
+				years = 150
+			}
+			hidden_tooltip = {
+				character_event = { id = boethiah.6 }
+			}
+		}
+	}
+}
+
+character_event = { #Opponent
+	id = boethiah.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_character_modifier = recent_duel_victory
+			}
+			remove_character_modifier = recent_duel_victory
+		}
+		FROM = {
+			character_event = { id = boethiah.7 }
+		}
+	}
+}
+
+character_event = { #Challenger
+	id = boethiah.7
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			200 = { # challenger win
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 1 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 2 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 3 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 4 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 5 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 6 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 7 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 8 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 9 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 10 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 11 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 12 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 13 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 14 }
+					}
+					factor = 0.7
+				}
+				modifier = {
+					FROM = {
+						combat_rating_diff = { who = ROOT value = 15 }
+					}
+					factor = 0.7
+				}
+				### effects
+				random_list = {
+					100 = {
+						add_character_modifier = {
+							modifier = recent_duel_victory
+							months = 12
+						}
+						long_character_event = { id = boethiah.8 }
+					}
+				}
+			}
+			200 = { # opponent win
+				modifier = {
+					combat_rating_diff = { who = FROM value = 1 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 2 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 3 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 4 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 5 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 6 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 7 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 8 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 9 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 10 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 11 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 12 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 13 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 14 }
+					factor = 0.7
+				}
+				modifier = {
+					combat_rating_diff = { who = FROM value = 15 }
+					factor = 0.7
+				}
+				### effects
+				random_list = {
+					100 = {
+						FROM = {
+							add_character_modifier = {
+								modifier = recent_duel_victory
+								months = 12
+							}
+							long_character_event = { id = boethiah.8  } 
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+long_character_event = { #Victory!
+	id = boethiah.8
+	desc = {
+		text = Boethiah8Challenger # Winning over opponent
+		trigger = {
+			event_target:boethiah_challenger = { character = ROOT }
+
+		}
+	}
+	desc = {
+		text = Boethiah8Opponent # Winning over challenger
+		trigger = {
+			NOT = { event_target:boethiah_challenger = { character = ROOT } }
+		}
+	}
+	picture = GFX_evt_melee
+	border = GFX_event_long_frame_war
+	title = duel_title
+	
+	is_triggered_only = yes
+	
+	option = { #Challenger wins - kill/inherit opponent
+		name = Boethiah8Acknowledge
+		trigger = {
+			event_target:boethiah_challenger = { character = ROOT }
+		}
+		event_target:boethiah_opponent = {
+#			any_demesne_title = {
+#				limit = { has_claim = FROM }
+#				grant_title = FROM
+#			}
+			abdicate_to = event_target:boethiah_challenger
+			death = {
+				death_reason = death_duel
+				killer = event_target:boethiah_challenger
+			}
+		}
+	}
+	option = { #Opponent wins - kill/inherit challenger
+		name = Boethiah8Acknowledge
+		trigger = {
+			NOT = {
+				event_target:boethiah_challenger = { character = ROOT }
+			}
+		}
+		event_target:boethiah_challenger = {
+			abdicate_to = event_target:boethiah_opponent
+			death = {
+				death_reason = death_duel
+				killer = event_target:boethiah_opponent
+			}
+		}
+	}
+}
+
+#Other events#
+
+#Boethiah grants plot power to a ruler who they think has potential
+
+character_event = {
+	id = boethiah.25
+	desc = Boethiah25
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	religion = daedra_boethiah
+	
+	trigger = {
+		intrigue = 12
+		NOT = { has_dlc = "Jade Dragon" }
+		NOT = { has_character_modifier = boethiah_advice }
+	}
+	
+	mean_time_to_happen = {
+		months = 280
+		
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.8
+			trait = ruthless
+		}
+		modifier = {
+			factor = 0.8
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.8
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.8
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.8
+			trait = envious
+		}
+		modifier = {
+			factor = 1.5
+			trait = kind
+		}
+		modifier = {
+			factor = 1.5
+			trait = content
+		}
+		modifier = {
+			factor = 1.5
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+	}
+	
+	option = {
+		name = "Boethiah25Acknowledge"
+		add_character_modifier = { name = boethiah_advice months = 60 }
+	}
+}
+
+
+character_event = {
+	id = boethiah.50
+	desc = Boethiah50
+	picture = GFX_evt_two_moon_aurora
+	
+	has_dlc = "Jade Dragon"
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = { #Improve how basic unit types fight, 
+		name = Boethiah50Accept
+		custom_tooltip = { text = Boethiah50Tooltip }
+		hidden_tooltip = {
+			random_list = {
+				10 = {
+					modifier = {
+						OR = {
+							is_light_foot_leader = yes
+							is_heavy_infantry_leader = yes
+							is_cavalry_leader = yes
+						}
+						factor = 0
+					}
+					add_trait = light_foot_leader
+				}
+				10 = {
+					modifier = {
+						OR = {
+							is_light_foot_leader = yes
+							is_heavy_infantry_leader = yes
+							is_cavalry_leader = yes
+						}
+						factor = 0
+					}
+					add_trait = heavy_infantry_leader
+				}
+				10 = {
+					modifier = {
+						OR = {
+							is_light_foot_leader = yes
+							is_heavy_infantry_leader = yes
+							is_cavalry_leader = yes
+						}
+						factor = 0
+					}
+					add_trait = cavalry_leader
+				}
+				10 = {
+					modifier = {
+						is_inspiring_leader = yes
+						factor = 0
+					}
+					add_trait = inspiring_leader
+				}
+				10 = {
+					modifier = {
+						is_trickster = yes
+						factor = 0
+					}
+					add_trait = trickster
+				}
+				10 = {
+					modifier = {
+						is_organizer = yes
+						factor = 0
+					}
+					add_trait = organizer
+				}
+				10 = {
+					modifier = {
+						OR = {
+							is_defensive_leader = yes
+							is_aggressive_leader = yes
+						}
+						factor = 0
+					}
+					add_trait = defensive_leader
+				}
+				10 = {
+					modifier = {
+						OR = {
+							is_defensive_leader = yes
+							is_aggressive_leader = yes
+						}
+						factor = 0
+					}
+					add_trait = aggressive_leader
+				}
+				10 = {
+					modifier = {
+						is_experimenter = yes
+						factor = 0
+					}
+					add_trait = experimenter
+				}
+				10 = {
+					modifier = {
+						is_flanker = yes
+						factor = 0
+					}
+					add_trait = flanker
+				}
+				10 = {
+					modifier = {
+						is_siege_leader = yes
+						factor = 0
+					}
+					add_trait = siege_leader
+				}
+				10 = {
+					modifier = {
+						is_narrow_flank_leader = yes
+						factor = 0
+					}
+					add_trait = narrow_flank_leader
+				}
+				10 = {
+					modifier = {
+						trait = flat_terrain_leader
+						factor = 0
+					}
+					add_trait = flat_terrain_leader
+				}
+				10 = {
+					modifier = {
+						trait = rough_terrain_leader
+						factor = 0
+					}
+					add_trait = rough_terrain_leader
+				}
+				10 = {
+					modifier = {
+						trait = mountain_terrain_leader
+						factor = 0
+					}
+					add_trait = mountain_terrain_leader
+				}
+				10 = {
+					modifier = {
+						trait = desert_terrain_leader
+						factor = 0
+					}
+					add_trait = desert_terrain_leader
+				}
+				10 = {
+					modifier = {
+						trait = jungle_terrain_leader
+						factor = 0
+					}
+					add_trait = jungle_terrain_leader
+				}
+				10 = {
+					modifier = {
+						trait = winter_soldier
+						factor = 0
+					}
+					add_trait = winter_soldier
+				}
+				10 = {
+					modifier = {
+						trait = swamp_terrain_leader
+						factor = 0
+					}
+					add_trait = swamp_terrain_leader
+				}
+				10 = {
+					modifier = {
+						trait = extreme_terrain_leader
+						factor = 0
+					}
+					add_trait = extreme_terrain_leader
+				}
+				10 = {
+					modifier = {
+						trait = holy_warrior
+						factor = 0
+					}
+					add_trait = holy_warrior
+				}
+				10 = {
+					modifier = {
+						trait = unyielding_leader
+						factor = 0
+					}
+					add_trait = unyielding_leader
+				}
+				10 = {
+					modifier = {
+						OR = {
+							trait = lead_from_rear
+							trait = lead_from_fore
+						}
+						factor = 0
+					}
+					add_trait = lead_from_rear
+				}
+				10 = {
+					modifier = {
+						OR = {
+							trait = lead_from_rear
+							trait = lead_from_fore
+						}
+						factor = 0
+					}
+					add_trait = lead_from_fore
+				}
+				50 = {
+					modifier = {
+						trait = bloody_commander
+						factor = 0
+					}
+					add_trait = bloody_commander
+				}
+			}
+			clr_character_flag = boethiah_deal
+		}
+	}
+}

@@ -1,0 +1,6253 @@
+namespace = lycan
+
+#Todo - Event for Martial Law catching hunting werewolves.
+
+#Special event for ruler designer werewolves
+character_event = {
+	id = lycan.2
+	hide_window = yes
+	
+	only_playable = yes
+	min_age = 16
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { trait = lycan }
+		OR = {
+			trait = known_lycan
+			trait = known_lycan_benevolent
+		}
+	}
+	
+	immediate = {
+		add_trait = lycan
+		if = {
+			limit = {
+				trait = lycan #If you're a lycanthrope, this is crucial
+				trait = known_lycan #Known lycanthropes start at level 1 default
+				NOR = { #if you don't have a lycan level, voila!
+					has_character_flag = lycan_level_1
+					has_character_flag = lycan_level_2
+					has_character_flag = lycan_level_3
+					has_character_flag = lycan_level_4
+					has_character_flag = lycan_level_5
+					has_character_flag = lycan_level_6
+					has_character_flag = lycan_level_7
+					has_character_flag = lycan_level_8
+					has_character_flag = lycan_level_9
+					has_character_flag = lycan_level_10
+				}
+			}
+			set_character_flag = lycan_level_1
+		}
+		if = {
+			limit = {
+				trait = lycan #If you're a lycanthrope, this is crucial
+				trait = known_lycan_benevolent #Benevolent lycanthropes start at level 5 default
+				NOR = { #if you don't have a lycan level, voila!
+					has_character_flag = lycan_level_1
+					has_character_flag = lycan_level_2
+					has_character_flag = lycan_level_3
+					has_character_flag = lycan_level_4
+					has_character_flag = lycan_level_5
+					has_character_flag = lycan_level_6
+					has_character_flag = lycan_level_7
+					has_character_flag = lycan_level_8
+					has_character_flag = lycan_level_9
+					has_character_flag = lycan_level_10
+				}
+			}
+			set_character_flag = lycan_level_5
+		}
+	}
+}
+
+#A character gets attacked by lycanthropes
+character_event = {
+	id = lycan.4
+	desc = Lycan4
+	picture = GFX_evt_burning_house
+	
+	capable_only = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		location = { has_province_modifier = lycan_infestation }
+		is_disease_immune = no
+		NOT = { is_inaccessible_trigger = yes }
+		NOT = { combat_rating = 40 }
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 0.8
+			trait = reckless
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 1.5
+			trait = paranoid
+		}
+	}
+	
+	option = {
+		name = Lycan4Acknowledge
+		hidden_tooltip = {
+			random_list = {
+				20 = { character_event = { id = lycan.5 } } #Character dies to lycans
+				30 = { character_event = { id = lycan.6 } } #Character escapes unscathed
+				50 = { character_event = { id = lycan.7 } } #Character gets infected
+			}
+		}	
+	}
+}
+
+#Courtier dies
+character_event = {
+	id = lycan.5
+	desc = Lycan5
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = { character_event = { id = lycan.8 } }
+		}
+	}
+	
+	option = {
+		name = Lycan5Acknowledge
+		death = {
+			death_reason = death_murder_lycan_unknown
+		}
+	}
+}
+
+#Character survives
+character_event = {
+	id = lycan.6
+	desc = Lycan6
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = { character_event = { id = lycan.9 } }
+		}
+	}
+	
+	option = {
+		name = Lycan6Acknowledge
+	}
+}
+
+#Character survives but gets wounded, possibly infected
+character_event = {
+	id = lycan.7
+	desc = Lycan7
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		roll_for_lycanthropy = yes
+		if = { #Notify the liege if one exists
+			limit = {
+				independent = no
+			}
+		liege = { character_event = { id = lycan.10 } }
+		}
+	}
+	
+	option = {
+		name = Lycan7Infection #Wounded, infected
+		trigger = {
+			is_disease_immune = no
+			NOT = { has_character_flag = lycanthropy_immune }
+			has_character_flag = lycan_disease
+		}
+		add_trait = wounded
+		#hidden_tooltip = {
+		#	long_character_event = { id = lycan.15 days = 3 }
+		#}
+	}
+	option = {
+		name = Lycan7NoInfection #Wounded, not infected
+		trigger = {
+			is_disease_immune = no
+			NOT = { has_character_flag = lycanthropy_immune }
+			NOT = { has_character_flag = lycan_disease }
+		}
+		add_trait = wounded
+	}
+	option = {
+		name = Lycan7Immune #Wounded, but not infected due to immunity
+		trigger = {
+			OR = {
+				is_disease_immune = yes
+				has_character_flag = lycanthropy_immune
+			}
+		}
+		add_trait = wounded
+	}
+}
+
+#Character dies - fallout
+character_event = {
+	id = lycan.8
+	desc = Lycan8
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan8Acknowledge
+		prestige = -20
+	}
+}
+
+#Character lives - fallout
+character_event = {
+	id = lycan.9
+	desc = Lycan9
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan9Acknowledge
+		prestige = -10
+	}
+}
+
+#Character lives but is wounded - fallout
+character_event = {
+	id = lycan.10
+	desc = Lycan10
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan10Acknowledge
+		prestige = -15
+	}
+	option = {
+		name = Lycan10Imprison #Imprison them, they could be a lycan
+		trigger = {
+			FROM = {
+				is_disease_immune = no
+			}
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+		}
+		prestige = -50
+		FROM = {
+			imprison = ROOT
+			opinion = {
+				modifier = opinion_hate
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Beast Powers Awaken...or not
+long_character_event = {
+	id = lycan.15
+	desc = {
+		trigger = {
+			NOT = { has_total_control_beast_form = yes }
+		}
+		text = Lycan15 
+	}
+	desc = { 
+		trigger = {
+			has_total_control_beast_form = yes
+		}
+		text = Lycan15Alt
+	}
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = lycan_disease
+		is_disease_immune = no
+	}
+	
+	immediate = {
+		remove_disease_trait_effect = yes
+		remove_treatment_modifiers_effect = yes
+		remove_disease_flags_effect = yes
+		add_trait = lycan
+	}
+	
+	option = {
+		name = Lycan15Accept
+		trigger = { 
+			prisoner = no
+			NOT = { has_artifact = ring_of_hircine }
+		}
+		ai_chance = {
+			factor = 1
+		}
+		set_character_flag = lycan_level_1
+		character_event = { id = lycan.55 }
+	}
+	option = {
+		name = Lycan15AcceptAlt
+		trigger = { 
+			prisoner = no
+			has_artifact = ring_of_hircine
+		}
+		ai_chance = {
+			factor = 1
+		}
+		set_character_flag = lycan_level_1
+	}
+	option = {
+		name = Lycan15Accept
+		trigger = { 
+			prisoner = yes
+			NOT = { has_artifact = ring_of_hircine }
+		}
+		ai_chance = {
+			factor = 1
+		}
+		set_character_flag = lycan_level_1
+		long_character_event = { id = lycan.60 }
+	}
+	option = {
+		name = Lycan15Suicide
+		ai_chance = {
+			factor = 0.01
+		}
+		prestige = -50
+		piety = -50
+		death = { death_reason = death_suicide }
+	}
+}
+
+#Lycan loses craven or gains brave
+character_event = {
+	id = lycan.25
+	desc = Lycan25
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { trait = brave }
+	}
+	
+	mean_time_to_happen = {
+		months = 140
+	}
+	
+	option = {
+		name = Lycan25Accept
+		if = {
+			limit = { trait = craven }
+			remove_trait = craven
+			break = yes
+		}
+		if = {
+			limit = { NOT = { trait = brave } }
+			add_trait = brave
+		}
+	}
+}
+#Lycan loses content or gains ruthless
+character_event = {
+	id = lycan.26
+	desc = Lycan26
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { trait = ruthless }
+	}
+	
+	mean_time_to_happen = {
+		months = 140
+	}
+	
+	option = {
+		name = Lycan26Accept
+		if = {
+			limit = { trait = content }
+			remove_trait = content
+			break = yes
+		}
+		if = {
+			limit = { NOT = { trait = ruthless } }
+			add_trait = ruthless
+		}
+	}
+}
+#Lycan gains stubborn 
+character_event = {
+	id = lycan.27
+	desc = Lycan27
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { trait = stubborn }
+	}
+	
+	mean_time_to_happen = {
+		months = 140
+	}
+	
+	option = {
+		name = Lycan27Accept
+		add_trait = stubborn
+	}
+}
+
+
+#Lycanthrope transformation event - Leads to a random hunt
+character_event = {
+	id = lycan.50
+	desc = Lycan50
+	picture = GFX_evt_burning_house
+	
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { has_total_control_beast_form = yes }
+		NOT = { trait = known_lycan_benevolent }
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+		
+		modifier = {
+			factor = 2.5
+			has_character_flag = lycan_level_2
+		}
+		modifier = {
+			factor = 5
+			has_character_flag = lycan_level_3
+		}
+		modifier = {
+			factor = 7.5
+			has_character_flag = lycan_level_4
+		}
+		modifier = {
+			factor = 10
+			has_character_flag = lycan_level_5
+		}
+		modifier = {
+			factor = 25
+			has_character_flag = lycan_level_6
+		}
+		modifier = {
+			factor = 50
+			has_character_flag = lycan_level_7
+		}
+		modifier = {
+			factor = 75
+			has_character_flag = lycan_level_8
+		}
+		modifier = {
+			factor = 100
+			has_character_flag = lycan_level_9
+		}
+		modifier = {
+			factor = 0.75
+			trait = wroth
+		}
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+	}
+	
+	option = {
+		name = Lycan50Acknowledge
+		random_list = {
+			5 = { long_character_event = { id = lycan.100 } } #Wrecks own quarters (no attack)
+			50 = { character_event = { id = lycan.105 } } #Livestock attacked
+			5 = { character_event = { id = lycan.110 } } #Traveller attacked
+			5 = { character_event = { id = lycan.115 } } #Townspeople attacked
+			5 = { character_event = { id = lycan.125 } } #Bandits attacked
+			5 = { character_event = { id = lycan.135 } } #Soldiers attacked
+			35 = { character_event = { id = lycan.141 } } #Named character attacked
+		}
+	}
+	option = {
+		name = Lycan50Refuse
+		trigger = {
+			has_average_control_beast_form = yes
+		}
+		character_event = { id = lycan.75 }
+	}
+}
+
+#Lycanthrope transformation event - Leads to a random hunt (this version is triggered only, but nearly identical to the main one)
+character_event = {
+	id = lycan.55
+	desc = Lycan55
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan55Acknowledge
+		
+		custom_tooltip = {
+			text = Lycan55CT
+			
+			random_list = {
+				50 = { long_character_event = { id = lycan.100 } } #Wrecks own quarters (no attack)
+				20 = { character_event = { id = lycan.105 } } #Livestock attacked (very easy intrigue checks)
+				5 = { character_event = { id = lycan.110 } } #Traveller attacked (easy intrigue checks)
+				5 = { character_event = { id = lycan.115 } } #Townspeople attacked (easy combat check)
+				5 = { character_event = { id = lycan.125 } } #Bandits attacked (moderate combat check)
+				5 = { character_event = { id = lycan.135 } } #Soldiers attacked (hard combat check)
+				10 = { character_event = { id = lycan.141 } } #Named character attacked (character vs character check)
+			}
+		}
+	}
+}
+
+#Lycanthrope stuck in prison
+long_character_event = {
+	id = lycan.60
+	desc = Lycan60
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan60Acknowledge
+		add_trait = known_lycan
+		host = { character_event = { id = lycan.61 } }
+	}
+}
+
+#Host finds out prisoner is a lycanthrope
+character_event = {
+	id = lycan.61
+	desc = Lycan61
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan61Acknowledge
+	}
+}
+
+#Lycanthrope refuses to hunt
+character_event = {
+	id = lycan.75
+	desc = Lycan75
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan75Acknowledge
+		prestige = 5
+	}
+}
+
+#Lycanthrope wrecks their own quarters
+long_character_event = {
+	id = lycan.100
+	desc = Lycan100
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan100Acknowledge
+		trigger = {
+			NOT = { trait = slovenly }
+			NOT = { trait = vain }
+		}
+		prestige = -10
+	}
+	option = {
+		name = Lycan100Slovenly
+		trigger = {
+			trait = slovenly
+		}
+		prestige = -5
+	}
+	option = {
+		name = Lycan100Vain
+		trigger = {
+			trait = vain
+		}
+		prestige = -25
+	}
+}
+
+#Lycanthrope attacks livestock
+character_event = {
+	id = lycan.105
+	desc = Lycan105
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Lycan105Intrigue"
+		trigger = {
+				NOT = { intrigue = 1 }
+			}
+		custom_tooltip = {
+			text = "Lycan105IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					75 = { character_event = { id = lycan.106 } } #Successful Hunt!
+					25 = { character_event = { id = lycan.107 } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan105Intrigue"
+		trigger = {
+				intrigue = 1
+				NOT = { intrigue = 2 }
+			}
+		custom_tooltip = {
+			text = "Lycan105IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					80 = { character_event = { id = lycan.106 } } #Successful Hunt!
+					20 = { character_event = { id = lycan.107 } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan105Intrigue"
+		trigger = {
+				intrigue = 2
+				NOT = { intrigue = 3 }
+			}
+		custom_tooltip = {
+			text = "Lycan105IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					85 = { character_event = { id = lycan.106 } } #Successful Hunt!
+					15 = { character_event = { id = lycan.107 } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan105Intrigue"
+		trigger = {
+				intrigue = 3
+				NOT = { intrigue = 4 }
+			}
+		custom_tooltip = {
+			text = "Lycan105IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					90 = { character_event = { id = lycan.106 } } #Successful Hunt!
+					10 = { character_event = { id = lycan.107 } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan105Intrigue"
+		trigger = {
+				intrigue = 4
+				NOT = { intrigue = 5 }
+			}
+		custom_tooltip = {
+			text = "Lycan105IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					95 = { character_event = { id = lycan.106 } } #Successful Hunt!
+					5 = { character_event = { id = lycan.107 } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan105Intrigue"
+		trigger = {
+			intrigue = 5
+			}
+		custom_tooltip = {
+			text = "Lycan105IntrigueInfo"
+		hidden_tooltip = {
+			character_event = { id = lycan.106 } #Successful Hunt!
+			}
+		}
+	}
+}
+
+#Successful Hunt
+character_event = {
+	id = lycan.106
+	desc = Lycan106
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan106Acknowledge
+		prestige = 10
+	}
+}
+
+#Failed Hunt
+character_event = {
+	id = lycan.107
+	desc = Lycan107
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan107Acknowledge
+		prestige = -5
+	}
+}
+
+#Lycanthrope Hunts a Traveller
+character_event = {
+	id = lycan.110
+	desc = Lycan110
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+				NOT = { intrigue = 1 }
+			}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					10 = { character_event = { id = lycan.111 } } #Successful Hunt!
+					90 = { character_event = { id = lycan.112 } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+				intrigue = 1
+				NOT = { intrigue = 2 }
+			}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					80 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+				intrigue = 2
+				NOT = { intrigue = 3 }
+			}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					30 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					70 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+				intrigue = 3
+				NOT = { intrigue = 4 }
+			}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					40 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					60 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+				intrigue = 4
+				NOT = { intrigue = 5 }
+			}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					50 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					50 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+				intrigue = 5
+				NOT = { intrigue = 6 }
+			}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					60 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					40 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+				intrigue = 6
+				NOT = { intrigue = 5 }
+			}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					70 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					30 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+			intrigue = 7
+			NOT = { intrigue = 8 }
+		}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					80 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					20 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+			intrigue = 8
+			NOT = { intrigue = 9 }
+		}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					90 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					10 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+			intrigue = 9
+			NOT = { intrigue = 10 }
+		}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+		hidden_tooltip = {
+			random_list = {
+					95 = { character_event = { id = lycan.111  } } #Successful Hunt!
+					5 = { character_event = { id = lycan.112  } } #Failed Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan110Intrigue"
+		trigger = {
+			intrigue = 10
+		}
+		custom_tooltip = {
+			text = "Lycan110IntrigueInfo"
+			hidden_tooltip = {
+				character_event = { id = lycan.111  } #Successful Hunt!
+			}
+		}
+	}
+}
+
+#Successful Hunt
+character_event = {
+	id = lycan.111
+	desc = Lycan111
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan111Acknowledge
+		prestige = 20
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Failed Hunt
+character_event = {
+	id = lycan.112
+	desc = Lycan112
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan112Acknowledge
+		prestige = -10
+	}
+}
+
+#Lycanthrope attacks Townspeople - Easy Combat Check
+character_event = {
+	id = lycan.115
+	desc = Lycan115
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Lycan115Combat"
+		trigger = {
+				NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "Lycan115CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					10 = { character_event = { id = lycan.116  } } #Successful Hunt!
+					45 = { character_event = { id = lycan.117  } } #Successful Hunt - Wounded!
+					45 = { character_event = { id = lycan.118  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan115Combat"
+		trigger = {
+				combat_rating = 4
+				NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "Lycan115CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = lycan.116  } } #Successful Hunt!
+					40 = { character_event = { id = lycan.117  } } #Successful Hunt - Wounded!
+					40 = { character_event = { id = lycan.118  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan115Combat"
+		trigger = {
+				combat_rating = 8
+				NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "Lycan115CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					40 = { character_event = { id = lycan.116  } } #Successful Hunt!
+					30 = { character_event = { id = lycan.117  } } #Successful Hunt - Wounded!
+					30 = { character_event = { id = lycan.118  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan115Combat"
+		trigger = {
+				combat_rating = 12
+				NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "Lycan115CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					60 = { character_event = { id = lycan.116  } } #Successful Hunt!
+					20 = { character_event = { id = lycan.117  } } #Successful Hunt - Wounded!
+					20 = { character_event = { id = lycan.118  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan115Combat"
+		trigger = {
+				combat_rating = 16
+				NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "Lycan115CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					80 = { character_event = { id = lycan.116  } } #Successful Hunt!
+					10 = { character_event = { id = lycan.117  } } #Successful Hunt - Wounded!
+					10 = { character_event = { id = lycan.118  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan115Combat"
+		trigger = {
+				combat_rating = 20
+			}
+		custom_tooltip = {
+			text = "Lycan115CombatInfo"
+		hidden_tooltip = {
+				character_event = { id = lycan.116  } #Successful Hunt!
+			}
+		}
+	}
+}
+
+#Successful Hunt
+character_event = {
+	id = lycan.116
+	desc = Lycan116
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan116Acknowledge
+		prestige = 5
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Successful Hunt - Wounded
+character_event = {
+	id = lycan.117
+	desc = Lycan117
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan117Acknowledge
+		prestige = 1
+		add_trait = wounded
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Successful Hunt - Killed
+character_event = {
+	id = lycan.118
+	desc = Lycan118
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan118Acknowledge
+		prestige = -25
+		death = {
+			death_reason = death_missing
+		}
+	}
+}
+
+#Lycanthrope attacks Bandits - Moderate Combat Check
+character_event = {
+	id = lycan.125
+	desc = Lycan125
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+				character_event = { id = lycan.128  } #Killed During Hunt!
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 4
+				NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					1 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					9 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+					90 = { character_event = { id = lycan.128  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 8
+				NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					5 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					15 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+					75 = { character_event = { id = lycan.128  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 12
+				NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					20 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+					60 = { character_event = { id = lycan.128  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 16
+				NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					30 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					25 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+					45 = { character_event = { id = lycan.128  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 20
+				NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					40 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					30 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+					30 = { character_event = { id = lycan.128  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 24
+				NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					50 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					35 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+					15 = { character_event = { id = lycan.128  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 28
+				NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					60 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					40 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 32
+				NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					70 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					30 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 36
+				NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					85 = { character_event = { id = lycan.126  } } #Successful Hunt!
+					15 = { character_event = { id = lycan.127  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan125Combat"
+		trigger = {
+				combat_rating = 40
+				NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "Lycan125CombatInfo"
+		hidden_tooltip = {
+				character_event = { id = lycan.126  } #Successful Hunt!
+			}
+		}
+	}
+}
+
+#Successful Hunt
+character_event = {
+	id = lycan.126
+	desc = Lycan126
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan126Acknowledge
+		prestige = 10
+	}
+}
+
+#Successful Hunt - Wounded
+character_event = {
+	id = lycan.127
+	desc = Lycan127
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan127Acknowledge
+		prestige = 5
+		add_trait = wounded
+	}
+}
+
+#Unsuccessful Hunt - Killed
+character_event = {
+	id = lycan.128
+	desc = Lycan128
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan127Acknowledge
+		prestige = -10
+		death = {
+			death_reason = death_missing
+		}
+	}
+}
+
+#Lycanthrope attacks Soldiers - Difficult Combat Check
+character_event = {
+	id = lycan.135
+	desc = Lycan135
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				NOT = { combat_rating = 4 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+				character_event = { id = lycan.138  } #Killed During Hunt!
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 4
+				NOT = { combat_rating = 8 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					1 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					4 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+					95 = { character_event = { id = lycan.138  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 8
+				NOT = { combat_rating = 12 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					5 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					5 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+					90 = { character_event = { id = lycan.138  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 12
+				NOT = { combat_rating = 16 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					10 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					10 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+					80 = { character_event = { id = lycan.138  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 16
+				NOT = { combat_rating = 20 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					15 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					15 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+					70 = { character_event = { id = lycan.138  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 20
+				NOT = { combat_rating = 24 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					20 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					20 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+					60 = { character_event = { id = lycan.138  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 24
+				NOT = { combat_rating = 28 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					30 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					30 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+					40 = { character_event = { id = lycan.138  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 28
+				NOT = { combat_rating = 32 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					40 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					40 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+					20 = { character_event = { id = lycan.138  } } #Killed During Hunt!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 32
+				NOT = { combat_rating = 36 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					50 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					50 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 36
+				NOT = { combat_rating = 40 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					60 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					40 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 40
+				NOT = { combat_rating = 44 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					70 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					30 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 44
+				NOT = { combat_rating = 48 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					80 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					20 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 48
+				NOT = { combat_rating = 52 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					90 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					10 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 52
+				NOT = { combat_rating = 56 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					95 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					5 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 56
+				NOT = { combat_rating = 60 }
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+			random_list = {
+					99 = { character_event = { id = lycan.136  } } #Successful Hunt!
+					1 = { character_event = { id = lycan.137  } } #Successful Hunt - Wounded!
+				}
+			}
+		}
+	}
+	option = {
+		name = "Lycan135Combat"
+		trigger = {
+				combat_rating = 60
+			}
+		custom_tooltip = {
+			text = "Lycan135CombatInfo"
+		hidden_tooltip = {
+				character_event = { id = lycan.136  }#Successful Hunt!
+			}
+		}
+	}
+}
+
+#Successful Hunt
+character_event = {
+	id = lycan.136
+	desc = Lycan136
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan136Acknowledge
+		prestige = 25
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Successful Hunt - Wounded
+character_event = {
+	id = lycan.137
+	desc = Lycan137
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan137Acknowledge
+		prestige = 10
+		add_trait = wounded
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Unsuccessful Hunt - Killed
+character_event = {
+	id = lycan.138
+	desc = Lycan138
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan138Acknowledge
+		prestige = -5
+		death = {
+			death_reason = death_missing
+		}
+	}
+}
+
+
+#Lycanthrope out on the Hunt - This one is triggered for hunts where the lycan is in a rage
+character_event = {
+	id = lycan.141
+	desc = Lycan141
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan141Acknowledge #Hunt a character
+		set_character_flag = hunting_lycan
+		save_event_target_as = lycan_attacker
+		random_realm_character = {
+			limit = {
+				is_adult = yes
+				is_disease_immune = no
+				at_location = ROOT
+				NOT = { character = ROOT }
+				NOT = { has_character_flag = do_not_disturb }
+				NOT = { is_inaccessible_trigger = yes }
+				NOT = { trait = incapable }
+			}
+			character_event = { id = lycan.145  }
+		}
+	}
+}
+
+#Lycanthrope out on the Hunt - Character
+character_event = {
+	id = lycan.145
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the lycan ambushed the character, the lycan has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				10 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				20 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				10 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				1 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				30 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				15 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				5 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				35 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				15 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				5 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				40 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				20 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				10 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				40 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				25 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				10 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				40 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				30 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				10 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				35 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				35 = { character_event = { id = lycan.148 } } #Lycanthrope wounded
+				15 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				35 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				40 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				15 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				30 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				40 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				20 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				25 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				35 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				30 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = lycan.146 } } #Lycanthrope kills character
+				15 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				35 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				49 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				1 = { character_event = { id = lycan.147 } } #Lycanthrope repelled, courtier wounded
+				10 = { character_event = { id = lycan.148 } } #Lycanthrope unable to feed
+				89 = { character_event = { id = lycan.149 } } #Lycanthrope killed by character
+			}
+		}
+	}
+}
+
+
+
+#Character dies
+character_event = {
+	id = lycan.146
+	desc = Lycan146
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:lycan_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = lycan.150 } #Notify liege of death
+				}
+			}
+		}
+		event_target:lycan_attacker = { character_event = { id = lycan.155 } } #Notify lycan
+	}
+	
+	option = {
+		name = Lycan146Acknowledge
+		death = { death_reason = death_murder_lycan_unknown killer = event_target:lycan_attacker }
+	}
+}
+
+
+#Character wounded
+character_event = {
+	id = lycan.147
+	desc = Lycan147
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	immediate = {
+		if = {
+			limit = { #50/50 chance of infection
+				is_disease_immune = no
+				NOT = { trait = argonian }
+			}
+			random = {
+				chance = 50
+				set_character_flag = lycan_disease
+			}
+		}
+		if = {
+			limit = { #Argonians are less likely to become lycans
+				is_disease_immune = no
+				trait = argonian
+			}
+			random = {
+				chance = 25
+				set_character_flag = lycan_disease
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:lycan_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = lycan.151 } #Notify liege of incident
+				}
+			}
+		}
+		event_target:lycan_attacker = { character_event = { id = lycan.156 } } #Notify lycan
+	}
+	
+	option = {
+		name = Lycan147Infection #Wounded, infected
+		trigger = {
+			is_disease_immune = no
+			has_character_flag = lycan_disease
+		}
+		add_trait = wounded
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:lycan_attacker
+			years = 10
+		}
+		hidden_tooltip = {
+			long_character_event = { id = lycan.15 days = 3 }
+		}
+	}
+	option = {
+		name =Lycan147NoInfection #Wounded, not infected
+		trigger = {
+			is_disease_immune = no
+			NOT = { has_character_flag = lycan_disease }
+		}
+		add_trait = wounded
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:lycan_attacker
+			years = 10
+		}
+	}
+	option = {
+		name = Lycan147Immune #Wounded, but not infected due to immunity
+		trigger = {
+			is_disease_immune = yes
+		}
+		add_trait = wounded
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:lycan_attacker
+			years = 10
+		}
+	}
+}
+
+#Character survives
+character_event = {
+	id = lycan.148
+	desc = Lycan148
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:lycan_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = lycan.152 } #Notify liege
+				}
+			}
+		}
+		event_target:lycan_attacker = { character_event = { id = lycan.157 } } #Notify lycan
+	}
+	
+	option = {
+		name = Lycan148Acknowledge
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:lycan_attacker
+			years = 10
+		}
+	}
+}
+
+#Character kills lycan
+character_event = {
+	id = lycan.149
+	desc = Lycan149
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					owner = {
+						NOT = { character = event_target:lycan_attacker }
+					}
+				}
+			}
+			location = {
+				owner = {
+					character_event = { id = lycan.153 } #Notify liege of death
+				}
+			}
+		}
+		event_target:lycan_attacker = { character_event = { id = lycan.158 } } #Notify lycan
+	}
+	
+	option = {
+		name = Lycan149Acknowledge
+	}
+}
+
+#Lycan kills character - Notify Liege
+
+character_event = {
+	id = lycan.150
+	desc = Lycan150
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan150Acknowledge
+		prestige = -100
+	}
+}
+
+#Lycan wounds character - Notify Liege
+
+character_event = {
+	id = lycan.151
+	desc = Lycan151
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan151Acknowledge
+		prestige = -50
+	}
+	
+	option = {
+		name = Lycan151Imprison #Imprison them, they could be a lycan
+		trigger = {
+			FROM = {
+				is_disease_immune = no
+			}
+		}
+		if = {
+			limit = {
+				trait = charitable
+			}
+			remove_trait = charitable
+		}
+		prestige = -50
+		FROM = {
+			imprison = ROOT
+			opinion = {
+				modifier = opinion_hate
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+#Character unscathed - Notify Liege
+
+character_event = {
+	id = lycan.152
+	desc = Lycan152
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan151Acknowledge
+		prestige = -25
+	}
+}
+
+#Character kills Lycan - Notify Liege
+
+character_event = {
+	id = lycan.153
+	desc = Lycan153
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan153Acknowledge
+	}
+}
+
+#Character killed - Notify lycan
+character_event = {
+	id = lycan.155
+	desc = Lycan155
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan155Acknowledge
+		clr_character_flag = hunting_lycan
+		clear_event_target = lycan_attacker
+		if = {
+			limit = { NOT = { has_character_flag = brotherhood_qualified } }
+			custom_tooltip = {
+				text = brotherhood_qualification_notification
+				hidden_tooltip = {
+					set_character_flag = brotherhood_qualified
+				}
+			}
+		}
+	}
+}
+
+#Character wounded - Notify lycan
+character_event = {
+	id = lycan.156
+	desc = Lycan156
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan156Acknowledge
+		clr_character_flag = hunting_lycan
+		clear_event_target = lycan_attacker
+	}
+}
+
+#Character survives - Notify lycan
+character_event = {
+	id = lycan.157
+	desc = Lycan157
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan157Acknowledge
+		clr_character_flag = hunting_lycan
+		clear_event_target = lycan_attacker
+		add_trait = known_lycan
+	}
+}
+
+#Character kills lycan - Notify lycan
+character_event = {
+	id = lycan.158
+	desc = Lycan158
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan158Acknowledge
+		clr_character_flag = hunting_lycan
+		clear_event_target = lycan_attacker
+		death = {
+			death_reason = death_missing
+		}
+	}
+}
+
+#Lycan Interrogates Imprisoned Lycan
+character_event = {
+	id = lycan.230
+	desc = Lycan230
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	option = {
+		name = Lycan230LetGo
+		opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROMFROMFROM
+			years = 50
+		}
+		FROMFROM = { character_event = { id = lycan.235 } }
+	}
+	option = {
+		name = Lycan230Press
+		FROMFROM = { character_event = { id = lycan.240 } }
+	}
+}
+#Non-Lycan Interrogates Imprisoned Lycan
+character_event = {
+	id = lycan.232
+	desc = Lycan232
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	option = {
+		name = Lycan230LetGo
+		opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROMFROMFROM
+			years = 50
+		}
+		FROMFROM = { character_event = { id = lycan.235 } }
+	}
+	option = {
+		name = Lycan230Press
+		FROMFROM = { character_event = { id = lycan.240 } }
+	}
+}
+
+character_event = {
+	id = lycan.235
+	desc = Lycan235
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan235Accept
+		if = {
+			limit = { FROM = { trait = lycan } }
+			opinion = {
+				modifier = opinion_understanding_lycan
+				who = FROM
+				years = 50
+			}
+		}
+	}
+}
+
+#Imprisoned Lycan is interrogated about their condition
+character_event = {
+	id = lycan.240
+	desc = Lycan240
+	picture = GFX_evt_into_the_dungeon
+	
+	min_age = 16
+	prisoner = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan250RevealBenevolent
+		trigger = {
+			OR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+				has_character_flag = lycan_level_9
+				has_character_flag = lycan_level_10
+			}
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_lycan_benevolent
+		host = {
+			character_event = { id = lycan.255 }
+		}
+	}
+	
+	option = {
+		name = Lycan250RevealLycan
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_lycan
+		host = {
+			character_event = { id = lycan.260 }
+		}
+	}
+}
+
+#Lycanthrope ponders whether or not it's time to admit the truth
+character_event = {
+	id = lycan.250
+	desc = Lycan250
+	picture = GFX_evt_burning_house
+	
+	capable_only = yes
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { trait = known_lycan }
+		NOT = { trait = known_lycan_benevolent }
+	}
+	
+	mean_time_to_happen = {
+		months = 180
+		
+		modifier = {
+			factor = 0.25
+			trait = honest
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { is_werewolf_religion = yes }
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.8
+			trait = kind
+		}
+		modifier = {
+			factor = 0.8
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.8
+			trait = just
+		}
+		modifier = {
+			factor = 0.8
+			trait = humble
+		}
+		modifier = {
+			factor = 0.8
+			trait = brave
+		}
+		modifier = {
+			factor = 1.2
+			trait = stubborn
+		}
+		modifier = {
+			factor = 4
+			trait = craven
+		}
+		modifier = {
+			factor = 4
+			trait = shy
+		}
+		modifier = {
+			factor = 4
+			trait = deceitful
+		}
+	}
+	
+	option = {
+		name = Lycan250Hide
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+		}
+	}
+	
+	option = {
+		name = Lycan250RevealBenevolent
+		trigger = {
+			has_average_control_beast_form = yes
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_lycan_benevolent
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.255  }
+			}
+		}
+	}
+	
+	option = {
+		name = Lycan250RevealLycan
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_lycan
+		if = {
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.260  }
+			}
+		}
+	}
+	
+	after = {
+		clr_character_flag = lycan_vamp_reveal_flag
+	}
+}
+
+#Liege finds out about the lycan's condition - Benevolent lycan
+character_event = {
+	id = lycan.255
+	desc = Lycan255
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan255Approve #No hostility
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				sibling = FROM
+			}
+			modifier = {
+				factor = 5
+				is_child_of = FROM
+			}
+			modifier = {
+				factor = 5
+				is_father = FROM
+			}
+			modifier = {
+				factor = 5
+				is_mother = FROM
+			}
+			modifier = {
+				factor = 5
+				is_married = FROM
+			}
+			modifier = {
+				factor = 5
+				is_lover = FROM
+			}
+			modifier = {
+				factor = 5
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 10
+				trait = known_lycan_benevolent
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { is_werewolf_religion = yese }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.01
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 25
+		}
+	}
+	option = {
+		name = Lycan255Disapprove #Disapprove the lycan and oppose them
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 10
+				trait = cruel
+			}
+			modifier = {
+				factor = 10
+				trait = paranoid
+			}
+			modifier = {
+				factor = 0.5
+				religion = daedra_hircine
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.01
+				religion = daedra_hircine
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_hostile_lycan
+			who = FROM
+			years = 25
+		}
+	}
+}
+
+#Liege finds out about the lycan's condition - Normal lycan
+character_event = {
+	id = lycan.260
+	desc = Lycan260
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan260Approve #Approve of the lycan
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2.5
+				sibling = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_child_of = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_father = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_mother = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_married = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_lover = FROM
+			}
+			modifier = {
+				factor = 2.5
+				is_friend = FROM
+			}
+			modifier = {
+				factor = 10
+				trait = known_lycan
+			}
+			modifier = {
+				factor = 0.001
+				NOT = { religion = daedra_hircine }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0
+				NOT = { religion = daedra_hircine }
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 25
+		}
+	}
+	option = {
+		name = Lycan260Disapprove #Disapprove the lycan and oppose them
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 10
+				trait = cruel
+			}
+			modifier = {
+				factor = 10
+				trait = paranoid
+			}
+			modifier = {
+				factor = 0.5
+				religion = daedra_hircine
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.01
+				religion = daedra_hircine
+				trait = zealous
+			}
+		}
+		opinion = {
+			modifier = opinion_hostile_lycan
+			who = FROM
+			years = 25
+		}
+	}
+}
+
+#ID 300-? - Lycanthropy Level-Up Events
+
+character_event = {
+	id = lycan.300
+	desc = Lycan300
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan300Accept
+		add_trait = on_mission
+		long_character_event = { id = lycan.301 days = 3 }
+	}
+	option = {
+		name = Lycan300Decline
+		prestige = -5
+	}
+}
+
+long_character_event = {
+	id = lycan.301
+	desc = {
+		trigger = {
+			OR = {
+				has_character_flag = lycan_level_1
+				has_character_flag = lycan_level_2
+				has_character_flag = lycan_level_3
+				has_character_flag = lycan_level_4
+			}
+		}
+		text = Lycan301A
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+			}
+		}
+		text = Lycan301B
+	}
+	desc = {
+		trigger = {
+			has_character_flag = lycan_level_9
+		}
+		text = Lycan301C
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan301Acknowledge
+		trigger = { NOT = { has_character_flag = lycan_level_9 } }
+		hidden_tooltip = {
+			random_list = {
+				50 = { #Characters with good self-control will be much more likely to succeed, more disciplined lycanthropes fare especially well
+					modifier = {
+						has_character_flag = lycan_level_2
+						factor = 2.5
+					}
+					modifier = {
+						has_character_flag = lycan_level_3
+						factor = 5
+					}
+					modifier = {
+						has_character_flag = lycan_level_4
+						factor = 7.5
+					}
+					modifier = {
+						has_character_flag = lycan_level_5
+						factor = 10
+					}
+					modifier = {
+						has_character_flag = lycan_level_6
+						factor = 25
+					}
+					modifier = {
+						has_character_flag = lycan_level_7
+						factor = 50
+					}
+					modifier = {
+						has_character_flag = lycan_level_8
+						factor = 75
+					}
+					modifier = {
+						has_character_flag = lycan_level_9
+						factor = 100
+					}
+					modifier = {
+						trait = temperate
+						factor = 5
+					}
+					modifier = {
+						trait = patient
+						factor = 5
+					}
+					modifier = {
+						trait = celibate
+						factor = 5
+					}
+					modifier = {
+						trait = chaste
+						factor = 2.5
+					}
+					modifier = {
+						trait = kind
+						factor = 2.5
+					}
+					modifier = {
+						trait = content
+						factor = 2.5
+					}
+					long_character_event = { id = lycan.302  }
+				}
+				50 = { #Characters with poor self-control will be much more likely to fail
+					modifier = {
+						trait = gluttonous
+						factor = 5
+					}
+					modifier = {
+						trait = wroth
+						factor = 5
+					}
+					modifier = {
+						trait = drunkard
+						factor = 5
+					}
+					modifier = {
+						trait = hedonist
+						factor = 5
+					}
+					modifier = {
+						trait = lustful
+						factor = 2.5
+					}
+					modifier = {
+						trait = envious
+						factor = 2.5
+					}
+					modifier = {
+						trait = cruel
+						factor = 2.5
+					}
+					long_character_event = { id = lycan.303  }
+				}
+			}
+		}
+	}
+	option = {
+		name = Lycan301Final
+		trigger = { has_character_flag = lycan_level_9 }
+		long_character_event = { id = lycan.304 }
+	}
+}
+
+#Success!
+long_character_event = {
+	id = lycan.302
+	desc = {
+		trigger = {
+			OR = {
+				has_character_flag = lycan_level_1
+				has_character_flag = lycan_level_2
+				has_character_flag = lycan_level_3
+				has_character_flag = lycan_level_4
+			}
+		}
+		text = Lycan302A
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+			}
+		}
+		text = Lycan302B
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_1 }
+		clr_character_flag = lycan_level_1
+		set_character_flag = lycan_level_2
+		remove_trait = on_mission
+		prestige = 1
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_2 }
+		clr_character_flag = lycan_level_2
+		set_character_flag = lycan_level_3
+		remove_trait = on_mission
+		prestige = 3
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_3 }
+		clr_character_flag = lycan_level_3
+		set_character_flag = lycan_level_4
+		remove_trait = on_mission
+		prestige = 5
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_4 }
+		clr_character_flag = lycan_level_4
+		set_character_flag = lycan_level_5
+		remove_trait = on_mission
+		prestige = 10
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_5 }
+		clr_character_flag = lycan_level_5
+		set_character_flag = lycan_level_6
+		remove_trait = on_mission
+		prestige = 25
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_6 }
+		clr_character_flag = lycan_level_6
+		set_character_flag = lycan_level_7
+		remove_trait = on_mission
+		prestige = 50
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_7 }
+		clr_character_flag = lycan_level_7
+		set_character_flag = lycan_level_8
+		remove_trait = on_mission
+		prestige = 75
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_8 }
+		clr_character_flag = lycan_level_8
+		set_character_flag = lycan_level_9
+		remove_trait = on_mission
+		prestige = 100
+	}
+	option = {
+		name = Lycan302Acknowledge
+		trigger = { has_character_flag = lycan_level_9 }
+		clr_character_flag = lycan_level_9
+		set_character_flag = lycan_level_10
+		remove_trait = on_mission
+		prestige = 150
+	}
+}
+
+#Failure!
+long_character_event = {
+	id = lycan.303
+	desc = {
+		trigger = {
+			OR = {
+				has_character_flag = lycan_level_1
+				has_character_flag = lycan_level_2
+				has_character_flag = lycan_level_3
+				has_character_flag = lycan_level_4
+			}
+		}
+		text = Lycan303A
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+			}
+		}
+		text = Lycan303B
+	}
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan303Acknowledge
+		remove_trait = on_mission
+		prestige = -10
+	}
+}
+
+#Success - Full Control over Lycanthropy
+long_character_event = {
+	id = lycan.304
+	desc = Lycan304
+	picture = GFX_evt_two_moon_aurora
+	
+	capable_only = yes
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan304Acknowledge
+		clr_character_flag = lycan_level_9
+		set_character_flag = lycan_level_10
+		remove_trait = on_mission
+		prestige = 250
+	}
+}
+
+#325 - Accept Lycanthropy?
+
+character_event = {
+	id = lycan.325
+	desc = Lycan325
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan325Accept #Accept Lycanthropy
+		ai_chance = {
+			factor = 0.25
+			#modifier = {
+			#	factor = 0.4
+			#	NOT = { religion = daedra_hircine }
+			#}
+			#modifier = {
+			#	factor = 0.4
+			#	NOT = { religion = daedra_hircine }
+			#	trait = zealous
+			#}
+			modifier = {
+				factor = 2
+				religion = daedra_hircine
+			}
+			modifier = {
+				factor = 2
+				religion = daedra_hircine
+				trait = zealous
+			}
+			modifier = { #Lovers and spouses more likely to consent.
+				factor = 2
+				OR = {
+					is_lover = FROMFROM
+					is_married = FROMFROM
+				}
+			}
+			modifier = { #Double-dipping for lust towards attractive characters
+				factor = 2.5
+				trait = lustful
+				FROMFROM = {
+					OR = {
+						is_lover = PREV
+						is_married = PREV
+					}
+					trait = fair
+				}
+			}
+			modifier = { #Ambitious characters more likely to accept
+				factor = 1.2
+				trait = ambitious
+			}
+			modifier = { #Paranoid characters not
+				factor = 0.8
+				trait = paranoid
+			}
+			modifier = { #Will never accept lycanthropy from rivals, if this ever becomes relevant somehow
+				factor = 0
+				is_rival = FROMFROM
+			}
+			modifier = { #Friends more likely to accept lycanthropy
+				factor = 2
+				is_friend = FROMFROM
+			}
+			modifier = { #Comrades more likely to accept lycanthropy
+				factor = 1.5
+				same_society_as = FROMFROM
+				NOT = {
+					opinion = { who = FROMFROM value < 0 }
+				}
+			}
+			modifier = {
+				factor = 2
+				FROMFROM = {
+					any_artifact = { #Maybe I should make this a trigger. It could be useful.
+						AND = {
+							artifact_type = amulet_of_domination
+							is_artifact_equipped = yes
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				trait = hunter
+			}
+			### Opinion spam modifiers ###
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROMFROM value = 100 }
+			}
+		}
+		opinion = {
+			modifier = opinion_lycan_patron
+			who = FROMFROM
+			years = 25
+		}
+		set_character_flag = lycan_disease
+		set_character_flag = transform_no_suicide
+		long_character_event = { id = lycan.15 days = 3 }
+		FROMFROM = { character_event = { id = lycan.326 } }
+	}
+	option = {
+		name = Lycan325Decline #Refuse Lycanthropy
+		ai_chance = {
+			factor = 0.75
+			#modifier = {
+			#	factor = 0.5
+			#	religion = daedra_hircine
+			#	NOT = { trait = zealous }
+			#}
+			#modifier = {
+			#	factor = 0.75
+			#	religion = daedra_hircine
+			#	trait = zealous
+			#}
+		}
+		FROMFROM = { character_event = { id = lycan.327 } }
+	}
+}
+
+character_event = {
+	id = lycan.326
+	desc = Lycan326
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan327Acknowledge
+		FROM = { clr_character_flag = lycanthropy_requested }
+	}
+}
+
+character_event = {
+	id = lycan.327
+	desc = Lycan327
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan327Acknowledge
+		FROM = {
+			opinion = {
+				modifier = opinion_horrified_lycan
+				who = ROOT
+				years = 5
+			}
+			clr_character_flag = lycanthropy_requested
+		}
+	}
+}
+
+#From Lycan to Friend: Confess my condition?
+character_event = {
+	id = lycan.350
+	desc = Lycan350
+	picture = GFX_evt_bad_news
+	
+	capable_only = yes
+	min_age = 16
+	friends = yes
+	prisoner = no
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { trait = known_lycan }
+		NOT = { trait = known_lycan_benevolent }
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		any_friend = {
+			is_adult = yes
+			prisoner = no
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			NOT = {
+				is_lover = ROOT
+			}
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan }
+				has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_lycan }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_bad }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 0.5
+			NOR = {
+				is_werewolf_religion = yes
+			}
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = kind
+		}
+		modifier = {
+			factor = 0.9
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.9
+			trait = just
+		}
+		modifier = {
+			factor = 0.9
+			trait = humble
+		}
+		modifier = {
+			factor = 0.9
+			trait = brave
+		}
+		modifier = {
+			factor = 1.1
+			trait = stubborn
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 2
+			trait = shy
+		}
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+	}
+	
+	immediate = {
+		random_friend = {
+			limit = {
+				is_adult = yes
+				prisoner = no
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				NOT = { trait = incapable }
+				NOT = {
+					is_lover = ROOT
+				}
+				NOR = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan }
+					has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_lycan }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_bad }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+					reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+				}
+			}
+			save_event_target_as = secret_lycan_friend
+		}
+	}
+	
+	option = { #Tell them
+		name = Lycan350Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_lycan_friend = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_lycan_friend = {
+					trait = trusting
+				}
+			}
+		}
+		event_target:secret_lycan_friend = {
+			character_event = { id = lycan.351 }
+		}
+	}
+	
+	option = { #Or don't
+		name = Lycan350Decline
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+			modifier = {
+				factor = 0.01
+				event_target:secret_lycan_friend = {
+					NOT = { is_werewolf_religion = yes }
+					trait = zealous
+				}
+			}
+		}
+	}
+}
+#Friend finds out
+character_event = {
+	id = lycan.351
+	desc = Lycan351
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = secret_lycan_friend
+	}
+	
+	option = { #You're joking
+		name = Lycan351OptA
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = slothful
+			}
+			modifier = {
+				factor = 2.5
+				trait = gregarious
+			}
+		}
+		FROM = { character_event = { id = lycan.355 } }
+	}
+	option = { #You're a monster!
+		name = Lycan351OptB
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 50
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.001
+				is_lycan = yes
+			}
+			modifier = {
+				factor = 0.25
+				is_supernatural = yes
+			}
+			modifier = {
+				factor = 0.5
+				trait = kind
+			}
+		}
+		FROM = { character_event = { id = lycan.356 } }
+	}
+	option = { #You're a still my friend!
+		name = Lycan351OptC
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = lycan.357 } }
+	}
+	option = { #Share your powers with me!
+		name = Lycan351OptD
+		trigger = {
+			is_disease_immune = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				trait = ambitious
+			}
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 0.001
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = lycan.358 } }
+	}
+}
+#A joke?
+character_event = {
+	id = lycan.355
+	desc = Lycan355
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan355Accept
+		prestige = -5
+	}
+}
+#You're a monster!
+character_event = {
+	id = lycan.356
+	desc = Lycan356
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan356Accept
+		piety = -10
+		remove_friend = FROM
+		add_rival = FROM
+		reverse_opinion = {
+			modifier = opinion_not_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_bad
+				who = FROM
+				years = 5000
+			}
+			FROM = { character_event = { id = lycan.360 } }
+		}
+	}
+}
+#You're still my friend!
+character_event = {
+	id = lycan.357
+	desc = Lycan357
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan357Accept
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+	}
+}
+#We're still friends, can you give me your powers?
+character_event = {
+	id = lycan.358
+	desc = Lycan358
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan358Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = lycan.365 } }
+	}
+	option = {
+		name = Lycan358Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = lycan.366 } }
+	}
+}
+#Monster, how to proceed?
+character_event = {
+	id = lycan.360
+	desc = Lycan360
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan360Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = schemer
+			}
+		}
+		character_event = { id = lycan.370 days = 5 }
+	}
+	option = {
+		name = Lycan360Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+		}
+	}
+}
+#Yay, lycanthropy!
+character_event = {
+	id = lycan.365
+	desc = Lycan365
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan365Accept
+		set_character_flag = lycan_disease
+		set_character_flag = transform_no_suicide #Not much point in them asking for beast blood just to commit suicide is there?
+		opinion = {
+			modifier = opinion_lycan_patron
+			who = FROM
+			years = 25
+		}
+		hidden_tooltip = {
+			long_character_event = { id = lycan.15 days = 3 }
+		}
+	}
+}
+#Boo, no lycanthropy!
+character_event = {
+	id = lycan.366
+	desc = Lycan366
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan366Accept
+	}
+}
+#A cunning plan to reveal the truth!
+character_event = {
+	id = lycan.370
+	desc = Lycan370
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan370Accept
+		ai_chance = {
+			factor = 1
+		}
+		FROMFROM = { character_event = { id = lycan.375 days = 5 } }
+	}
+	option = { #AI check evaluated in previous event
+		name = Lycan370Decline
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+#Lycan is confronted
+character_event = {
+	id = lycan.375
+	desc = Lycan375
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan375OptA
+		trigger = {
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+				has_total_control_beast_form = yes
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "lycan_plot_reveal_1_tooltip"
+		}
+		add_trait = known_lycan
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.380 } }
+			character_event = { id = lycan.385 }
+		}
+	}
+	option = {
+		name = Lycan375OptB
+		trigger = {
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+			has_total_control_beast_form = yes
+		}
+		ai_chance = {
+			factor = 1
+		}
+		add_trait = known_lycan_benevolent
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.255  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.380 } }
+		}
+	}
+	option = {
+		name = Lycan375OptC
+		trigger = {
+			OR = {
+				intrigue = 20
+				diplomacy = 20
+			}
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		custom_tooltip = {
+			text = "lycan_plot_reveal_2_tooltip"
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.381 } }
+		}
+	}
+	option = {
+		name = Lycan375OptD
+		trigger = {
+			OR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.382 } }
+		}
+	}
+}
+#The lycan is revealed, plotter reacts
+character_event = {
+	id = lycan.380
+	desc =  {
+		text = Lycan380A
+		trigger = {
+			FROM = { trait = known_lycan }
+		}
+	}
+	desc =  {
+		text = Lycan380B
+		trigger = {
+			FROM = { trait = known_lycan_benevolent }
+		}
+	}
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan380OptA
+		trigger = {
+			FROM = { trait = known_lycan }
+		}
+	}
+	option = {
+		name = Lycan380OptB
+		trigger = {
+			FROM = { trait = known_lycan_benevolent }
+		}
+	}
+}
+#Discredited
+character_event = {
+	id = lycan.381
+	desc = Lycan381
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan381Accept
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 120
+		}
+	}
+}
+character_event = {
+	id = lycan.382
+	desc = Lycan382
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan382Accept
+	}
+}
+#Waking up after transforming
+character_event = {
+	id = lycan.385
+	desc = Lycan385
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan385Accept
+	}
+}
+
+#From Lycan to Spouse: Confess my condition?
+character_event = {
+	id = lycan.400
+	desc = Lycan400
+	picture = GFX_evt_bad_news
+	
+	capable_only = yes
+	min_age = 16
+	friends = yes
+	prisoner = no
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { trait = known_lycan }
+		NOT = { trait = known_lycan_benevolent }
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		any_spouse = {
+			prisoner = no
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			NOR = {
+				is_friend = ROOT
+				is_lover = ROOT 
+				is_rival = ROOT
+			}
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan }
+				has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_lycan }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_bad }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { is_werewolf_religion = yes }
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = kind
+		}
+		modifier = {
+			factor = 0.9
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.9
+			trait = just
+		}
+		modifier = {
+			factor = 0.9
+			trait = humble
+		}
+		modifier = {
+			factor = 0.9
+			trait = brave
+		}
+		modifier = {
+			factor = 1.1
+			trait = stubborn
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 2
+			trait = shy
+		}
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+	}
+	
+	immediate = {
+		random_spouse = {
+			limit = {
+				prisoner = no
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				NOT = { trait = incapable }
+				NOR = { 
+					is_lover = ROOT 
+					is_friend = ROOT
+					is_rival = ROOT
+				}
+				NOR = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan }
+					has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_lycan }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_bad }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+					reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+				}
+			}
+			save_event_target_as = secret_lycan_spouse
+		}
+	}
+	
+	option = { #Tell them
+		name = Lycan400Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_lycan_spouse = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_lycan_spouse = {
+					trait = trusting
+				}
+			}
+		}
+		event_target:secret_lycan_spouse = {
+			character_event = { id = lycan.401 }
+		}
+	}
+	
+	option = { #Or don't
+		name = Lycan400Decline
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+			modifier = {
+				factor = 0.01
+				event_target:secret_lycan_spouse = {
+					NOT = { is_werewolf_religion = yes }
+					trait = zealous
+				}
+			}
+		}
+	}
+}
+#Spouse finds out
+character_event = {
+	id = lycan.401
+	desc = Lycan401
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = secret_lycan_spouse
+	}
+	
+	option = { #You're joking
+		name = Lycan401OptA
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = slothful
+			}
+			modifier = {
+				factor = 2.5
+				trait = gregarious
+			}
+		}
+		FROM = { character_event = { id = lycan.405 } }
+	}
+	option = { #You're a monster!
+		name = Lycan401OptB
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 50
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.001
+				is_lycan = yes
+			}
+			modifier = {
+				factor = 0.25
+				is_supernatural = yes
+			}
+			modifier = {
+				factor = 0.5
+				trait = kind
+			}
+		}
+		FROM = { character_event = { id = lycan.406 } }
+	}
+	option = { #I stand with you!
+		name = Lycan401OptC
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = lycan.407 } }
+	}
+	option = { #Share your powers with me!
+		name = Lycan401OptD
+		trigger = {
+			is_disease_immune = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				trait = ambitious
+			}
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 0.001
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = lycan.408 } }
+	}
+}
+#A joke?
+character_event = {
+	id = lycan.405
+	desc = Lycan405
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan405Accept
+		prestige = -5
+	}
+}
+#You're a monster!
+character_event = {
+	id = lycan.406
+	desc = Lycan406
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan406Accept
+		piety = -10
+		add_rival = FROM
+		reverse_opinion = {
+			modifier = opinion_not_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_bad
+				who = FROM
+				years = 5000
+			}
+			FROM = { character_event = { id = lycan.410 } }
+		}
+	}
+}
+#I stand with you!
+character_event = {
+	id = lycan.407
+	desc = Lycan407
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan407Accept
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+	}
+}
+#We're still on the same page, can you give me your powers?
+character_event = {
+	id = lycan.408
+	desc = Lycan408
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan408Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = lycan.415 } }
+	}
+	option = {
+		name = Lycan408Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = lycan.416 } }
+	}
+}
+#Monster, how to proceed?
+character_event = {
+	id = lycan.410
+	desc = Lycan410
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan410Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = schemer
+			}
+		}
+		character_event = { id = lycan.420 days = 5 }
+	}
+	option = {
+		name = Lycan410Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+		}
+	}
+}
+#Yay, lycanthropy!
+character_event = {
+	id = lycan.415
+	desc = Lycan415
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan415Accept
+		set_character_flag = lycan_disease
+		set_character_flag = transform_no_suicide #Not much point in them asking for beast blood just to commit suicide is there?
+		opinion = {
+			modifier = opinion_lycan_patron
+			who = FROM
+			years = 25
+		}
+		hidden_tooltip = {
+			long_character_event = { id = lycan.15 days = 3 }
+		}
+	}
+}
+#Boo, no lycanthropy!
+character_event = {
+	id = lycan.416
+	desc = Lycan416
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan416Accept
+	}
+}
+#A cunning plan to reveal the truth!
+character_event = {
+	id = lycan.420
+	desc = Lycan420
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan420Accept
+		ai_chance = {
+			factor = 1
+		}
+		FROMFROM = { character_event = { id = lycan.425 days = 5 } }
+	}
+	option = { #AI check evaluated in previous event
+		name = Lycan420Decline
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+#Lycan is confronted
+character_event = {
+	id = lycan.425
+	desc = Lycan425
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan425OptA
+		trigger = {
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+				has_total_control_beast_form = yes
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "lycan_plot_reveal_1_tooltip"
+		}
+		add_trait = known_lycan
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.430 } }
+			character_event = { id = lycan.435 }
+		}
+	}
+	option = {
+		name = Lycan425OptB
+		trigger = {
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+			has_total_control_beast_form = yes
+		}
+		ai_chance = {
+			factor = 1
+		}
+		add_trait = known_lycan_benevolent
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.255  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.430 } }
+		}
+	}
+	option = {
+		name = Lycan425OptC
+		trigger = {
+			OR = {
+				intrigue = 20
+				diplomacy = 20
+			}
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		custom_tooltip = {
+			text = "lycan_plot_reveal_2_tooltip"
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.431 } }
+		}
+	}
+	option = {
+		name = Lycan425OptD
+		trigger = {
+			OR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.432 } }
+		}
+	}
+}
+#The Lycan is revealed, plotter reacts
+character_event = {
+	id = lycan.430
+	desc =  {
+		text = Lycan430A
+		trigger = {
+			FROM = { trait = known_lycan }
+		}
+	}
+	desc =  {
+		text = Lycan430B
+		trigger = {
+			FROM = { trait = known_lycan_benevolent }
+		}
+	}
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan430OptA
+		trigger = {
+			FROM = { trait = known_lycan }
+		}
+	}
+	option = {
+		name = Lycan430OptB
+		trigger = {
+			FROM = { trait = known_lycan_benevolent }
+		}
+	}
+}
+#Discredited
+character_event = {
+	id = lycan.431
+	desc = Lycan431
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan431Accept
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 120
+		}
+	}
+}
+character_event = {
+	id = lycan.432
+	desc = Lycan432
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan432Accept
+	}
+}
+#Waking up after transforming
+character_event = {
+	id = lycan.435
+	desc = Lycan435
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan435Accept
+	}
+}
+
+#From Lycan to Lover: Confess my condition?
+character_event = {
+	id = lycan.450
+	desc = Lycan450
+	picture = GFX_evt_bad_news
+	
+	capable_only = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		trait = lycan
+		NOT = { has_character_flag = hunting_lycan }
+		NOT = { trait = known_lycan }
+		NOT = { trait = known_lycan_benevolent }
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		any_lover = {
+			prisoner = no
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = incapable }
+			NOT = { is_rival = ROOT }
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan }
+				has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_lycan }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_bad }
+				has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 80
+		
+		modifier = {
+			factor = 0.5
+			trait = honest
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { is_werewolf_religion = yes }
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.75
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = kind
+		}
+		modifier = {
+			factor = 0.9
+			trait = charitable
+		}
+		modifier = {
+			factor = 0.9
+			trait = just
+		}
+		modifier = {
+			factor = 0.9
+			trait = humble
+		}
+		modifier = {
+			factor = 0.9
+			trait = brave
+		}
+		modifier = {
+			factor = 1.1
+			trait = stubborn
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 2
+			trait = shy
+		}
+		modifier = {
+			factor = 2
+			trait = deceitful
+		}
+	}
+	
+	immediate = {
+		random_lover = {
+			limit = {
+				prisoner = no
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				NOT = { trait = incapable }
+				NOT = {
+					is_rival = ROOT
+				}
+				NOR = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan }
+					has_opinion_modifier = { who = ROOT modifier = opinion_not_understanding_lycan }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_bad }
+					has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+					reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_patron }
+				}
+			}
+			save_event_target_as = secret_lycan_lover
+		}
+	}
+	
+	option = { #Tell them
+		name = Lycan450Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_lycan_lover = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 2.5
+				event_target:secret_lycan_lover = {
+					trait = trusting
+				}
+			}
+		}
+		event_target:secret_lycan_lover = {
+			character_event = { id = lycan.451 }
+		}
+	}
+	
+	option = { #Or don't
+		name = Lycan450Decline
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 5
+				trait = craven
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+			modifier = {
+				factor = 0.01
+				event_target:secret_lycan_lover = {
+					NOT = { is_werewolf_religion = yes }
+					trait = zealous
+				}
+			}
+		}
+	}
+}
+#Lover finds out
+character_event = {
+	id = lycan.451
+	desc = Lycan451
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = secret_lycan_lover
+	}
+	
+	option = { #You're joking
+		name = Lycan451OptA
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 2.5
+				trait = slothful
+			}
+			modifier = {
+				factor = 2.5
+				trait = gregarious
+			}
+		}
+		FROM = { character_event = { id = lycan.455 } }
+	}
+	option = { #You're a monster!
+		name = Lycan451OptB
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 50
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 10
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 0.001
+				is_lycan = yes
+			}
+			modifier = {
+				factor = 0.25
+				is_supernatural = yes
+			}
+			modifier = {
+				factor = 0.5
+				trait = kind
+			}
+		}
+		FROM = { character_event = { id = lycan.456 } }
+	}
+	option = { #I stand with you!
+		name = Lycan451OptC
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = trusting
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+			modifier = {
+				factor = 5
+				trait = slothful
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2.5
+				trait = kind
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = lycan.457 } }
+	}
+	option = { #Share your powers with me!
+		name = Lycan451OptD
+		trigger = {
+			is_disease_immune = no
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				trait = ambitious
+			}
+			modifier = {
+				factor = 5
+				trait = envious
+			}
+			modifier = {
+				factor = 0.001
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 0.1
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 10 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 20 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 30 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 40 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 50 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 60 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 70 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 80 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 90 }
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROMFROM value = 100 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -10 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -20 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -30 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -40 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -50 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -60 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -70 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -80 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -90 }
+			}
+			modifier = {
+				factor = 0.8
+				opinion = { who = FROMFROM value <= -100 }
+			}
+		}
+		FROM = { character_event = { id = lycan.458 } }
+	}
+}
+#A joke?
+character_event = {
+	id = lycan.455
+	desc = Lycan455
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan455Accept
+		prestige = -5
+	}
+}
+#You're a monster!
+character_event = {
+	id = lycan.456
+	desc = Lycan456
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan456Accept
+		piety = -10
+		FROM = { save_event_target_as = former_lover }
+		break_up_with_target = yes
+		add_rival = FROM
+		reverse_opinion = {
+			modifier = opinion_not_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_bad
+				who = FROM
+				years = 5000
+			}
+			FROM = { character_event = { id = lycan.460 } }
+		}
+	}
+}
+#I stand with you!
+character_event = {
+	id = lycan.457
+	desc = Lycan457
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan457Accept
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+	}
+}
+#We're still on the same page, can you give me your powers?
+character_event = {
+	id = lycan.458
+	desc = Lycan458
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan458Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = charitable
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = lycan.465 } }
+	}
+	option = {
+		name = Lycan458Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_understanding_lycan
+			who = FROM
+			years = 50
+		}
+		hidden_tooltip = {
+			reverse_opinion = {
+				modifier = opinion_lycan_aware_good
+				who = FROM
+				years = 5000
+			}
+		}
+		FROM = { character_event = { id = lycan.466 } }
+	}
+}
+#Monster, how to proceed?
+character_event = {
+	id = lycan.460
+	desc = Lycan460
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan460Accept
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = wroth
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = schemer
+			}
+		}
+		character_event = { id = lycan.470 days = 5 }
+	}
+	option = {
+		name = Lycan460Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+		}
+	}
+}
+#Yay, lycanthropy!
+character_event = {
+	id = lycan.465
+	desc = Lycan465
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan465Accept
+		set_character_flag = lycan_disease
+		set_character_flag = transform_no_suicide #Not much point in them asking for beast blood just to commit suicide is there?
+		opinion = {
+			modifier = opinion_lycan_patron
+			who = FROM
+			years = 25
+		}
+		hidden_tooltip = {
+			long_character_event = { id = lycan.15 days = 3 }
+		}
+	}
+}
+#Boo, no lycanthropy!
+character_event = {
+	id = lycan.466
+	desc = Lycan466
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan466Accept
+	}
+}
+#A cunning plan to reveal the truth!
+character_event = {
+	id = lycan.470
+	desc = Lycan470
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan470Accept
+		ai_chance = {
+			factor = 1
+		}
+		FROMFROM = { character_event = { id = lycan.475 days = 5 } }
+	}
+	option = { #AI check evaluated in previous event
+		name = Lycan470Decline
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+#Lycan is confronted
+character_event = {
+	id = lycan.475
+	desc = Lycan475
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan475OptA
+		trigger = {
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+				has_total_control_beast_form = yes
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+		custom_tooltip = {
+			text = "lycan_plot_reveal_1_tooltip"
+		}
+		add_trait = known_lycan
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.260  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.480 } }
+			character_event = { id = lycan.485 }
+		}
+	}
+	option = {
+		name = Lycan475OptB
+		trigger = {
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+			has_total_control_beast_form = yes
+		}
+		ai_chance = {
+			factor = 1
+		}
+		add_trait = known_lycan_benevolent
+		if = { #Inform the liege, if applicable
+			limit = {
+				independent = no
+			}
+			liege = {
+				character_event = { id = lycan.255  }
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.480 } }
+		}
+	}
+	option = {
+		name = Lycan475OptC
+		trigger = {
+			OR = {
+				intrigue = 20
+				diplomacy = 20
+			}
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		custom_tooltip = {
+			text = "lycan_plot_reveal_2_tooltip"
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.481 } }
+		}
+	}
+	option = {
+		name = Lycan475OptD
+		trigger = {
+			OR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+		}
+		hidden_tooltip = {
+			FROM = { character_event = { id = lycan.482 } }
+		}
+	}
+}
+#The Lycan is revealed, plotter reacts
+character_event = {
+	id = lycan.480
+	desc =  {
+		text = Lycan480A
+		trigger = {
+			FROM = { trait = known_lycan }
+		}
+	}
+	desc =  {
+		text = Lycan480B
+		trigger = {
+			FROM = { trait = known_lycan_benevolent }
+		}
+	}
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan480OptA
+		trigger = {
+			FROM = { trait = known_lycan }
+		}
+	}
+	option = {
+		name = Lycan480OptB
+		trigger = {
+			FROM = { trait = known_lycan_benevolent }
+		}
+	}
+}
+#Discredited
+character_event = {
+	id = lycan.481
+	desc = Lycan481
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan481Accept
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 120
+		}
+	}
+}
+character_event = {
+	id = lycan.482
+	desc = Lycan482
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan482Accept
+	}
+}
+#Waking up after transforming
+character_event = {
+	id = lycan.485
+	desc = Lycan485
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan485Accept
+	}
+}
+
+#Lycan character causes a stir at court
+province_event = {
+	id = lycan.500
+	hide_window = yes
+	
+	trigger = {
+		NOR = { 
+			has_province_modifier = vampire_peasant_unrest
+			has_province_modifier = lycan_peasant_unrest 
+			has_province_modifier = peasantry_placated
+		}
+		owner = {
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			prisoner = no
+			NOT = { trait = incapable }
+			NOR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+			any_courtier = {
+				is_ruler = no
+				trait = lycan
+				OR = {
+					trait = known_lycan
+					trait = known_lycan_benevolent
+				}
+				is_indisposed = no
+				is_inaccessible_trigger = no
+				prisoner = no
+				NOT = { trait = incapable }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 960
+		
+		modifier = {
+			factor = 0.5
+			NOT = { is_werewolf_religion = yes }
+		}
+		modifier = {
+			factor = 0.75
+			owner = {
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+		}
+		modifier = {
+			factor = 0.9
+			owner = {
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+		}
+		modifier = {
+			factor = 5.0
+			is_werewolf_religion = yes
+		}
+	}
+	
+	immediate = {
+		owner = {
+			random_courtier = {
+				limit = {
+					is_ruler = no
+					trait = lycan
+					OR = {
+						trait = known_lycan
+						trait = known_lycan_benevolent
+					}
+					is_indisposed = no
+					is_inaccessible_trigger = no
+					prisoner = no
+					NOT = { trait = incapable }
+				}
+				save_event_target_as = lycan_peasant_target
+			}
+			character_event = { id = lycan.505 }
+		}
+	}
+}
+character_event = {
+	id = lycan.505
+	desc = Lycan505
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan505Accept
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 15
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 100
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 5
+				NOT = { is_werewolf_religion = yes }
+				trait = just
+			}
+			modifier = {
+				factor = 0.001
+				event_target:lycan_peasant_target = {
+					OR = {
+						is_friend = ROOT
+						is_lover = ROOT
+						is_close_relative = ROOT
+						is_married = ROOT
+					}
+				}
+			}
+		}
+		reverse_imprison = event_target:lycan_peasant_target
+		opinion = {
+			modifier = opinion_hostile_lycan
+			who = event_target:lycan_peasant_target
+			years = 25
+		}
+		FROM = {
+			add_province_modifier = {
+				name = peasantry_placated
+				duration = 365
+			}
+		}
+		event_target:lycan_peasant_target = {
+			character_event = { id = lycan.506 }
+		}
+	}
+	option = {
+		name = Lycan505Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				is_werewolf_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 50
+				is_werewolf_religion = yes
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				event_target:lycan_peasant_target = {
+					is_rival = ROOT
+				}
+			}
+		}
+		FROM = {
+			add_province_modifier = {
+				name = lycan_peasant_unrest
+				duration = 1825
+			}
+		}
+		event_target:lycan_peasant_target = {
+			character_event = { id = lycan.506 }
+		}
+	}
+}
+character_event = {
+	id = lycan.506
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = lycan_peasant_target
+	}
+}
+
+
+#Lycan ruler draws the ire of the peasantry
+province_event = {
+	id = lycan.510
+	hide_window = yes
+	
+	trigger = {
+		NOR = { 
+			has_province_modifier = vampire_peasant_unrest
+			has_province_modifier = lycan_peasant_unrest
+			has_province_modifier = peasantry_placated
+		}
+		owner = {
+			trait = lycan
+			OR = {
+				trait = known_lycan
+				trait = known_lycan_benevolent
+			}
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			prisoner = no
+			NOT = { trait = incapable }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		
+		modifier = {
+			factor = 0.5
+			NOT = { is_werewolf_religion = yes }
+		}
+		modifier = {
+			factor = 2.5
+			owner = {
+				trait = known_lycan_benevolent
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = just
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = kind
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = gregarious
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = charitable
+			}
+		}
+		modifier = {
+			factor = 1.25
+			owner = {
+				trait = deceitful
+			}
+		}
+		modifier = {
+			factor = 5.0
+			is_werewolf_religion = yes
+		}
+	}
+	
+	immediate = {
+		owner = {
+			character_event = { id = lycan.515 }
+		}
+	}
+}
+character_event = {
+	id = lycan.515
+	desc = Lycan515
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Lycan515Accept
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 15
+				NOT = { is_werewolf_religion = yes }
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 100
+				NOT = { is_werewolf_religion = yes }
+				trait = zealous
+			}
+			modifier = {
+				factor = 5
+				NOT = { is_werewolf_religion = yes }
+				trait = just
+			}
+		}
+		scaled_wealth = -0.25
+		if = {
+			limit = { ai = yes }
+			scaled_wealth = 0.15
+		}
+		FROM = {
+			add_province_modifier = {
+				name = peasantry_placated
+				duration = 365
+			}
+		}
+	}
+	option = {
+		name = Lycan515Decline
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 10
+				is_werewolf_religion = yes
+				NOT = { trait = zealous }
+			}
+			modifier = {
+				factor = 50
+				is_werewolf_religion = yes
+				trait = zealous
+			}
+		}
+		FROM = {
+			add_province_modifier = {
+				name = lycan_peasant_unrest
+				duration = 1825
+			}
+		}
+	}
+}

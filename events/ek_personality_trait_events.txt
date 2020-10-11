@@ -1,0 +1,277 @@
+# Extension to the vanilla personality trait events
+
+# Remove Ruthless
+character_event = {
+	id = 1059
+	desc = "EVTDESC1059"
+	picture = "GFX_evt_family"
+	
+	min_age = 16
+	only_capable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		personality_traits = 6
+		trait = ruthless
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			personality_traits > 6
+		}
+		modifier = {
+			factor = 0.1
+			has_character_modifier = the_ruthless
+		}
+		modifier = {
+			factor = 0.1
+			has_character_modifier = the_ruthless_2
+		}
+		modifier = {
+			factor = 0
+			has_nickname = nick_the_ruthless
+		}
+	}
+	
+	option = {
+		name = "EVTDESC1059Accept"
+		remove_trait = ruthless
+		random = {
+			chance = 50
+			if = {
+				limit = { NOT = { trait = stressed } }
+				add_stressed = yes
+			}
+			else = {
+				prestige = -25
+			}
+		}
+	}
+	option = {
+		name = EVTDESC1059Refuse
+		prestige = 25
+		random = {
+			chance = 75
+			add_character_modifier = {
+				name = the_ruthless_2
+				months = 36
+			}
+			random_friend = { remove_friend = ROOT add_rival = ROOT }
+		}
+	}
+}
+
+#Remove Reckless
+character_event = {
+	id = 1060
+	desc = "EVTDESC1060"
+	picture = "GFX_evt_family"
+	
+	min_age = 16
+	only_capable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		personality_traits = 6
+		trait = reckless
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			personality_traits > 6
+		}
+	}
+	
+	option = {
+		name = "EVTDESC1060Accept"
+		remove_trait = reckless
+		random = {
+			chance = 50
+			if = {
+				limit = { NOT = { trait = stressed } }
+				add_stressed = yes
+			}
+			else = {
+				prestige = -25
+			}
+		}
+	}
+	option = {
+		name = EVTDESC1060Refuse
+		random_list = {
+			40 = {
+				if = {
+					limit = { NOT = { trait = wounded } }
+					add_trait_wounded_effect = yes
+				}
+			}
+			60 = {
+				scaled_wealth = { value = 0.5 min = 100 max = 500 }
+			}
+		}
+	}
+}
+
+#Remove Absent Minded
+character_event = {
+	id = 1061
+	desc = "EVTDESC1061"
+	picture = "GFX_evt_family"
+	
+	min_age = 16
+	only_capable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		personality_traits = 6
+		trait = absent_minded
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			personality_traits > 6
+		}
+	}
+	
+	option = {
+		name = "EVTDESC1061Accept"
+		remove_trait = absent_minded
+		random = {
+			chance = 50
+			if = {
+				limit = { NOT = { trait = stressed } }
+				add_stressed = yes
+			}
+			else = {
+				prestige = -25
+			}
+			random_artifact = {
+				limit = { is_indestructible = no }
+				destroy_artifact = yes
+			}
+		}
+	}
+	option = {
+		name = EVTDESC1061Refuse
+	}
+}
+
+#Remove Vain
+character_event = {
+	id = 1062
+	desc = "EVTDESC1062"
+	picture = "GFX_evt_family"
+	
+	min_age = 16
+	only_capable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		personality_traits = 6
+		trait = vain
+		NOT = { has_character_modifier = irresistible }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			personality_traits > 6
+		}
+	}
+	
+	option = {
+		name = "EVTDESC1062Accept"
+		remove_trait = vain
+		random = {
+			chance = 50
+			if = {
+				limit = { NOT = { trait = stressed } }
+				add_stressed = yes
+			}
+			else = {
+				prestige = -25
+			}
+		}
+	}
+	option = {
+		name = EVTDESC1062Refuse
+		add_character_modifier = {
+			name = irresistible
+			months = 12
+		}
+	}
+}
+
+#Remove Slovenly
+character_event = {
+	id = 1063
+	desc = "EVTDESC1063"
+	picture = "GFX_evt_family"
+	
+	min_age = 16
+	only_capable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		personality_traits = 6
+		trait = slovenly
+		NOT = { has_character_modifier = revolting_smell }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 2
+			personality_traits > 6
+		}
+	}
+	
+	option = {
+		name = "EVTDESC1063Accept"
+		remove_trait = slovenly
+		random = {
+			chance = 50
+			if = {
+				limit = { NOT = { trait = stressed } }
+				add_stressed = yes
+			}
+			else = {
+				prestige = -25
+			}
+		}
+	}
+	option = {
+		name = EVTDESC1063Refuse
+		random = {
+			chance = 50
+			random_courtier = {
+				opinion = {
+					modifier = opinion_disgusted
+					who = ROOT
+					years = 10
+				}
+			}
+			add_character_modifier = {
+				name = revolting_smell
+				months = 12
+			}
+		}
+	}
+}

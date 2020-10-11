@@ -1,0 +1,532 @@
+### Requires saving the province to check in the province_with_slaves event target!
+local_get_enslaved_culture = {
+    event_target:province_with_slaves = {
+        persistent_event_target:slaves_culture = { save_event_target_as = enslaved_culture }
+    }
+}
+
+### Requires saving the culture in the enslaved_culture event target!
+local_slave_generals = {
+    if = {
+        # If you didn't do it (but please do)
+        limit = { NOT = { event_target:enslaved_culture = { always = yes } } }
+        # You still need to save the province to check however
+        local_get_enslaved_culture = yes
+    }
+	create_character = {
+		random_traits = yes
+		dynasty = none
+		religion = ROOT
+		culture = event_target:enslaved_culture
+		age = 34
+		attributes = {
+			martial = 5
+		}
+		trait = warrior_2
+		trait = rebel_slave
+	}
+	new_character = {
+		assign_birthsign = yes
+		assign_racial_trait = yes
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = none
+		religion = ROOT
+		culture = event_target:enslaved_culture
+		age = 28
+		attributes = {
+			martial = 5
+		}
+		trait = warrior_2
+		trait = rebel_slave
+	}
+	new_character = {
+		assign_birthsign = yes
+		assign_racial_trait = yes
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = none
+		religion = ROOT
+		culture = event_target:enslaved_culture
+		age = 23
+		attributes = {
+			martial = 5
+		}
+		trait = warrior_2
+		trait = rebel_slave
+	}
+	new_character = {
+		assign_birthsign = yes
+		assign_racial_trait = yes
+	}
+}
+
+### Increment slaver & liberator progression
+increment_slaver_progression = {
+	hidden_tooltip = { # Track slave raids
+		change_variable = { which = numeroussecretslaveraidsonargonia value = 1 }
+		if = {
+			limit = { NOT = { has_character_modifier = enslaved_provinces_count } }
+			add_character_modifier = { name = enslaved_provinces_count days = -1 }
+		}
+	}
+	
+	if = {
+		limit = { NOT = { trait = slaver } }
+		custom_tooltip = {
+			text = PROGRESS_TOWARDS_SLAVER_TRAIT_CT
+			if = {
+				limit = { check_variable = { which = numeroussecretslaveraidsonargonia value = 15 } }
+				add_trait = slaver
+				character_event = { id = 38323 }
+			}
+		}
+	}
+	
+	else = {
+		if = {
+			limit = { NOR = { any_owned_bloodline = { has_bloodline_flag = slaver_bloodline } has_character_flag = founded_slaver_bloodline } }
+			prestige = 50
+			
+			custom_tooltip = {
+				text = PROGRESS_TOWARDS_SLAVER_BLOODLINE_CT
+				if = {
+					limit = { check_variable = { which = numeroussecretslaveraidsonargonia value = 100 } }
+					# Well then, let's give a bloodline I guess
+					long_character_event = { id = slaves.50 days = 7 }
+					
+					set_character_flag = founded_slaver_bloodline
+				}
+			}
+		}
+		
+		else = {
+			prestige = 75
+			wealth = 25
+		}
+	}
+}
+
+increment_liberator_progression = {
+	hidden_tooltip = { # Track slave raids
+		change_variable = { which = enslaved_provinces_liberated value = 1 }
+		if = {
+			limit = { NOT = { has_character_modifier = liberated_provinces_count } }
+			add_character_modifier = { name = liberated_provinces_count days = -1 }
+		}
+	}
+	
+	if = {
+		limit = { NOT = { trait = liberator } }
+		custom_tooltip = {
+			text = PROGRESS_TOWARDS_LIBERATOR_TRAIT_CT
+			if = {
+				limit = { check_variable = { which = enslaved_provinces_liberated value = 15 } }
+				add_trait = liberator
+				character_event = { id = 38324 }
+			}
+		}
+	}
+	
+	else = {
+		if = {
+			limit = { NOR = { any_owned_bloodline = { has_bloodline_flag = liberator_bloodline } has_character_flag = founded_liberator_bloodline } }
+			prestige = 25
+			piety = 25
+			custom_tooltip = {
+				text = PROGRESS_TOWARDS_LIBERATOR_BLOODLINE_CT
+				if = {
+					limit = { check_variable = { which = enslaved_provinces_liberated value = 100 } }
+					# Well then, let's give a bloodline I guess
+					long_character_event = { id = slaves.60 days = 7 }
+					
+					set_character_flag = founded_liberator_bloodline
+				}
+			}
+		}
+		
+		else = {
+			prestige = 50
+			piety = 50
+		}
+	}
+}
+
+### ENSLAVE A PROVINCE EFFECTS
+# We don't deal with the Slaver & Liberator progression there, because we want these effects to be usable elsewhere (like in random events or something)
+# So you'll have to do it yourself 
+cleanse_slavery_event_target = {
+	event_target:target_province_enslaved = {
+		clear_persistent_event_target = culture_enslaved
+		# If they were sent somewhere
+		if = {
+			limit = { persistent_event_target:slaves_sent_to_province = { always = yes } }
+			clear_persistent_event_target = slaves_sent_to_province
+			
+			# We can't clear the persistent event targets in slaves_sent_to_province because the province might have received new slaves in the mean time
+		}
+	}
+}
+
+# Liberate the slaves of a province
+liberate_province = {
+	custom_tooltip = {
+		text = FREE_SLAVES_NOT_WITHIN_REALM_CT
+		
+		remove_province_modifier = province_has_slaves
+	}
+}
+
+# Liberate the slaves of a province and send them back home
+liberate_province_send_back = {
+	custom_tooltip = {
+		text = SLAVES_JOIN_BACK_HOME_PROVINCE_CT
+		
+		persistent_event_target:slaves_culture = { save_event_target_as = enslaved_culture }
+		persistent_event_target:slaves_come_from_province = { save_event_target_as = province_slaves_come_from }
+		
+		persistent_event_target:slaves_come_from_province = { remove_province_modifier = province_enslaved }
+		
+		# Let's tell the province owner that their slaves have been liberated, if the owner is not target_liberator
+		if = {
+			limit = {
+				OR = {
+					NOT = { event_target:target_liberator = { always = yes } }
+					event_target:province_slaves_come_from = { owner = { NOT = { character = event_target:target_liberator } } }
+				}
+			}
+			
+			event_target:province_slaves_come_from = { owner = { character_event = { id = slaves.21 } } }
+		}
+	
+		liberate_province = yes
+	}
+}
+
+# Enslave a province but don't send the slaves anywhere (requires you to setup the target_province_enslaved event target)
+# Important: If a province doesn't have a slaves_sent_to_province persistent_event_target, it is assumed that the slaves are available somewhere (wink wink slave market Ev wink wink)
+enslave_province = {
+	# We save the enslaved culture to reference it later + uprising if needed
+	event_target:target_province_enslaved = { culture_scope = { save_event_target_as = culture_enslaved } }
+	
+	event_target:target_province_enslaved = {
+		save_persistent_event_target = {
+			name = slaves_culture
+			scope = event_target:culture_enslaved
+		}
+		
+		add_province_modifier = {
+			name = province_enslaved
+			years = 10
+		}
+	}
+}
+
+# Enslave a province and send the slaves in slave_new_home (requires you to setup the target_province_enslaved and target_province_receive_slaves event targets)
+enslave_province_send_target_province_receive_slaves = {
+	# Looks a lot like enslave_province, so we'll use the same thing and just build on it
+	enslave_province = yes
+	
+	# Now we can tell the slaves where they are sent
+	event_target:target_province_enslaved = {
+		save_persistent_event_target = {
+			name = slaves_sent_to_province
+			scope = event_target:target_province_receive_slaves
+		}
+	}
+	
+	# And we store the culture + origin of the slaves
+	event_target:target_province_receive_slaves = {
+		save_persistent_event_target = {
+			# We get it in enslave_province
+			name = slaves_culture
+			scope = event_target:culture_enslaved
+		}
+		
+		save_persistent_event_target = {
+			name = slaves_come_from_province
+			scope = event_target:target_province_enslaved
+		}
+	}
+	
+	event_target:target_province_receive_slaves = {
+		# Now we can apply the modifier
+		add_province_modifier = {
+			name = province_has_slaves
+			years = 10
+		}
+	}
+}
+
+# target_slaver will enslave any province they have a border with from target_enslaved realm (so both these event_target have to be setup)
+# Provinces that are a sea tile away will also be enslaved
+# If target_slaver is a seafarer, provinces up to two sea tiles away will be enslaved
+target_slaver_enslave_target_enslaved_realm = {
+	event_target:target_enslaved = {
+		# These provinces will be enslaved
+		while = {
+			limit = {
+				any_realm_province = {
+					holder_scope = {
+						OR = {
+							character = event_target:target_enslaved
+							is_liege_or_above = event_target:target_enslaved
+						}
+					}
+					
+					OR = {
+						# Shares a border with target_slaver
+						any_neighbor_province = {
+							has_owner = yes
+							holder_scope = {
+								OR = {
+									character = event_target:target_slaver
+									is_liege_or_above = event_target:target_slaver
+								}
+							}
+						}
+						
+						# One coast tile away for most people
+						any_neighbor_province = {
+							is_land = no
+							any_neighbor_province = {
+								has_owner = yes
+								owner = {
+									OR = {
+										character = event_target:target_slaver
+										is_liege_or_above = event_target:target_slaver
+									}
+								}
+							}
+						}
+						
+						# Two coast tiles away for sea-faring people OR for people with the slaver bloodline
+						AND = {
+							event_target:target_slaver = {
+								OR = { 
+									is_seafarer = yes
+									any_owned_bloodline = {
+										has_bloodline_flag = slaver_bloodline
+										bloodline_is_active_for = PREV
+									}
+								}
+							}
+							
+							any_neighbor_province = {
+								is_land = no
+								any_neighbor_province = {
+									is_land = no
+									any_neighbor_province = {
+										has_owner = yes
+										owner = {
+											OR = {
+												character = event_target:target_slaver
+												is_liege_or_above = event_target:target_slaver
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					province_can_be_enslaved = yes
+				}
+			}
+			random_realm_province = {
+				limit = {
+					holder_scope = {
+						OR = {
+							character = event_target:target_enslaved
+							is_liege_or_above = event_target:target_enslaved
+						}
+					}
+					
+					OR = {
+						any_neighbor_province = {
+							has_owner = yes
+							holder_scope = {
+								OR = {
+									character = event_target:target_slaver
+									is_liege_or_above = event_target:target_slaver
+								}
+							}
+						}
+						
+						# One coast tile away for most people
+						any_neighbor_province = {
+							is_land = no
+							any_neighbor_province = {
+								has_owner = yes
+								owner = {
+									OR = {
+										character = event_target:target_slaver
+										is_liege_or_above = event_target:target_slaver
+									}
+								}
+							}
+						}
+						
+						# Two coast tiles away for sea-faring people OR for people with the slaver bloodline
+						AND = {
+							event_target:target_slaver = {
+								OR = { 
+									is_seafarer = yes
+									any_owned_bloodline = {
+										has_bloodline_flag = slaver_bloodline
+										bloodline_is_active_for = PREV
+									}
+								}
+							}
+							
+							any_neighbor_province = {
+								is_land = no
+								any_neighbor_province = {
+									is_land = no
+									any_neighbor_province = {
+										has_owner = yes
+										owner = {
+											OR = {
+												character = event_target:target_slaver
+												is_liege_or_above = event_target:target_slaver
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					province_can_be_enslaved = yes
+				}
+				
+				save_event_target_as = target_province_enslaved
+				
+				### If there is an available province for event_target:target_slaver (no slave)
+				if = {
+					limit = {
+						event_target:target_slaver = { any_demesne_province = { NOT = { province_has_slaves = yes } } }
+					}
+					event_target:target_slaver = {
+						random_demesne_province = {
+							limit = { NOT = { province_has_slaves = yes } }
+							save_event_target_as = target_province_receive_slaves
+							
+							enslave_province_send_target_province_receive_slaves = yes
+						}
+					}
+				}
+				
+				### If there is no available province
+				else = {
+					enslave_province = yes
+					event_target:target_slaver = { wealth = 50 }
+				}
+				
+				event_target:target_slaver = { increment_slaver_progression = yes }
+			}
+		}
+	}
+}
+# target_liberator will free all the slaves *who were part of their realm* in target_slaver realm
+target_liberator_liberate_own_target_slaver = {
+	event_target:target_slaver = {
+		any_realm_province = {
+			limit = {
+				province_has_slaves = yes
+				persistent_event_target:slaves_come_from_province = {
+					owner = {
+						OR = {
+							character = event_target:target_liberator
+							is_liege_or_above = event_target:target_liberator
+						}
+					}
+				}
+			}
+			
+			liberate_province_send_back = yes
+			
+			hidden_tooltip = {
+				event_target:target_liberator = {
+					if = {
+						# Can't be both a slaver and a liberator
+						limit = {
+							has_law = slavery_0
+							NOT = { check_variable = { which = numeroussecretslaveraidsonargonia value = 1 } }
+							NOT = { trait = slaver }
+						}
+						
+						increment_liberator_progression = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+# target_liberator will free all the slaves in target_slaver realm
+target_liberator_liberate_target_slaver = {
+	event_target:target_slaver = {
+		any_realm_province = {
+			limit = { province_has_slaves = yes }
+			
+			# If the slaves are part of target_liberator realm, OR if liberator has the liberator bloodline, the slaves will be sent back home
+			if = {
+				limit = {
+					OR = {
+						persistent_event_target:slaves_come_from_province = {
+							owner = {
+								OR = {
+									character = event_target:target_liberator
+									is_liege_or_above = event_target:target_slaver
+								}
+							}
+						}
+						
+						event_target:target_liberator = {
+							any_owned_bloodline = {
+								has_bloodline_flag = liberator_bloodline
+								bloodline_is_active_for = PREV
+							}
+						}
+					}
+				}
+				
+				liberate_province_send_back = yes
+				ROOT = { prestige = 25 }
+			}
+			
+			else = {
+				# Those who aren't will just be scattered away, trying to get a new, and hopefully, better life elsewhere
+				liberate_province = yes
+			}
+			
+			hidden_tooltip = {
+				event_target:target_liberator = {
+					if = {
+						# Can't be both a slaver and a liberator
+						limit = {
+							has_law = slavery_0
+							NOT = { check_variable = { which = numeroussecretslaveraidsonargonia value = 1 } }
+							NOT = { trait = slaver }
+						}
+						
+						increment_liberator_progression = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+# Free all the slaves from target_slaver realm
+free_all_slaves_target_slaver = {
+	event_target:target_slaver = {
+		any_realm_province = {
+			limit = { province_has_slaves = yes }
+			liberate_province = yes
+		}
+	}
+}

@@ -1,0 +1,74 @@
+namespace = ekera
+
+#startup event
+# character_event = {
+# 	id = ekera.1
+# 	hide_window = yes
+	
+#     only_playable = yes
+# 	ai = no
+	
+# 	is_triggered_only = yes
+	
+# 	trigger = {
+#         is_multiplayer_host_character = yes
+# 	}
+	
+# 	immediate = {
+# 		export_to_variable = { which = global_second_era_year value = year }
+#         subtract_variable = { which = global_second_era_year value = 2920 }
+
+#         export_to_variable = { which = global_third_era_year value = year }
+#         subtract_variable = { which = global_third_era_year which = global_third_era_start }
+
+#         export_to_variable = { which = global_played_years value = total_years_played }
+
+# 		if = {
+# 			limit = {
+#                 NOR = {
+#                     is_save_game = yes
+#                     has_global_flag = ek_era_initialise
+#                 }
+# 			}
+# 			set_variable = { which = global_start_year_2e which = global_second_era_year }
+#             set_variable = { which = global_start_year_3e which = global_third_era_year }
+# 			set_global_flag = ek_era_initialise
+#             set_character_flag = yay_it_work
+#             ekera_startup_effect = yes #finds 1/1/xxxx and fires yearly update event ekera.2 for then
+# 		}
+# 	}
+# }
+
+
+#update event
+province_event = {
+	id = ekera.2
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+        province_id = 1
+	}
+	
+	immediate = {
+		if = {
+			limit = { NOT = { has_global_flag = era_updated } }
+
+        	change_variable = { which = global_second_era_year value = 1 }
+        	change_variable = { which = global_third_era_year value = 1 }
+
+        	change_variable = { which = global_played_years value = 1 }
+
+			if = {
+				limit = { has_global_flag = era_non_bm_start }
+				set_global_flag = era_updated
+			}
+		
+			province_event = { id = ekera.2 days = 365 }
+		}
+		else = {
+			clr_global_flag = era_updated
+		}
+	}
+}

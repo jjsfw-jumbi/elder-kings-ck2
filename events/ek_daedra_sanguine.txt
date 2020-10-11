@@ -1,0 +1,347 @@
+####Etienne's Daedric Events - Sanguine ####
+
+namespace = sanguine
+
+#Drinking contest!
+character_event = {
+	id = sanguine.1
+	desc = Sanguine1
+	picture = GFX_evt_brothel
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	religion = daedra_sanguine
+	
+	trigger = {
+		is_undead = no
+		any_courtier = {
+			is_adult = yes
+			is_undead = no
+			prisoner = no
+			NOT = { trait = incapable }
+			religion = daedra_sanguine
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 0.9
+			trait = hedonist
+		}
+		modifier = {
+			factor = 0.9
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.9
+			trait = gluttonous
+		}
+		modifier = {
+			factor = 2.5
+			trait = temperate
+		}
+	}
+	
+	immediate = {
+		random_courtier = {
+			limit = {
+				is_adult = yes
+				is_undead = no
+				prisoner = no
+				NOT = { trait = incapable }
+				religion = daedra_sanguine
+			}
+			save_event_target_as = target_drinking_opponent
+		}
+	}
+	
+	option = {
+		name = Sanguine1Accept
+		piety = 5
+		long_character_event = { id = sanguine.5 }
+	}
+	option = {
+		name = Sanguine1Decline
+		piety = -5
+	}
+}
+
+long_character_event = {
+	id = sanguine.5
+	desc =  {
+		text = Sanguine5A
+		trigger = {
+			has_character_flag = sanguine_loser
+		}
+	}
+	desc =  {
+		text = Sanguine5B
+		trigger = {
+			has_character_flag = sanguine_winner
+		}
+	}
+	picture = GFX_evt_brothel
+	
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	religion = daedra_sanguine
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			50 = {
+				modifier = {
+					factor = 3
+					trait = fortitude
+				}
+				modifier = {
+					factor = 2
+					trait = strong
+				}
+				modifier = {
+					factor = 2
+					trait = robust
+				}
+				modifier = {
+					factor = 2
+					trait = gluttonous
+				}
+				modifier = {
+					factor = 1.5
+					trait = drunkard
+				}
+				modifier = {
+					factor = 1.5
+					trait = hedonist
+				}
+				modifier = {
+					factor = 1.5 #Nords are notorious drinkers
+					OR = {
+						culture = atmoran
+						culture = nord
+						culture = skaal
+					}
+				}
+				modifier = {
+					factor = 1.25
+					trait = socializer
+				}
+				modifier = {
+					factor = 0.33
+					trait = temperate
+				}
+				modifier = {
+					factor = 0.33
+					trait = weak
+				}
+				modifier = {
+					factor = 0.33
+					trait = feeble
+				}
+				modifier = {
+					factor = 0.33
+					trait = infirm
+				}
+				set_character_flag = sanguine_winner
+			}
+			50 = {
+				modifier = {
+					factor = 3
+					event_target:target_drinking_opponent = { trait = fortitude }
+				}
+				modifier = {
+					factor = 2
+					event_target:target_drinking_opponent = { trait = strong }
+				}
+				modifier = {
+					factor = 2
+					event_target:target_drinking_opponent = { trait = robust }
+				}
+				modifier = {
+					factor = 2
+					event_target:target_drinking_opponent = { trait = gluttonous }
+				}
+				modifier = {
+					factor = 1.5
+					event_target:target_drinking_opponent = { trait = drunkard }
+				}
+				modifier = {
+					factor = 1.5
+					event_target:target_drinking_opponent = { trait = hedonist }
+				}
+				modifier = {
+					factor = 1.5 #Nords are notorious drinkers
+					event_target:target_drinking_opponent = {
+						OR = {
+							culture = atmoran
+							culture = nord
+							culture = skaal
+						}
+					}
+				}
+				modifier = {
+					factor = 1.25
+					event_target:target_drinking_opponent = { trait = socializer }
+				}
+				modifier = {
+					factor = 0.33
+					event_target:target_drinking_opponent = { trait = temperate }
+				}
+				modifier = {
+					factor = 0.33
+					event_target:target_drinking_opponent = { trait = weak }
+				}
+				modifier = {
+					factor = 0.33
+					event_target:target_drinking_opponent = { trait = feeble }
+				}
+				modifier = {
+					factor = 0.33
+					event_target:target_drinking_opponent = { trait = infirm }
+				}
+				set_character_flag = sanguine_loser
+			}
+		}
+	}
+	
+	option = {
+		name = Sanguine5Acknowledge
+		if = {
+			limit = { has_character_flag = sanguine_winner }
+			piety = 25
+		}
+		if = {
+			limit = { has_character_flag = sanguine_loser }
+			piety = 5
+		}
+		if = {
+			limit = { trait = temperate }
+			random = {
+				chance = 33
+				remove_trait = temperate
+			}
+		}
+		if = {
+			limit = { 
+				NOR = {
+					trait = drunkard
+					trait = temperate
+				}
+			}
+			random = {
+				chance = 15
+				add_trait = drunkard
+			}
+		}
+		clr_character_flag = sanguine_winner
+		clr_character_flag = sanguine_loser
+		event_target:target_sanguine_opponent = { character_event = { id = sanguine.6 } }
+	}
+}
+#Clean-up event for opponent
+character_event = {
+	id = sanguine.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clear_event_target = target_sanguine_opponent
+	}
+}
+
+long_character_event = {
+	id = sanguine.20
+	desc = {
+		text = Sanguine20A
+		trigger = { has_character_flag = sanguine_glibness }
+	}
+	desc = {
+		text = Sanguine20B
+		trigger = { has_character_flag = sanguine_berserker }
+	}
+	desc = {
+		text = Sanguine20C
+		trigger = { has_character_flag = sanguine_reflection }
+	}
+	desc = {
+		text = Sanguine20D
+		trigger = { has_character_flag = sanguine_energy }
+	}
+	desc = {
+		text = Sanguine20E
+		trigger = { has_character_flag = sanguine_vitality }
+	}
+	picture = GFX_evt_drunk
+	
+	has_dlc = "Jade Dragon"
+	only_playable = yes
+	min_age = 16
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			10 = { set_character_flag = sanguine_glibness }
+			10 = { set_character_flag = sanguine_berserker }
+			10 = { set_character_flag = sanguine_reflection }
+			10 = { set_character_flag = sanguine_energy }
+			10 = { set_character_flag = sanguine_vitality }
+		}
+	}
+	
+	option = {
+		name = Sanguine20OptA
+		trigger = {
+			has_character_flag = sanguine_glibness
+		}
+		add_character_modifier = { name = sanguine_brew_glibness months = 48 }
+		clr_character_flag = sanguine_glibness
+		clr_character_flag = sanguine_deal
+	}
+	option = {
+		name = Sanguine20OptB
+		trigger = {
+			has_character_flag = sanguine_berserker
+		}
+		add_character_modifier = { name = sanguine_brew_berserker months = 48 }
+		clr_character_flag = sanguine_berserker
+		clr_character_flag = sanguine_deal
+	}
+	option = {
+		name = Sanguine20OptC
+		trigger = {
+			has_character_flag = sanguine_reflection
+		}
+		add_character_modifier = { name = sanguine_brew_reflection months = 48 }
+		clr_character_flag = sanguine_reflection
+		clr_character_flag = sanguine_deal
+	}
+	option = {
+		name = Sanguine20OptD
+		trigger = {
+			has_character_flag = sanguine_energy
+		}
+		add_character_modifier = { name = sanguine_brew_energy months = 48 }
+		clr_character_flag = sanguine_energy
+		clr_character_flag = sanguine_deal
+	}
+	option = {
+		name = Sanguine20OptE
+		trigger = {
+			has_character_flag = sanguine_vitality
+		}
+		add_character_modifier = { name = sanguine_brew_vitality months = 48 }
+		clr_character_flag = sanguine_vitality
+		clr_character_flag = sanguine_deal
+	}
+}

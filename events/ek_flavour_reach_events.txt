@@ -1,0 +1,1028 @@
+namespace = reach_flavour
+
+### De Jure Reach created
+narrative_event = {
+	id = reach_flavour.1
+	desc = reach_flavour.1.d
+	title = reach_flavour.1.t
+	
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = reach_de_jure_kingdom_formed
+	}
+	
+	option = {
+		name = reach_flavour.1.optA
+		
+		create_de_jure_reach = yes
+	}
+}
+
+narrative_event = {
+	id = reach_flavour.2
+	desc = reach_flavour.2.d
+	title = reach_flavour.1.t
+	
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = reach_flavour.2.optA
+	}
+}
+
+### The Elder Council has been asked to consider creating a de Jure Reach kingdom out of Skyrim and High Rock
+# Imperial veto
+character_event = {
+	id = reach_flavour.3
+	desc = reach_flavour.3.d
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.veto
+		trigger = {
+			block_general_event_trigger = no
+		}
+		save_event_target_as = target_emperor
+
+		ec_veto_council = yes
+		elder_council = {
+			any_society_member = {
+				character_event = { id = reach_flavour.9 }
+			}
+		}
+		any_realm_lord = {
+			limit = {
+				top_liege = {
+					character = ROOT
+				}
+				NOT = {
+					society_member_of = elder_council
+				}
+			}
+			character_event = { id = reach_flavour.9 }
+		}
+
+		ai_chance = {
+			factor = 10
+			ec_veto_default_score_petty = yes
+		}
+	}
+
+	option = {
+		name = eldercouncil.dont_veto
+
+		custom_tooltip = {
+			text = elder_council_vote
+			hidden_tooltip = {
+				elder_council = {
+					any_society_member = {
+						limit = {
+							is_society_grandmaster = yes
+						}
+						character_event = { id = reach_flavour.4 }
+					}
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 100
+			ec_dont_veto_default_score = yes
+		}
+	}
+}
+
+# High Chancellor ping/notification event - triggered by decision - single desc
+character_event = {
+	id = reach_flavour.4
+	desc = reach_flavour.4.d
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.hc_accept
+
+		ec_vote_prepare = yes
+
+		hidden_tooltip = {
+			elder_council = {
+				any_society_member = {
+					character_event = { id = reach_flavour.5 }
+				}
+			}
+			
+			1 = {
+				elder_council = {
+					any_society_member = {
+						limit = {
+							is_society_grandmaster = yes
+						}
+						character_event = { id = reach_flavour.6 days = 3 }
+					}
+				}
+			}		
+		}
+	}
+}
+
+# Councillor votes
+character_event = {
+	id = reach_flavour.5
+	desc = reach_flavour.5.d
+	
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	immediate = {
+		ec_vote_clr_flags = yes
+	}
+
+	option = {
+		name = ec_vote_yes
+
+		ec_vote_yes = yes
+
+		ai_chance = {
+			factor = 21
+			modifier = {
+				factor = 6
+				culture = reachmen
+			}
+			modifier = {
+				factor = 2
+				religion_group = human_pantheon
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  10 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  20 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  30 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  40 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  50 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  60 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  70 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  80 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  90 }
+			}
+			modifier = {
+				factor = 1.1
+				opinion = { who = event_target:target_proposer value =  100 }
+			}
+		}
+	}
+
+	option = {
+		name = ec_vote_no
+
+		ec_vote_no = yes
+
+		ai_chance = {
+			factor = 36 # favour status quo
+			modifier = {
+				factor = 6
+				OR = {
+					culture = nord
+					culture = breton
+				}
+			}
+			modifier = {
+				factor = 2
+				event_target:target_proposer = {
+					religion_group = reach_faiths
+				}
+			}
+			modifier = {
+				factor = 3
+				event_target:target_proposer = {
+					religion_group = daedra
+				}
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -10 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -20 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -30 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -40 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -50 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -60 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -70 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -80 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -90 } }
+			}
+			modifier = {
+				factor = 1.1
+				NOT = { opinion = { who = event_target:target_proposer value =  -100 } }
+			}
+		}
+	}
+}
+
+# High Chancellor tallies, breaks tie
+character_event = {
+	id = reach_flavour.6
+
+	desc = {
+		text = reach_flavour.6.passed
+		trigger = {
+			ec_vote_passed = yes
+		}
+	}
+	desc = {
+		text = reach_flavour.6.failed
+		trigger = {
+			ec_vote_failed = yes
+		}
+	}
+	desc = {
+		text = reach_flavour.6.tied
+		trigger = {
+			ec_vote_tied = yes
+		}
+	}
+
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.passed.accept
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_passed = yes
+		}
+
+		ec_end_vote = yes
+		
+		create_de_jure_reach = yes
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = reach_flavour.7 }
+			}
+		}
+
+		event_target:target_emperor = {
+			character_event = { id = reach_flavour.7 }
+		}
+	}
+
+	option = {
+		name = eldercouncil.failed.accept
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_failed = yes
+		}
+
+		ec_end_vote = yes
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = reach_flavour.8 }
+			}
+		}
+
+
+		event_target:target_emperor = {
+			character_event = { id = reach_flavour.8 }
+		}
+	}
+
+	option = {
+		name = eldercouncil.tied.pass
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_tied = yes
+		}
+
+		ec_end_vote = yes
+
+		create_de_jure_reach = yes
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = reach_flavour.7 }
+			}
+		}
+
+		event_target:target_emperor = {
+			character_event = { id = reach_flavour.7 }
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_character_flag = ec_vote_no
+			}
+		}
+	}
+
+	option = {
+		name = eldercouncil.tied.fail
+		ec_show_votes = yes
+
+		trigger = {
+			ec_vote_tied = yes
+		}
+
+		ec_end_vote = yes
+
+		elder_council = {
+			any_society_member = {
+				limit = {
+					NOT = {
+						character = ROOT
+					}
+				}
+				character_event = { id = reach_flavour.8 }
+			}
+		}
+
+		event_target:target_emperor = {
+			character_event = { id = reach_flavour.8 }
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_character_flag = ec_vote_yes
+			}
+		}
+	}
+}
+
+# Vote passes - inform Council
+character_event = {
+	id = reach_flavour.7
+	desc = {
+		text = reach_flavour.7.passed
+		trigger = {
+			ec_vote_passed = yes
+		}
+	}
+	desc = {
+		text = reach_flavour.7.tied
+		trigger = {
+			ec_vote_tied = yes
+		}
+	}
+	desc = {
+		text = reach_flavour.7.error
+		trigger = {
+			ec_vote_failed = yes
+		}
+	}
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.very_well
+		ec_show_votes = yes
+		ec_tooltip_imperial_legislature = yes
+	}
+}
+
+# Vote fails - inform Council
+character_event = {
+	id = reach_flavour.8
+	desc = {
+		text = reach_flavour.8.error
+		trigger = {
+			ec_vote_passed = yes
+		}
+	}
+	desc = {
+		text = reach_flavour.8.tied
+		trigger = {
+			ec_vote_tied = yes
+		}
+	}
+	desc = {
+		text = reach_flavour.8.failed
+		trigger = {
+			ec_vote_failed = yes
+		}
+	}
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.very_well
+		ec_show_votes = yes
+		ec_tooltip_imperial_legislature = yes
+	}
+}
+
+# Emperor vetoes motion - inform realm, council
+character_event = {
+	id = reach_flavour.9
+	desc = reach_flavour.9.d
+	picture = GFX_evt_k_eldercouncil
+
+	is_triggered_only = yes
+
+	option = {
+		name = eldercouncil.veto_react
+		trigger = {
+			block_general_event_trigger = no
+		}
+	}
+}
+
+### Faolan reborn
+narrative_event = {
+	id = reach_flavour.10
+	desc = reach_flavour.10.d
+	title = reach_flavour.10.t
+	
+	picture = GFX_evt_briarheart
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	immediate = {
+		set_global_flag = faolan_reborn_appears
+		ROOT = { save_event_target_as = faolan_reborn_char }
+		save_persistent_event_target = { name = faolan_reborn scope = event_target:faolan_reborn_char }
+	}
+	
+	option = {
+		name = reach_flavour.10.optA
+		
+		# Might change at one point, idk
+		give_nickname = nick_red_eagle
+		
+		# Upgrades Red Eagle's Fury into Red Eagle's Bane
+		custom_tooltip = {
+			text = REDEAGLE_FURY_INTO_REDEAGLE_BANE_CT
+			hidden_tooltip = {
+				unsafe_destroy_artifact = weapon_redeagle
+				add_artifact = weapon_redeagle_bane
+			}
+		}
+		
+		# Revives Faolan's bloodline
+		c_18000 = { random_owned_bloodline = { ROOT = { add_to_bloodline = PREV } } }
+		
+		custom_tooltip = {
+			text = REACHMEN_FAOLAN_BLOODLINE_NAMED_FAOLAN
+		}
+		
+		character_event = { #Faolan/Melka title (Reach Emperor)
+			id = reach_flavour.18
+		}
+		
+		character_event = { #Reach Empire name
+			id = reach_flavour.19
+		}
+		
+		prestige = 500
+		piety = 500
+		
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = { 
+					ai = no 
+					NOT = { character = ROOT }
+				}
+				narrative_event = { id = reach_flavour.11 }
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = reach_flavour.11
+	desc = reach_flavour.11.d
+	title = reach_flavour.10.t
+	
+	picture = GFX_evt_briarheart
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = reach_flavour.11.optA
+	}
+}
+
+### Consort with Hagravens - Bargain
+character_event = {
+	id = reach_flavour.12
+	
+	desc = {
+		trigger = { NOT = { has_landed_title = k_thereach } }
+		text = reach_flavour.12.d.1
+	}
+	
+	desc = {
+		trigger = { has_landed_title = k_thereach }
+		text = reach_flavour.12.d.2
+	}
+	
+	title = reach_flavour.12.t
+	
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	option = { # I heard about your dark powers...
+		name = reach_flavour.12.optA
+		
+		trigger = {
+			NOR = {
+				trait = briarheart
+				trait = hagraven
+			}
+		}
+		
+		custom_tooltip = {
+			text = HAGRAVEN_POWERS_OFFERING_CT
+			hidden_tooltip = {
+				character_event = { id = reach_flavour.13 }
+			}
+		}
+	}
+	
+	option = { # I am here to seek an alliance
+		name = reach_flavour.12.optB
+		
+		trigger = {
+			OR = {
+				trait = briarheart
+				trait = hagraven
+				has_landed_title = k_thereach
+			}
+		}
+		
+		custom_tooltip = {
+			text = HAGRAVEN_ALLIANCE_OFFERING_CT
+			hidden_tooltip = {
+				character_event = { id = reach_flavour.14 }
+			}
+		}
+	}
+	
+	option = { # I do not need anything, at least for now
+		name = reach_flavour.12.optC
+		
+		clr_character_flag = is_in_hagraven_coven
+	}
+}
+
+character_event = {
+	id = reach_flavour.13
+	desc = reach_flavour.13.d
+	
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		roll_hagraven_briarheart_transformation_survival_chance = yes
+	}
+	
+	option = {
+		name = reach_flavour.13.optA
+		
+		trigger = {
+			OR = {
+				is_female = no
+				learning = 20
+				is_mage = yes
+			}
+			
+			piety = 1000
+		}
+		
+		piety = -1000
+		
+		roll_hagraven_briarheart_transformation = yes
+	}
+	
+	option = {
+		name = reach_flavour.13.optB
+		
+		if = {
+			limit = { NOT = { piety = 1000 } }
+			custom_tooltip = {
+				text = NEED_1000_PIETY_CT
+			}
+		}
+	}
+	
+	after = {
+		clr_character_flag = is_in_hagraven_coven
+	}
+}
+
+character_event = {
+	id = reach_flavour.14
+	
+	desc = {
+		trigger = {
+			NOR = {
+				trait = briarheart
+				trait = hagraven
+			}
+		}
+		text = reach_flavour.14.d.1 #Neither Briarheart/Hagraven
+	}
+	
+	desc = {
+		trigger = {
+			OR = {
+				trait = briarheart
+				trait = hagraven
+			}
+		}
+		text = reach_flavour.14.d.2 #Already a Briarheart/Hagraven
+	}
+	
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { trait = briarheart }
+			generate_hagraven = yes
+		}
+		
+		else_if = {
+			limit = { trait = hagraven }
+			generate_briarheart = yes
+		}
+	}
+	
+	option = { # There goes my heart and body
+		name = reach_flavour.14.optA
+		
+		trigger = {
+			NOR = {
+				trait = briarheart
+				trait = hagraven
+			}
+			piety = 1000 #Cheaper than the regular sacrifice
+		}
+		
+		piety = -1000
+		
+		hidden_tooltip = {
+			roll_hagraven_briarheart_transformation_survival_chance = yes
+			roll_hagraven_briarheart_transformation = yes
+		}
+		
+		
+		character_event = { id = reach_flavour.14 days = 3 random = 2 }
+	}
+	
+	option = { # I will bind myself to one of you
+		name = reach_flavour.14.optB
+		
+		trigger = {
+			OR = {
+				trait = briarheart
+				trait = hagraven
+			}
+		}
+		
+		remove_spouse = yes
+		
+		event_target:generated_briarheart_hagraven = {
+			add_spouse = ROOT
+		}
+		
+		custom_tooltip = {
+			text = HAGRAVEN_VASSALIZED_CT
+			hidden_tooltip = {
+				d_hagraven = {
+					owner = {
+						set_defacto_liege = ROOT
+					}
+				}
+			}
+		}
+		
+		custom_tooltip = {
+			text = HAGRAVEN_ALLIANCE_SEALED_CT
+		}
+		
+		clr_character_flag = is_in_hagraven_coven
+		set_character_flag = formed_alliance_with_hagravens
+	}
+	
+	option = { # The price might be too high
+		name = reach_flavour.14.optC
+		
+		clr_character_flag = is_in_hagraven_coven
+		
+		if = {
+			limit = {
+				NOT = { piety = 1000 }
+				NOR = {
+					trait = briarheart
+					trait = hagraven
+				}
+			}
+			custom_tooltip = {
+				text = NEED_1000_PIETY_CT
+			}
+		}
+	}
+}
+
+# Result of the Briarheart / Hagraven transformation
+character_event = {
+	id = reach_flavour.15
+	
+	desc = {
+		trigger = { trait = briarheart }
+		text = reach_flavour.15.d.1
+	}
+	
+	desc = {
+		trigger = { trait = hagraven }
+		text = reach_flavour.15.d.2
+	}
+	
+	picture = GFX_evt_briarheart
+	
+	is_triggered_only = yes
+	
+	option = { # My heart and soul for the Reach.
+		name = reach_flavour.15.optA
+	}
+}
+
+# Awards the title_faolan minor title (on_new_holder)
+character_event = {
+	id = reach_flavour.16
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		ROOT = {
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_faolan
+				bloodline_is_active_for = PREV
+			}
+		}
+		FROM = { tier = EMPEROR }
+	}
+	
+	immediate = {
+		# Clear the owners of the title
+		any_character = {
+			limit = {
+				has_character_flag = current_faolan
+			}
+			remove_special_character_title = title_faolan
+			clr_character_flag = current_faolan
+		}
+		
+		# Gives the special character title
+		name_faolan_melka = yes
+		spouse = { name_faolan_melka = yes }
+	}
+}
+
+# Awards the title_faolan minor title (on_marriage)
+character_event = {
+	id = reach_flavour.17
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			FROM = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_faolan
+					bloodline_is_active_for = PREV
+				}
+			}
+			new_character = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_faolan
+					bloodline_is_active_for = PREV
+				}
+			}
+		}
+		FROM = { primary_title = { tier = EMPEROR } }
+	}
+	
+	immediate = {
+		# Clear the owners of the title
+		any_character = {
+			limit = {
+				has_character_flag = current_faolan
+			}
+			remove_special_character_title = title_faolan
+			clr_character_flag = current_faolan
+		}
+		
+		# Gives the special character title
+		FROM = { name_faolan_melka = yes }
+		new_character = { name_faolan_melka = yes }
+	}
+}
+
+# Awards the title_faolan minor title (during title creation)
+character_event = {
+	id = reach_flavour.18
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		primary_title = { tier = EMPEROR }
+	}
+	
+	immediate = {
+		# Gives the special character title
+		FROM = { name_faolan_melka = yes }
+		spouse = { name_faolan_melka = yes }
+	}
+}
+
+# Changes the name of the Reach Empire due to change of religion/religion
+character_event = {
+	id = reach_flavour.19
+	hide_window = yes
+	
+	trigger = {
+		has_landed_title = e_thereach
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_faolan
+					bloodline_is_active_for = PREV
+				}
+			}
+			e_thereach = {
+				set_name = "Scarlet Dominion"
+			}
+		}
+		
+		else_if = {
+			limit = {
+				religion = forsworn_heresy
+			}
+			e_thereach = {
+				set_name = "Dominion of Bones"
+			}
+		}
+		
+		else_if = {
+			limit = {
+				culture = reachmen
+			}
+			e_thereach = {
+				set_name = "Greater Reach"
+			}
+		}
+		
+		else_if = {
+			limit = {
+				culture = orsimer
+			}
+			e_thereach = {
+				set_name = "Greater Orsinium"
+			}
+		}
+		
+		else_if = {
+			limit = {
+				culture = falmer
+			}
+			e_thereach = {
+				set_name = "Pure-Snow Dominion"
+			}
+		}
+		
+		else = {
+			e_thereach = {
+				set_name = ""
+			}
+		}
+	}
+}
+
+### High Crone should always be a Hagraven
+character_event = {
+	id = reach_flavour.20
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { d_hagraven = { owner = { character = ROOT } } }
+	
+	immediate = {
+		if = {
+			limit = { any_realm_character = { trait = hagraven } }
+			random_realm_character = {
+				limit = { trait = hagraven }
+				dynasty = 100061
+				ROOT = { abdicate_to = PREV }
+			}
+		}
+		
+		else = {
+			generate_hagraven = yes
+			
+			event_target:generated_hagraven = {
+				dynasty = 100061
+				ROOT = { abdicate_to = PREV }
+			}
+		}
+	}
+}

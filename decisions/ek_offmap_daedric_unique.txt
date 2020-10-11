@@ -1,0 +1,1477 @@
+offmap_decisions = {
+	#Azura: Cure Stressed, Depressed, and Paranoid
+	oblivion_azura_peace_of_mind = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			worships_azura = yes
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			OR = {
+				trait = depressed
+				trait = stressed
+				trait = paranoid
+			}
+			NOT = { has_character_flag = azura_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_azura
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_azura
+				}
+				has_offmap_currency = { offmap = oblivion_azura value = 500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_azura }
+			oblivion_azura_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_azura
+					value = -500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = azura_deal
+					long_character_event = { id = azura.10 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Boethiah: Gain a command trait
+	oblivion_boethiah_martial_expertise = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			can_have_more_leadership_traits = yes
+			leadership_max_total = no
+			leadership_max_type = no
+			worships_boethiah = yes
+			NOT = { has_character_flag = boethiah_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_boethiah
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_boethiah
+				}
+				has_offmap_currency = { offmap = oblivion_boethiah value = 750 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_boethiah }
+			oblivion_boethiah_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_boethiah
+					value = -750
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = boethiah_deal
+					character_event = { id = boethiah.50 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Clavicus: Bargain for Immortality
+	oblivion_clavicus_bargain_immortality = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_immortal = no
+			is_adult = yes
+			worships_clavicus = yes
+			NOT = { has_character_flag = clavicus_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_clavicus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_clavicus
+				}
+				has_offmap_currency = { offmap = oblivion_clavicus value = 2500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_clavicus }
+			oblivion_clavicus_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_clavicus
+					value = -2500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = clavicus_deal
+					character_event = { id = clavicus.25 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Clavicus: Whirlwind Romance (spouse or courtier)
+	#Condensed into one decision that uses the vanilla events
+	oblivion_clavicus_bargain_romance = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			worships_clavicus = yes
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			NOT = { has_character_flag = clavicus_deal }
+			NOT = { has_character_modifier = clavicus_cooldown }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_clavicus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_clavicus
+				}
+				has_offmap_currency = { offmap = oblivion_clavicus value = 750 }
+				prisoner = no
+				is_adult = yes
+				is_marriage_adult = yes
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_clavicus }
+			oblivion_clavicus_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_clavicus
+					value = -750
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = clavicus_deal
+					long_character_event = { id = clavicus.40 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Clavicus: Bargain for Fame and Renown
+	oblivion_clavicus_bargain_fame = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_immortal = no
+			is_adult = yes
+			worships_clavicus = yes
+			NOT = { has_character_flag = clavicus_deal }
+			NOT = { has_character_modifier = clavicus_cooldown }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_clavicus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_clavicus
+				}
+				has_offmap_currency = { offmap = oblivion_clavicus value = 500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_clavicus }
+			oblivion_clavicus_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_clavicus
+					value = -500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = clavicus_deal
+					character_event = { id = clavicus.80 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Clavicus: Bargain for power!
+	oblivion_clavicus_bargain_power = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_immortal = no
+			is_adult = yes
+			worships_clavicus = yes
+			NOT = { has_character_flag = clavicus_deal }
+			NOT = { has_character_modifier = clavicus_cooldown }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_clavicus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_clavicus
+				}
+				has_offmap_currency = { offmap = oblivion_clavicus value = 1500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_clavicus }
+			oblivion_clavicus_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_clavicus
+					value = -1500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = clavicus_deal
+					character_event = { id = clavicus.100 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	
+	#Hermaeus Mora: Black Books
+	oblivion_hermaeus_black_book = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_hermaeus = yes
+			NOT = { has_character_modifier = hermaeus_cooldown }
+			NOT = { has_character_flag = black_book }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_hermaeus
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_hermaeus
+				}
+				has_offmap_currency = { offmap = oblivion_hermaeus value = 1500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				check_variable = { which = black_books_read value < 8 }
+			}
+			ROOT = { is_offmap_tag = oblivion_hermaeus }
+			oblivion_hermaeus_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_hermaeus
+					value = -1500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = black_book
+					long_character_event = { id = hermaeus.1 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Hircine: Lycanthropy
+	oblivion_hircine_lycanthropy = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_hircine = yes
+			NOR = {
+				has_character_flag = lycanthrope_decision
+				has_character_flag = lycan_disease
+				is_lycan = yes
+			}
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_hircine
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_hircine
+				}
+				has_offmap_currency = { offmap = oblivion_hircine value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_hircine }
+			oblivion_hircine_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_hircine
+					value = -1000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = lycanthrope_decision
+					long_character_event = { id = hircine.1 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	oblivion_hircine_unicorn = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_hircine = yes
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_hircine
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_hircine
+				}
+				has_offmap_currency = { offmap = oblivion_hircine value = 2000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_hircine }
+			oblivion_hircine_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_hircine
+					value = -2000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					add_artifact = mount_horse_unicorn
+					new_artifact = {
+						set_artifact_flag = summoned_creature
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Malacath: Goblin-Ken Army
+	oblivion_malacath_goblins = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_malacath = yes
+			NOT = { has_character_flag = malacath_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_malacath
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_malacath
+				}
+				has_offmap_currency = { offmap = oblivion_malacath value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_malacath }
+			oblivion_malacath_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_malacath
+					value = -1000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = malacath_deal
+					character_event = { id = malacath.100 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Mehrunes Dagon: Agent of Change
+	oblivion_mehrunes_fuel_ambitions = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_mehrunes = yes
+			NOR = {
+				has_character_flag = mehrunes_deal
+				has_character_flag = mehrunes_agent_of_change
+			}
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_mehrunes
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_mehrunes
+				}
+				has_offmap_currency = { offmap = oblivion_mehrunes value = 1250 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_mehrunes }
+			oblivion_mehrunes_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_mehrunes
+					value = -1250
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = mehrunes_deal
+					long_character_event = { id = mehrunes.10 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Mephala: Power of Seduction for several stat boosts
+	oblivion_mephala_power_of_seduction = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_mephala = yes
+			NOR = {
+				has_character_flag = mephala_deal
+				has_character_modifier = mephala_seduction
+			}
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_mephala
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_mephala
+				}
+				has_offmap_currency = { offmap = oblivion_mephala value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_mephala }
+			oblivion_mephala_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_mephala
+					value = -1000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = mephala_deal
+					character_event = { id = mephala.25 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Meridia: Grand Bane of the Undead - Harms and severely debuffs Undead characters, reveals secret vampires
+	oblivion_meridia_grand_bane_of_undead = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_meridia = yes
+			NOT = { has_character_flag = meridia_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_meridia
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_meridia
+				}
+				has_offmap_currency = { offmap = oblivion_meridia value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_meridia }
+			oblivion_meridia_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_meridia
+					value = -1000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = meridia_deal
+					character_event = { id = meridia.10 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Molag Bal: Pure-Blooded Vampirism
+	oblivion_molag_pureblood_vampirism = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_molag = yes
+			OR = {
+				is_disease_immune = no
+				AND = {
+					is_disease_immune = yes
+					is_vampire = yes
+				}
+			}
+			NOR = {
+				has_character_flag = pureblood_decision
+				has_character_flag = vampire_disease
+				has_character_modifier = pureblood_vampire #Vital to prevent becoming Pure-Blooded repeatedly
+			}
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_molag
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_molag
+				}
+				
+				trigger_if = {
+					limit = { is_vampire = yes }
+					has_offmap_currency = { offmap = oblivion_molag value = 4000 }
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = oblivion_molag value = 8000 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_molag }
+			oblivion_molag_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				if = {
+					limit = { is_vampire = yes }
+					add_offmap_currency = {
+						offmap = oblivion_molag
+						value = -4000
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = oblivion_molag
+						value = -8000
+					}
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = pureblood_decision
+					long_character_event = { id = molag.1 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Namira: Make Decay Feed New Life
+	oblivion_namira_decay_feeds_life = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_namira = yes
+			NOT = { has_character_flag = namira_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_namira
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_namira
+				}
+				has_offmap_currency = { offmap = oblivion_namira value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_namira }
+			oblivion_namira_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_namira
+					value = -1000
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					FROM = {
+						#set_china_boon_cd_effect = yes
+						set_character_flag = namira_deal
+						character_event = { id = namira.10 }
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_dlc = "Reapers" }
+					}
+					FROM = {
+						#set_china_boon_cd_effect = yes
+						set_character_flag = namira_deal
+						character_event = { id = namira.15 }
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Nocturnal: Lady Luck's Fortunes
+	oblivion_nocturnal_lady_luck = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_nocturnal = yes
+			NOT = { has_character_flag = nocturnal_deal }
+			NOT = { trait = lucky }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_nocturnal
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_nocturnal
+				}
+				has_offmap_currency = { offmap = oblivion_nocturnal value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_nocturnal }
+			oblivion_nocturnal_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_nocturnal
+					value = -1000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = nocturnal_deal
+					character_event = { id = nocturnal.20 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Peryite: Peryite's Immunizing Plague
+	oblivion_peryite_plague = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_peryite = yes
+			NOT = { has_character_flag = peryite_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_peryite
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_peryite
+				}
+				has_offmap_currency = { offmap = oblivion_peryite value = 500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_peryite }
+			oblivion_peryite_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_peryite
+					value = -500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = peryite_deal
+					character_event = { id = peryite.1 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 0.15
+		}
+	}
+	
+	#Sanguine: Special Brews
+	oblivion_sanguine_special_brew = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_sanguine = yes
+			NOR = {
+				has_character_flag = sanguine_deal
+				has_character_flag = sanguine_agent_of_change
+			}
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_sanguine
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_sanguine
+				}
+				has_offmap_currency = { offmap = oblivion_sanguine value = 500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_sanguine }
+			oblivion_sanguine_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_sanguine
+					value = -500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = sanguine_deal
+					long_character_event = { id = sanguine.20 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Sheogorath: Gift of Madness
+	oblivion_sheogorath_mad_gifts = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_indisposed = no
+			is_adult = yes
+			worships_sheogorath = yes
+			NOT = { has_character_flag = sheogorath_deal }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_sheogorath
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_sheogorath
+				}
+				has_offmap_currency = { offmap = oblivion_sheogorath value = 750 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_sheogorath }
+			oblivion_sheogorath_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_sheogorath
+					value = -750
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = sheogorath_deal
+					long_character_event = { id = sheogorath.100 }
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Vaermina - Nightmares
+	oblivion_vaermina_nightmare_rival = {
+		only_playable = yes
+		button_name = offmap_boons
+		
+		third_party_filter = rivals
+		ai_third_party_filter = rivals
+		third_party = FROM
+		ai_check_interval = 1
+		show_third_party_potential = yes
+
+		potential = {
+			is_offmap_tag = oblivion_vaermina
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_vaermina = yes
+			NOT = { has_character_flag = vaermina_deal }
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_vaermina
+				}
+				has_offmap_currency = { offmap = oblivion_vaermina value = 400 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_vaermina }
+			oblivion_vaermina_boon_decisions_enabled_trigger = yes
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+				is_incapable = no
+				is_adult = yes
+				NOT = { has_character_modifier = vaermina_character_nightmares }
+			}
+		}
+		
+		third_party_allow = {
+			show_only_failed_conditions = yes
+		}
+		
+		third_party_score = {
+			factor = -400
+		}
+	
+		effect = {
+			FROM = {
+				sound_effect = china_grace_gain
+			}
+			FROMFROM = { character_event = { id = vaermina.20 } }
+			
+			FROM = {
+				show_scope_change = no
+				set_character_flag = vaermina_deal
+				add_offmap_currency = {
+					offmap = oblivion_vaermina
+					value = local_third_party_score
+				}
+			}
+		}
+	
+
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.3 # slow down
+			}
+		}
+	}
+	
+	oblivion_vaermina_nightmare_ruler = {
+		only_playable = yes
+		button_name = offmap_boons
+		
+		third_party_filter = independent_rulers
+		ai_third_party_filter = independent_rulers
+		third_party = FROM
+		ai_check_interval = 1
+		show_third_party_potential = yes
+
+		potential = {
+			is_offmap_tag = oblivion_vaermina
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_vaermina = yes
+			NOT = { has_character_flag = vaermina_deal }
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				ROOT = {
+					is_offmap_tag = oblivion_vaermina
+				}
+				has_offmap_currency = { offmap = oblivion_vaermina value = 400 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			ROOT = { is_offmap_tag = oblivion_vaermina }
+			oblivion_vaermina_boon_decisions_enabled_trigger = yes
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+				is_incapable = no
+				is_adult = yes
+				is_within_diplo_range = FROM
+				NOR = {
+					is_rival = FROM
+					has_character_modifier = vaermina_character_nightmares
+				}
+			}
+		}
+		
+		third_party_allow = {
+			show_only_failed_conditions = yes
+		}
+		
+		third_party_score = {
+			factor = -400
+		}
+	
+		effect = {
+			FROM = {
+				sound_effect = china_grace_gain
+			}
+			FROMFROM = { character_event = { id = vaermina.20 } }
+			
+			FROM = {
+				show_scope_change = no
+				set_character_flag = vaermina_deal
+				add_offmap_currency = {
+					offmap = oblivion_vaermina
+					value = local_third_party_score
+				}
+			}
+		}
+	
+
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.3 # slow down
+			}
+		}
+	}
+}

@@ -1,0 +1,710 @@
+#appoint_local_magistrate	;	Create new character from province culture and give them target settlement.
+###
+
+settlement_decisions = {
+
+	appoint_local_magistrate = {
+		filter = owned
+		ai_target_filter = owned
+		
+		ai_check_interval = 12
+		
+		from_potential = {
+			primary_title = {
+				higher_real_tier_than = COUNT
+				temporary = no
+			}
+			OR = {
+				AND = {
+					ai = no
+					demesne_size = 2
+				}
+				AND = {
+					demesne_size = 3
+					over_max_demesne_size = 3
+				}
+			}
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			can_be_given_away = yes
+			is_occupied = no
+			holder_scope = {
+				character = FROM
+			}
+		}
+		allow = {
+			FROM = { war = no }
+			can_be_given_away = yes
+			is_occupied = no
+			holder_scope = {
+				character = FROM
+			}
+		}
+		
+		effect = {
+			location = {
+				owner = {
+					random_list = {
+						7 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_1
+								culture = PREV
+								age = 22
+							}
+						}
+						3 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_1
+								culture = PREV
+								age = 22
+								female = yes
+							}
+						}
+						5 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_2
+								culture = PREV
+								age = 27
+							}
+						}
+						5 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_2
+								culture = PREV
+								age = 27
+								female = yes
+							}
+						}
+						7 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_3
+								culture = PREV
+								age = 34
+							}
+						}
+						4 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_3
+								culture = PREV
+								age = 34
+								female = yes
+							}
+						}
+						6 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_4
+								culture = PREV
+								age = 41
+							}
+						}
+						3 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_4
+								culture = PREV
+								age = 41
+								female = yes
+							}
+						}
+						5 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_1
+								culture = PREV
+								age = 25
+							}
+						}
+						5 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_1
+								culture = PREV
+								age = 25
+								female = yes
+							}
+						}
+						7 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_2
+								culture = PREV
+								age = 36
+							}
+						}
+						2 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_2
+								culture = PREV
+								age = 36
+								female = yes
+							}
+						}
+						6 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_3
+								culture = PREV
+								age = 45
+							}
+						}
+						4 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_3
+								culture = PREV
+								age = 45
+								female = yes
+							}
+						}
+						7 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_4
+								culture = PREV
+								age = 52
+							}
+						}
+						3 = {
+							create_character = {
+								random_traits = yes
+								trait = magistrate_4
+								culture = PREV
+								age = 52
+								female = yes
+							}
+						}
+						3 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_1
+								culture = PREV
+								age = 23
+								female = yes
+							}
+						}
+						2 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_1
+								culture = PREV
+								age = 28
+							}
+						}
+						3 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_2
+								culture = PREV
+								age = 31
+							}
+						}
+						1 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_2
+								culture = PREV
+								age = 29
+								female = yes
+							}
+						}
+						3 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_3
+								culture = PREV
+								age = 46
+							}
+						}
+						2 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_3
+								culture = PREV
+								age = 52
+								female = yes
+							}
+						}
+						3 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_4
+								culture = PREV
+								age = 48
+								female = yes
+							}
+						}
+						4 = {
+							create_character = {
+								random_traits = yes
+								trait = diplomat_4
+								culture = PREV
+								age = 57
+							}
+						}
+					}
+					new_character = {
+						gain_title = ROOT
+						opinion = {
+							who = FROM
+							modifier = location_magistrate_opinion
+							years = 25
+						}
+						liege = {
+							any_courtier = {
+								limit = {
+									culture = PREVPREV
+									NOR = {
+										trait = ambitious
+										trait = envious
+									}
+								}
+								random = {
+									chance = 33
+									opinion = {
+										who = PREV
+										modifier = opinion_pleased
+										years = 3
+									}
+								}
+							}
+							any_vassal = {
+								limit = {
+									culture = PREVPREV
+									NOR = {
+										trait = ambitious
+										trait = envious
+									}
+								}
+								random = {
+									chance = 33
+									opinion = {
+										who = PREV
+										modifier = opinion_pleased
+										years = 3
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				FROM = { trait = ruthless }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = wroth }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = greedy }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = envious }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = paranoid }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = zealous }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = arbitrary }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = shy }
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = absent_minded }
+			}
+			modifier = { #AI shouldn't use it if their realm size is quite small, could lead to rebellion and them losing their realm to a rebel.
+				factor = 0
+				OR = {
+					FROM = { primary_title = { tier = COUNT } }
+					FROM = {
+						primary_title = { tier = DUKE }
+						NOT = { realm_size = 3 }
+					}
+					FROM = {
+						primary_title = { tier = KING }
+						NOT = { realm_size = 6 }
+					}
+					FROM = {
+						primary_title = { tier = EMPEROR }
+						NOT = { realm_size = 9 }
+					}
+				}
+			}
+			modifier = { #AI should prefer to land their relatives rather than appoint a random local.
+				factor = 0
+				FROM = {
+					any_dynasty_member = {
+						is_landed = no
+					}
+				}
+			}
+			modifier = { #AI should prefer to land their children, even if of a different dynasty, than appoint a random local.
+				factor = 0
+				FROM = {
+					any_child = {
+						age = 16
+						is_landed = no
+					}
+				}
+			}
+		}
+	}
+
+	convert_to_castle = {
+		only_playable = yes
+		only_rulers = yes
+		
+		ai_check_interval = 6000
+		
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = no
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			OR = {
+				holding_type = city
+				holding_type = temple
+			}
+			holder_scope = {
+				character = FROM
+			}
+		}
+		allow = {
+			#has_settlement_construction = no
+			FROM = { wealth = 250 prestige = 50 }
+			trigger_if = {
+				limit = { holding_is_tower = yes }
+				NOT = { holding_is_tower = yes }
+			}
+		}
+		effect = {
+			FROM = { wealth = -250 prestige = -50 }
+			convert_to = CASTLE
+			refill_holding_levy = yes
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	convert_to_city = {
+		only_playable = yes
+		only_rulers = yes
+		
+		ai_check_interval = 6000
+		
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = no
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			OR = {
+				holding_type = temple
+				holding_type = castle
+			}
+			holder_scope = {
+				character = FROM
+			}
+		}
+		allow = {
+			#has_settlement_construction = no
+			FROM = { wealth = 300 }
+			trigger_if = {
+				limit = { holding_is_tower = yes }
+				NOT = { holding_is_tower = yes }
+			}
+		}
+		effect = {
+			FROM = { wealth = -300 }
+			convert_to = CITY
+			refill_holding_levy = yes
+		}
+
+		ai_will_do = {
+			factor = 0 # On average ca 1 year before taken
+		}
+	}
+	
+	convert_to_temple = {
+		only_playable = yes
+		only_rulers = yes
+		
+		ai_check_interval = 6000
+		
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = no
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			OR = {
+				holding_type = city
+				holding_type = castle
+			}
+			holder_scope = {
+				character = FROM
+			}
+		}
+		allow = {
+			#has_settlement_construction = no
+			FROM = { wealth = 250 piety = 50 }
+			trigger_if = {
+				limit = { holding_is_tower = yes }
+				NOT = { holding_is_tower = yes }
+			}
+		}
+		effect = {
+			FROM = { wealth = -250 piety = -50 }
+			convert_to = TEMPLE
+			refill_holding_levy = yes
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	change_capital_republic = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		
+		ai_check_interval = 6000
+		
+		from_potential = {
+			is_merchant_republic = yes
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			holding_type = city
+			location = { port = yes }
+			is_capital = no
+			holder_scope = { character = FROM }
+		}
+		allow = {
+			FROM = { scaled_wealth = 10 }
+		}
+		effect = {
+			FROM = { scaled_wealth = -10 }
+			location = { FROM = { capital = PREV } }
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	#culture_convert_province = {
+	#	only_playable = yes
+	#	filter = owned
+	#	ai_target_filter = owned
+	#	ai_check_interval = 12
+	#	
+	#	from_potential = {
+	#		NOT = { has_character_flag = spellbook_open }
+	#	}
+	#	
+	#	potential = {
+	#		location = {
+	#			NOT = { culture = FROM }
+	#			NOT = { has_province_modifier = foreign_enclaves }
+	#			OR = {
+	#				FROM = { NOT = { culture_group = argonian } }
+	#				terrain = argonia
+	#				terrain = marsh
+	#				terrain = mangrove_swamp
+	#				terrain = jungle
+	#				terrain = valen_woods
+	#			}
+	#			OR = {
+	#				FROM = { NOT = { culture = bosmer } }
+	#				terrain = forest
+	#				terrain = woods
+	#				terrain = argonia
+	#				terrain = marsh
+	#				terrain = mangrove_swamp
+	#				terrain = jungle
+	#				terrain = valen_woods
+	#			}
+	#		}
+	#		holder_scope = { character = FROM }
+	#	}
+	#	allow = {
+	#		FROM = { scaled_wealth = 1 }
+	#		NOT = { FROM = { any_demesne_province = { has_province_modifier = foreign_enclaves } } }
+	#		location = {
+	#			OR = {
+	#				port = yes
+	#				any_neighbor_province = {
+	#					ROOT = {
+	#						owner = {
+	#							culture = PREVPREV
+	#						}
+	#					}
+	#					owner = {
+	#						ROOT = {
+	#							owner = {
+	#								culture = PREVPREV
+	#							}
+	#						}
+	#					}
+	#					NOR = {
+	#						has_province_modifier = depopulated_1
+	#						has_province_modifier = depopulated_2
+	#						has_province_modifier = depopulated_3
+	#					}
+	#				}
+	#				owner = {
+	#					AND = {
+	#						is_capital = yes
+	#						independent = yes
+	#					}
+	#				}
+	#			}
+	#		}
+	#	}
+	#	effect = {
+	#		FROM = { scaled_wealth = -1 }
+	#		location = {
+	#			add_province_modifier = {
+	#				name = foreign_enclaves
+	#				duration = -1
+	#			}
+	#		}
+	#	}
+	#	
+	#	revoke_allowed = {
+	#		always = no
+	#	}
+	#	
+	#	ai_will_do = {
+	#		factor = 1
+	#		modifier = {
+	#			factor = 10
+	#			location = { is_capital = yes }
+	#		}
+	#		modifier = {
+	#			factor = 0
+	#			location = { culture_group = FROM }
+	#		}
+	#	}
+	#}
+	#cancel_convert_province = {
+	#	only_playable = yes
+	#	filter = owned
+	#	ai_target_filter = owned
+	#	ai_check_interval = 12
+	#	
+	#	from_potential = {
+	#		NOT = { has_character_flag = spellbook_open }
+	#	}
+	#	
+	#	potential = {
+	#		location = { has_province_modifier = foreign_enclaves }
+	#		holder_scope = { character = FROM }
+	#	}
+	#	allow = {
+	#	}
+	#	effect = {
+	#		location = {
+	#			remove_province_modifier = foreign_enclaves
+	#		}
+	#	}
+	#	
+	#	revoke_allowed = {
+	#		always = no
+	#	}
+	#	
+	#	ai_will_do = {
+	#		factor = 1
+	#		modifier = {
+	#			factor = 0
+	#			location = { NOT = { culture_group = FROM } }
+	#		}
+	#	}
+	#}
+	
+	destroy_leaning_tower = {
+		ai_target_filter = owned
+		filter = owned
+		
+		from_potential = {
+			is_playable = yes
+			has_dlc = "Way of Life"
+			has_submenu_open = no
+			higher_real_tier_than = BARON
+		}
+		
+		potential = {
+			location = { owner = { character = FROM } }
+			location = { has_province_modifier = leaning_tower_bad }
+			NOT = { has_province_flag = leaning_tower_being_demolished }
+		}
+		
+		allow = {
+			holder_scope = { scaled_wealth = 1.5 }
+		}
+		
+		effect = {
+			holder_scope = { scaled_wealth = -1.5 }
+			location = {
+				set_province_flag = leaning_tower_being_demolished
+				province_event = { id = ekwol.200 days = 1095 random = 365 }
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.5
+			}
+		}
+	}
+}

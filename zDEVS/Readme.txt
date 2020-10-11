@@ -1,0 +1,1 @@
+Testers can ignore this folder, it's a repository for broken things or "spare" files.

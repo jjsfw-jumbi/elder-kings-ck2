@@ -1,0 +1,5021 @@
+#Additional job action events for EK#
+
+namespace = ekjobs
+
+#Hunt for Vampire and hunt for Werewolf events, based on 'Hunt Apostates' event chain from job_offmap.txt
+
+character_event = { # Hunt Vampires meta event
+	id = ekjobs.100
+	title = EKJobs100Title
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+	
+	trigger = {
+		has_job_action = action_hunt_heretics
+		NOT = { has_character_modifier = in_seclusion }
+		NOT = { has_character_modifier = bedridden_illness }
+		NOT = { trait = incapable }
+		NAND = {
+			is_necromancy_religion = yes
+			liege = { is_necromancy_religion = yes }
+		}
+		liege = {
+			OR = {
+				# Known Vampire - Always takes priority
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = PREV
+						}
+					}
+					NOR = { # Don't try to get a friend or lover locked up if you already know.
+						is_friend = ROOT
+						is_lover = ROOT
+					}
+					NOT = { ROOT = { trait = known_vampire } } #Don't try to arrest someone with the same trait as you
+					trait = known_vampire
+					
+				}
+				
+				# Known Benevolent Vampire - Next in line
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = PREV
+						}
+					}
+					NOR = { # Don't try to get a friend or lover locked up if you already know.
+						is_friend = ROOT
+						is_lover = ROOT
+					}
+					NOT = { ROOT = { trait = known_vampire_benevolent } } #Don't try to arrest someone with the same trait as you
+					trait = known_vampire_benevolent
+				}
+				
+				# A real vampire who is not known but is highly suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = PREV
+						}
+					}
+					is_unknown_vampire = yes
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				
+				# Not a real vampire but still highly suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = PREV
+						}
+					}
+					is_vampire = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_lycan = yes #EXCEPT for unknown werewolves, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				
+				# A real vampire who is not known but is moderately suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = PREV
+						}
+					}
+					is_unknown_vampire = yes
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = seducer
+							trait = seductress
+							trait = schemer
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = mystic
+							trait = scholar
+							trait = alchemist
+							trait = necromancer
+							trait = is_malnourished
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = patient
+							trait = humble
+							trait = deceitful
+							trait = craven
+							trait = shy
+							trait = arbitrary
+							trait = paranoid
+							trait = cruel
+							trait = ruthless
+							trait = vain
+							trait = slovenly
+							trait = erudite
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				
+				# Not a real vampire but still moderately suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = PREV
+						}
+					}
+					is_vampire = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_lycan = yes #EXCEPT for unknown werewolves, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = seducer
+							trait = seductress
+							trait = schemer
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = mystic
+							trait = scholar
+							trait = alchemist
+							trait = necromancer
+							trait = is_malnourished
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = patient
+							trait = humble
+							trait = deceitful
+							trait = craven
+							trait = shy
+							trait = arbitrary
+							trait = paranoid
+							trait = cruel
+							trait = ruthless
+							trait = vain
+							trait = slovenly
+							trait = erudite
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				
+				# Someone random, and I'm incompetent
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = PREV
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		# Mark targets
+		liege = {
+			save_event_target_as = my_liege
+			# Known Vampire
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = event_target:my_liege
+						}
+					}
+					NOR = { # Don't try to get a friend or lover locked up if you already know.
+						is_friend = ROOT
+						is_lover = ROOT
+					}
+					NOT = { ROOT = { trait = known_vampire } } #Don't try to arrest someone with the same trait as you
+					trait = known_vampire
+				}
+				save_event_target_as = known_vampire_suspect
+				#####set_character_flag = vampire_suspect_known
+				
+			}
+			
+			# Known Benevolent Vampire
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = event_target:my_liege
+						}
+					}
+					NOR = { # Don't try to get a friend or lover locked up if you already know.
+						is_friend = ROOT
+						is_lover = ROOT
+					}
+					NOT = { ROOT = { trait = known_vampire_benevolent } } #Don't try to arrest someone with the same trait as you
+					trait = known_vampire_benevolent
+				}
+				save_event_target_as = known_benevolent_vampire_suspect
+				#####set_character_flag = vampire_suspect_known_benevolent
+			}
+			
+			# A real vampire who is not known but is highly suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = event_target:my_liege
+						}
+					}
+					is_unknown_vampire = yes
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				save_event_target_as = unknown_vampire_highly_suspect
+				#####set_character_flag = vampire_suspect_unknown_highly
+			}
+			
+			# Not a real vampire but still highly suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = event_target:my_liege
+						}
+					}
+					is_vampire = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_lycan = yes #EXCEPT for unknown werewolves, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				save_event_target_as = fake_vampire_highly_suspect
+				#####set_character_flag = vampire_suspect_highly_fake
+			}
+			
+			# A real vampire who is not known but is moderately suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = event_target:my_liege
+						}
+					}
+					is_unknown_vampire = yes
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = seducer
+							trait = seductress
+							trait = schemer
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = mystic
+							trait = scholar
+							trait = alchemist
+							trait = necromancer
+							trait = is_malnourished
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = patient
+							trait = humble
+							trait = deceitful
+							trait = craven
+							trait = shy
+							trait = arbitrary
+							trait = paranoid
+							trait = cruel
+							trait = ruthless
+							trait = vain
+							trait = slovenly
+							trait = erudite
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				save_event_target_as = unknown_vampire_moderate_suspect
+				#####set_character_flag = vampire_suspect_unknown_moderate
+			}
+			
+			# Not a real vampire but still moderately suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = event_target:my_liege
+						}
+					}
+					is_vampire = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_lycan = yes #EXCEPT for unknown werewolves, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = seducer
+						trait = seductress
+						trait = schemer
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = mystic
+						trait = scholar
+						trait = alchemist
+						trait = necromancer
+						trait = is_malnourished
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = patient
+						trait = humble
+						trait = deceitful
+						trait = craven
+						trait = shy
+						trait = arbitrary
+						trait = paranoid
+						trait = cruel
+						trait = ruthless
+						trait = vain
+						trait = slovenly
+						trait = erudite
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = seducer
+							trait = seductress
+							trait = schemer
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = mystic
+							trait = scholar
+							trait = alchemist
+							trait = necromancer
+							trait = is_malnourished
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = patient
+							trait = humble
+							trait = deceitful
+							trait = craven
+							trait = shy
+							trait = arbitrary
+							trait = paranoid
+							trait = cruel
+							trait = ruthless
+							trait = vain
+							trait = slovenly
+							trait = erudite
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				save_event_target_as = fake_vampire_moderate_suspect
+				#####set_character_flag = vampire_suspect_moderate_fake
+			}
+			
+			# Innocent person! Well, not necessarily...
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_vampire } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_vampire_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_vampire } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_vampire
+							who = event_target:my_liege
+						}
+					}
+				}
+				save_event_target_as = wildcard_vampire_suspect
+				#####set_character_flag = vampire_suspect_wildcard
+			}
+		}
+		
+		if = { # If you're incompetent its more usual to accuse someone random
+			limit = {
+				event_target:wildcard_vampire_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				20 = {
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 2 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 4 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 6 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 8 }
+					}
+					event_target:wildcard_vampire_suspect = {
+						save_event_target_as = accused_vampire
+					}
+					character_event = { id = ekjobs.105 }
+					break = yes
+				}
+				80 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is known, always succeed
+			limit = {
+				event_target:known_vampire_suspect = {
+					is_alive = yes
+				}
+			}
+			event_target:known_vampire_suspect = {
+				save_event_target_as = accused_vampire
+			}
+			character_event = { id = ekjobs.105 }
+			break = yes
+		}
+		
+		if = { # If there is someone who is known benevolent, always succeed
+			limit = {
+				event_target:known_benevolent_vampire_suspect = {
+					is_alive = yes
+				}
+			}
+			event_target:known_benevolent_vampire_suspect = {
+				save_event_target_as = accused_vampire
+			}
+			character_event = { id = ekjobs.105 }
+			break = yes
+		}
+		
+		if = { # If there is someone who is a highly suspicious vampire, succeed a bit less often
+			limit = {
+				event_target:unknown_vampire_highly_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				50 = {
+					modifier = {
+						factor = 0.25
+						event_target:unknown_vampire_highly_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:unknown_vampire_highly_suspect = {
+						save_event_target_as = accused_vampire
+					}
+					character_event = { id = ekjobs.105 }
+					break = yes
+				}
+				50 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is a highly suspicious non-vampire, succeed a bit less often
+			limit = {
+				event_target:fake_vampire_highly_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				50 = {
+					modifier = {
+						factor = 0.25
+						event_target:fake_vampire_highly_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:fake_vampire_highly_suspect = {
+						save_event_target_as = accused_vampire
+					}
+					character_event = { id = ekjobs.105 }
+					break = yes
+				}
+				50 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is a moderately suspicious vampire, succeed a bit less often
+			limit = {
+				event_target:unknown_vampire_moderate_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				30 = {
+					modifier = {
+						factor = 0.25
+						event_target:unknown_vampire_moderate_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:unknown_vampire_moderate_suspect = {
+						save_event_target_as = accused_vampire
+					}
+					character_event = { id = ekjobs.105 }
+					break = yes
+				}
+				70 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is a moderately suspicious non-vampire, succeed a bit less often
+			limit = {
+				event_target:fake_vampire_moderate_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				30 = {
+					modifier = {
+						factor = 0.25
+						event_target:fake_vampire_moderate_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:fake_vampire_moderate_suspect = {
+						save_event_target_as = accused_vampire
+					}
+					character_event = { id = ekjobs.105 }
+					break = yes
+				}
+				70 = {
+					
+				}
+			}
+		}
+				
+		if = { # Accuse someone random!
+			limit = {
+				event_target:wildcard_vampire_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				5 = {
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 2 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 4 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 6 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 8 }
+					}
+					modifier = {
+						factor = 1.25
+						is_dumb_trigger = yes
+					}
+					event_target:wildcard_vampire_suspect = {
+						save_event_target_as = accused_vampire
+					}
+					character_event = { id = ekjobs.105 }
+					break = yes
+				}
+				95 = {
+					
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 100
+
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 6 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 8 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 14
+		}
+		modifier = {
+			factor = 0.75
+			learning = 16
+		}
+		modifier = {
+			factor = 0.75
+			learning = 18
+		}
+		modifier = {
+			factor = 0.75
+			learning = 20
+		}
+		modifier = {
+			factor = 0.75
+			learning = 22
+		}
+		modifier = {
+			factor = 0.9
+			trait = witchhunter_1
+		}
+		modifier = {
+			factor = 0.75
+			trait = witchhunter_2
+		}
+		modifier = {
+			factor = 0.5
+			trait = witchhunter_3
+		}
+		modifier = {
+			factor = 0.75
+			is_vampire = yes
+		}
+		modifier = {
+			factor = 2
+			NOT = { religion_authority = 0.1 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { religion_authority = 0.3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { religion_authority = 0.5 }
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.7
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.8
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.9
+		}
+	}
+}
+
+character_event = { # Outcome event
+	id = ekjobs.105
+	title = EKJobs100Title
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:known_vampire_suspect }
+		}
+		text = EKJobs105_known_vampire_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:known_benevolent_vampire_suspect }
+		}
+		text = EKJobs105_known_benevolent_vampire_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:unknown_vampire_highly_suspect }
+		}
+		text = EKJobs105_unknown_vampire_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:fake_vampire_highly_suspect }
+		}
+		text = EKJobs105_fake_vampire_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:unknown_vampire_moderate_suspect }
+		}
+		text = EKJobs105_unknown_vampire_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:fake_vampire_moderate_suspect }
+		}
+		text = EKJobs105_fake_vampire_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:wildcard_vampire_suspect }
+		}
+		text = EKJobs105_wildcard_vampire_suspect
+	}
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		
+	}
+	
+	immediate = {
+		event_target:my_liege = {
+			random_realm_character = {
+				limit = {
+					age = 16
+					ai = yes
+					is_rival = ROOT
+					NOT = {
+						character = event_target:my_liege
+					}
+					NOT = {
+						character = event_target:accused_vampire
+					}
+				}
+				save_event_target_as = rival_target
+			}
+		}
+
+	}
+	
+	option = {
+		name = EKJobs105OptA
+		
+		ai_chance = {
+			factor = 100
+			
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_anti_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_anti_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 0.1
+				trait = zealous
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 0.25
+				NOT = { trait = zealous }
+				is_necromancy_religion = yes
+			}
+		}
+		
+		event_target:accused_vampire = {
+			opinion = {
+				modifier = opinion_hate
+				who = ROOT
+				years = 100
+			}
+		}
+		
+		custom_tooltip = {
+			text = vampire_found_tooltip
+		}
+		
+		liege = {
+			character_event = { id = ekjobs.110 }
+		}
+	}
+	
+	option = {
+		name = EKJobs105OptB
+		tooltip_info = deceitful
+		
+		trigger = {
+			trait = deceitful
+			event_target:rival_target = {
+				is_alive = yes
+			}
+		}
+		
+		ai_chance = {
+			factor = 1000
+			
+			modifier = {
+				factor = 2
+				trait = lunatic
+			}
+			modifier = {
+				factor = 2
+				trait = possessed
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = paranoid
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+		
+		custom_tooltip = {
+			text = accuse_rival_vampire_tooltip
+		}
+		
+		event_target:rival_target = {
+			save_event_target_as = accused_vampire
+			#####set_character_flag = vampire_rival_accused
+		}
+		liege = {
+			character_event = { id = ekjobs.110 }
+		}
+	}
+	
+	option = {
+		name = EKJobs105OptC
+		
+		ai_chance = {
+			factor = 100
+			
+			modifier = {
+				factor = 2
+				trait = slovenly
+			}
+			modifier = {
+				factor = 2
+				trait = slothful
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+		
+		custom_tooltip = {
+			text = probably_not_a_vampire_tooltip
+		}
+		
+		event_target:accused_vampire = {
+			reverse_opinion = {
+				modifier = opinion_probably_not_vampire
+				who = ROOT
+				years = 4
+			}
+		}
+	}
+}
+
+character_event = { # What does the liege wish to do with the vampire?
+	id = ekjobs.110
+	title = EKJobs100Title
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	trigger = {
+		event_target:accused_vampire = {
+			is_alive = yes
+			NOT = { has_character_modifier = accused_vamp_cooldown }
+		}
+	}
+	
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:known_vampire_suspect }
+		}
+		text = EKJobs110_known_vampire_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:known_benevolent_vampire_suspect }
+		}
+		text = EKJobs110_known_benevolent_vampire_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:unknown_vampire_highly_suspect }
+		}
+		text = EKJobs110_unknown_vampire_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:fake_vampire_highly_suspect }
+		}
+		text = EKJobs110_fake_vampire_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:unknown_vampire_moderate_suspect }
+		}
+		text = EKJobs110_unknown_vampire_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:fake_vampire_moderate_suspect }
+		}
+		text = EKJobs110_fake_vampire_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_vampire = { character = event_target:wildcard_vampire_suspect }
+		}
+		text = EKJobs110_wildcard_vampire_suspect
+	}
+	
+	is_triggered_only = yes
+	
+	option = { # Imprison the vampire!
+		name = EKJobs110OptA
+		trigger = {
+			event_target:accused_vampire = {
+				is_vampire = yes
+				is_unknown_vampire = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 40
+			
+			modifier = {
+				factor = 2.5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_anti_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_anti_necromancy_religion = yes
+			}
+		}
+		
+		anti_necromancy_p50 = yes
+		
+		event_target:accused_vampire = {
+			show_scope_change = no
+			imprison = ROOT
+			add_character_modifier = {
+				name = accused_vamp_cooldown
+				years = 12
+				hidden = yes
+			}
+			if = {
+				limit = {
+					religion = ROOT
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		opinion = {
+			modifier = opinion_hostile_vampire 
+			who = event_target:accused_vampire 
+			years = 100
+		}
+		custom_tooltip = {
+			text = vampire_imprison_tooltip
+		}
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				character_event = { id = ekjobs.115 }
+			}
+		}
+	}
+	
+	option = { # Allow the test to take place
+		name = EKJobs110OptB
+		trigger = {
+			event_target:accused_vampire = {
+				OR = {
+					is_vampire = no
+					is_unknown_vampire = yes
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 40
+			
+			modifier = {
+				factor = 5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_anti_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_anti_necromancy_religion = yes
+			}
+		}
+		
+		custom_tooltip = {
+			text = vampire_test_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				add_character_modifier = {
+					name = accused_vamp_cooldown
+					years = 12
+					hidden = yes
+				}
+				character_event = { id = ekjobs.120 }
+			}
+		}
+		opinion = {
+			modifier = opinion_accused_vampire 
+			who = event_target:accused_vampire 
+			years = 10
+		}
+	}
+	
+	option = { # Let them go - Known Vampire
+		name = EKJobs110OptC
+		trigger = {
+			event_target:accused_vampire = {
+				is_vampire = yes
+				is_unknown_vampire = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 0
+				NOR = {
+					trait = trusting
+					is_necromancy_religion = yes
+					event_target:accused_vampire = { trait = known_vampire_benevolent }
+				}
+			}
+		}
+		
+		necromancy_p50 = yes
+		
+		custom_tooltip = {
+			text = vampire_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				add_character_modifier = {
+					name = accused_vamp_cooldown
+					years = 12
+					hidden = yes
+				}
+				character_event = { id = ekjobs.130 }
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_vampire 
+			who = event_target:accused_vampire 
+			years = 10
+		}
+		reverse_opinion = {
+			modifier = opinion_outraged 
+			who = FROM
+			months = 6
+		}
+	}
+	
+	option = { # Let them go - Not known Vampire
+		name = EKJobs110OptD
+		trigger = {
+			event_target:accused_vampire = {
+				OR = {
+					is_vampire = no
+					is_unknown_vampire = yes
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 0
+				NOR = {
+					trait = trusting
+					is_necromancy_religion = yes
+					event_target:accused_vampire = { trait = known_vampire_benevolent }
+				}
+			}
+		}
+		
+		custom_tooltip = {
+			text = vampire_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				add_character_modifier = {
+					name = accused_vamp_cooldown
+					years = 12
+					hidden = yes
+				}
+				character_event = { id = ekjobs.130 }
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_outraged 
+			who = FROM
+			months = 6
+		}
+	}
+}
+
+character_event = { # The Vampire reacts to Imprisonment
+	id = ekjobs.115
+	desc = EKJobs115
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs115OptA
+		tooltip = {
+			imprison = FROM
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_hostile_vampire 
+					who = event_target:accused_vampire 
+					years = 100
+				}
+			}
+			if = {
+				limit = {
+					religion = FROM
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.135 }
+		}
+	}
+}
+
+character_event = { # The Vampire reacts to Mercy
+	id = ekjobs.120
+	desc = EKJobs120
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs120OptA
+		
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_understanding_vampire 
+					who = event_target:accused_vampire 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.140 }
+		}
+	}
+}
+
+character_event = { # The accused is tested
+	id = ekjobs.125
+	desc = {
+		trigger = { 
+			is_vampire = yes
+		}
+		text = EKJobs125A
+	}
+	desc = {
+		trigger = { 
+			is_vampire = no
+		}
+		text = EKJobs125B
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs125OptA
+		trigger = {
+			is_vampire = yes
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_vampire
+		hidden_tooltip = {
+			event_target:my_liege = {
+				character_event = { id = ekjobs.145 }
+			}
+		}
+	}
+	option = {
+		name = EKJobs125OptB
+		trigger = {
+			is_vampire = yes
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_vampire_benevolent
+		hidden_tooltip = {
+			event_target:my_liege = {
+				character_event = { id = ekjobs.145 }
+			}
+		}
+	}
+	option = {
+		name = EKJobs125OptC
+		trigger = {
+			is_vampire = no
+		}
+		hidden_tooltip = {
+			event_target:my_liege = {
+				character_event = { id = ekjobs.145 }
+			}
+		}
+	}
+}
+
+character_event = { # The accused reacts to mercy
+	id = ekjobs.130
+	desc = {
+		trigger = { 
+			is_vampire = yes
+		}
+		text = EKJobs130A
+	}
+	desc = {
+		trigger = { 
+			is_vampire = no
+		}
+		text = EKJobs130B
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs130OptA
+		trigger = { 
+			is_vampire = yes
+		}
+		
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_probably_not_vampire 
+					who = event_target:accused_vampire 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.150 }
+		}
+	}
+	
+	option = {
+		name = EKJobs130OptB
+		trigger = { 
+			is_vampire = no
+		}
+		
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_probably_not_vampire 
+					who = event_target:accused_vampire 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.150 }
+		}
+	}
+}
+
+character_event = { # The Magister Responds to the Imprisonment of the Vampire
+	id = ekjobs.135
+	desc = EKJobs135
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs135OptA
+		prestige = 50
+		piety = 50
+	}
+}
+
+character_event = { # The Magister Responds to the Release of the Vampire
+	id = ekjobs.140
+	desc = EKJobs140
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs140OptA
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:accused_vampire
+			years = 100
+		}
+	}
+	option = {
+		name = EKJobs140OptB
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+		opinion = {
+			modifier = opinion_outraged
+			who = event_target:my_liege
+			months = 6
+		}
+	}
+	option = {
+		name = EKJobs140OptC
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:accused_vampire
+			years = 100
+		}
+		opinion = {
+			modifier = opinion_outraged
+			who = event_target:my_liege
+			months = 6
+		}
+	}
+}
+
+character_event = { # The Liege Responds to the result of the test
+	id = ekjobs.145
+	desc = {
+		trigger = {
+			event_target:accused_vampire = {
+				trait = known_vampire
+			}
+		}
+		text = EKJobs145A
+	}
+	desc = {
+		trigger = {
+			event_target:accused_vampire = {
+				trait = known_vampire_benevolent
+			}
+		}
+		text = EKJobs145B
+	}
+	desc = {
+		trigger = {
+			event_target:accused_vampire = {
+				is_vampire = no
+			}
+		}
+		text = EKJobs145C
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = { # Imprison the vampire!
+		name = EKJobs145OptA
+		trigger = {
+			event_target:accused_vampire = {
+				is_vampire = yes
+				is_unknown_vampire = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 40
+			
+			modifier = {
+				factor = 2.5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_anti_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_anti_necromancy_religion = yes
+			}
+		}
+		
+		anti_necromancy_p25 = yes
+		
+		event_target:accused_vampire = {
+			show_scope_change = no
+			imprison = ROOT
+		}
+		opinion = {
+			modifier = opinion_hostile_vampire 
+			who = event_target:accused_vampire 
+			years = 100
+		}
+		event_target:accused_vampire = {
+			show_scope_change = no
+			if = {
+				limit = {
+					religion = ROOT
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		custom_tooltip = {
+			text = vampire_imprison_tooltip
+		}
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				character_event = { id = ekjobs.150 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.135 }
+			}
+		}
+	}
+	
+	option = { # Let them go - Known Vampire
+		name = EKJobs145OptB
+		trigger = {
+			event_target:accused_vampire = {
+				is_vampire = yes
+				is_unknown_vampire = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_necromancy_religion = yes
+			}
+			modifier = {
+				factor = 0
+				NOR = {
+					trait = trusting
+					is_necromancy_religion = yes
+					event_target:accused_vampire = { trait = known_vampire_benevolent }
+				}
+			}
+		}
+		
+		necromancy_p25 = yes
+		
+		custom_tooltip = {
+			text = vampire_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				character_event = { id = ekjobs.155 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.140 }
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_vampire 
+			who = event_target:accused_vampire 
+			years = 10
+		}
+		reverse_opinion = {
+			modifier = opinion_outraged 
+			who = FROM
+			months = 6
+		}
+	}
+	
+	option = { # Let them go - Not a Vampire
+		name = EKJobs145OptC
+		trigger = {
+			event_target:accused_vampire = {
+				is_vampire = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					trait = trusting
+				}
+			}
+		}
+		
+		piety = 25
+		
+		custom_tooltip = {
+			text = vampire_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				character_event = { id = ekjobs.155 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.160 }
+			}
+		}
+		opinion = {
+			modifier = opinion_probably_not_vampire 
+			who = event_target:accused_vampire 
+			years = 10
+		}
+	}
+	
+	option = { # Throw them in the dungeon anyway!
+		name = EKJobs145OptD
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 0
+				NOR = {
+					is_batshit_crazy = yes
+					trait = arbitrary
+					event_target:accused_vampire = { is_rival = ROOT }
+				}
+			}
+			modifier = {
+				factor = 5
+				is_batshit_crazy = yes
+			}
+			modifier = {
+				factor = 10
+				event_target:accused_vampire = { is_rival = ROOT }
+			}
+		}
+		
+		piety = -25
+		
+		event_target:accused_vampire = {
+			show_scope_change = no
+			imprison = ROOT
+		}
+		event_target:accused_vampire = {
+			show_scope_change = no
+		}
+		custom_tooltip = {
+			text = vampire_imprison_tooltip
+		}
+		hidden_tooltip = {
+			event_target:accused_vampire = {
+				character_event = { id = ekjobs.150 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.165 }
+			}
+		}
+	}
+}
+
+character_event = { # The accused is imprisoned - their reaction
+	id = ekjobs.150
+	desc = {
+		trigger = {
+			is_vampire = yes
+		}
+		text = EKJobs150A
+	}
+	desc = {
+		trigger = {
+			is_vampire = no
+		}
+		text = EKJobs150B
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs150OptA
+		trigger = {
+			is_vampire = yes
+		}
+		tooltip = {
+			imprison = FROM
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_accused_vampire 
+					who = event_target:accused_vampire 
+					years = 100
+				}
+			}
+			if = {
+				limit = {
+					religion = FROM
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.135 }
+		}
+	}
+	
+	option = {
+		name = EKJobs150OptB
+		trigger = {
+			is_vampire = no
+		}
+		tooltip = {
+			imprison = FROM
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.135 }
+		}
+	}
+}
+
+character_event = { # The Vampire reacts to Mercy
+	id = ekjobs.155
+	desc = {
+		trigger = {
+			is_vampire = yes
+		}
+		text = EKJobs155A
+	}
+	desc = {
+		trigger = {
+			is_vampire = no
+		}
+		text = EKJobs155B
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs120OptA
+		
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_accused_vampire 
+					who = event_target:accused_vampire 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.140 }
+		}
+	}
+}
+
+character_event = { # The Magister Responds to the Release of the Innocent Character
+	id = ekjobs.160
+	desc = EKJobs160
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs160OptA
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+	}
+}
+
+character_event = { # The Magister Responds to the Imprisonment of the Innocent Character
+	id = ekjobs.165
+	desc = EKJobs165
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs165OptA
+		trigger = {
+			event_target:accused_vampire = { NOT = { is_rival = ROOT } }
+		}
+		prestige = 25
+	}
+	option = {
+		name = EKJobs165OptB
+		trigger = {
+			event_target:accused_vampire = { is_rival = ROOT }
+		}
+		prestige = 25
+	}
+}
+
+#Werewolf/Lycan events below!
+
+character_event = { # Hunt Werewolves/Lycans meta event
+	id = ekjobs.200
+	title = EKJobs200Title
+	hide_window = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+	
+	trigger = {
+		has_job_action = action_hunt_heretics
+		NOT = { has_character_modifier = in_seclusion }
+		NOT = { has_character_modifier = bedridden_illness }
+		NOT = { trait = incapable }
+		NAND = {
+			is_werewolf_religion = yes
+			liege = { is_werewolf_religion = yes }
+		}
+		liege = {
+			OR = {
+				# Known Lycan - Always takes priority
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = PREV
+						}
+					}
+					NOT = { ROOT = { trait = known_lycan } } #Don't try to arrest someone with the same trait as you
+					trait = known_lycan
+				}
+				
+				# Known Benevolent Lycan - Next in line
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = PREV
+						}
+					}
+					NOT = { ROOT = { trait = known_lycan_benevolent } } #Don't try to arrest someone with the same trait as you
+					trait = known_lycan_benevolent
+				}
+				
+				# A real lycan who is not known but is highly suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = PREV
+						}
+					}
+					is_unknown_lycan = yes
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				
+				# Not a real lycan but still highly suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = PREV
+						}
+					}
+					is_lycan = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_vampire = yes #EXCEPT for unknown vampires, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				
+				# A real lycan who is not known but is moderately suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = PREV
+						}
+					}
+					is_unknown_lycan = yes
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = falconer
+							trait = hunter
+							trait = pirate
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = gladiator
+							trait = strategist
+							trait = duelist
+							trait = gambler
+							trait = is_fat
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = wroth
+							trait = humble
+							trait = deceitful
+							trait = brave
+							trait = shy
+							trait = arbitrary
+							trait = reckless
+							trait = cruel
+							trait = ruthless
+							trait = stubborn
+							trait = slovenly
+							trait = diligent
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				
+				# Not a real lycan but still moderately suspicious
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = PREV
+						}
+					}
+					is_lycan = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_vampire = yes #EXCEPT for unknown vampires, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = falconer
+							trait = hunter
+							trait = pirate
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = gladiator
+							trait = strategist
+							trait = duelist
+							trait = gambler
+							trait = is_fat
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = wroth
+							trait = humble
+							trait = deceitful
+							trait = brave
+							trait = shy
+							trait = arbitrary
+							trait = reckless
+							trait = cruel
+							trait = ruthless
+							trait = stubborn
+							trait = slovenly
+							trait = diligent
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				
+				# Someone random, and I'm incompetent
+				any_realm_character = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = PREV } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = PREV
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		# Mark targets
+		liege = {
+			save_event_target_as = my_liege
+			# Known Lycan
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = event_target:my_liege
+						}
+					}
+					NOT = { ROOT = { trait = known_lycan } } #Don't try to arrest someone with the same trait as you
+					trait = known_lycan
+				}
+				save_event_target_as = known_lycan_suspect
+				#####set_character_flag = lycan_suspect_known
+				
+			}
+			
+			# Known Benevolent Lycan
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = event_target:my_liege
+						}
+					}
+					NOT = { ROOT = { trait = known_lycan_benevolent } } #Don't try to arrest someone with the same trait as you
+					trait = known_lycan_benevolent
+				}
+				save_event_target_as = known_benevolent_lycan_suspect
+				#####set_character_flag = lycan_suspect_known_benevolent
+			}
+			
+			# A real lycan who is not known but is highly suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = event_target:my_liege
+						}
+					}
+					is_unknown_lycan = yes
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				save_event_target_as = unknown_lycan_highly_suspect
+				#####set_character_flag = lycan_suspect_unknown_highly
+			}
+			
+			# Not a real lycan but still highly suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = event_target:my_liege
+						}
+					}
+					is_lycan = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_vampire = yes #EXCEPT for unknown vampires, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 14
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+				}
+				save_event_target_as = fake_lycan_highly_suspect
+				#####set_character_flag = lycan_suspect_highly_fake
+			}
+			
+			# A real lycan who is not known but is moderately suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = event_target:my_liege
+						}
+					}
+					is_unknown_lycan = yes
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = falconer
+							trait = hunter
+							trait = pirate
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = gladiator
+							trait = strategist
+							trait = duelist
+							trait = gambler
+							trait = is_fat
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = wroth
+							trait = humble
+							trait = deceitful
+							trait = brave
+							trait = shy
+							trait = arbitrary
+							trait = reckless
+							trait = cruel
+							trait = ruthless
+							trait = stubborn
+							trait = slovenly
+							trait = diligent
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				save_event_target_as = unknown_lycan_moderate_suspect
+				#####set_character_flag = lycan_suspect_unknown_moderate
+			}
+			
+			# Not a real lycan but still moderately suspicious
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = event_target:my_liege
+						}
+					}
+					is_lycan = no
+					OR = {
+						is_disease_immune = no #Never accuse disease-immune characters such as Draugr, Liches, Daedric Princes, Dragons, etc. 
+						is_unknown_vampire = yes #EXCEPT for unknown vampires, since their immunity, and its cause, isn't public.
+					}
+					calc_true_if = {
+						amount = 7
+						
+						trait = impaler
+						trait = falconer
+						trait = hunter
+						trait = pirate
+						trait = smuggler
+						trait = saboteur
+						trait = hedonist
+						trait = gladiator
+						trait = strategist
+						trait = duelist
+						trait = gambler
+						trait = is_fat
+						trait = lustful
+						trait = gluttonous
+						trait = greedy
+						trait = envious
+						trait = wroth
+						trait = humble
+						trait = deceitful
+						trait = brave
+						trait = shy
+						trait = arbitrary
+						trait = reckless
+						trait = cruel
+						trait = ruthless
+						trait = stubborn
+						trait = slovenly
+						trait = diligent
+						trait = groomed
+						trait = uncouth
+						trait = cannibal_trait
+					}
+					NOT = {
+						calc_true_if = {
+							amount = 14
+							
+							trait = impaler
+							trait = falconer
+							trait = hunter
+							trait = pirate
+							trait = smuggler
+							trait = saboteur
+							trait = hedonist
+							trait = gladiator
+							trait = strategist
+							trait = duelist
+							trait = gambler
+							trait = is_fat
+							trait = lustful
+							trait = gluttonous
+							trait = greedy
+							trait = envious
+							trait = wroth
+							trait = humble
+							trait = deceitful
+							trait = brave
+							trait = shy
+							trait = arbitrary
+							trait = reckless
+							trait = cruel
+							trait = ruthless
+							trait = stubborn
+							trait = slovenly
+							trait = diligent
+							trait = groomed
+							trait = uncouth
+							trait = cannibal_trait
+						}
+					}
+				}
+				save_event_target_as = fake_lycan_moderate_suspect
+				#####set_character_flag = lycan_suspect_moderate_fake
+			}
+			
+			# Innocent person! Well, not necessarily...
+			random_realm_character = {
+				limit = {
+					prisoner = no
+					age = 16
+					NOT = { character = ROOT } # Don't catch yourself
+					NOT = { character = event_target:my_liege } # Don't catch your liege
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_understanding_lycan } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_lycan_aware_good } } # Don't catch someone whose condition you're cool with
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_probably_not_lycan } } # Don't catch someone you've cleared as a suspect
+					NOT = {
+						reverse_has_opinion_modifier = {
+							modifier = opinion_understanding_lycan
+							who = event_target:my_liege
+						}
+					}
+				}
+				save_event_target_as = wildcard_lycan_suspect
+				#####set_character_flag = lycan_suspect_wildcard
+			}
+		}
+		
+		if = { # If you're incompetent its more usual to accuse someone random
+			limit = {
+				event_target:wildcard_lycan_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				20 = {
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 2 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 4 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 6 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 8 }
+					}
+					event_target:wildcard_lycan_suspect = {
+						save_event_target_as = accused_lycan
+					}
+					character_event = { id = ekjobs.205 }
+					break = yes
+				}
+				80 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is known, always succeed
+			limit = {
+				event_target:known_lycan_suspect = {
+					is_alive = yes
+				}
+			}
+			event_target:known_lycan_suspect = {
+				save_event_target_as = accused_lycan
+			}
+			character_event = { id = ekjobs.205 }
+			break = yes
+		}
+		
+		if = { # If there is someone who is known benevolent, always succeed
+			limit = {
+				event_target:known_benevolent_lycan_suspect = {
+					is_alive = yes
+				}
+			}
+			event_target:known_benevolent_lycan_suspect = {
+				save_event_target_as = accused_lycan
+			}
+			character_event = { id = ekjobs.205 }
+			break = yes
+		}
+		
+		if = { # If there is someone who is a highly suspicious lycan, succeed a bit less often
+			limit = {
+				event_target:unknown_lycan_highly_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				50 = {
+					modifier = {
+						factor = 0.25
+						event_target:unknown_lycan_highly_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:unknown_lycan_highly_suspect = {
+						save_event_target_as = accused_lycan
+					}
+					character_event = { id = ekjobs.205 }
+					break = yes
+				}
+				50 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is a highly suspicious non-lycan, succeed a bit less often
+			limit = {
+				event_target:fake_lycan_highly_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				50 = {
+					modifier = {
+						factor = 0.25
+						event_target:fake_lycan_highly_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:fake_lycan_highly_suspect = {
+						save_event_target_as = accused_lycan
+					}
+					character_event = { id = ekjobs.205 }
+					break = yes
+				}
+				50 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is a moderately suspicious lycan, succeed a bit less often
+			limit = {
+				event_target:unknown_lycan_moderate_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				30 = {
+					modifier = {
+						factor = 0.25
+						event_target:unknown_lycan_moderate_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:unknown_lycan_moderate_suspect = {
+						save_event_target_as = accused_lycan
+					}
+					character_event = { id = ekjobs.205 }
+					break = yes
+				}
+				70 = {
+					
+				}
+			}
+		}
+		
+		if = { # If there is someone who is a moderately suspicious non-lycan, succeed a bit less often
+			limit = {
+				event_target:fake_lycan_moderate_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				30 = {
+					modifier = {
+						factor = 0.25
+						event_target:fake_lycan_moderate_suspect = {
+							ai = no
+						}
+					}
+					modifier = {
+						factor = 1.25
+						learning = 10
+					}
+					modifier = {
+						factor = 1.25
+						learning = 12
+					}
+					modifier = {
+						factor = 1.25
+						learning = 14
+					}
+					modifier = {
+						factor = 1.25
+						learning = 16
+					}
+					modifier = {
+						factor = 1.25
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						learning = 20
+					}
+					modifier = {
+						factor = 1.25
+						learning = 22
+					}
+					modifier = {
+						factor = 1.25
+						trait = witchhunter_1
+					}
+					modifier = {
+						factor = 1.5
+						trait = witchhunter_2
+					}
+					modifier = {
+						factor = 1.75
+						trait = witchhunter_3
+					}
+					event_target:fake_lycan_moderate_suspect = {
+						save_event_target_as = accused_lycan
+					}
+					character_event = { id = ekjobs.205 }
+					break = yes
+				}
+				70 = {
+					
+				}
+			}
+		}
+				
+		if = { # Accuse someone random!
+			limit = {
+				event_target:wildcard_lycan_suspect = {
+					is_alive = yes
+				}
+			}
+			random_list = {
+				5 = {
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 2 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 4 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 6 }
+					}
+					modifier = {
+						factor = 1.25
+						NOT = { learning = 8 }
+					}
+					modifier = {
+						factor = 1.25
+						is_dumb_trigger = yes
+					}
+					event_target:wildcard_lycan_suspect = {
+						save_event_target_as = accused_lycan
+					}
+					character_event = { id = ekjobs.205 }
+					break = yes
+				}
+				95 = {
+					
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 100
+
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 6 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 8 }
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 14
+		}
+		modifier = {
+			factor = 0.75
+			learning = 16
+		}
+		modifier = {
+			factor = 0.75
+			learning = 18
+		}
+		modifier = {
+			factor = 0.75
+			learning = 20
+		}
+		modifier = {
+			factor = 0.75
+			learning = 22
+		}
+		modifier = {
+			factor = 0.9
+			trait = witchhunter_1
+		}
+		modifier = {
+			factor = 0.75
+			trait = witchhunter_2
+		}
+		modifier = {
+			factor = 0.5
+			trait = witchhunter_3
+		}
+		modifier = {
+			factor = 0.75
+			is_lycan = yes
+		}
+		modifier = {
+			factor = 2
+			NOT = { religion_authority = 0.1 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { religion_authority = 0.2 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { religion_authority = 0.3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { religion_authority = 0.4 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { religion_authority = 0.5 }
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.6
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.7
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.8
+		}
+		modifier = {
+			factor = 0.9
+			religion_authority = 0.9
+		}
+	}
+}
+
+character_event = { # Outcome event
+	id = ekjobs.205
+	title = EKJobs200Title
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:known_lycan_suspect }
+		}
+		text = EKJobs205_known_lycan_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:known_benevolent_lycan_suspect }
+		}
+		text = EKJobs205_known_benevolent_lycan_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:unknown_lycan_highly_suspect }
+		}
+		text = EKJobs205_unknown_lycan_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:fake_lycan_highly_suspect }
+		}
+		text = EKJobs205_fake_lycan_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:unknown_lycan_moderate_suspect }
+		}
+		text = EKJobs205_unknown_lycan_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:fake_lycan_moderate_suspect }
+		}
+		text = EKJobs205_fake_lycan_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:wildcard_lycan_suspect }
+		}
+		text = EKJobs205_wildcard_lycan_suspect
+	}
+	
+	is_triggered_only = yes
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		
+	}
+	
+	immediate = {
+		event_target:my_liege = {
+			random_realm_character = {
+				limit = {
+					age = 16
+					ai = yes
+					is_rival = ROOT
+					NOT = {
+						character = event_target:my_liege
+					}
+					NOT = {
+						character = event_target:accused_lycan
+					}
+				}
+				save_event_target_as = rival_target
+			}
+		}
+
+	}
+	
+	option = {
+		name = EKJobs205OptA
+		
+		ai_chance = {
+			factor = 100
+			
+			modifier = {
+				factor = 5
+				trait = zealous
+				is_werewolf_religion = no
+			}
+			modifier = {
+				factor = 2.5
+				NOT = { trait = zealous }
+				is_werewolf_religion = no
+			}
+			modifier = {
+				factor = 0.1
+				trait = zealous
+				is_werewolf_religion = yes
+			}
+			modifier = {
+				factor = 0.25
+				NOT = { trait = zealous }
+				is_werewolf_religion = yes
+			}
+		}
+		
+		event_target:accused_lycan = {
+			opinion = {
+				modifier = opinion_hate
+				who = ROOT
+				years = 100
+			}
+		}
+		
+		custom_tooltip = {
+			text = lycan_found_tooltip
+		}
+		
+		liege = {
+			character_event = { id = ekjobs.210 }
+		}
+	}
+	
+	option = {
+		name = EKJobs205OptB
+		tooltip_info = deceitful
+		
+		trigger = {
+			trait = deceitful
+			event_target:rival_target = {
+				is_alive = yes
+			}
+		}
+		
+		ai_chance = {
+			factor = 1000
+			
+			modifier = {
+				factor = 2
+				trait = lunatic
+			}
+			modifier = {
+				factor = 2
+				trait = possessed
+			}
+			modifier = {
+				factor = 2
+				trait = cruel
+			}
+			modifier = {
+				factor = 2
+				trait = paranoid
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+		
+		custom_tooltip = {
+			text = accuse_rival_lycan_tooltip
+		}
+		
+		event_target:rival_target = {
+			save_event_target_as = accused_lycan
+			#####set_character_flag = lycan_rival_accused
+		}
+		liege = {
+			character_event = { id = ekjobs.210 }
+		}
+	}
+	
+	option = {
+		name = EKJobs205OptC
+		
+		ai_chance = {
+			factor = 100
+			
+			modifier = {
+				factor = 2
+				trait = slovenly
+			}
+			modifier = {
+				factor = 2
+				trait = slothful
+			}
+			modifier = {
+				factor = 2
+				trait = arbitrary
+			}
+		}
+		
+		custom_tooltip = {
+			text = probably_not_a_lycan_tooltip
+		}
+		
+		event_target:accused_lycan = {
+			reverse_opinion = {
+				modifier = opinion_probably_not_lycan
+				who = ROOT
+				years = 4
+			}
+		}
+	}
+}
+
+character_event = { # What does the liege wish to do with the lycan?
+	id = ekjobs.210
+	title = EKJobs200Title
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	trigger = {
+		event_target:accused_lycan = {
+			is_alive = yes
+		}
+	}
+	
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:known_lycan_suspect }
+		}
+		text = EKJobs210_known_lycan_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:known_benevolent_lycan_suspect }
+		}
+		text = EKJobs210_known_benevolent_lycan_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:unknown_lycan_highly_suspect }
+		}
+		text = EKJobs210_unknown_lycan_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:fake_lycan_highly_suspect }
+		}
+		text = EKJobs210_fake_lycan_highly_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:unknown_lycan_moderate_suspect }
+		}
+		text = EKJobs210_unknown_lycan_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:fake_lycan_moderate_suspect }
+		}
+		text = EKJobs210_fake_lycan_moderate_suspect
+	}
+	desc = {
+		trigger = { 
+			event_target:accused_lycan = { character = event_target:wildcard_lycan_suspect }
+		}
+		text = EKJobs210_wildcard_lycan_suspect
+	}
+	
+	is_triggered_only = yes
+	
+	option = { # Imprison the lycan!
+		name = EKJobs210OptA
+		trigger = {
+			event_target:accused_lycan = {
+				is_lycan = yes
+				is_unknown_lycan = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 40
+			
+			modifier = {
+				factor = 2.5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 5
+				trait = zealous
+				is_werewolf_religion = no
+			}
+			modifier = {
+				factor = 2.5
+				NOT = { trait = zealous }
+				is_werewolf_religion = no
+			}
+		}
+		
+		if = { 
+			limit = { is_werewolf_religion = yes } 
+			piety = -25
+		}
+		if = { 
+			limit = { is_werewolf_religion = no } 
+			piety = 25
+		}
+		
+		event_target:accused_lycan = {
+			show_scope_change = no
+			imprison = ROOT
+		}
+		opinion = {
+			modifier = opinion_hostile_lycan 
+			who = event_target:accused_lycan 
+			years = 100
+		}
+		event_target:accused_lycan = {
+			show_scope_change = no
+			if = {
+				limit = {
+					religion = ROOT
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		custom_tooltip = {
+			text = lycan_imprison_tooltip
+		}
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.215 }
+			}
+		}
+	}
+	
+	option = { # Allow the test to take place
+		name = EKJobs210OptB
+		trigger = {
+			event_target:accused_lycan = {
+				OR = {
+					is_lycan = no
+					is_unknown_lycan = yes
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 40
+			
+			modifier = {
+				factor = 5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 5
+				trait = zealous
+				is_werewolf_religion = no
+			}
+			modifier = {
+				factor = 2.5
+				NOT = { trait = zealous }
+				is_werewolf_religion = no
+			}
+		}
+		
+		custom_tooltip = {
+			text = lycan_test_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.220 }
+			}
+		}
+		opinion = {
+			modifier = opinion_accused_lycan 
+			who = event_target:accused_lycan 
+			years = 10
+		}
+	}
+	
+	option = { # Let them go - Known Lycan
+		name = EKJobs210OptC
+		trigger = {
+			event_target:accused_lycan = {
+				is_lycan = yes
+				is_unknown_lycan = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_werewolf_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_werewolf_religion = yes
+			}
+			modifier = {
+				factor = 0
+				NOR = {
+					trait = trusting
+					is_werewolf_religion = yes
+					event_target:accused_lycan = { trait = known_lycan_benevolent }
+				}
+			}
+		}
+		
+		if = { 
+			limit = { is_werewolf_religion = yes } 
+			piety = 25
+		}
+		if = { 
+			limit = { is_werewolf_religion = no } 
+			piety = -25
+		}
+		
+		custom_tooltip = {
+			text = lycan_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.230 }
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_lycan 
+			who = event_target:accused_lycan 
+			years = 10
+		}
+		reverse_opinion = {
+			modifier = opinion_outraged 
+			who = FROM
+			months = 6
+		}
+	}
+	
+	option = { # Let them go - Not known Lycan
+		name = EKJobs210OptD
+		trigger = {
+			event_target:accused_lycan = {
+				OR = {
+					is_lycan = no
+					is_unknown_lycan = yes
+				}
+			}
+		}
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_werewolf_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_werewolf_religion = yes
+			}
+			modifier = {
+				factor = 0
+				NOR = {
+					trait = trusting
+					is_werewolf_religion = yes
+					event_target:accused_lycan = { trait = known_lycan_benevolent }
+				}
+			}
+		}
+		
+		custom_tooltip = {
+			text = lycan_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.230 }
+			}
+		}
+		reverse_opinion = {
+			modifier = opinion_outraged 
+			who = FROM
+			months = 6
+		}
+	}
+}
+
+character_event = { # The Lycan reacts to Imprisonment
+	id = ekjobs.215
+	desc = EKJobs215
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs215OptA
+		tooltip = {
+			imprison = FROM
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_hostile_lycan
+					who = event_target:accused_lycan
+					years = 100
+				}
+			}
+			if = {
+				limit = {
+					religion = FROM
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.235 }
+		}
+	}
+}
+
+character_event = { # The Lycan reacts to Mercy
+	id = ekjobs.220
+	desc = EKJobs220
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs220OptA
+		
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_understanding_lycan 
+					who = event_target:accused_lycan 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.240 }
+		}
+	}
+}
+
+character_event = { # The accused is tested
+	id = ekjobs.225
+	desc = {
+		trigger = { 
+			is_lycan = yes
+			NOR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+				has_character_flag = lycan_level_9
+				has_character_flag = lycan_level_10
+			}
+		}
+		text = EKJobs225A
+	}
+	desc = {
+		trigger = { 
+			is_lycan = yes
+			OR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+				has_character_flag = lycan_level_9
+				has_character_flag = lycan_level_10
+			}
+		}
+		text = EKJobs225B
+	}
+	desc = {
+		trigger = { 
+			is_lycan = no
+		}
+		text = EKJobs225C
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs225OptA
+		trigger = {
+			is_lycan = yes
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				OR = {
+					has_character_flag = lycan_level_5
+					has_character_flag = lycan_level_6
+					has_character_flag = lycan_level_7
+					has_character_flag = lycan_level_8
+					has_character_flag = lycan_level_9
+					has_character_flag = lycan_level_10
+				}
+			}
+			modifier = {
+				factor = 5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 5
+				trait = reckless
+			}
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				trait = gluttonous
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_lycan
+		hidden_tooltip = {
+			event_target:my_liege = {
+				character_event = { id = ekjobs.245 }
+			}
+		}
+	}
+	option = {
+		name = EKJobs225OptB
+		trigger = {
+			is_lycan = yes
+			OR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+				has_character_flag = lycan_level_9
+				has_character_flag = lycan_level_10
+			}
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0.25
+				OR = {
+					has_character_flag = lycan_level_5
+					has_character_flag = lycan_level_6
+					has_character_flag = lycan_level_7
+					has_character_flag = lycan_level_8
+					has_character_flag = lycan_level_9
+					has_character_flag = lycan_level_10
+				}
+			}
+			modifier = {
+				factor = 5
+				trait = kind
+			}
+			modifier = {
+				factor = 5
+				trait = just
+			}
+			modifier = {
+				factor = 5
+				trait = temperate
+			}
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 10
+				trait = honest
+			}
+		}
+		add_trait = known_lycan_benevolent
+		hidden_tooltip = {
+			event_target:my_liege = {
+				character_event = { id = ekjobs.245 }
+			}
+		}
+	}
+	option = {
+		name = EKJobs225OptC
+		trigger = {
+			is_lycan = yes
+			OR = {
+				has_character_flag = lycan_level_5
+				has_character_flag = lycan_level_6
+				has_character_flag = lycan_level_7
+				has_character_flag = lycan_level_8
+				has_character_flag = lycan_level_9
+				has_character_flag = lycan_level_10
+			}
+		}
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				trait = shy
+			}
+			modifier = {
+				factor = 10
+				trait = deceitful
+			}
+		}
+		hidden_tooltip = {
+			event_target:my_liege = {
+				character_event = { id = ekjobs.245 }
+			}
+		}
+	}
+	option = {
+		name = EKJobs225OptD
+		trigger = {
+			is_lycan = no
+		}
+		hidden_tooltip = {
+			event_target:my_liege = {
+				character_event = { id = ekjobs.245 }
+			}
+		}
+	}
+}
+
+character_event = { # The accused reacts to mercy
+	id = ekjobs.230
+	desc = {
+		trigger = { 
+			is_lycan = yes
+		}
+		text = EKJobs230A
+	}
+	desc = {
+		trigger = { 
+			is_lycan = no
+		}
+		text = EKJobs230B
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs230OptA
+		trigger = { 
+			is_lycan = yes
+		}
+		
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_probably_not_lycan 
+					who = event_target:accused_lycan 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.250 }
+		}
+	}
+	
+	option = {
+		name = EKJobs230OptB
+		trigger = { 
+			is_lycan = no
+		}
+		
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_probably_not_lycan 
+					who = event_target:accused_lycan 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.250 }
+		}
+	}
+}
+
+character_event = { # The Magister Responds to the Imprisonment of the Lycan
+	id = ekjobs.235
+	desc = EKJobs235
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs235OptA
+		prestige = 50
+		piety = 50
+	}
+}
+
+character_event = { # The Magister Responds to the Release of the Lycan
+	id = ekjobs.240
+	desc = EKJobs240
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs240OptA
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:accused_lycan
+			years = 100
+		}
+	}
+	option = {
+		name = EKJobs240OptB
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+		opinion = {
+			modifier = opinion_outraged
+			who = event_target:my_liege
+			months = 6
+		}
+	}
+	option = {
+		name = EKJobs240OptC
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+		opinion = {
+			modifier = opinion_hate
+			who = event_target:accused_lycan
+			years = 100
+		}
+		opinion = {
+			modifier = opinion_outraged
+			who = event_target:my_liege
+			months = 6
+		}
+	}
+}
+
+character_event = { # The Liege Responds to the result of the test
+	id = ekjobs.245
+	desc = {
+		trigger = {
+			event_target:accused_lycan = {
+				trait = known_lycan
+			}
+		}
+		text = EKJobs245A
+	}
+	desc = {
+		trigger = {
+			event_target:accused_lycan = {
+				OR = {
+					is_unknown_lycan = yes
+					is_lycan = no
+				}
+			}
+		}
+		text = EKJobs245B
+	}
+	desc = {
+		trigger = {
+			event_target:accused_lycan = {
+				trait = known_lycan_benevolent
+			}
+		}
+		text = EKJobs245C
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = { # Imprison the werewolf!
+		name = EKJobs245OptA
+		trigger = {
+			event_target:accused_lycan = {
+				is_lycan = yes
+				is_unknown_lycan = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 40
+			
+			modifier = {
+				factor = 2.5
+				trait = cruel
+			}
+			modifier = {
+				factor = 5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 5
+				trait = zealous
+				is_werewolf_religion = no
+			}
+			modifier = {
+				factor = 2.5
+				NOT = { trait = zealous }
+				is_werewolf_religion = no
+			}
+		}
+		
+		event_target:accused_lycan = {
+			show_scope_change = no
+			imprison = ROOT
+		}
+		opinion = {
+			modifier = opinion_hostile_lycan 
+			who = event_target:accused_lycan 
+			years = 100
+		}
+		event_target:accused_lycan = {
+			show_scope_change = no
+			if = {
+				limit = {
+					religion = ROOT
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		
+		if = { 
+			limit = { is_werewolf_religion = yes } 
+			piety = -25
+		}
+		if = { 
+			limit = { is_werewolf_religion = no } 
+			piety = 25
+		}
+		
+		custom_tooltip = {
+			text = lycan_imprison_tooltip
+		}
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.250 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.235 }
+			}
+		}
+	}
+	
+	option = { # Let them go - Known Lycan
+		name = EKJobs245OptB
+		trigger = {
+			event_target:accused_lycan = {
+				is_lycan = yes
+				is_unknown_lycan = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 25
+			
+			modifier = {
+				factor = 10
+				trait = zealous
+				is_werewolf_religion = yes
+			}
+			modifier = {
+				factor = 5
+				NOT = { trait = zealous }
+				is_werewolf_religion = yes
+			}
+			modifier = {
+				factor = 0
+				NOR = {
+					trait = trusting
+					is_werewolf_religion = yes
+					event_target:accused_lycan = { trait = known_lycan_benevolent }
+				}
+			}
+		}
+		
+		if = { 
+			limit = { is_werewolf_religion = yes } 
+			piety = 25
+		}
+		if = { 
+			limit = { is_werewolf_religion = no } 
+			piety = -25
+		}
+		
+		custom_tooltip = {
+			text = lycan_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.255 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.240 }
+			}
+		}
+		opinion = {
+			modifier = opinion_understanding_lycan 
+			who = event_target:accused_lycan 
+			years = 10
+		}
+		reverse_opinion = {
+			modifier = opinion_outraged 
+			who = FROM
+			months = 6
+		}
+	}
+	
+	option = { # Let them go - Not a Lycan
+		name = EKJobs245OptC
+		trigger = {
+			event_target:accused_lycan = {
+				is_known_lycan = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					trait = trusting
+				}
+			}
+		}
+		
+		piety = 25
+		
+		custom_tooltip = {
+			text = lycan_free_tooltip
+		}
+		
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.255 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.260 }
+			}
+		}
+		opinion = {
+			modifier = opinion_probably_not_lycan 
+			who = event_target:accused_lycan 
+			years = 10
+		}
+	}
+	
+	option = { # Throw them in the dungeon anyway!
+		name = EKJobs245OptD
+		trigger = {
+			event_target:accused_lycan = {
+				is_known_lycan = no
+			}
+		}
+		
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 0
+				NOR = {
+					is_batshit_crazy = yes
+					trait = arbitrary
+					event_target:accused_lycan = { is_rival = ROOT }
+				}
+			}
+			modifier = {
+				factor = 5
+				is_batshit_crazy = yes
+			}
+			modifier = {
+				factor = 10
+				event_target:accused_lycan = { is_rival = ROOT }
+			}
+		}
+		
+		piety = -25
+		
+		event_target:accused_lycan = {
+			show_scope_change = no
+			imprison = ROOT
+		}
+		event_target:accused_lycan = {
+			show_scope_change = no
+		}
+		custom_tooltip = {
+			text = lycan_imprison_tooltip
+		}
+		hidden_tooltip = {
+			event_target:accused_lycan = {
+				character_event = { id = ekjobs.250 }
+			}
+			random_courtier = {
+				limit = { has_job_title = job_spiritual }
+				character_event = { id = ekjobs.265 }
+			}
+		}
+	}
+}
+
+character_event = { # The accused is imprisoned - their reaction
+	id = ekjobs.250
+	desc = {
+		trigger = {
+			is_known_lycan = yes
+		}
+		text = EKJobs250A
+	}
+	desc = {
+		trigger = {
+			is_known_lycan = no
+		}
+		text = EKJobs250B
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs250OptA
+		trigger = {
+			is_known_lycan = yes
+		}
+		tooltip = {
+			imprison = FROM
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_accused_lycan
+					who = event_target:accused_lycan 
+					years = 100
+				}
+			}
+			if = {
+				limit = {
+					religion = FROM
+					controls_religion = no
+					OR = {
+						religion = maruhkati
+						religion = nine_divines
+						religion = alikr
+						religion = auriel
+						religion = almsivi
+					}
+				}
+				add_trait = excommunicated
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.235 }
+		}
+	}
+	
+	option = {
+		name = EKJobs250OptB
+		trigger = {
+			is_known_lycan = no
+		}
+		tooltip = {
+			imprison = FROM
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.235 }
+		}
+	}
+}
+
+character_event = { # The Werewolf reacts to Mercy
+	id = ekjobs.255
+	desc = {
+		trigger = {
+			is_known_lycan = yes
+		}
+		text = EKJobs255A
+	}
+	desc = {
+		trigger = {
+			is_known_lycan = no
+		}
+		text = EKJobs255B
+	}
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs255OptA
+		trigger = { 
+			trait = known_lycan 
+		}
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_accused_lycan
+					who = event_target:accused_lycan 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.240 }
+		}
+	}
+	option = {
+		name = EKJobs255OptB
+		trigger = { 
+			trait = known_lycan_benevolent 
+		}
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_accused_lycan
+					who = event_target:accused_lycan 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.240 }
+		}
+	}
+	option = {
+		name = EKJobs255OptC
+		trigger = { 
+			is_known_lycan = no
+		}
+		tooltip = {
+			event_target:my_liege = {
+				opinion = {
+					modifier = opinion_accused_lycan
+					who = event_target:accused_lycan 
+					years = 10
+				}
+			}
+		}
+		FROMFROMFROM = {
+			character_event = { id = ekjobs.240 }
+		}
+	}
+}
+
+character_event = { # The Magister Responds to the Release of the Innocent Character
+	id = ekjobs.260
+	desc = EKJobs260
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs260OptA
+		prestige = -25
+		add_character_modifier = {
+			name = discredited_for_bad_plot
+			months = 60
+		}
+	}
+}
+
+character_event = { # The Magister Responds to the Imprisonment of the Innocent Character
+	id = ekjobs.265
+	desc = EKJobs265
+	picture = GFX_evt_catching_heretic
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EKJobs265OptA
+		trigger = {
+			event_target:accused_lycan = { NOT = { is_rival = ROOT } }
+		}
+		prestige = 25
+	}
+	option = {
+		name = EKJobs265OptB
+		trigger = {
+			event_target:accused_lycan = { is_rival = ROOT }
+		}
+		prestige = 25
+	}
+}

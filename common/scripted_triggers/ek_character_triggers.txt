@@ -1,0 +1,1531 @@
+#For character scoping triggers
+is_indisposed = {
+	OR = {
+		trait = in_hiding
+		trait = on_adventure
+		trait = on_assassination
+		trait = on_diplomatic
+		trait = on_tour
+		trait = on_guild
+		trait = on_mission
+		trait = on_pilgrimage
+	}
+}
+is_dragonblood = {
+	custom_tooltip = {
+		text = IS_DRAGONBLOOD_CT
+		OR = {
+			trait = dragonborn
+			trait = dragonborn_g_1
+			trait = dragonborn_g_2
+			trait = dragonborn_g_3
+			trait = dragonborn_g_4
+			trait = dragonborn_g_5
+			trait = dragonborn_descendant
+		}
+	}
+}
+is_batshit_crazy = {
+	OR = {
+		trait = lunatic
+		trait = possessed
+	}
+}
+is_mute = {
+	trait = mute
+}
+is_total_bastard = {
+	OR = {
+		trait = legit_bastard
+		trait = bastard
+	}
+}
+is_blinded_trigger = {
+	OR = {
+		trait = blind
+		trait = blinded
+		trait = blind_moth
+	}
+}
+is_maimed = {
+	custom_tooltip = {
+		text = is_maimed_text
+		hidden_tooltip = {
+			OR = {
+				trait = one_legged
+				trait = one_handed
+				trait = one_eyed
+				trait = mangled
+				trait = disfigured
+			}
+		}
+	}
+}
+is_mer = {
+	custom_tooltip = {
+		text = is_mer_text
+		hidden_tooltip = {
+			OR = {
+				is_altmer = yes
+				is_ayleid = yes
+				is_bosmer = yes
+				is_chimer = yes
+				is_dunmer = yes
+				is_maormer = yes
+				is_falmer = yes
+				is_dwemer = yes
+				is_tsaesci = yes #Included as theoretically descended from Mer and maintain immortality
+				trait = dremora #Included as Dremora will be functionally identical to Mer
+			}
+		}
+	}
+}
+is_human = {
+	custom_tooltip = {
+		text = is_human_text
+		hidden_tooltip = {
+			OR = {
+				trait = redguard
+				trait = imperial
+				trait = breton
+				trait = nord
+				trait = akaviri
+				trait = quey
+				trait = reachman
+				trait = kamal
+			}
+		}
+	}
+}
+is_beast = {
+	custom_tooltip = {
+		text = is_beast_text
+		hidden_tooltip = {
+			OR = {
+				trait = khajiit
+				trait = argonian
+				trait = potun
+				trait = tangmo
+				trait = sload
+				is_dragon = yes
+			}
+		}
+	}
+}
+is_cat = {
+	custom_tooltip = {
+		text = is_cat_text
+		hidden_tooltip = {
+			OR = {
+				trait = khajiit
+				trait = potun
+			}
+		}
+	}
+}
+is_mortal_race = {
+	custom_tooltip = {
+		text = is_mortal_race_text
+		hidden_tooltip = {
+			OR = {
+				trait = imperial
+				trait = orsimer
+				trait = nord
+				trait = breton
+				trait = reachman
+				trait = quey
+				trait = redguard
+				trait = akaviri
+				trait = khajiit
+				trait = argonian
+				trait = kamal
+				trait = potun
+				trait = tangmo
+			}
+		}
+	}
+}
+is_imperial = {
+	custom_tooltip = {
+		text = is_imperial_text
+		hidden_tooltip = {
+			trait = imperial
+		}
+	}
+}
+is_vampire = {
+	custom_tooltip = {
+		text = is_vampire_text
+		hidden_tooltip = {
+			OR = {
+				trait = vampire
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+	}
+}
+is_known_vampire = {
+	custom_tooltip = {
+		text = is_vampire_text
+		hidden_tooltip = {
+			OR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+	}
+}
+is_unknown_vampire = {
+	custom_tooltip = {
+		text = is_unknown_vampire_text
+		hidden_tooltip = {
+			trait = vampire
+			NOR = {
+				trait = known_vampire
+				trait = known_vampire_benevolent
+			}
+		}
+	}
+}
+is_known_undead = {
+	custom_tooltip = {
+		text = is_known_undead_text
+		hidden_tooltip = {
+			OR = {
+				is_known_vampire = yes
+				trait = briarheart
+				trait = undead
+				trait = lich
+			}
+		}
+	}
+}
+is_undead = {
+	custom_tooltip = {
+		text = is_undead_text
+		hidden_tooltip = {
+			OR = {
+				is_known_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+	}
+}
+
+is_not_undead = {
+	custom_tooltip = {
+		text = is_not_undead_text
+		hidden_tooltip = {
+			NOR = {
+				is_known_undead = yes
+				is_unknown_vampire = yes
+			}
+		}
+	}
+}
+
+### Character lifespan
+# Regular (0-100)
+is_short_lived = {
+	custom_tooltip = {
+		text = is_short_lived_text
+		hidden_tooltip = {
+			NOT = { is_immortal = yes }
+			NOT = { should_receive_elven_immortality = yes }
+		}
+	}
+}
+# Elven (0-400)
+is_long_lived = {
+	custom_tooltip = {
+		text = is_long_lived_text
+		hidden_tooltip = {
+			NOT = { is_immortal = yes }
+			
+			should_receive_elven_immortality = yes
+		}
+	}
+}
+should_receive_elven_immortality = {
+	OR = {
+		is_altmer = yes
+		is_ayleid = yes
+		is_bosmer = yes
+		is_chimer = yes
+		is_dunmer = yes
+		is_maormer = yes
+		is_falmer = yes
+		is_dwemer = yes
+		is_tsaesci = yes #Included as theoretically descended from Mer and maintain immortality
+		trait = dremora #Included as Dremora will be functionally identical to Mer
+		
+		has_character_modifier = immortality_pseudo_long_lived
+	}
+}
+# Immortal (0-infinity)
+is_immortal = {
+	custom_tooltip = {
+		text = is_immortal_text
+		hidden_tooltip = {
+			OR = {
+				is_undead = yes
+				
+				trait = clone
+				trait = hagraven
+				trait = immortal
+				trait = soulless_clavicus
+				is_dragon = yes
+				
+				trait = the_ideal_masters
+				is_almsivi_god = yes
+				is_daedric_prince = yes
+			}
+		}
+	}
+}
+
+### Great Houses of Morrowind
+has_house_trait = {
+	custom_tooltip = {
+		text = has_house_trait_text
+		hidden_tooltip = {
+			OR = {
+				trait = house_indoril
+				trait = house_dres
+				trait = house_hlaalu
+				trait = house_redoran
+				trait = house_telvanni
+				trait = house_sadras
+				trait = house_dagoth
+				trait = house_veloth
+				trait = house_sul
+				trait = house_custom_1
+				trait = house_custom_2
+				trait = house_custom_3
+			}
+		}
+	}
+}
+has_house_trait_including_houseless = {
+	custom_tooltip = {
+		text = has_house_trait_text
+		hidden_tooltip = {
+			OR = {
+				trait = house_indoril
+				trait = house_dres
+				trait = house_hlaalu
+				trait = house_redoran
+				trait = house_telvanni
+				trait = house_sadras
+				trait = house_dagoth
+				trait = house_veloth
+				trait = house_sul
+				trait = house_custom_1
+				trait = house_custom_2
+				trait = house_custom_3
+				trait = houseless_dunmer
+			}
+		}
+	}
+}
+is_dunmer_great_house = {
+	custom_tooltip = {
+		text = is_dunmer_great_house_text
+		hidden_tooltip = {
+			OR = {
+				trait = house_indoril
+				trait = house_dres
+				trait = house_hlaalu
+				trait = house_redoran
+				trait = house_telvanni
+			}
+		}
+	}
+}
+
+# Other
+is_regent = {
+	custom_tooltip = {
+		text = is_regent_text
+		hidden_tooltip = {
+			liege = { has_regent = yes }
+			OR = {
+				has_minor_title = title_regent
+				liege = {
+					regent = {
+						character = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+is_commander = {
+	custom_tooltip = {
+		text = is_commander_text
+		hidden_tooltip = {
+			has_minor_title = title_commander
+		}
+	}
+}
+is_away = {
+	custom_tooltip = {
+		text = is_away_text
+		hidden_tooltip = {
+			OR = {
+				trait = on_adventure
+				trait = on_assassination
+				trait = on_diplomatic
+				trait = on_tour
+				trait = on_mission
+				trait = on_pilgrimage
+				trait = on_guild
+			}
+		}
+	}
+}
+has_bloodline = {
+	custom_tooltip = {
+	text = has_bloodline_text
+	hidden_tooltip = {
+			OR = {
+				any_owned_bloodline = {
+					OR = {
+						has_bloodline_flag = bloodline_reman
+						has_bloodline_flag = bloodline_tiber
+						has_bloodline_flag = bloodline_divine
+						has_bloodline_flag = bloodline_hidellith
+						has_bloodline_flag = bloodline_direnni
+						has_bloodline_flag = bloodline_eplear
+						has_bloodline_flag = bloodline_frandar
+						has_bloodline_flag = bloodline_olo
+						has_bloodline_flag = bloodline_rislav
+						has_bloodline_flag = bloodline_sul
+						has_bloodline_flag = bloodline_faolan
+						has_bloodline_flag = bloodline_orgnum
+						has_bloodline_flag = bloodline_companions
+						has_bloodline_flag = bloodline_ysgramor
+						has_bloodline_flag = bloodline_gardner
+						has_bloodline_flag = bloodline_tharn
+					}
+				}
+			}
+		}
+	}
+}
+is_divine_bloodline = {
+	any_owned_bloodline = {
+		OR = {
+			has_bloodline_flag = bloodline_tiber
+			has_bloodline_flag = bloodline_divine
+		}
+		
+		# Since any_owned_bloodline has to be scoped from a character, PREV should return said character
+		bloodline_is_active_for = PREV
+	}
+}
+is_former_emperor_bloodline = {
+	custom_tooltip = {
+		text = IS_FORMER_EMPEROR_BLOODLINE_CT
+		hidden_tooltip = {
+			any_owned_bloodline = {
+				OR = {
+					has_bloodline_flag = bloodline_reman
+					has_bloodline_flag = bloodline_tiber
+					has_bloodline_flag = bloodline_divine
+					has_bloodline_flag = bloodline_former_emperor
+				}
+				
+				# Since any_owned_bloodline has to be scoped from a character, PREV should return said character
+				bloodline_is_active_for = PREV
+			}
+		}
+	}
+}
+is_potential_emperor_bloodline = {
+	custom_tooltip = {
+		text = IS_POTENTIAL_EMPEROR_BLOODLINE_CT
+		hidden_tooltip = {
+			any_owned_bloodline = {
+				OR = {
+					has_bloodline_flag = bloodline_hidellith
+					has_bloodline_flag = bloodline_potential_emperor
+				}
+				
+				# Since any_owned_bloodline has to be scoped from a character, PREV should return said character
+				bloodline_is_active_for = PREV
+			}
+		}
+	}
+}
+#is_unstable_emperor = {
+#	custom_tooltip = {
+#		text = is_unstable_emperor_text
+#		hidden_tooltip = {
+#			OR = {
+#				has_character_modifier = imp_stab_neg_1
+#				has_character_modifier = imp_stab_neg_2
+#				has_character_modifier = imp_stab_neg_3
+#				has_character_modifier = imp_stab_neg_4
+#				has_character_modifier = imp_stab_neg_5
+#				has_character_modifier = imp_stab_neg_6
+#				has_character_modifier = imp_stab_neg_7
+#				has_character_modifier = imp_stab_neg_8
+#				has_character_modifier = imp_stab_neg_9
+#				has_character_modifier = imp_stab_neg_10
+#				has_character_modifier = imp_stab_neg_11
+#				has_character_modifier = imp_stab_neg_12
+#				has_character_modifier = imp_stab_neg_13
+#				has_character_modifier = imp_stab_neg_14
+#				has_character_modifier = imp_stab_neg_15
+#				has_character_modifier = imp_stab_neg_16
+#				has_character_modifier = imp_stab_neg_17
+#				has_character_modifier = imp_stab_neg_18
+#				has_character_modifier = imp_stab_neg_19
+#				has_character_modifier = imp_stab_neg_20
+#				has_character_modifier = imp_stab_neg_21
+#				has_character_modifier = imp_stab_neg_22
+#				has_character_modifier = imp_stab_neg_23
+#				has_character_modifier = imp_stab_neg_24
+#				has_character_modifier = imp_stab_neg_25
+#				has_character_modifier = imp_stab_neg_26
+#				has_character_modifier = imp_stab_neg_27
+#				has_character_modifier = imp_stab_neg_28
+#				has_character_modifier = imp_stab_neg_29
+#				has_character_modifier = imp_stab_neg_30
+#				has_character_modifier = imp_stab_neg_31
+#				has_character_modifier = imp_stab_neg_32
+#				has_character_modifier = imp_stab_neg_33
+#				has_character_modifier = imp_stab_neg_34
+#				has_character_modifier = imp_stab_neg_35
+#				has_character_modifier = imp_stab_neg_36
+#				has_character_modifier = imp_stab_neg_37
+#				has_character_modifier = imp_stab_neg_38
+#				has_character_modifier = imp_stab_neg_39
+#				has_character_modifier = imp_stab_neg_40
+#				has_character_modifier = imp_stab_neg_41
+#				has_character_modifier = imp_stab_neg_42
+#				has_character_modifier = imp_stab_neg_43
+#				has_character_modifier = imp_stab_neg_44
+#				has_character_modifier = imp_stab_neg_45
+#				has_character_modifier = imp_stab_neg_46
+#				has_character_modifier = imp_stab_neg_47
+#				has_character_modifier = imp_stab_neg_48
+#				has_character_modifier = imp_stab_neg_49
+#				has_character_modifier = imp_stab_neg_50
+#			}
+#		}
+#	}
+#}
+#
+#is_severely_unstable_emperor = {
+#	custom_tooltip = {
+#		text = is_severely_unstable_emperor_text
+#		hidden_tooltip = {
+#			OR = {
+#				has_character_modifier = imp_stab_neg_30
+#				has_character_modifier = imp_stab_neg_31
+#				has_character_modifier = imp_stab_neg_32
+#				has_character_modifier = imp_stab_neg_33
+#				has_character_modifier = imp_stab_neg_34
+#				has_character_modifier = imp_stab_neg_35
+#				has_character_modifier = imp_stab_neg_36
+#				has_character_modifier = imp_stab_neg_37
+#				has_character_modifier = imp_stab_neg_38
+#				has_character_modifier = imp_stab_neg_39
+#				has_character_modifier = imp_stab_neg_40
+#				has_character_modifier = imp_stab_neg_41
+#				has_character_modifier = imp_stab_neg_42
+#				has_character_modifier = imp_stab_neg_43
+#				has_character_modifier = imp_stab_neg_44
+#				has_character_modifier = imp_stab_neg_45
+#				has_character_modifier = imp_stab_neg_46
+#				has_character_modifier = imp_stab_neg_47
+#				has_character_modifier = imp_stab_neg_48
+#				has_character_modifier = imp_stab_neg_49
+#				has_character_modifier = imp_stab_neg_50
+#			}
+#		}
+#	}
+#}
+#
+#is_stable_emperor = {
+#	custom_tooltip = {
+#		text = is_stable_emperor_text
+#		hidden_tooltip = {
+#			OR = {
+#				has_character_modifier = imp_stab_0
+#				has_character_modifier = imp_stab_1
+#				has_character_modifier = imp_stab_2
+#				has_character_modifier = imp_stab_3
+#				has_character_modifier = imp_stab_4
+#				has_character_modifier = imp_stab_5
+#				has_character_modifier = imp_stab_6
+#				has_character_modifier = imp_stab_7
+#				has_character_modifier = imp_stab_8
+#				has_character_modifier = imp_stab_9
+#				has_character_modifier = imp_stab_10
+#				has_character_modifier = imp_stab_11
+#				has_character_modifier = imp_stab_12
+#				has_character_modifier = imp_stab_13
+#				has_character_modifier = imp_stab_14
+#				has_character_modifier = imp_stab_15
+#				has_character_modifier = imp_stab_16
+#				has_character_modifier = imp_stab_17
+#				has_character_modifier = imp_stab_18
+#				has_character_modifier = imp_stab_19
+#				has_character_modifier = imp_stab_20
+#				has_character_modifier = imp_stab_21
+#				has_character_modifier = imp_stab_22
+#				has_character_modifier = imp_stab_23
+#				has_character_modifier = imp_stab_24
+#				has_character_modifier = imp_stab_25
+#				has_character_modifier = imp_stab_26
+#				has_character_modifier = imp_stab_27
+#				has_character_modifier = imp_stab_28
+#				has_character_modifier = imp_stab_29
+#				has_character_modifier = imp_stab_30
+#				has_character_modifier = imp_stab_31
+#				has_character_modifier = imp_stab_32
+#				has_character_modifier = imp_stab_33
+#				has_character_modifier = imp_stab_34
+#				has_character_modifier = imp_stab_35
+#				has_character_modifier = imp_stab_36
+#				has_character_modifier = imp_stab_37
+#				has_character_modifier = imp_stab_38
+#				has_character_modifier = imp_stab_39
+#				has_character_modifier = imp_stab_40
+#				has_character_modifier = imp_stab_41
+#				has_character_modifier = imp_stab_42
+#				has_character_modifier = imp_stab_43
+#				has_character_modifier = imp_stab_44
+#				has_character_modifier = imp_stab_45
+#				has_character_modifier = imp_stab_46
+#				has_character_modifier = imp_stab_47
+#				has_character_modifier = imp_stab_48
+#				has_character_modifier = imp_stab_49
+#				has_character_modifier = imp_stab_50
+#			}
+#		}
+#	}
+#}
+#
+#is_very_stable_emperor = {
+#	custom_tooltip = {
+#		text = is_stable_emperor_text
+#		hidden_tooltip = {
+#			OR = {
+#				has_character_modifier = imp_stab_40
+#				has_character_modifier = imp_stab_41
+#				has_character_modifier = imp_stab_42
+#				has_character_modifier = imp_stab_43
+#				has_character_modifier = imp_stab_44
+#				has_character_modifier = imp_stab_45
+#				has_character_modifier = imp_stab_46
+#				has_character_modifier = imp_stab_47
+#				has_character_modifier = imp_stab_48
+#				has_character_modifier = imp_stab_49
+#				has_character_modifier = imp_stab_50
+#			}
+#		}
+#	}
+#}
+is_nick_age_check = {
+	OR = {
+		AND = {
+			is_mortal_race = yes
+			age = 25
+		}
+		AND = {
+			is_mer = yes
+			age = 80
+		}
+	}
+}
+is_nick_beast_check = {
+	OR = {
+		trait = argonian
+		trait = khajiit
+		trait = potun
+		trait = tangmo
+	}
+}
+is_rebel_leader_trigger = {
+	OR = {
+		trait = peasant_leader
+		trait = heresiarch
+		trait = bandit_leader
+		trait = rebel_slave
+	}
+}
+has_birthsign = {
+	OR = {
+		trait = sign_ritual
+		trait = sign_lover
+		trait = sign_lord
+		trait = sign_mage
+		trait = sign_shadow
+		trait = shadowscale
+		trait = sign_steed
+		trait = sign_apprentice
+		trait = sign_warrior
+		trait = sign_lady
+		trait = sign_tower
+		trait = sign_atronach
+		trait = sign_thief
+		trait = sign_serpent
+	}
+	NOR = {
+		is_dragon = yes
+	}
+}
+has_racial_trait = {
+	OR = {
+		trait = altmer
+		trait = ayleid
+		trait = maormer
+		trait = dunmer
+		trait = dremora
+		trait = undead
+		trait = bosmer
+		trait = chimer
+		trait = argonian
+		trait = khajiit
+		trait = imperial
+		trait = redguard
+		trait = nord
+		trait = reachman
+		trait = breton
+		trait = quey
+		trait = akaviri
+		trait = kamal
+		trait = sload
+		trait = tsaesci
+		trait = falmer
+		trait = dwemer
+		trait = tangmo
+		trait = potun
+		is_dragon = yes
+	}
+}
+has_terrain_leadership = {
+	OR = {
+		trait = rough_terrain_leader
+		trait = flat_terrain_leader
+		trait = mountain_terrain_leader
+		trait = desert_terrain_leader
+		trait = swamp_terrain_leader
+		trait = jungle_terrain_leader
+		trait = extreme_terrain_leader
+	}
+}
+has_unit_leadership = {
+	OR = {
+		is_cavalry_leader = yes
+		is_heavy_infantry_leader = yes
+		is_light_foot_leader = yes
+	}
+}
+
+is_disease_immune_except_lycan = {
+	OR = {
+		is_daedric_prince = yes
+		is_undead = yes
+		trait = hagraven
+		trait = soulless_clavicus
+		trait = sload
+		trait = dremora
+		trait = almalexia
+		trait = sothasil
+		trait = vivec
+		trait = the_ideal_masters
+		is_dragon = yes
+	}
+}
+
+is_disease_immune = {
+	OR = {
+		is_disease_immune_except_lycan = yes
+		trait = lycan
+	}
+}
+
+is_martially_inclined = {
+	OR = {
+		is_barbarian = yes
+		is_knight = yes
+		is_warrior = yes
+		martial = 12
+	}
+}
+
+is_lycan = {
+	OR = {
+		trait = lycan
+		trait = known_lycan
+		trait = known_lycan_benevolent
+	}
+}
+is_known_lycan = {
+	is_lycan = yes
+	OR = {
+		trait = known_lycan
+		trait = known_lycan_benevolent
+	}
+}
+is_unknown_lycan = {
+	is_lycan = yes
+	NOR = {
+		trait = known_lycan
+		trait = known_lycan_benevolent
+	}
+}
+is_mane = {
+	OR = {
+		trait = weak_mane
+		trait = traditional_mane
+		trait = powerful_mane
+	}
+}
+is_akaviri_culture = {
+	OR = {
+		culture_group = kamal_group
+		culture_group = tsaesci_group
+		culture_group = tangmo_group
+		culture_group = potun_group
+		culture_group = islander_group
+	}
+}
+is_tamriel_culture = {
+	OR = {
+		culture_group = nedic
+		culture_group = yokudan_group
+		culture_group = aldmeris
+		culture_group = chimeris
+		culture_group = islander_group
+		culture_group = argonian
+		culture_group = khajiit
+	}
+}
+has_court_mage = {
+	any_courtier_or_vassal = {
+		liege = { character = ROOT }
+		has_minor_title = title_court_mage
+	}
+}
+has_in_house_alchemy = {
+	OR = {
+		trait = alchemist
+		any_courtier_or_vassal = {
+			liege = { character = ROOT }
+			has_minor_title = title_court_alchemist
+		}
+	}
+}
+is_necromancer = {
+	OR = {
+		#ADD IN NECROMANCER SOCIETY CHECK
+		trait = necromancer
+	}
+}
+is_honourable = {
+	OR = {
+		trait = just
+		trait = humble
+		trait = honest
+		trait = charitable
+		trait = chaste
+	}
+}
+is_dishonourable = {
+	OR = {
+		trait = seducer
+		trait = seductress
+		trait = impaler
+		trait = schemer
+		trait = greedy
+		trait = envious
+		trait = deceitful
+		trait = craven
+		trait = arbitrary
+		trait = ruthless
+		trait = cruel
+	}
+}
+is_waterbreather = {
+	OR = {
+		trait = argonian
+		is_undead = yes
+		trait = sload
+		is_dragon = yes
+	}
+}
+
+is_incapacitated = {
+	OR = {
+		trait = incapable
+		trait = infirm
+	}
+}
+
+is_lucky = {
+	trait = lucky
+}
+is_unlucky = {
+	trait = unlucky
+}
+has_thuum = {
+	OR = {
+		trait = thuum_1
+		trait = thuum_2
+		trait = thuum_3
+		is_dragon = yes
+	}
+}
+is_daedric_prince = {
+	OR = {
+		trait = azura
+		trait = boethiah
+		trait = clavicus
+		trait = hermaeus
+		trait = hircine
+		trait = jyggalag
+		trait = malacath
+		trait = mehrunes
+		trait = mephala
+		trait = meridia
+		trait = molag_bal
+		trait = namira
+		trait = nocturnal
+		trait = peryite
+		trait = sanguine
+		trait = sheogorath
+		trait = vaermina
+	}
+}
+
+is_almsivi_god = {
+	OR = {
+		trait = almalexia
+		trait = sothasil
+		trait = vivec
+	}
+}
+
+is_supernatural = {
+	OR = {
+		is_necromancer = yes
+		is_lycan = yes
+		is_undead = yes
+		trait = dremora
+		is_immortal = yes #Has some overlap but -shrug-.
+	}
+}
+
+chugged_it_down_innit_bruv = { #Yes, this one.
+	custom_tooltip = {
+		text = underpotioneffect
+		OR = {
+			has_character_modifier = modifier_bad_potion
+			has_character_modifier = modifier_potion_of_chameleon
+			has_character_modifier = modifier_potion_of_longevity
+			has_character_modifier = modifier_potion_of_fortify_health
+			has_character_modifier = modifier_potion_of_virility
+			has_character_modifier = modifier_potion_of_fortify_strength
+			has_character_modifier = modifier_potion_of_fortify_personality
+			has_character_modifier = modifier_potion_of_fortify_luck
+			has_character_modifier = modifier_potion_of_fortify_intelligence
+			has_character_modifier = modifier_potion_of_fortify_agility
+			has_character_modifier = modifier_potion_of_regeneration
+			has_character_modifier = modifier_potion_of_genderswap
+		}
+	}
+}
+
+is_on_council_trigger = {
+	OR = {
+		has_job_title = job_chancellor
+		has_job_title = job_marshal
+		has_job_title = job_treasurer
+		has_job_title = job_spymaster
+		has_job_title = job_spiritual
+		has_minor_title = title_councilmember_king
+		has_minor_title = title_councilmember_emperor
+	}
+}
+is_dragon = {
+	OR = {
+		trait = dragon_1
+		trait = dragon_2
+		trait = dragon_3
+		trait = dragon_paarthurnax
+		trait = dragon_alduin
+	}
+}
+is_nordic_culture = {
+	OR = {
+		culture = nord
+		culture = skaal
+		culture = atmoran
+		culture = reachmen
+	}
+}
+is_mead_culture = {
+	OR = {
+		culture = nord
+		culture = skaal
+		culture = atmoran
+		culture = reachmen
+		culture = orsimer
+	}
+}
+is_wine_culture = {
+	OR = {
+		culture = breton
+		culture = imperial
+		culture = nibenean
+		culture = colovian
+		culture = altmer
+		culture = ayleid
+	}
+}
+is_sake_culture = {
+	OR = {
+		culture = akaviri
+		culture = ashlander
+		culture = dunmer
+		culture = chimer
+		culture = maormer
+		culture = tsaesci
+	}
+}
+is_arrack_culture = {
+	OR = {
+		culture = quey
+		culture_group = tangmo_group
+	}
+}
+is_kumis_culture = {
+	OR = {
+		culture = bosmer
+		culture = potun
+		culture_group = kamal_group
+	}
+}
+
+has_martial_inclination_mercenary_trigger = {
+	OR = {
+		is_warrior = yes
+		has_acceptable_fighters_specialisation = yes
+		has_warrior_type_specialisation = yes
+		trait = former_soldier
+		trait = gladiator
+		trait = berserker
+		trait = ravager
+		trait = warlord
+		trait = viking
+		trait = seaking
+		trait = sea_queen
+		is_dragonblood = yes
+		trait = pirate
+		trait = duelist
+		trait = hunter
+		trait = strategist
+		trait = adventurer
+		trait = gamer
+	}
+}
+is_halfbreed = {
+	real_father = { always = yes }
+	OR = {
+		AND = {
+			NOR = {
+				mother_even_if_dead = { graphical_culture = anequinagfx }
+				mother_even_if_dead = { graphical_culture = pellitinegfx }
+			}
+			OR = {
+				true_father_even_if_dead = { graphical_culture = anequinagfx }
+				true_father_even_if_dead = { graphical_culture = pellitinegfx }
+			}
+		}
+		AND = {
+			OR = {
+				mother_even_if_dead = { graphical_culture = anequinagfx }
+				mother_even_if_dead = { graphical_culture = pellitinegfx }
+			}
+			NOR = {
+				true_father_even_if_dead = { graphical_culture = anequinagfx }
+				true_father_even_if_dead = { graphical_culture = pellitinegfx }
+			}
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = ayleidgfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = ayleidgfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = ayleidgfx } }
+			true_father_even_if_dead = { graphical_culture = ayleidgfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = kapotungfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = kapotungfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = kapotungfx } }
+			true_father_even_if_dead = { graphical_culture = kapotungfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = altmergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = altmergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = altmergfx } }
+			true_father_even_if_dead = { graphical_culture = altmergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = orsimergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = orsimergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = orsimergfx } }
+			true_father_even_if_dead = { graphical_culture = orsimergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = tsaescigfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = tsaescigfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = tsaescigfx } }
+			true_father_even_if_dead = { graphical_culture = tsaescigfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = dremoragfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = dremoragfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = dremoragfx } }
+			true_father_even_if_dead = { graphical_culture = dremoragfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = dunmergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = dunmergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = dunmergfx } }
+			true_father_even_if_dead = { graphical_culture = dunmergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = chimergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = chimergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = chimergfx } }
+			true_father_even_if_dead = { graphical_culture = chimergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = bosmergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = bosmergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = bosmergfx } }
+			true_father_even_if_dead = { graphical_culture = bosmergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = dwemergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = dwemergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = dwemergfx } }
+			true_father_even_if_dead = { graphical_culture = dwemergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = falmergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = falmergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = falmergfx } }
+			true_father_even_if_dead = { graphical_culture = falmergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = maormergfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = maormergfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = maormergfx } }
+			true_father_even_if_dead = { graphical_culture = maormergfx }
+		}
+		AND = {
+			mother_even_if_dead = { graphical_culture = kamalgfx }
+			NOT = { true_father_even_if_dead = { graphical_culture = kamalgfx } }
+		}
+		AND = {
+			NOT = { mother_even_if_dead = { graphical_culture = kamalgfx } }
+			true_father_even_if_dead = { graphical_culture = kamalgfx }
+		}
+	}
+}
+bloodline_bastard_check = {
+	conditional_tooltip = {
+		trigger = {
+			trait = bastard
+		}
+		custom_tooltip = {
+			text = BLOODLINE_BASTARD_CHECK_CT
+			hidden_tooltip = {
+				OR = {
+					AND = { #Bastards of the founder will always have the bloodline active.
+						trait = bastard
+						true_father_even_if_dead = { FROM = { founder = { character = PREVPREV } } }
+					}
+					NOT = { trait = bastard }
+				}
+			}
+		}
+	}
+}
+
+### Age checks
+# ni stands for non_immortal
+is_very_old = {
+	OR = {
+		AND = {
+			is_long_lived = yes
+			age >= 256
+		}
+		AND = {
+			is_long_lived = no
+			age >= 74
+		}
+	}
+}
+
+is_very_old_ni = {
+	NOT = { is_immortal = yes }
+	is_very_old = yes
+}
+
+is_old = {
+	OR = {
+		AND = {
+			is_long_lived = yes
+			age >= 216
+			age < 255
+		}
+		AND = {
+			is_long_lived = no
+			age >= 63
+			age < 73
+		}
+	}
+}
+
+is_old_ni = {
+	NOT = { is_immortal = yes }
+	is_old = yes
+}
+
+is_aging = {
+	OR = {
+		AND = {
+			is_long_lived = yes
+			age >= 156
+			age < 216
+		}
+		AND = {
+			is_long_lived = no
+			age >= 46
+			age < 62
+		}
+	}
+}
+
+is_aging_ni = {
+	NOT = { is_immortal = yes }
+	is_aging = yes
+}
+
+is_adult = {
+	OR = {
+		AND = {
+			is_long_lived = yes
+			age >= 56
+			age < 156
+		}
+		AND = {
+			is_long_lived = no
+			age >= 16
+			age < 45
+		}
+	}
+}
+
+is_adult_ni = {
+	NOT = { is_immortal = yes }
+	is_adult = yes
+}
+
+is_child = {
+	OR = {
+		AND = {
+			is_long_lived = yes
+			age < 56
+		}
+		AND = {
+			is_long_lived = no
+			age < 16
+		}
+	}
+}
+
+is_child_ni = {
+	NOT = { is_immortal = yes }
+	is_child = yes
+}
+
+is_immune_to_cold = {
+	OR = {
+		trait = fortitude
+		trait = falmer
+		trait = kamal
+		trait = nord
+		trait = undead
+		trait = vampire
+	}
+}
+
+### Check if you're claiming/considered to be a God
+is_divine = {
+	character = 39000 #Orgnum
+}
+
+is_compatible_species = {
+	OR = {
+		AND = {
+			FROM = {
+				is_beast = no
+			}
+			ROOT = {
+				is_beast = no
+			}
+		}
+		AND = {
+			FROM = {
+				trait = argonian
+			}
+			ROOT = {
+				trait = argonian
+			}
+		}
+		AND = {
+			FROM = {
+				OR = {
+					trait = khajiit
+					trait = potun
+				}
+			}
+			ROOT = {
+				OR = {
+					trait = khajiit
+					trait = potun
+				}
+			}
+		}
+		AND = {
+			FROM = {
+				trait = tangmo
+			}
+			ROOT = {
+				trait = tangmo
+			}
+		}
+		AND = {
+			FROM = {
+				trait = sload
+			}
+			ROOT = {
+				trait = sload
+			}
+		}
+		AND = {
+			FROM = {
+				is_dragon = yes
+			}
+			ROOT = {
+				is_dragon = yes
+			}
+		}
+	}
+}
+
+is_daedra = {
+	OR = {
+		trait = dremora
+		trait = azura
+		trait = boethiah
+		trait = clavicus
+		trait = hermaeus
+		trait = hircine
+		trait = jyggalag
+		trait = malacath
+		trait = mehrunes
+		trait = mephala
+		trait = meridia
+		trait = molag_bal
+		trait = namira
+		trait = nocturnal
+		trait = peryite
+		trait = sanguine
+		trait = sheogorath
+		trait = vaermina
+	}
+}
+
+is_daedric_scion = {
+	OR = {
+		trait = daedric_scion
+		trait = daedric_scion_g_1
+		trait = daedric_scion_g_2
+		trait = daedric_scion_g_3
+	}
+}
+is_vampiric_scion = {
+	OR = {
+		trait = vampiric_scion
+		trait = vampiric_scion_g_1
+		trait = vampiric_scion_g_2
+		trait = vampiric_scion_g_3
+	}
+}
+has_public_heritage = {
+	OR = {
+		has_character_flag = revealed_vampiric_heritage
+		has_character_flag = revealed_daedric_heritage
+	}
+}
+
+is_knahaten_immune = {
+	trait = knahaten_immune
+}
+
+is_disciplined_commander = {
+	OR = {
+		is_inspiring_leader = yes
+		is_siege_leader = yes
+		is_organizer = yes
+		trait = unyielding_leader
+		trait = veteran_leader_4
+		trait = veteran_leader_5
+		trait = lead_from_fore
+	}
+}
+is_undisciplined_commander = {
+	OR = {
+		is_trickster = yes
+		is_aggressive_leader = yes
+		trait = bloody_commander
+		trait = lead_from_rear
+	}
+}
+
+eligible_for_genderswap = {
+	is_adult = yes
+	NOR = {
+		is_pregnant = yes
+		trait = hagraven
+		trait = briarheart
+		government = orsimer_government #Needs to be made Egalitarian TODO
+		government = matriarchy_government
+		government = mane_government #Needs to be made Egalitarian TODO
+	}
+}
+
+is_high_king = {
+	any_demesne_title = {
+		is_titular = no
+		real_tier = KING
+	}
+}
+
+character_was_another_religion = {
+	OR = {
+		has_character_flag = character_was_eight_divines
+		has_character_flag = character_was_maruhkati
+		has_character_flag = character_was_nine_divines
+		has_character_flag = character_was_alikr
+		has_character_flag = character_was_satakal
+		has_character_flag = character_was_auriel
+		has_character_flag = character_was_green_pact
+		has_character_flag = character_was_blacksap
+		has_character_flag = character_was_almsivi
+		has_character_flag = character_was_nerevarine
+		has_character_flag = character_was_almsivi_old_velothi
+		has_character_flag = character_was_reclamationist
+		has_character_flag = character_was_sixth_house
+		has_character_flag = character_was_daedra_azura
+		has_character_flag = character_was_daedra_boethiah
+		has_character_flag = character_was_daedra_clavicus
+		has_character_flag = character_was_daedra_hermaeus
+		has_character_flag = character_was_daedra_hircine
+		has_character_flag = character_was_daedra_mehrunes
+		has_character_flag = character_was_daedra_mephala
+		has_character_flag = character_was_daedra_meridia
+		has_character_flag = character_was_daedra_molag
+		has_character_flag = character_was_daedra_namira
+		has_character_flag = character_was_daedra_nocturnal
+		has_character_flag = character_was_daedra_peryite
+		has_character_flag = character_was_daedra_sanguine
+		has_character_flag = character_was_daedra_sheogorath
+		has_character_flag = character_was_daedra_jyggalag
+		has_character_flag = character_was_daedra_vaermina
+		has_character_flag = character_was_daedra_malacath
+		has_character_flag = character_was_riddlethar
+		has_character_flag = character_was_alkosh
+		has_character_flag = character_was_baan_dar
+		has_character_flag = character_was_hist
+		has_character_flag = character_was_old_gods
+		has_character_flag = character_was_forsworn_heresy
+		has_character_flag = character_was_king_of_worms_cult
+		has_character_flag = character_was_sithis
+		has_character_flag = character_was_animism
+		has_character_flag = character_was_dragon_cult
+		has_character_flag = character_was_anuic_skaal
+		has_character_flag = character_was_ideal_masters
+		has_character_flag = character_was_five_courts
+		has_character_flag = character_was_sun_court
+		has_character_flag = character_was_night_court
+		has_character_flag = character_was_tangmo_pantheon
+		has_character_flag = character_was_bhut_cult
+		has_character_flag = character_was_shani_cult
+		has_character_flag = character_was_tiger_pantheon
+		has_character_flag = character_was_black_dragon
+		has_character_flag = character_was_kapotun_pantheon
+		has_character_flag = character_was_kamal_pantheon
+		has_character_flag = character_was_winter_wind
+		has_character_flag = character_was_sea_worship
+		has_character_flag = character_was_brethren
+		has_character_flag = character_was_pyandoneaic
+		has_character_flag = character_was_postorgnumic
+	}
+}
+
+### Character height
+height_plus_one_race = {
+	OR = {
+		is_altmer = yes
+		trait = nord
+		trait = orsimer
+		is_tsaesci = yes
+		trait = potun
+	}
+}
+
+height_minus_one_race = {
+	OR = {
+		is_bosmer = yes
+		trait = breton
+		trait = khajiit
+		trait = tangmo
+		trait = quey
+	}
+}

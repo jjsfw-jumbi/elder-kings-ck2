@@ -1,0 +1,640 @@
+decisions = {
+
+	commune_with_hist = { # Hist
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_flag = commune_with_hist }
+			has_submenu_open = no
+			NOT = { has_character_modifier = hist_communion }
+			religion_group = hist_group
+		}
+		allow = {
+			NOR = {
+				trait = incapable
+				trait = infirm
+				trait = cynical
+			}
+			treasury = 25
+		}
+		effect = {
+			set_character_flag = commune_with_hist
+			add_character_modifier = {
+				name = hist_communion
+				duration = 90
+				hidden = yes
+			}
+			random_list = {
+				55 = { character_event = { id = kmisc.1000 days = 8 random = 5 tooltip = HISTNORMAL } } # Normal reaction (+Piety)
+				25 = { character_event = { id = kmisc.1001 days = 8 random = 5 tooltip = HISTGOOD } } # Hist grants a Blessing
+				20 = { character_event = { id = kmisc.1002 days = 8 random = 5 tooltip = HISTBAD } } # Bad reaction (Overdose)
+			}
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	honour_the_ancestors = { # Nerevarine
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_flag = honoured_ancestors }
+			has_submenu_open = no
+			religion = nerevarine
+		}
+		allow = {
+			treasury = 25
+		}
+		effect = {
+			set_character_flag = honoured_ancestors
+			random_list = {
+				60 = { character_event = { id = kmisc.1003 days = 8 random = 5 tooltip = HONOUREDNORMAL } } # + Piety
+				30 = { character_event = { id = kmisc.1004 days = 8 random = 5 tooltip = HONOUREDGOOD } } # + Piety & + Opinion from Dynasty Members
+				10 = { character_event = { id = kmisc.1005 days = 8 random = 5 tooltip = HONOUREDNORMAL } } # - Opinion from Dynasty Members
+			}
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	make_tribute_tribunal = { # Tribunal Religion
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_flag = made_tribute }
+			has_submenu_open = no
+			religion = almsivi
+			NOT = { has_character_modifier = tribunal_blessing }
+			NOT = { has_character_modifier = tribunal_curse }
+			NOT = { trait = excommunicated }
+		}
+		allow = {
+			treasury = 25
+		}
+		effect = {
+			set_character_flag = made_tribute
+			rightful_religious_head_scope = { character_event = { id = kmisc.1006 days = 8 random = 5 tooltip = TRIBUTETIP } }
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	make_offering_mer = { # Mer Pantheon
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_flag = made_offering }
+			has_submenu_open = no
+			religion_group = mer_pantheon
+			is_heretic = no
+			NOT = { has_character_modifier = aedra_blessing }
+		}
+		allow = {
+			treasury = 25
+		}
+		effect = {
+			set_character_flag = made_offering
+			random_list = {
+				55 = { character_event = { id = kmisc.1010 days = 8 random = 5 tooltip = AEDRANORMAL } }
+				30 = { character_event = { id = kmisc.1011 days = 8 random = 5 tooltip = AEDRAGOOD } }
+				15 = { character_event = { id = kmisc.1012 days = 8 random = 5 tooltip = AEDRABAD } }
+			}
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	make_tribute_riddlethar = { # Riddle'Thar
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_flag = made_tribute }
+			has_submenu_open = no
+			religion = riddlethar
+			NOT = { rightful_religious_head = ROOT }
+			NOT = { has_character_modifier = riddlethar_blessing }
+			NOT = { trait = excommunicated }
+		}
+		allow = {
+			treasury = 25
+		}
+		effect = {
+			set_character_flag = made_tribute
+			hidden_tooltip = { e_pirates = { holder_scope = { character_event = { id = kmisc.1013 days = 8 random = 5 } } } }
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	make_offering_daedra = { # Daedra Religions
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_flag = made_offering }
+			has_submenu_open = no
+			religion_group = daedra
+			NOT = { has_character_flag = daedra_blessing }
+		}
+		allow = {
+			treasury = 25
+		}
+		effect = {
+			set_character_flag = made_offering
+			random_list = {
+				70 = { character_event = { id = kmisc.1016 days = 8 random = 5 tooltip = DAEDRANORMAL } }
+				30 = { character_event = { id = kmisc.1017 days = 8 random = 5 tooltip = DAEDRABAD } }
+			}
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	consort_with_hagravens = { # Hagraven Coven
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_modifier = religious_timer }
+			has_submenu_open = no
+			religion = forsworn_heresy
+		}
+		allow = {
+			treasury = 25
+		}
+		effect = {
+			piety = 25
+			# The bargain with the Hagravens has been moved to ek_reach_flavour_decisions
+			# ek_reach_flavour_decisions has been moved to ek_flavour_reach_decisions :pet_cavy:
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+			add_character_modifier = {
+				name = religious_timer
+				duration = 7
+				hidden = yes
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	make_offering_otherfaith = { # Generic Other Faiths decision
+		
+		ai_check_interval = 96
+		
+		potential = {
+			age = 16
+			demesne_size = 1
+			NOT = { has_character_flag = made_offering_otherfaith }
+			has_submenu_open = no
+			OR = {
+				religion_group = old_faith
+				religion_group = void_religions	
+				#religion_group = anuic_religions
+				religion_group = islander_religions
+				religion_group = tsaesci_courts
+				religion_group = tangmo_religions
+				religion_group = potun_religions
+				religion_group = kamal_religions
+				religion_group = atmoran_pantheon
+				religion_group = maormer_religion
+				#religion_group = hero_cults
+				#religion_group = celestial_cults
+				religion_group = yokudan_pantheon
+				religion_group = tribunal
+				religion_group = khajiit_pantheon
+			}
+			NOT = { # These three already have custom offering events...
+				religion = almsivi
+				religion = nerevarine
+				religion = five_courts
+				religion = riddlethar
+			}
+		}
+		allow = {
+			treasury = 25
+		}
+		effect = {
+			set_character_flag = made_offering_otherfaith
+			random_list = {
+				70 = { character_event = { id = rebornrel.1 days = 8 random = 5 tooltip = OTHERFAITHNORMAL } }
+				30 = { character_event = { id = rebornrel.2 days = 8 random = 5 tooltip = OTHERFAITHBAD } }
+			}
+			if = {
+				limit = { ai = no }
+				treasury = -25
+			}
+			else_if = {
+				limit = { ai = yes }
+				treasury = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				war = yes
+				factor = 0
+			}
+			modifier = {
+				wealth <= 100
+				wealth >= 50
+				factor = 0.75
+			}
+			modifier = {
+				wealth <= 49
+				wealth >= 26
+				factor = 0.5
+			}
+			modifier = {
+				wealth <= 25
+				factor = 0.25
+			}
+		}
+	}
+	
+	### Make the Alessian Order use the College of Cardinals mechanic
+	restore_college_cardinals_maruhkati = {
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			religion = maruhkati
+			is_ruler = yes
+			higher_tier_than = COUNT
+			NOT = { has_global_flag = restored_college_cardinals_maruhkati_flag }
+		}
+		
+		allow = {
+			controls_three_holy_sites = yes
+			piety = 500
+			
+			custom_tooltip = {
+				text = AT_LEAST_NINE_THEOCRACIES_YOUR_RELIGION_CT
+				any_realm_lord = {
+					count = 9 # Because there are 9 Selectives
+					is_theocracy = yes
+					religion = ROOT
+				}
+			}
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = RESTORED_COLLEGE_SELECTIVES_CT
+				narrative_event = { id = maruhkati_flavour.1 }
+			}
+		}
+	}
+	
+	### Make the Sun Court use the College of Cardinals mechanic
+	restore_college_cardinals_sun_court = {
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			religion = sun_court
+			is_ruler = yes
+			higher_tier_than = COUNT
+			NOT = { has_global_flag = restored_college_cardinals_sun_court_flag }
+		}
+		
+		allow = {
+			trigger_if = {
+				limit = { is_heretic = yes }
+				is_heretic = no
+			}
+			
+			controls_three_holy_sites = yes
+			piety = 500
+			
+			custom_tooltip = {
+				text = AT_LEAST_NINE_THEOCRACIES_YOUR_RELIGION_CT
+				any_realm_lord = {
+					count = 9 # Because there are 9 Selectives
+					is_theocracy = yes
+					religion = ROOT
+				}
+			}
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = RESTORED_COLLEGE_CARDINALS_SUN_COURT_CT
+				narrative_event = { id = sun_court_flavour.1 }
+			}
+		}
+	}
+}
+
+settlement_decisions = {
+	# If Orgnum's tomb is currently owned and in a random location, move it to an owned holy site
+	move_orgnum_tomb = {
+		filter = owned
+		#ai_filter = owned
+
+		potential = {
+			event_target:global_target_orgnum_tomb_holding = {
+				holder_scope = {
+					character = FROM
+				}
+				location = {
+					NOT = {
+						b_altea = {
+							location = {
+								province = PREVPREV
+							}
+						}
+						b_tiguna = {
+							location = {
+								province = PREVPREV
+							}
+						}
+						b_bondar = {
+							location = {
+								province = PREVPREV
+							}
+						}
+						b_kratos = {
+							location = {
+								province = PREVPREV
+							}
+						}
+						b_ethosul = {
+							location = {
+								province = PREVPREV
+							}
+						}
+					}
+				}
+			}
+			location = {
+				OR = {
+					b_altea = {
+						location = {
+							province = PREVPREV
+						}
+					}
+					b_tiguna = {
+						location = {
+							province = PREVPREV
+						}
+					}
+					b_bondar = {
+						location = {
+							province = PREVPREV
+						}
+					}
+					b_kratos = {
+						location = {
+							province = PREVPREV
+						}
+					}
+					b_ethosul = {
+						location = {
+							province = PREVPREV
+						}
+					}
+				}
+			}
+		}
+
+		allow = {
+			FROM = {
+				piety = 1000
+				wealth = 500
+				OR = {
+					religion = pyandoneaic
+					trait = p_storgnum
+				}
+			}
+		}
+
+		effect = {
+			piety = -1000
+			wealth = -500
+			event_target:global_target_orgnum_tomb_holding = {
+				clr_title_flag = orgnum_tomb
+			}
+			set_title_flag = orgnum_tomb
+			save_global_event_target_as = global_target_orgnum_tomb_holding
+			trigger_switch = {
+				on_trigger = holding_type
+				CITY = { add_building = ct_orgnum_tomb_0 }
+				CASTLE = { add_building = ca_orgnum_tomb_0 }
+				TEMPLE = { add_building = tp_orgnum_tomb_0 }
+				TRIBAL = { add_building = tb_orgnum_tomb_0 }
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.5
+		}
+	}
+}

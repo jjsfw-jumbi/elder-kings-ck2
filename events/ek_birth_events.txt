@@ -1,0 +1,402 @@
+namespace = ekbirth
+
+#Pregnancy Complications
+character_event = {
+	id = ekbirth.0
+	desc = ekbirth0d
+	picture = GFX_evt_pregnancy
+	
+	only_women = yes
+	min_age = 16
+	
+	trigger = {
+		trait = pregnant
+		is_undead = no
+		NOT = { has_character_modifier = difficult_pregnancy }
+	}
+	
+	mean_time_to_happen = {
+		years = 295
+		
+		modifier = {
+			factor = 0.85
+			is_mer = yes
+		}
+		modifier = {
+			factor = 0.75
+			trait = feeble
+		}
+		modifier = {
+			factor = 0.75
+			trait = weak
+		}
+		modifier = {
+			factor = 0.5
+			trait = inbred
+		}
+		modifier = {
+			factor = 0.95
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.9
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.25
+			trait = skooma_addiction
+		}
+		modifier = {
+			factor = 0.95
+			trait = wounded
+		}
+		modifier = {
+			factor = 2.0
+			trait = strong
+		}
+		modifier = {
+			factor = 2.0
+			trait = robust
+		}
+	}
+	
+	option = {
+		name = ekbirth0opta # It's just my nerves, there's nothing wrong... is there?
+		if = {
+			limit = { trait = depressed }
+			random = {
+				chance = 10
+				add_character_modifier = {
+					name = difficult_pregnancy
+					days = -1
+				}
+			}
+			break = yes
+		}
+		if = {
+			limit = { trait = stressed }
+			random = {
+				chance = 50
+				add_depressed = yes
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = { trait = stressed }
+				NOT = { trait = depressed }
+			}
+			random = {
+				chance = 75
+				add_stressed = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = ekbirth.1
+	desc = ekbirth1d # As you enter the kitchen for a midday snack you're greeted by the visage of your pregnant wife sitting at the table consuming a large platter of various sweets and foods from the local market.
+	picture = GFX_evt_pregnancy
+	
+	only_men = yes
+	prisoner = no
+	capable_only = yes
+	min_age = 16
+	
+	trigger = {
+		any_spouse = { trait = pregnant }
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+	}
+	
+	option = {
+		name = ekbirth1opta #My darling wife, you're glowing with beauty!
+		
+		custom_tooltip = {
+			text = ekbirth2ctt #Your spouse will be pleased.
+			hidden_tooltip = {
+				random_spouse = {
+					limit = {
+						trait = pregnant
+					}
+					character_event = { id = ekbirth.3 }
+				}
+			}
+		}
+	}
+	option = {
+		name = {
+			text = ekbirth1optb1 #You've gotten so big, are you sure there isn't a netch hiding in there?
+			trigger = {
+				race = dunmer
+			}
+		}
+		name = {
+			text = ekbirth1optb2 #You've gotten so big, are you sure there isn't a mammoth hiding in there?
+			trigger = {
+				OR = {
+					trait = nord
+					trait = reachman
+					trait = kamal
+				}
+			}
+		}
+		name = {
+			text = ekbirth1optb3 #You've gotten so big, are you sure there isn't a horse hiding in there?
+			trigger = {
+				NOR = {
+					trait = nord
+					trait = reachman
+					trait = kamal
+					trait = potun
+					trait = akaviri
+				}
+				NOT = { race = dunmer }
+				NOT = { race = tsaesci }
+			}
+		}
+		name = {
+			text = ekbirth1optb4 #You've gotten so big, are you sure there isn't a dragon hiding in there?
+			trigger = {
+				OR = {
+					trait = potun
+					trait = akaviri
+					race = tsaesci
+				}
+			}
+		}
+		name = {
+			text = ekbirth1optb5 #You've gotten so big, are you sure there isn't a sea-serpent hiding in there?
+			trigger = {
+				race = maormer
+			}
+		}
+		name = {
+			text = ekbirth1optb6 #You've gotten so big, are you sure there isn't a sencheraht hiding in there?
+			trigger = {
+				trait = khajiit
+			}
+		}
+		custom_tooltip = {
+			text = ekbirth1ctt #Your spouse will be most displeased at your comment.
+			hidden_tooltip = {
+				random_spouse = {
+					limit = {
+						trait = pregnant
+					}
+					character_event = { id = ekbirth.2 }
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = ekbirth.2
+	desc = ekbirth2d # While snacking on a large platter of delicacies from the local market to satisfy your insatiable cravings [Root.GetHusbandWife] made a disparaging comment about your weight gain.
+	picture = GFX_evt_pregnancy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekbirth2opta #What? How dare he! I'm pregnant! I'm eating for two!
+		
+		opinion = {
+			who = FROM
+			months = 12
+			modifier = opinion_annoyed
+		}
+		
+		if = {
+			limit = { NOT = { trait = stressed } }
+			random = {
+				chance = 8
+				add_stressed = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = ekbirth.3
+	desc = ekbirth3d # [Root.GetHusbandWife] has espoused his love for you and your beauty, your positively glowing during your pregnancy.
+	picture = GFX_evt_pregnancy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ekbirth2opta #Oh, he's such a loving husband.
+		
+		opinion = {
+			who = FROM
+			years = 3
+			modifier = opinion_happy
+		}
+		
+		prestige = 5
+	}
+}
+#Remove inactive bloodlines from later descendents to reduce stacking.
+character_event = {
+	id = ekbirth.4
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_bloodline = {
+			count > 3
+			NOT = { bloodline_is_active_for = ROOT }
+			founder = {
+				NOR = {
+					is_grandparent_of = ROOT
+					is_parent_of = ROOT
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		while = {
+			limit = {
+				any_owned_bloodline = {
+					count > 1
+					NOT = { bloodline_is_active_for = ROOT }
+					founder = {
+						NOR = {
+							is_grandparent_of = ROOT
+							is_parent_of = ROOT
+						}
+					}
+				}
+			}
+			random_owned_bloodline = {
+				limit = {
+					NOT = { bloodline_is_active_for = ROOT }
+					founder = {
+						NOR = {
+							is_grandparent_of = ROOT
+							is_parent_of = ROOT
+						}
+					}
+				}
+				remove_bloodline_member = ROOT
+			}
+		}
+	}
+}
+#Non-Mer Menopause
+character_event = {
+	id = ekbirth.103
+	picture = GFX_evt_lovers
+	
+	hide_window = yes
+	
+	min_age = 38
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_mer = no
+		is_female = yes
+		NOT = { has_character_modifier = menopause_timer }
+		fertility > 0
+	}
+	
+	option = {
+		name = kbird4o
+		if = {
+			limit = { age >= 38 age <= 40 }
+			fertility = -0.1
+		}
+		else_if = {
+			limit = { age >= 41 age <= 43 }
+			fertility = -0.2
+		}
+		else_if = {
+			limit = { age >= 44 age <= 46 }
+			fertility = -0.3
+		}
+		else_if = {
+			limit = { age >= 47 age <= 49 }
+			fertility = -0.4
+		}
+		else_if = {
+			limit = { age >= 50 age <= 52 }
+			fertility = -0.5
+		}
+		else_if = {
+			limit = { age >= 53 age <= 55 }
+			fertility = -0.6
+		}
+		else_if = {
+			limit = { age >= 56 age <= 58 }
+			fertility = -0.75
+		}
+		else_if = {
+			limit = { age >= 59 }
+			fertility = -1
+		}
+		else = {
+			fertility = -100
+		}
+		
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = menopause_timer
+				duration = 1095
+				hidden = yes
+			}
+		}
+	}
+}
+
+#Children of the Emperor/Empress of Tamriel are always the regnant character's dynasty
+character_event = {
+	id = ekbirth.200
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			mother = {
+				primary_title = { title = e_tamriel }
+			}
+			father = {
+				primary_title = { title = e_tamriel }
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				mother = { primary_title = { title = e_tamriel } }
+			}
+			mother = { save_event_target_as = tamriel_birth_parent }
+			dynasty = event_target:tamriel_birth_parent
+			break = yes
+		}
+		if = {
+			limit = {
+				father = { primary_title = { title = e_tamriel } }
+			}
+			father = { save_event_target_as = tamriel_birth_parent }
+			dynasty = event_target:tamriel_birth_parent
+			break = yes
+		}
+	}
+}
+
+#Assign seed on birth; assign sexuality
+character_event = {
+	id = ekbirth.250
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		assign_birth_seed = yes
+		assign_sexual_orientation = yes
+	}
+}

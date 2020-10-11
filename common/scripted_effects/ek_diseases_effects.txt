@@ -1,0 +1,41 @@
+cannibal_eat_raw_meat_disease_effect = {
+	random = {
+		chance = 50
+		modifier = {
+			factor = 0
+			is_disease_immune = yes
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				num_of_symptoms = 1
+				is_ill = yes
+				has_character_flag = developing_illness
+				has_character_flag = disease_not_serious
+			}
+		}
+		modifier = {
+			factor = 0.5
+			trait = argonian
+			is_bosmer = yes
+			religion = daedra_namira
+		}
+		random_list = {
+			50 = { # Food Poisoning
+				set_character_flag = got_food_poisoning
+				set_character_flag = developing_illness
+				character_event = { id = RIP.5023 days = 5 }
+			}
+			25 = { # Diarrhea - Not Serious
+				set_character_flag = disease_not_serious
+				character_event = { id = RIP.5002 days = 5 }
+				character_event = { id = RIP.11004 days = 10 random = 50 }
+			}
+			25 = { # Vomiting - Not Serious
+				set_character_flag = disease_not_serious
+				character_event = { id = RIP.5003 days = 5 }
+				character_event = { id = RIP.11005 days = 10 random = 50 }
+			}
+		}
+	}
+}

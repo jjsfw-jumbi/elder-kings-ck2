@@ -1,0 +1,2223 @@
+#Press F and use the following tags to find relevant religion blocks
+##MAN PANTHEON##
+##MER PANTHEON##
+##VELOTHIAN/TRIBUNAL RELIGIONS##
+##DAEDRIC RELIGIONS##
+##KHAJIIT##
+##HIST RELIGIONS##
+##REACH FAITHS##
+##OLD FAITHS##
+##VOID RELIGIONS##
+##ANUIC RELIGIONS##
+##ATMORAN PANTHEON##
+##HERO CULTS##
+##CELESTIAL CULTS##
+#ai_convert_same_group = 2 # always try to convert
+#ai_convert_same_group = 1 # try to convert with large character zeal
+#ai_convert_same_group = 0 # never try to convert
+#ai_convert_other_group = 2 # always try to convert
+#ai_convert_other_group = 1 # try to convert with large character zeal
+#ai_convert_other_group = 0 # never try to convert
+# Religion-specific opinion can be added to modifiers (E.G., norse_pagan_opinion = 5), but the modifier *has* to be defined in 00_modifier_definitions.txt as well. It also needs localisation. Works for groups as well
+
+# join_crusade_if_bordering_hostile = yes # The AI won't refrain from joining a crusade simply because it borders a heathen/heretic realm
+
+# This trigger defines who can see a character's secret religion. The character with the secret religion is FROM, while the viewer is ROOT
+# Characters can always see their own secret religion. The observer can see all secret religions
+secret_religion_visibility_trigger = {
+	secret_religion = FROM
+}
+#dynamic_cult = no
+#secret_religion = no
+
+##MAN PANTHEON##
+human_pantheon = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { nedic_interface feudal_sym_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.90 0.90 1.0 }
+	
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+	
+	# Names given only to Human Pantheon characters (base names)
+	male_names = {
+		Belharza Pelinius Tiber
+	}
+	female_names = {
+		Alessia
+	}
+
+	eight_divines = {
+		graphical_culture = westerngfx
+		merge_republic_interface = yes
+
+		icon = 4
+		heresy_icon = 3
+		color = { 1.0 0.78 0.93 }
+
+		crusade_name = "CRUSADE"
+		scripture_name = THE_CONVENANT
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_THE_DIVINES
+		
+		god_names = {
+			GOD_THE_DIVINES GOD_THE_EIGHT GOD_THE_EIGHT_DIVINES GOD_THE_GODS GOD_THE_AEDRA
+		}
+		
+		evil_god_names = {
+			DAEDRA DEMONS DAEDRIC_PRINCES
+		}
+		
+		#autocephaly = yes
+		allow_rivermovement = yes
+		allow_looting = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		#investiture = yes
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		feminist = yes      # Nullifies the negative opinion modifier that vassals normally get if ruler is female or has female heir
+		aggression = 1.25
+		
+		intermarry = animism
+		intermarry = anuic_skaal
+		intermarry = old_gods
+		intermarry = almsivi
+		intermarry = reclamationist
+		intermarry = nine_divines
+		intermarry = green_pact
+		intermarry = auriel
+		intermarry = satakal
+		intermarry = alikr
+		intermarry = maruhkati
+		
+		#religious_clothing_head = 9
+		#religious_clothing_priest = 9
+		has_heir_designation = yes
+		rel_head_defense = yes
+	}
+	
+	maruhkati = { #Formerly a heresy of the Eight, now a standalone to reflect it more or less being dead as of the Second Era
+		graphical_culture = westerngfx
+		merge_republic_interface = yes
+		alternate_start = { has_alternate_start_parameter = { key = religion value = full_random } }
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_THE_DIVINES
+		
+		god_names = {
+			GOD_SAINT_ALESSIA GOD_THE_ENLIGHTENED_ONE GOD_MARUHK GOD_THE_PROPHET GOD_MORIHAUS
+		}
+		
+		evil_god_names = {
+			GOD_THE_EIGHT
+		}
+		
+		icon = 75
+		heresy_icon = 76
+		color = { 1.0 0.77 0.77 }
+
+		crusade_name = "CLEANSING"
+		scripture_name = ALESSIAN_DOCTRINES
+		
+		#autocephaly = no
+		allow_looting = yes
+		allow_rivermovement = yes
+		#parent = eight_divines
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = no
+		#investiture = yes
+		female_temple_holders = no
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		aggression = 2.0
+		#religious_clothing_head = 9
+		#religious_clothing_priest = 9
+		has_heir_designation = yes
+	}
+	
+	nine_divines = {
+		graphical_culture = westerngfx
+		merge_republic_interface = yes
+		alternate_start = { always = no }
+		icon = 1
+		heresy_icon = 2
+		color = { 0.78 0.96 1.0 }
+
+		crusade_name = "CRUSADE"
+		scripture_name = THE_CONVENANT
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+
+		high_god_name = GOD_THE_DIVINES
+		
+		god_names = {
+			GOD_THE_DIVINES GOD_THE_NINE GOD_THE_NINE_DIVINES GOD_THE_GODS GOD_TIBER_SEPTIM GOD_TALOS GOD_DYNAMIC
+		}
+		
+		evil_god_names = {
+			DAEDRA DEMONS DAEDRIC_PRINCES
+		}
+		
+		#autocephaly = yes
+		allow_rivermovement = yes
+		allow_looting = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		#investiture = yes
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		feminist = yes      # Nullifies the negative opinion modifier that vassals normally get if ruler is female or has female heir
+		
+		intermarry = animism
+		intermarry = anuic_skaal
+		intermarry = old_gods
+		intermarry = almsivi
+		intermarry = reclamationist
+		intermarry = eight_divines
+		intermarry = green_pact
+		intermarry = auriel
+		intermarry = satakal
+		intermarry = alikr
+		
+		#religious_clothing_head = 9
+		#religious_clothing_priest = 9
+		has_heir_designation = yes
+	}
+}
+###YOKUDAN PANTHEON###
+yokudan_pantheon = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { yokudan_interface feudal_sym_interface muslim_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.7 0.3 0.1 }
+
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+	
+	alikr = {
+		graphical_culture = westerngfx
+
+		icon = 5
+		heresy_icon = 6
+		color = { 0.67 0.26 0.08 }
+
+		crusade_name = "HOONDING"
+		scripture_name = THE_RA_GADA
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+
+		god_names = {
+			GOD_RUPTGA GOD_DIAGNA GOD_SATAKAL GOD_ZEHT GOD_TAVA GOD_ONSI GOD_MORWHA GOD_LEKI GOD_TUWHACCA GOD_SEP
+		}
+		
+		high_god_name = GOD_THE_GODS
+		
+		evil_god_names = {
+			DAEDRA DEMONS DAEDRIC_PRINCES GOD_MALOOC
+		}
+
+		max_wives = 2
+		#autocephaly = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		#investiture = yes
+		female_temple_holders = no
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		
+		intermarry = animism
+		intermarry = anuic_skaal
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = satakal
+		
+		#religious_clothing_head = 9
+		#religious_clothing_priest = 9
+		has_heir_designation = yes
+	}
+	
+	satakal = {
+		graphical_culture = westerngfx
+
+		icon = 5
+		heresy_icon = 6
+		color = { 1.0 0.29 0.0 }
+
+		crusade_name = "HOONDING"
+		scripture_name = THE_RA_GADA
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+
+		god_names = {
+			GOD_SATAKAL GOD_RUPTGA GOD_DIAGNA GOD_ZEHT GOD_TAVA GOD_ONSI GOD_MORWHA GOD_LEKI GOD_TUWHACCA GOD_SEP
+		}
+		
+		high_god_name = GOD_THE_GODS
+		
+		evil_god_names = {
+			DAEDRA DEMONS DAEDRIC_PRINCES GOD_MALOOC
+		}
+		
+		max_wives = 2
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = no
+		#investiture = yes
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		short_reign_opinion_year_mult = 1 # The default is 2
+		feminist = yes      # Nullifies the negative opinion modifier that vassals normally get if ruler is female or has female heir
+		
+		intermarry = animism
+		intermarry = anuic_skaal
+		intermarry = dragon_cult
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = alikr
+		
+		#religious_clothing_head = 9
+		#religious_clothing_priest = 9
+		has_heir_designation = yes
+	}
+}
+##MER PANTHEON##
+mer_pantheon = {
+	has_coa_on_barony_only = yes
+	graphical_culture = mesoamericangfx
+	interface_skin = { mer_interface republic_sym_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 1.0 0.89 0.61 }
+
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+	
+	auriel = {
+		graphical_culture = mesoamericangfx
+		merge_republic_interface = yes
+
+		icon = 17
+		heresy_icon = 18
+		color = { 1.0 1.0 0.6 }
+
+		crusade_name = "INQUISITION_WAR"
+		scripture_name = THE_MANIFEST
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_AURIEL
+		
+		god_names = {
+			GOD_AURIEL GOD_STENDARR GOD_MARA GOD_XARXES GOD_MAGNUS GOD_PHYNASTER GOD_JEPHRE GOD_SYRABANE
+		}
+		
+		evil_god_names = {
+			DAEDRA DEMONS DAEDRIC_PRINCES
+		}
+		feminist = yes      # Nullifies the negative opinion modifier that vassals normally get if ruler is female or has female heir
+		#autocephaly = yes
+		allow_rivermovement = yes
+		allow_looting = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		#investiture = yes
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 4 # The default is 2
+		has_heir_designation = yes
+		aggression = 1.1
+		
+		intermarry = blacksap
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = green_pact
+		
+		#religious_clothing_head = 11
+		#religious_clothing_priest = 11
+	}
+	
+	green_pact = {
+		graphical_culture = mesoamericangfx
+		interface_skin = { greenpact_interface pagan_green_sym_interface pagan_interface }
+
+		icon = 21
+		heresy_icon = 22
+		color = { 0.0 0.71 0.24 }
+		
+		crusade_name = "WILD_HUNT"
+		scripture_name = THE_PACT
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_YFFRE
+		
+		god_names = {
+			GOD_YFFRE GOD_AURIEL GOD_ARKAY GOD_XARXES GOD_ZEN GOD_BAANDAR GOD_MARA GOD_HERMAMORA GOD_STENDARR
+		}
+		
+		evil_god_names = {
+			DAEDRA DEMONS DAEDRIC_PRINCES
+		}
+		feminist = yes      # Nullifies the negative opinion modifier that vassals normally get if ruler is female or has female heir
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = no
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		short_reign_opinion_year_mult = 4 # The default is 2
+		
+		intermarry = auriel
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = daedra_meridia
+		intermarry = daedra_hircine
+
+		#religious_clothing_head = 11
+		#religious_clothing_priest = 11
+		has_heir_designation = yes
+	}
+	
+	blacksap = {
+		graphical_culture = mesoamericangfx
+		interface_skin = { greenpact_interface pagan_green_sym_interface pagan_interface }
+		alternate_start = { has_alternate_start_parameter = { key = religion value = full_random } }
+		icon = 21
+		heresy_icon = 22
+		color = { 0.0 0.24 0.08 }
+		
+		parent = green_pact
+		
+		crusade_name = "WILD_HUNT"
+		scripture_name = THE_WRITTEN_PACT
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_YFFRE
+		
+		god_names = {
+			GOD_YFFRE GOD_AURIEL GOD_ARKAY GOD_XARXES GOD_ZEN GOD_BAANDAR GOD_MARA GOD_HERMAMORA GOD_STENDARR
+		}
+		
+		evil_god_names = {
+			DAEDRA DEMONS DAEDRIC_PRINCES
+		}
+		feminist = yes      # Nullifies the negative opinion modifier that vassals normally get if ruler is female or has female heir
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		#investiture = yes
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		short_reign_opinion_year_mult = 4 # The default is 2
+		#religious_clothing_head = 11
+		#religious_clothing_priest = 11
+		has_heir_designation = yes
+		
+		intermarry = auriel
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = daedra_meridia
+		intermarry = daedra_hircine
+		intermarry = almsivi
+		intermarry = reclamationist
+	}
+}
+##VELOTHIAN/TRIBUNAL RELIGIONS##
+tribunal = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { velothian_interface muslim_inv_sym_interface muslim_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.49 0.26 0.0 }
+
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+	
+	# Names given only to Tribunal characters (base names)
+	male_names = {
+		Jiub Llothis Meris Delyn Olms Roris Felms Seryn Aralor Rilms
+	}
+	
+	almsivi = {
+		graphical_culture = muslimgfx
+
+		icon = 13
+		heresy_icon = 14
+		color = { 0.77 0.4 0.0 }
+
+		crusade_name = "TRIBUNAL_WAR"
+		scripture_name = THE_TRIBUNAL
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_LIVING_GODS
+		
+		god_names = {
+			GOD_LIVING_GODS GOD_ALMALEXIA GOD_SOTHA_SIL GOD_VIVEC GOD_AZURA GOD_BOETHIAH GOD_MEPHALA GOD_NEREVAR GOD_THE_ANCESTORS
+		}
+		evil_god_names = {
+			GOD_MEHRUNES_DAGON GOD_SHEOGORATH GOD_MOLAG_BAL GOD_MALACATH GOD_DAGOTH
+		}
+		
+		allow_rivermovement = yes
+		allow_looting = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = no
+		#investiture = yes
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 4 # The default is 2
+		feminist = yes
+		
+		intermarry = nine_divines
+		intermarry = eight_divines
+		intermarry = blacksap
+		intermarry = daedra_mephala
+		intermarry = daedra_boethiah
+		intermarry = daedra_azura
+		
+		aggression = 0.5
+		has_heir_designation = yes
+	}
+	nerevarine = {
+		graphical_culture = muslimgfx
+		
+		scripture_name = THE_SEVEN_VISIONS
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		crusade_name = HOLY_WAR
+
+		high_god_name = GOD_GOOD_DAEDRA
+		
+		god_names = {
+			GOD_AZURA GOD_BOETHIAH GOD_MEPHALA GOD_NEREVAR GOD_NEREVARINE GOD_THE_ANCESTORS GOD_STSUL
+		}
+		evil_god_names = {
+			GOD_ALMALEXIA GOD_SOTHA_SIL GOD_VIVEC GOD_DAGOTH
+		}
+		
+		icon = 13
+		heresy_icon = 14
+		color = { 1.0 0.77 0.37 }
+		parent = almsivi
+		
+		defensive_attrition = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		short_reign_opinion_year_mult = 4 # The default is 2
+		
+		intermarry = reclamationist
+		intermarry = almsivi_old_velothi
+		intermarry = daedra_mephala
+		intermarry = daedra_boethiah
+		intermarry = daedra_azura
+		
+		feminist = yes
+		aggression = 1.25
+		has_heir_designation = yes
+	}
+	sixth_house = {
+		graphical_culture = muslimgfx
+		alternate_start = { has_alternate_start_parameter = { key = religion value = full_random } }
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_DAGOTH
+		scripture_name = THE_LEGENDS
+		
+		god_names = {
+			GOD_AKULAKHAN GOD_THE_ANCESTORS GOD_SHARMAT GOD_VORYN
+		}
+		evil_god_names = {
+			GOD_ALMALEXIA GOD_SOTHA_SIL GOD_VIVEC
+		}
+		
+		icon = 13
+		heresy_icon = 14
+		color = { 0.75 1.0 0.95 }
+		parent = almsivi
+		feminist = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 4 # The default is 2
+		has_heir_designation = yes
+	}
+	reclamationist = {
+		graphical_culture = muslimgfx
+		alternate_start = { always = no }		
+		icon = 13
+		heresy_icon = 14
+		color = { 0.73 0.48 0.06 }
+
+		crusade_name = "TRIBUNAL_WAR"
+		scripture_name = THE_RECLAMATIONS
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+
+		high_god_name = GOD_GOOD_DAEDRA
+		
+		god_names = {
+			GOD_ST_ALMALEXIA GOD_AZURA GOD_ST_SOTHA_SIL GOD_ST_VIVEC GOD_BOETHIAH GOD_MEPHALA GOD_NEREVAR GOD_THE_ANCESTORS
+		}
+		evil_god_names = {
+			GOD_MEHRUNES_DAGON GOD_SHEOGORATH GOD_MOLAG_BAL GOD_MALACATH GOD_DAGOTH
+		}
+		feminist = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		#investiture = yes
+		female_temple_holders = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 4 # The default is 2
+		
+		intermarry = nine_divines
+		intermarry = eight_divines
+		intermarry = nerevarine
+		intermarry = almsivi_old_velothi
+		intermarry = daedra_mephala
+		intermarry = daedra_boethiah
+		intermarry = daedra_azura
+		intermarry = blacksap
+		
+		aggression = 0.75
+		has_heir_designation = yes
+	}
+	almsivi_old_velothi = {
+		graphical_culture = muslimgfx
+		
+		high_god_name = GOD_GOOD_DAEDRA
+		scripture_name = THE_LEGENDS
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		god_names = {
+			GOD_BOETHIAH GOD_THE_ANCESTORS GOD_ST_VELOTH
+		}
+		evil_god_names = {
+			GOD_MEHRUNES_DAGON GOD_SHEOGORATH GOD_MOLAG_BAL GOD_MALACATH
+		}
+		
+		icon = 13
+		heresy_icon = 14
+		color = { 0.67 0.58 0.42 }
+		parent = almsivi
+		feminist = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = no
+		#investiture = yes
+		female_temple_holders = yes
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 4 # The default is 2
+		
+		intermarry = nerevarine
+		intermarry = reclamationist
+		intermarry = daedra_mephala
+		intermarry = daedra_boethiah
+		intermarry = daedra_azura
+		
+		has_heir_designation = yes
+	}
+}
+##DAEDRIC RELIGIONS##
+daedra = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { daedric_interface mus_feud_sym_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.73 0.06 0.29 }
+		
+	ai_convert_same_group = 1
+	ai_convert_other_group = 1
+	
+	daedra_azura = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 39
+		heresy_icon = 40
+		color = { 0.0 0.80 0.80 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = INVOCATION_OF_AZURA
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_AZURA
+
+		god_names = {
+			GOD_AZURA
+		}
+		evil_god_names = {
+			GOD_EBONARM GOD_NOCTURNAL
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		feminist = yes
+		
+		intermarry = old_gods
+		intermarry = almsivi
+		intermarry = daedra_boethiah
+		intermarry = daedra_mephala
+		intermarry = daedra_molag
+		intermarry = daedra_meridia
+		intermarry = nerevarine
+		intermarry = almsivi_old_velothi
+		intermarry = reclamationist
+		
+		has_heir_designation = yes
+		
+		aggression = 1.25
+	}
+	daedra_boethiah = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 41
+		heresy_icon = 42
+		color = { 0.56 0.14 0.0 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = BOETHIAHS_CALLING
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_BOETHIAH
+
+		god_names = {
+			GOD_BOETHIAH
+		}
+		evil_god_names = {
+			GOD_EBONARM GOD_MOLAG_BAL GOD_VAERMINA GOD_TRINIMAC
+		}
+		
+		unit_home_modifier = {
+			land_morale = 0.15
+			levy_size = 0.10
+			garrison_size = 0.10
+			
+			key = "daedra_malacath"
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		allow_viking_invasion = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = no
+		priests_can_inherit = no
+		
+		intermarry = almsivi
+		intermarry = daedra_azura
+		intermarry = daedra_mephala
+		intermarry = nerevarine
+		intermarry = almsivi_old_velothi
+		intermarry = reclamationist
+		
+		has_heir_designation = yes
+		
+		aggression = 1.5
+	}
+	daedra_clavicus = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 43
+		heresy_icon = 44
+		color = { 1.0 0.78 0.0 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = VILE_BOOK
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_CLAVICUS
+
+		god_names = {
+			GOD_CLAVICUS
+		}
+		evil_god_names = {
+			GOD_EBONARM
+		}
+		
+		max_consorts = 2
+		women_can_take_consorts = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		can_retire_to_monastery = no
+		priests_can_inherit = yes
+		has_heir_designation = yes
+		
+		aggression = 0.8
+
+		intermarry = almsivi_old_velothi
+	}
+	daedra_hermaeus = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 45
+		heresy_icon = 46
+		color = { 0.37 0.61 0.14 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = OGHMA_INFINIUM
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_HERMAEUS_MORA
+
+		god_names = {
+			GOD_HERMAEUS_MORA
+		}
+		evil_god_names = {
+			GOD_EBONARM GOD_VAERMINA
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		
+		intermarry = daedra_mephala
+		
+		has_heir_designation = yes
+		
+		aggression = 0.75
+	}
+	daedra_hircine = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 47
+		heresy_icon = 48
+		color = { 0.49 0.2 0 }
+
+		crusade_name = "GREAT_HUNT"
+		scripture_name = THE_TOTEMS
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_HIRCINE
+
+		god_names = {
+			GOD_HIRCINE
+		}
+		evil_god_names = {
+			GOD_EBONARM
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		intermarry = old_gods
+		intermarry = green_pact
+		intermarry = blacksap
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = no
+		priests_can_inherit = no
+		
+		aggression = 1.25
+	}
+	daedra_mehrunes = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 51
+		heresy_icon = 52
+		color = { 0.75 0 0 }
+
+		crusade_name = "DEVASTATION"
+		scripture_name = THE_MYSTERIUM_XERXES
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_MEHRUNES_DAGON
+
+		god_names = {
+			GOD_MEHRUNES_DAGON
+		}
+		evil_god_names = {
+			GOD_EBONARM
+		}
+		
+		max_consorts = 2
+		women_can_take_consorts = yes
+		raised_vassal_opinion_loss = no
+		defensive_attrition = yes
+		peace_prestige_loss = yes
+		allow_viking_invasion = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = no
+		
+		intermarry = daedra_mephala
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = no
+		priests_can_inherit = yes
+		aggression = 3
+	}
+	daedra_mephala = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 53
+		heresy_icon = 54
+		color = { 0.1 0.0 0.0 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = ANTICIPATION_OF_MEPHALA
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_MEPHALA
+
+		god_names = {
+			GOD_MEPHALA
+		}
+		evil_god_names = {
+			GOD_EBONARM GOD_MOLAG_BAL
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		intermarry = almsivi
+		intermarry = daedra_azura
+		intermarry = daedra_boethiah
+		intermarry = daedra_malacath
+		intermarry = nerevarine
+		intermarry = almsivi_old_velothi
+		intermarry = reclamationist
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		
+	}
+	daedra_meridia = {
+		graphical_culture = mesoamericangfx
+		merge_republic_interface = yes
+
+		icon = 55
+		heresy_icon = 56
+		color = { 0.78 0.92 1.0 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = MERIDIAS_BEACON
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_MERIDIA
+
+		god_names = {
+			GOD_MERIDIA
+		}
+		evil_god_names = {
+			GOD_PELINAL GOD_NAMIRA GOD_MOLAG_BAL GOD_CLAVICUS
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		has_heir_designation = yes
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		
+		aggression = 0.8
+		
+		intermarry = old_gods
+		intermarry = green_pact
+		intermarry = blacksap
+		intermarry = daedra_azura
+	}
+	daedra_molag = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 57
+		heresy_icon = 58
+		color = { 0.24 0 0.12 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = BOOK_OF_MOLAG
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_MOLAG_BAL
+
+		god_names = {
+			GOD_MOLAG_BAL
+		}
+		evil_god_names = {
+			GOD_EBONARM GOD_MEPHALA GOD_BOETHIAH
+		}
+		
+		max_consorts = 4
+		raised_vassal_opinion_loss = no
+		defensive_attrition = yes
+		peace_prestige_loss = yes
+		allow_viking_invasion = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = no
+		
+		intermarry = old_gods
+		intermarry = daedra_azura
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = no
+		priests_can_inherit = yes
+		aggression = 2.5
+	}
+	daedra_namira = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 59
+		heresy_icon = 60
+		color = { 0.37 0.37 0.1 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = VOICE_OF_NAMIRA
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_NAMIRA
+
+		god_names = {
+			GOD_NAMIRA
+		}
+		evil_god_names = {
+			GOD_EBONARM GOD_MERIDIA
+		}
+
+		defensive_attrition = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		intermarry = forsworn_heresy
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		aggression = 1.15
+	}
+	daedra_nocturnal = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 61
+		heresy_icon = 62
+		color = { 0.0 0.0 0.3 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = BLESSING_OF_NOCTURNAL
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_NOCTURNAL
+
+		god_names = {
+			GOD_NOCTURNAL
+		}
+		evil_god_names = {
+			GOD_AZURA
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+	}
+	daedra_peryite = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 63
+		heresy_icon = 64
+		color = { 0.69 0.65 0.06 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = PERYITES_FOLLY
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_PERYITE
+
+		god_names = {
+			GOD_PERYITE
+		}
+		evil_god_names = {
+			GOD_MEPHALA GOD_EBONARM GOD_VAERMINA
+		}
+
+		defensive_attrition = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		intermarry = old_gods
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		aggression = 1.25
+	}
+	daedra_sanguine = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 65
+		heresy_icon = 66
+		color = { 0.76 0.12 0.34 }
+
+		crusade_name = "SUBLIME_CRUSADE"
+		scripture_name = SUBLIME_WISDOM
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_SANGUINE
+
+		god_names = {
+			GOD_SANGUINE
+		}
+		evil_god_names = {
+			GOD_MARA GOD_EBONARM
+		}
+		
+		max_consorts = 3
+		women_can_take_consorts = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		intermarry = human_pantheon
+		intermarry = reach_faiths
+		intermarry = yokudan_pantheon
+		intermarry = mer_pantheon
+		intermarry = tribunal
+		intermarry = daedra
+		intermarry = old_gods
+		
+		has_heir_designation = yes
+		
+		can_retire_to_monastery = no
+		priests_can_inherit = no
+		aggression = 0.8
+	}
+	daedra_sheogorath = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 67
+		heresy_icon = 68
+		color = { 0.86 0.54 0.85 }
+
+		crusade_name = "WAR_OF_MADNESS"
+		scripture_name = ACCORDS_OF_MADNESS
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_SHEOGORATH
+
+		god_names = {
+			GOD_SHEOGORATH
+		}
+		evil_god_names = {
+			GOD_JYGGALAG
+		}
+		
+		max_consorts = 2
+		women_can_take_consorts = yes
+		defensive_attrition = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+	}
+	daedra_jyggalag = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+		alternate_start = { always = no }
+		icon = 49
+		heresy_icon = 50
+		
+		color = { 0.5 0.5 0.5 }
+		
+		crusade_name = GREY_MARCH
+		scripture_name = ACCORDS_OF_ORDER
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_JYGGALAG
+
+		god_names = {
+			GOD_JYGGALAG
+		}
+		evil_god_names = {
+			GOD_SHEOGORATH
+		}
+		
+		allow_looting = no
+		allow_rivermovement = yes
+		allow_viking_invasion = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = no
+		can_grant_claim = no
+		priests_can_marry = no
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		
+		aggression = 2.0
+	}
+	daedra_vaermina = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+
+		icon = 69
+		heresy_icon = 70
+		color = { 0.2 0.12 0.31 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = CORRUPTION_OF_VAERMINA
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_VAERMINA
+
+		god_names = {
+			GOD_VAERMINA
+		}
+		evil_god_names = {
+			GOD_PERYITE GOD_EBONARM GOD_BOETHIAH GOD_HERMAEUS_MORA
+		}
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		has_heir_designation = yes
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+	}
+	daedra_malacath = {
+		graphical_culture = muslimgfx
+		merge_republic_interface = yes
+		
+		icon = 15
+		heresy_icon = 16
+		
+		color = { 0.2 0.40 0.2 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_WAR
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_MALACATH
+
+		god_names = {
+			GOD_MALACATH GOD_MALAK GOD_MAULOCH GOD_TRINIMAC
+		}
+		evil_god_names = {
+			GOD_EBONARM GOD_BOETHIAH
+		}
+		
+		unit_home_modifier = {
+			land_morale = 0.10
+			levy_size = 0.05
+			garrison_size = 0.20
+			
+			key = "daedra_malacath"
+		}
+		
+		max_wives = 3
+		raised_vassal_opinion_loss = no
+		peace_prestige_loss = yes
+		allow_viking_invasion = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = no
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		
+		has_heir_designation = yes
+		
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = no
+		priests_can_inherit = yes
+		aggression = 2.0
+		
+		intermarry = daedra_mephala
+	}
+}
+	
+##KHAJIIT##
+khajiit_pantheon = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { khajiit_interface republic_sym_interface muslim_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+	
+	color = { 1.0 0.65 0.05 }
+
+	riddlethar = {
+		graphical_culture = norsegfx
+
+		icon = 71
+		heresy_icon = 72
+		
+		color = { 1.0 0.59 0.0 }
+
+		#crusade_name = "HIGH_ON_SKOOMA"
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_RIDDLETHAR
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_RIDDLETHAR
+
+		god_names = {
+			GOD_ALKOSH GOD_AZURAH GOD_KHENARTHI GOD_SRENDARR GOD_MARA GOD_MASSER GOD_SECUNDA GOD_LORKHAJ GOD_RAJHIN GOD_MERRUNZ GOD_SKOOMACAT GOD_RIDDLETHAR
+		}
+		
+		evil_god_names = {
+			GOD_YFFER GOD_NIRNI
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = no # Like Pyandoneaic
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_grant_invasion_cb = invasion
+		
+		intermarry = alkosh
+		intermarry = baan_dar
+		
+		has_heir_designation = yes
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		
+		aggression = 0.75
+		
+		##religious_clothing_head = 12
+		##religious_clothing_priest = 12
+		#Mane won't wear his damn head dress
+	}
+	
+	alkosh = {
+		graphical_culture = norsegfx
+
+		icon = 11
+		heresy_icon = 12
+		color = { 0.73 0.28 0.0 }
+		
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_CONVENANT
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_ALKOSH
+		
+		god_names = {
+			GOD_ALKOSH GOD_AZURAH GOD_KHENARTHI GOD_SRENDARR GOD_MARA GOD_MASSER GOD_SECUNDA GOD_LORKHAJ GOD_MERRUNZ GOD_SKOOMACAT
+		}
+		
+		evil_god_names = {
+			GOD_YFFER GOD_NIRNI
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		
+		intermarry = riddlethar
+		intermarry = baan_dar
+		
+		has_heir_designation = yes
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		
+		aggression = 1.25
+	}
+	baan_dar = {
+		graphical_culture = norsegfx
+		alternate_start = { has_alternate_start_parameter = { key = religion value = full_random } }
+		crusade_name = "HOLY_WAR"
+		scripture_name = SCROLLS_BAAN_DAR
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_BAANDAR
+
+		god_names = { 
+			GOD_BAANDAR 
+		}
+		evil_god_names = {
+			GOD_YFFER GOD_NIRNI
+		}
+		icon = 11
+		heresy_icon = 12
+		color = { 0.81 0.88 0.0 }
+		parent = alkosh
+		
+		defensive_attrition = yes
+		allow_looting = no
+		allow_rivermovement = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = no
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		#can_grant_invasion_cb = invasion
+		
+		intermarry = riddlethar
+		intermarry = alkosh
+		
+		has_heir_designation = yes
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		
+		aggression = 1.0
+	}
+}
+
+##HIST RELIGIONS##
+hist_group = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { hist_interface pagan_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+		
+	color = { 0.0 0.75 0.0 }
+
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+
+	hist = {
+		graphical_culture = norsegfx
+
+		icon = 10
+		heresy_icon = 32
+		
+		color = { 0.0 0.65 0.0 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_LEGENDS
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_HIST
+		
+		god_names = {
+			GOD_HIST GOD_ARGONIA
+		}
+		
+		evil_god_names = {
+			HIST_SAP hist_rogue
+		}
+		
+		raised_vassal_opinion_loss = no
+		defensive_attrition = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_retire_to_monastery = no
+		priests_can_inherit = no
+		short_reign_opinion_year_mult = 1 # The default is 2
+		
+		has_heir_designation = yes
+		
+		aggression = 0.75
+	}
+}
+##REACH FAITHS##
+reach_faiths = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { reach_interface pagan_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.43 0.47 0.57 }
+	
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+
+	old_gods = {
+		graphical_culture = norsegfx
+
+		icon = 8
+		heresy_icon = 9
+		color = { 0.16 0.24 0.39 }
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+
+		high_god_name = GOD_OLDGODS
+		
+		god_names = {
+			GOD_OLDGODS GOD_DIBELLA GOD_MARA GOD_MERIDIA GOD_AZURA GOD_HIRCINE GOD_PERYITE
+		}
+		
+		evil_god_names = {
+			OUTSIDE_GODS NEW_GODS
+		}
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_MYSTERIUM_XERXES
+		
+		max_consorts = 2
+		women_can_take_consorts = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		allow_viking_invasion = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		aggression = 1.5
+		
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = daedra_meridia
+		intermarry = daedra_azura
+		intermarry = daedra_hircine
+		intermarry = daedra_molag
+		intermarry = daedra_namira
+		intermarry = daedra_peryite
+		intermarry = forsworn_heresy
+		
+		#religious_clothing_head = 3
+		#religious_clothing_priest = 3
+		
+		has_heir_designation = yes
+	}
+	forsworn_heresy = { #Hagraven Cults
+		graphical_culture = norsegfx
+
+		icon = 8
+		heresy_icon = 9
+		color = { 0.26 0.22 0.29 }
+		parent = old_gods
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		crusade_name = "HOLY_WAR"
+		
+		high_god_name = GOD_OLDGODS
+		scripture_name = THE_LEGENDS
+		
+		god_names = {
+			GOD_OLDGODS GOD_BRIARHEART GOD_HAGRAVEN
+		}
+		
+		evil_god_names = {
+			OUTSIDE_GODS NEW_GODS
+		}
+		has_heir_designation = yes
+		max_consorts = 3
+		women_can_take_consorts = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		allow_viking_invasion = yes
+		defensive_attrition = yes
+		peace_prestige_loss = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		aggression = 2.0
+		
+		intermarry = old_gods
+		intermarry = daedra_namira
+		
+		#religious_clothing_head = 3
+		#religious_clothing_priest = 3
+		rel_head_defense = yes
+	}
+}
+##OLD FAITHS##
+old_faith = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { old_faiths_interface rep_feud_sym_interface }
+	alternate_start = { has_alternate_start_parameter = { key = religion value = full_random } }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.06 0.12 0.06 }
+		
+	ai_convert_same_group = 2
+	ai_convert_other_group = 0
+
+	king_of_worms_cult = {
+		graphical_culture = norsegfx
+		merge_republic_interface = yes
+		icon = 77
+		heresy_icon = 78
+		color = { 0.06 0.12 0.06 }
+		crusade_name = "HOLY_WAR"
+		scripture_name = NGASTA
+		
+		piety_name = FAVOUR
+		priest_title = PRIEST
+
+		high_god_name = GOD_KING_OF_WORMS
+		
+		god_names = {
+			GOD_KING_OF_WORMS GOD_NECROMANCERS_MOON GOD_REVENANT
+		}
+		
+		evil_god_names = {
+			GOD_ARKAY GOD_THE_DIVINES GOD_THREE_THIEVES GOD_UNDERKING
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		investiture = no
+		female_temple_holders = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = no # Same as Pyandoneaic and Riddle'Thar
+		can_grant_claim = yes
+		priests_can_marry = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		has_heir_designation = yes
+		
+		intermarry = brethren
+		intermarry = oblivion_religions
+		
+		#religious_clothing_head = 9
+		#religious_clothing_priest = 9
+	}
+}
+##VOID RELIGIONS##
+void_religions = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { void_interface rep_feud_sym_interface }
+	alternate_start = { has_alternate_start_parameter = { key = religion value = full_random } }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.15 0.15 0.15 }
+		
+	ai_convert_same_group = 2
+	ai_convert_other_group = 0
+	
+	sithis = {
+		graphical_culture = norsegfx
+		merge_republic_interface = yes
+
+		icon = 7
+		heresy_icon = 19
+		color = { 0.15 0.15 0.15 }
+
+		crusade_name = CULLING
+		scripture_name = THE_FIVE_TENETS
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_SITHIS
+		
+		god_names = {
+			GOD_SITHIS GOD_THE_NIGHT_MOTHER GOD_THE_VOID GOD_PADOMAY
+		}
+		
+		evil_god_names = {
+			GOD_ANU
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		can_grant_invasion_cb = invasion
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		
+		has_heir_designation = yes
+		
+		aggression = 1.5
+	}
+}
+##ATMORAN PANTHEON##
+atmoran_pantheon = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { atmoran_interface pagan_dark_sym_interface pagan_interface }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.6 0.95 0.95 }
+		
+	ai_convert_same_group = 2
+	ai_convert_other_group = 1
+	
+	animism = {
+		graphical_culture = norsegfx
+
+		icon = 20
+		heresy_icon = 31
+		color = { 0.56 0.94 0.94 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_LEGENDS
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_THE_GODS
+
+		god_names = {
+			GOD_THE_DRAGONS GOD_SACRED_WHALE GOD_SACRED_MOTH GOD_SACRED_EAGLE GOD_SACRED_WOLF GOD_SACRED_BEAR
+		}
+		
+		evil_god_names = {
+			DEMONS
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		
+		has_heir_designation = yes
+		
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = dragon_cult
+		intermarry = anuic_skaal
+		intermarry = alikr
+		intermarry = satakal
+		
+		#religious_clothing_head = 7
+		#religious_clothing_priest = 7
+	}
+	dragon_cult = {
+		graphical_culture = norsegfx
+
+		icon = 80
+		heresy_icon = 80
+		color = { 0.50 0.13 0.01 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_LEGENDS
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_ALDUIN
+		
+		god_names = {
+			GOD_ALDUIN GOD_THE_DRAGONS GOD_THE_DRAGON_GODS
+		}
+		
+		evil_god_names = {
+			DEMONS
+		}
+
+		max_consorts = 2
+		women_can_take_consorts = yes
+		raised_vassal_opinion_loss = no
+		defensive_attrition = yes
+		allow_looting = yes
+		allow_rivermovement = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		can_grant_invasion_cb = invasion
+		
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		
+		has_heir_designation = yes
+		
+		aggression = 1.75
+		
+		intermarry = animism
+		intermarry = anuic_skaal
+		intermarry = satakal
+		
+		#religious_clothing_head = 8
+		#religious_clothing_priest = 8
+	}
+	anuic_skaal = {
+		graphical_culture = norsegfx
+
+		icon = 35
+		heresy_icon = 36
+		color = { 0.45 0.63 0.63 }
+
+		crusade_name = "HOLY_WAR"
+		scripture_name = THE_LEGENDS
+
+		piety_name = FAVOUR
+		priest_title = PRIEST
+		
+		high_god_name = GOD_THE_ALLMAKER
+		
+		god_names = {
+			GOD_THE_ALLFATHER GOD_THE_ALLMAKER
+		}
+		
+		evil_god_names = {
+			DEMONS DAEDRA GOD_HERMAMORA
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_call_crusade = no
+		can_excommunicate = no
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		can_retire_to_monastery = yes
+		priests_can_inherit = no
+		
+		has_heir_designation = yes
+		
+		intermarry = animism
+		intermarry = dragon_cult
+		intermarry = eight_divines
+		intermarry = nine_divines
+		intermarry = alikr
+		intermarry = satakal
+		
+		aggression = 1.25
+		#religious_clothing_head = 7
+		#religious_clothing_priest = 7
+	}
+}
+##OBLIVION RELIGIONS##
+oblivion_religions = {
+	has_coa_on_barony_only = yes
+	graphical_culture = westerngfx
+	interface_skin = { oblivion_interface rep_feud_sym_interface }
+	alternate_start = { has_alternate_start_parameter = { key = religion value = full_random } }
+	crusade_cb = crusade
+	playable = yes
+	hostile_within_group = yes
+	
+	color = { 0.20 0.08 0.47 }
+	
+	ai_convert_same_group = 1
+	ai_convert_other_group = 1
+	
+	ideal_masters = {
+		graphical_culture = norsegfx
+		merge_republic_interface = yes
+
+		icon = 79
+		heresy_icon = 79
+		color = { 0.20 0.08 0.47 }
+
+		crusade_name = SUPREME_HARVEST
+		scripture_name = MASTERS_VISIONS
+
+		piety_name = SOULS
+		priest_title = PRIEST
+		
+		high_god_name = GOD_IDEAL_MASTERS
+		
+		god_names = {
+			GOD_IDEAL_MASTERS PROPHET_KEEPER PROPHET_REAPER
+		}
+		
+		evil_god_names = {
+			DAEDRA DAEDRIC_PRINCES GOD_MEHRUNES_DAGON
+		}
+		
+		allow_looting = yes
+		allow_rivermovement = yes
+		investiture = no
+		female_temple_holders = yes
+		feminist = yes
+		can_call_crusade = no # GHW are disabled in EK, so it just clutters the religious features screen
+		can_excommunicate = yes
+		can_grant_divorce = yes
+		can_grant_claim = yes
+		priests_can_marry = yes
+		can_retire_to_monastery = yes
+		priests_can_inherit = yes
+		can_grant_invasion_cb = invasion
+		
+		intermarry = brethren
+		intermarry = old_faith
+		
+		has_heir_designation = yes
+		
+		aggression = 4.0
+	}
+}

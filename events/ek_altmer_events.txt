@@ -1,0 +1,1161 @@
+##### Events for Altmer #####
+
+namespace = altmer
+
+#Purity on_birth
+character_event = {
+	id = altmer.0
+	# desc = altmer0d
+	hide_window = yes
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		graphical_culture = altmergfx
+		culture = altmer
+		NOR = {
+			trait = pure_altmer
+			trait = impure_altmer
+		}
+	}
+	
+	immediate = {
+		### Parents are known
+		# Pure parents
+		if = {
+			limit = {
+				father_even_if_dead = {
+					trait = pure_altmer
+					culture = altmer
+				}
+				mother_even_if_dead = {
+					trait = pure_altmer
+					culture = altmer
+				}
+			}
+			add_trait = pure_altmer
+			break = yes
+		}
+		# Impure parents
+		else_if = {
+			limit = {
+				OR = {
+					father_even_if_dead = {	trait = impure_altmer }
+					mother_even_if_dead = { trait = impure_altmer }
+					father_even_if_dead = {	NOT = { graphical_culture = altmergfx } }
+					mother_even_if_dead = { NOT = { graphical_culture = altmergfx } }
+					father_even_if_dead = {	NOT = { culture = altmer } }
+					mother_even_if_dead = { NOT = { culture = altmer } }
+				}
+			}
+			add_trait = impure_altmer
+			break = yes
+		}
+		
+		### Parents are unknown
+		# You live in Alinor / are vassal of Alinor => Pure
+		if = {
+			limit = {
+				OR = {
+					capital_scope = {
+						region = nirn_tamriel_summerset
+					}
+					top_liege = {
+						capital_scope = {
+							region = nirn_tamriel_summerset
+						}
+					}
+				}
+			}
+			add_trait = pure_altmer
+			break = yes
+		}
+		else = {
+			add_trait = impure_altmer
+		}
+	}
+}
+
+#Ruler berates courtier for being impure
+character_event = {
+	id = altmer.1
+	desc = Altmer1
+	picture = GFX_evt_scandal
+	
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		race = altmer
+		trait = pure_altmer
+		any_courtier = {
+			OR = {
+				is_councillor = yes
+				family = ROOT
+			}
+			trait = impure_altmer
+			is_ruler = no
+			NOT = { has_character_modifier = disgraceful_altmer }
+			NOT = { has_character_flag = disgraceful_impure }
+			NOT = { reverse_opinion = { who = ROOT value = 0 } }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+		
+		modifier = {
+			factor = 0.75
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.9
+			trait = proud
+		}
+		modifier = {
+			factor = 0.9
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.9
+			trait = honest
+		}
+		modifier = {
+			factor = 0.9
+			trait = wroth
+		}
+		modifier = {
+			factor = 0.9
+			trait = vain
+		}
+		modifier = {
+			factor = 1.25
+			trait = cynical
+		}
+		modifier = {
+			factor = 1.1
+			trait = humble
+		}
+		modifier = {
+			factor = 1.1
+			trait = slovenly
+		}
+		modifier = {
+			factor = 1.1
+			trait = kind
+		}
+		modifier = {
+			factor = 1.1
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.1
+			trait = patient
+		}
+	}
+	
+	immediate = {
+		random_courtier = {
+			limit = {
+				OR = {
+					is_councillor = yes
+					family = ROOT
+				}
+				trait = impure_altmer
+				is_ruler = no
+				NOT = { has_character_modifier = disgraceful_altmer }
+				NOT = { has_character_flag = disgraceful_impure }
+				NOT = { reverse_opinion = { who = ROOT value = 0 } }
+			}
+			save_event_target_as = target_impure_courtier
+			set_character_flag = altmer_impure_courtier
+		}
+	}
+	
+	option = {
+		name = Altmer1Accept
+		piety = 10
+		event_target:target_impure_courtier = {
+			character_event = { id = altmer.5 days = 3 }
+			set_character_flag = disgraceful_impure
+		}
+	}
+}
+
+#Ruler berates vassal for being impure
+character_event = {
+	id = altmer.2
+	desc = Altmer2
+	picture = GFX_evt_scandal
+	
+	only_rulers = yes
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		race = altmer
+		trait = pure_altmer
+		any_vassal = {
+			trait = impure_altmer
+			is_ruler = yes
+			NOT = { has_character_modifier = disgraceful_altmer }
+			NOT = { has_character_flag = disgraceful_impure }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+		
+		modifier = {
+			factor = 0.75
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.9
+			trait = proud
+		}
+		modifier = {
+			factor = 0.9
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.9
+			trait = honest
+		}
+		modifier = {
+			factor = 0.9
+			trait = wroth
+		}
+		modifier = {
+			factor = 0.9
+			trait = vain
+		}
+		modifier = {
+			factor = 1.25
+			trait = cynical
+		}
+		modifier = {
+			factor = 1.1
+			trait = humble
+		}
+		modifier = {
+			factor = 1.1
+			trait = slovenly
+		}
+		modifier = {
+			factor = 1.1
+			trait = kind
+		}
+		modifier = {
+			factor = 1.1
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.1
+			trait = patient
+		}
+	}
+	
+	immediate = {
+		random_vassal = {
+			limit = {
+				trait = impure_altmer
+				is_ruler = yes
+				NOT = { has_character_modifier = disgraceful_altmer }
+				NOT = { has_character_flag = disgraceful_impure }
+			}
+			save_event_target_as = target_impure_vassal
+			set_character_flag = altmer_impure_vassal
+		}
+	}
+	
+	option = {
+		name = Altmer2Accept
+		piety = 10
+		event_target:target_impure_vassal = {
+			character_event = { id = altmer.5 days = 3 }
+			set_character_flag = disgraceful_impure
+		}
+	}
+}
+
+#Berated for Impurity
+character_event = {
+	id = altmer.5
+	desc = Altmer5
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		trait = impure_altmer
+	}
+	
+	option = {
+		name = Altmer5Acknowledge
+		trigger = { has_character_flag = altmer_impure_courtier }
+		piety = -25
+		add_character_modifier = {
+			name = disgraceful_altmer
+			months = 12
+		}
+		clr_character_flag = disgraceful_impure
+		clr_character_flag = altmer_impure_courtier
+		clear_event_target = target_impure_courtier
+	}
+	option = {
+		name = Altmer5Acknowledge
+		trigger = { has_character_flag = altmer_impure_vassal }
+		piety = -25
+		add_character_modifier = {
+			name = disgraceful_altmer
+			months = 12
+		}
+		clr_character_flag = disgraceful_impure
+		clr_character_flag = altmer_impure_vassal
+		clear_event_target = target_impure_vassal
+	}
+}
+
+#Altmer's Friend causes them to be considered impure
+character_event = {
+	id = altmer.10
+	desc = Altmer10
+	picture = GFX_evt_scandal
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		race = altmer
+		trait = pure_altmer
+		NOT = { has_character_modifier = purity_timer }
+		any_friend = {
+			OR = {
+				AND = {
+					race = altmer
+					trait = impure_altmer
+				}
+			NOT = { race = altmer }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+	}
+	
+	immediate = {
+		random_friend = {
+			limit = {
+				OR = {
+					AND = {
+						race = altmer
+						trait = impure_altmer
+					}
+				NOT = { race = altmer }
+				}
+			}
+			save_event_target_as = target_impure_friend
+		}
+	}
+	
+	option = {
+		name = Altmer10Accept
+		piety = 25
+		event_target:target_impure_friend = {
+			character_event = { id = altmer.15 days = 3 }
+			set_character_flag = disgraceful_impure
+		}
+	}
+	option = {
+		name = Altmer10Decline
+		piety = -25
+		remove_trait = pure_altmer
+		add_trait = impure_altmer
+	}
+	option = {
+		name = Altmer10Purify
+		trigger = {
+			scaled_wealth = 0.5
+		}
+		scaled_wealth = -0.5
+		add_character_modifier = {
+			name = purity_timer
+			months = 6
+			hidden = yes
+		}
+	}
+}
+
+#Informed by friend that Impurity forces them to part ways
+character_event = {
+	id = altmer.15
+	desc = Altmer15
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			trait = impure_altmer
+			NOT = { race = altmer }
+		}
+	}
+	
+	option = {
+		name = Altmer15Acknowledge
+		piety = -10
+		remove_friend = FROM
+		clr_character_flag = disgraceful_impure
+		clear_event_target = target_impure_friend
+	}
+}
+
+#Altmer's lover leads them to be considered impure
+character_event = {
+	id = altmer.20
+	desc = Altmer20
+	picture = GFX_evt_scandal
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		race = altmer
+		trait = pure_altmer
+		NOT = { has_character_modifier = purity_timer }
+		any_lover = {
+			OR = {
+				AND = {
+					race = altmer
+					trait = impure_altmer
+				}
+			NOT = { race = altmer }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+	}
+	
+	immediate = {
+		random_lover = {
+			limit = {
+				OR = {
+					AND = {
+						race = altmer
+						trait = impure_altmer
+					}
+				NOT = { race = altmer }
+				}
+			}
+			save_event_target_as = target_impure_lover
+		}
+	}
+	
+	option = {
+		name = Altmer20Accept
+		piety = 25
+		event_target:target_impure_lover = {
+			character_event = { id = altmer.25 days = 3 }
+			set_character_flag = disgraceful_impure
+		}
+	}
+	option = {
+		name = Altmer20Decline
+		piety = -25
+		remove_trait = pure_altmer
+		add_trait = impure_altmer
+	}
+	option = {
+		name = Altmer20Purify
+		trigger = {
+			scaled_wealth = 0.5
+		}
+		scaled_wealth = -0.5
+		add_character_modifier = {
+			name = purity_timer
+			months = 6
+			hidden = yes
+		}
+	}
+}
+
+#Informed by lover that Impurity forces them to part ways
+character_event = {
+	id = altmer.25
+	desc = Altmer25
+	picture = GFX_evt_scandal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			trait = impure_altmer
+			NOT = { race = altmer }
+		}
+	}
+	
+	option = {
+		name = Altmer25Acknowledge
+		piety = -10
+		FROM = { save_event_target_as = former_lover }
+		break_up_with_target = yes
+		clr_character_flag = disgraceful_impure
+		clear_event_target = target_impure_lover
+	}
+}
+
+#Purity Pilgrimage - Return to Alinor for R&R?
+character_event = {
+	id = altmer.50
+	desc = Altmer50
+	picture = GFX_evt_alinor
+	
+	only_rulers = yes
+	capable_only = yes
+	min_age = 16
+	prisoner = no
+	
+	trigger = {
+		race = altmer
+		trait = pure_altmer
+		is_indisposed = no
+		is_inaccessible_trigger = no
+		location = {
+			NOT = {
+				region = nirn_tamriel_summerset
+			}
+		}
+		NOT = { has_character_modifier = purity_timer }
+	}
+	
+	mean_time_to_happen = {
+		years = 200
+	}
+	
+	option = {
+		name = Altmer50Accept
+		trigger = { 
+			scaled_wealth = 1
+		}
+		ai_chance = {
+			factor = 10
+		}
+		scaled_wealth = -1
+		add_trait = on_pilgrimage
+		long_character_event = { id = altmer.51 days = 90 random = 30 }
+	}
+	
+	option = {
+		name = Altmer50Decline
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0
+				trait = proud
+			}
+			modifier = {
+				factor = 0
+				trait = vain
+			}
+			modifier = {
+				factor = 0
+				trait = diligent
+			}
+		}
+		piety = -25
+		remove_trait = pure_altmer
+		add_trait = impure_altmer
+	}
+}
+
+#Refreshed, relaxed, and still pure!
+long_character_event = {
+	id = altmer.51
+	desc = Altmer51
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Altmer51Acknowledge
+		piety = 25
+		if = {
+			limit = {
+				trait = stressed
+			}
+			random = {
+				chance = 20
+				remove_trait = stressed
+			}
+		}
+		if = {
+			limit = {
+				trait = depressed
+			}
+			random = {
+				chance = 20
+				remove_trait = depressed
+			}
+		}
+		add_character_modifier = {
+			name = purity_timer
+			months = 12
+			hidden = yes
+		}
+		remove_trait = on_pilgrimage
+	}
+}
+
+#Altmer Impure to Pure Pilgrimage Event Chain
+
+character_event = {
+	id = altmer.74
+	desc = Altmer74
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Altmer74Acknowledge
+		add_trait = on_pilgrimage
+		long_character_event = { id = altmer.75 days = 120 random = 30 }
+	}
+}
+
+#Refreshed, Relaxed, but now for a test!
+long_character_event = {
+	id = altmer.75
+	desc = Altmer75
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Altmer75Acknowledge
+		if = {
+			limit = {
+				NOT = { trait = on_pilgrimage }
+			}
+			add_trait = on_pilgrimage
+		}
+		narrative_event = { id = altmer.76 days = 1 }
+	}
+}
+
+narrative_event = {
+	id = altmer.76
+	title = Altmer76Title
+	desc = Altmer76
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Altmer76Acknowledge
+		if = {
+			limit = {
+				NOT = { diplomacy = 10 }
+			}
+			narrative_event = { id = altmer.77 days = 1 } #Diplomacy Test - Failure
+		}
+		if = {
+			limit = {
+				diplomacy = 10
+			}
+			narrative_event = { id = altmer.78 days = 1 } #Diplomacy Test - Success
+		}
+	}
+}
+
+#Diplomacy Test - Altmer Language and Etiquette - Failure
+narrative_event = {
+	id = altmer.77
+	title = Altmer77Title
+	desc = Altmer77
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_diplomacy_failure
+	}
+	
+	option = {
+		name = Altmer77Acknowledge
+		if = {
+			limit = {
+				NOT = { martial = 10 }
+			}
+			narrative_event = { id = altmer.79 days = 1 } #Martial Test - Failure
+		}
+		if = {
+			limit = {
+				martial = 10
+			}
+			narrative_event = { id = altmer.80 days = 1 } #Martial Test - Success
+		}
+	}
+}
+#Diplomacy Test - Altmer Language and Etiquette - Success
+narrative_event = {
+	id = altmer.78
+	title = Altmer78Title
+	desc = Altmer78
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_diplomacy_success
+	}
+	
+	option = {
+		name = Altmer78Acknowledge
+		if = {
+			limit = {
+				NOT = { martial = 10 }
+			}
+			narrative_event = { id = altmer.79 days = 1 } #Martial Test - Failure
+		}
+		if = {
+			limit = {
+				martial = 10
+			}
+			narrative_event = { id = altmer.80 days = 1 } #Martial Test - Success
+		}
+	}
+}
+
+#Martial Test - Altmer Military History and Strategy - Failure
+narrative_event = {
+	id = altmer.79
+	title = Altmer79Title
+	desc = Altmer79
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_martial_failure
+	}
+	
+	option = {
+		name = Altmer78Acknowledge
+		if = {
+			limit = {
+				NOT = { stewardship = 10 }
+			}
+			narrative_event = { id = altmer.81 days = 1 } #Stewardship Test - Failure
+		}
+		if = {
+			limit = {
+				stewardship = 10
+			}
+			narrative_event = { id = altmer.82 days = 1 } #Stewardship Test - Success
+		}
+	}
+}
+#Martial Test - Altmer Military History and Strategy - Success
+narrative_event = {
+	id = altmer.80
+	title = Altmer80Title
+	desc = Altmer80
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_martial_success
+	}
+	
+	option = {
+		name = Altmer78Acknowledge
+		if = {
+			limit = {
+				NOT = { stewardship = 10 }
+			}
+			narrative_event = { id = altmer.81 days = 1 } #Stewardship Test - Failure
+		}
+		if = {
+			limit = {
+				stewardship = 10
+			}
+			narrative_event = { id = altmer.82 days = 1 } #Stewardship Test - Success
+		}
+	}
+}
+
+#Stewardship Test - Altmer Law and Legalism - Failure
+narrative_event = {
+	id = altmer.81
+	title = Altmer81Title
+	desc = Altmer81
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_stewardship_failure
+	}
+	
+	option = {
+		name = Altmer81Acknowledge
+		if = {
+			limit = {
+				NOT = { intrigue = 10 }
+			}
+			narrative_event = { id = altmer.83 days = 1 } #Intrigue Test - Failure
+		}
+		if = {
+			limit = {
+				intrigue = 10
+			}
+			narrative_event = { id = altmer.84 days = 1 } #Intrigue Test - Success
+		}
+	}
+}
+#Stewardship Test - Altmer Law and Legalism - Success
+narrative_event = {
+	id = altmer.82
+	title = Altmer82Title
+	desc = Altmer82
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_stewardship_success
+	}
+	
+	option = {
+		name = Altmer82Acknowledge
+		if = {
+			limit = {
+				NOT = { intrigue = 10 }
+			}
+			narrative_event = { id = altmer.83 days = 1 } #Intrigue Test - Failure
+		}
+		if = {
+			limit = {
+				intrigue = 10
+			}
+			narrative_event = { id = altmer.84 days = 1 } #Intrigue Test - Success
+		}
+	}
+}
+
+#Intrigue Test - Altmer Intrigue and Riddles - Failure
+narrative_event = {
+	id = altmer.83
+	title = Altmer83Title
+	desc = Altmer83
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_intrigue_failure
+	}
+	
+	option = {
+		name = Altmer83Acknowledge
+		if = {
+			limit = {
+				NOT = { learning = 10 }
+			}
+			narrative_event = { id = altmer.85 days = 1 } #Learning Test - Failure
+		}
+		if = {
+			limit = {
+				learning = 10
+			}
+			narrative_event = { id = altmer.86 days = 1 } #Learning Test - Success
+		}
+	}
+}
+#Intrigue Test - Altmer Intrigue and Riddles - Success
+narrative_event = {
+	id = altmer.84
+	title = Altmer84Title
+	desc = Altmer84
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_intrigue_success
+	}
+	
+	option = {
+		name = Altmer84Acknowledge
+		if = {
+			limit = {
+				NOT = { learning = 10 }
+			}
+			narrative_event = { id = altmer.85 days = 1 } #Learning Test - Failure
+		}
+		if = {
+			limit = {
+				learning = 10
+			}
+			narrative_event = { id = altmer.86 days = 1 } #Learning Test - Success
+		}
+	}
+}
+
+#Learning Test - Altmer Philosophy and Magicks - Failure
+narrative_event = {
+	id = altmer.85
+	title = Altmer85Title
+	desc = Altmer85
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_learning_failure
+	}
+	
+	option = {
+		name = Altmer85Acknowledge
+		trigger = {
+			calc_true_if = {
+				amount = 3
+				has_character_flag = purity_diplomacy_failure
+				has_character_flag = purity_martial_failure
+				has_character_flag = purity_stewardship_failure
+				has_character_flag = purity_intrigue_failure
+				has_character_flag = purity_learning_failure
+			}
+		}
+		narrative_event = { id = altmer.90 days = 1 }
+	}
+	option = {
+		name = Altmer85Acknowledge
+		trigger = {
+			calc_true_if = {
+				amount = 3
+				has_character_flag = purity_diplomacy_success
+				has_character_flag = purity_martial_success
+				has_character_flag = purity_stewardship_success
+				has_character_flag = purity_intrigue_success
+				has_character_flag = purity_learning_success
+			}
+			NAND = {
+				has_character_flag = purity_diplomacy_success
+				has_character_flag = purity_martial_success
+				has_character_flag = purity_stewardship_success
+				has_character_flag = purity_intrigue_success
+				has_character_flag = purity_learning_success
+			}
+		}
+		narrative_event = { id = altmer.91 days = 1 }
+	}
+	option = {
+		name = Altmer85Acknowledge
+		trigger = {
+			has_character_flag = purity_diplomacy_success
+			has_character_flag = purity_martial_success
+			has_character_flag = purity_stewardship_success
+			has_character_flag = purity_intrigue_success
+			has_character_flag = purity_learning_success
+		}
+		narrative_event = { id = altmer.92 days = 1 }
+	}
+}
+#Learning Test - Altmer Philosophy and Magicks - Success
+narrative_event = {
+	id = altmer.86
+	title = Altmer86Title
+	desc = Altmer86
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = purity_learning_success
+	}
+	
+	option = {
+		name = Altmer86Acknowledge
+		trigger = {
+			calc_true_if = {
+				amount = 3
+				has_character_flag = purity_diplomacy_failure
+				has_character_flag = purity_martial_failure
+				has_character_flag = purity_stewardship_failure
+				has_character_flag = purity_intrigue_failure
+				has_character_flag = purity_learning_failure
+			}
+		}
+		narrative_event = { id = altmer.90 days = 1 }
+	}
+	option = {
+		name = Altmer86Acknowledge
+		trigger = {
+			calc_true_if = {
+				amount = 3
+				has_character_flag = purity_diplomacy_success
+				has_character_flag = purity_martial_success
+				has_character_flag = purity_stewardship_success
+				has_character_flag = purity_intrigue_success
+				has_character_flag = purity_learning_success
+			}
+			NAND = {
+				has_character_flag = purity_diplomacy_success
+				has_character_flag = purity_martial_success
+				has_character_flag = purity_stewardship_success
+				has_character_flag = purity_intrigue_success
+				has_character_flag = purity_learning_success
+			}
+		}
+		narrative_event = { id = altmer.91 days = 1 }
+	}
+	option = {
+		name = Altmer86Acknowledge
+		trigger = {
+			has_character_flag = purity_diplomacy_success
+			has_character_flag = purity_martial_success
+			has_character_flag = purity_stewardship_success
+			has_character_flag = purity_intrigue_success
+			has_character_flag = purity_learning_success
+		}
+		narrative_event = { id = altmer.92 days = 1 }
+	}
+}
+
+#FAILURE - Still Impure
+narrative_event = {
+	id = altmer.90
+	title = Altmer90Title
+	desc = Altmer90
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = Altmer90Acknowledge
+		piety = -50
+		add_character_modifier = {
+			name = disgraceful_altmer
+			months = 12
+		}
+		remove_trait = on_pilgrimage
+		clr_character_flag = do_not_disturb
+		clr_character_flag = purity_diplomacy_failure
+		clr_character_flag = purity_martial_failure
+		clr_character_flag = purity_stewardship_failure
+		clr_character_flag = purity_intrigue_failure
+		clr_character_flag = purity_learning_failure
+		clr_character_flag = purity_diplomacy_success
+		clr_character_flag = purity_martial_success
+		clr_character_flag = purity_stewardship_success
+		clr_character_flag = purity_intrigue_success
+		clr_character_flag = purity_learning_success
+	}
+}
+
+#SUCCESS - Purity Attained
+narrative_event = {
+	id = altmer.91
+	title = Altmer91Title
+	desc = Altmer91
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_character_modifier = disgraceful_altmer
+			}
+			remove_character_modifier = disgraceful_altmer
+		}
+	}
+	
+	option = {
+		name = Altmer91Acknowledge
+		piety = 10
+		add_character_modifier = {
+			name = purity_timer
+			months = 6
+			hidden = yes
+		}
+		remove_trait = impure_altmer
+		add_trait = pure_altmer
+		remove_trait = on_pilgrimage
+		clr_character_flag = do_not_disturb
+		clr_character_flag = purity_diplomacy_failure
+		clr_character_flag = purity_martial_failure
+		clr_character_flag = purity_stewardship_failure
+		clr_character_flag = purity_intrigue_failure
+		clr_character_flag = purity_learning_failure
+		clr_character_flag = purity_diplomacy_success
+		clr_character_flag = purity_martial_success
+		clr_character_flag = purity_stewardship_success
+		clr_character_flag = purity_intrigue_success
+		clr_character_flag = purity_learning_success
+	}
+}
+
+#SUCCESS - Purity Attained with a Flourish!
+narrative_event = {
+	id = altmer.92
+	title = Altmer92Title
+	desc = Altmer92
+	picture = GFX_evt_alinor
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_character_modifier = disgraceful_altmer
+			}
+			remove_character_modifier = disgraceful_altmer
+		}
+	}
+	
+	option = {
+		name = Altmer92Acknowledge
+		piety = 50
+		add_character_modifier = {
+			name = purity_timer
+			months = 12
+			hidden = yes
+		}
+		remove_trait = impure_altmer
+		add_trait = pure_altmer
+		remove_trait = on_pilgrimage
+		clr_character_flag = do_not_disturb
+		clr_character_flag = purity_diplomacy_failure
+		clr_character_flag = purity_martial_failure
+		clr_character_flag = purity_stewardship_failure
+		clr_character_flag = purity_intrigue_failure
+		clr_character_flag = purity_learning_failure
+		clr_character_flag = purity_diplomacy_success
+		clr_character_flag = purity_martial_success
+		clr_character_flag = purity_stewardship_success
+		clr_character_flag = purity_intrigue_success
+		clr_character_flag = purity_learning_success
+	}
+}

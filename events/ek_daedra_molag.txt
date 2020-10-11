@@ -1,0 +1,117 @@
+####Etienne's Daedric Events - Molag Bal ####
+
+namespace = molag
+
+#### Pureblood Vampirism ####
+
+long_character_event = {
+	id = molag.1
+	desc = Molag1
+	picture = GFX_evt_two_moon_aurora
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Molag1Accept"
+		trigger = {
+			NOT = { trait = vampire }
+		}
+		character_event = { id = molag.2 }
+	}
+	option = {
+		name = "Molag1AcceptVampire"
+		trigger = {
+			trait = vampire
+		}
+		character_event = { id = molag.3 }
+	}
+	# option = {
+		# name = "Molag1Decline"
+		# prestige = -50
+		# piety = -50
+		# custom_tooltip = {
+			# text = "Molag1DeclineInfo"
+			# hidden_tooltip = {
+				# clr_character_flag = pureblood_decision
+			# }
+		# }
+	# }
+}
+
+character_event = {
+	id = molag.2
+	desc = Molag2
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Molag2Acknowledge"
+		#add_character_modifier = { name = pureblood_vampire duration = -1 hidden = yes }
+		#change_diplomacy = 2
+		#change_martial = 2
+		#change_intrigue = 2
+		#change_learning = 2
+		add_pureblooded_vampirism_effect = yes
+		hidden_tooltip = {
+			#add_trait = vampire
+			remove_disease_trait_effect = yes
+			remove_treatment_modifiers_effect = yes
+			remove_disease_flags_effect = yes
+			clr_character_flag = pureblood_decision
+		}
+	}
+}
+
+character_event = {
+	id = molag.3
+	desc = Molag3
+	picture = GFX_evt_two_moon_aurora
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "Molag2Acknowledge"
+		#add_character_modifier = { name = pureblood_vampire duration = -1 hidden = yes }
+		#change_diplomacy = 2
+		#change_martial = 2
+		#change_intrigue = 2
+		#change_learning = 2
+		add_pureblooded_vampirism_effect = yes
+		hidden_tooltip = {
+			clr_character_flag = pureblood_decision
+			if = {
+				limit = { 
+					has_character_flag = stage_2_vampire 
+				}
+				clr_character_flag = stage_2_vampire
+				change_diplomacy = 1
+				change_intrigue = -1
+				change_learning = -1
+			}
+			if = {
+				limit = { 
+					has_character_flag = stage_3_vampire 
+				}
+				clr_character_flag = stage_3_vampire
+				change_diplomacy = 2
+				change_martial = -1
+				change_intrigue = -2
+				change_learning = -1
+				break = yes
+			}
+			if = {
+				limit = { 
+					has_character_flag = stage_4_vampire 
+				}
+				clr_character_flag = stage_4_vampire
+				change_diplomacy = 3
+				change_martial = -2
+				change_intrigue = -2
+				change_learning = -2
+			}
+		}
+	}
+}

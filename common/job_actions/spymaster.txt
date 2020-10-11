@@ -1,0 +1,114 @@
+# Spymaster
+action_uncover_plots = {
+	attribute = intrigue
+	
+	potential = {
+		NOT = { has_dlc = Mystics }
+	}
+	
+	trigger = {
+		any_province_lord = {
+			OR = {
+				is_liege_or_above = FROM
+				same_liege = FROM
+			}
+		}
+	}
+
+	plot_discovery_chance = 0.01
+	
+	events = { 929 931 9000 9020 }
+}
+
+action_uncover_plots_offmap = {
+	attribute = intrigue
+	
+	potential = {
+		has_dlc = Mystics
+	}
+	
+	offmap = yes
+
+	plot_discovery_chance = 0.01
+	
+	events = { MNM.70022 MNM.70024 MNM.70023 }
+}
+
+action_study_technology = {
+	attribute = intrigue
+	
+	potential = {
+	}
+	
+	trigger = {
+		has_higher_tech_than = FROM
+		any_province_lord = {
+			NOT = { is_liege_or_above = FROM }
+			NOT = { character = FROM }
+		}
+		is_within_diplo_range = FROM
+	}
+	
+	events = { 932 933 }
+}
+
+action_organize_spies = {
+	attribute = intrigue
+	
+	potential = {
+		NOT = {
+			has_dlc = "Mystics"
+		}
+	}
+	
+	trigger = {
+		any_province_lord = {
+			NOT = { character = FROM }
+		}
+		is_within_diplo_range = FROM
+	}
+	
+	plot_power_modifier = 0.005
+	
+	events = { 935 936 }
+}
+
+action_organize_spies_mystics = {
+	attribute = intrigue
+	
+	potential = {
+		has_dlc = "Mystics"
+	}
+	
+	trigger = {
+		any_province_lord = {
+			NOT = { character = FROM }
+		}
+		is_within_diplo_range = FROM
+	}
+	
+	plot_power_modifier = 0.005
+	
+	events = { 935 936 931 9000 9020 }
+}
+
+action_sabotage_province = {
+	attribute = intrigue
+
+	potential = {
+		has_dlc = Mystics
+	}
+
+	trigger = {
+		any_province_lord = {
+			NOT = {
+				tier = BARON
+			}
+			NOT = { character = FROM }
+		}
+		can_be_sabotaged_trigger = yes
+		is_within_diplo_range = FROM
+	}
+	
+	events = { MNM.70020 933 }
+}

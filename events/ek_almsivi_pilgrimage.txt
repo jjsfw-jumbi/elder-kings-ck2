@@ -1,0 +1,2562 @@
+#############################################
+#
+# On Pilgrimage Event Series
+#
+# Event ID 86000-86999 is reserved
+#
+#############################################
+
+#############################
+# Start Event
+#############################
+letter_event = {
+	id = 86000
+	desc = EVTDESC86000
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86000
+		piety = 5
+		set_character_flag = preparing_pilgrimage
+		clr_character_flag = activated_pilgrimage
+		hidden_tooltip = {
+			character_event = { id = 86100 days = 12 }
+		}	
+	}
+}
+
+
+###########################################
+# Preparation..  random events that can happen. one will
+###########################################
+
+#Invite a courtier to come.
+character_event = {
+	id = 86001
+	desc = EVTDESC86001
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = preparing_pilgrimage
+		any_courtier = {
+			age = 20
+			prisoner = no
+			NOT = { trait = on_pilgrimage }
+			NOT = { trait = pilgrim }
+			religion = almsivi
+			NOT = { is_inaccessible_trigger = yes }
+		}
+		NOT = {
+			any_child = {
+				age = 16
+				prisoner = no
+				NOT = { trait = on_pilgrimage }
+				NOT = { trait = pilgrim }
+				host = { character = ROOT }
+				NOT = { trait = cynical }
+				is_ruler = no
+			}
+			has_character_flag = pilgrimage_company
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		
+		random_courtier = {
+			limit = {
+				
+				age = 20
+				prisoner = no
+				religion = almsivi
+				NOT = { trait = on_pilgrimage }
+				NOT = { trait = pilgrim }
+				NOT = { is_inaccessible_trigger = yes }
+			}
+			set_character_flag = invite_to_pilgrimage
+		}
+		set_character_flag = pilgrimage_company
+	}
+	
+	option = {
+		name = EVTOPTA86001
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 20
+				trait = gregarious
+			}
+			modifier = {
+				factor = 20
+				trait = charitable
+			}
+			modifier = {
+				factor = 0
+				trait = greedy
+			}
+		}
+		scaled_wealth = -0.05
+		random_courtier = {
+			limit = { has_character_flag = invite_to_pilgrimage }
+			clr_character_flag = invite_to_pilgrimage
+			add_trait = on_pilgrimage
+			opinion = { 
+				modifier = opinion_bring_on_pilgrimage
+				who = ROOT
+			}
+			reverse_opinion = { 
+				modifier = opinion_bring_on_pilgrimage
+				who = ROOT
+			}			
+			hidden_tooltip = {
+				character_event = { id = 86100 days = 3 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB86001
+		trigger = { NOT = { trait = charitable } }
+		piety = -5
+		random_courtier = {
+			limit = { has_character_flag = invite_to_pilgrimage }
+			clr_character_flag = invite_to_pilgrimage
+		}	
+	}
+}
+
+
+# older liege, berate him to come on pilgrimage.
+character_event = {
+	id = 86010
+	desc = EVTDESC86010
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = preparing_pilgrimage
+		NOT = { has_character_flag = pilgrimage_company }
+		liege = {
+			war = no
+			
+			age = 40
+			religion = almsivi
+			NOT = { trait = on_pilgrimage }
+			NOT = { trait = pilgrim }
+			NOT = { has_character_flag = preparing_pilgrimage }
+			NOT = {	has_character_flag = asked_on_pilgrimage }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		set_character_flag = pilgrimage_company
+	}
+	
+	option = {
+		name = EVTOPTA86010
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 5
+				trait = zealous
+			}
+		}		
+		liege = {
+			letter_event = { id = 86011 days = 1 random = 2 tooltip = EVTTOOLTIP86011 }
+			set_character_flag = asked_on_pilgrimage
+		}	
+	}
+	option = {
+		name = EVTOPTB86010
+		piety = -5		
+	}
+}
+
+#liege gets event asking him to come.
+letter_event = {
+	id = 86011
+	desc = EVTDESC86011
+	border = GFX_event_letter_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		war = no
+		NOT = { trait = on_pilgrimage }
+		NOT = { trait = pilgrim }
+		NOT = { has_character_flag = preparing_pilgrimage }
+	}
+	
+	option = {
+		name = EVTOPTA86011
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 5
+				age = 50
+			}
+			modifier = {
+				factor = 20
+				trait = zealous
+			}
+		}	
+		reverse_opinion = { 
+			who = FROM
+			modifier = opinion_bring_on_pilgrimage
+		}		
+		FROM = {
+			letter_event = { id = 86012 days = 1 random = 2 tooltip = EVTTOOLTIP86012 }
+		}
+		hidden_tooltip = {
+			character_event = { id = 86100 }
+		}
+		prestige = -5
+		clr_character_flag = asked_on_pilgrimage
+	}
+	option = {
+		name = EVTOPTB86011
+		FROM = {
+			letter_event = { id = 86013 days = 1 random = 2 tooltip = EVTTOOLTIP86013 }
+		}
+		piety = -25
+		clr_character_flag = asked_on_pilgrimage
+		reverse_opinion = { 
+			modifier = opinion_declined_pilgrimage
+			who = FROM
+		}		
+	}
+}
+
+#our liege is coming..
+letter_event = {
+	id = 86012
+	desc = EVTDESC86012
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86012
+		reverse_opinion = { 
+			modifier = opinion_bring_on_pilgrimage
+			who = FROM
+		}
+		prestige = 25		
+	}
+}
+
+#our liege is NOT coming..
+letter_event = {
+	id = 86013
+	desc = EVTDESC86013
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86013
+		reverse_opinion = { 
+			who = FROM
+			modifier = opinion_attepmt_pilgrimage
+		}
+		prestige = -10
+	}
+}
+
+# our liege gives us advice.
+character_event = {
+	id = 86015
+	desc = EVTDESC86015
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		religion = almsivi
+		has_character_flag = preparing_pilgrimage
+		liege = {
+			trait = pilgrim
+			
+			age = 20
+		}
+		NOT = {	at_location = 719 }  #no dange when near mecca already :)
+		NOT = { has_character_flag = pilgrimage_company }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_character_flag = pilgrimage_company
+	}
+	
+	option = {
+		name = EVTOPTA86015
+		scaled_wealth = -0.20
+		set_character_flag = pilgrimage_bring_guards
+			
+	}
+	
+	option = {
+		name = EVTOPTB86015
+		prestige = -10
+		set_character_flag = pilgrimage_travel_lightly
+	
+	}
+}
+
+
+#adult son wants to go with you.
+character_event = {
+	id = 86020
+	desc = EVTDESC86020
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = preparing_pilgrimage
+		NOT = { has_character_flag = pilgrimage_company }
+		any_child = {
+			age = 16
+			
+			prisoner = no
+			NOT = { trait = on_pilgrimage }
+			NOT = { trait = pilgrim }
+			host = { character = ROOT }
+			NOT = { trait = cynical }
+			is_ruler = no
+			religion = almsivi
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_character_flag = pilgrimage_company
+	}
+	
+	option = {
+		name = EVTOPTA86020
+		scaled_wealth = -0.1
+		random_child = {
+			limit = {
+				age = 16
+				
+				NOT = { trait = on_pilgrimage }
+				NOT = { trait = pilgrim }
+				host = { character = ROOT }
+				NOT = { trait = cynical }
+				is_ruler = no
+				religion = almsivi
+			}
+			add_trait = on_pilgrimage
+			opinion = { 
+				modifier = opinion_bring_on_pilgrimage
+				who = ROOT
+			}
+			reverse_opinion = { 
+				modifier = opinion_bring_on_pilgrimage
+				who = ROOT
+			}			
+			hidden_tooltip = {
+				character_event = { id = 86100 days = 3 }
+			}
+		}		
+			
+	}
+	
+	option = {
+		name = EVTOPTB86020
+		opinion = { 
+			modifier = opinion_refused_pilgrimage
+			who = ROOT
+		}				
+	}
+}
+
+##########################################################################
+# Pilgrimage Starting!
+##########################################################################
+character_event = {
+	id = 86100
+	desc = EVTDESC86100
+	picture = GFX_evt_carriage
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+	
+	option = {
+		name = EVTOPTA86100
+		clr_character_flag = preparing_pilgrimage
+		add_trait = on_pilgrimage
+		if = {
+			limit = { ai = no }
+			chronicle = {
+				entry = CHRONICLE_WENT_ON_HAJJ
+				picture = GFX_evt_hagia_sofia
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = 86300 days = 30 }
+		}
+	}
+}
+
+#Bandits!
+character_event = {
+	id = 86101
+	desc = EVTDESC86101
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+	}
+	
+	option = {
+		name = EVTOPTA86101 #attempt avoid
+		trigger = {
+			has_character_flag = pilgrimage_travel_lightly
+		}
+		random = {
+			chance = 20
+			character_event = { id = 86102 tooltip = EVTTOOLTIP86102 }
+			
+		}
+	}
+	option = {
+		name = EVTOPTA86101
+		trigger = {
+			NOT = { has_character_flag = pilgrimage_travel_lightly }
+		}
+		random = {
+			chance = 50
+			character_event = { id = 86102 tooltip = EVTTOOLTIP86102 }
+		}
+	}	
+	option = {
+		name = EVTOPTB86101
+		trigger = {
+			NOT = { has_character_flag = pilgrimage_bring_guards }
+		}
+		character_event = { id = 86102  tooltip = EVTTOOLTIP86102}
+		prestige = 10
+
+	}
+	option = {
+		name = EVTOPTB86101
+		trigger = {
+			has_character_flag = pilgrimage_bring_guards
+		}
+		prestige = 10
+		random = {
+			chance = 2
+			add_trait_wounded_effect = yes
+		}		
+	}
+}
+
+#Bandits catch us
+character_event = {
+	id = 86102
+	desc = EVTDESC86102
+	picture = GFX_evt_bandits
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86102
+		tooltip_info = martial
+		trigger = {
+			martial = 14
+		}
+		prestige = 30
+		random = {
+			chance = 20
+			add_trait_wounded_effect = yes
+		}		
+	}
+	option = {
+		name = EVTOPTB86102
+		trigger = {
+			NOT = { martial = 14 }
+			has_character_flag = pilgrimage_bring_guards
+		}
+		prestige = 10
+		random = {
+			chance = 15
+			add_trait_wounded_effect = yes
+		}		
+	}
+	
+	option = {
+		name = EVTOPTB86102 #fight	
+		trigger = {
+			NOT = { martial = 14 }
+			NOT = { has_character_flag = pilgrimage_bring_guards }
+		}
+		random = {
+			chance = 20
+			add_trait_wounded_effect = yes
+		}		
+	}	
+	option = {
+		name = EVTOPTC86102
+		scaled_wealth = -0.05
+		prestige = -10
+	}
+}
+
+#Seasick on a ship
+character_event = {
+	id = 86105
+	desc = EVTDESC86105
+	picture = GFX_evt_kraken
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86105
+		piety = 5
+	}
+}
+
+#Christian pirates
+character_event = {
+	id = 86110
+	desc = EVTDESC86110
+	picture = GFX_evt_kraken
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+	}
+	
+	option = {
+		name = EVTOPTA86110
+		prestige = -25
+	}
+	option = {
+		name = EVTOPTB86110
+		piety = 25
+		random = {
+			chance = 15
+			add_trait_wounded_effect = yes
+		}
+	}
+}
+
+#Bandits have attacked a fellow on pilgrimage
+character_event = {
+	id = 86150
+	desc = EVTDESC86150
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		is_ruler = yes
+
+	}
+	
+	option = {
+		name = EVTOPTA86150
+		piety = -20
+	}
+	option = {
+		name = EVTOPTB86150
+		piety = 5
+		random = {
+			chance = 15
+			add_trait_wounded_effect = yes
+		}		
+		on_pilgrimage = {
+			limit = {
+				prisoner = no
+				NOT = { has_character_flag = pilgrimage_bring_guards }
+			}
+			opinion = { 
+				modifier = opinion_pilgrimage_saved_from_bandit
+				who = ROOT
+			}
+			hidden_tooltip = { character_event = { id = 86151 } }
+		}
+	}	
+}
+
+#Saved from bandits by fellow pilgrims
+character_event = {
+	id = 86151
+	desc = EVTDESC86151
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86151
+		reverse_opinion = { 
+			modifier = opinion_pilgrimage_saving_on_pilgrimage
+			who = FROM
+		}
+	}
+}
+
+#Encountering a rival on the pilgrimage.
+character_event = {
+	id = 86160
+	desc = EVTDESC86160
+	picture = GFX_evt_carriage
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		on_pilgrimage = {
+			NOT = {
+				has_character_flag = pilgrimage_arrived_in_mecca
+				opinion = { who = ROOT value = 0 }
+			}
+		}
+	}
+	
+	immediate = {
+		on_pilgrimage = {
+			limit = {
+				prisoner = no
+				NOT = {
+					has_character_flag = pilgrimage_arrived_in_mecca
+					opinion = { who = ROOT value = 0 }
+				}
+			}
+			set_character_flag = pilgrimage_rival
+		}
+	}
+	
+	option = {
+		name = EVTOPTA86160 #Attack him!
+		piety = -10
+		on_pilgrimage = {
+			limit = {
+				prisoner = no
+				has_character_flag = pilgrimage_rival
+			}
+			opinion = { 
+				modifier = opinion_pilgrimage_attempt_murder
+				who = ROOT
+			}
+			character_event = { id = 86161 tooltip = EVTTOOLTIP86161 } 
+		}
+	}
+	
+	option = {
+		name = EVTOPTB86160 #Attempt befriend
+		on_pilgrimage = {
+			limit = {
+				prisoner = no
+				has_character_flag = pilgrimage_rival
+			}
+			character_event = { id = 86165 tooltip = EVTTOOLTIP86165 } 
+		}
+	}
+	option = {
+		name = EVTOPTC86160
+		prestige = -10
+	}
+}
+
+#We have had an ambush
+character_event = {
+	id = 86161
+	desc = EVTDESC86161
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86161
+		tooltip_info = martial
+		trigger = {
+			martial = FROM 
+		}
+		random_list = {
+			80 = {
+				FROM = { character_event = { id = 86162 tooltip = EVTTOOLTIP86162 } }
+			}
+			20 = {
+				add_trait_wounded_effect = yes
+				hidden_tooltip = { FROM = { character_event = { id = 86163 } } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB86161
+		trigger = {
+			NOT = { martial = FROM }
+		}
+		random_list = {
+			30 = {
+				FROM = { character_event = { id = 86162 tooltip = EVTTOOLTIP86162 } }
+			}
+			60 = {
+				add_trait_wounded_effect = yes
+				hidden_tooltip = { FROM = { character_event = { id = 86163 } } }
+			}
+			10 = {
+				add_maimed_trait_effect = yes
+				hidden_tooltip = { FROM = { character_event = { id = 86163 } } }
+			}
+		}		
+	}
+	
+	option = {
+		name = EVTOPTC86161
+		trigger = {
+			OR = {
+				trait = paranoid
+				trait = ambitious
+				has_character_flag = pilgrimage_bring_guards
+			}
+		}
+		prestige = -5
+		hidden_tooltip = {
+			FROM = { character_event = { id = 86164 }  }
+		}
+	}
+
+}
+
+#We hurt
+character_event = {
+	id = 86162
+	desc = EVTDESC86162
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86162
+		add_trait = wounded
+	}
+}
+
+#Success!
+character_event = {
+	id = 86163
+	desc = EVTDESC86163
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86163
+		prestige = 5
+	}
+}
+
+#They got away
+character_event = {
+	id = 86164
+	desc = EVTDESC86164
+	picture = GFX_evt_carriage
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86164
+		prestige = -5
+	}
+}
+
+#Another pilgrimage is attempting to befriend us.
+character_event = {
+	id = 86165
+	desc = EVTDESC86165
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86165
+		FROM = { character_event = { id = 86166 tooltip = EVTTOOLTIP86166 } }
+		reverse_opinion = { 
+			who = FROM
+			modifier = opinion_pilgrimage_rivalry_mended
+		}
+	}
+	option = {
+		name = EVTOPTB86165
+		FROM = { letter_event = { id = 86167 tooltip = EVTTOOLTIP86167 } }
+	}
+}
+
+#Breaking bread together
+character_event = {
+	id = 86166
+	desc = EVTDESC86166
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86166
+		reverse_opinion = { 
+			who = FROM
+			modifier = opinion_pilgrimage_rivalry_mended
+		}
+	}
+}
+
+#Does not want to reconciliate
+letter_event = {
+	id = 86167
+	desc = EVTDESC86167
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA86167
+		prestige = -5
+	}
+}
+
+#Lose glutton and drunkard...
+character_event = {
+	id = 86170
+	desc = EVTDESC86170
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86170
+		trigger = {
+			OR = {
+				trait = drunkard
+				trait = gluttonous
+			}
+		}
+		if = {
+			limit = {
+				trait = gluttonous
+			}
+			remove_trait = gluttonous
+		}
+		if = {
+			limit = {
+				trait = drunkard
+			}
+			remove_trait = drunkard
+		}
+	}
+	
+	option = {
+		name = EVTOPTB86170
+		trigger = {
+			NOT = { trait = drunkard }
+			NOT = { trait = gluttonous }
+		}	
+		piety = 15
+	}
+}
+	
+#Lost in the desert
+character_event = {
+	id = 86180
+	desc = EVTDESC86180
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86180
+		health = -1
+		prestige = 25
+	}
+	
+	option = {
+		name = EVTOPTB86180
+		random = {
+			chance = 33
+			add_trait = trusting
+			hidden_tooltip = {
+				character_event = {
+					id = 38250 #Notify Trusting
+				}
+			}
+		}		
+		
+	}
+}
+
+##########################################################################
+# The Hadiths on Hajj.
+##########################################################################
+character_event = {
+	id = 86300
+	desc = EVTDESC86300
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_tooltip = {
+			character_event = { id = 86500 days = 10 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTA86300
+		custom_tooltip = {
+			text = TOOLTIP_LISTEN_TO_HADITH
+			hidden_tooltip = {
+				random_list = {
+					10 = {  character_event = { id = 86320 } }
+					10 = {  character_event = { id = 86330 } }
+					10 = {  character_event = { id = 86340 } }
+					10 = {  character_event = { id = 86350 } }
+					10 = {  character_event = { id = 86360 } }
+					10 = {  character_event = { id = 86380 } }
+					10 = {  character_event = { id = 86390 } }
+					10 = {  character_event = { id = 86400 } }
+					10 = {  character_event = { id = 86410 } }
+				}
+			}		
+		}
+		scaled_wealth = -0.01
+	}
+	option = {
+		name = EVTOPTB86300
+		piety = -10
+	}
+}
+
+#Hadith - Greed
+character_event = {
+	id = 86320
+	desc = EVTDESC86320
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86320
+		tooltip_info = greedy
+		trigger = {
+			trait = greedy
+		}
+		remove_trait = greedy		
+	}
+	option = {
+		name = EVTOPTB86320
+		trigger = {
+			NOT = { trait = greedy }
+		}
+		scaled_wealth = 0.1
+	}
+}		
+
+#Hadith - Protect from laziness, cowardice etc
+character_event = {
+	id = 86330
+	desc = EVTDESC86330
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86330
+		tooltip_info = slothful
+		trigger = {
+			trait = slothful
+		}
+		remove_trait = slothful			
+	}
+
+	option = {
+		name = EVTOPTB86330
+		trigger = {
+			NOT = { trait = slothful }
+		}
+		prestige = 25
+	}
+}		
+
+#Hadith - Envy
+character_event = {
+	id = 86340
+	desc = EVTDESC86340
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86340
+		tooltip_info = envious
+		trigger = {
+			trait = envious
+		}
+		remove_trait = envious				
+	}
+	option = {
+		name = EVTOPTB86340
+		trigger = {
+			NOT = { trait = envious }
+		}	
+		piety = 15	
+	}	
+}		
+
+#Hadith - Truth
+character_event = {
+	id = 86350
+	desc = EVTDESC86350
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86350
+		tooltip_info = deceitful
+		trigger = {
+			trait = deceitful
+		}
+		remove_trait = deceitful				
+		
+	}
+
+	option = {
+		name = EVTOPTB86350
+		trigger = {
+			NOT = { trait = deceitful }
+		}	
+		change_diplomacy = 1		
+	}
+}
+
+#Hadith - Cowardice
+character_event = {
+	id = 86360
+	desc = EVTDESC86360
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86360
+		tooltip_info = craven
+		trigger = {
+			trait = craven
+		}
+		remove_trait = craven		
+	}
+	option = {
+		name = EVTOPTB86360
+		trigger = {
+			NOT = { trait = craven }
+		}	
+		change_martial = 1		
+	}
+}
+
+#Hadith - Unjust
+character_event = {
+	id = 86380
+	desc = EVTDESC86380
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86380
+		tooltip_info = arbitrary
+		trigger = {
+			trait = arbitrary
+		}
+		remove_trait = arbitrary				
+	}
+	option = {
+		name = EVTOPTB86380
+		trigger = {
+			NOT = { trait = arbitrary }
+		}
+		change_diplomacy = 1			
+	}	
+}
+
+#Hadith - Next world
+character_event = {
+	id = 86390
+	desc = EVTDESC86390
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86390
+		tooltip_info = hedonist
+		trigger = {
+			trait = hedonist
+		}
+		remove_trait = hedonist		
+	}
+	option = {
+		name = EVTOPTB86390
+		trigger = {
+			NOT = { trait = hedonist }
+		}
+		change_stewardship = 1
+	}
+}
+
+#Hadith - Cynical
+character_event = {
+	id = 86400
+	desc = EVTDESC86400
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86400
+		tooltip_info = cynical
+		trigger = {
+			trait = cynical
+		}
+		remove_trait = cynical
+	}
+	
+	option = {
+		name = EVTOPTB86400
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		change_diplomacy = 1
+	}
+}
+
+#Hadith - Wroth
+character_event = {
+	id = 86410
+	desc = EVTDESC86410
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86410
+		tooltip_info = wroth
+		trigger = {
+			trait = wroth
+		}
+		remove_trait = wroth
+	}
+
+	option = {
+		name = EVTOPTB86410
+		trigger = {
+			NOT = { trait = wroth }
+		}
+		change_stewardship = 1
+	}
+}		
+
+
+##########################################################################
+# Arrival at Mecca
+##########################################################################				
+
+#Hidden gateway event				
+character_event = {
+	id = 86500
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = pilgrimage_arrived_in_mecca
+		character_event = { id = 86520 }
+	}
+}
+
+#arrival in vivec
+character_event = {
+	id = 86520
+	desc = EVTDESC86520
+	picture = GFX_evt_almsivi_vivec_arrival
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86520
+		piety = 50
+		hidden_tooltip = { character_event = { id = 86620 days = 3 } }		
+	}
+}
+
+#Ghostgate Shrine
+character_event = {
+	id = 86550
+	desc = EVTDESC86550
+	picture = GFX_evt_almsivi_ghostgate
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	immediate = {
+		
+	}	
+	option = {
+		name = EVTOPTA86550
+		if = {
+			limit = {
+				trait = cynical
+			}
+			remove_trait = cynical
+		}
+		random = {
+			chance = 10
+			add_trait = zealous
+			hidden_tooltip = { character_event = {	id = 38261 } }
+		}
+		scaled_wealth = -0.5
+		piety = 50
+		hidden_tooltip = {
+			character_event = { id = 86610 days = 14 } 
+			random_list = {
+				25 = {  character_event = { id = 86101 days = 2 random = 5 } }
+				25 = {  character_event = { id = 86150 days = 2 random = 5 } }
+				25 = {  character_event = { id = 86160 days = 2 random = 5 } }
+				25 = {  character_event = { id = 86820 days = 2 random = 5 } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB86550
+		if = {
+			limit = {
+				trait = cynical
+			}
+			remove_trait = cynical
+		}
+		if = {
+			limit = {
+				trait = ambitious
+			}
+			remove_trait = ambitious
+		}
+		random = {
+			chance = 10
+			add_trait = content
+			}
+		piety = 25
+		hidden_tooltip = {
+			character_event = { id = 86610 days = 14 }
+			random_list = {
+				25 = {  character_event = { id = 86101 days = 2 random = 5 } }
+				25 = {  character_event = { id = 86150 days = 2 random = 5 } }
+				25 = {  character_event = { id = 86160 days = 2 random = 5 } }
+				25 = {  character_event = { id = 86820 days = 2 random = 5 } }
+			}
+		}
+	}	
+}
+
+
+#Hidden gateway event				
+character_event = {
+	id = 86551
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				location = {
+					distance = {
+						where = 342	#Red Mountain
+						value = 400	#kind of far..
+					}
+				}
+			}
+			character_event = { id = 86800  days = 30 random = 25 }
+		}
+		if = {
+			limit = {
+				location = {
+					NOT = {
+						distance = {
+							where = 342	#Red Mountain
+							value = 400	#kind of far..
+						}
+					}
+				}
+			}
+			character_event = { id = 86800  days = 10 random = 25 }
+		}
+	}
+}
+
+#Fields of Kummu
+character_event = {
+	id = 86610
+	desc = EVTDESC86610
+	picture = GFX_evt_almsivi_fields_of_kummu
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86610
+		set_character_flag = on_home_from_pilgrimage
+		clr_character_flag = pilgrimage_arrived_in_mecca
+		if = {
+			limit = { trait = zealous }
+				add_trait = ambitious
+			}
+		if = {
+			limit = { NOT = { trait = zealous } }
+				random = {
+				chance = 10
+				add_trait = diligent
+				hidden_tooltip = { character_event = { id = 38256 } }
+				}
+			}
+		piety = 50
+		hidden_tooltip = { character_event = { id = 86551 } }	
+	}
+	option = {
+		name = EVTOPTB86610
+		set_character_flag = on_home_from_pilgrimage
+		clr_character_flag = pilgrimage_arrived_in_mecca
+		piety = 50
+		hidden_tooltip = { remove_trait = proud }
+		add_trait = humble
+		hidden_tooltip = { character_event = { id = 86551 } }
+	}
+}
+	
+#Shrine of Daring - High Fane
+character_event = {
+	id = 86620
+	desc = EVTDESC86620
+	picture = GFX_evt_almsivi_vivec_high_fane
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86620
+		if = {
+			limit = { trait = possessed }
+			remove_trait = possessed
+		}
+		if = {
+			limit = { trait = lunatic }
+			remove_trait = lunatic
+		}
+		if = {
+			limit = { trait = stressed }
+			remove_trait = stressed
+		}	
+		if = {
+			limit = { trait = depressed }
+			remove_trait = depressed
+		}	
+		piety = 50	
+		hidden_tooltip = { character_event = { id = 86630 days = 3 } }
+	}
+}
+	
+#Shrine of Generosity - Palace of vivec
+character_event = {
+	id = 86630
+	desc = EVTDESC86630
+	picture = GFX_evt_almsivi_vivec_palace
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	option = {
+		name = EVTOPTA86630
+		random = {
+			chance = 50
+			add_trait = charitable
+			hidden_tooltip = { character_event = { id = 38273 } }
+			}
+		scaled_wealth = -0.5
+		prestige = 50
+		hidden_tooltip = { character_event = {	id = 86640 days = 3 } }
+	}
+	option = {
+		name = EVTOPTB86630
+		scaled_wealth = -0.1
+		piety = 50
+		hidden_tooltip = { character_event = {	id = 86640 days = 3 } }
+	}	
+	option = {
+		name = EVTOPTC86630
+		random = {
+			chance = 50
+			add_trait = greedy
+			hidden_tooltip = { character_event = { id = 38252 } }
+			}
+		scaled_wealth = 0.5
+		piety = -50
+		prestige = -50
+		hidden_tooltip = { character_event = {	id = 86640 days = 3 } }
+	}	
+}
+
+#Shrine of Courtesy - Puzzle Canals
+character_event = {
+	id = 86640
+	desc = EVTDESC86640
+	picture = GFX_evt_almsivi_vivec_puzzle_canal
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	option = {
+		#Give Krazzt the sword
+		name = EVTOPTA86640
+		if = {
+			limit = { 
+				trait = shy 
+			}
+			remove_trait = shy
+		}		
+		random = {
+			chance = 10
+			add_trait = gregarious
+			hidden_tooltip = { character_event = { id = 38265 } }
+			}
+		piety = 50
+		hidden_tooltip = {
+			character_event = {	id = 86650 days = 14 } 
+			random_list = {
+					20 = {  character_event = { id = 86105 days = 2 random = 5 } }
+					20 = {  character_event = { id = 86110 days = 2 random = 5 } }
+					20 = {  character_event = { id = 86810 days = 2 random = 5 } }
+					20 = {  character_event = { id = 86815 days = 2 random = 5 } }
+					20 = {  character_event = { id = 86815 days = 2 random = 5 } }
+			}
+		}
+	}	
+}
+
+#Shrine of Valour - Koal Cave
+character_event = {
+	id = 86650
+	desc = EVTDESC86650
+	picture = GFX_evt_almsivi_koal_cave
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	option = {
+		#Fight Dreugh alone, prestige + chance of death + brave
+		name = EVTOPTA86650
+		random = {
+			chance = 50
+			ROOT = { death = { death_reason = death_accident } }
+			}
+		prestige = 100
+		hidden_tooltip = { remove_trait = craven }
+		add_trait = brave
+		hidden_tooltip = { character_event = {	id = 86660 days = 3 } }
+	}
+	option = {
+		#Fight Dreugh together, piety + chance of wound
+		name = EVTOPTB86650
+		random = {
+			chance = 25
+			add_trait = wounded 
+			hidden_tooltip = { character_event = { id = 38280 } }
+			}
+		piety = 50
+		hidden_tooltip = { character_event = { id = 86660 days = 3 } }
+	}
+	option = {
+		#Tell others to fight Dreugh, lose piety + prestige + cowardice, no death/wound
+		name = EVTOPTC86650
+		prestige = -50
+		piety = -50
+		hidden_tooltip = { remove_trait = brave }
+		add_trait = craven
+		hidden_tooltip = { character_event = { id = 86660 days = 3 } }
+	}		
+}
+
+#Shrine of Justice - Gnisis
+character_event = {
+	id = 86660
+	desc = EVTDESC86660
+	picture = GFX_evt_almsivi_gnisis
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	option = {
+		#Leave the potion of cure disease
+		name = EVTOPTA86660
+		if = {
+			limit = { 
+				trait = arbitrary
+				}
+			remove_trait = arbitrary
+		}
+		random = {
+			chance = 10
+			add_trait = just 
+			hidden_tooltip = { character_event = { id = 38267 } }
+			}
+		piety = 50
+		hidden_tooltip = {
+			character_event = {	id = 86550 days = 14 } 
+			random_list = {
+					25 = {  character_event = { id = 86180 days = 2 random = 5 } }
+					25 = {  character_event = { id = 86825 days = 2 random = 5 } }
+					25 = {  character_event = { id = 86830 days = 2 random = 5 } }
+					25 = {  character_event = { id = 86845 days = 2 random = 5 } }
+			}
+		}
+	}
+}
+
+##########################################################################
+# Random things that can happen on the way home..
+##########################################################################
+
+#Dangerous bandits have cornered us..
+character_event = {
+	id = 86700
+	desc = EVTDESC86700
+	picture = GFX_evt_mongols
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = on_home_from_pilgrimage
+		trait = on_pilgrimage
+		NOT = { has_character_flag = pilgrimage_bring_guards }
+		NOT = { has_character_flag = pilgrimage_home_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}	
+	
+	immediate = {
+		set_character_flag = pilgrimage_home_event
+	}
+
+	option = {
+		name = EVTOPTA86700
+		prestige = 10
+		random = {
+			chance = 15
+			add_trait_wounded_effect = yes
+		}		
+		
+	}
+	option = {
+		name = EVTOPTB86700
+		ai_chance = {
+			factor = 0
+		}
+		add_trait = craven
+	}
+}
+
+#Discover
+character_event = {
+	id = 86701
+	desc = EVTDESC86701
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = on_home_from_pilgrimage
+		trait = on_pilgrimage
+		has_character_flag = pilgrimage_bring_guards
+		NOT = { has_character_flag = pilgrimage_home_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	immediate = {
+		set_character_flag = pilgrimage_home_event
+	}
+
+	option = {
+		name = EVTOPTA86701
+		scaled_wealth = 0.05
+	}
+}
+
+#Encounter a poor village
+character_event = {
+	id = 86720
+	desc = EVTDESC86720
+	picture = GFX_evt_heretic
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = on_home_from_pilgrimage
+		trait = on_pilgrimage
+		NOT = { has_character_flag = pilgrimage_home_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	immediate = {
+		set_character_flag = pilgrimage_home_event
+	}
+
+	option = {
+		name = EVTOPTA86720
+		scaled_wealth = -0.10
+		piety = 15
+	}
+	option = {
+		name = EVTOPTB86720
+		piety = -15
+		on_pilgrimage = {
+			opinion = { 
+				who = ROOT
+				modifier = opinion_pilgrimage_not_helpin
+			}
+		}
+	}
+}
+
+##########################################################################
+# We are now home, and have been on our pilgrimage.
+##########################################################################
+character_event = {
+	id = 86800
+	desc = EVTDESC86800
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = on_home_from_pilgrimage
+		clr_character_flag = pilgrimage_company
+		clr_character_flag = do_not_disturb
+	}
+	option = {
+		name = EVTOPTA86800
+		remove_trait = on_pilgrimage
+		add_trait = pilgrim
+		piety = 25
+
+	}
+}
+
+######################################################
+#Random Events when NOT on pilgrimage or is pilgrim
+######################################################
+character_event = {
+	id = 86900
+	desc = EVTDESC86900
+	picture = GFX_evt_bishop
+	border = GFX_event_normal_frame_religion
+
+	only_men = yes
+	min_age = 35
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_ruler = yes
+		religion = almsivi
+		NOT = { trait = pilgrim }
+		NOT = { trait = on_pilgrimage }
+		NOT = { trait = cynical }
+		NOT = {	has_character_flag = preparing_pilgrimage }
+		NOT = { has_character_flag = opinion_pilgrimage_promised }
+		NOT = { has_character_flag = opinion_almsivi_liberation_promised }
+		job_spiritual = {
+			learning = 11
+			age = 30
+			trait = pilgrim
+		}
+		NOR = {
+			any_current_enemy = { religion_group = human_pantheon }
+			any_current_enemy = { religion_group = mer_pantheon }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.8
+			piety = 100
+		}
+	}
+	option = {
+		name = EVTOPTA86900
+		set_character_flag = promise_pilgrimage
+		job_spiritual = {
+			opinion = { 
+				who = FROM
+				modifier = opinion_pilgrimage_promised
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB86900
+		trigger = {
+			any_independent_ruler = {
+				or = {
+					religion_group = human_pantheon
+					religion_group = mer_pantheon
+				}
+				any_realm_province = {
+					religion = almsivi
+				}
+			}
+		}
+		set_character_flag = promise_almsivi_liberation
+		job_spiritual = {
+			opinion = { 
+				who = FROM
+				modifier = opinion_pleased
+				years = 5
+			}
+		}		
+	}	
+	option = {
+		name = EVTOPTC86900
+		piety = -10
+		add_trait = cynical
+	}
+}
+
+#Remind on promised pilgrimage
+character_event = {
+	id = 86901
+	desc = EVTDESC86901
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	only_men = yes
+	min_age = 30
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		is_ruler = yes
+		religion = almsivi
+		war = no
+		has_character_flag = promise_pilgrimage
+		any_demesne_title = {
+			is_occupied = no
+		}
+		prisoner = no		
+		job_spiritual = { learning = 1 }
+		NOT = { trait = pilgrim }
+		NOT = { trait = on_pilgrimage }
+		NOT = {	has_character_flag = preparing_pilgrimage }
+		#any_independent_ruler = { }
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA86901
+		piety = -25
+	}
+}
+
+#Remind on promised liberation!
+character_event = {
+	id = 86902
+	desc = EVTDESC86902
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_religion
+	
+	only_men = yes
+	min_age = 30
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		
+		is_ruler = yes
+		religion = almsivi
+		war = no
+		has_character_flag = promise_almsivi_liberation
+		prisoner = no
+		job_spiritual = { learning = 1 }
+		
+		any_independent_ruler = {
+			or = {
+				religion_group = mer_pantheon
+				religion_group = human_pantheon
+			}
+			any_realm_province = {
+				religion = almsivi
+			}
+		}
+	
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = EVTOPTA86902
+		piety = -25
+	}
+}
+
+#hidden clear up event.
+# TODO:JJPERF see if this can be moved to on_action
+character_event = {
+	id = 86903
+	only_men = yes
+	min_age = 30
+	capable_only = yes
+	prisoner = no
+
+	religion = almsivi
+	only_playable = yes
+	
+	trigger = {
+		has_character_flag = promise_almsivi_liberation
+		war = yes
+		OR = {
+			any_current_enemy = { religion_group = mer_pantheon }
+			any_current_enemy = { religion_group = human_pantheon }
+		}
+	
+	}
+	
+	hide_window = yes
+	mean_time_to_happen = {
+		days = 1
+	}	
+	immediate = {
+		clr_character_flag = promise_almsivi_liberation
+	}
+}
+
+#############################
+# Additional flavour events # 
+#############################
+
+### Far Journey 
+
+# Shipwrecked
+character_event = {
+	id = 86810
+	desc = EVTDESC86810
+	picture = GFX_evt_kraken
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = { # Shares food
+		name = EVTOPTA86810
+		character_event = { id = 86811 tooltip = EVTTOOLTIP86811 }
+	}
+	option = { # Does not share
+		name = EVTOPTB86810
+		character_event = { id = 86812 tooltip = EVTTOOLTIP86812 }
+	}
+}
+
+# Shipwrecked: Shared Food
+character_event = {
+	id = 86811
+	desc = EVTDESC86811
+	picture = GFX_evt_kraken
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86811
+		piety = 15
+		health = -1
+	}
+}
+
+# Shipwrecked: Did NOT Share Food
+character_event = {
+	id = 86812
+	desc = EVTDESC86812
+	picture = GFX_evt_kraken
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86812
+		piety = -15
+	}
+}
+
+# Mutiny
+character_event = {
+	id = 86815
+	desc = EVTDESC86815
+	picture = GFX_evt_kraken
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86815
+		character_event = { id = 86816 tooltip = EVTTOOLTIP86816 }
+		random = {
+			chance = 15
+			add_trait_wounded_effect = yes
+		}
+	}
+	option = {
+		name = EVTOPTB86815
+		character_event = { id = 86817 tooltip = EVTTOOLTIP86817 }
+	}
+}
+
+# Mutiny: Fights Crew
+character_event = {
+	id = 86816
+	desc = EVTDESC86816
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86816
+		prestige = 15
+	}
+}
+
+# Mutiny: Sneaks Off Ship
+character_event = {
+	id = 86817
+	desc = EVTDESC86817
+	picture = GFX_evt_kraken
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86817
+		prestige = -15
+	}
+}
+
+# Caravan
+character_event = {
+	id = 86820
+	desc = EVTDESC86820
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86820
+		prestige = 10
+	}
+}
+
+### Other pilgrimage events
+
+# Oasis
+character_event = {
+	id = 86825
+	desc = EVTDESC86825
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86825
+		character_event = { id = 86826 tooltip = EVTTOOLTIP86826 }
+	}
+	option = {
+		name = EVTOPTB86825
+		character_event = { id = 86827 tooltip = EVTTOOLTIP86827 }
+	}
+}
+
+# Oasis: Has Faith
+character_event = {
+	id = 86826
+	desc = EVTDESC86826
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86826
+		piety = 15
+	}
+}
+
+# Oasis: Gives In To Despair
+character_event = {
+	id = 86827
+	desc = EVTDESC86827
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86827
+		piety = -15
+	}
+}
+
+# Desert Mirage
+character_event = {
+	id = 86830
+	desc = EVTDESC86830
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86830
+		random = {
+			chance = 5
+			add_depressed = yes
+			hidden_tooltip = { character_event = { id = 38288 } }
+		}
+	}
+	option = {
+		name = EVTOPTB86830
+		random = {
+			chance = 5
+			add_trait = possessed
+			#hidden_tooltip = { character_event = { id = 6032 } }
+		}
+	}
+}
+
+# Camels
+character_event = {
+	id = 86835
+	desc = EVTDESC86835
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86835
+		piety = 15
+		health = -1
+	}
+	option = {
+		name = EVTOPTB86835
+		piety = -15
+	}
+}
+
+# Baggage Train
+character_event = {
+	id = 86840
+	desc = EVTDESC86840
+	picture = GFX_evt_carriage
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86840
+		piety = 10
+	}
+}
+
+# Hashshashin
+character_event = {
+	id = 86845
+	desc = EVTDESC86845
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+		has_global_flag = assassins_founded
+		NOT = { has_global_flag = assassins_scatter }
+		NOT = { has_global_flag = assassins_destroyed }
+	}
+	
+	option = {
+		name = EVTOPTA86845
+		character_event = { id = 86846 tooltip = EVTTOOLTIP86846 }
+		random = {
+			chance = 15
+			add_trait_wounded_effect = yes
+		}
+		set_character_flag = saved_assassin
+	}
+	option = {
+		name = EVTOPTB86845
+		piety = -10
+	}
+}
+
+# Hashshashin: Intervenes
+character_event = {
+	id = 86846
+	desc = EVTDESC86846
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86846
+		piety = 10
+	}
+}
+
+### On The Way Home
+
+# Pilgrim Remains
+character_event = {
+	id = 86850
+	desc = EVTDESC86850
+	picture = GFX_evt_pale_rider
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = on_home_from_pilgrimage
+		trait = on_pilgrimage
+		NOT = { has_character_flag = pilgrimage_home_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}	
+	
+	immediate = {
+		set_character_flag = pilgrimage_home_event
+	}
+	
+	option = {
+		name = EVTOPTA86850
+		piety = 15
+	}
+}
+
+# Sandstorm
+character_event = {
+	id = 86855
+	desc = EVTDESC86855
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = on_home_from_pilgrimage
+		trait = on_pilgrimage
+		NOT = { has_character_flag = pilgrimage_home_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	immediate = {
+		set_character_flag = pilgrimage_home_event
+	}
+	
+	option = {
+		name = EVTOPTA86855
+		piety = 15
+	}
+}
+
+# Stranded Pilgrims
+character_event = {
+	id = 86860
+	desc = EVTDESC86860
+	picture = GFX_evt_desert
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = on_home_from_pilgrimage
+		trait = on_pilgrimage
+		NOT = { has_character_flag = pilgrimage_home_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}	
+	
+	immediate = {
+		set_character_flag = pilgrimage_home_event
+	}
+	
+	option = {
+		name = EVTOPTA86860
+		piety = 15
+		scaled_wealth = -0.10
+	}
+	option = {
+		name = EVTOPTB86860
+		piety = -15
+	}
+}
+
+# Hashshashins: Ambushed
+character_event = {
+	id = 86865
+	desc = EVTDESC86865
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	trigger = {
+		has_character_flag = on_home_from_pilgrimage
+		has_character_flag = saved_assassin
+		trait = on_pilgrimage
+		NOT = { has_character_flag = pilgrimage_home_event }
+	}
+	
+	mean_time_to_happen = {
+		days = 15
+	}
+	
+	immediate = {
+		set_character_flag = pilgrimage_home_event
+	}
+	
+	option = {
+		name = EVTOPTA86865
+		character_event = { id = 86866 tooltip = EVTTOOLTIP86866 }
+	}
+}
+
+# Hashshashins: Saved
+character_event = {
+	id = 86866
+	desc = EVTDESC86866
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_religion
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+
+	trigger = {
+		trait = on_pilgrimage
+	}
+	
+	option = {
+		name = EVTOPTA86866
+		prestige = 20
+	}
+}

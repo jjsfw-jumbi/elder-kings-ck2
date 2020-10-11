@@ -1,0 +1,71 @@
+# Chancellor
+action_improve_relations = {
+	attribute = diplomacy
+	
+	potential = {
+	}
+	
+	trigger = {
+		any_province_lord = {
+			NOT = { character = FROM }
+			is_theocracy = no
+			FROM = {
+				job_chancellor = {
+					NOT = { character = PREVPREV } # Can't be sent to improve relations with himself...
+				}
+			}
+		}
+		is_within_diplo_range = FROM
+	}
+
+	events = { 910 911 }
+}
+action_fabricate_claims = {
+	attribute = diplomacy
+	
+	potential = {
+		FROM = { is_nomadic = no }
+	}
+	
+	trigger = {
+		any_province_lord = {
+			NOT = { character = FROM }
+			FROM = {
+				job_chancellor = {
+					NOT = { character = PREVPREV } # Can't be sent to improve relations with himself...
+				}
+			}
+		}
+		is_within_diplo_range = FROM
+	}
+	
+	events = { 913 914 }
+}
+action_sow_dissent = {
+	attribute = diplomacy
+	
+	potential = {
+	}
+	
+	trigger = {
+		any_province_lord = {
+			NOT = { character = FROM }
+			NOT = { is_liege_or_above = FROM }
+		}
+		is_within_diplo_range = FROM
+	}
+	events = { 916 917 }
+}
+action_statecraft = {
+	attribute = diplomacy
+
+	potential = {
+		has_dlc = Mystics
+	}
+
+	liege_modifier = statecraft_liege_mod
+
+	offmap = yes
+	
+	events = { MNM.78000 MNM.78003 } 
+}

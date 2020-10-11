@@ -1,0 +1,1469 @@
+decisions = {
+	view_the_dead_of_motalion_decision = {
+		only_independent = yes
+		ai = no
+		
+		potential = {
+			is_playable = yes
+			has_submenu_open = no
+			any_wonder_owner = {
+				has_wonder = wonder_motalion
+				any_realm_wonder_upgrade = {
+					has_wonder_flag = is_motalion
+					is_active = yes
+				}
+			}
+			OR = {
+				religion_group = yokudan_pantheon
+				culture_group = yokudan_group
+			}
+		}
+		allow = {
+			religion_group = yokudan_pantheon
+		}
+		effect = {
+			hidden_tooltip = { character_event = { id = ekwonder.103 } }
+		}
+		ai_will_do = { factor = 0 }
+	}
+	rewrite_stars_decision = {
+		only_independent = yes
+		ai = no
+		
+		potential = {
+			is_playable = yes
+			has_submenu_open = no
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade = upgrade_runestones
+				is_active = yes
+			}
+		}
+		allow = {
+			has_birthsign = yes
+			custom_tooltip = {
+				text = has_not_changed_birthsign_recently
+				hidden_tooltip = {
+					NOT = { has_character_modifier = birthsign_timer }
+				}
+			}
+		}
+		
+		effect = {
+			set_character_flag = birthsign_page_1
+			add_character_modifier = {
+				modifier = birthsign_timer
+				years = 3
+				hidden = yes
+			}
+			character_event = { id = birthsign.1 }
+		}
+		
+		
+		ai_will_do = { factor = 0 }
+	}
+
+	use_skyforge_decision = {
+		only_independent = yes
+		ai = no
+		
+		potential = {
+			#always = no
+			is_playable = yes
+			has_submenu_open = no
+			any_realm_wonder = {
+				has_wonder = wonder_skyforge
+				is_active = yes
+			}
+		}
+		allow = {
+			has_wonder = wonder_skyforge
+			any_realm_wonder = {
+				has_wonder_upgrade = upgrade_skyforge_master
+				is_active = yes
+			}
+			custom_tooltip = {
+				text = has_not_used_skyforge_recently
+				hidden_tooltip = {
+					OR = {
+						NOT = { has_character_flag = used_skyforge_recently }
+						had_character_flag = { flag = used_skyforge_recently days = 720 }
+					}
+				}
+			}
+			custom_tooltip = {
+				text = skyforge_is_not_damaged
+				hidden_tooltip = {
+					OR = {
+						NOT = { has_character_flag = skyforged_was_damaged }
+						had_character_flag = { flag = skyforged_was_damaged days = 3600 }
+					}
+				}
+			}
+		}
+		
+		effect = {
+			character_event = { id = ekwonder.5 }
+		}
+		
+		
+		ai_will_do = { factor = 0 }
+	}
+	
+	meditative_retreat_decision = {
+		only_independent = yes
+		ai = no
+		
+		potential = {
+			is_ruler = yes
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = inner_sanctuary
+				is_active = yes
+			}
+		}
+		allow = {
+			is_adult = yes
+			prisoner = no
+			is_inaccessible_trigger = no
+			in_command = no
+			has_job_title = no
+			custom_tooltip = { text = is_not_busy_trigger_tooltip hidden_tooltip = { NOT = { has_character_flag = do_not_disturb } } }
+			custom_tooltip = { NOR = { has_character_modifier = recent_meditation has_character_modifier = enlightened_meditation } text = not_recently_retreated_for_meditation_tooltip }
+		}
+		effect = {
+			custom_tooltip = {
+				text = go_into_meditative_retreat_info_tooltip
+				set_character_flag = do_not_disturb
+				add_trait = meditative_retreat_trait
+				hidden_tooltip = {
+					add_character_modifier = {
+						name = meditating_timer
+						duration = 100
+						hidden = yes
+					}
+				}
+				
+				#any_spouse = {
+				#	#notify spouse about seclusion.
+				#}
+				#any_courtier_or_vassal = {
+				#	limit = {
+				#		OR = {
+				#			has_job_title = yes
+				#			has_landed_title = yes
+				#		}
+				#	}
+				#	#notify any vassals about seclusion.
+				#}
+			}
+		}
+		
+		ai_will_do = { factor = 0 } #Not required but I feel weird not having it.
+	}
+	
+	stop_meditative_retreat_decision = {
+		only_playable = yes
+		ai = no
+		
+		potential = {
+			trait = meditative_retreat_trait
+		}
+		allow = {
+			trait = meditative_retreat_trait
+		}
+		effect = {
+			custom_tooltip = {
+				text = end_meditative_retreat_tt
+				remove_trait = meditative_retreat_trait
+				add_character_modifier = {
+					name = recent_meditation
+					duration = 365
+					hidden = yes
+				}
+				if = {
+					limit = {
+						NOT = { has_character_modifier = meditating_timer }
+					}
+					hidden_tooltip = { character_event = { id = ekwonder.25 } }
+				}
+				#any_spouse = {
+				#	#notify spouse about return.
+				#}
+				#any_courtier_or_vassal = {
+				#	limit = {
+				#		OR = {
+				#			has_job_title = yes
+				#			has_landed_title = yes
+				#		}
+				#	}
+				#	#notify any vassals about return.
+				#}
+			}
+		}
+		
+		ai_will_do = { factor = 0 }
+	}
+	
+	recruit_chirurgeon = {
+		only_independent = yes
+		ai_check_interval = 24
+
+		potential = {
+			has_character_flag = employment_open
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade_flag = hospital
+				is_active = yes
+			}
+		}
+		allow = {
+			is_inaccessible_trigger = no
+			custom_tooltip = {
+				text = 3_year_physician_cooldown
+				hidden_tooltip = {
+					OR = {
+						NOT = { has_character_flag = 3_year_physician_cooldown }
+						had_character_flag = { flag = 3_year_physician_cooldown days = 1095 }
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = {
+				text = recruit_chirurgeon_tooltip #A candidate from the Hospital will be presented at Court.
+				hidden_tooltip = {
+					random_list = {
+						20 = { #Sawbones
+							modifier = { factor = 0 has_global_flag = rc_sawbones_generated }
+							create_character = {
+								culture = random
+								religion = ROOT
+								dynasty = actually_culture
+								female = 25
+								trait = healer_3
+								trait = warrior_3
+								trait = witchhunter_2
+								trait = physician
+								trait = former_soldier
+								trait = cynical
+								trait = stubborn
+								trait = ruthless
+								trait = honest
+								trait = scarred_mid
+								trait = one_legged
+								trait = gambler
+								#has_nickname = nick_the_sawbones
+							}
+							new_character = {
+								give_nickname = nick_the_sawbones
+							}
+						}
+						20 = { #Barber Surgeon
+							modifier = { factor = 0 has_global_flag = rc_barber_generated }
+							create_character = {
+								culture = random
+								religion = ROOT
+								dynasty = actually_culture
+								female = 50
+								trait = healer_3
+								trait = agent_3
+								trait = trader_2
+								trait = physician
+								trait = groomed
+								trait = ambitious
+								trait = gregarious
+								trait = charitable
+								trait = adventurer
+								#has_nickname = nick_the_barber
+							}
+							new_character = {
+								give_nickname = nick_the_barber
+							}
+						}
+						20 = { #Phylogenist
+							modifier = { factor = 0 has_global_flag = rc_phylo_generated }
+							create_character = {
+								culture = random
+								religion = ROOT
+								dynasty = actually_culture
+								female = 50
+								trait = healer_3
+								trait = magistrate_3
+								trait = savant_2
+								trait = physician
+								trait = erudite
+								trait = temperate
+								trait = proud
+								trait = lustful
+								trait = scholar
+								#has_nickname = nick_the_phylogenist
+							}
+							new_character = {
+								give_nickname = nick_the_phylogenist
+							}
+						}
+						20 = { #Chemist
+							modifier = { factor = 0 has_global_flag = rc_chem_generated }
+							create_character = {
+								culture = random
+								religion = ROOT
+								dynasty = actually_culture
+								female = 50
+								trait = healer_3
+								trait = mage_3
+								trait = nightblade_2
+								trait = physician
+								trait = erudite
+								trait = gluttonous
+								trait = charitable
+								trait = paranoid
+								trait = alchemist
+								#has_nickname = nick_the_chemist
+							}
+							new_character = {
+								give_nickname = nick_the_chemist
+							}
+						}
+						20 = { #Alienist
+							modifier = { factor = 0 has_global_flag = rc_alien_generated }
+							create_character = {
+								culture = random
+								religion = ROOT
+								dynasty = actually_culture
+								female = 50
+								trait = healer_3
+								trait = diplomat_3
+								trait = priest_2
+								trait = physician
+								trait = kind
+								trait = trusting
+								trait = diligent
+								trait = patient
+								trait = socializer
+								#has_nickname = nick_the_alienist
+							}
+							new_character = {
+								give_nickname = nick_the_alienist
+							}
+						}
+						20 = { #Generic
+							create_character = {
+								random_traits = yes
+								culture = random
+								religion = ROOT
+								dynasty = actually_culture
+								female = 50
+								trait = healer_3
+								trait = physician
+							}
+							new_character = {
+								remove_education_effect = yes
+								random_list = {
+									30 = { add_trait = mage_3 }
+									18 = { add_trait = agent_3 }
+									25 = { add_trait = warrior_3 }
+									11 = { add_trait = diplomat_3 }
+									16 = { add_trait = magistrate_3 }
+								}
+							}
+						}
+					}
+					new_character = {
+						assign_birthsign = yes
+						assign_racial_trait = yes
+						remove_all_negative_congenital_traits_effect = yes
+						random_list = {
+							1 = { add_trait = vampire }
+							1 = { add_trait = lycan }
+							98 = {}
+						}
+						if = {
+							limit = { age < 25 is_long_lived = no }
+							add_age = 15
+						}
+						if = {
+							limit = { is_long_lived = yes }
+							add_age = 86
+							assign_racial_trait = yes
+						}
+						random_list = {
+							15 = { add_trait = perceptive }
+							10 = { add_trait = quick }
+							5 = { add_trait = genius }
+							15 = { add_trait = agile }
+							55 = {}
+						}
+						if = { limit = { learning < 9 } change_learning = 3 }
+						if = { limit = { stewardship < 6 } change_learning = 3 }
+						if = { limit = { diplomacy < 5 } change_learning = 3 }
+						if = { limit = { intrigue < 5 } change_learning = 3 }
+						if = { limit = { martial < 5 } change_learning = 3 }
+						save_event_target_as = invited_character
+					}
+					character_event = { id = ekwonder.26 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0.3
+			
+			modifier = {
+				factor = 0
+				AND = {
+					tier = COUNT
+					NOT = {
+						any_close_relative = {
+							ai = no
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOR = {
+					tier = KING
+					tier = EMPEROR
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = paranoid
+			}
+			modifier = {
+				factor = 10
+				OR = {
+					is_ill = yes
+					num_of_symptoms = 1
+				}
+			}
+		}
+	}
+
+	volwesi_destroy_palace_decision = {
+		only_independent = yes
+		ai = no
+		
+		potential = {
+			is_playable = yes
+			has_submenu_open = no
+			OR = {
+				AND = {
+					culture = akaviri
+					any_realm_wonder = {
+						is_active = yes
+						OR = {
+							has_wonder_upgrade = upgrade_serpentine_palace
+							has_wonder_upgrade = upgrade_volwesi_palace_generic
+						}
+					}
+				}
+				AND = {
+					culture = tsaesci
+					any_realm_wonder = {
+						is_active = yes
+						OR = {
+							has_wonder_upgrade = upgrade_ginyeom_palace
+							has_wonder_upgrade = upgrade_volwesi_palace_generic
+						}
+					}
+				}
+			}
+			
+		}
+		allow = {
+			war = no
+			818 = {
+				culture = ROOT
+			}
+		}
+		
+		effect = {
+			custom_tooltip = {
+				text = volwesi_palace_destroyed_tt
+				any_realm_wonder = {
+						limit = {
+							has_wonder_flag = is_volwesi
+						}
+						if = {
+							limit = {
+								has_wonder_upgrade = upgrade_ginyeom_palace
+							}
+							destroy_wonder_upgrade = upgrade_ginyeom_palace
+						}
+						else_if = {
+							limit = {
+								has_wonder_upgrade = upgrade_serpentine_palace
+							}
+							destroy_wonder_upgrade = upgrade_serpentine_palace
+						}
+						else = {
+							destroy_wonder_upgrade = upgrade_volwesi_palace_generic
+						}
+					}
+			}
+		}
+	}
+	
+	### Based on recruit_academy_hero
+	recruit_gladiator_ic_arena = {
+		only_independent = yes
+		is_high_prio = yes
+		
+		potential = {
+			has_submenu_open = no
+			is_playable = yes
+			any_realm_wonder_upgrade = {
+				has_wonder_upgrade = upgrade_imperial_arena
+				is_active = yes
+			}
+			
+			OR = {
+				ai = no
+				NOT = {
+					any_courtier_or_vassal = {
+						OR = {
+							#Generic
+							has_character_flag = gladiator_generic_heretic
+							has_character_flag = gladiator_generic_guildsworn
+							#Custom
+							has_character_flag = gladiator_breton_knight
+							has_character_flag = gladiator_altmer_outcast
+							has_character_flag = gladiator_argonian_pirate
+							has_character_flag = gladiator_nord_berserker
+							has_character_flag = gladiator_dunmer_houseless
+							has_character_flag = gladiator_khajiit_caravaner
+							has_character_flag = gladiator_bosmer_blind
+							has_character_flag = gladiator_imperial_monk
+							has_character_flag = gladiator_orsimer_renegade
+							has_character_flag = gladiator_redguard_gladiator
+							#Exotic
+							has_character_flag = gladiator_humanakaviri_refugee
+							has_character_flag = gladiator_yokudan_swordsinger
+							has_character_flag = gladiator_atmoran_champion
+							has_character_flag = gladiator_quey_plaguing_kings
+						}
+					}
+				}
+			}
+		}
+		
+		allow = {
+			is_inaccessible_trigger = no
+			prestige = 10
+			scaled_wealth = 0.25
+			custom_tooltip = {
+				text = has_not_recruited_in_5_years_TT
+				hidden_tooltip = {
+					OR = {
+						NOT = { has_character_flag = recruited_gladiator_ic_arena }
+						had_character_flag = { flag = recruited_gladiator_ic_arena days = 1825 }
+						# Next time please don't forget to comment that line
+						#always = yes
+					}
+				}
+			}
+		}
+		
+		effect = {
+			
+			prestige = -10
+			scaled_wealth = -0.25
+			
+			hidden_effect = {
+				set_character_flag = recruited_gladiator_ic_arena
+				random_list = {
+					
+					# Regular ones, not too wild
+					
+					# Breton Knight, last child of a random noble
+					10 = {
+						create_character = {
+							culture = breton
+							religion = eight_divines
+							dynasty = none
+							female = 33
+							trait = warrior_4
+							trait = knight_2
+							trait = just
+							trait = proud
+							trait = diligent
+							trait = patient
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							# Give some gear
+							generate_weapon_sword_breton = yes
+							generate_armor_breton = yes
+							
+							random_playable_ruler = {
+								limit = {
+									ai = yes
+									culture = breton
+									lower_tier_than = DUKE
+									is_theocracy = no
+									num_of_children	> 2
+									NOT = { any_child_even_if_dead = { has_character_flag = gladiator_breton_knight } }
+									NOT = { any_close_relative = { higher_tier_than = COUNT } }
+								}
+								if = {
+									limit = { is_female = no }
+									new_character = { set_father = PREV dynasty = PREV }
+								}
+								else = { new_character = { set_mother = PREV dynasty = PREV } }
+							}
+							
+							set_character_flag = gladiator_breton_knight
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Redguard Gladiator, his life and the Arena are one and the same
+					10 = {
+						create_character = {
+							culture = forebear
+							religion = alikr
+							dynasty = none
+							female = 33
+							trait = warrior_4
+							trait = rogue_2
+							trait = scout_1
+							trait = lefthanded
+							trait = tall
+							trait = diligent
+							trait = shy
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							#Actual culture
+							random_list = {
+								10 = { culture = forebear }
+								10 = { culture = crown set_graphical_culture = crown }
+								10 = { culture = lhotunic set_graphical_culture = lhotunic }
+							}
+							
+							# Give some gear
+							generate_weapon_sword_yokudan = yes
+							generate_armor_yokudan = yes
+							
+							set_character_flag = gladiator_redguard_gladiator
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Altmer Outcast, was left to die but managed to get to Cyrodiil and climb the Arena
+					10 = {
+						create_character = {
+							culture = altmer
+							religion = auriel
+							dynasty = none
+							female = 50
+							trait = warrior_4
+							trait = spellsword_2
+							trait = rogue_2
+							trait = wroth
+							trait = diligent
+							trait = cynical
+							trait = impure_altmer
+							trait = bastard
+						}
+						new_character = {
+							# Add random difformity
+							random_list = {
+								10 = { add_trait = clubfooted }
+								10 = { add_trait = harelip }
+								10 = { add_trait = hunchback }
+								10 = { add_trait = lisp }
+								10 = { add_trait = ugly }
+								10 = { add_trait = dwarf }
+							}
+							
+							add_trait = gladiator
+							
+							# Give some gear
+							generate_weapon_sword_elven = yes
+							generate_armor_elven = yes
+							
+							add_age = 50 # Very old compared to short-lived races, but actually quite young
+							
+							random_playable_ruler = {
+								limit = {
+									ai = yes
+									culture = altmer
+									lower_tier_than = DUKE
+									num_of_children	> 1
+									NOT = { any_child_even_if_dead = { has_character_flag = gladiator_breton_knight } }
+									NOT = { any_close_relative = { higher_tier_than = COUNT } }
+								}
+								new_character = { set_father = PREV dynasty = father_bastard }
+							}
+							
+							set_character_flag = gladiator_altmer_outcast
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Argonian pirate, got caught, was sent to the Arena to die or get their "jailor" cash
+					10 = {
+						create_character = {
+							culture = archein
+							religion = hist
+							dynasty = none
+							female = 50
+							trait = warrior_4
+							trait = thief_2
+							trait = acrobat_2
+							trait = quick
+							trait = pirate
+							trait = deceitful
+							trait = patient
+							trait = greedy
+							trait = one_eyed
+						}
+						new_character = {		
+							add_trait = gladiator
+							
+							# Give some gear
+							generate_weapon_sword_argonian = yes
+							generate_armor_argonian = yes
+							
+							add_artifact = pet_raven
+							
+							new_artifact = {
+								set_name = "Branan the Raven"
+							}
+							
+							set_character_flag = gladiator_argonian_pirate
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Nord Berserker, traveled throughout Skyrim, defeating each champion in the Holds and wild beasts throughout the province
+					10 = {
+						create_character = {
+							culture = nord
+							religion = eight_divines
+							dynasty = none
+							female = 50
+							trait = warrior_4
+							trait = barbarian_2
+							trait = wayfarer_2
+							trait = strong
+							trait = scarred
+							trait = brave
+							trait = shy
+						}
+						new_character = {		
+							add_trait = gladiator
+							
+							# Give some gear
+							random_list = {
+								50 = { generate_weapon_sword_nord = yes }
+								50 = { generate_weapon_axe_nord = yes }
+							}
+							generate_armor_nord_carved = yes
+							generate_shield_nord = yes
+							
+							add_age = 7 # Older than average
+							
+							set_character_flag = gladiator_nord_berserker
+							save_event_target_as = gladiator_recruited
+							
+							# Let's make them a werewolf... Perhaps
+							random = {
+								chance = 30
+								add_trait = lycan
+								remove_disease_trait_effect = yes
+								remove_treatment_modifiers_effect = yes
+								remove_disease_flags_effect = yes
+								clr_character_flag = lycan_level_1
+								clr_character_flag = lycan_level_2
+								clr_character_flag = lycan_level_3
+								clr_character_flag = lycan_level_4
+								clr_character_flag = lycan_level_5
+								clr_character_flag = lycan_level_6
+								clr_character_flag = lycan_level_7
+								clr_character_flag = lycan_level_8
+								clr_character_flag = lycan_level_9
+								clr_character_flag = lycan_level_10
+								
+								set_character_flag = lycan_level_5
+							}
+						}
+					}
+					
+					# Houseless Dunmer, scorned for worshiping the House of Troubles (and maybe something even darker?)
+					10 = {
+						create_character = {
+							culture = dunmer
+							dynasty = none
+							female = 50
+							trait = agent_4
+							trait = crusader_2
+							trait = zealous
+							trait = ambitious
+							trait = houseless_dunmer
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							#Which Daedra?
+							random_list = {
+								10 = {
+									religion = daedra_molag
+									add_trait = cruel
+								}
+								10 = {
+									religion = daedra_malacath
+									add_trait = shy
+								}
+								10 = {
+									religion = daedra_sheogorath
+									add_trait = lunatic
+								}
+								10 = {
+									religion = daedra_mehrunes
+									add_trait = wroth
+								}
+							}
+							#Maybe Dagoth?
+							random = {
+								chance = 30
+								set_secret_religion = sixth_house
+								add_trait = deceitful
+							}
+							# Give some gear
+							generate_armor_chitin = yes
+							generate_weapon_sword_ebony = yes
+							
+							add_age = 100 # Very old compared to short-lived races, but actually somewhat young
+							
+							set_character_flag = gladiator_dunmer_houseless
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Caravaner Khajiit, traded his own liberty for a fat sack of gold
+					10 = {	
+						create_character = {
+							culture = khajiit
+							dynasty = none
+							female = 33
+							trait = warrior_4
+							trait = scout_2
+							trait = unlucky
+							trait = ambitious
+							trait = brave
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							#Religion?
+							random_list = {
+								10 = { religion = alkosh }
+								10 = { religion = riddlethar }
+							}
+							# Give some gear
+							generate_armor_khajiit = yes
+							generate_weapon_sword_khajiit = yes
+							
+							# Let's make them a vampire... Perhaps
+							random = {
+								chance = 30
+								add_trait = vampire
+								set_secret_religion = daedra_molag
+								remove_disease_trait_effect = yes
+								remove_treatment_modifiers_effect = yes
+								remove_disease_flags_effect = yes
+								set_character_flag = stage_1_vampire
+							}
+							
+							set_character_flag = gladiator_khajiit_caravaner
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Renegade Orsimer, she ain't being no whatever-wife to no chief
+					10 = {
+						create_character = {
+							culture = orsimer
+							dynasty = none
+							female = 66
+							religion = daedra_malacath
+							trait = warrior_4
+							trait = barbarian_2
+							trait = cynical
+							trait = ambitious
+							trait = proud
+							trait = disinherited
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							# Give some queer
+							random_list = {
+								10 = { add_trait = homosexual }
+								10 = { add_trait = bisexual }
+							}
+							# Give some gear
+							generate_armor_orcish = yes
+							generate_weapon_sword_orcish = yes
+							
+							set_character_flag = gladiator_orsimer_renegade
+							save_event_target_as = gladiator_recruited
+							
+							random_playable_ruler = {
+								limit = {
+									ai = yes
+									culture = orsimer
+									is_ruler = yes
+									is_feudal = yes
+									lower_tier_than = DUKE
+									num_of_children	> 1
+									NOT = { any_child_even_if_dead = { has_character_flag = gladiator_orsimer_renegade } }
+								}
+								if = {
+									limit = { is_female = no }
+									new_character = { set_father = PREV dynasty = PREV }
+								}
+								else = { new_character = { set_mother = PREV dynasty = PREV } }
+							}
+							
+						}
+					}
+					
+					# Blind Bosmer, blinded and left to die by a group of Imga
+					10 = {	
+						create_character = {
+							culture = bosmer
+							religion = green_pact
+							dynasty = none
+							female = 66
+							trait = agent_4
+							trait = scout_2
+							trait = blinded
+							trait = lucky
+							trait = perceptive
+							trait = agile
+							trait = scarred
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							#Blinded yet special
+							add_character_modifier = { name = mitigating_blindness duration = -1 hidden = yes }
+							
+							#Give some gear
+							generate_weapon_sword_bosmer = yes
+							generate_armor_bosmer = yes
+							
+							#Brainwashed perhaps?
+							random = {
+								chance = 40
+								set_secret_religion = maruhkati
+							}
+							
+							set_character_flag = gladiator_bosmer_blind
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Imperial monk, fighting in the Arena to uplift the spirits
+					10 = {
+						create_character = {
+							culture = imperial
+							religion = eight_divines
+							dynasty = none
+							female = 50
+							trait = agent_4
+							trait = monk_2
+							trait = perceptive
+							trait = agile
+							trait = kind
+							trait = proud
+							trait = monk
+						}
+						new_character = {
+							add_trait = gladiator
+							abandon_heresy = yes
+							
+							#Actual culture
+							random_list = {
+								10 = { culture = imperial }
+								10 = { culture = nibenean set_graphical_culture = nibenean }
+								10 = { culture = colovian set_graphical_culture = colovian }
+							}
+							
+							# Give some gear
+							generate_armor_imperial = yes
+							generate_loot_mundane_ring = yes
+							
+							leave_society = yes
+							join_society = moth_priests_tamriel
+							society_rank_up = 1
+							
+							set_character_flag = gladiator_imperial_monk
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Generic Heretic, thrown in the Arena for repentance
+					10 = {
+						create_character = {
+							culture = ROOT
+							religion = ROOT
+							dynasty = none
+							female = 50
+							trait = mage_4
+							trait = priest_2
+							trait = trusting
+							trait = gregarious
+							trait = zealous
+							trait = powerful_voice
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							#Penitent or crypto?
+							random_list = {
+								30 = { random_daedra_conversion_secret = yes }
+								10 = { become_secret_heretic = yes } #Half of the time the religion won't even have a heresy
+								5 = { add_trait = honest }
+							}
+							
+							# Give some gear
+							generate_armor_steel = yes
+							generate_weapon_sword_steel = yes
+							
+							set_character_flag = gladiator_generic_heretic
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Generic Guildsworn, bringing glory and money to his local guild chapter
+					10 = {
+						create_character = {
+							culture = ROOT
+							religion = ROOT
+							dynasty = none
+							female = 50
+							trait = warrior_4
+							trait = proud
+							trait = ambitious
+							trait = greedy
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							#Which guild?
+							random_list = {
+								10 = {
+									leave_society = yes
+									join_society = fighters_guild_tamriel
+									add_trait = knight_2
+								}
+								10 = {
+									modifier = {
+										factor = 0
+										NOR = {
+											culture = nord
+											culture = atmoran
+											culture = skaal
+										}
+									}
+									leave_society = yes
+									join_society = companions_tamriel
+									add_trait = barbarian_2
+								}
+								8 = {
+									leave_society = yes
+									join_society = mages_guild_tamriel
+									add_trait = battlemage_2
+								}
+								5 = {
+									leave_society = yes
+									join_society = mercantile_guild_tamriel
+									add_trait = scout_2
+								}
+								5 = {
+									leave_society = yes
+									join_society = scenarist_guild_tamriel
+									add_trait = rogue_2
+								}
+							}
+							random = {
+								chance = 50
+								society_rank_up = 1
+							}
+							
+							# Give some gear
+							generate_weapon_sword_steel = yes
+							generate_armor_steel = yes
+							
+							set_character_flag = gladiator_generic_guildsworn
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					#Generic Criminal, actually a prisoner fighting in the Arena
+					10 = {
+						create_character = {
+							culture = ROOT
+							religion = ROOT
+							dynasty = none
+							female = 50
+							trait = agent_4
+							trait = is_malnourished
+							trait = craven
+							trait = shy
+							trait = ruthless
+							trait = agile
+						}
+						new_character = {
+							add_trait = gladiator
+							
+							#Which guild?
+							random_list = {
+								10 = {
+									leave_society = yes
+									join_society = dark_brotherhood_tamriel
+									add_trait = assassin_2
+								}
+								10 = {
+									modifier = {
+										factor = 0
+										NOR = {
+											culture = dunmer
+											culture = ashlander
+											is_dunmer = yes
+										}
+									}
+									leave_society = yes
+									join_society = morag_tong_tamriel
+									set_secret_religion = daedra_mephala
+									add_trait = assassin_2
+								}
+								10 = {
+									leave_society = yes
+									join_society = thieves_guild_tamriel
+									add_trait = thief_2
+								}
+								10 = {
+									modifier = {
+										factor = 0
+										NOR = {
+											culture = dunmer
+											culture = ashlander
+											is_dunmer = yes
+										}
+									}
+									leave_society = yes
+									join_society = camonna_tong_tamriel
+									add_trait = thief_2
+								}
+							}
+							random = {
+								chance = 50
+								society_rank_up = 1
+							}
+							
+							# Give some gear
+							generate_weapon_sword_steel = yes
+							generate_armor_steel = yes
+							
+							set_character_flag = gladiator_generic_criminal
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Now we're getting in the "wild-stuff" category
+					
+					# Atmoran Champion, landed in Skyrim as a teenager, studied with the Greybeards, delved into some dungeons, and then decided to try his luck in the Imperial City - Knows the Voice!	
+					5 = {
+						create_character = {
+							culture = atmoran
+							religion = animism
+							dynasty = none
+							female = 50
+							trait = warrior_4
+							trait = monk_2
+							trait = thuum_1
+							trait = quick
+							trait = scarred
+							trait = brave
+							trait = diligent
+						}
+						new_character = {		
+							add_trait = gladiator
+							
+							# Give some gear
+							generate_armor_ancient_nord = yes
+							generate_weapon_sword_atmoran = yes
+							
+							set_character_flag = gladiator_atmoran_champion
+							save_event_target_as = gladiator_recruited
+							
+							# Let's make them a potential Dragonborn >:)
+							set_character_flag = dragonborn_candidate
+						}
+					}
+					
+					# Yokudan Swordsinger, muted for life for sharing a secret sword technique
+					5 = {
+						create_character = {
+							culture = yokudan
+							religion = satakal
+							dynasty = none
+							female = 33
+							trait = warrior_4
+							trait = monk_2
+							trait = agile
+							trait = mute
+							trait = scarred
+							trait = perceptive
+							trait = trusting
+						}
+						new_character = {		
+							add_trait = gladiator
+							
+							#How much swordsinger?
+							random_list = {
+								30 = { add_trait = swordsinger_1 }
+								10 = { add_trait = swordsinger_2 }
+								3 = { add_trait = swordsinger_3 }
+							}
+							# Give some gear
+							generate_weapon_sword_yokudan = yes
+							generate_armor_yokudan = yes
+							
+							add_age = 10 # Older than average
+							
+							leave_society = yes
+							join_society = ansei_guild_tamriel
+							
+							set_character_flag = gladiator_yokudan_swordsinger
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Human Akaviri, avoided the Tsaesci
+					5 = {
+						create_character = {
+							culture = akaviri
+							religion = sun_court
+							dynasty = none
+							female = 50
+							trait = warrior_4
+							trait = knight_2
+							trait = brave
+							trait = diligent
+							trait = honest
+							trait = wroth
+						}
+						new_character = {		
+							add_trait = gladiator
+							
+							# Give some gear
+							generate_weapon_sword_akaviri = yes
+							generate_armor_akaviri_metal = yes
+							
+							add_artifact = map_of_akavir
+							
+							set_character_flag = gladiator_humanakaviri_refugee
+							save_event_target_as = gladiator_recruited
+						}
+					}
+					
+					# Quey worshipping the Plaguing Kings, banished from his home island for sacrificing many Chimer to the Plaguing Kings
+					5 = {
+						create_character = {
+							culture = quey
+							religion = plaguing_kings
+							dynasty = none
+							female = 50
+							trait = warrior_4
+							trait = holy_warrior
+							trait = brave
+							trait = wroth
+						}
+						new_character = {		
+							add_trait = gladiator
+							
+							# Which King do they worship?
+							random_list = {
+								25 = {
+									add_trait = p_pksheogorath
+									random_list = {
+										60 = { add_trait = lunatic }
+										20 = { add_trait = mania }
+										20 = { add_trait  = dementia }
+									}
+								}
+								
+								25 = {
+									add_trait = p_pkmehrunes
+									add_trait = reckless
+								}
+								
+								25 = {
+									add_trait = p_pkmalacath
+									add_trait = ugly
+									add_trait = strong
+								}
+								
+								25 = {
+									add_trait = p_pkmolag
+									add_trait = cruel
+									add_trait = vampire
+								}
+							}
+							
+							# Give some gear
+							generate_weapon_sword_akaviri = yes
+							generate_armor_akaviri_metal = yes
+							
+							set_character_flag = gladiator_quey_plaguing_kings
+							save_event_target_as = gladiator_recruited
+						}
+					}
+				}
+			}
+			
+			event_target:gladiator_recruited = {
+				opinion = {
+					modifier = opinion_loyal_servant
+					who = ROOT
+				}
+			}
+			
+			long_character_event = { id = ekwonder.150 }
+		}
+	}
+}
+
+targeted_decisions = {
+	skooma_gift_decision = { #Give Skooma Gift
+		only_independent = yes
+		ai = no
+		potential = {
+			NOT = {
+				character = FROM
+				has_character_modifier = recently_recieved_skooma_gift
+			}
+			ROOT = {
+				is_alive = yes
+				is_within_diplo_range = FROM
+			}
+			FROM = {
+				is_ruler = yes
+				any_realm_wonder_upgrade = {
+					has_wonder_upgrade_flag = produces_skooma
+					is_active = yes
+				}
+			}
+		}
+		
+		allow = {
+			is_adult = yes
+			prisoner = no
+			FROM = {
+				NOT = {
+					has_character_modifier = recently_sent_skooma_gift
+				}
+			}
+			custom_tooltip = {
+				text = not_recently_sent_skooma_tooltip
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					trait = temperate
+				}
+				opinion = {
+					who = FROM
+					modifier = opinion_disrespects_me
+				}
+			}
+			else = {
+				if = {
+					limit = { trait = skooma_addiction }
+					opinion = {
+						who = FROM
+						modifier = opinion_gifted_skooma_addict
+					}
+				}
+				else = {
+					opinion = {
+						who = FROM
+						modifier = opinion_gifted_skooma
+					}
+				}
+			}
+			hidden_tooltip = {
+				add_character_modifier = {
+					name = recently_recieved_skooma_gift
+					duration = 365
+					hidden = yes
+				}
+			}
+			
+			hidden_tooltip = {
+				FROM = {
+					add_character_modifier = {
+						name = recently_sent_skooma_gift
+						duration = 365
+						hidden = yes	
+					}	
+				}
+			}
+		}
+	}
+}
+
+#Black Market
+# settlement_decisions = {
+	# visit_blackmarket_wonder_realm = {
+		# only_playable = yes
+		# ai_check_interval = 60
+		# ai_target_filter = realm_owned
+		
+		# from_potential = {
+			# is_playable = yes
+			# has_submenu_open = no
+			# any_realm_wonder_upgrade = {
+				# has_wonder_upgrade = upgrade_black_market
+				# is_active = yes
+			# }
+			# NOT = { has_character_modifier = black_market_timer }
+		# }
+		# potential = {
+			# any_wonder = {
+				# location = { province = ROOT }
+				# has_wonder_upgrade = upgrade_black_market
+				# is_active = yes
+			# }
+		# }
+		# allow = {
+			# any_realm_wonder_upgrade = {
+				# has_wonder_upgrade = upgrade_black_market
+				# is_active = yes
+			# }
+			# custom_tooltip = {
+				# text = has_not_blackmarket_timer
+				# NOT = { has_character_modifier = black_market_timer }
+			# }
+		# }
+		# effect = {
+			# custom_tooltip = {
+				# text = visit_blackmarket_tt
+				# add_character_modifier = {
+					# name = black_market_timer
+					# years = 3
+					# hidden = yes
+				# }
+			# }
+		# }
+	# }
+# }

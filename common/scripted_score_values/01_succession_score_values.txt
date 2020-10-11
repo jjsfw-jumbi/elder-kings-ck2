@@ -1,0 +1,5304 @@
+# Consolidated identical and near-identical vote weights into scripted scores
+
+# Root scope - Voter, the character voting in the election
+# From scope - Candidate, Character considered for the title
+# FromFrom scope - The title the nomination is for
+# FromFromFrom scope - The title owner's candidate
+
+# Elector voting themself
+succession_vote_self_score = {
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_myself
+		succession_vote_myself_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_not_myself
+		FROMFROM = {
+			NOT = {
+				# Tanistry has a different weight
+				has_law = succ_tanistry
+			}
+		}
+		succession_vote_not_myself_trigger = yes
+	}
+	additive_modifier = {
+		value = 40
+		localisation_key = tooltip_feudal_elector_vote_myself_heir
+		succession_vote_myself_heir = yes
+	}
+	additive_modifier = {
+		value = 40
+		localisation_key = tooltip_feudal_elector_vote_myself_ambitious
+		succession_vote_myself_ambitious = yes
+		is_adult = yes
+	}
+}
+
+# Lesser
+succession_vote_self_lesser_score = {
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_myself
+		succession_vote_myself_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_not_myself
+		succession_vote_not_myself_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_myself_heir
+		succession_vote_myself_heir = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_myself_ambitious
+		succession_vote_myself_ambitious = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+}
+
+#Current ruler will always try to elect his player heir.
+succession_player_heir_score = {
+	additive_modifier = {
+		value = 50
+		localisation_key = tooltip_feudal_elector_vote_player_heir
+		player_heir = {
+			character = FROM
+			NOT = { character = ROOT }
+		}
+		FROMFROM = {
+			holder_scope = {
+				character = PREVPREV
+			}
+			NOT = {
+				is_rival = FROM #Unless is rival.
+			}
+		}
+	}
+}
+
+### Gender weights
+
+# Normal
+succession_gender_score = {
+	# Ag-Cog male preference
+	additive_modifier = { #Gender weights
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_agnatic_woman
+		succession_ag_cog_preference_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+	# En-Cog female preference
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_enatic_man
+		succession_en_cog_preference_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+	# Tsaesci female preference
+	additive_modifier = {
+		value = -75
+		localisation_key = tooltip_elector_vote_tsaesci_man
+		succession_tsaesci_matriarchy_preference_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+	# Reformed matri/patri doctrines preference
+	additive_modifier = {
+		value = -75
+		localisation_key = tooltip_feudal_elector_vote_patriarchal
+		succession_patriarchy_preference_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -75
+		localisation_key = tooltip_feudal_elector_vote_matriarchal
+		succession_matriarchy_preference_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+### Ageism
+
+# Normal ageism
+succession_age_score = {
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_baby
+		NOT = { character = FROM }
+		FROM = {
+			NOT = {
+				age = 5
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 5
+			NOT = {
+				age = 10
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 10
+			NOT = {
+				age = 16
+			}
+		}
+	}
+	additive_modifier = { #Still too young for older rulers
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 30
+			}
+			AND = {
+				is_long_lived = yes
+				age = 90
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 16
+					NOT = {
+						age = 25
+					}
+				}
+				AND = {
+					is_long_lived = yes
+					age = 16
+					NOT = {
+						age = 75
+					}
+				}
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 40
+			}
+			AND = {
+				is_long_lived = yes
+				age = 125
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 25
+					NOT = {
+						age = 35
+					}
+				}
+				AND = {
+					is_long_lived = yes
+					age = 75
+					NOT = {
+						age = 105
+					}
+				}
+			}
+		}
+	}
+	additive_modifier = { #Or too old for younger rulers.
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_oldtimer
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				NOT = { age = 40 }
+			}
+			AND = {
+				is_long_lived = yes
+				NOT = { age = 125 }
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 40
+					NOT = { age = 50 }
+				}
+				AND = {
+					is_long_lived = yes
+					age = 125
+					NOT = { age = 150 }
+				}
+			}
+		}
+	}
+
+	additive_modifier = { #Or simply too old overall.
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_decrepit
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				NOT = { age = 60 }
+			}
+			AND = {
+				is_long_lived = yes
+				NOT = { age = 180 }
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 60
+				}
+				AND = {
+					is_long_lived = yes
+					age = 180
+				}
+			}
+		}
+	}
+}
+
+#Less Ageism
+succession_age_score_less = {
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_baby
+		NOT = { character = FROM }
+		FROM = {
+			NOT = {
+				age = 5
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 5
+			NOT = {
+				age = 10
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 10
+			NOT = {
+				age = 16
+			}
+		}
+	}
+	additive_modifier = { #Still too young for older rulers
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 30
+			}
+			AND = {
+				is_long_lived = yes
+				age = 90
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 16
+					NOT = {
+						age = 25
+					}
+				}
+				AND = {
+					is_long_lived = yes
+					age = 16
+					NOT = {
+						age = 75
+					}
+				}
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 40
+			}
+			AND = {
+				is_long_lived = yes
+				age = 125
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 25
+					NOT = {
+						age = 35
+					}
+				}
+				AND = {
+					is_long_lived = yes
+					age = 75
+					NOT = {
+						age = 105
+					}
+				}
+			}
+		}
+	}
+	additive_modifier = { #Or too old for younger rulers.
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_oldtimer
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				NOT = { age = 40 }
+			}
+			AND = {
+				is_long_lived = yes
+				NOT = { age = 125 }
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 40
+					NOT = { age = 50 }
+				}
+				AND = {
+					is_long_lived = yes
+					age = 125
+					NOT = { age = 150 }
+				}
+			}
+		}
+	}
+
+	additive_modifier = { #Or simply too old overall.
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_decrepit
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				NOT = { age = 60 }
+			}
+			AND = {
+				is_long_lived = yes
+				NOT = { age = 180 }
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 60
+				}
+				AND = {
+					is_long_lived = yes
+					age = 180
+				}
+			}
+		}
+	}
+}
+
+# Favour older rulers
+succession_age_older_score = {
+	additive_modifier = { 
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_baby
+		NOT = { character = FROM }
+		FROM = {
+			NOT = {
+				age = 5
+			}
+		}
+	}
+	additive_modifier = { #Higher malus for Tanistry
+		value = -40
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 5
+			NOT = {
+				age = 10
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 10
+			NOT = {
+				age = 16
+			}
+		}
+	}
+	additive_modifier = { #Still too young for older rulers
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 30
+			}
+			AND = {
+				is_long_lived = yes
+				age = 90
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 16
+					NOT = {
+						age = 25
+					}
+				}
+				AND = {
+					is_long_lived = yes
+					age = 16
+					NOT = {
+						age = 75
+					}
+				}
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 40
+			}
+			AND = {
+				is_long_lived = yes
+				age = 125
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 25
+					NOT = {
+						age = 35
+					}
+				}
+				AND = {
+					is_long_lived = yes
+					age = 75
+					NOT = {
+						age = 105
+					}
+				}
+			}
+		}
+	}
+	additive_modifier = { #Or too old for younger rulers. -Less of a malus for Tanistry
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_oldtimer
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				NOT = { age = 40 }
+			}
+			AND = {
+				is_long_lived = yes
+				NOT = { age = 125 }
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 40
+					NOT = { age = 50 }
+				}
+				AND = {
+					is_long_lived = yes
+					age = 125
+					NOT = { age = 150 }
+				}
+			}
+		}
+	}
+
+	additive_modifier = { #Or simply too old overall. -Less of a malus for Tanistry
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_decrepit
+		NOT = { character = FROM }
+		OR = {
+			AND = {
+				is_long_lived = no
+				NOT = { age = 60 }
+			}
+			AND = {
+				is_long_lived = yes
+				NOT = { age = 180 }
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 60
+				}
+				AND = {
+					is_long_lived = yes
+					age = 180
+				}
+			}
+		}
+	}
+}
+
+# Favour younger rulers
+succession_age_younger_score = {
+	additive_modifier = { 
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_baby
+		NOT = { character = FROM }
+		FROM = {
+			NOT = {
+				age = 5
+			}
+		}
+	}
+	additive_modifier = { #Higher malus for Tanistry
+		value = -40
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 5
+			NOT = {
+				age = 10
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_child
+		NOT = { character = FROM }
+		FROM = {
+			age = 10
+			NOT = {
+				age = 16
+			}
+		}
+	}
+	additive_modifier = { #Old just right.
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_prime_age
+		NOT = { character = FROM }
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 20
+					NOT = { age = 40 }
+				}
+				AND = {
+					is_long_lived = yes
+					age = 60
+					NOT = { age = 125 }
+				}
+			}
+		}
+	}
+	additive_modifier = { #Too old to rule.
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_decrepit
+		NOT = { character = FROM }
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 40
+					NOT = { age = 50 }
+				}
+				AND = {
+					is_long_lived = yes
+					age = 125
+					NOT = { age = 150 }
+				}
+			}
+		}
+	}
+	additive_modifier = { #Or simply too old overall.
+		value = -35
+		localisation_key = tooltip_feudal_elector_vote_decrepit
+		NOT = { character = FROM }
+		FROM = { 
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 50
+				}
+				AND = {
+					is_long_lived = yes
+					age = 150
+				}
+			}
+		}
+	}
+}
+
+# Favour not young rulers
+succession_not_young_score = {
+	additive_modifier = { 
+		value = -70
+		localisation_key = tooltip_feudal_elector_vote_baby
+		FROM = {
+			NOT = {
+				age = 5
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_child
+		FROM = {
+			age = 5
+			NOT = {
+				age = 10
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_child
+		FROM = {
+			age = 10
+			NOT = {
+				age = 16
+			}
+		}
+	}
+	additive_modifier = { #Still too young for older rulers
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 30
+			}
+			AND = {
+				is_long_lived = yes
+				age = 90
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 16
+					NOT = { age = 25 }
+				}
+				AND = {
+					is_long_lived = yes
+					age = 16
+					NOT = { age = 75 }
+				}
+			}
+		}
+	}
+	additive_modifier = { 
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_youngster
+		OR = {
+			AND = {
+				is_long_lived = no
+				age = 40
+			}
+			AND = {
+				is_long_lived = yes
+				age = 125
+			}
+		}
+		FROM = {
+			OR = {
+				AND = {
+					is_long_lived = no
+					age = 25
+					NOT = { age = 35 }
+				}
+				AND = {
+					is_long_lived = yes
+					age = 75
+					NOT = { age = 105 }
+				}
+			}
+		}
+	}
+}
+
+### Culturism
+
+# Normal
+succession_culture_score = {
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_fellow_culture
+		NOT = { character = FROM }
+		culture = FROM
+	}
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_stranger
+		FROMFROM = { holder_scope = { culture = ROOT } } #Only a concern if Elector and current ruler share culture.
+		NOT = { culture = FROM }
+	}
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_foreigner
+		FROMFROM = { holder_scope = { culture = ROOT } } #Only a concern if Elector and current ruler share culture.
+		NOT = { culture_group = FROM }
+	}
+}
+
+succession_foreign_score = {
+	additive_modifier = { #Candidate is a foreigner's pet 
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_strangers_pet
+		FROM = { 
+			character = ROOT_FROMFROMFROM 
+			culture = ROOT
+		}
+		FROMFROM = { holder_scope = { NOT = { culture = ROOT_FROM } } }
+	}
+	additive_modifier = { #Candidate is a foreigner's pet 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_foreigners_pet
+		FROM = { 
+			character = ROOT_FROMFROMFROM 
+			culture = ROOT
+		}
+		FROMFROM = { holder_scope = { NOT = { culture_group = ROOT_FROM } } }
+	}
+	additive_modifier = { #If candidate is elected, he will rule from a capital outside this dejure.
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_political_concerns
+		capital_scope = { de_jure_liege = FROMFROM }
+		FROM = {
+			is_ruler = yes 
+			vassal_of = FROMFROM
+			capital_scope = { NOT = { de_jure_liege = ROOT_FROMFROM } }
+		}
+	}
+	additive_modifier = { #Candidate is a foreign ruler.
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
+		capital_scope = { de_jure_liege = FROMFROM }
+		FROM = {
+			is_ruler = yes 
+			NOT = { is_vassal_or_below_of = ROOT_FROMFROM }
+		}
+	}
+	additive_modifier = { #Candidate is a foreign non-dejure ruler.
+		value = -500
+		localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
+		NOT = { capital_scope = { de_jure_liege = FROMFROM } }
+		FROM = {
+			is_ruler = yes 
+			NOT = { is_vassal_or_below_of = ROOT_FROMFROM }
+		}
+	}
+}
+
+# More biased
+succession_culture_phobic_score = {
+	additive_modifier = { 
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_fellow_culture
+		NOT = { character = FROM }
+		culture = FROM
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { 
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_stranger
+		FROMFROM = { holder_scope = { culture = ROOT } } #Only a concern if Elector and current ruler share culture.
+		NOT = { culture = FROM }
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { 
+		value = -40
+		localisation_key = tooltip_feudal_elector_vote_foreigner
+		FROMFROM = { holder_scope = { culture = ROOT } } #Only a concern if Elector and current ruler share culture.
+		NOT = { culture_group = FROM }
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+succession_foreign_phobic_score = {
+	additive_modifier = { #Candidate is a foreigner's pet 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_strangers_pet
+		FROMFROM = { holder_scope = { culture = ROOT } } #Only a concern if Elector and current ruler share culture.
+		FROM = { 
+			character = ROOT_FROMFROMFROM 
+			culture = ROOT
+		}
+		FROMFROM = { holder_scope = { NOT = { culture = ROOT_FROM } } }
+	}
+	additive_modifier = { #Candidate is a foreigner's pet 
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_foreigners_pet
+		FROMFROM = { holder_scope = { culture = ROOT } } #Only a concern if Elector and current ruler share culture.
+		FROM = { 
+			character = ROOT_FROMFROMFROM 
+			culture = ROOT
+		}
+		FROMFROM = { holder_scope = { NOT = { culture_group = ROOT_FROM } } }
+	}
+	additive_modifier = { #If candidate is elected, he will rule from a capital outside this dejure.
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_political_concerns
+		capital_scope = { de_jure_liege = FROMFROM }
+		FROM = {
+			is_ruler = yes 
+			vassal_of = FROMFROM
+			capital_scope = { NOT = { de_jure_liege = FROMFROM } }
+		}
+	}
+	additive_modifier = { #Candidate is a foreign ruler.
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
+		FROMFROM = { holder_scope = { culture = ROOT } } #Only a concern if Elector and current ruler share culture.
+		capital_scope = { de_jure_liege = FROMFROM }
+		FROM = {
+			is_ruler = yes 
+			NOT = { is_vassal_or_below_of = FROMFROM }
+		}
+	}
+	additive_modifier = { #Candidate is a foreign non-dejure ruler.
+		value = -500
+		localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
+		NOT = { capital_scope = { de_jure_liege = FROMFROM } }
+		FROM = {
+			is_ruler = yes 
+			NOT = { is_vassal_or_below_of = ROOT_FROMFROM }
+		}
+	}
+}
+
+### Faithism
+
+# Normal
+succession_religion_score = {
+	additive_modifier = { #Infidel
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_infidel
+		succession_infidel_trigger = yes
+	}
+	additive_modifier = { #Heathen
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_heathen
+		succession_heathen_trigger = yes
+	}
+	additive_modifier = { #Heretic
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_heretic
+		succession_heretic_trigger = yes
+	}
+	additive_modifier = { #Dogmatics will hardly ever pick an infidel.
+		value = -100
+		localisation_key = tooltip_feudal_elector_vote_heathen_dogmatic
+		succession_dogmatic_trigger = yes
+	}
+}
+
+# Less biased
+succession_religion_philic_score = {
+	additive_modifier = { #Infidel
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_infidel
+		succession_infidel_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Heathen
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_heathen
+		succession_heathen_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Heretic
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_heretic
+		succession_heretic_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Dogmatics will hardly ever pick an infidel.
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_heathen_dogmatic
+		succession_dogmatic_trigger = yes
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+#More biased
+succession_religion_phobic_score = {
+	additive_modifier = { #Infidel
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_infidel
+		succession_infidel_trigger = yes
+	}
+	additive_modifier = { #Heathen
+		value = -100
+		localisation_key = tooltip_feudal_elector_vote_heathen
+		succession_heathen_trigger = yes
+	}
+	additive_modifier = { #Heretic
+		value = -100
+		localisation_key = tooltip_feudal_elector_vote_heretic
+		succession_heretic_trigger = yes
+	}
+	additive_modifier = { #Dogmatics will hardly ever pick an infidel.
+		value = -200
+		localisation_key = tooltip_feudal_elector_vote_heathen_dogmatic
+		succession_dogmatic_trigger = yes
+	}
+}
+
+### Government
+
+# Barbarism
+succession_barbarism_score = {
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_uncivilized
+		OR = { 
+			is_feudal = yes 
+			is_merchant_republic = yes
+			is_patrician = yes
+		}
+		FROM = { 
+			NOR = { 
+				is_feudal = yes 
+				is_merchant_republic = yes
+				is_patrician = yes
+			} 
+		}
+	}
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_settled
+		is_nomadic = yes
+		FROM = { 
+			is_nomadic = no
+		}
+	}
+}
+
+# Tribalism
+succession_tribalism_score = {
+	additive_modifier = { 
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_tribalism
+		is_tribal = yes
+		FROM = {
+			OR = {
+				AND = { 
+					is_ruler = yes
+					is_tribal = no
+				}
+				AND = { 
+					is_ruler = no
+					liege = { is_tribal = no }
+				}
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_settled
+		is_nomadic = yes
+		FROM = { 
+			is_nomadic = no
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+### Nepotism
+
+# Normal
+succession_nepotism_score = {
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_dynasty
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			dynasty = ROOT
+			NOT = { 
+				is_close_relative = ROOT
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { 
+		value = 20
+		localisation_key = tooltip_feudal_elector_vote_relative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			is_close_relative = ROOT
+			NOT = { 
+				is_child_of = ROOT
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { 
+		value = 30
+		localisation_key = tooltip_feudal_elector_vote_parent
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			is_child_of = ROOT
+		}
+		NOT = { 
+			FROMFROM = { 
+				holder_scope = { 
+					character = ROOT
+				}
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Current Ruler should tend to often pick one of his own children as potential heirs.
+		value = 60
+		localisation_key = tooltip_feudal_elector_vote_parent
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			is_child_of = ROOT
+		}
+		FROMFROM = { 
+			holder_scope = { 
+				character = ROOT
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+#More Nepotism
+succession_nepotism_score_extreme = {
+	additive_modifier = { 
+		value = 50
+		localisation_key = tooltip_feudal_elector_vote_dynasty
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			dynasty = ROOT
+			NOT = { 
+				is_close_relative = ROOT
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { 
+		value = 100
+		localisation_key = tooltip_feudal_elector_vote_relative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			is_close_relative = ROOT
+			NOT = { 
+				is_child_of = ROOT
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { 
+		value = 150
+		localisation_key = tooltip_feudal_elector_vote_parent
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			is_child_of = ROOT
+		}
+		NOT = { 
+			FROMFROM = { 
+				holder_scope = { 
+					character = ROOT
+				}
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Current Ruler should tend to often pick one of his own children as potential heirs.
+		value = 300
+		localisation_key = tooltip_feudal_elector_vote_parent
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			is_child_of = ROOT
+		}
+		FROMFROM = { 
+			holder_scope = { 
+				character = ROOT
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Non-Dynastic Spouse
+succession_spouse_score_phobic = {
+	additive_modifier = { 
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_spouse
+		NOT = { 
+			character = FROM
+		}
+		FROM = { 
+			NOT = { dynasty = ROOT }
+			is_married = ROOT
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Prestige
+succession_prestige_score = {
+	additive_modifier = { 
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_prestige_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { NOT = { prestige = -1000 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_prestige_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { prestige = -1000 }
+		FROM = { NOT = { prestige = -500 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_prestige_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { prestige = -500 }
+		FROM = { NOT = { prestige = -250 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_prestige_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { prestige = -250 }
+		FROM = { NOT = { prestige = 0 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_prestige_positive
+		NOT = { 
+			character = FROM
+		}
+		FROM = { prestige = 250 }
+		FROM = { NOT = { prestige = 500 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_prestige_positive
+		NOT = { 
+			character = FROM
+		}
+		FROM = { prestige = 500 }
+		FROM = { NOT = { prestige = 1000 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_prestige_positive
+		NOT = { 
+			character = FROM
+		}
+		FROM = { prestige = 1000 }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+}
+
+# Piety
+succession_piety_score = {
+	additive_modifier = { 
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_piety_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { NOT = { piety = -500 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_piety_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { piety = -500 }
+		FROM = { NOT = { piety = -250 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_piety_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { piety = -250 }
+		FROM = { NOT = { piety = -100 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_piety_negative
+		NOT = { 
+			character = FROM
+		}
+		FROM = { piety = -100 }
+		FROM = { NOT = { piety = 0 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_piety_positive
+		NOT = { 
+			character = FROM
+		}
+		FROM = { piety = 100 }
+		FROM = { NOT = { piety = 250 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_piety_positive
+		NOT = { 
+			character = FROM
+		}
+		FROM = { piety = 250 }
+		FROM = { NOT = { piety = 500 } }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = { 
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_piety_positive
+		NOT = { 
+			character = FROM
+		}
+		FROM = { piety = 500 }
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+}
+
+# Educational preferences
+succession_education_score = {
+	additive_modifier = { # Warrior culture prefers warriors
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_martial_education
+		succession_favours_martial_trigger = yes
+	}
+	additive_modifier = { # Diplomatic culture prefers stewards and diplomats
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_diplomatic_education
+		succession_favours_rulership_trigger = yes
+	}
+	additive_modifier = { # Spiritual culture prefers scholars
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_spiritual_education
+		this_is_spiritual_culture_trigger = yes
+		FROM = { 
+			learning = 10
+			OR = { 
+				has_education_learning_trigger = yes 
+				has_lifestyle_learning_trigger = yes
+			} 
+		}
+	}
+}
+
+# Combat rating preference (warrior cultures only)
+succession_warrior_combat_score = {
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_martial_score_negative
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			NOT = { martial = 5 }
+		}
+	}
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_martial_score
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			martial = 10
+			NOT = { martial = 15 }
+		}
+	}
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_martial_score
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			martial = 15
+			NOT = { martial = 20 }
+		}
+	}
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_martial_score
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			martial = 20
+		}
+	}
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_combat_rating_score_negative
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			NOT = { combat_rating = 25 }
+		}
+	}
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_combat_rating_score
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			combat_rating = 25
+			NOT = { combat_rating = 50 }
+		}
+	}
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_combat_rating_score
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			combat_rating = 50
+			NOT = { combat_rating = 80 }
+		}
+	}
+	additive_modifier = { # Warrior culture prefers warriors - Elective Gavelkind also takes into consideration raw martial/combat rating.
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_combat_rating_score
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			combat_rating = 80
+		}
+	}
+}
+
+# Diplomacy preference
+succession_diplomacy_score = {
+	additive_modifier = { # Eldership favors Diplomacy
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_diplomacy_score_negative
+		FROM = { 
+			NOT = { diplomacy = 5 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {  # Eldership favors Diplomacy
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_diplomacy_score
+		FROM = { 
+			diplomacy = 10
+			NOT = { diplomacy = 15 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Diplomacy
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_diplomacy_score
+		FROM = { 
+			diplomacy = 15
+			NOT = { diplomacy = 20 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Diplomacy
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_diplomacy_score
+		FROM = { 
+			diplomacy = 20
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Stewardship preference
+succession_stewardship_score = {
+	additive_modifier = { # Eldership favors Stewardship
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_martial_score_negative
+		FROM = { 
+			NOT = { stewardship = 5 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {  # Eldership favors Stewardship
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_martial_score
+		FROM = { 
+			stewardship = 10
+			NOT = { stewardship = 15 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Stewardship
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_martial_score
+		FROM = { 
+			stewardship = 15
+			NOT = { stewardship = 20 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Stewardship
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_martial_score
+		FROM = { 
+			stewardship = 20
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Intrigue preference
+succession_intrigue_score = {
+	additive_modifier = { # Eldership favors Intrigue
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_intrigue_score_negative
+		FROM = { 
+			NOT = { intrigue = 5 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {  # Eldership favors Intrigue
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_intrigue_score
+		FROM = { 
+			intrigue = 10
+			NOT = { intrigue = 15 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Intrigue
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_intrigue_score
+		FROM = { 
+			intrigue = 15
+			NOT = { intrigue = 20 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Intrigue
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_intrigue_score
+		FROM = { 
+			intrigue = 20
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Learning preference
+succession_learning_score = {
+	additive_modifier = { # Eldership favors Learning
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_learning_score_negative
+		FROM = { 
+			NOT = { learning = 5 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {  # Eldership favors Learning
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_learning_score
+		FROM = { 
+			learning = 10
+			NOT = { learning = 15 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Learning
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_learning_score
+		FROM = { 
+			learning = 15
+			NOT = { learning = 20 }
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Eldership favors Learning
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_learning_score
+		FROM = { 
+			learning = 20
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Shared interests
+succession_shared_interests_score = {
+	additive_modifier = { # Parent prefers child with his same interests
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_martial_education
+		OR = { 
+			has_education_martial_trigger = yes 
+			has_lifestyle_martial_trigger = yes
+		} 
+		FROM = { 
+			martial = 10
+			OR = { 
+				has_education_martial_trigger = yes 
+				has_lifestyle_martial_trigger = yes
+			} 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Parent prefers child with his same interests
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_diplomatic_education
+		OR = { 
+			has_education_diplomacy_trigger = yes
+			has_lifestyle_diplomacy_trigger = yes
+			has_education_stewardship_trigger = yes
+			has_lifestyle_stewardship_trigger = yes
+		}
+		FROM = { 
+			OR = { 
+				AND = { 
+					diplomacy = 10
+					OR = { 
+						has_education_diplomacy_trigger = yes
+						has_lifestyle_diplomacy_trigger = yes
+					}
+				}
+				AND = { 
+					stewardship = 10
+					OR = { 
+						has_education_stewardship_trigger = yes
+						has_lifestyle_stewardship_trigger = yes
+					}
+				}
+			} 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { # Parent prefers child with his same interests
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_spiritual_education
+		OR = { 
+			has_education_learning_trigger = yes 
+			has_lifestyle_learning_trigger = yes
+		}
+		FROM = { 
+			learning = 10
+			OR = { 
+				has_education_learning_trigger = yes 
+				has_lifestyle_learning_trigger = yes
+			} 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+### Claims
+
+# Normal
+succession_claim_score = {
+	additive_modifier = {
+		value = 30
+		localisation_key = tooltip_feudal_elector_vote_strong_claimant
+		FROM = { 
+			has_claim = FROMFROM
+		}
+	}
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_weak_claimant
+		FROM = { 
+			has_weak_claim = FROMFROM
+		}
+	}
+}
+
+# Care less
+success_claim_lesser_score = {
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_strong_claimant
+		FROM = { 
+			has_claim = FROMFROM
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_weak_claimant
+		FROM = { 
+			has_weak_claim = FROMFROM
+		}
+	}
+}
+
+### Candidate's traits
+
+# Many, many traits
+succession_candidate_traits_score = {
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_depressed
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = depressed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_drunkard
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			is_hedonistic_religion = yes
+			AND = {
+				is_prudish_religion = yes
+				trait = zealous
+			}
+		}
+		FROM = { 
+			trait = drunkard
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_drunkard_muslim
+		NOT = { character = FROM } #Do not judge yourself.
+		is_prudish_religion = yes
+		trait = zealous
+		FROM = { 
+			trait = drunkard
+		}
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_skooma_addiction
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			is_hedonistic_religion = yes
+			AND = {
+				is_prudish_religion = yes
+				trait = zealous
+			}
+		}
+		FROM = { 
+			trait = skooma_addiction
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_skooma_addiction_severe
+		NOT = { character = FROM } #Do not judge yourself.
+		is_prudish_religion = yes
+		trait = zealous
+		FROM = { 
+			trait = skooma_addiction
+		}
+	}
+	additive_modifier = { 	#Would mean the end of Elections
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_immortal
+		NOT = { character = FROM } #Do not judge yourself.	
+		FROM = { 
+			trait = immortal
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -35
+		localisation_key = tooltip_feudal_elector_vote_incapable
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = incapable
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_incapable_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = incapable
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_infirm
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_diplomatic_culture_trigger = no
+		FROM = { 
+			trait = infirm
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_infirm_diplomat
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_diplomatic_culture_trigger = yes
+		FROM = { 
+			trait = infirm
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_lunatic
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			trait = zealous 
+			is_tribal = yes
+			is_nomadic = yes
+		}
+		FROM = { 
+			trait = lunatic
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_maimed
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = maimed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_maimed_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = maimed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -35
+		localisation_key = tooltip_feudal_elector_vote_possessed
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { trait = zealous }
+		NOR = { 
+			is_tribal = yes
+			is_nomadic = yes
+		}
+		FROM = { 
+			trait = possessed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -60
+		localisation_key = tooltip_feudal_elector_vote_possessed_vs_zealous
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = zealous
+		NOR = { 
+			is_tribal = yes
+			is_nomadic = yes
+		}
+		FROM = { 
+			trait = possessed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_physician # TODO:COMPATCH update key
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_spiritual_culture_trigger = yes
+		FROM = { 
+			physician_good_trigger = yes
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_scarred
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = scarred
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_scarred_mid
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = scarred_mid
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_scarred_high
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = scarred_high
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_stressed
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = stressed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Judge yourself on illness. You should probably not candidate yourself if you are dying.
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_wounded
+		FROM = { 
+			trait = wounded
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_has_aztec_disease
+		FROM = { 
+			trait = has_aztec_disease
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_has_typhus
+		FROM = { 
+			trait = has_typhus 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_cancer
+		FROM = { 
+			trait = cancer
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_has_tuberculosis
+		FROM = { 
+			trait = has_tuberculosis
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -35
+		localisation_key = tooltip_feudal_elector_vote_dancing_plague
+		FROM = { 
+			trait = dancing_plague 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_dysentery
+		FROM = { 
+			trait = dysentery
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_flu
+		FROM = { 
+			trait = flu
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_food_poisoning
+		FROM = { 
+			trait = food_poisoning
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_gout
+		FROM = { 
+			trait = gout
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_syphilitic
+		FROM = { 
+			trait = syphilitic
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_has_typhoid_fever
+		FROM = { 
+			trait = has_typhoid_fever 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_ill
+		FROM = { 
+			trait = ill
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_leper
+		FROM = { 
+			trait = leper
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_has_measles
+		FROM = { 
+			trait = has_measles
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_pneumonic
+		FROM = { 
+			trait = pneumonic
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_rabies
+		FROM = { 
+			trait = rabies
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_scurvy
+		FROM = { 
+			trait = scurvy
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -45
+		localisation_key = tooltip_feudal_elector_vote_sickly
+		FROM = { 
+			trait = sickly
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_has_small_pox
+		FROM = { 
+			trait = has_small_pox
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -35
+		localisation_key = tooltip_feudal_elector_vote_has_bubonic_plague
+		FROM = { 
+			trait = has_bubonic_plague
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_has_knahaten_flu
+		FROM = { 
+			trait = has_knahaten_flu
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_has_swamp_rot
+		FROM = { 
+			trait = has_swamp_rot
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_cholera
+		FROM = { 
+			trait = cholera
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_dampworm
+		FROM = { 
+			trait = dampworm
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_witches_pox
+		FROM = { 
+			trait = witches_pox
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_greenspore
+		FROM = { 
+			trait = greenspore
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_rockjoint
+		FROM = { 
+			trait = rockjoint
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_stomach_rot
+		FROM = { 
+			trait = stomach_rot
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_chrondiasis
+		FROM = { 
+			trait = chrondiasis
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_has_peryite_plague
+		FROM = { 
+			trait = has_peryite_plague
+		}
+		NOT = {
+			religion = daedra_peryite
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_has_peryite_flag_like
+		FROM = { 
+			trait = has_peryite_plague
+		}
+		religion = daedra_peryite
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_disfigured
+		this_is_warrior_culture_trigger = no
+		#NOT = { 
+		#	culture_group = byzantine
+		#}
+		FROM = { 
+			trait = disfigured
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	#additive_modifier = {
+	#	value = -50
+	#	localisation_key = tooltip_feudal_elector_vote_disfigured_byzantine
+	#	culture_group = byzantine
+	#	FROM = { 
+	#		trait = disfigured
+	#	}
+	#}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_disfigured_warrior
+		this_is_warrior_culture_trigger = yes
+		#NOT = { 
+		#	culture_group = byzantine
+		#}
+		FROM = { 
+			trait = disfigured
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_mangled
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = mangled
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_mangled_warrior
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = mangled
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_one_eyed
+		FROM = { 
+			trait = one_eyed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_one_handed
+		FROM = { 
+			trait = one_handed
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_one_legged
+		FROM = { 
+			trait = one_legged
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_severely_injured
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = severely_injured
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_bastard
+		NOT = { character = FROM } #Do not judge yourself.
+		is_feudal = yes
+		FROM = { 
+			trait = bastard
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	#additive_modifier = {
+	#	value = 10
+	#	localisation_key = tooltip_feudal_elector_vote_born_in_the_purple
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	culture_group = byzantine
+	#	FROM = { 
+	#		trait = born_in_the_purple
+	#	}
+	#}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_child_of_consort
+		NOT = { character = FROM } #Do not judge yourself.
+		is_feudal = yes
+		FROM = {
+			OR = { 
+				trait = legit_bastard
+				trait = child_of_consort_male
+				trait = child_of_consort
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 20
+		localisation_key = tooltip_feudal_elector_vote_genius_diplomat
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_spiritual_culture_trigger = yes
+		}
+		FROM = { 
+			trait = genius
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_genius
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_spiritual_culture_trigger = yes
+		}
+		FROM = { 
+			trait = genius
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_quick_diplomat
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_spiritual_culture_trigger = yes
+		}
+		FROM = { 
+			trait = quick
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_quick
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_spiritual_culture_trigger = yes
+		}
+		FROM = { 
+			trait = quick
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_strong
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = strong
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_strong_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = strong
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_clubfooted
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = clubfooted
+		}
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_dwarf
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = dwarf
+		}
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_dwarf_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = dwarf
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_harelip
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = harelip
+		}
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_hunchback
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = hunchback
+		}
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_hunchback_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = hunchback
+		}
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_imbecile
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_diplomatic_culture_trigger = no
+		FROM = { 
+			trait = imbecile
+		}
+	}
+	additive_modifier = {
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_imbecile_diplomat
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_diplomatic_culture_trigger = yes
+		FROM = { 
+			trait = imbecile
+		}
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_inbred
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = inbred
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_lisp
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = lisp
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_slow
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_diplomatic_culture_trigger = no
+		FROM = { 
+			trait = slow
+		}
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_slow_diplomat
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_diplomatic_culture_trigger = yes
+		FROM = { 
+			trait = slow
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_stutter
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = stutter
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_weak
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = weak
+		}
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_weak_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = weak
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_robust
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = robust
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_robust_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = robust
+		}
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_dull_diplomat
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_spiritual_culture_trigger = yes
+		}
+		FROM = { 
+			trait = dull
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_dull
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_spiritual_culture_trigger = yes
+		}
+		FROM = { 
+			trait = dull
+		}
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_feeble
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = feeble
+		}
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_feeble_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = feeble
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_tall
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = tall
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_tall_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = tall
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_agile
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = agile
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_agile_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = agile
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_melodious_voice
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = melodious_voice
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_powerful_voice
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			trait = powerful_voice
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_perceptive
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = perceptive
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_perceptive_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = perceptive
+		}
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_fortitude
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = fortitude
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_fortitude_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = fortitude
+		}
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_lucky
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = lucky
+		}
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_unlucky
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = unlucky
+		}
+	}
+
+	#The Seven Sins/Virtues
+	additive_modifier = { #Praised for being Chaste
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_chaste_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		always = yes
+		OR = {
+			trait = chaste
+			is_prudish_religion = yes
+		}
+		NOR = {
+			trait = lustful
+			trait = hedonist
+			is_hedonistic_religion = yes
+		}
+		FROM = { 
+			trait = chaste
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Chaste
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_chaste_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = lustful
+			trait = hedonist
+			is_hedonistic_religion = yes
+		}
+		NOR = { 
+			trait = chaste
+			is_prudish_religion = yes
+		}
+		FROM = { 
+			trait = chaste
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Temperate
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_temperate_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = temperate
+			is_prudish_religion = yes
+		}
+		NOR = {
+			trait = drunkard
+			trait = gluttonous
+			trait = skooma_addiction
+			is_hedonistic_religion = yes
+		}
+		FROM = { 
+			trait = temperate
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Temperate
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_temperate_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = drunkard
+			trait = gluttonous
+			trait = skooma_addiction
+			is_hedonistic_religion = yes
+		}
+		NOR = { 
+			trait = temperate
+			is_prudish_religion = yes
+		}
+		FROM = { 
+			trait = temperate
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Charitable
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_charitable_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = charitable
+			is_generous_religion = yes
+		}
+		NOR = { 
+			trait = greedy 
+			is_selfish_religion = yes
+		}
+		FROM = { 
+			trait = charitable
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Charitable
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_charitable_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = greedy 
+			is_selfish_religion = yes
+		}
+		NOR = {
+			trait = charitable
+			is_generous_religion = yes
+		}
+		FROM = { 
+			trait = charitable
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Diligent
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_diligent_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { trait = slothful }
+		FROM = { 
+			trait = diligent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Diligent
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_diligent_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = slothful
+		FROM = { 
+			trait = diligent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Patient
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_patient_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = patient
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		NOR = { 
+			trait = wroth
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = patient
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Patient
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_patient_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = wroth
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		NOR = {
+			trait = patient
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		FROM = { 
+			trait = patient
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Kind
+		value = 25
+		localisation_key = tooltip_feudal_elector_vote_kind_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			is_benevolent_trigger = yes
+			is_generous_religion = yes
+		}
+		NOR = {
+			is_evil_trigger = yes
+			is_selfish_religion = yes
+		}
+		FROM = { 
+			is_benevolent_trigger = yes
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Kind
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_kind_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			is_evil_trigger = yes
+			is_selfish_religion = yes
+		}
+		NOR = {
+			is_benevolent_trigger = yes
+			is_generous_religion = yes
+		}
+		FROM = { 
+			is_benevolent_trigger = yes
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Humble
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_humble_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = humble
+		NOR = { 
+			trait = proud 
+			trait = envious
+		}
+		FROM = { 
+			trait = humble
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Humble
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_humble_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = proud
+			trait = envious
+		}
+		NOT = { trait = humble }
+		FROM = { 
+			trait = humble
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Lustful
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_lustful_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = lustful
+			trait = hedonist
+			is_hedonistic_religion = yes
+		}
+		NOR = {
+			trait = chaste
+			is_prudish_religion = yes
+		}
+		FROM = { 
+			trait = lustful
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Lustful - Male
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_lustful_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = chaste
+			is_prudish_religion = yes
+		}
+		OR = { 
+			trait = arbitrary #No need for consistency
+			NOR = { 
+				trait = lustful
+				trait = hedonist
+				is_hedonistic_religion = yes
+			}
+		}
+		FROM = { 
+			trait = lustful
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Gluttonous
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_gluttonous_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = gluttonous
+			trait = skooma_addiction
+			trait = hedonist
+			is_hedonistic_religion = yes
+		}
+		NOR = {
+			trait = temperate
+			is_prudish_religion = yes
+		}
+		FROM = { 
+			trait = gluttonous
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Gluttonous
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_gluttonous_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = temperate
+			is_prudish_religion = yes
+		}
+		OR = { 
+			trait = arbitrary #No need for consistency
+			NOR = { 
+				trait = gluttonous
+				trait = skooma_addiction
+				trait = hedonist
+				is_hedonistic_religion = yes
+			}
+		}
+		FROM = { 
+			trait = gluttonous
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Greedy
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_greedy_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = greedy
+			is_selfish_religion = yes
+		}
+		NOR = {
+			trait = charitable
+			is_generous_religion = yes
+		}
+		FROM = { 
+			trait = greedy
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Greedy
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_greedy_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = charitable
+			is_generous_religion = yes
+		}
+		OR = { 
+			trait = arbitrary #No need for consistency
+			NOR = { 
+				trait = greedy
+				is_selfish_religion = yes
+			}
+		}
+		FROM = { 
+			trait = greedy
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Slothful
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_slothful_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = slothful
+		FROM = { 
+			trait = slothful
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Slothful
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_slothful_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = arbitrary #No need for consistency
+			NOT = { trait = slothful }
+		}
+		FROM = { 
+			trait = slothful
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Wroth
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_wroth_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = wroth
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		NOR = {
+			trait = patient
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		FROM = { 
+			trait = wroth
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Wroth
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_wroth_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = patient
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		NOR = {
+			trait = wroth
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = wroth
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Evil
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_evil_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = arbitrary #No need for consistency
+			NOT = { is_evil_trigger = yes }
+			is_generous_religion = yes
+		}
+		NOR = {
+			is_evil_trigger = yes
+			is_selfish_religion = yes
+		}
+		FROM = { 
+			is_evil_trigger = yes
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Proud
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_proud_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = proud
+		NOT = {
+			trait = humble
+		}
+		FROM = { 
+			trait = proud
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Proud
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_proud_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = arbitrary #No need for consistency
+			trait = humble
+		}
+		NOT = { trait = proud }
+		FROM = { 
+			trait = proud
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Ambitious
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_ambitious_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = ambitious
+			is_selfish_religion = yes
+		}
+		NOR = {
+			trait = content
+			is_generous_religion = yes
+		}
+		FROM = { 
+			trait = ambitious
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Ambitious
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_ambitious_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = content
+			is_generous_religion = yes
+		}
+		OR = { 
+			trait = arbitrary #No need for consistency
+			NOR = { 
+				trait = ambitious
+				is_selfish_religion = yes
+			}
+		}
+		FROM = { 
+			trait = ambitious
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Arbitrary
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_arbitrary_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = {
+			religion = daedra_sheogorath
+		}
+		OR = { 
+			trait = just
+			trait = arbitrary #Arbitraception
+		}
+		FROM = { 
+			trait = arbitrary
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Brave
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_brave_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = no
+			is_warlike_religion = no
+		}
+		NOR = { 
+			trait = envious
+			trait = arbitrary #No need for consistency
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = brave
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Brave
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_brave_positive_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		NOR = { 
+			trait = envious
+			trait = arbitrary #No need for consistency
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		FROM = { 
+			trait = brave
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Brave
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_brave_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		OR = { 
+			trait = envious
+			trait = arbitrary #No need for consistency
+			NOR = {
+				this_is_warrior_culture_trigger = yes
+				is_warlike_religion = yes
+			}
+		}
+		FROM = { 
+			trait = brave
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Content
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_content_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			pacifist = yes
+			trait = content
+			is_generous_religion = yes
+		}
+		NOT = { is_selfish_religion = yes }
+		FROM = { 
+			trait = content
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Content
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_content_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			NOR = { 
+				trait = content
+				pacifist = yes
+				is_generous_religion = yes
+			}
+			is_selfish_religion = yes
+		}
+		FROM = { 
+			trait = content
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Craven
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_craven_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = craven
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Craven
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_craven_negative_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		calc_true_if = {
+			amount = 2
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+			trait = brave
+		}
+		FROM = { 
+			trait = craven
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Cynical
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_cynical_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		religion = FROM
+		OR = { 
+			has_religion_feature = religion_cosmopolitan
+			trait = cynical
+		}
+		NOT = { 
+			trait = zealous
+		}
+		FROM = { 
+			trait = cynical
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Cynical
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_cynical_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { has_religion_feature = religion_dogmatic }
+		religion = FROM
+		NOR = { 
+			has_religion_feature = religion_cosmopolitan
+			trait = cynical
+		}
+		OR = { 
+			is_reformed_religion = yes
+			trait = zealous
+		}
+		FROM = { 
+			trait = cynical
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Cynical
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_cynical_negative_dogmatic
+		NOT = { character = FROM } #Do not judge yourself.
+		has_religion_feature = religion_dogmatic
+		religion = FROM
+		OR = { 
+			trait = arbitrary #No need for consistency
+			trait = zealous
+		}
+		FROM = { 
+			trait = cynical
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Deceitful
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_deceitful_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		is_clandestine_religion = yes
+		NOR = {
+			trait = honest
+			is_honest_religion = yes
+		}
+		FROM = { 
+			trait = deceitful
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Deceitful
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_deceitful_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = arbitrary #No need for consistency
+			trait = honest
+			is_honest_religion = yes
+		}
+		NOT = { is_clandestine_religion = yes }
+		FROM = { 
+			trait = deceitful
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Erudite
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_erudite_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_spiritual_culture_trigger = yes
+		}
+		FROM = { 
+			trait = erudite
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Just
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_just_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			trait = deceitful
+			trait = arbitrary
+		}
+		FROM = { 
+			trait = just
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Paranoid
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_paranoid_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			trait = paranoid
+			religion = daedra_sheogorath
+		}
+		NOR = { 
+			trait = deceitful
+			trait = arbitrary
+			trait = paranoid
+		}
+		FROM = { 
+			trait = paranoid
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Paranoid by Paranoid
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_paranoid_negative_paranoid
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = paranoid
+		NOR = { 
+			trait = deceitful
+			trait = arbitrary
+			religion = daedra_sheogorath
+		}
+		FROM = { 
+			trait = paranoid
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Shy
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_shy_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			this_is_diplomatic_culture_trigger = yes
+			this_is_warrior_culture_trigger = yes
+		}
+		FROM = { 
+			trait = shy
+		}
+	}
+	additive_modifier = { #Praised for being Stubborn
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_stubborn_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = stubborn
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Stubborn
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_stubborn_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_spiritual_culture_trigger = yes
+		FROM = { 
+			trait = stubborn
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Trusting
+		value = 25
+		localisation_key = tooltip_feudal_elector_vote_trusting_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			trait = deceitful
+			trait = schemer
+			trait = ambitious
+		}
+		FROM = { 
+			trait = trusting
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Zealous
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_zealous_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		religion = FROM
+		NOR = { 
+			has_religion_feature = religion_cosmopolitan
+			pacifist = yes
+			trait = cynical
+		}
+		FROM = { 
+			trait = zealous
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Zealous
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_zealous_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		religion = FROM
+		OR = { 
+			has_religion_feature = religion_cosmopolitan
+			pacifist = yes
+			trait = cynical
+		}
+		FROM = { 
+			trait = zealous
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Pilgrim
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_pilgrim_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		religion = FROM
+		trait = zealous
+		FROM = { 
+			OR = { 
+				trait = pilgrim
+				#trait = indian_pilgrim
+				#trait = hajjaj
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	#additive_modifier = { #Praised for being Shieldmaiden
+	#	value = 10
+	#	localisation_key = tooltip_feudal_elector_vote_shieldmaiden_positive
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	this_is_warrior_culture_trigger = yes
+	#	NOT = { has_religion_feature = religion_patriarchal }
+	#	FROM = { 
+	#		trait = shieldmaiden
+	#	}
+	#}
+	#additive_modifier = { #Shunned for being Shieldmaiden
+	#	value = -10
+	#	localisation_key = tooltip_feudal_elector_vote_shieldmaiden_negative
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	this_is_warrior_culture_trigger = no
+	#	NOT = { has_religion_feature = religion_patriarchal }
+	#	FROM = { 
+	#		trait = shieldmaiden
+	#	}
+	#}
+	#additive_modifier = { #Shunned for being Shieldmaiden
+	#	value = -40
+	#	localisation_key = tooltip_feudal_elector_vote_shieldmaiden_negative_patriarchal
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	this_is_warrior_culture_trigger = no
+	#	has_religion_feature = religion_patriarchal
+	#	FROM = { 
+	#		trait = shieldmaiden
+	#	}
+	#}
+	# TODO:COMPATCH bloodlines
+	#additive_modifier = { #Praised for being a saoshyant_descendant 
+	#	value = 10
+	#	localisation_key = tooltip_feudal_elector_vote_saoshyant_descendant_positive
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	religion_group = zoroastrian_group
+	#	FROM = { 
+	#		trait = saoshyant_descendant 
+	#	}
+	#}
+	additive_modifier = { #Shunned for being Berserker
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_berserker_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		FROM = { 
+			trait = berserker
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being blind
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_blinded_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		#NOT = { 
+		#	culture_group = byzantine
+		#}
+		FROM = { 
+			is_blinded_trigger = yes
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being blind
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_blinded_negative_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		#NOT = { 
+		#	culture_group = byzantine
+		#}
+		FROM = { 
+			is_blinded_trigger = yes
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	#additive_modifier = { #Shunned for being blind
+	#	value = -75
+	#	localisation_key = tooltip_feudal_elector_vote_blinded_negative_byzantine
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	#culture_group = byzantine
+	#	FROM = { 
+	#		trait = blinded
+	#	}
+	#}
+	additive_modifier = { #Shunned for being eunuch
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_eunuch_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = eunuch
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being eunuch
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_eunuch_negative_warrior
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = eunuch
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	#additive_modifier = { #Shunned for being eunuch
+	#	value = -100
+	#	localisation_key = tooltip_feudal_elector_vote_eunuch_negative_byzantine
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	OR = { 
+	#		culture_group = byzantine
+	#		religion_group = muslim
+	#	}
+	#	FROM = { 
+	#		trait = eunuch
+	#	}
+	#}
+	additive_modifier = { #Shunned for being excommunicated
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_excommunicated_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			trait = zealous
+			trait = cynical
+		}
+		OR = { 
+			NOT = { trait = excommunicated }
+			trait = arbitrary #No need for consistency
+		}
+		FROM = { 
+			excommunicated_for = ROOT
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being excommunicated
+		value = -75
+		localisation_key = tooltip_feudal_elector_vote_excommunicated_negative_zealous
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = zealous
+		OR = { 
+			NOT = { trait = excommunicated }
+			trait = arbitrary #No need for consistency
+		}
+		FROM = { 
+			excommunicated_for = ROOT
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for loving the heathens
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_sympathy_heathens
+		NOT = { character = FROM } #Do not judge yourself.
+		religion = FROM
+		NOT = { has_religion_feature = religion_cosmopolitan }
+		# TODO:COMPATCH religions?
+		#NOT = { religion_group = indian_group }
+		#NOT = { religion = bon }
+		OR = { 
+			#AND = { 
+			#	NOT = { has_dlc = "Holy Fury"}
+			#	religion = bon_reformed
+			#}
+			pacifist = yes
+		}
+		OR = { 
+			trait = zealous
+			has_religion_feature = religion_dogmatic
+		}
+		OR = { 
+			trait = zealous
+			trait = arbitrary #No need for consistency
+		}
+		FROM = { 
+			OR = { 
+				trait = sympathy_human_pantheon
+				trait = sympathy_yokudan_pantheon
+				trait = sympathy_mer_pantheon
+				trait = sympathy_tribunal
+				trait = sympathy_daedra
+				trait = sympathy_khajiit_pantheon
+				trait = sympathy_hist_group
+				trait = sympathy_reach_faiths
+				trait = sympathy_old_faith
+				trait = sympathy_void_religions
+				trait = sympathy_atmoran_pantheon
+				trait = sympathy_oblivion_religions
+				trait = sympathy_tsaesci_courts
+				trait = sympathy_tangmo_religions
+				trait = sympathy_potun_religions
+				trait = sympathy_kamal_religions
+				trait = sympathy_islander_religions
+				trait = sympathy_maormer_religion
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Giant
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_giant_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			trait = giant
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Giant
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_giant_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = no
+		FROM = { 
+			trait = giant
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Lefthanded
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_lefthanded_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			culture = yokudan
+			religion = satakal
+		}
+		FROM = { 
+			trait = lefthanded
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being out of shape
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_shape_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_warrior_culture_trigger = yes
+		FROM = { 
+			OR = { 
+				trait = is_fat
+				trait = is_malnourished
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	# TODO:COMPATCH baptisms?
+	#additive_modifier = { #Praised for being baptized by Bishop
+	#	value = 5
+	#	localisation_key = tooltip_feudal_elector_vote_baptized_by_bishop
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	religion_group = christian
+	#	FROM = { 
+	#		trait = baptized_by_bishop
+	#	}
+	#}
+	#additive_modifier = { #Praised for being baptized by Pope
+	#	value = 10
+	#	localisation_key = tooltip_feudal_elector_vote_baptized_by_pope
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	OR = { 
+	#		religion = catholic 
+	#		religion = fraticelli
+	#	} 
+	#	religion = FROM
+	#	FROM = { 
+	#		trait = baptized_by_pope
+	#	}
+	#}
+	#additive_modifier = { #Praised for being baptized by Patriarch
+	#	value = 10
+	#	localisation_key = tooltip_feudal_elector_vote_baptized_by_patriarch
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	religion = orthodox
+	#	religion = FROM
+	#	FROM = { 
+	#		trait = baptized_by_patriarch
+	#	}
+	#}
+	# TODO:COMPATCH patrons?
+	#additive_modifier = { #Shunned for being of opposite pagan branch.
+	#	value = -25
+	#	localisation_key = tooltip_feudal_elector_vote_pagan_branch_negative
+	#	NOT = { character = FROM } #Do not judge yourself.
+	#	religion = FROM #Will care only if of same religion.
+	#	OR = { 
+	#		AND = { 
+	#			trait = pagan_branch_1 	
+	#			FROM = { 
+	#				OR = { 
+	#					trait = pagan_branch_2
+	#					trait = pagan_branch_3
+	#					trait = pagan_branch_4
+	#				}
+	#			}
+	#		}
+	#		AND = { 
+	#			trait = pagan_branch_2 	
+	#			FROM = { 
+	#				OR = { 
+	#					trait = pagan_branch_1
+	#					trait = pagan_branch_3
+	#					trait = pagan_branch_4
+	#				}
+	#			}
+	#		}
+	#		AND = { 
+	#			trait = pagan_branch_3 	
+	#			FROM = { 
+	#				OR = { 
+	#					trait = pagan_branch_2
+	#					trait = pagan_branch_1
+	#					trait = pagan_branch_4
+	#				}
+	#			}
+	#		}
+	#		AND = { 
+	#			trait = pagan_branch_4 	
+	#			FROM = { 
+	#				OR = { 
+	#					trait = pagan_branch_2
+	#					trait = pagan_branch_3
+	#					trait = pagan_branch_1
+	#				}
+	#			}
+	#		}
+	#	}
+	#}
+	
+	#Other traits and things (EK Specific)
+	#Known Vampire
+	additive_modifier = { #Shunned for being Known Vampire (Anti-Necromancy)
+		value = -125
+		localisation_key = tooltip_feudal_elector_vote_known_vampire_anti_necromancy
+		NOT = { character = FROM } #Do not judge yourself.
+		is_anti_necromancy_religion = yes
+		OR = {
+			is_generous_religion = yes #Empathetic religions don't like vampires, whether or not they're anti-undead
+			trait = zealous #Anti-undead fanatics are a natural enemy
+			trait = known_vampire_benevolent #"You give us honest bloodsuckers a bad name!"
+		}
+		FROM = { 
+			trait = known_vampire
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Known Vampire (Neither Anti nor Pro Necromancy)
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_known_vampire
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			is_anti_necromancy_religion = yes
+			is_necromancy_religion = yes
+		}
+		OR = {
+			is_generous_religion = yes #Empathetic religions don't like vampires, whether or not they're anti-undead
+			trait = zealous #Anti-undead fanatics are a natural enemy
+			trait = known_vampire_benevolent #"You give us honest bloodsuckers a bad name!"
+		}
+		FROM = { 
+			trait = known_vampire
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Known Vampire (Pro Necromancy)
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_known_vampire_pro_necromancy
+		NOT = { character = FROM } #Do not judge yourself.
+		is_necromancy_religion = yes
+		OR = {
+			is_generous_religion = yes #Empathetic religions don't like vampires, whether or not they're anti-undead
+			trait = known_vampire_benevolent #"You give us honest bloodsuckers a bad name!"
+		}
+		FROM = { 
+			trait = known_vampire
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	#Benevolent Vampire
+	additive_modifier = { #Shunned for being Benevolent Vampire (Anti-Necromancy)
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_known_vampire_benevolent_anti_necromancy
+		NOT = { character = FROM } #Do not judge yourself.
+		is_anti_necromancy_religion = yes
+		OR = {
+			is_generous_religion = yes #Empathetic religions don't like vampires, whether or not they're anti-undead
+			trait = zealous #Anti-undead fanatics are a natural enemy
+		}
+		NOT = { trait = known_vampire } #Special case
+		FROM = { 
+			trait = known_vampire_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Benevolent Vampire (Neither Anti nor Pro Necromancy)
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_known_vampire_benevolent
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			is_anti_necromancy_religion = yes
+			is_necromancy_religion = yes
+		}
+		OR = {
+			is_generous_religion = yes #Empathetic religions don't like vampires, whether or not they're anti-undead
+			trait = zealous #Anti-undead fanatics are a natural enemy
+		}
+		NOT = { trait = known_vampire } #Special case
+		FROM = { 
+			trait = known_vampire_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Benevolent Vampire (Pro Necromancy)
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_known_vampire_benevolent_pro_necromancy
+		NOT = { character = FROM } #Do not judge yourself.
+		is_necromancy_religion = yes
+		trait = cynical #Suspicious of vampires anyway
+		NOT = { trait = known_vampire } #Special case
+		FROM = { 
+			trait = known_vampire_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Benevolent Vampire (via Known Vampire)
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_known_vampire_benevolent_vs_known_vampire
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = known_vampire
+		FROM = { 
+			trait = known_vampire_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	
+	#Known Lycan
+	additive_modifier = { #Shunned for being Known Lycanthrope (Anti-Werewolf)
+		value = -100
+		localisation_key = tooltip_feudal_elector_vote_known_lycan_anti_lycan
+		NOT = { character = FROM } #Do not judge yourself.
+		is_pacifist_religion = yes #Werewolves, due to their bloodthirsty aggression, are anathema to pacifism
+		OR = {
+			is_generous_religion = yes #Werewolves don't earn many sympathy points from altruistic societies
+			trait = zealous #Anti-werewolf fanatics are a natural enemy
+			trait = known_lycan_benevolent #"You give us honest werewolves a bad name!"
+		}
+		FROM = { 
+			trait = known_lycan
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Known Lycanthrope (Not Pro-Werewolf)
+		value = -35
+		localisation_key = tooltip_feudal_elector_vote_known_lycan
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			religion = daedra_hircine
+			religion = daedra_namira
+			religion = old_gods
+			religion = forsworn_heresy
+			is_pacifist_religion = yes
+		}
+		OR = {
+			is_generous_religion = yes #Werewolves don't earn many sympathy points from altruistic societies
+			trait = zealous #Anti-werewolf fanatics are a natural enemy
+			trait = known_lycan_benevolent #"You give us honest werewolves a bad name!"
+		}
+		FROM = { 
+			trait = known_lycan
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Known Lycanthrope (Pro-Werewolf)
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_known_lycan_pro_lycan
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			religion = daedra_hircine
+			religion = daedra_namira
+			religion = old_gods
+			religion = forsworn_heresy
+		}
+		OR = {
+			trait = cynical #Not as big on this whole "werewolve are great" thing
+			trait = known_lycan_benevolent #"You give us honest werewolves a bad name!"
+		}
+		FROM = { 
+			trait = known_lycan
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	#Benevolent Lycan
+	additive_modifier = { #Shunned for being Known Benevolent Lycanthrope (Anti-Werewolf)
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_known_lycan_benevolent_anti_lycan
+		NOT = { character = FROM } #Do not judge yourself.
+		is_pacifist_religion = yes #Werewolves, due to their bloodthirsty aggression, are anathema to pacifism
+		OR = {
+			is_generous_religion = yes #Werewolves don't earn many sympathy points from altruistic societies
+			trait = zealous #Anti-werewolf fanatics are a natural enemy
+		}
+		FROM = { 
+			trait = known_lycan_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Known Benevolent Lycanthrope (Not Pro-Werewolf)
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_known_lycan_benevolent
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			religion = daedra_hircine
+			religion = daedra_namira
+			religion = old_gods
+			religion = forsworn_heresy
+			is_pacifist_religion = yes
+		}
+		OR = {
+			is_generous_religion = yes #Werewolves don't earn many sympathy points from altruistic societies
+			trait = zealous #Anti-werewolf fanatics are a natural enemy
+		}
+		NOT = { trait = known_lycan } #Special case
+		FROM = { 
+			trait = known_lycan_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Known Benevolent Lycanthrope (Pro-Werewolf)
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_known_lycan_benevolent_pro_lycan
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			religion = daedra_hircine
+			religion = daedra_namira
+			religion = old_gods
+			religion = forsworn_heresy
+		}
+		trait = cynical #Not as big on this whole "werewolve are great" thing
+		NOT = { trait = known_lycan } #Special case
+		FROM = { 
+			trait = known_lycan_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Benevolent Lycanthrope (via Known Lycan)
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_known_lycan_benevolent_vs_known_lycan
+		NOT = { character = FROM } #Do not judge yourself.
+		trait = known_lycan
+		FROM = { 
+			trait = known_lycan_benevolent
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	
+	#General Undead are rejected by anti-undead societies
+	additive_modifier = { #Shunned for being Undead (Anti-Necromancy)
+		value = -150
+		localisation_key = tooltip_feudal_elector_vote_undead_anti_necromancy
+		NOT = { character = FROM } #Do not judge yourself.
+		is_anti_necromancy_religion = yes
+		OR = {
+			is_generous_religion = yes #Empathetic religions don't like vampires, whether or not they're anti-undead
+			trait = zealous #Anti-undead fanatics are a natural enemy
+		}
+		OR = {
+			is_unknown_vampire = yes
+			is_undead = no
+		}
+		FROM = { 
+			is_undead = yes
+			is_vampire = no
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Undead (Not Pro-Necromancy)
+		value = -75
+		localisation_key = tooltip_feudal_elector_vote_undead
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = {
+			is_anti_necromancy_religion = yes
+			is_necromancy_religion = yes
+		}
+		OR = {
+			is_generous_religion = yes #Empathetic religions don't like vampires, whether or not they're anti-undead
+			trait = zealous #Anti-undead fanatics are a natural enemy
+		}
+		OR = {
+			is_unknown_vampire = yes
+			is_undead = no
+		}
+		FROM = { 
+			is_undead = yes
+			is_vampire = no
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+succession_candidate_child_traits_score = {
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_playful
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = playful
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_rowdy
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = rowdy
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_haughty
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_diplomatic_culture_trigger = yes
+			is_selfish_religion = yes
+		}
+		FROM = { 
+			trait = haughty
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_conscientious
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_diplomatic_culture_trigger = yes
+			is_selfish_religion = yes
+		}
+		FROM = { 
+			trait = conscientious
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_curious
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_spiritual_culture_trigger = yes
+		FROM = { 
+			trait = curious
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_idolizer
+		NOT = { character = FROM } #Do not judge yourself.
+		this_is_spiritual_culture_trigger = yes
+		FROM = { 
+			trait = idolizer
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Normal adventure/raider/etc preferences
+succession_adventurer_trait_score = {
+	additive_modifier = { #Praised for being Seaking/Sea_queen
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_seaking_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			OR = {
+				this_is_warrior_culture_trigger = yes
+				is_warlike_religion = yes
+			}
+			has_religion_feature = religion_seafaring
+		}
+		FROM = { 
+			OR = { 
+				trait = seaking
+				trait = sea_queen
+			}
+		}
+	}
+	additive_modifier = { #Shunned for being Seaking/Sea_queen
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_seaking_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			OR = {
+				this_is_warrior_culture_trigger = yes
+				is_warlike_religion = yes
+			}
+			has_religion_feature = religion_seafaring
+		}
+		FROM = { 
+			OR = { 
+				trait = seaking
+				trait = sea_queen
+			}
+		}
+	}
+	additive_modifier = { #Praised for being Adventurer
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_adventurer_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = adventurer
+		}
+	}
+	additive_modifier = { #Shunned for being Adventurer
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_adventurer_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		FROM = { 
+			trait = adventurer
+		}
+	}
+	additive_modifier = { #Praised for being Berserker
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_berserker_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = berserker
+		}
+	}
+	additive_modifier = { #Shunned for being unproved courtier in the shadow of the ruler.
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_spoiled_courtier
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			NOR = { 
+				is_ruler = yes
+				has_job_title = job_marshal
+				has_job_title = job_chancellor
+				has_job_title = job_treasurer
+				has_job_title = job_spiritual
+				has_job_title = job_spymaster
+			}
+			OR = { 
+				trait = decadent
+				trait = slothful
+				trait = hedonist
+				trait = is_fat
+				trait = shy
+				trait = slovenly
+			}
+		}
+	}
+}
+
+# Prefer adventurous traits
+succession_adventurer_trait_prefer_score = {
+	additive_modifier = { #Praised for being Seaking/Sea_queen - Boosted for Elective Gavelkind
+		value = 25
+		localisation_key = tooltip_feudal_elector_vote_seaking_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = { 
+			OR = {
+				this_is_warrior_culture_trigger = yes
+				is_warlike_religion = yes
+			}
+			has_religion_feature = religion_seafaring
+		}
+		FROM = { 
+			OR = { 
+				trait = seaking
+				trait = sea_queen
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Seaking/Sea_queen - Reduced for Elective Gavelkind
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_seaking_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		NOR = { 
+			OR = {
+				this_is_warrior_culture_trigger = yes
+				is_warlike_religion = yes
+			}
+			has_religion_feature = religion_seafaring
+		}
+		FROM = { 
+			OR = { 
+				trait = seaking
+				trait = sea_queen
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Adventurer - Boosted for Elective Gavelkind
+		value = 20
+		localisation_key = tooltip_feudal_elector_vote_adventurer_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = adventurer
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being Adventurer
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_adventurer_negative
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = no
+			is_pacifist_religion = yes
+		}
+		NOT = {
+			trait = adventurer
+		}
+		FROM = { 
+			trait = adventurer
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Praised for being Berserker - Boosted for Elective Gavelkind
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_berserker_positive
+		NOT = { character = FROM } #Do not judge yourself.
+		OR = {
+			this_is_warrior_culture_trigger = yes
+			is_warlike_religion = yes
+		}
+		FROM = { 
+			trait = berserker
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = { #Shunned for being unproved courtier in the shadow of the ruler. - Boosted for Elective Gavelkind
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_spoiled_courtier
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #Do not judge yourself.
+		FROM = { 
+			NOR = { 
+				is_ruler = yes
+				has_job_title = job_marshal
+				has_job_title = job_chancellor
+				has_job_title = job_treasurer
+				has_job_title = job_spiritual
+				has_job_title = job_spymaster
+			}
+			OR = { 
+				trait = decadent
+				trait = slothful
+				trait = hedonist
+				trait = is_fat
+				trait = shy
+				trait = slovenly
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Attraction
+succession_attraction_score = {
+	additive_modifier = { #Attraction bonus
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_attractive
+		NOT = { character = FROM } #Do not judge yourself.
+		is_adult = yes
+		OR = { 
+			NOT = { is_close_relative = FROM }
+			is_hedonistic_religion = yes
+			is_divine_blood_religion = yes
+			has_religion_feature = religion_holy_family
+		} 
+		OR = { 
+			AND = { 
+				prefers_men_trigger = yes
+				NOR = { 
+					trait = celibate 
+					AND = { 
+						is_married = yes 
+						NOT = { is_married = FROM }
+						trait = chaste
+					}
+				}
+				FROM = { 
+					is_female = no 
+					is_adult = yes
+					is_attractive_trigger = yes
+				}
+			}
+			AND = { 
+				prefers_women_trigger = yes
+				NOR = { 
+					trait = celibate 
+					AND = { 
+						is_married = yes 
+						NOT = { is_married = FROM }
+						trait = chaste
+					}
+				}
+				FROM = { 
+					is_female = yes 
+					is_adult = yes
+					is_attractive_trigger = yes
+				}
+			}
+		}
+	}
+	additive_modifier = { #Ugliness bonus
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_ugly
+		NOT = { character = FROM } #Do not judge yourself.
+		is_adult = yes
+		OR = { 
+			NOT = { is_close_relative = FROM }
+			is_hedonistic_religion = yes
+			is_divine_blood_religion = yes
+			has_religion_feature = religion_holy_family
+		} 
+		OR = { 
+			AND = { 
+				prefers_men_trigger = yes
+				NOR = { 
+					trait = celibate 
+					AND = { 
+						is_married = yes 
+						NOT = { is_married = FROM }
+						trait = chaste
+					}
+				}
+				FROM = { 
+					is_female = no 
+					is_adult = yes
+					is_unattractive_trigger = yes
+				}
+			}
+			AND = { 
+				prefers_women_trigger = yes
+				NOR = { 
+					trait = celibate 
+					AND = { 
+						is_married = yes 
+						NOT = { is_married = FROM }
+						trait = chaste
+					}
+				}
+				FROM = { 
+					is_female = yes 
+					is_adult = yes
+					is_unattractive_trigger = yes
+				}
+			}
+		}
+	}
+}
+
+# Kinslayer - normal
+# N.B. excluded for elders
+succession_kinslayer_score = {
+	#Kinslayer - From stranger's perspective
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_1_stranger
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { dynasty = FROM }
+		succession_kinslayer_1_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_2_stranger
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { dynasty = FROM }
+		succession_kinslayer_2_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_3_stranger
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { dynasty = FROM }
+		succession_kinslayer_3_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	#Kinslayer - From a far relative's perspective
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_1_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { is_close_relative = FROM }
+		dynasty = FROM
+		succession_kinslayer_1_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_2_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { is_close_relative = FROM }
+		dynasty = FROM
+		succession_kinslayer_2_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_3_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { is_close_relative = FROM }
+		dynasty = FROM
+		succession_kinslayer_3_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	#Kinslayer - From a close relative's perspective
+	additive_modifier = {
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_1_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		is_close_relative = FROM 
+		succession_kinslayer_1_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_2_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		is_close_relative = FROM 
+		dynasty = FROM
+		succession_kinslayer_2_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_3_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		is_close_relative = FROM 
+		dynasty = FROM
+		succession_kinslayer_3_trigger = yes
+		succession_eldership_scope_ruler_only_trigger = yes
+	}
+}
+
+succession_kinslayer_hate_score = {
+	#Kinslayer - From stranger's perspective - Elders are for family values, all Kinslayer maluses are boosted.
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_1_stranger
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { dynasty = FROM }
+		succession_kinslayer_1_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_2_stranger
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { dynasty = FROM }
+		succession_kinslayer_2_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -40
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_3_stranger
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { dynasty = FROM }
+		succession_kinslayer_3_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	#Kinslayer - From a far relative's perspective
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_1_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { is_close_relative = FROM }
+		dynasty = FROM
+		succession_kinslayer_1_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -40
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_2_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { is_close_relative = FROM }
+		dynasty = FROM
+		succession_kinslayer_2_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_3_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		NOT = { is_close_relative = FROM }
+		dynasty = FROM
+		succession_kinslayer_3_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	#Kinslayer - From a close relative's perspective
+	additive_modifier = {
+		value = -40
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_1_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		is_close_relative = FROM 
+		succession_kinslayer_1_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_2_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		is_close_relative = FROM 
+		dynasty = FROM
+		succession_kinslayer_2_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -60
+		localisation_key = tooltip_feudal_elector_vote_kinslayer_3_dynast
+		NOT = { character = FROM } #Do not judge yourself.
+		is_close_relative = FROM 
+		dynasty = FROM
+		succession_kinslayer_3_trigger = yes
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+}
+
+### Other
+
+# Current ruler modifier
+succession_current_ruler_score = {
+	#Ruler is lunatic, vote against his pick
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_anti_vote_ruler_lunatic
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		NOR = {
+			trait = lunatic #Don't care
+			trait = possessed #Don't care
+			trait = arbitrary #Don't care
+			trait = zealous #Might be the gods speaking
+			religion = daedra_sheogorath #Religion of complete insanity
+		}
+		FROMFROM = { 
+			holder_scope = {
+				trait = lunatic
+			} 
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	#Ruler is possessed, vote against his pick
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_anti_vote_ruler_possessed
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		trait = zealous
+		NOR = {
+			trait = lunatic #Don't care
+			trait = possessed #Don't care
+			trait = arbitrary #Don't care
+			religion = daedra_sheogorath #Religion of complete insanity
+		}
+		FROMFROM = { 
+			holder_scope = {
+				trait = possessed
+			} 
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+
+	#Ruler is just, trust his pick
+	additive_modifier = {
+		value = 25
+		localisation_key = tooltip_feudal_elector_pro_vote_ruler_just
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		NOR = {
+			trait = lunatic #Don't care
+			trait = possessed #Don't care
+			trait = arbitrary #Don't like it
+		}
+		FROMFROM = { 
+			holder_scope = {
+				trait = just
+			} 
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	#Ruler is a Tyrant (Opinion), vote against his pick
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_anti_vote_ruler_tyrant
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		NOR = {
+			trait = lunatic #Don't care
+			trait = possessed #Don't care
+			trait = arbitrary #Don't care
+		}
+		FROMFROM = { 
+			holder_scope = {
+				ROOT = {
+					has_opinion_modifier = {
+						modifier = opinion_tyrant
+						who = PREV
+					} 
+				} 
+			} 
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+}
+
+# Candidate opinion
+succession_candidate_opinion_score = {
+	additive_modifier = {
+		value = -150
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		is_rival = FROM
+	}
+	additive_modifier = {
+		value = -100
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -75 
+			}
+		}
+	}
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -50  
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -75 
+		}
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -25
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -50
+		}
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 0
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -25 
+		}
+	}
+	additive_modifier = {
+		value = 15
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 0
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 25
+			}
+		}
+	}
+	additive_modifier = {
+		value = 30
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 25
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 50
+			}
+		}
+	}
+	additive_modifier = {
+		value = 50
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 50
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 75 
+			}
+		}
+	}
+	additive_modifier = {
+		value = 70
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 75
+		}
+	}
+}
+
+# Candidate opinion - lesser
+succession_candidate_opinion_lesser_score = {
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		is_rival = FROM
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -40
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -75 
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -20
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -50  
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -75 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -25
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -50
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = -5
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 0
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -25 
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 5
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 0
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 25
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 10
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 25
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 50
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 30
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 50
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 75 
+			}
+		}
+		succession_eldership_scope_trigger = yes
+	}
+	additive_modifier = {
+		value = 40
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 75
+		}
+		succession_eldership_scope_trigger = yes
+	}
+}
+
+# Boosted
+succession_candidate_opinion_boosted_score = {
+	additive_modifier = {
+		value = -50
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		is_rival = FROM
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -30
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -75 
+			}
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -25
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -50  
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -75 
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -15
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = -25
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -50
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = -10
+		localisation_key = tooltip_feudal_elector_vote_opinion_negative
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 0
+			}
+		}
+		opinion = {
+			who = FROM
+			value = -25 
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = 30
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 0
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 25
+			}
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = 50
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 25
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 50
+			}
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = 70
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 50
+		}
+		NOT = {
+			opinion = {
+				who = FROM
+				value = 75 
+			}
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+	additive_modifier = {
+		value = 120
+		localisation_key = tooltip_feudal_elector_vote_opinion_positive
+		NOT = { character = FROM } #But not if it's me.
+		NOT = { is_rival = FROM } #Special case
+		opinion = {
+			who = FROM
+			value = 75
+		}
+		succession_eldership_score_pleased_only_trigger = yes
+	}
+}
+
+# Ruler opinion
+succession_current_ruler_opinion_score = {
+	additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+		value = -30
+		localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				NOT = { 
+					reverse_opinion = { who = ROOT value = -75 } 
+				} 
+			} 
+		}
+	}
+	additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+		value = -20
+		localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				NOT = { 
+					reverse_opinion = { who = ROOT value = -50 } 
+				} 
+				reverse_opinion = { who = ROOT value = -75 } 
+			} 
+		}
+	}
+	additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+		value = -10
+		localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				NOT = { 
+					reverse_opinion = { who = ROOT value = -25 } 
+				} 
+				reverse_opinion = { who = ROOT value = -50 } 
+			} 
+		}
+	}
+	additive_modifier = { #Vassal hates ruler, therefore votes against the ruler's candidate (FROMFROMFROM)
+		value = -5
+		localisation_key = tooltip_feudal_elector_anti_vote_ruler_opinion_negative
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				NOT = { 
+					reverse_opinion = { who = ROOT value = 0 } 
+				} 
+				reverse_opinion = { who = ROOT value = -25 } 
+			} 
+		}
+	}
+	additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+		value = 5
+		localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				reverse_opinion = { who = ROOT value = 0 } 
+				NOT = { 
+					reverse_opinion = { who = ROOT value = 25 } 
+				} 
+			} 
+		}
+	}
+	additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+		value = 20
+		localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				reverse_opinion = { who = ROOT value = 25 } 
+				NOT = { 
+					reverse_opinion = { who = ROOT value = 50 } 
+				} 
+			} 
+		}
+	}
+	additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+		value = 40
+		localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				reverse_opinion = { who = ROOT value = 50 } 
+				NOT = { 
+					reverse_opinion = { who = ROOT value = 75 } 
+				} 
+			} 
+		}
+	}
+	additive_modifier = { #Vassal loves ruler, therefore votes for the ruler's candidate (FROMFROMFROM)
+		value = 60
+		localisation_key = tooltip_feudal_elector_pro_vote_ruler_opinion_positive
+		FROM = { character = ROOT_FROMFROMFROM }
+		NOT = { character = FROM } #But not if it's me.
+		FROMFROM = { 
+			holder_scope = {
+				NOT = { character = ROOT } #Of course you trust your own opinion of your candidate...
+				reverse_opinion = { who = ROOT value = 75 } 
+			} 
+		}
+	}
+}

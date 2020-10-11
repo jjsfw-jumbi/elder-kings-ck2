@@ -1,0 +1,337 @@
+# Types:
+# 0 - Light Infantry
+# 1 - Heavy Infantry
+# 2 - Pikemen
+# 3 - Light Cavalry
+# 4 - Heavy Cavalry
+# 5 - Archers
+# 6 - Special troops
+#
+# Each Individual unit type in a formation should have a total of 60% bonus for cultural, 30% for generic
+#
+
+RETTYPE_INF1 = {
+	first_type = 0
+	first_amount = 330
+
+	potential = {
+		is_nomadic = no
+	}
+	
+	modifier = {
+		light_infantry_morale = 0.1
+		light_infantry_offensive = 0.1
+		light_infantry_defensive = 0.1
+	}
+}
+
+RETTYPE_INF2 = {
+	first_type = 1
+	first_amount = 200
+
+	potential = {
+		is_nomadic = no
+	}
+	
+	modifier = {
+		heavy_infantry_morale = 0.1
+		heavy_infantry_offensive = 0.1
+		heavy_infantry_defensive = 0.1
+	}
+}
+
+RETTYPE_INF3 = {
+	first_type = 2
+	first_amount = 250
+	
+
+	potential = {
+		is_nomadic = no
+	}
+	
+	modifier = {
+		pikemen_morale = 0.1
+		pikemen_defensive = 0.1
+		pikemen_offensive = 0.1
+	}
+}
+
+RETTYPE_CAV1 = {
+	first_type = 3
+	first_amount = 200
+
+	potential = {
+		is_nomadic = no
+	}
+	
+	modifier = {
+		light_cavalry_morale = 0.1
+		light_cavalry_offensive = 0.1
+		light_cavalry_defensive = 0.1
+	}
+}
+
+RETTYPE_CAV2 = {
+	first_type = 4
+	first_amount = 100
+
+	potential = {
+		is_nomadic = no
+	}
+	
+	modifier = {
+		knights_morale = 0.1
+		knights_offensive = 0.1
+		knights_defensive = 0.1
+	}
+}
+
+RETTYPE_SKIR1 = {
+	first_type = 5
+	first_amount = 330
+
+	potential = {
+		is_nomadic = no
+	}
+	
+	modifier = {
+		archers_morale = 0.1
+		archers_offensive = 0.1
+		archers_defensive = 0.1
+	}
+}
+
+RETTYPE_MAGES = {
+	first_type = 6
+	first_amount = 50
+	
+	special_troops = battlemages
+
+	potential = {
+		is_nomadic = no
+		OR = {
+			is_undead = no
+			is_vampire = yes
+			trait = lich
+			trait = briarheart
+		}
+	}
+	
+	modifier = {
+		battlemages_morale = 0.1
+		battlemages_offensive = 0.1
+		battlemages_defensive = 0.1
+	}
+}
+
+RETTYPE_TONGUES = { #Testing purposes
+	first_type = 6
+	first_amount = 20
+	
+	special_troops = tongues
+
+	potential = {
+		is_nomadic = no
+		OR = {
+			is_undead = no
+			is_vampire = yes
+			trait = lich
+			trait = briarheart
+		}
+		OR = {
+			is_dragonblood = yes
+			AND = {
+				society_member_of = greybeards_tamriel #TODO: Akavir Thu'um society?
+				society_rank = 2 #TODO: Tooltip for this society rank.
+				any_demesne_province = {
+					has_building = ca_greybeards_0
+				}
+			}
+		}
+	}
+	
+	modifier = {
+		tongues_morale = 0.1
+		tongues_offensive = 0.1
+		tongues_defensive = 0.1
+	}
+}
+
+RETTYPE_UNDEAD = { #Testing purposes
+	first_type = 6
+	first_amount = 500
+	
+	special_troops = undead_troop
+
+	potential = {
+		is_nomadic = no
+		OR = {
+			trait = necromancer
+			trait = lich
+			AND = {
+				is_undead = yes
+				is_vampire = no
+				NOT = { trait = briarheart }
+			}
+		}
+	}
+	
+	modifier = {
+		undead_troop_offensive = 0.2
+		undead_troop_defensive = 0.2
+	}
+}
+
+RETTYPE_HORSEARCHERS = {
+	first_type = 6
+	first_amount = 150
+	
+	special_troops = horse_archers
+
+	potential = {
+		is_nomadic = no
+		OR = {
+			is_undead = no
+			is_vampire = yes
+			trait = lich
+			trait = briarheart
+		}
+		capital_scope = {
+			OR = {
+				culture_group = tsaesci_group
+				culture = akaviri
+			}
+		}
+	}
+	
+	modifier = {
+		horse_archers_morale = 0.1
+		horse_archers_offensive = 0.1
+		horse_archers_defensive = 0.1
+	}
+}
+
+RETTYPE_WARBABARS = {
+	first_type = 6
+	first_amount = 80
+	
+	special_troops = war_elephants
+
+	potential = {
+		is_nomadic = no
+		OR = {
+			is_undead = no
+			is_vampire = yes
+			trait = lich
+			trait = briarheart
+		}
+		capital_scope = {
+			OR = {
+				region = nirn_akavir_tangmo
+				region = nirn_akavir_phaedin
+				region = nirn_akavir_nuku
+				region = nirn_akavir_panman
+			}
+			culture_group = tangmo_group
+		}
+	}
+	
+	modifier = {
+		war_elephants_morale = 0.1
+		war_elephants_offensive = 0.1
+		war_elephants_defensive = 0.1
+	}
+}
+
+RETTYPE_CAMEL = {
+	first_type = 6
+	first_amount = 200
+	
+	special_troops = camel_cavalry
+
+	potential = {
+		is_nomadic = no
+		OR = {
+			is_undead = no
+			is_vampire = yes
+			trait = lich
+			trait = briarheart
+		}
+		capital_scope = {
+			OR = {
+				region = nirn_yokuda
+				region = nirn_tamriel_hammerfell
+				region = nirn_akavir_potun
+			}
+			OR = {
+				culture_group = yokudan_group
+				culture_group = potun_group
+			}
+		}
+	}
+	
+	modifier = {
+		camel_cavalry_morale = 0.1
+		camel_cavalry_offensive = 0.1
+		camel_cavalry_defensive = 0.1
+	}
+}
+
+RETTYPE_WARWOOLIES = {
+	first_type = 6
+	first_amount = 80
+	
+	special_troops = war_mammoths
+
+	potential = {
+		is_nomadic = no
+		OR = {
+			is_undead = no
+			is_vampire = yes
+			trait = lich
+			trait = briarheart
+		}
+		capital_scope = {
+			OR = {
+				region = nirn_tamriel_skyrim
+				region = nirn_atmora
+				region = nirn_akavir_kamal
+			}
+			OR = {
+				culture = nord
+				culture = skaal
+				culture = atmoran
+			}
+		}
+	}
+	
+	modifier = {
+		war_mammoths_morale = 0.1
+		war_mammoths_offensive = 0.1
+		war_mammoths_defensive = 0.1
+	}
+}
+
+#Cultural
+#RETTYPE_IMPERIAL_1 = { # Imperial Auxilia
+#RETTYPE_ORSIMER_1 = { # Orsimer Barbarians
+#RETTYPE_COLOVIAN_1 = { # Colovian Horsemen
+#RETTYPE_NIBENEAN_1 = { # Nibenean Cadre
+#RETTYPE_SKAAL_1 = { # Skaal Berserkers
+#RETTYPE_NORD_1 = { # Nord Housecarls
+#RETTYPE_REACHMEN_1 = { # Reachmen Forsworn
+#RETTYPE_BRETON_1 = { # Breton Yeomenry
+#RETTYPE_CROWN_1 = { # Loyalist Militia
+#RETTYPE_FOREBEAR_1 = { # Forebear Harbingers
+#RETTYPE_YOKUDAN_1 = { # Yokudan Swordsingers
+#RETTYPE_KHAJIIT_1 = { # Raht
+#RETTYPE_KHAJIIT_2 = { # Dagi
+#RETTYPE_quey_1 = { # Island Bowmen
+#RETTYPE_DUNMER_1 = { # Dunmer Ordinator
+#RETTYPE_ASHLANDER_1 = { # Ashlander Nomads
+#RETTYPE_ARGONIAN_1 = { # Argonian Phalanx
+#RETTYPE_MAORMER_1 = { # Moarmer Seaguard
+#RETTYPE_CHIMER_1 = { # Chimer Ashguard
+#RETTYPE_ALTMER_1 = { # Altmer Sunguard
+#RETTYPE_AYLEID_1 = { # Ayleid Skyguard
+#RETTYPE_BOSMER_1 = { # Bosmer Jaqspur

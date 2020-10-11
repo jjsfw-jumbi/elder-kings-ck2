@@ -1,0 +1,4045 @@
+#On-action combat event: Killed in action
+character_event = {
+	id = 242
+	desc = EVTDESC242	
+	picture = GFX_evt_death
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { trait = berserker }
+	}
+
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = clubfooted
+			factor = 1.25
+		}
+		modifier = {
+			trait = hunchback
+			factor = 1.25
+		}
+		modifier = {
+			trait = lisp
+			factor = 1.1
+		}
+		modifier = {
+			trait = stutter
+			factor = 1.1
+		}
+		modifier = {
+			trait = dwarf
+			factor = 1.25
+		}		
+		modifier = {
+			trait = genius
+			factor = 0.9
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 0.9
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 2.0
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 3.0
+		}
+		modifier = {
+			trait = inbred
+			factor = 3.0
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 0.7
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 2.5
+		}		
+		modifier = {
+			factor = 1.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 1.25
+			trait = depressed
+		}
+		modifier = {
+			factor = 1.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 1.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 1.1
+			is_ill = yes
+		}
+		modifier = {
+			factor = 1.15
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 1.15
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 2.0
+			trait = leper
+		}
+		modifier = {
+			factor = 1.15
+			trait = wounded
+		}
+		modifier = {
+			factor = 1.25
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 3.0
+			trait = incapable
+		}
+		modifier = {
+			factor = 1.1
+			trait = drunkard
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 1.1
+			trait = has_small_pox
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 0.9
+			martial = 30
+		}
+		modifier = {
+			factor = 0.9
+			martial = 25
+		}
+		modifier = {
+			factor = 0.9
+			martial = 20
+		}
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 12
+		}
+		modifier = {
+			factor = 0.10
+			combat_rating = 60
+		}
+		modifier = {
+			factor = 0.45
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 0.55
+			combat_rating = 42
+		}
+		modifier = {
+			factor = 0.65
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 0.75
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 0.85
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { combat_rating = 18 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { combat_rating = 12 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { combat_rating = 6 }
+		}
+		modifier = {
+			factor = 0.8
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 0.9
+		}
+		modifier = {
+			trait = perceptive
+			factor = 0.9
+		}
+		modifier = {
+			factor = 1.1
+			trait = skooma_addiction
+		}		
+	}
+	
+	immediate = {
+		liege = {
+			if = {
+				limit = { NOT = { character = ROOT } }
+				character_event = { id = 253 }
+			}
+		}
+		FROMFROM = {
+			if = {
+				limit = { 
+					NOR = { 
+						is_vassal_or_below = ROOT
+						character = ROOT
+					}
+				}
+				set_character_flag = temp_battle_kill_242
+				character_event = { id = 249 }
+			}
+		}
+		FROM = {
+			if = {
+				limit = { 
+					NOR = { 
+						has_character_flag = temp_battle_kill_242
+						is_vassal_or_below = ROOT
+						character = ROOT
+					}
+				}
+				character_event = { id = 249 }
+			}
+		}
+		FROMFROM = {
+			clr_character_flag = temp_battle_kill_242
+		}
+		if = {
+			limit = {
+				OR = {
+					is_liege_or_above = FROM
+					FROM = { character = ROOT }
+					NOT = { FROM = { always = yes } }
+				}
+			}
+			death = {
+				death_reason = death_battle
+			}
+			break = yes
+		}
+		death = {
+			death_reason = death_battle
+			killer = FROM
+		}
+	}
+	
+	option = {
+		name = ALAS
+	}	
+}
+
+#On-action combat event: Wounded in action
+character_event = {
+	id = 243
+	desc = EVTDESC243
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { trait = wounded }
+		can_be_maimed_trigger = yes
+		NOT = { trait = berserker }
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			has_character_modifier = proving_bravery
+		}
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = clubfooted
+			factor = 1.25
+		}
+		modifier = {
+			trait = hunchback
+			factor = 1.25
+		}
+		modifier = {
+			trait = lisp
+			factor = 1.1
+		}
+		modifier = {
+			trait = stutter
+			factor = 1.1
+		}
+		modifier = {
+			trait = dwarf
+			factor = 1.25
+		}		
+		modifier = {
+			trait = genius
+			factor = 0.9
+		}
+		modifier = {
+			OR = {
+			trait = quick
+			trait = shrewd
+		}
+			factor = 0.9
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 2.0
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 3.0
+		}
+		modifier = {
+			trait = inbred
+			factor = 3.0
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 0.7
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 2.5
+		}		
+		
+		modifier = {
+			factor = 1.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 1.25
+			trait = depressed
+		}
+		modifier = {
+			factor = 1.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 1.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 1.1
+			is_ill = yes
+		}
+		modifier = {
+			factor = 1.15
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 1.15
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 2.0
+			trait = leper
+		}
+		modifier = {
+			factor = 1.25
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 3.0
+			trait = incapable
+		}
+		modifier = {
+			factor = 1.1
+			trait = drunkard
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 1.1
+			trait = has_small_pox
+		}		
+		#Elder Kings Additions
+		modifier = {
+			factor = 0.9
+			martial = 30
+		}
+		modifier = {
+			factor = 0.9
+			martial = 25
+		}
+		modifier = {
+			factor = 0.9
+			martial = 20
+		}
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 12
+		}
+		modifier = {
+			factor = 0.45
+			combat_rating = 42
+		}
+		modifier = {
+			factor = 0.55
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 0.65
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 0.75
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 0.85
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { combat_rating = 12 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { combat_rating = 6 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { combat_rating = 0 }
+		}
+		modifier = {
+			factor = 0.8
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 0.9
+		}
+		modifier = {
+			trait = perceptive
+			factor = 0.9
+		}
+		modifier = {
+			factor = 1.1
+			trait = skooma_addiction
+		}		
+	}
+	
+	option = {
+		name = CURSES
+		add_trait = wounded
+	}
+}
+
+#On-action combat event: Maimed in action
+character_event = {
+	id = 244
+	desc = EVTDESC244
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	
+	trigger = {
+		NOT = { trait = maimed }
+		NOT = { trait = mangled }
+		NOT = { 
+			AND = {
+				trait = one_eyed
+				trait = one_handed 
+				trait = one_legged 
+				trait = disfigured 
+			}
+		}
+		NOT = { trait = berserker }
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			has_character_modifier = proving_bravery
+		}
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = clubfooted
+			factor = 1.25
+		}
+		modifier = {
+			trait = hunchback
+			factor = 1.25
+		}
+		modifier = {
+			trait = lisp
+			factor = 1.1
+		}
+		modifier = {
+			trait = stutter
+			factor = 1.1
+		}
+		modifier = {
+			trait = dwarf
+			factor = 1.25
+		}		
+		modifier = {
+			trait = genius
+			factor = 0.9
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 0.9
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 2.0
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 3.0
+		}
+		modifier = {
+			trait = inbred
+			factor = 3.0
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 0.7
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 2.5
+		}		
+
+		modifier = {
+			factor = 1.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 1.25
+			trait = depressed
+		}
+		modifier = {
+			factor = 1.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 1.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 1.1
+			is_ill = yes
+		}
+		modifier = {
+			factor = 1.15
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 1.15
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 2.0
+			trait = leper
+		}
+		modifier = {
+			factor = 1.15
+			trait = wounded
+		}
+		modifier = {
+			factor = 2.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 3.0
+			trait = incapable
+		}
+		modifier = {
+			factor = 1.1
+			trait = drunkard
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 1.1
+			trait = has_small_pox
+		}		
+		#Elder Kings Additions
+		modifier = {
+			factor = 0.9
+			martial = 30
+		}
+		modifier = {
+			factor = 0.9
+			martial = 25
+		}
+		modifier = {
+			factor = 0.9
+			martial = 20
+		}
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 12
+		}
+		modifier = {
+			factor = 0.45
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 0.55
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 0.65
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 0.75
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 0.85
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { combat_rating = 12 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { combat_rating = 6 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { combat_rating = 0 }
+		}
+		modifier = {
+			factor = 0.8
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 0.9
+		}
+		modifier = {
+			trait = perceptive
+			factor = 0.9
+		}
+		modifier = {
+			factor = 1.1
+			trait = skooma_addiction
+		}		
+	}
+	
+	option = {
+		name = CURSES
+		add_maimed_trait_effect = yes
+	}
+}
+
+#On-action combat event: Serious head injury in action
+character_event = {
+	id = 245
+	#desc = EVTDESC245
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	desc = {
+		picture = GFX_evt_battle
+		text = EVTDESC245
+		trigger = { has_character_flag = wounded_incapable }
+	}
+	desc = {
+		picture = GFX_evt_battle
+		text = 245.d2
+		trigger = { has_character_flag = wounded_disfigured }
+	}
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			random_list = {
+				60 = {
+					modifier = {
+						factor = 0
+						trait = disfigured						
+					}
+					set_character_flag = wounded_disfigured
+				}
+				40 = {
+					set_character_flag = wounded_incapable
+				}
+			}
+		}
+	}
+	
+	
+	trigger = {
+		NOT = { trait = incapable }
+		is_immortal = no
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			has_character_modifier = proving_bravery
+		}
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+		
+			trait = craven
+		}
+		modifier = {
+			trait = clubfooted
+			factor = 1.25
+		}
+		modifier = {
+			trait = hunchback
+			factor = 1.25
+		}
+		modifier = {
+			trait = lisp
+			factor = 1.1
+		}
+		modifier = {
+			trait = stutter
+			factor = 1.1
+		}
+		modifier = {
+			trait = dwarf
+			factor = 1.25
+		}		
+		modifier = {
+			trait = genius
+			factor = 0.9
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 0.9
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 2.0
+		}
+		modifier = {
+			trait = imbecile
+			factor = 3.0
+		}
+		modifier = {
+			trait = inbred
+			factor = 3.0
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 0.7
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 2.5
+		}
+		modifier = {
+			factor = 1.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 1.25
+			trait = depressed
+		}
+		modifier = {
+			factor = 1.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 1.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 1.1
+			is_ill = yes
+		}
+		modifier = {
+			factor = 1.15
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 1.15
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 2.0
+			trait = leper
+		}
+		modifier = {
+			factor = 1.15
+			trait = wounded
+		}
+		modifier = {
+			factor = 1.25
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 1.1
+			trait = drunkard
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 1.1
+			trait = has_small_pox
+		}		
+		#Elder Kings Additions
+		modifier = {
+			factor = 0.9
+			martial = 30
+		}
+		modifier = {
+			factor = 0.9
+			martial = 25
+		}
+		modifier = {
+			factor = 0.9
+			martial = 20
+		}
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 12
+		}
+		modifier = {
+			factor = 0.45
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 0.55
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 0.65
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 0.75
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 0.85
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { combat_rating = 12 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { combat_rating = 6 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { combat_rating = 0 }
+		}
+		modifier = {
+			factor = 0.8
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 0.9
+		}
+		modifier = {
+			trait = perceptive
+			factor = 0.9
+		}
+		modifier = {
+			factor = 1.1
+			trait = skooma_addiction
+		}		
+	}
+
+	option = {
+		name = CURSES
+		if = {
+			limit = {
+				NOT = {
+					has_dlc = "Reapers"
+				}
+			}
+			add_trait = incapable
+			break = yes
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+				has_character_flag = wounded_disfigured
+			}
+			add_trait = disfigured 
+			add_trait = severely_injured 
+			resolve_severely_injured_effect = yes
+			clr_character_flag = wounded_disfigured
+			break = yes
+		}
+		if = {
+			limit = {
+				has_character_flag = wounded_incapable
+			}
+			add_trait = incapable
+			clr_character_flag = wounded_incapable
+		}
+	}
+}
+
+#On-action combat event: Character skill improves
+character_event = {
+	id = 246
+	desc = EVTDESC246
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_alive = yes
+		#NOT = { trait = veteran_leader_5 }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = genius
+			factor = 1.2
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.1
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.9
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 0.2
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.2
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.5
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}	
+		modifier = {
+			factor = 0.8
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.8
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.75
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.75
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.8
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 0.8
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 0.5
+			trait = leper
+		}
+		modifier = {
+			factor = 0.9
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.8
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.4
+			trait = incapable
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 0.5
+			trait = has_small_pox
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.5
+			trait = skooma_addiction
+		}		
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			is_veteran_leader = no
+		}
+		improve_veterancy = yes
+	}
+	option = {
+		name = EXCELLENT
+		trigger = {
+			is_veteran_leader = yes
+		}
+		custom_tooltip = {
+			text = skillsimprove
+			hidden_tooltip = {
+				random_list = {
+					15 = {
+						modifier = { factor = 0 trait = veteran_leader_5 }
+						modifier = { factor = 5 trait = veteran_leader_1 }
+						modifier = { factor = 2.5 trait = veteran_leader_2 }
+						modifier = { factor = 1.25 trait = veteran_leader_3 }
+						improve_veterancy = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = flanker } trait = flanker_3 } }
+						modifier = { factor = 1.15 trait = flanker }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_flanker = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = experimenter } trait = experimenter_3 } }
+						modifier = { factor = 1.15 trait = experimenter }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_experimenter = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = defensive_leader } trait = defensive_leader_3 } }
+						modifier = { factor = 1.15 trait = defensive_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_defensive_leader = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = siege_leader } trait = siege_leader_3 } }
+						modifier = { factor = 1.15 trait = siege_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_siege_leader = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = narrow_flank_leader } trait = narrow_flank_leader_3 } }
+						modifier = { factor = 1.15 trait = narrow_flank_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_narrow_flank_leader = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = trickster } trait = trickster_3 } }
+						modifier = { factor = 1.15 trait = trickster }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_trickster = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = aggressive_leader } trait = aggressive_leader_3 } }
+						modifier = { factor = 1.15 trait = aggressive_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_aggressive_leader = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = organizer } trait = organizer_3 } }
+						modifier = { factor = 1.15 trait = organizer }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_organizer = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = cavalry_leader } trait = cavalry_leader_3 } }
+						modifier = { factor = 1.15 trait = cavalry_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_cavalry_leader = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = heavy_infantry_leader } trait = heavy_infantry_leader_3 } }
+						modifier = { factor = 1.15 trait = heavy_infantry_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_heavy_infantry_leader = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = light_foot_leader } trait = light_foot_leader_3 } }
+						modifier = { factor = 1.15 trait = light_foot_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_light_foot_leader = yes
+					}
+					6 = {
+						modifier = { factor = 0 OR = { NOT = { trait = inspiring_leader } trait = inspiring_leader_3 } }
+						modifier = { factor = 1.15 trait = inspiring_leader }
+						modifier = { factor = 1.2 trait = veteran_leader_3 }
+						modifier = { factor = 0.85 trait = veteran_leader_1 }
+						improve_inspiring_leader = yes
+					}
+					3 = {
+						modifier = { factor = 0 NOT = { trait = veteran_leader_5 } }
+						modifier = { factor = 0 is_master_warrior = yes }
+						modifier = { factor = 0 is_warrior = no }
+						modifier = { factor = 0 NOT = { leadership_max_total = yes } }
+						improve_education = yes
+					}
+					10 = {
+						modifier = { factor = 0.5 trait = veteran_leader_1 }
+						modifier = { factor = 0.75 trait = veteran_leader_2 }
+						modifier = { factor = 1.5 trait = veteran_leader_4 }
+						modifier = { factor = 2.0 trait = veteran_leader_5 }
+						modifier = { factor = 2.5 leadership_max_total = yes }
+						change_martial = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+#On-action combat event: Flat improvement to martial skill
+character_event = {
+	id = 247
+	desc = EVTDESC247
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	notification = yes
+
+	trigger = {
+		is_alive = yes
+		NOT = { martial = 10 }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = genius
+			factor = 1.2
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.1
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.9
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 0.2
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.2
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.5
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}			
+		modifier = {
+			factor = 0.8
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.8
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.75
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.75
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.8
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 0.8
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 0.5
+			trait = leper
+		}
+		modifier = {
+			factor = 0.9
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.8
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.4
+			trait = incapable
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 0.5
+			trait = has_small_pox
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.5
+			trait = skooma_addiction
+		}
+		#Harder to learn new tricks when you're already a master
+		modifier = {
+			factor = 0.5
+			maxed_education = yes
+		}
+		modifier = {
+			factor = 0
+			martial = 24	# If your martial is already over 24 it won't increase via this event anymore.
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		change_martial = 1
+	}
+}
+
+#On-action combat event: Tech Increase in Capital
+character_event = {
+	id = 248
+	desc = EVTDESC248
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+		is_landed = yes
+		OR = {
+			is_warrior = yes
+			is_agent = yes
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 3
+			has_focus = focus_scholarship
+		}
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = genius
+			factor = 3.0
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 2.0
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.1
+		}
+
+		modifier = {
+			trait = imbecile
+			factor = 0
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.2
+		}
+		modifier = {
+			factor = 0.8
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.8
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.75
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.75
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.8
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 0.8
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 0.5
+			trait = leper
+		}
+		modifier = {
+			factor = 0.9
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.8
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.4
+			trait = incapable
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 0.5
+			trait = has_small_pox
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.5
+			trait = skooma_addiction
+		}		
+	}
+
+	option = {
+		name = EXCELLENT
+		capital_scope = {
+			add_province_modifier = {
+				name = war_knowledge
+				duration = 365
+			}
+		}		
+	}
+}
+
+#Opponent is informed that enemy commander has been killed
+character_event = {
+	id = 249
+	desc = EVTDESC249
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+	}
+
+	option = {
+		name = EVTOPTA249
+	}
+}
+
+#Opponent is informed that enemy commander has been killed
+character_event = {
+	id = 253
+	desc = EVTDESC253
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+	}
+
+	option = {
+		name = ALAS
+	}
+}
+
+#On-action combat event: Becoming Brave
+character_event = {
+	id = 270
+	desc = EVTDESC270
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+		NOT = { trait = brave }
+		NOT = { trait = craven }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 5
+			has_character_modifier = proving_bravery
+		}
+		modifier = {
+			trait = genius
+			factor = 1.2
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.1
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.9
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 0.2
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.2
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.5
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}		
+		modifier = {
+			factor = 0.8
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.8
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.75
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.75
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.8
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 0.8
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 0.5
+			trait = leper
+		}
+		modifier = {
+			factor = 0.9
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.8
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.4
+			trait = incapable
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 0.5
+			trait = has_small_pox
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.5
+			trait = skooma_addiction
+		}		
+	}
+
+	option = {
+		name = EXCELLENT
+		add_trait = brave
+		add_blood_splatter_effect = yes
+	}
+}
+
+#On-action combat event: Becoming Craven
+character_event = {
+	id = 271
+	desc = EVTDESC271
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+		NOT = { trait = brave }
+		NOT = { trait = ruthless }
+		NOT = { trait = craven }
+		NOT = { trait = berserker }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			trait = clubfooted
+			factor = 1.25
+		}
+		modifier = {
+			trait = hunchback
+			factor = 1.25
+		}
+		modifier = {
+			trait = lisp
+			factor = 1.1
+		}
+		modifier = {
+			trait = stutter
+			factor = 1.1
+		}
+		modifier = {
+			trait = dwarf
+			factor = 1.25
+		}		
+		modifier = {
+			trait = genius
+			factor = 0.9
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 0.9
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 2.0
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 3.0
+		}
+		modifier = {
+			trait = inbred
+			factor = 3.0
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 0.7
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 2.5
+		}		
+		modifier = {
+			factor = 1.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 1.25
+			trait = depressed
+		}
+		modifier = {
+			factor = 1.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 1.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 1.1
+			is_ill = yes
+		}
+		modifier = {
+			factor = 1.25
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 1.25
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 2.0
+			trait = leper
+		}
+		modifier = {
+			factor = 1.15
+			trait = wounded
+		}
+		modifier = {
+			factor = 1.25
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 2.0
+			trait = infirm
+		}
+		modifier = {
+			factor = 3.0
+			trait = incapable
+		}
+		modifier = {
+			factor = 1.1
+			trait = drunkard
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 1.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 1.1
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 1.1
+			trait = has_small_pox
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 0.9
+			martial = 30
+		}
+		modifier = {
+			factor = 0.9
+			martial = 25
+		}
+		modifier = {
+			factor = 0.9
+			martial = 20
+		}
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 12
+		}
+			modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 0.55
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 0.65
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 0.75
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 0.85
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { combat_rating = 12 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { combat_rating = 6 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { combat_rating = 3 }
+		}
+		modifier = {
+			factor = 0.8
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 0.9
+		}
+		modifier = {
+			trait = perceptive
+			factor = 0.9
+		}
+		modifier = {
+			factor = 1.1
+			trait = skooma_addiction
+		}		
+		modifier = {
+			factor = 0.8
+			trait = ruthless
+		}
+		modifier = {
+			factor = 0.95
+			trait = wroth
+		}
+	}
+
+	option = {
+		name = CURSES
+		add_trait = craven
+	}
+}
+
+#On-action combat event: Becoming Wroth
+character_event = {
+	id = 272
+	desc = EVTDESC272
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+		NOT = { trait = wroth }
+		NOT = { trait = patient }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 0.9
+			trait = temperate
+		}
+		modifier = {
+			factor = 0.95
+			trait = gregarious
+		}
+		modifier = {
+			factor = 1.1
+			trait = ruthless
+		}
+		modifier = {
+			factor = 1.1
+			trait = paranoid
+		}
+	}
+
+	option = {
+		name = CURSES
+		add_trait = wroth
+		add_blood_splatter_effect = yes
+	}
+}
+
+#On-action combat event: Becoming Patient
+character_event = {
+	id = 273
+	desc = EVTDESC273
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+	
+	trigger = {
+		is_alive = yes
+		NOT = { trait = wroth }
+		NOT = { trait = patient }
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = {
+			factor = 1.1
+			trait = temperate
+		}
+		modifier = {
+			factor = 1.05
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = ruthless
+		}
+		modifier = {
+			factor = 0.9
+			trait = paranoid
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		add_trait = patient
+	}
+}
+
+#On-action battle_won: Heroism shown.
+character_event = {
+	id = 260
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}		
+		modifier = {
+			factor = 1.5
+			martial = 10
+		}		
+
+		modifier = {
+			trait = genius
+			factor = 1.2
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.1
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.9
+		}
+		
+		modifier = {
+			trait = imbecile
+			factor = 0.2
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.2
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.5
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}	
+				modifier = {
+			factor = 0.8
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.8
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.75
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.75
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.8
+			trait = pneumonic
+		}
+		modifier = {
+			factor = 0.8
+			trait = syphilitic
+		}
+		modifier = {
+			factor = 0.5
+			trait = leper
+		}
+		modifier = {
+			factor = 0.9
+			trait = wounded
+		}
+		modifier = {
+			factor = 0.8
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.4
+			trait = incapable
+		}
+		modifier = {
+			factor = 0.5
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_tuberculosis
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhoid_fever
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_typhus
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_swamp_rot
+		}
+		modifier = {
+			factor = 0.5
+			trait = has_measles
+		}		
+		modifier = {
+			factor = 0.5
+			trait = has_small_pox
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.5
+			trait = skooma_addiction
+		}		
+	}
+	
+	immediate = {
+		random_list = {
+			16 = { character_event = { id = 262 } }
+			16 = { character_event = { id = 263 } }
+			16 = { character_event = { id = 264 } }
+			16 = { character_event = { id = 265 } }
+			16 = { character_event = { id = 266 } }
+			16 = { character_event = { id = 267 } }
+		}
+	}
+
+	# option = {
+		# name = OK
+	# }
+}
+
+
+#On-action battle_won: Soldier Distinguishes himself.
+character_event = {
+	id = 261
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	desc = EVTDESC261
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_alive = yes
+		ai = no
+	}
+	
+	immediate = {
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = random
+			female = no
+			religion = ROOT
+			culture = ROOT
+			attributes = {
+				martial = 8
+				stewardship = 3
+				diplomacy = 3
+				learning = 3
+				intrigue = 3
+			}
+		}
+		new_character = {
+			add_blood_splatter_effect = yes
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			remove_education_trait = yes
+			marshal_education_assignment = yes
+			add_trait = former_soldier
+			remove_trait = craven
+			save_event_target_as = soldier_target
+		}
+	}
+
+	
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = patient
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 1.5
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.2
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.2
+			trait = arbitrary
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		event_target:soldier_target = {
+			prestige = 50
+		}
+	}
+}
+
+# Heroism Shown 1
+character_event = {
+	id = 262
+	desc = EVTDESC262
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA262
+		prestige = 100
+	}
+}
+
+# Heroism Shown 2
+character_event = {
+	id = 263
+	desc = EVTDESC263
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA262
+		prestige = 100
+	}
+}
+
+# Heroism Shown 3
+character_event = {
+	id = 264
+	desc = EVTDESC264
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA262
+		prestige = 100
+	}
+}
+
+# Heroism Shown 4
+character_event = {
+	id = 265
+	desc = EVTDESC265
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA262
+		prestige = 100
+	}
+}
+
+# Heroism Shown 5
+character_event = {
+	id = 266
+	desc = EVTDESC266
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA262
+		prestige = 100
+	}
+}
+
+# Heroism Shown 6
+character_event = {
+	id = 267
+	desc = EVTDESC267
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA262
+		prestige = 100
+	}
+}
+
+
+#On-action battle_lost: Imprisoned by the enemy
+character_event = {
+	id = 250
+	title = captured_in_battle
+	desc = EVTDESC250
+	picture = GFX_evt_into_the_dungeon
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_alive = yes
+		prisoner = no
+		NOT = {
+			character = FROM
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		bad_soldier_outcome_score = yes
+		title_tier_reduction_score = yes
+		# modifier = {
+			# FROM = { trait = norse_leader }
+			# factor = 1.5
+		# }
+		
+		modifier = {
+			factor = 2 # if the enemy leader has a particular bloodline
+			FROM = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_fearsome
+				}
+			}
+		}
+		# modifier = {
+			# factor = 3 # if the enemy leader was a warrior lodge member
+			# FROM = {
+				# is_member_of_any_warrior_lodge_trigger = yes
+				# society_rank > 1 #Must be rank 2 or higher
+			# }
+		# }
+		#Elder Kings Additions
+		modifier = {
+			factor = 0.9
+			martial = 30
+		}
+		modifier = {
+			factor = 0.9
+			martial = 25
+		}
+		modifier = {
+			factor = 0.9
+			martial = 20
+		}
+		modifier = {
+			factor = 0.9
+			martial = 15
+		}
+		modifier = {
+			factor = 0.9
+			martial = 12
+		}
+	modifier = {
+			factor = 0.45
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 0.55
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 0.65
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 0.75
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 0.85
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { combat_rating = 12 }
+		}
+		modifier = {
+			factor = 1.5
+			NOT = { combat_rating = 6 }
+		}
+		modifier = {
+			factor = 2.0
+			NOT = { combat_rating = 0 }
+		}
+		modifier = {
+			factor = 0.8
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 0.9
+		}
+		modifier = {
+			trait = perceptive
+			factor = 0.9
+		}
+		modifier = {
+			factor = 1.1
+			trait = skooma_addiction
+		}
+	}
+	
+	immediate = {
+		save_event_target_as = captured_commander
+		location = { save_event_target_as = battlefield_location }
+		FROM = { save_event_target_as = enemy_liege }
+		#You are captured...
+		imprison = event_target:enemy_liege #ROOT is imprisoned *by* enemy_liege.
+	}
+
+	option = {
+		name = CURSES
+		hidden_tooltip = {
+			FROM = {
+				character_event = { 
+					id = 50020 # imprisoned_events.txt #Enemy_liege is notified about your capture...
+				}
+			}
+		}
+	}
+}
+
+# Leading attacker dies, will never trigger from code
+letter_event = {
+	id = 251
+	is_triggered_only = yes
+	border = GFX_event_letter_frame_war
+	
+	trigger = {
+		ai = no
+	}
+
+	desc = EVTDESC251
+
+	option = {
+		name = OK
+	}
+}
+
+# Leading defender dies, will never trigger from code
+letter_event = {
+	id = 252
+	desc = EVTDESC251
+	border = GFX_event_letter_frame_war
+	
+	is_triggered_only = yes
+
+	trigger = {
+		ai = no
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+#Marshal: Unnecessary violence
+character_event = {
+	id = 255
+	desc = EVTDESC255
+	picture = GFX_evt_torture
+	border = GFX_event_normal_frame_war
+	
+	capable_only = yes
+	war = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		in_command = yes
+		has_job_title = job_marshal
+		OR = {
+			trait = cruel
+			trait = ruthless
+			trait = impaler
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTA255
+		prestige = -20
+		piety = -20
+		hidden_tooltip = {
+			liege = {
+				character_event = {
+					id = 256
+				}
+			}
+		}
+	}
+}
+
+#Liege: Marshal used unnecessary violence
+character_event = {
+	id = 256
+	desc = EVTDESC256
+	picture = GFX_evt_torture
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA256 #That's the cruelty of war
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.25
+				trait = kind
+			}
+			modifier = {
+				factor = 0.5
+				trait = charitable
+			}
+			modifier = {
+				factor = 0.75
+				trait = gregarious
+			}
+			modifier = {
+				factor = 2.0
+				trait = former_soldier
+			}
+			modifier = {
+				factor = 1.5
+				trait = impaler
+			}
+			modifier = {
+				factor = 0.85
+				trait = just
+			}
+			modifier = {
+				factor = 1.1
+				trait = honest
+			}
+			modifier = {
+				factor = 2.0
+				trait = ruthless
+			}
+			modifier = {
+				factor = 2.0
+				trait = cruel
+			}
+			modifier = {
+				factor = 1.5
+				trait = shrewd
+			}
+			modifier = {
+				factor = 1.5
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 2.5
+				trait = cynical
+			}
+		}
+		prestige = -5
+	}
+	option = {
+		name = EVTOPTB256 #Disapprove of his conduct
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 5.0
+				trait = kind
+			}
+			modifier = {
+				factor = 3.0
+				trait = charitable
+			}
+			modifier = {
+				factor = 1.5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 0.75
+				trait = former_soldier
+			}
+			modifier = {
+				factor = 1.25
+				trait = just
+			}
+			modifier = {
+				factor = 0.5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 0.25
+				trait = cruel
+			}
+			modifier = {
+				factor = 0.9
+				trait = shrewd
+			}
+			modifier = {
+				factor = 0.5
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 0.75
+				trait = cynical
+			}
+		}
+		opinion = {
+			modifier = opinion_disapprove
+			who = FROM
+			years = 5
+		}
+	}
+	option = {
+		name = EVTOPTC256 #He's right, we should terrorise our enemy
+		ai_chance = {
+			factor = 100
+			
+			modifier = {
+				factor = 0.1
+				trait = kind
+			}
+			modifier = {
+				factor = 0.25
+				trait = charitable
+			}
+			modifier = {
+				factor = 0.5
+				trait = gregarious
+			}
+			modifier = {
+				factor = 0.75
+				trait = just
+			}
+			modifier = {
+				factor = 1.5
+				trait = ruthless
+			}
+			modifier = {
+				factor = 3.0
+				trait = cruel
+			}
+			modifier = {
+				factor = 0.85
+				trait = shrewd
+			}
+			modifier = {
+				factor = 1.25
+				trait = arbitrary
+			}
+			modifier = {
+				factor = 5.0
+				trait = impaler
+			}
+			modifier = {
+				factor = 2.0
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.25
+				trait = wroth
+			}
+		}
+		opinion = {
+			modifier = opinion_approves
+			who = FROM
+			years = 5
+		}
+		prestige = -10
+		random = {
+			chance = 25
+			
+			add_trait = cruel
+			hidden_tooltip = {
+				character_event ={
+					id = 38259 #Notify Cruel
+				}
+			}
+		}
+	}
+}
+
+### Combat Trait Events
+
+# Event 1
+character_event = {
+	id = 96500
+	desc = EVTDESC96500
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		can_have_more_leadership_traits = yes
+		leadership_max_total = no
+		is_alive = yes
+		OR = {
+			leadership_max_terrain = no
+			has_unit_leadership = no
+			NOT = { trait = winter_soldier }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			martial = 10
+		}
+		modifier = {
+			factor = 1.5
+			martial = 14
+		}	
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = genius
+			factor = 1.5
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.2
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.5
+		}
+		modifier = {
+			trait = imbecile
+			factor = 0.1
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.7
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.2
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}		
+		modifier = {
+			factor = 0.85
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.85
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.6
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.9
+			trait = drunkard
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.8
+			trait = skooma_addiction
+		}		
+	}
+
+	option = {
+		name = EVTOPTK96500 # Jungle Terrain Specialization
+		trigger = {
+			location = {
+				OR = {
+					terrain = jungle
+					terrain = valen_woods
+				}
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = jungle_terrain_leader
+			}
+		}
+		add_trait = jungle_terrain_leader
+	}
+	option = {
+		name = EVTOPTM96500 # WINTER Terrain Specialization
+		trigger = {
+			location = { is_winter = yes }
+			NOT = { trait = winter_soldier }
+		}
+		add_trait = winter_soldier
+	}
+	option = {
+		name = EVTOPTA96500 # Rough Terrain Specialization
+		trigger = {
+			OR = {
+				location = { terrain = forest }
+				location = { terrain = hills }
+				location = { terrain = woods }
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = rough_terrain_leader
+			}
+		}
+		add_trait = rough_terrain_leader
+	}
+	option = {
+		name = EVTOPTB96500 # Flat Terrain Specialization
+		trigger = {
+			OR = {
+				location = { terrain = plains }
+				location = { terrain = farmlands }
+				location = { terrain = steppe }
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = flat_terrain_leader
+			}
+		}
+		add_trait = flat_terrain_leader
+	}
+	option = {
+		name = EVTOPTC96500 # Mountain Terrain Specialization
+		trigger = {
+			location = { terrain = mountain }
+			leadership_max_terrain = no
+			NOT = { 
+				trait = mountain_terrain_leader
+			}
+		}
+		add_trait = mountain_terrain_leader
+	}
+	option = {
+		name = EVTOPTD96500 # Desert Terrain Leader
+		trigger = {
+			location = { 
+				OR = {
+					terrain = desert
+					terrain = coastal_desert
+					terrain = alikr_desert
+				}
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = desert_terrain_leader
+			}
+		}
+		add_trait = desert_terrain_leader
+	}
+	option = {
+		name = EVTOPTD96500extreme # Extreme Terrain Leader
+		trigger = {
+			location = { 
+				OR = {
+					terrain = wasteland
+					terrain = ashlands
+					terrain = arctic
+				}
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = extreme_terrain_leader
+			}
+		}
+		add_trait = extreme_terrain_leader
+	}
+	option = {
+		name = EVTOPTD96500swamp # Swamp Terrain Leader
+		trigger = {
+			location = { 
+				OR = {
+					terrain = marsh
+					terrain = argonia
+					terrain = mangrove_swamp
+				}
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = swamp_terrain_leader
+			}
+		}
+		add_trait = swamp_terrain_leader
+	}
+	option = {
+		name = EVTOPTE96500 # Cavalry
+		trigger = {
+			leadership_max_type = no
+		}
+		add_trait = cavalry_leader
+	}
+	option = {
+		name = EVTOPTF96500 # Light Infantry
+		trigger = {
+			leadership_max_type = no
+		}
+		add_trait = light_foot_leader
+	}
+	option = {
+		name = EVTOPTG96500 # Heavy Infantry
+		trigger = {
+			leadership_max_type = no
+		}
+		add_trait = heavy_infantry_leader
+	}
+}
+
+# Event 2
+character_event = {
+	id = 96501
+	desc = EVTDESC96500
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		can_have_more_leadership_traits = yes
+		leadership_max_total = no
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = genius
+			factor = 1.5
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.2
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.5
+		}
+		modifier = {
+			trait = imbecile
+			factor = 0.1
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.7
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.2
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}		
+		modifier = {
+			factor = 0.85
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.85
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.6
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.9
+			trait = drunkard
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.8
+			trait = skooma_addiction
+		}		
+	}
+
+	option = { # Organizer
+		name = EVTOPTA96502
+		trigger = {
+			NOT = { 
+				is_organizer = yes
+			}
+		}
+		add_trait = organizer
+	}
+	option = { # Experimenter
+		name = EVTOPTB96502
+		trigger = {
+			NOT = { 
+				is_experimenter = yes
+			}
+		}
+		add_trait = experimenter
+	}
+	option = { # Holy Warrior
+		name = EVTOPTC96502
+		trigger = {
+			trait = zealous
+			NOT = { 
+				trait = holy_warrior
+				trait = cynical
+			}
+		}
+		add_trait = holy_warrior
+	}
+	option = { # Unyielding
+		name = EVTOPTD96502
+		trigger = {
+			NOT = { 
+				trait = unyielding_leader
+			}
+		}
+		add_trait = unyielding_leader
+	}
+}
+
+# Event 3
+character_event = {
+	id = 96502
+	desc = EVTDESC96500
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		can_have_more_leadership_traits = yes
+		leadership_max_total = no
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = genius
+			factor = 1.5
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.2
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.5
+		}
+		modifier = {
+			trait = imbecile
+			factor = 0.1
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.7
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.2
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}		
+		modifier = {
+			factor = 0.85
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.85
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.6
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.9
+			trait = drunkard
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+	modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.8
+			trait = skooma_addiction
+		}		
+	}
+	
+	option = {
+		name = EVTOPTH96500 # Aggressive
+		trigger = {
+			NOR = { 
+				is_defensive_leader = yes
+				is_aggressive_leader = yes
+			}
+		}
+		add_trait = aggressive_leader
+	}
+	option = {
+		name = EVTOPTI96500 # Defensive
+		trigger = {
+			NOR = { 
+				is_defensive_leader = yes
+				is_aggressive_leader = yes
+			}
+		}
+		add_trait = defensive_leader
+	}
+	option = {
+		name = EVTOPTJ96500 # Inspiring
+		trigger = {
+			NOT = { 
+				is_inspiring_leader = yes
+			}
+		}
+		add_trait = inspiring_leader
+	}
+	option = { # Trickster
+		name = EVTOPTH96501
+		trigger = {
+			NOT = { 
+				is_trickster = yes
+			}
+		}
+		add_trait = trickster
+	}
+}
+
+# Event 4
+character_event = {
+	id = 96503
+	desc = EVTDESC96500
+	picture = GFX_evt_battle
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		can_have_more_leadership_traits = yes
+		leadership_max_total = no
+		is_alive = yes
+	}
+	
+	weight_multiplier = {
+		days = 1
+		modifier = {
+			factor = 1.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = craven
+		}
+		modifier = {
+			trait = genius
+			factor = 1.5
+		}
+		modifier = {
+			OR = {
+				trait = quick
+				trait = shrewd
+			}
+			factor = 1.2
+		}	
+		modifier = {
+			OR = {
+				trait = slow
+				trait = dull
+			}
+			factor = 0.5
+		}
+		modifier = {
+			trait = imbecile
+			factor = 0.1
+		}
+		modifier = {
+			trait = inbred
+			factor = 0.7
+		}
+		modifier = {
+			is_strong_trigger = yes
+			factor = 1.2
+		}
+		modifier = {
+			is_weak_trigger = yes
+			factor = 0.8
+		}		
+		modifier = {
+			factor = 0.85
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.85
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.5
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.5
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.9
+			is_ill = yes
+		}
+		modifier = {
+			factor = 0.6
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.9
+			trait = drunkard
+		}
+		#Elder Kings Additions
+		modifier = {
+			factor = 1.5
+			martial = 30
+		}
+		modifier = {
+			factor = 1.4
+			martial = 25
+		}
+		modifier = {
+			factor = 1.3
+			martial = 20
+		}
+		modifier = {
+			factor = 1.2
+			martial = 15
+		}
+		modifier = {
+			factor = 1.1
+			martial = 12
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 48
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 36
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 30
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 24
+		}
+		modifier = {
+			factor = 1.05
+			combat_rating = 18
+		}
+		modifier = {
+			factor = 1.05
+			trait = agile
+		}
+		modifier = {
+			trait = tall
+			factor = 1.05
+		}
+		modifier = {
+			trait = perceptive
+			factor = 1.1
+		}
+		modifier = {
+			factor = 0.8
+			trait = skooma_addiction
+		}		
+	}
+
+	option = {
+		name = EVTOPTA96500 # Rough Terrain Specialization
+		trigger = {
+			OR = {
+				location = { terrain = forest }
+				location = { terrain = hills }
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = rough_terrain_leader
+			}
+		}
+		add_trait = rough_terrain_leader
+	}
+	option = {
+		name = EVTOPTB96500 # Flat Terrain Specialization
+		trigger = {
+			OR = {
+				location = { terrain = plains }
+				location = { terrain = farmlands }
+				location = { terrain = steppe }
+			}
+			leadership_max_terrain = no
+			NOT = { 
+				trait = flat_terrain_leader
+			}
+		}
+		add_trait = flat_terrain_leader
+	}
+	option = {
+		name = EVTOPTC96500 # Mountain Terrain Specialization
+		trigger = {
+			location = { terrain = mountain }
+			leadership_max_terrain = no
+			NOT = { 
+				trait = mountain_terrain_leader
+			}
+		}
+		add_trait = mountain_terrain_leader
+	}
+	option = {
+		name = EVTOPTD96500 # Desert Terrain Leader
+		trigger = {
+			location = { terrain = desert }
+			leadership_max_terrain = no
+			NOT = { 
+				trait = desert_terrain_leader
+			}
+		}
+		add_trait = desert_terrain_leader
+	}
+	option = { # Flanker
+		name = EVTOPTI96501
+		trigger = {
+			NOT = { 
+				is_flanker = yes
+			}
+		}
+		add_trait = flanker
+	}
+	option = { # Narrow flank leader
+		name = EVTOPTJ96501
+		trigger = {
+			OR = {
+				location = { terrain = mountain }
+				location = { terrain = hills }
+				location = { terrain = forest }
+			}
+			NOT = { 
+				is_narrow_flank_leader = yes
+			}
+		}
+		add_trait = narrow_flank_leader
+	}
+	option = { # Siege leader
+		name = EVTOPTK96501
+		trigger = {
+			siege = {
+				is_attacker = yes
+			}
+			NOT = {
+				is_siege_leader = yes
+			}
+		}
+		add_trait = siege_leader
+	}
+}

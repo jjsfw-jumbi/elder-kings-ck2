@@ -1,0 +1,883 @@
+# Interactions with offmap Ideal Masters
+# Some decisions derived from ek_offmap_daedric_decisions
+# Requires Jade Dragon
+
+# Gifts for the Masters
+offmap_decisions = {
+	# Offer souls harvested regularly from unwilling subjects
+	oblivion_ideal_soul_harvest = {
+		only_playable = yes
+		button_name = offmap_gifts
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			worships_ideal_masters = yes
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			NOT = { has_character_modifier = ideal_offmap_harvest }
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_ideal_masters
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				religion = ideal_masters # only characters who openly worship the masters can do this
+				ROOT = {
+					is_offmap_tag = oblivion_ideal_masters
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				hidden_tooltip = {
+					remove_character_modifier = ideal_offmap_harvest_dark_memory
+				}
+				add_character_modifier = {
+					inherit = no
+					name = ideal_offmap_harvest
+					duration = -1
+				}
+				custom_tooltip = {
+					text = gift_soul_harvest_info
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 0.25
+			modifier = {
+				factor = 0
+				FROM = {
+					war = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					OR = {
+						AND = { # false ai worshippers will never do this
+							NOT = {
+								secret_religion = ideal_masters
+								trait = necromancer # necromancers willing to deal with the masters regardless of real religion
+							}
+							has_secret_religion = no
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				FROM = {
+					trait = cruel
+				}
+			}
+			modifier = {
+				factor = 1.1
+				FROM = {
+					trait = ruthless
+				}
+			}
+			modifier = {
+				factor = 1.1
+				FROM = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 1.5
+					FROM = {
+					trait = zealous
+				}
+			}
+			modifier = {
+				factor = 2
+					FROM = {
+					trait = impaler
+				}
+			}
+			modifier = {
+				factor = 1.75
+				FROM = {
+					trait = necromancer
+				}
+			}
+			modifier = {
+				factor = 1.05
+				FROM = {
+					trait = warlord
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 2750 }
+				}
+			}
+			modifier = {
+				factor = 0.75
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 2250 }
+				}
+			}
+			modifier = {
+				factor = 0.75
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 1750 }
+				}
+			}
+			modifier = {
+				factor = 0.75
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 1250 }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					has_character_modifier = ideal_offmap_harvest_dark_memory
+				}
+			}
+		}
+	}
+
+	# Stop offering souls
+	oblivion_ideal_stop_harvest = {
+		only_playable = yes
+		button_name = offmap_gifts
+		ai_check_interval = 12
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			worships_ideal_masters = yes
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			has_character_modifier = ideal_offmap_harvest
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_ideal_masters
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = ideal_masters_debt_forced_harvest
+					hidden_tooltip = {
+						check_variable = { which = ideal_soul_debt value < 1 }
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				remove_character_modifier = ideal_offmap_harvest
+				add_character_modifier = {
+					inherit = yes # stigma stays with your heir
+					name = ideal_offmap_harvest_dark_memory
+					duration = 3650
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 0.05
+			modifier = {
+				factor = 999
+				FROM = {
+					OR = {
+						war = yes
+						trait = kind
+						trait = content
+						AND = {
+							has_secret_religion = yes
+							NOT = {
+								secret_religion = ideal_masters
+								trait = necromancer # necromancers willing to deal with the masters regardless of real religion
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.8
+				FROM = {
+					trait = cruel
+				}
+			}
+			modifier = {
+				factor = 0.7
+				FROM = {
+					trait = ruthless
+				}
+			}
+			modifier = {
+				factor = 0.9
+				FROM = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.7
+				FROM = {
+					trait = zealous
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					trait = impaler
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					trait = necromancer
+				}
+			}
+			modifier = {
+				factor = 0.95
+				FROM = {
+					trait = warlord
+				}
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 2750 }
+				}
+			}
+			modifier = {
+				factor = 1.2
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 2250 }
+				}
+			}
+			modifier = {
+				factor = 1.2
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 1750 }
+				}
+			}
+			modifier = {
+				factor = 1.2
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 1250 }
+				}
+			}
+		}
+	}
+}
+
+# Boons from the Masters
+offmap_decisions = {
+
+	#Lesser Undead Horde - Can only be used if the Masters aren't Isolationist, and not in a Cataclysm or Convalescing
+	oblivion_undead_horde_lesser = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_ideal_masters = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				oblivion_ideal_masters_no_boon_soldiers = yes
+				custom_tooltip = {
+					text = has_1250_ardor_with_ideal_masters
+					hidden_tooltip = {
+						OR = {
+							AND = {
+								ROOT = {
+									is_offmap_tag = oblivion_ideal_masters
+								}
+								worships_ideal_masters = yes
+								has_offmap_currency = { offmap = oblivion_ideal_masters value = 1250 }
+							}
+						}
+					}
+				}
+				oblivion_ideal_masters_no_debt = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOT = {
+				daedra_is_isolationist = yes
+			}
+			NOR = {
+				daedra_is_cataclysm = yes
+				daedra_is_convalescing = yes
+			}
+			custom_tooltip = {
+				text = ideal_enough_souls_1250
+				hidden_tooltip = {
+					offmap_ruler = {
+						check_variable = {
+							which = offmap_souls
+							value = 1250
+						}
+					}
+				}
+			}
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_ideal_masters
+					value = -1250
+				}
+			}
+			custom_tooltip = {
+				text = oblivion_undead_horde_lesser_info
+					hidden_tooltip = {
+					FROM = {
+						#set_china_boon_cd_effect = yes
+						character_event = { id = ideal_offmap.10 }
+					}
+				}
+			}
+			
+
+			offmap_ruler = {
+				subtract_variable = { which = offmap_souls value = 1250}
+			}
+			
+			# debug counter
+			hidden_tooltip = {
+				oblivion_ideal_masters = {
+					offmap_ruler = {
+						change_variable = { which = undead_bought value = 1 }
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				factor = 100
+				FROM = {
+					war = yes
+				}
+			}
+			#modifier = {
+			#	FROM = {
+			#		NOT = { has_grace_major_trigger = yes }
+			#	}
+			#	factor = 0.1
+			#}
+		}
+	}
+
+	# Lease Undead Horde - Get lesser undead with 10% up-front cost, interest over time
+	oblivion_debt_undead_horde_lesser = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_ideal_masters = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				oblivion_ideal_masters_no_boon_soldiers = yes
+				custom_tooltip = {
+					text = has_125_ardor_with_ideal_masters
+					hidden_tooltip = {
+						OR = {
+							AND = {
+								ROOT = {
+									is_offmap_tag = oblivion_ideal_masters
+								}
+								worships_ideal_masters = yes
+								has_offmap_currency = { offmap = oblivion_ideal_masters value = 125 }
+							}
+						}
+					}
+				}
+				oblivion_ideal_masters_no_debt = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			
+			can_get_boon_from_daedra = yes
+			NOT = {
+				daedra_is_isolationist = yes
+			}
+			NOR = {
+				daedra_is_cataclysm = yes
+				daedra_is_convalescing = yes
+			}
+			custom_tooltip = {
+				text = ideal_enough_souls_1250
+				hidden_tooltip = {
+					offmap_ruler = {
+						check_variable = {
+							which = offmap_souls
+							value = 1250
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				add_offmap_currency = { offmap = oblivion_ideal_masters value = -125 }
+				custom_tooltip = {
+					text = ideal_1500_debt
+					set_variable = { which = ideal_soul_debt value = 1500 }
+				}
+				hidden_tooltip = {
+					set_character_flag = ideal_debt
+					remove_character_modifier = ideal_offmap_harvest_dark_memory
+					add_character_modifier = {
+						inherit = no
+						name = ideal_offmap_harvest
+						duration = -1
+					}
+				}
+			}
+
+			custom_tooltip = {
+				text = oblivion_debt_undead_horde_lesser_info
+					hidden_tooltip = {
+					FROM = {
+						#set_china_boon_cd_effect = yes
+						character_event = { id = ideal_offmap.10 } # give soldiers
+						character_event = { id = ideal_offmap.150 days = 30 } # loan handling
+					}
+				}
+			}
+			
+
+			offmap_ruler = {
+				subtract_variable = { which = offmap_souls value = 1250}
+			}
+			
+			# debug counter
+			hidden_tooltip = {
+				oblivion_ideal_masters = {
+					offmap_ruler = {
+						change_variable = { which = undead_borrowed value = 1 }
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.05 # slow down
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 1250 } # don't rent if you can buy
+				}
+			}
+			modifier = {
+				factor = 100
+				FROM = {
+					war = yes
+				}
+			}
+		}
+	}
+
+	# Undead General
+	oblivion_undead_general = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_ideal_masters = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = has_2500_ardor_with_ideal_masters
+					hidden_tooltip = {
+						OR = {
+							AND = {
+								ROOT = {
+									is_offmap_tag = oblivion_ideal_masters
+								}
+								worships_ideal_masters = yes
+								has_offmap_currency = { offmap = oblivion_ideal_masters value = 2500 }
+							}
+						}
+					}
+				}
+				oblivion_ideal_masters_no_debt = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOT = {
+				daedra_is_isolationist = yes
+			}
+			NOR = {
+				daedra_is_cataclysm = yes
+				daedra_is_convalescing = yes
+			}
+			custom_tooltip = {
+				text = ideal_enough_souls_1250
+				hidden_tooltip = {
+					offmap_ruler = {
+						check_variable = {
+							which = offmap_souls
+							value = 250 # ideals get the better end of this deal
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_ideal_masters
+					value = -2500
+				}
+			}
+			custom_tooltip = {
+				text = oblivion_undead_horde_lesser_info
+					hidden_tooltip = {
+					FROM = {
+						#set_china_boon_cd_effect = yes
+						character_event = { id = ideal_offmap.250 }
+					}
+				}
+			}
+			
+
+			offmap_ruler = {
+				subtract_variable = { which = offmap_souls value = 250}
+			}
+			
+			# debug counter
+			hidden_tooltip = {
+				oblivion_ideal_masters = {
+					offmap_ruler = {
+						change_variable = { which = generals_bought value = 1 }
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+
+	# Lease Undead General
+	oblivion_debt_undead_general = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			worships_ideal_masters = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = has_250_ardor_with_ideal_masters
+					hidden_tooltip = {
+						OR = {
+							AND = {
+								ROOT = {
+									is_offmap_tag = oblivion_ideal_masters
+								}
+								worships_ideal_masters = yes
+								has_offmap_currency = { offmap = oblivion_ideal_masters value = 250 }
+							}
+						}
+					}
+				}
+				oblivion_ideal_masters_no_debt = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOT = {
+				daedra_is_isolationist = yes
+			}
+			NOR = {
+				daedra_is_cataclysm = yes
+				daedra_is_convalescing = yes
+			}
+			custom_tooltip = {
+				text = ideal_enough_souls_1250
+				hidden_tooltip = {
+					offmap_ruler = {
+						check_variable = {
+							which = offmap_souls
+							value = 250 # ideals get the better end of this deal
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				add_offmap_currency = {
+					offmap = oblivion_ideal_masters
+					value = -250
+				}
+				hidden_tooltip = {
+					set_character_flag = ideal_debt
+					remove_character_modifier = ideal_offmap_harvest_dark_memory
+					add_character_modifier = {
+						inherit = no
+						name = ideal_offmap_harvest
+						duration = -1
+					}
+				}
+				custom_tooltip = {
+					text = ideal_3000_debt
+					set_variable = { which = ideal_soul_debt value = 3000 }
+				}
+			}
+			custom_tooltip = {
+				text = oblivion_debt_undead_horde_lesser_info
+					hidden_tooltip = {
+					FROM = {
+						#set_china_boon_cd_effect = yes
+						character_event = { id = ideal_offmap.250 } # give general
+						character_event = { id = ideal_offmap.150 days = 30 } # loan handling
+					}
+				}
+			}
+			
+
+			offmap_ruler = {
+				subtract_variable = { which = offmap_souls value = 250}
+			}
+			
+			# debug counter
+			hidden_tooltip = {
+				oblivion_ideal_masters = {
+					offmap_ruler = {
+						change_variable = { which = generals_borrowed value = 1 }
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					has_offmap_currency = { offmap = oblivion_ideal_masters value = 2500 } # don't rent if you can buy
+				}
+			}
+		}
+	}
+
+	#Ideal Invasion - Can only be used if the Masters
+	oblivion_ideal_invasion = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 12
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			religion = ideal_masters
+			NOT = {
+				has_character_flag = soul_sold
+			}
+		}
+
+		potential = {
+			is_offmap_tag = oblivion_ideal_masters
+			# 1 invasion at a time (ever?)
+			NOT = {
+				has_global_flag = ideal_deal_made
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				piety = 0
+				religion = ideal_masters
+				#disable during major daedric invasion?
+				#like when dagon clashed with them?
+				custom_tooltip = {
+					text = has_12500_ardor_with_ideal_masters # cheaper than Daedric invasion for obvious reasons
+						hidden_tooltip = {
+						AND = {
+							ROOT = {
+								is_offmap_tag = oblivion_ideal_masters
+							}
+							worships_ideal_masters = yes
+							has_offmap_currency = { offmap = oblivion_ideal_masters value = 12500 }
+						}
+					}
+				}
+				oblivion_ideal_masters_no_debt = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOR = {
+				daedra_is_isolationist = yes
+				daedra_is_cataclysm = yes
+				daedra_is_convalescing = yes
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				piety = 1000
+				add_offmap_currency = { offmap = oblivion_ideal_masters value = -12500 }
+				custom_tooltip = {
+					text = ideal_deal_info
+					hidden_tooltip = {
+						set_character_flag = soul_sold
+						set_global_flag = ideal_deal_made
+						character_event = { id = ideal_masters.3 days = 30}
+					}
+				}
+			}
+			# debug counter
+			hidden_tooltip = {
+				oblivion_ideal_masters = {
+					offmap_ruler = {
+						change_variable = { which = invasions_bought value = 1 }
+					}
+				}
+			}
+		}
+
+
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+}

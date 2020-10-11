@@ -1,0 +1,2315 @@
+###########################################
+#                                         #
+# M&M MISC Events                         #
+#                                         #
+# ID MNM.10000 - 10001     	              #
+#                                         #
+###########################################
+
+namespace = MNM
+
+###RANKING UP EVENTS####
+
+# Hidden start: Send the rank-up request to the current Grandmaster (delayed event on self, from decision to rank up)
+character_event = {
+	id = MNM.10002
+
+	hide_window = yes
+
+	trigger = {
+		has_character_flag = has_sent_request_to_rank_up
+	}
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { 
+				is_in_society = yes 
+				NAND = { #This is the Glenmoril Lycanthropy check for the Companions
+					society_member_of = companions_tamriel #Applicant must be a Companion
+					society_rank == 2 #Must not yet be in the Circle
+					has_global_flag = companions_are_werewolves #If the Glenmoril gift hasn't been given yet, this is moot
+					any_society_member = {
+						society_member_of = companions_tamriel
+						society_rank >= 3 #Must be Circle or Harbinger
+						is_lycan = yes #Can't bestow beast blood if no one is part of the pack
+						has_character_flag = lycan_level_10 #Companions-issued lycanthropy is level 10, guaranteed
+					}
+				}
+			}
+			random_society_member = {
+				limit = {
+					is_society_grandmaster = yes
+					same_society_as = ROOT
+				}
+				character_event = { id = MNM.10000 } # send request to Grand Master. Relic rewards also handled by this event
+			}
+		}
+		if = {
+			limit = { 
+				is_in_society = yes 
+				AND = { #This is the Glenmoril Lycanthropy check for the Companions
+					society_member_of = companions_tamriel #Applicant must be a Companion
+					society_rank == 2 #Must not yet be in the Circle
+					has_global_flag = companions_are_werewolves #If the Glenmoril gift hasn't been given yet, this is moot
+					any_society_member = {
+						society_member_of = companions_tamriel
+						society_rank >= 3 #Must be Circle or Harbinger
+						is_lycan = yes #Can't bestow beast blood if no one is part of the pack
+						has_character_flag = lycan_level_10 #Companions-issued lycanthropy is level 10, guaranteed
+					}
+				}
+			}
+			random_society_member = {
+				limit = {
+					same_society_as = ROOT #of course a Companion
+					society_rank >= 3 #Must be Circle or Harbinger
+					is_lycan = yes #Can't bestow beast blood if no one is part of the pack
+					has_character_flag = lycan_level_10 #Companions-issued lycanthropy is level 10, guaranteed
+				}
+				character_event = { id = ekcompanions.80 } # A Lycan Companion finds out, time for Beast Blood!
+			}
+		}
+		if = {
+			limit = { is_in_society = no }
+			clr_character_flag = has_sent_request_to_rank_up
+		}
+	}
+}
+
+# Grandmaster gets the rank-up request
+character_event = {
+	id = MNM.10000
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:rank_up_target = { letter_event = { id = MNM.10001 } }
+
+		# FROM = {
+			# if = {
+				# limit = {
+					# society_rank == 2
+					# is_christian_monastic_member_trigger = yes
+				# }
+				
+				# random = {
+					# chance = 20
+					# modifier = {
+						# ai = no
+						# factor = 5
+					# }
+					# letter_event = { id = MNM.4431 days = 30 random = 15 } #Gives saint's fingerbone
+				# }
+			# }
+		# }
+	}
+}
+
+#Grand master approves my request
+letter_event = {
+	id = MNM.10001
+	desc = EVTDESC_MNM_10001_A
+	border = GFX_event_letter_frame_intrigue
+
+	trigger = {
+		#society_rank < 4
+		has_character_flag = has_sent_request_to_rank_up
+	}
+	
+	is_triggered_only = yes
+
+	#Yes
+	option = {
+		name = {
+			text = EVTOPTA_10001
+		}
+		if = { 
+			limit = { 
+				OR = {
+					AND = {
+						society_rank < 2
+						is_in_society = yes
+						is_member_society_3_ranks = yes
+					}
+					AND = {
+						society_rank < 3
+						is_in_society = yes
+						is_member_society_4_ranks = yes
+					}
+					AND = {
+						society_rank < 4 
+						is_member_society_5_ranks = yes
+					}
+					AND = {
+						society_rank < 5 
+						is_member_society_6_ranks = yes
+					}
+					AND = {
+						society_rank < 6
+						is_member_society_7_ranks = yes
+					}
+				}
+			} #todo: Remember you can rankup to 4 in some societies
+			society_rank_up = 1
+		}
+		#Society rank-up goodies & Flag clearance
+		hidden_effect = { society_rank_up_rewards_effect = yes }
+		clr_character_flag = has_sent_request_to_rank_up
+	}
+}
+
+
+#Back up event for showing interest
+character_event = {
+	id = MNM.10010
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_in_society = no
+		OR = {
+			interested_in_society = secret_religious_cult
+			# Assassins Guilds
+			interested_in_society = dark_brotherhood_tamriel
+			interested_in_society = morag_tong_tamriel
+			interested_in_society = assassin_guild_akavir
+			# Thieves Guilds
+			interested_in_society = thieves_guild_tamriel
+			interested_in_society = thieves_guild_akavir
+			interested_in_society = camonna_tong_tamriel
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { interested_in_society = secret_religious_cult }
+			character_event = { id = MNM.10011 days = 90 random = 640 }
+		}
+		if = {
+			limit = { 
+				OR = {
+					interested_in_society = dark_brotherhood_tamriel
+					interested_in_society = morag_tong_tamriel
+					interested_in_society = assassin_guild_akavir
+					interested_in_society = thieves_guild_tamriel
+					interested_in_society = thieves_guild_akavir
+					interested_in_society = camonna_tong_tamriel
+				} 
+			}
+			character_event = { id = MNM.10011 days = 10 random = 5 }
+		}
+	}
+}
+
+character_event = {
+	id = MNM.10011
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_in_society = no
+		OR = {
+			interested_in_society = secret_religious_cult
+			# Assassins Guilds
+			interested_in_society = dark_brotherhood_tamriel
+			interested_in_society = morag_tong_tamriel
+			interested_in_society = assassin_guild_akavir
+			# Thieves Guilds
+			interested_in_society = thieves_guild_tamriel
+			interested_in_society = thieves_guild_akavir
+			interested_in_society = camonna_tong_tamriel
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { prisoner = yes }
+			repeat_event = { id = MNM.10011 days = 90 random = 640 }
+			break = yes
+		}
+		#Secret religious society
+		if = {
+			limit = {
+				interested_in_society = secret_religious_cult
+				NOT = { has_character_modifier = secret_religions_recruitment_timer }
+		    	any_society_member = {
+		    	 	is_in_prevs_interesting_society_trigger = yes
+		    	}
+			}
+    		add_character_modifier = {
+				name = secret_religions_recruitment_timer
+				years = 5
+				hidden = yes
+			}
+			character_event = { id = MNM.3420 } 
+		}
+		#Dark Brotherhood & Morag Tong
+		if = {
+			limit = {
+				OR = {
+					interested_in_society = dark_brotherhood_tamriel
+					interested_in_society = morag_tong_tamriel
+					interested_in_society = assassin_guild_akavir
+				}
+			}
+			long_character_event = { id = eksecretive.1 } 
+		}
+		if = {
+			limit = {
+				OR = {
+					interested_in_society = thieves_guild_tamriel
+					interested_in_society = thieves_guild_akavir
+					interested_in_society = camonna_tong_tamriel
+				}
+			}
+			character_event = { id = eksecretive.200 } 
+		}
+	}	
+}
+
+
+
+
+
+#Becoming stressed about keeping a secret
+character_event = {
+    id = MNM.10020
+    picture = GFX_evt_uncomfortable
+    border = GFX_event_normal_frame_intrigue
+
+    desc = {
+    	trigger = { 
+    		has_dlc = "Mystics" 
+    		trait = paranoid
+    	}
+    	text = EVTDESC_MNM_10020_A
+    	picture = GFX_evt_uncomfortable
+    }
+
+    desc = {
+    	trigger = { 
+    		NOT = { has_dlc = "Mystics" }
+    		trait = paranoid
+    	}
+    	text = EVTDESC_MNM_10020_A
+    	picture = GFX_evt_shadowy_cabal
+    }
+
+    desc = {
+    	trigger = { 
+    		has_dlc = "Mystics" 
+    		NOT = { trait = paranoid }
+    	}
+    	text = EVTDESC_MNM_10020_B
+    	picture = GFX_evt_uncomfortable
+    }
+
+    desc = {
+    	trigger = { 
+    		NOT = { has_dlc = "Mystics" }
+    		NOT = { trait = paranoid }
+    	}
+    	text = EVTDESC_MNM_10020_B
+    	picture = GFX_evt_shadowy_cabal
+    }
+
+	is_in_society = yes
+	
+    is_triggered_only = yes
+    
+    trigger = {
+    	society_is_criminal = yes
+    	NOT = { trait = stressed }
+    }
+
+    option = { 
+        name = EVTOPTA_MNM_10020
+
+	    add_stressed = yes
+    }
+}
+
+
+#Excluded from society due to breaking the limitations
+character_event = {
+	id = MNM.10021
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { #If YOU are the grandmaster and there are others in the society...
+				is_society_grandmaster = yes
+				any_society_member = {
+					NOT = { character = ROOT }
+					same_society_as = ROOT
+				}
+			}
+			society = {
+				random_society_member = {
+					limit = { NOT = { character = ROOT } }
+					character_event = { id = MNM.10022 } #Have some rando send the kick-out letter!
+				}
+			}
+		}
+		if = {
+			limit = { #If you are NOT the grandmaster/a leader...
+				is_society_grandmaster = no
+			}
+			society = {
+				random_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+					}
+					character_event = { id = MNM.10022 } #Have the Grand Master send the kick-out letter!
+				}
+			}
+		}
+		else = { #If you are the last of your kind...
+			ROOT = {
+				if = { limit = { is_in_society = yes } leave_society = yes }
+			}
+		}
+	}
+}
+
+
+character_event = {
+    id = MNM.10022
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = { FROM = { letter_event = { id = MNM.10023 } } }
+}
+
+
+letter_event = {
+	id = MNM.10023
+	border = GFX_event_letter_frame_religion
+
+	is_triggered_only = yes
+
+	desc = {
+		trigger = { 
+			society_member_of = secret_religious_cult 
+			FROM = { ROOT = { is_openly_of_prevs_secret_religion_trigger = yes } }
+		}
+		text = EVTDESC_MNM_10023_SR_A
+	}
+	desc = {
+		trigger = { 
+			society_member_of = secret_religious_cult 
+			FROM = { ROOT = { is_openly_of_prevs_secret_religion_trigger = no } }
+		}
+		text = EVTDESC_MNM_10023_SR_B
+	}
+	desc = {
+		trigger = { 
+			NOT = { society_member_of = secret_religious_cult }
+		}
+		text = EVTDESC_MNM_10023_SR_C
+	}
+	
+	option = {
+		name = EVTOPTA_MNM_10023
+		if = { limit = { is_in_society = yes } leave_society = yes }
+	}
+}
+
+character_event = {
+    id = MNM.10019
+    desc = EVTDESC_MNM_10019
+    picture = GFX_evt_society_joining
+    border = GFX_event_normal_frame_religion
+
+    is_triggered_only = yes
+
+    option = { 
+        name = ALAS
+        set_interested_society = none
+    }
+}
+
+# Force join AI characters to societies
+character_event = {
+	id = MNM.10030
+	hide_window = yes
+	
+	only_rulers = yes
+	is_triggered_only = yes
+	
+	has_dlc = "Mystics"
+	
+	immediate = {
+		if = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_in_society = yes
+				society_rank < 3
+				society_can_rank_up = yes
+			}
+			random_list = {
+				75 = {}
+				25 = {
+					society_rank_up = 1					
+				}
+			}
+		}
+		any_courtier = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_adult = yes
+				is_in_society = no
+				controls_religion = no
+				block_general_event_trigger = no
+			}
+			character_event = { id = MNM.10031 }
+		}
+		if = {
+			limit = {
+				ai = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_adult = yes
+				is_in_society = no
+				controls_religion = no
+				block_general_event_trigger = no
+			}
+			character_event = { id = MNM.10031 }
+		}
+	}
+}
+
+character_event = {
+	id = MNM.10031
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			95 = { # do nothing
+			}
+			5 = { # try to join a society
+				modifier = {
+					factor = 2
+					higher_tier_than = BARON
+				}
+				
+				random_list = {
+					700 = { } # Fall back dead weight
+					100 = {
+						trigger = {
+							can_join_society = fighters_guild_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								is_warrior = yes
+								AND = {
+									has_acceptable_fighters_specialisation = yes
+									martial = 15
+								}
+								AND = {
+									combat_rating = 75
+									martial = 30
+								}
+								AND = {
+									OR = {
+										is_mage = yes
+										is_agent = yes
+									}
+									martial = 25
+								}
+								trait = dragonborn
+							}
+						}
+						join_society = fighters_guild_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = fighters_guild_akavir
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								is_warrior = yes
+								AND = {
+									has_acceptable_fighters_specialisation = yes
+									martial = 15
+								}
+								AND = {
+									combat_rating = 75
+									martial = 30
+								}
+								AND = {
+									OR = {
+										is_mage = yes
+										is_agent = yes
+									}
+									martial = 25
+								}
+								trait = dragonborn
+							}
+						}
+						join_society = fighters_guild_akavir
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = companions_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								is_warrior = yes
+								AND = {
+									has_acceptable_fighters_specialisation = yes
+									martial = 15
+								}
+								AND = {
+									combat_rating = 75
+									martial = 30
+								}
+								AND = {
+									OR = {
+										is_mage = yes
+										is_agent = yes
+									}
+									martial = 25
+								}
+								trait = dragonborn
+							}
+						}
+						join_society = companions_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = ansei_guild_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								is_warrior = yes
+								AND = {
+									has_acceptable_fighters_specialisation = yes
+									martial = 15
+								}
+								AND = {
+									combat_rating = 75
+									martial = 30
+								}
+								AND = {
+									OR = {
+										is_mage = yes
+										is_agent = yes
+									}
+									martial = 25
+								}
+								trait = dragonborn
+							}
+						}
+						join_society = ansei_guild_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = mages_guild_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								AND = {
+									is_landed = yes
+									OR = { 
+										learning = 14
+										is_mage = yes
+									}
+								}
+								AND = {
+									learning = 18
+									is_mage = yes
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							has_global_flag = mages_tamriel_necromancy_allowed
+							has_character_flag = quit_mages_tamriel_necromancy_allowed
+						}
+						modifier = {
+							factor = 0
+							has_global_flag = mages_tamriel_necromancy_banned
+							has_character_flag = quit_mages_tamriel_necromancy_banned
+						}
+						join_society = mages_guild_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = mages_guild_akavir
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								AND = {
+									is_landed = yes
+									OR = { 
+										learning = 14
+										is_mage = yes
+									}
+								}
+								AND = {
+									learning = 18
+									is_mage = yes
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							has_global_flag = mages_akavir_necromancy_allowed
+							has_character_flag = quit_mages_akavir_necromancy_allowed
+						}
+						modifier = {
+							factor = 0
+							has_global_flag = mages_akavir_necromancy_banned
+							has_character_flag = quit_mages_akavir_necromancy_banned
+						}
+						join_society = mages_guild_akavir
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = mercantile_guild_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								AND = {
+									is_landed = yes
+									OR = { 
+										stewardship = 14
+										is_magistrate = yes
+									}
+								}
+								AND = {
+									stewardship = 18
+									is_magistrate = yes
+								}
+							}
+						}
+						join_society = mercantile_guild_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = mercantile_guild_akavir
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								AND = {
+									is_landed = yes
+									OR = { 
+										stewardship = 14
+										is_magistrate = yes
+									}
+								}
+								AND = {
+									stewardship = 18
+									is_magistrate = yes
+								}
+							}
+						}
+						join_society = mercantile_guild_akavir
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = scenarist_guild_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								AND = {
+									is_landed = yes
+									OR = { 
+										diplomacy = 14
+										is_diplomat = yes
+									}
+								}
+								AND = {
+									diplomacy = 18
+									is_diplomat = yes
+								}
+							}
+						}
+						join_society = scenarist_guild_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = scenarist_guild_akavir
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								AND = {
+									is_landed = yes
+									OR = { 
+										diplomacy = 14
+										is_diplomat = yes
+									}
+								}
+								AND = {
+									diplomacy = 18
+									is_diplomat = yes
+								}
+							}
+						}
+						join_society = scenarist_guild_akavir
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					50 = {
+						trigger = {
+							can_join_society = greybeards_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								learning = 15
+								is_mage = yes
+								is_healer = yes
+								is_monk_education = yes
+								is_priest_education = yes
+								is_wayfarer = yes
+								trait = monk
+								trait = nun
+								trait = celibate
+							}
+						}
+						modifier = {
+							factor = 0.05
+							NOT = { religion_group = human_pantheon }
+						}
+						join_society = greybeards_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					50 = {
+						trigger = {
+							can_join_society = moth_priests_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								learning = 15
+								is_mage = yes
+								is_healer = yes
+								is_monk_education = yes
+								is_priest_education = yes
+								is_wayfarer = yes
+								trait = monk
+								trait = nun
+							}
+						}
+						modifier = {
+							factor = 0.05
+							NOT = { religion_group = human_pantheon }
+						}
+						join_society = moth_priests_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					50 = {
+						trigger = {
+							can_join_society = dark_brotherhood_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								trait = ruthless
+								trait = schemer
+								trait = cruel
+								trait = impaler
+								trait = agent_4
+								trait = agent_5
+								trait = assassin_3
+								trait = deceitful
+								trait = ambitious
+								intrigue = 18
+							}
+						}
+						join_society = dark_brotherhood_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					50 = {
+						trigger = {
+							can_join_society = morag_tong_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								trait = ruthless
+								trait = schemer
+								trait = cruel
+								trait = impaler
+								trait = agent_4
+								trait = agent_5
+								trait = assassin_3
+								trait = deceitful
+								trait = ambitious
+								intrigue = 18
+							}
+						}
+						join_society = morag_tong_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = thieves_guild_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								trait = greedy
+								trait = charitable
+								trait = schemer
+								trait = agent_4
+								trait = agent_5
+								trait = acrobat_3
+								trait = thief_3
+								trait = deceitful
+								trait = ambitious
+								intrigue = 18
+							}
+						}
+						join_society = thieves_guild_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = camonna_tong_tamriel
+						}
+						modifier = {
+							factor = 4
+							OR = {
+								trait = greedy
+								trait = charitable
+								trait = schemer
+								trait = agent_4
+								trait = agent_5
+								trait = acrobat_3
+								trait = thief_3
+								trait = deceitful
+								trait = ambitious
+								intrigue = 18
+							}
+						}
+						join_society = camonna_tong_tamriel
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_dres_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_dres_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_hlaalu_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_hlaalu_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_indoril_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_indoril_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_redoran_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_redoran_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_telvanni_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_telvanni_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_sadras_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_sadras_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_sul_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_sul_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_veloth_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_veloth_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					100 = {
+						trigger = {
+							can_join_society = house_dagoth_council
+						}
+						modifier = {
+							factor = 10
+							tier = COUNT
+						}
+						modifier = {
+							factor = 50
+							tier = DUKE
+						}
+						modifier = {
+							factor = 250
+							tier = KING
+						}
+						modifier = {
+							factor = 1000
+							tier = EMPEROR
+						}
+						join_society = house_dagoth_council
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+###Society relationship events###
+
+#Making an enemy
+character_event = {
+    id = MNM.10040
+    hide_window = yes
+    is_triggered_only = yes
+    capable_only = yes
+    trigger = {
+    	society = {
+    		any_society_member = {
+    			NOT = { reverse_opinion = { who = ROOT value = -20 } }
+    			NOT = { opinion = { who = ROOT value = 0 } }
+    			NOT = { is_rival = ROOT }
+    			NOT = { has_character_flag = ineligible_for_society_rivalry }
+    			ai = yes
+    		}
+    	}
+    }
+    immediate = {
+    	society = {
+    		random_society_member = {
+    			limit = {
+    				NOT = { reverse_opinion = { who = ROOT value = -20 } }
+	    			NOT = { opinion = { who = ROOT value = 0 } }
+	    			NOT = { is_rival = ROOT }
+	    			NOT = { has_character_flag = ineligible_for_society_rivalry }
+	    			ai = yes
+    			}
+    			character_event = { id = MNM.10041 }
+    		}
+    	}
+    }
+}
+
+
+character_event = {
+    id = MNM.10041
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = { FROM = { character_event = { id = MNM.10042 } } }
+}	
+
+
+character_event = {
+    id = MNM.10042
+    picture = GFX_evt_rival_rulers
+    border = GFX_event_normal_frame_war
+
+    desc = {
+    	trigger = { 
+    	}
+    	text = EVTDESC_MNM_10042
+    	picture = GFX_evt_rival_rulers
+    }
+
+    is_triggered_only = yes
+    
+    #Make them enemy
+    option = { 
+        name = EVTOPTA_MNM_10042
+        add_rival = FROM
+
+        ai_chance = {
+        	factor = 90
+        	modifier = {
+        		has_evil_trait_trigger = yes
+        		factor = 15
+        	}
+        }
+    }
+
+
+    #Ignore them
+    option = {
+        name = EVTOPTB_MNM_10042
+
+        detract_society_currency_minor_effect = yes
+
+        if = {
+        	limit = { ai = no }
+        	FROM = { set_character_flag = ineligible_for_society_rivalry }
+        }
+
+        ai_chance = {
+        	factor = 10
+        	modifier = {
+        		has_benevolent_trait_trigger = yes
+        		factor = 15
+        	}
+        }
+    }
+}
+
+
+#Making a friend
+character_event = {
+    id = MNM.10043
+    hide_window = yes
+    is_triggered_only = yes
+    capable_only = yes
+    trigger = {
+    	society = {
+    		any_society_member = {
+    			reverse_opinion = { who = ROOT value = 30 }
+    			opinion = { who = ROOT value = 40 }
+    			NOR = {
+	    			is_lover = ROOT
+    				is_friend = ROOT
+    				is_rival = ROOT
+    				is_close_relative = ROOT
+    			}
+    			prisoner = no
+    			NOT = { has_character_flag = ineligible_for_society_friendship }
+    			ai = yes
+    		}
+    	}
+    }
+    immediate = {
+    	society = {
+    		random_society_member = {
+    			limit = {
+    				reverse_opinion = { who = ROOT value = 30 }
+	    			opinion = { who = ROOT value = 40 }
+	    			NOR = {
+	    				is_lover = ROOT
+	    				is_friend = ROOT
+	    				is_rival = ROOT
+	    				is_close_relative = ROOT
+	    			}
+	    			prisoner = no
+	    			NOT = { has_character_flag = ineligible_for_society_friendship }
+	    			ai = yes
+	    		}
+    			character_event = { id = MNM.10044 }
+    		}
+    	}
+    }
+}
+
+character_event = {
+    id = MNM.10044
+    hide_window = yes
+    is_triggered_only = yes
+    immediate = { FROM = { character_event = { id = MNM.10045 } } }
+}	
+
+
+character_event = {
+    id = MNM.10045
+    picture = GFX_evt_courtiers_talking
+    border = GFX_event_normal_frame_diplomacy
+
+    desc = {
+    	trigger = { 
+    		NOR = {
+    			society_member_of = secret_religious_cult
+    		}
+    	}
+    	text = EVTDESC_MNM_10045
+    	picture = GFX_evt_rival_rulers
+    }
+    desc = {
+    	trigger = { society_member_of = secret_religious_cult }
+    	text = EVTDESC_MNM_10045
+    	picture = GFX_evt_secret_ceremony
+    }
+
+    is_triggered_only = yes
+    
+    #Make them friend
+    option = { 
+        name = EVTOPTA_MNM_10045
+        add_friend = FROM
+
+        ai_chance = {
+        	factor = 75
+        	modifier = {
+        		has_pleasant_trait_trigger = yes
+        		factor = 15
+        	}	
+        }
+    }
+
+    #Love?
+    option = {
+    	trigger = { FROM = { root_attraction_trigger = yes } }
+        name = EVTOPTC_MNM_10045
+        custom_tooltip = { text = EVTOPTB_MNM_6903_TT }
+
+        hidden_effect = { FROM = { character_event = { id = MNM.6906 days = 3 } } }
+
+        if = {
+        	limit = { ai = no }
+        	FROM = { set_character_flag = ineligible_for_society_friendship }
+        }
+
+        ai_chance = {
+        	factor = 25
+        	modifier = {
+        		factor = 0
+        		NOR = {
+        			trait = lustful
+        			AND = {
+        				NOT = { any_lover = { is_alive = yes } }
+        				is_married = yes
+        			}
+        			FROM = { has_attractive_trait_trigger = yes }
+        		}
+        	}
+        }
+    }
+
+    #Nah
+    option = {
+        name = EVTOPTB_MNM_10045
+
+        if = {
+        	limit = { ai = no }
+        	FROM = { set_character_flag = ineligible_for_society_friendship }
+        }
+
+        ai_chance = {
+        	factor = 25
+        	modifier = {
+        		has_unpleasant_trait_trigger = yes
+        		factor = 15
+        	}
+        }
+    }
+}
+
+#clearing secret_societies_interference flag
+character_event = {
+	id = MNM.6661
+	
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		clr_character_flag = secret_societies_interference 
+	}
+
+	option = {
+		
+	}
+}
+
+#Suspicion modifiers
+character_event = {
+	id = MNM.6662
+	desc = MNM.6662.d
+	picture = "GFX_evt_uncomfortable"
+	border = GFX_event_normal_frame_religion
+
+	trigger = {
+		is_in_society = yes
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = MNM.6662.a
+		tooltip = {
+			add_character_modifier = {
+				name = under_suspicion duration = -1
+			}
+		}
+	}
+}
+
+character_event = {
+	id = MNM.6663
+	desc = MNM.6662.d
+	picture = "GFX_evt_uncomfortable"
+	border = GFX_event_normal_frame_religion
+
+	trigger = {
+		is_in_society = yes
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = MNM.6662.a
+		tooltip = {
+			add_character_modifier = {
+				name = highly_suspect duration = -1
+			}
+		}
+	}
+}
+
+character_event = {
+	id = MNM.6664
+	desc = MNM.6664.d
+	picture = "GFX_evt_dark_prayer"
+	border = GFX_event_normal_frame_religion
+
+	trigger = {
+		is_in_society = yes
+		has_character_modifier = highly_suspect
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			remove_character_modifier = highly_suspect
+		}
+	}
+}
+
+character_event = {
+	id = MNM.6665
+	desc = MNM.6664.d
+	picture = "GFX_evt_dark_prayer"
+	border = GFX_event_normal_frame_religion
+
+	trigger = {
+		is_in_society = yes
+		has_character_modifier = under_suspicion
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		tooltip = {
+			remove_character_modifier = under_suspicion
+		}
+	}
+}
+
+#quest modifiers
+character_event = {
+	id = MNM.6666
+	
+	hide_window = yes
+
+	trigger = {
+		is_in_society = yes
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		add_mission_succeed_influence_effect = yes
+	}
+}
+
+character_event = {
+	id = MNM.6667
+	
+	hide_window = yes
+
+	trigger = {
+		is_in_society = yes
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ALAS
+		add_mission_fail_influence_effect = yes
+	}
+}
+
+character_event = {
+	id = MNM.6668
+	desc = MNM.6668.d
+	picture = "GFX_evt_dark_prayer"
+	border = GFX_event_normal_frame_religion
+
+	trigger = {
+		is_in_society = yes
+	}
+	
+	is_triggered_only = yes
+
+	option = {
+		name = CURSES
+		if = {
+			limit = {
+				controls_religion = no
+			}
+			add_trait = excommunicated
+		}
+	}
+}
+
+#Cleanup event for dead quest targets
+character_event = {
+	id = MNM.6991
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = { is_quest_target = yes }
+
+	immediate = {
+		any_quester_targeting_this = {
+			#Dark Brotherhood
+			if = {
+				limit = {
+					has_quest = quest_db_major_assassination
+					ROOT = { killer = { character = PREVPREV } }
+				}
+				character_event = { id = assassination.510 days = 1 } #Completes assassination mission
+			}
+			if = {
+				limit = {
+					has_quest = quest_db_major_assassination
+					NOT = {
+						ROOT = { killer = { character = PREVPREV } }
+					}
+				}
+				character_event = { id = assassination.514 days = 1 } #Minor mission failure
+			}
+			if = {
+				limit = {
+					has_quest = quest_db_personal_assassination
+					ROOT = { killer = { character = PREVPREV } }
+				}
+				character_event = { id = assassination.516 days = 1 } #Completes assassination mission
+			}
+			if = {
+				limit = {
+					has_quest = quest_db_personal_assassination
+					NOT = {
+						ROOT = { killer = { character = PREVPREV } }
+					}
+				}
+				character_event = { id = assassination.518 days = 1 } #Minor mission failure
+			}
+			#Morag Tong
+			if = {
+				limit = {
+					has_quest = quest_mt_major_assassination
+					ROOT = { killer = { character = PREVPREV } }
+				}
+				character_event = { id = assassination.520 days = 1 } #Completes assassination mission
+			}
+			if = {
+				limit = {
+					has_quest = quest_mt_major_assassination
+					NOT = {
+						ROOT = { killer = { character = PREVPREV } }
+					}
+				}
+				character_event = { id = assassination.524 days = 1 } #Minor mission failure
+			}
+			if = {
+				limit = {
+					has_quest = quest_mt_personal_assassination
+					ROOT = { killer = { character = PREVPREV } }
+				}
+				character_event = { id = assassination.526 days = 1 } #Completes assassination mission
+			}
+			if = {
+				limit = {
+					has_quest = quest_mt_personal_assassination
+					NOT = {
+						ROOT = { killer = { character = PREVPREV } }
+					}
+				}
+				character_event = { id = assassination.528 days = 1 } #Minor mission failure
+			}
+			
+			
+			
+			if = {
+				limit = {
+					has_quest = quest_tg_major_theft
+				}
+				character_event = { id = ekthieving.290 days = 1 } #Target died, therefore no theft
+			}
+			if = {
+				limit = {
+					has_quest = quest_tg_personal_theft
+				}
+				character_event = { id = ekthieving.291 days = 1 } #Target died, therefore no theft
+			}
+			if = {
+				limit = {
+					has_quest = quest_ct_major_theft
+				}
+				character_event = { id = ekthieving.390 days = 1 } #Target died, therefore no theft
+			}
+			if = {
+				limit = {
+					has_quest = quest_ct_personal_theft
+				}
+				character_event = { id = ekthieving.391 days = 1 } #Target died, therefore no theft
+			}
+		}
+	}
+}
+
+
+#Notification of invalid
+character_event = {
+	id = MNM.6992
+	desc = EVTDESC_MNM_6992
+	border = GFX_event_normal_frame_religion
+	picture = GFX_evt_society_joining
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_quest = quest_secret_religions_conduct_secret_ceremony
+			has_quest = quest_secret_religious_societies_induct_ruler
+			has_quest = quest_secret_religious_societies_sympathy_ruler
+		}
+	}
+
+	option = {		
+		name = ALAS
+
+		trigger_switch = {
+			on_trigger = has_quest
+			quest_secret_religions_conduct_secret_ceremony = { clr_quest = { id = quest_secret_religions_conduct_secret_ceremony failure = yes } }
+			quest_secret_religious_societies_induct_ruler = { clr_quest = { id = quest_secret_religious_societies_induct_ruler failure = yes } }
+			quest_secret_religious_societies_sympathy_ruler = { clr_quest = { id = quest_secret_religious_societies_sympathy_ruler failure = yes } }
+		}
+
+
+		hidden_effect = {
+			clr_character_flag = A_FAIL
+	    	clr_character_flag = B_FAIL
+	    	clr_character_flag = C_FAIL
+	    	clr_character_flag = D_FAIL
+			clr_character_flag = A_SUCCESS
+    		clr_character_flag = B_SUCCESS
+    		clr_character_flag = C_SUCCESS
+    		clr_character_flag = D_SUCCESS
+    		clr_character_flag = alexandria
+    		clr_character_flag = conduct_secret_ceremony_timer
+			clr_character_flag = do_not_disturb
+			clr_character_flag = bribed_guards
+			clr_character_flag = guards_wake_up
+			clr_character_flag = distraction_failed
+			clr_character_flag = caught_stealing
+			clr_character_flag = caught_destroying
+			clr_character_flag = great_theft
+			clr_character_flag = good_theft
+			clr_character_flag = ok_theft
+			clr_character_flag = lab_destruction
+			clr_character_flag = lab_damage
+			clr_character_flag = lab_explosion_death
+			clr_character_flag = sympathy_argument_friends_family
+			clr_character_flag = sympathy_argument_trauma
+			clr_character_flag = sympathy_argument_profit
+			clr_character_flag = sympathy_argument_personal
+			clr_character_flag = induction_argument_war
+			clr_character_flag = induction_argument_community
+			clr_character_flag = induction_argument_theology
+            clr_character_flag = induction_argument_stewardship
+            clr_character_flag = threaten_personally
+            clr_character_flag = threaten_relation
+            clr_character_flag = threaten_wealth
+            clr_character_flag = collecting_debt
+		}
+	}
+}
+
+character_event = { # Fired from on_character_leave_society (meant to clear any society related flags and effects)
+    id = MNM.10018
+    is_triggered_only = yes
+    hide_window = yes
+    
+    immediate = {
+    	clean_up_after_leaving_society_effect = yes #NOTE: update if more societies are added
+    }
+}
+
+character_event = {
+    id = MNM.10024
+    desc = EVTDESC_MNM_10024
+    picture = GFX_evt_ritual_scroll
+    border = GFX_event_normal_frame_religion
+    is_triggered_only = yes
+	
+    trigger = {
+		NOT = { 
+			FROM = {
+				any_society_member = { always = yes }
+			}
+		}
+    }
+	
+	immediate = { set_character_flag = society_join_block }
+
+    option = {      
+        name = EVTOPTA_MNM_10024
+		join_society = FROM
+		set_society_grandmaster = yes # Set character as Grand Master
+		add_society_currency_massive_effect = yes # Give the Grand Master a start-up capital to induct members
+		clr_character_flag = society_join_block
+    }
+	
+	option = {
+		name = EVTOPTB_MNM_10024
+		clr_character_flag = society_join_block
+	}
+}
+
+character_event = { #Save game conversion of secret_traits to secret religions
+	id = MNM.10025
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	only_playable = yes
+	
+	trigger = {
+		is_multiplayer_host_character = yes
+		is_save_game = yes
+	}
+	
+	immediate = {
+		any_character = {
+			trigger_switch = {
+				on_trigger = trait
+				# secretly_catholic = { set_secret_religion = catholic remove_trait = secretly_catholic }
+			}
+		}
+	}
+}

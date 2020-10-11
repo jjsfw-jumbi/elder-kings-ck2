@@ -1,0 +1,700 @@
+##Framework based on mnm_society_decisions events
+# Unique decisions
+decisions = {
+	return_to_high_hrothgar = {
+		is_high_prio = yes
+		
+		ai_check_interval = 84
+		
+		potential = {
+			has_character_flag = visited_greybeards #This lets you return to High Hrothgar to rejoin the Greybeards if you previously refused
+			is_in_society = no
+			is_ruler = yes
+			is_indisposed = no
+			is_inaccessible_trigger = no
+			NOT = { trait = pilgrim }
+			NOT = { trait = on_pilgrimage }
+			NOT = {	has_character_flag = preparing_pilgrimage }
+			NOT = {	has_character_flag = meditation }
+			NOT = {	has_character_flag = activated_pilgrimage }
+			NOT = { has_character_flag = revisiting_greybeards }
+			has_submenu_open = no
+		}
+		allow = {
+			war = no
+			prisoner = no
+			scaled_wealth = 0.20
+			age = 16
+		}
+		effect = {
+			scaled_wealth = -0.20
+			add_trait = on_pilgrimage
+			set_character_flag = revisiting_greybeards
+			character_event = { id = ekgreybeards.5 days = 15 }
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.25
+				trait = cynical
+			}
+			modifier = { #Monthly randomizer for when AI takes decision (1% chance)
+				factor = 0
+				random = 1
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = {
+				factor = 100
+				trait = dragonborn
+			}
+			modifier = {
+				factor = 0
+				NOT = { age = 22 }
+			}						
+		}
+	}
+}
+
+# Unique guild decisions
+# Society decisions is better for performances, as it's only evaluated for characters in a society (bottom text)
+society_decisions = {
+	### Scenarists
+	take_care_appearance_scenarist = {
+		ai_check_interval = 120
+		
+		potential = {
+			OR = {
+				society_member_of = scenarist_guild_tamriel
+				society_member_of = scenarist_guild_akavir
+			}
+			society_rank >= 2
+			
+			NOT = { trait = groomed }
+			
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+		}
+		
+		allow = {
+			war = no
+			
+			custom_tooltip = {
+				text = NOT_USE_TAKE_CARE_APPEARANCE_2_YEARS_CT
+				NOT = { has_character_modifier = used_take_care_appearance }
+			}
+			
+			trigger_if = {
+				limit = { OR = { trait = uncouth trait = slovenly } }
+				has_society_currency_medium_trigger_scaling = yes
+			}
+			
+			trigger_else = {
+				has_society_currency_major_trigger_scaling = yes
+			}
+		}
+		
+		effect = {
+			
+			if = {
+				limit = { OR = { trait = uncouth trait = slovenly } }
+				detract_society_currency_medium_effect_scaling = yes
+			}
+			
+			else = {
+				detract_society_currency_major_effect_scaling = yes
+			}
+			
+			custom_tooltip = {
+				text = TAKE_CARE_APPEARANCE_EFFECT_CT
+				character_event = { id = eksocieties.270 }
+			}
+			
+			add_character_modifier = { name = used_take_care_appearance days = 730 }
+		}
+	}	
+	
+	### Warriors
+	strengthen_body_fighter = {
+		ai_check_interval = 120
+		
+		potential = {
+			OR = {
+				is_member_of_fighters_guild = yes
+				society_member_of = companions_tamriel
+				society_member_of = ansei_guild_tamriel
+			}
+			society_rank >= 2
+			
+			NOT = { trait = robust }
+			
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+		}
+		
+		allow = {
+			war = no
+			
+			custom_tooltip = {
+				text = NOT_USE_STRENGTHEN_BODY_2_YEARS_CT
+				NOT = { has_character_modifier = used_strengthen_body }
+			}
+			
+			trigger_if = {
+				limit = { trait = feeble }
+				has_society_currency_medium_trigger_scaling = yes
+			}
+			
+			trigger_else_if = {
+				limit = { trait = sturdy }
+				has_society_currency_large_trigger_scaling = yes
+			}
+			
+			trigger_else = {
+				has_society_currency_major_trigger_scaling = yes
+			}
+		}
+		
+		effect = {
+			
+			if = {
+				limit = { trait = feeble }
+				detract_society_currency_medium_effect_scaling = yes
+			}
+			
+			else_if = {
+				limit = { trait = sturdy }
+				detract_society_currency_large_effect_scaling = yes
+			}
+			
+			else = {
+				detract_society_currency_major_effect_scaling = yes
+			}
+			
+			custom_tooltip = {
+				text = STRENGTHEN_BODY_EFFECT_CT
+				character_event = { id = eksocieties.260 }
+			}
+			
+			add_character_modifier = { name = used_strenghten_body days = 730 }
+		}
+	}	
+		
+	### Mercantile
+	### Criminal
+	# Assassins
+	hire_trained_assassin = {
+		only_rulers = yes
+		
+		ai_check_interval = 36
+		
+		potential = {
+			is_member_of_assassins_guild = yes
+			
+			OR = {
+				AND = {
+					is_member_society_4_ranks = yes
+					society_rank >= 3
+				}
+				AND = {
+					is_member_society_5_ranks = yes
+					society_rank >= 4
+				}
+				AND = {
+					is_member_society_6_ranks = yes
+					society_rank >= 4
+				}
+				AND = {
+					is_member_society_7_ranks = yes
+					society_rank >= 5
+				}
+			}
+			
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_character_flag = soul_sold }
+		}
+		allow = {
+			society_currency >= 500
+		}
+		effect = {
+			change_society_currency = -500
+			character_event = { id = eksecretive.10 }
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+			}
+			modifier = {
+				factor = 10
+				society_currency >= 3000
+			}
+		}
+	}
+	
+	claim_shadowmere = {
+		ai_check_interval = 36
+		
+		potential = {
+			society_member_of = dark_brotherhood_tamriel
+			society_rank = 5
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_character_flag = soul_sold }
+			NOT = { has_global_flag = shadowmere_active }
+		}
+		allow = {
+			society_currency >= 2500
+		}
+		effect = {
+			change_society_currency = -2500
+			add_artifact = mount_horse_shadowmere
+			set_global_flag = shadowmere_active
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+			}
+			modifier = {
+				factor = 10
+				society_currency >= 3000
+			}
+		}
+	}
+	# Thieves
+	hire_trained_thief = {
+		only_rulers = yes
+		
+		ai_check_interval = 36
+		
+		potential = {
+			is_member_of_thieves_guild = yes
+			
+			OR = {
+				AND = {
+					is_member_society_4_ranks = yes
+					society_rank >= 3
+				}
+				AND = {
+					is_member_society_5_ranks = yes
+					society_rank >= 4
+				}
+				AND = {
+					is_member_society_6_ranks = yes
+					society_rank >= 4
+				}
+				AND = {
+					is_member_society_7_ranks = yes
+					society_rank >= 5
+				}
+			}
+			
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_character_flag = soul_sold }
+		}
+		allow = {
+			society_currency >= 500
+		}
+		effect = {
+			change_society_currency = -500
+			character_event = { id = eksecretive.15 }
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1
+			}
+			modifier = {
+				factor = 10
+				society_currency >= 3000
+			}
+		}
+	}
+	### Mages
+	mages_tamriel_allow_necromancy = {
+		ai_check_interval = 36
+		
+		potential = {
+			society_member_of = mages_guild_tamriel
+			is_society_grandmaster = yes
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_global_flag = mages_tamriel_necromancy_allowed }
+			NAND = { #This check is for AI only - they can only change the rules once whereas the player can do so many times
+				ai = yes
+				has_character_flag = mages_tamriel_necromancy_law_set
+			}
+		}
+		
+		allow = {
+			society_currency >= 2500
+		}
+		effect = {
+			change_society_currency = -2500
+			clr_global_flag = mages_tamriel_necromancy_banned
+			set_global_flag = mages_tamriel_necromancy_allowed
+			if = {
+				limit = { ai = yes }
+				set_character_flag = mages_tamriel_necromancy_law_set
+			}
+			narrative_event = { id = eksocieties.200 }
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+				true_religion_scope = {
+					is_anti_necromancy_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.33
+				true_religion_scope = {
+					is_anti_necromancy_religion = yes
+				}
+			}
+		}
+	}
+	mages_tamriel_ban_necromancy = {
+		ai_check_interval = 36
+		
+		potential = {
+			society_member_of = mages_guild_tamriel
+			is_society_grandmaster = yes
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_global_flag = mages_tamriel_necromancy_banned }
+			NAND = { #This check is for AI only - they can only change the rules once whereas the player can do so many times
+				ai = yes
+				has_character_flag = mages_tamriel_necromancy_law_set
+			}
+		}
+		
+		allow = {
+			society_currency >= 2500
+		}
+		effect = {
+			change_society_currency = -2500
+			clr_global_flag = mages_tamriel_necromancy_allowed
+			set_global_flag = mages_tamriel_necromancy_banned
+			
+			if = {
+				limit = { ai = yes }
+				set_character_flag = mages_tamriel_necromancy_law_set
+			}
+			narrative_event = { id = eksocieties.201 }
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+				true_religion_scope = {
+					is_necromancy_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.33
+				true_religion_scope = {
+					is_necromancy_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					trait = necromancer
+					trait = lich
+				}
+			}
+		}
+	}
+	
+	mages_akavir_allow_necromancy = {
+		ai_check_interval = 36
+		
+		potential = {
+			society_member_of = mages_guild_akavir
+			is_society_grandmaster = yes
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_global_flag = mages_akavir_necromancy_allowed }
+			NAND = { #This check is for AI only - they can only change the rules once whereas the player can do so many times
+				ai = yes
+				has_character_flag = mages_akavir_necromancy_law_set
+			}
+		}
+		
+		allow = {
+			society_currency >= 2500
+		}
+		effect = {
+			change_society_currency = -2500
+			clr_global_flag = mages_akavir_necromancy_banned
+			set_global_flag = mages_akavir_necromancy_allowed
+			if = {
+				limit = { ai = yes }
+				set_character_flag = mages_akavir_necromancy_law_set
+			}
+			narrative_event = { id = eksocieties.205 }
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+				true_religion_scope = {
+					is_anti_necromancy_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.33
+				true_religion_scope = {
+					is_anti_necromancy_religion = yes
+				}
+			}
+		}
+	}
+	mages_akavir_ban_necromancy = {
+		ai_check_interval = 36
+		
+		potential = {
+			society_member_of = mages_guild_akavir
+			is_society_grandmaster = yes
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_global_flag = mages_akavir_necromancy_banned }
+			NAND = { #This check is for AI only - they can only change the rules once whereas the player can do so many times
+				ai = yes
+				has_character_flag = mages_akavir_necromancy_law_set
+			}
+		}
+		
+		allow = {
+			society_currency >= 2500
+		}
+		effect = {
+			change_society_currency = -2500
+			clr_global_flag = mages_akavir_necromancy_allowed
+			set_global_flag = mages_akavir_necromancy_banned
+			
+			if = {
+				limit = { ai = yes }
+				set_character_flag = mages_akavir_necromancy_law_set
+			}
+			narrative_event = { id = eksocieties.206 }
+		}
+
+		ai_will_do = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+				true_religion_scope = {
+					is_necromancy_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0.33
+				true_religion_scope = {
+					is_necromancy_religion = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					trait = necromancer
+					trait = lich
+				}
+			}
+		}
+	}
+	
+	mages_study_necromancy = {
+		ai_check_interval = 12
+		
+		potential = {
+			OR = {
+				AND = {
+					society_member_of = mages_guild_tamriel
+					has_global_flag = mages_tamriel_necromancy_allowed
+				}
+				AND = {
+					society_member_of = mages_guild_akavir
+					has_global_flag = mages_akavir_necromancy_allowed
+				}
+			}
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			
+			NOR = {
+				trait = necromancer
+				has_character_flag = studying_necromancy
+			}
+		}
+		
+		allow = {
+			society_currency >= 1000
+		}
+		effect = {
+			change_society_currency = -1000
+			
+			custom_tooltip = {
+				text = CAN_TAKE_STUDY_NECROMANCY_DECISION_CT
+				set_character_flag = studying_necromancy
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				trait = zealous
+				true_religion_scope = {
+					is_anti_necromancy_religion = yes
+				}
+			}
+		}
+	}
+	
+	### Other
+	# Greybeards
+	# Moth Priests
+	study_an_elder_scroll = {
+		potential = {
+			society_member_of = moth_priests_tamriel
+			society_rank = 2
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_character_flag = soul_sold }
+			NOR = {
+				has_character_flag = moth_study_scroll
+				has_character_modifier = moth_scroll_cooldown
+				trait = blind
+				trait = blinded
+			}
+			OR = {
+				is_undead = no
+				AND = {
+					is_undead = yes
+					trait = vampire
+				}
+			}
+		}
+		allow = {
+			society_currency >= 150
+		}
+		effect = {
+			change_society_currency = -150
+			set_character_flag = moth_study_scroll
+			character_event = { id = ekmothpriests.20 }
+		}
+
+	}
+	
+	mitigate_blindness = {
+		ai_check_interval = 36
+		
+		potential = {
+			society_member_of = moth_priests_tamriel
+			society_rank = 3
+			is_indisposed = no
+			block_general_event_trigger = no
+			OR = {
+				has_character_flag = society_open
+				ai = yes
+			}
+			NOT = { has_character_flag = soul_sold }
+			NOR = {
+				has_character_flag = mitigating_blindness
+				has_character_modifier = mitigating_blindness
+			}
+			OR = {
+				trait = blind
+				trait = blinded
+			}
+			OR = {
+				is_undead = no
+				AND = {
+					is_undead = yes
+					trait = vampire
+				}
+			}
+		}
+		
+		allow = {
+			society_currency >= 300
+		}
+		effect = {
+			change_society_currency = -300
+			set_character_flag = mitigating_blindness
+			character_event = { id = ekmothpriests.10 days = 90 random = 15 }
+		}
+
+	}
+}

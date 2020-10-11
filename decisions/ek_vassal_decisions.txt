@@ -1,0 +1,78 @@
+targetted_decisions = {
+
+	request_religious_conversion = {
+		filter = sub_realm
+		ai_target_filter = sub_realm
+		
+		ai_check_interval = 12
+		
+		from_potential = {
+			is_ruler = yes
+			war = no
+			NOT = { has_character_flag = spellbook_open }
+		}
+		potential = {
+			vassal_of = FROM
+			war = no
+			NOT = { religion = FROM }
+			NOT = { has_character_flag = conversion_requested }
+			NOT = { has_character_flag = ai_flag_refuse_conversion }
+		}
+		allow = {
+			opinion = { who = FROM value = 80 }
+			NOT = { trait = zealous } #Zealous characters simply will not abandon their beliefs
+			NOT = { religion = hist } #Argonians are tightly connected to the Hist
+			NOT = { has_character_modifier = request_conversion_timer }
+		}
+		effect = {
+			hidden_tooltip = {
+				letter_event = { id = conversion.1 days = 3 }
+			}
+		}
+
+		ai_will_do = {
+			factor = 1						
+		}
+	
+	}
+	
+	
+	kill_undead_courtier = { #Rulers can kill their undead automatons at no penalty
+		filter = sub_realm
+		ai_target_filter = sub_realm
+		
+		ai_check_interval = 12
+		
+		from_potential = {
+			is_ruler = yes
+			NOT = { trait = undead }
+			NOT = { has_character_flag = spellbook_open }
+		}
+		potential = {
+			vassal_of = FROM
+			trait = undead
+		}
+		allow = {
+		}
+		effect = {
+			death = {
+				death_reason = death_vanished
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { #AI won't kill off courtiers of value
+				factor = 0
+				OR = {
+					diplomacy = 20
+					martial = 20
+					stewardship = 20
+					intrigue = 20
+					learning = 20
+				}
+			}
+		}
+	}
+}

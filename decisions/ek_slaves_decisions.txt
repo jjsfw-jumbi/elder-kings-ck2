@@ -1,0 +1,80 @@
+title_decisions = {
+	free_slaves = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		is_high_prio = yes
+		
+		#ai_check_interval = 1
+		
+		from_potential = {
+			is_playable = yes
+			higher_tier_than = BARON
+			NOT = { has_character_flag = spellbook_open }
+		}
+		
+		potential = {
+			# Can only free slaves in your demesne
+			owner = {
+				character = FROM
+			}
+			tier = COUNT
+			location = {
+				province_has_slaves = yes
+			}
+		}
+		
+		allow = {
+			OR = {
+				custom_tooltip = {
+					text = SLAVES_ORIGIN_YOUR_REALM_CT
+					# Slaves are from a province within your realm
+					location = {
+						persistent_event_target:slaves_come_from_province = {
+							owner = { same_realm = FROM }
+						}
+					}
+				}
+				# Slavery is illegal
+				owner = { has_law = slavery_0 }
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						persistent_event_target:slaves_come_from_province = {
+							owner = { same_realm = FROM }
+						}
+						owner = { trait = liberator }
+						owner = {
+							any_owned_bloodline = {
+								has_bloodline_flag = liberator_bloodline
+								bloodline_is_active_for = PREV
+							}
+						}
+					}
+				}
+				
+				custom_tooltip = {
+					text = FREE_SLAVES_WITHIN_REALM_CT
+					location = { liberate_province_send_back = yes }
+				}
+			}
+			
+			else = {
+				custom_tooltip = {
+					text = FREE_SLAVES_NOT_WITHIN_REALM_CT
+					location = { liberate_province = yes }
+				}
+			}
+			
+			owner = { increment_liberator_progression = yes }
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

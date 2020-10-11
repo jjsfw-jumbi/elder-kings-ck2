@@ -1,0 +1,391 @@
+namespace = racemaintenance
+
+#racemaintenance.1 removed, no longer necessary due to the cancel_pregnancy event to handle "illegal" pregnancies.
+
+# TODO:JJPERF See about moving this to on actions
+character_event = {
+	id = racemaintenance.2
+	desc = AI_evt_d
+	picture = GFX_evt_comet
+	
+	trigger = {
+		ai = yes
+		spouse = { ai = yes }
+		#fertility = 0.01
+		OR = {
+			is_ruler = yes
+			is_primary_heir = yes
+			is_pretender = yes
+		}
+		OR = {
+			is_betrothed = yes
+			is_married = yes
+		}
+		OR = {
+			AND = {
+				graphical_culture = argoniangfx
+				spouse = { NOT = { graphical_culture = argoniangfx } }
+			}
+			AND = {
+				NOT = { graphical_culture = argoniangfx }
+				spouse = { graphical_culture = argoniangfx }
+			}
+			AND = {
+				OR = { graphical_culture = anequinagfx graphical_culture = pellitinegfx graphical_culture = kapotungfx }
+				spouse = { AND = { NOT = { graphical_culture = anequinagfx } NOT = { graphical_culture = pellitinegfx } NOT = { graphical_culture = kapotungfx } } }
+			}
+			AND = {
+				AND = { NOT = { graphical_culture = anequinagfx } NOT = { graphical_culture = pellitinegfx } NOT = { graphical_culture = kapotungfx } }
+				spouse = { OR = { graphical_culture = anequinagfx graphical_culture = pellitinegfx graphical_culture = kapotungfx } }
+			}
+			AND = {
+				graphical_culture = orsimergfx
+				spouse = { NOT = { graphical_culture = orsimergfx } }
+			}
+			AND = {
+				NOT = { graphical_culture = orsimergfx }
+				spouse = { graphical_culture = orsimergfx }
+			}
+			AND = {
+				graphical_culture = tangmogfx
+				spouse = { NOT = { graphical_culture = tangmogfx } }
+			}
+			AND = {
+				NOT = { graphical_culture = tangmogfx }
+				spouse = { graphical_culture = tangmogfx }
+			}
+			AND = {
+				graphical_culture = sloadgfx
+				spouse = { NOT = { graphical_culture = sloadgfx } }
+			}
+			AND = {
+				NOT = { graphical_culture = sloadgfx }
+				spouse = { graphical_culture = sloadgfx }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = AI_evt_opt
+		if = {
+			limit = { is_betrothed = yes }
+			break_betrothal = ROOT
+		}
+		if = {
+			limit = { is_married = yes }
+			remove_spouse = spouse
+		}
+		if = {
+			limit = { is_female = no }
+			create_character = {
+				age = 16
+				random_traits = yes
+				dynasty = none
+				culture = ROOT
+				female = yes
+			}
+		}
+		if = {
+			limit = { is_female = yes }
+			create_character = {
+				age = 16
+				random_traits = yes
+				dynasty = none
+				culture = ROOT
+				female = no
+			}
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			add_spouse = ROOT
+		}
+	}
+}
+
+#Checks if the father and mother have bloodline traits. If the father does not, the child inherits the mother's bloodline trait.
+#3/28/18 refactored to account for matrilineal marriages, forked event to apply 'agnatic = yes' trait effect manually but only if not in a marriage
+character_event = {
+	id = racemaintenance.3
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_alive = yes
+		OR = {
+			father_even_if_dead = { has_bloodline = yes }
+			mother_even_if_dead = { has_bloodline = yes }
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				father_even_if_dead = {
+					OR = {
+						has_bloodline = no
+						is_married_matrilineally = yes
+					}
+				}
+				mother_even_if_dead = {
+					has_bloodline = yes
+				}
+			}
+			mother_even_if_dead = {
+				any_owned_bloodline = {
+					add_bloodline_member = ROOT
+				}
+			}
+		}
+		if = {
+			limit = {
+				father_even_if_dead = {
+					has_bloodline = yes
+					OR = {
+						is_married_matrilineally = no
+						ROOT = { mother_even_if_dead = { has_bloodline = no } }
+					}
+				}
+			}
+			father_even_if_dead = {
+				any_owned_bloodline = {
+					add_bloodline_member = ROOT
+				}
+			}
+		}
+	}
+}
+
+#Lover becomes pregnant
+character_event = {
+	id = racemaintenance.4
+	# desc = EVTDESC64145
+	# picture = GFX_evt_pregnancy
+	
+	hide_window = yes
+	min_age = 16
+	only_women = yes
+	
+	trigger = {
+		is_abroad = no
+		is_pregnant = no
+		fertility = 0.01
+		any_lover = {
+			is_female = no
+			fertility = 0.01
+			NOT = { any_spouse = { character = ROOT } }
+			NOT = { any_consort = { character = ROOT } }
+		}
+		# Interracial Fertility Check
+		OR = {
+			AND = {
+				OR = {
+					graphical_culture = anequinagfx
+					graphical_culture = pellitinegfx
+					graphical_culture = kapotungfx
+				}
+				OR = {
+					any_lover = { is_alive = yes graphical_culture = anequinagfx is_female = no }
+					any_lover = { is_alive = yes graphical_culture = pellitinegfx is_female = no }
+					any_lover = { is_alive = yes graphical_culture = kapotungfx is_female = no }
+				}
+			}
+			AND = {
+				graphical_culture = argoniangfx
+				any_lover = { is_alive = yes graphical_culture = argoniangfx is_female = no }
+			}
+			AND = {
+				graphical_culture = tangmogfx
+				any_lover = { is_alive = yes graphical_culture = tangmogfx is_female = no }
+			}
+			AND = {
+				graphical_culture = sloadgfx
+				any_lover = { is_alive = yes graphical_culture = sloadgfx is_female = no }
+			}
+			AND = {
+				NOT = { graphical_culture = argoniangfx }
+				NOT = { graphical_culture = anequinagfx }
+				NOT = { graphical_culture = pellitinegfx }
+				NOT = { graphical_culture = kapotungfx }
+				NOT = { graphical_culture = tangmogfx }
+				NOT = { graphical_culture = sloadgfx }
+				any_lover = {
+					is_alive = yes
+					NOT = { graphical_culture = argoniangfx }
+					NOT = { graphical_culture = anequinagfx }
+					NOT = { graphical_culture = pellitinegfx }
+					NOT = { graphical_culture = kapotungfx }
+					NOT = { graphical_culture = tangmogfx }
+					NOT = { graphical_culture = sloadgfx }
+					is_female = no
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 200
+		
+		modifier = { factor = 0.98 fertility = 0.02 }
+		modifier = { factor = 0.98 fertility = 0.04 }
+		modifier = { factor = 0.98 fertility = 0.06 }
+		modifier = { factor = 0.98 fertility = 0.08 }
+		modifier = { factor = 0.98 fertility = 0.10 }
+		modifier = { factor = 0.98 fertility = 0.12 }
+		modifier = { factor = 0.98 fertility = 0.14 }
+		modifier = { factor = 0.98 fertility = 0.16 }
+		modifier = { factor = 0.98 fertility = 0.18 }
+		modifier = { factor = 0.98 fertility = 0.20 }
+		modifier = { factor = 0.98 fertility = 0.22 }
+		modifier = { factor = 0.98 fertility = 0.24 }
+		modifier = { factor = 0.98 fertility = 0.26 }
+		modifier = { factor = 0.98 fertility = 0.28 }
+		modifier = { factor = 0.98 fertility = 0.30 }
+		modifier = { factor = 0.98 fertility = 0.32 }
+		modifier = { factor = 0.98 fertility = 0.34 }
+		modifier = { factor = 0.98 fertility = 0.36 }
+		modifier = { factor = 0.98 fertility = 0.38 }
+		modifier = { factor = 0.98 fertility = 0.40 }
+		modifier = { factor = 0.98 fertility = 0.42 }
+		modifier = { factor = 0.98 fertility = 0.44 }
+		modifier = { factor = 0.98 fertility = 0.46 }
+		modifier = { factor = 0.98 fertility = 0.48 }
+		modifier = { factor = 0.98 fertility = 0.50 }
+		modifier = { factor = 0.98 fertility = 0.52 }
+		modifier = { factor = 0.98 fertility = 0.54 }
+		modifier = { factor = 0.98 fertility = 0.56 }
+		modifier = { factor = 0.98 fertility = 0.58 }
+		modifier = { factor = 0.98 fertility = 0.60 }
+		modifier = { factor = 0.98 fertility = 0.62 }
+		modifier = { factor = 0.98 fertility = 0.64 }
+		modifier = { factor = 0.98 fertility = 0.66 }
+		modifier = { factor = 0.98 fertility = 0.68 }
+		modifier = { factor = 0.98 fertility = 0.70 }
+		modifier = { factor = 0.98 fertility = 0.72 }
+		modifier = { factor = 0.98 fertility = 0.74 }
+		modifier = { factor = 0.98 fertility = 0.76 }
+		modifier = { factor = 0.98 fertility = 0.78 }
+		modifier = { factor = 0.98 fertility = 0.80 }
+		modifier = { factor = 0.98 fertility = 0.82 }
+		modifier = { factor = 0.98 fertility = 0.84 }
+		modifier = { factor = 0.98 fertility = 0.86 }
+		modifier = { factor = 0.98 fertility = 0.88 }
+		modifier = { factor = 0.98 fertility = 0.90 }
+		modifier = { factor = 0.98 fertility = 0.92 }
+		modifier = { factor = 0.98 fertility = 0.94 }
+		modifier = { factor = 0.98 fertility = 0.96 }
+		modifier = { factor = 0.98 fertility = 0.98 }
+		modifier = { factor = 0.98 fertility = 1.00 }
+
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.02 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.04 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.06 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.08 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.10 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.12 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.14 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.16 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.18 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.20 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.22 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.24 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.26 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.28 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.30 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.32 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.34 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.36 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.38 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.40 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.42 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.44 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.46 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.48 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.50 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.52 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.54 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.56 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.58 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.60 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.62 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.64 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.66 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.68 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.70 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.72 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.74 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.76 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.78 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.80 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.82 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.84 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.86 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.88 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.90 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.92 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.94 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.96 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 0.98 } }
+		modifier = { factor = 0.98 any_lover = { is_female = no fertility = 1.00 } }
+	}
+	
+	immediate = {
+		random_lover = {
+			limit = {
+				is_female = no
+				fertility = 0.01
+				NOT = { any_spouse = { character = ROOT } }
+				NOT = { any_consort = { character = ROOT } }
+				# Interracial Fertility Check
+				OR = {
+					AND = {
+						OR = {
+							graphical_culture = anequinagfx
+							graphical_culture = pellitinegfx
+							graphical_culture = kapotungfx
+						}
+						OR = {
+							ROOT = { graphical_culture = anequinagfx }
+							ROOT = { graphical_culture = pellitinegfx }
+							ROOT = { graphical_culture = kapotungfx }
+						}
+					}
+					AND = {
+						graphical_culture = argoniangfx
+						ROOT = { graphical_culture = argoniangfx }
+					}
+					AND = {
+						graphical_culture = tangmogfx
+						ROOT = { graphical_culture = tangmogfx }
+					}
+					AND = {
+						graphical_culture = sloadgfx
+						ROOT = { graphical_culture = sloadgfx }
+					}
+					AND = {
+						NOT = { graphical_culture = argoniangfx }
+						NOT = { graphical_culture = anequinagfx }
+						NOT = { graphical_culture = pellitinegfx }
+						NOT = { graphical_culture = kapotungfx }
+						NOT = { graphical_culture = tangmogfx }
+						NOT = { graphical_culture = sloadgfx }
+						ROOT = {
+							NOT = { graphical_culture = argoniangfx }
+							NOT = { graphical_culture = anequinagfx }
+							NOT = { graphical_culture = pellitinegfx }
+							NOT = { graphical_culture = kapotungfx }
+							NOT = { graphical_culture = tangmogfx }
+							NOT = { graphical_culture = sloadgfx }
+						}
+					}
+				}
+			}
+			impregnate_cuckoo = ROOT
+		}
+	}
+}

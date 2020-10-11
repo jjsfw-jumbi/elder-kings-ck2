@@ -1,0 +1,2465 @@
+#Special Decisions for Daedric Interaction, REQUIRES JADE DRAGON DLC
+
+#Efforts to earn Daedric support
+
+offmap_decisions = {
+	chinese_grace_send_gift = {
+		only_playable = yes
+		button_name = offmap_gifts
+		ai_check_interval = 12
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+			}
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				scaled_wealth = { value = 1 min = 30 }
+				custom_tooltip = {
+					text = chinese_grace_send_gift_allow_tt
+					# NOT = { has_character_modifier = chinese_grace_send_gift_timer }
+				}
+				
+				trigger_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_azura } }
+					NOT = { has_character_modifier = oblivion_azura_sacrifice }
+					worships_azura = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_boethiah } }
+					NOT = { has_character_modifier = oblivion_boethiah_sacrifice }
+					worships_boethiah = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_clavicus } }
+					NOT = { has_character_modifier = oblivion_clavicus_sacrifice }
+					worships_clavicus = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hermaeus } }
+					NOT = { has_character_modifier = oblivion_hermaeus_sacrifice }
+					worships_hermaeus = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hircine } }
+					NOT = { has_character_modifier = oblivion_hircine_sacrifice }
+					worships_hircine = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_malacath } }
+					NOT = { has_character_modifier = oblivion_malacath_sacrifice }
+					worships_malacath = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mehrunes } }
+					NOT = { has_character_modifier = oblivion_mehrunes_sacrifice }
+					worships_mehrunes = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mephala } }
+					NOT = { has_character_modifier = oblivion_mephala_sacrifice }
+					worships_mephala = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_meridia } }
+					NOT = { has_character_modifier = oblivion_meridia_sacrifice }
+					worships_meridia = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_molag } }
+					NOT = { has_character_modifier = oblivion_molag_sacrifice }
+					worships_molag = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_namira } }
+					NOT = { has_character_modifier = oblivion_namira_sacrifice }
+					worships_namira = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_nocturnal } }
+					NOT = { has_character_modifier = oblivion_nocturnal_sacrifice }
+					worships_nocturnal = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sanguine } }
+					NOT = { has_character_modifier = oblivion_sanguine_sacrifice }
+					worships_sanguine = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sheogorath } }
+					NOT = { has_character_modifier = oblivion_sheogorath_sacrifice }
+					worships_sheogorath = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_vaermina } }
+					NOT = { has_character_modifier = oblivion_vaermina_sacrifice }
+					worships_vaermina = yes
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			# china_offmap_decisions_enabled_trigger = yes #leave in please, to be used if the tooltip for china_offmap_tribute_decisions_enabled_trigger changes and we need to reference things uniquely again
+			# china_offmap_tribute_decisions_enabled_trigger = yes
+		}
+		effect = {
+			FROM = {
+				sound_effect = china_grace_gain
+				scaled_wealth = { value = -1 min = -30 } #If this changes the ai chances should probably be adjusted
+				hidden_effect = { character_event = { id = ekardor.10 } }
+				
+				if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_azura } }
+					add_character_modifier = {
+						modifier = oblivion_azura_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_boethiah } }
+					add_character_modifier = {
+						modifier = oblivion_boethiah_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_clavicus } }
+					add_character_modifier = {
+						modifier = oblivion_clavicus_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hermaeus } }
+					add_character_modifier = {
+						modifier = oblivion_hermaeus_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hircine } }
+					add_character_modifier = {
+						modifier = oblivion_hircine_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_malacath } }
+					add_character_modifier = {
+						modifier = oblivion_malacath_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mehrunes } }
+					add_character_modifier = {
+						modifier = oblivion_mehrunes_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mephala } }
+					add_character_modifier = {
+						modifier = oblivion_mephala_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_meridia } }
+					add_character_modifier = {
+						modifier = oblivion_meridia_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_molag } }
+					add_character_modifier = {
+						modifier = oblivion_molag_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_namira } }
+					add_character_modifier = {
+						modifier = oblivion_namira_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_nocturnal } }
+					add_character_modifier = {
+						modifier = oblivion_nocturnal_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_peryite } }
+					add_character_modifier = {
+						modifier = oblivion_peryite_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sanguine } }
+					add_character_modifier = {
+						modifier = oblivion_sanguine_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sheogorath } }
+					add_character_modifier = {
+						modifier = oblivion_sheogorath_sacrifice
+						days = 1825
+					}
+				}
+				else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_vaermina } }
+					add_character_modifier = {
+						modifier = oblivion_vaermina_sacrifice
+						days = 1825
+					}
+				}
+				tooltip = {
+					piety = 25
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.25 # slow down
+			}
+			modifier = {
+				factor = 0.1
+				FROM = { NOT = { monthly_income = 2.5 } } #That's over 30 gold every 3 years
+			}
+		}
+	}
+	
+	chinese_grace_offer_artifact = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		third_party_filter = artifacts
+		ai_third_party_filter = artifacts
+		third_party = FROM
+		ai_check_interval = 6
+		show_third_party_potential = yes
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				
+				trigger_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_azura } }
+					worships_azura = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_boethiah } }
+					worships_boethiah = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_clavicus } }
+					worships_clavicus = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hermaeus } }
+					worships_hermaeus = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hircine } }
+					worships_hircine = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_malacath } }
+					worships_malacath = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mehrunes } }
+					worships_mehrunes = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mephala } }
+					worships_mephala = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_meridia } }
+					worships_meridia = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_molag } }
+					worships_molag = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_namira } }
+					worships_namira = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_nocturnal } }
+					worships_nocturnal = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sanguine } }
+					worships_sanguine = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sheogorath } }
+					worships_sheogorath = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_vaermina } }
+					worships_vaermina = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_ideal_masters } }
+					worships_ideal_masters = yes
+				}
+			}
+			# china_offmap_decisions_enabled_trigger = yes #leave in please, to be used if the tooltip for china_offmap_tribute_decisions_enabled_trigger changes and we need to reference things uniquely again
+			#china_offmap_tribute_decisions_enabled_trigger = yes
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = send_artifact_potential_tt
+					is_indestructible = no
+					NOR = {
+						has_artifact_flag = unique
+						has_artifact_flag = daedric_artifact
+						has_artifact_flag = aedric_artifact
+						has_artifact_flag = artifact_is_being_destroyed #An artifact being sold or sacrificed is a no-go
+						has_artifact_flag = force_sell #This artifact can only be sold
+						has_artifact_flag = summoned_creature #No more farming cats (or scamps, or what have you!)
+					}
+				}
+			}
+		}
+		
+		third_party_allow = {
+			
+		}
+		
+		third_party_score = {
+			factor = 100
+			
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					quality == 2
+				}
+			}
+			
+			additive_modifier = {
+				value = 100
+				FROMFROM = {
+					quality == 3
+				}
+			}
+			
+			additive_modifier = {
+				value = 200
+				FROMFROM = {
+					quality == 4
+				}
+			}
+			additive_modifier = {
+				value = 300
+				FROMFROM = {
+					quality >= 5
+				}
+			}
+			additive_modifier = {
+				value = -50
+				FROMFROM = {
+					quality == 1
+					OR = {
+						has_artifact_flag = mount
+						has_artifact_flag = pet
+						has_artifact_flag = book
+					}
+				}
+			}
+			additive_modifier = {
+				value = -100
+				FROMFROM = {
+					quality == 2
+					OR = {
+						has_artifact_flag = mount
+						has_artifact_flag = pet
+						has_artifact_flag = book
+					}
+				}
+			}
+			additive_modifier = {
+				value = -150
+				FROMFROM = {
+					quality == 3
+					OR = {
+						has_artifact_flag = mount
+						has_artifact_flag = pet
+						has_artifact_flag = book
+					}
+				}
+			}
+			additive_modifier = {
+				value = -250
+				FROMFROM = {
+					quality == 4
+					OR = {
+						has_artifact_flag = mount
+						has_artifact_flag = pet
+						has_artifact_flag = book
+					}
+				}
+			}
+			additive_modifier = {
+				value = -350
+				FROMFROM = {
+					quality >= 5
+					OR = {
+						has_artifact_flag = mount
+						has_artifact_flag = pet
+						has_artifact_flag = book
+					}
+				}
+			}
+			additive_modifier = {
+				value = -50
+				FROMFROM = {
+					has_artifact_flag = stolen_artifact
+				}
+			}
+		}
+	
+		effect = {
+			FROMFROM = {
+				set_artifact_flag = artifact_is_being_destroyed
+			}
+			FROM = {
+				show_scope_change = no
+				add_offmap_currency = {
+					offmap = ROOT
+					value = local_third_party_score
+				}
+			}
+			
+			FROM = {
+				sound_effect = china_grace_gain
+				
+			}
+			FROMFROM = {
+				hidden_effect = { unsafe_destroy_artifact = yes }
+			}
+
+			hidden_effect = {
+				FROM = {
+					set_character_flag = jd_gifting_artifact
+					character_event = { id = ekardor.15 }
+				}
+			}
+		}
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5
+				FROMFROM = {
+					quality >= 4
+				}
+			}
+			modifier = { #Super-high quality artifacts don't get offered. Characters also don't offer if they have few artifacts, or if they're bankrupt
+				factor = 0
+				OR = {
+					FROMFROM = {
+						quality > 8
+					}
+					FROMFROM = {
+						has_artifact_flag = force_sell #This artifact must be sold instead
+					}
+					FROMFROM = {
+						has_artifact_flag = mount #AI will not sacrifice mounts
+					}
+					FROMFROM = {
+						has_artifact_flag = pet #AI will not sacrifice pets
+					}
+					FROMFROM = {
+						has_artifact_flag = book #AI will not sacrifice books
+					}
+					num_of_artifacts < 4
+					NOT = { wealth = -25 }
+				}
+			}
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	#Sacrifice Prisoner - Based on chinese_grace_offer_eunuch decision
+	chinese_grace_offer_eunuch = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		third_party_filter = home_court
+		ai_third_party_filter = home_court
+		third_party = FROM
+		ai_check_interval = 36
+		show_third_party_potential = yes
+
+		potential = {
+			OR = {
+				#is_offmap_tag = oblivion_azura - Human sacrifice is beyond her interests
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				#is_offmap_tag = oblivion_meridia - Has her own version of this decision
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal #- Likes thieving, not executing -- Actually Ev says she's cool with it so let's go
+				is_offmap_tag = oblivion_peryite
+				#is_offmap_tag = oblivion_sanguine - Human sacrifice is DEFINITELY a party foul
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				
+				### Hiding the "must officially worship X" behind a hidden tooltip left some players wondering why it didn't work
+				# Bless the trigger_if
+				# We can leave all the Daedric Princes, even those who can't sacrifice people - they're already filtered out in the potential block
+				trigger_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_azura } }
+					officially_worships_azura = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_boethiah } }
+					officially_worships_boethiah = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_clavicus } }
+					officially_worships_clavicus = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hermaeus } }
+					officially_worships_hermaeus = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_hircine } }
+					officially_worships_hircine = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_malacath } }
+					officially_worships_malacath = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mehrunes } }
+					officially_worships_mehrunes = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_mephala } }
+					officially_worships_mephala = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_meridia } }
+					officially_worships_meridia = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_molag } }
+					officially_worships_molag = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_namira } }
+					officially_worships_namira = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_nocturnal } }
+					officially_worships_nocturnal = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sanguine } }
+					officially_worships_sanguine = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_sheogorath } }
+					officially_worships_sheogorath = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_vaermina } }
+					officially_worships_vaermina = yes
+				}
+				trigger_else_if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_ideal_masters } }
+					OR = {
+						religion = ideal_masters
+						AND = {
+							trait = necromancer
+							OR = {
+								religion = king_of_worms_cult
+								religion = winter_wind
+							}
+						}
+					}
+				}
+			}
+			# china_offmap_decisions_enabled_trigger = yes #leave in please, to be used if the tooltip for china_offmap_tribute_decisions_enabled_trigger changes and we need to reference things uniquely again
+			#china_offmap_tribute_decisions_enabled_trigger = yes
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+				prisoner = yes
+				is_adult = yes
+				NOT = { is_heir = yes }
+				NOT = { has_character_flag = he_ded }
+			}
+		}
+		
+		third_party_allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				any_courtier = {
+					character = FROMFROM
+				}
+			}
+			FROMFROM = {
+				NOR = {
+					has_opinion_modifier = { who = FROM modifier = opinion_summoner }
+					has_opinion_modifier = { who = FROM modifier = opinion_bound_dremora }
+				}
+			}
+		}
+		
+		third_party_score = {
+			factor = 25
+			
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 8					
+					hidden_trigger = {
+						NOT = { diplomacy = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 12					
+					hidden_trigger = {
+						NOT = { diplomacy = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 16				
+					hidden_trigger = {
+						NOT = { diplomacy = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					martial = 8					
+					hidden_trigger = {
+						NOT = { martial = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					martial = 12					
+					hidden_trigger = {
+						NOT = { martial = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					martial = 16				
+					hidden_trigger = {
+						NOT = { martial = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					martial = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 8					
+					hidden_trigger = {
+						NOT = { stewardship = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 12					
+					hidden_trigger = {
+						NOT = { stewardship = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 16				
+					hidden_trigger = {
+						NOT = { stewardship = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 8					
+					hidden_trigger = {
+						NOT = { intrigue = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 12					
+					hidden_trigger = {
+						NOT = { intrigue = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 16				
+					hidden_trigger = {
+						NOT = { intrigue = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					learning = 8					
+					hidden_trigger = {
+						NOT = { learning = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					learning = 12					
+					hidden_trigger = {
+						NOT = { learning = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					learning = 16				
+					hidden_trigger = {
+						NOT = { learning = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					learning = 20
+				}
+			}
+			additive_modifier = {
+				value = 25
+				FROMFROM = {
+					show_scope_change = no
+					tier == BARON
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = {
+					show_scope_change = no
+					tier == COUNT
+				}
+			}
+			additive_modifier = {
+				value = 150
+				FROMFROM = {
+					show_scope_change = no
+					tier == DUKE
+				}
+			}
+			additive_modifier = {
+				value = 400
+				FROMFROM = {
+					show_scope_change = no
+					tier == KING
+				}
+			}
+			additive_modifier = {
+				value = 1000
+				FROMFROM = {
+					show_scope_change = no
+					tier == EMPEROR
+				}
+			}
+			additive_modifier = {
+				value = 2500
+				FROMFROM = {
+					show_scope_change = no
+					trait = dragonborn
+				}
+			}
+			additive_modifier = {
+				value = 250
+				FROMFROM = {
+					show_scope_change = no
+					trait = dragonborn_descendant
+				}
+			}
+			additive_modifier = {
+				value = 100
+				FROMFROM = {
+					show_scope_change = no
+					has_bloodline = yes
+				}
+			}
+		}
+	
+		effect = {
+			FROM = {
+				sound_effect = china_grace_gain
+				if = {
+					limit = { NOT = { has_character_flag = brotherhood_qualified } }
+					custom_tooltip = {
+						text = brotherhood_qualification_notification
+						hidden_tooltip = {
+							set_character_flag = brotherhood_qualified
+						}
+					}
+				}
+				save_event_target_as = oblivion_sacrifice_killer
+			}
+			FROMFROM = {
+				set_character_flag = he_ded
+				character_event = { id = ekardor.20 }
+			}
+			
+			FROM = {
+				show_scope_change = no
+				add_offmap_currency = {
+					offmap = ROOT
+					value = local_third_party_score
+				}
+				if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = oblivion_ideal_masters
+						}
+					}
+					oblivion_ideal_masters = {
+						offmap_ruler = {
+							change_variable = { which = offmap_souls which = local_third_party_score }
+							change_variable = { which = souls_from_sacrifice which = local_third_party_score }
+						}
+					}
+				}
+			}
+		}
+	
+
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.3 # slow down
+			}
+		}
+	}
+	oblivion_sacrifice_undead = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		third_party_filter = home_court
+		ai_third_party_filter = home_court
+		third_party = FROM
+		ai_check_interval = 36
+		show_third_party_potential = yes
+
+		potential = {
+			is_offmap_tag = oblivion_meridia #All other Princes have the normal decision
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				hidden_tooltip = {
+					AND = {
+						ROOT = { is_offmap_tag = oblivion_meridia }
+						officially_worships_meridia = yes
+					}
+				}
+			}
+			# china_offmap_decisions_enabled_trigger = yes #leave in please, to be used if the tooltip for china_offmap_tribute_decisions_enabled_trigger changes and we need to reference things uniquely again
+			#china_offmap_tribute_decisions_enabled_trigger = yes
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+				prisoner = yes
+				is_adult = yes
+				is_undead = yes
+				NOT = { is_heir = yes }
+				NOT = { has_character_flag = he_ded }
+			}
+		}
+		
+		third_party_allow = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				NOR = {
+					has_opinion_modifier = { who = FROM modifier = opinion_summoner }
+					has_opinion_modifier = { who = FROM modifier = opinion_bound_dremora }
+				}
+			}
+		}
+		
+		third_party_score = {
+			factor = 100
+			
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 8					
+					hidden_trigger = {
+						NOT = { diplomacy = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 12					
+					hidden_trigger = {
+						NOT = { diplomacy = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 16				
+					hidden_trigger = {
+						NOT = { diplomacy = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					diplomacy = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					martial = 8					
+					hidden_trigger = {
+						NOT = { martial = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					martial = 12					
+					hidden_trigger = {
+						NOT = { martial = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					martial = 16				
+					hidden_trigger = {
+						NOT = { martial = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					martial = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 8					
+					hidden_trigger = {
+						NOT = { stewardship = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 12					
+					hidden_trigger = {
+						NOT = { stewardship = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 16				
+					hidden_trigger = {
+						NOT = { stewardship = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					stewardship = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 8					
+					hidden_trigger = {
+						NOT = { intrigue = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 12					
+					hidden_trigger = {
+						NOT = { intrigue = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 16				
+					hidden_trigger = {
+						NOT = { intrigue = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					intrigue = 20
+				}
+			}
+			additive_modifier = {
+				value = 5
+				FROMFROM = {
+					show_scope_change = no
+					learning = 8					
+					hidden_trigger = {
+						NOT = { learning = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 10
+				FROMFROM = {
+					show_scope_change = no
+					learning = 12					
+					hidden_trigger = {
+						NOT = { learning = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					learning = 16				
+					hidden_trigger = {
+						NOT = { learning = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = {
+					show_scope_change = no
+					learning = 20
+				}
+			}
+			additive_modifier = {
+				value = 25
+				FROMFROM = {
+					show_scope_change = no
+					tier == BARON
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = {
+					show_scope_change = no
+					tier == COUNT
+				}
+			}
+			additive_modifier = {
+				value = 150
+				FROMFROM = {
+					show_scope_change = no
+					tier == DUKE
+				}
+			}
+			additive_modifier = {
+				value = 400
+				FROMFROM = {
+					show_scope_change = no
+					tier == KING
+				}
+			}
+			additive_modifier = {
+				value = 1000
+				FROMFROM = {
+					show_scope_change = no
+					tier == EMPEROR
+				}
+			}
+			additive_modifier = {
+				value = 2500
+				FROMFROM = {
+					show_scope_change = no
+					trait = dragonborn
+				}
+			}
+			additive_modifier = {
+				value = 250
+				FROMFROM = {
+					show_scope_change = no
+					trait = dragonborn_descendant
+				}
+			}
+			additive_modifier = {
+				value = 100
+				FROMFROM = {
+					show_scope_change = no
+					has_bloodline = yes
+				}
+			}
+			additive_modifier = {
+				value = 150
+				FROMFROM = {
+					show_scope_change = no
+					OR = {
+						trait = lich
+						has_character_modifier = pureblood_vampire
+					}
+				}
+			}
+		}
+	
+		effect = {
+			FROM = {
+				sound_effect = china_grace_gain
+			}
+			FROMFROM = {
+				hidden_tooltip = {
+					mother = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = FROM
+						}
+					}
+					father = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = FROM
+						}
+					}
+					spouse = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = FROM
+						}
+					}
+					any_child = {
+						opinion = {
+							modifier = opinion_killed_close_kin
+							who = FROM
+						}
+					}
+					if = {
+						limit = {
+							FROM = {
+								NOT = { dynasty = FROMFROM }
+								NOT = { sibling = FROMFROM }
+							}
+						}
+						any_sibling = {
+							opinion = {
+								modifier = opinion_killed_close_kin
+								who = FROM
+							}
+						}
+						any_dynasty_member = {
+							opinion = {
+								modifier = opinion_mutilated_family
+								who = FROM
+							}
+						}
+					}
+				}
+				set_character_flag = he_ded
+				character_event = { id = ekardor.20 }
+			}
+			
+			FROM = {
+				show_scope_change = no
+				add_offmap_currency = {
+					offmap = oblivion_meridia
+					value = local_third_party_score
+				}
+			}
+		}
+	
+
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.3 # slow down
+			}
+		}
+	}
+
+	# Mass Sacrifice - so you don't have to sacrifice your 30 prisoners one at a time
+	oblivion_mass_sacrifice = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		ai_check_interval = 36
+
+		potential = {
+			OR = {
+				#is_offmap_tag = oblivion_azura - Human sacrifice is beyond her interests
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				#is_offmap_tag = oblivion_meridia - Has her own version of this decision
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal #- Likes thieving, not executing -- Actually Ev says she's cool with it so let's go
+				is_offmap_tag = oblivion_peryite
+				#is_offmap_tag = oblivion_sanguine - Human sacrifice is DEFINITELY a party foul
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+	
+		from_potential = {
+			ai = no
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			NOT = { has_character_flag = oblivion_mass_sacrifice_ongoing }
+			
+			any_courtier = {
+				prisoner = yes
+				is_adult = yes
+				NOT = { is_heir = yes }
+				NOT = { has_character_flag = he_ded }
+				NOT = { has_character_flag = saved_from_mass_sacrifice }
+				
+				# Can't be a summonded entity, obviously
+				NOR = {
+					has_opinion_modifier = { who = ROOT modifier = opinion_summoner }
+					has_opinion_modifier = { who = ROOT modifier = opinion_bound_dremora }
+				}
+				
+				# Can't have already been taken into account
+				NOT = { has_character_flag = mass_sacrifice_counted }
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				hidden_tooltip = {
+					OR = {
+						# AND = {
+							# ROOT = { is_offmap_tag = oblivion_azura }
+							# officially_worships_azura = yes
+						# }
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_boethiah }
+							officially_worships_boethiah = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_clavicus }
+							officially_worships_clavicus = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_hermaeus }
+							officially_worships_hermaeus = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_hircine }
+							officially_worships_hircine = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_malacath }
+							officially_worships_malacath = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_mehrunes }
+							officially_worships_mehrunes = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_mephala }
+							officially_worships_mephala = yes
+						}
+						# AND = {
+							# ROOT = { is_offmap_tag = oblivion_meridia }
+							# officially_worships_meridia = yes
+						# }
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_molag }
+							officially_worships_molag = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_namira }
+							officially_worships_namira = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_nocturnal }
+							officially_worships_nocturnal = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_peryite }
+							officially_worships_peryite = yes
+						}
+						# AND = {
+							# ROOT = { is_offmap_tag = oblivion_sanguine }
+							# officially_worships_sanguine = yes
+						# }
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_sheogorath }
+							officially_worships_sheogorath = yes
+						}
+						AND = {
+							ROOT = { is_offmap_tag = oblivion_vaermina }
+							officially_worships_vaermina = yes
+						}
+						AND = {
+							ROOT = {
+								is_offmap_tag = oblivion_ideal_masters
+							}
+							OR = {
+								religion = ideal_masters
+								AND = {
+									trait = necromancer
+									OR = {
+										religion = king_of_worms_cult
+										religion = winter_wind
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			# china_offmap_decisions_enabled_trigger = yes #leave in please, to be used if the tooltip for china_offmap_tribute_decisions_enabled_trigger changes and we need to reference things uniquely again
+			#china_offmap_tribute_decisions_enabled_trigger = yes
+		}
+		
+		# TODO: third_party_allow => all prisoners that can be sacrificed are selected, save for those the player decides to kee
+	
+		effect = {
+			# FROM has 30 days to manually select prisoners they don't want to sacrifice
+			FROM = {
+				show_scope_change = no
+				
+				set_character_flag = oblivion_mass_sacrifice_ongoing
+				
+				custom_tooltip = { text = OBLIVION_MASS_SACRIFICE_PROTECT_TARGET_CT }
+				
+				if = {
+					limit = { multiplayer = yes	}
+					custom_tooltip = { text = OBLIVION_MASS_SACRIFICE_TIMER_MP_CT }
+					character_event = { id = ekardor.30 days = 30 }
+				}
+				else = {
+					custom_tooltip = { text = OBLIVION_MASS_SACRIFICE_TIMER_SP_CT }
+					character_event = { id = ekardor.30 days = 7 }
+				}
+			}
+		}
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0 # AI will not use that decision
+			}
+		}
+	}
+}
+
+
+#Daedric Boons
+
+offmap_decisions = {
+	#Summon Dremora Kynmarcher - As long as the Prince isn't isolationist, you can summon this one
+	oblivion_dremora_kynmarcher = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				
+				has_offmap_currency = { offmap = ROOT value = 750 }
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				add_offmap_currency = {
+					offmap = ROOT
+					value = -750
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekardor.100 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+			modifier = {
+				FROM = {
+					has_character_flag = wannabe_herald
+				}
+				factor = 0
+			}
+		}
+	}
+	
+	#Daedric Protection - Can be used if the Prince is not in a Cataclysm
+	oblivion_daedric_protection = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			NOT = { has_character_modifier = daedric_protection }
+			FROM = {
+				show_scope_change = no
+				
+				has_offmap_currency = { offmap = ROOT value = 750 }
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOT = {
+				daedra_is_cataclysm = yes
+			}
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				add_offmap_currency = {
+					offmap = ROOT
+					value = -750
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekardor.110 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+			modifier = {
+				FROM = {
+					has_character_flag = wannabe_herald
+				}
+				factor = 0
+			}
+		}
+	}
+	
+	#Treasure - Prince will send you gold or an artifact, can be used so long as the Prince isn't Isolationist or Cataclysm
+	oblivion_treasure = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				
+				trigger_if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = oblivion_ideal_masters
+						}
+					}
+					
+					has_offmap_currency = { offmap = ROOT value = 750 }
+					oblivion_ideal_masters_no_debt = yes
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 750 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOT = {
+				daedra_is_cataclysm = yes
+			}
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				add_offmap_currency = {
+					offmap = ROOT
+					value = -750
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekardor.60 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+			modifier = {
+				FROM = {
+					has_character_flag = wannabe_herald
+				}
+				factor = 0
+			}
+		}
+	}
+	
+	#Daedric Training - Extremely overpriced permanent stat increase, can be used so long as the Prince isn't Isolationist or Cataclysm
+	oblivion_daedric_training = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				
+				trigger_if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = oblivion_ideal_masters
+						}
+					}
+					
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+					oblivion_ideal_masters_no_debt = yes
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 5000 }
+				}
+					
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOT = {
+				daedra_is_cataclysm = yes
+			}
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				add_offmap_currency = {
+					offmap = ROOT
+					value = -5000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					if = {
+						limit = { ai = yes }
+						random_list = {
+							20 = { change_diplomacy = 1 }
+							20 = { change_martial = 1 }
+							20 = { change_stewardship = 1 }
+							20 = { change_intrigue = 1 }
+							20 = { change_learning = 1 }
+						}
+					}
+					else = {
+						character_event = { id = ekardor.50 }
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+			modifier = {
+				FROM = {
+					has_character_flag = wannabe_herald
+				}
+				factor = 0
+			}
+		}
+	}
+	
+	#Lesser Daedric Horde - Can only be used if the Prince is Interventionist, and not in a Cataclysm or Convalescing
+	oblivion_daedric_horde_lesser = {
+		only_playable = yes
+		button_name = offmap_boons
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			OR = {
+				war = yes
+				ai = no
+			}
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				
+				has_offmap_currency = { offmap = ROOT value = 2500 }
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			daedra_is_interventionist = yes
+			NOR = {
+				daedra_is_cataclysm = yes
+				daedra_is_convalescing = yes
+			}
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				add_offmap_currency = {
+					offmap = ROOT
+					value = -2500
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					character_event = { id = ekardor.120 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+			modifier = {
+				FROM = {
+					has_character_flag = wannabe_herald
+				}
+				factor = 0
+			}
+		}
+	}
+	
+	#Daedric Invasion - Can only be used if the Prince is not Aloof, and not in a Cataclysm or Convalescing
+	oblivion_daedric_invasion = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				is_offmap_tag = oblivion_meridia
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+			}
+			NOR = { #Only one major crisis at a time
+				has_global_flag = oblivion_invasion_azura
+				has_global_flag = oblivion_invasion_boethiah
+				has_global_flag = oblivion_invasion_clavicus
+				has_global_flag = oblivion_invasion_hermaeus
+				has_global_flag = oblivion_invasion_hircine
+				has_global_flag = oblivion_invasion_malacath
+				has_global_flag = oblivion_invasion_mehrunes
+				has_global_flag = oblivion_invasion_mephala
+				has_global_flag = oblivion_invasion_meridia
+				has_global_flag = oblivion_invasion_molag
+				has_global_flag = oblivion_invasion_namira
+				has_global_flag = oblivion_invasion_nocturnal
+				has_global_flag = oblivion_invasion_peryite
+				has_global_flag = oblivion_invasion_sanguine
+				has_global_flag = oblivion_invasion_sheogorath
+				has_global_flag = oblivion_invasion_vaermina
+			}
+			FROM = {
+				NOR = {
+					has_character_flag = latent_daedric_herald #This is if the person has taken the decision but hasn't gotten anything out of it yet
+					has_character_flag = daedric_herald
+				}
+				NOT = {
+					event_target:lit_dragonfires = { #Obviously you can't summon a Daedric horde while the Dragonfires are burning
+						is_alive = yes
+					}
+				}
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				
+				has_offmap_currency = { offmap = ROOT value = 25000 }
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOR = {
+				daedra_is_isolationist = yes
+				daedra_is_cataclysm = yes
+				daedra_is_convalescing = yes
+			}
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				add_offmap_currency = {
+					offmap = ROOT
+					value = -25000
+				}
+			}
+			hidden_effect = {
+				FROM = {
+					#set_china_boon_cd_effect = yes
+					set_character_flag = latent_daedric_herald
+					long_character_event = { id = ekardor.200 }
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				factor = 100
+				FROM = { has_character_flag = wannabe_herald }
+			}
+			modifier = {
+				FROM = {
+					NOT = { has_grace_major_trigger = yes }
+				}
+				factor = 0.1
+			}
+		}
+	}
+	
+	#Undo Lich Decay - Liches decay over time until they become Draugr, some Daedric Princes will reverse this
+	oblivion_lich_decay_cure = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 1
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			holy_order = no
+			is_landed = yes
+			is_adult = yes
+			trait = lich
+			NOR = {
+				has_character_flag = curing_lich_decay
+				has_character_flag = perpetual_lich_decay
+			}
+		}
+
+		potential = {
+			OR = {
+				is_offmap_tag = oblivion_azura
+				is_offmap_tag = oblivion_boethiah
+				is_offmap_tag = oblivion_clavicus #Discounted
+				is_offmap_tag = oblivion_hermaeus
+				is_offmap_tag = oblivion_hircine
+				is_offmap_tag = oblivion_malacath
+				is_offmap_tag = oblivion_mehrunes
+				is_offmap_tag = oblivion_mephala
+				#is_offmap_tag = oblivion_meridia - Meridia does not like Liches one bit
+				is_offmap_tag = oblivion_molag
+				is_offmap_tag = oblivion_namira #Special
+				is_offmap_tag = oblivion_nocturnal
+				is_offmap_tag = oblivion_peryite #Discounted
+				is_offmap_tag = oblivion_sanguine
+				is_offmap_tag = oblivion_sheogorath
+				is_offmap_tag = oblivion_vaermina
+				is_offmap_tag = oblivion_ideal_masters
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				OR = {
+					has_character_modifier = lich_decay_1
+					has_character_modifier = lich_decay_2
+				}
+				show_scope_change = no
+				
+				trigger_if = {
+					limit = {
+						ROOT = {
+							OR = {
+								is_offmap_tag = oblivion_clavicus
+								is_offmap_tag = oblivion_peryite
+							}
+						}
+					}
+					
+					has_offmap_currency = { offmap = ROOT value = 500 }
+				}
+				
+				trigger_else_if = {
+					limit = {
+						ROOT = {
+							is_offmap_tag = oblivion_ideal_masters
+						}
+					}
+					has_offmap_currency = { offmap = ROOT value = 500 }
+					oblivion_ideal_masters_no_debt = yes
+				}
+				
+				trigger_else = {
+					has_offmap_currency = { offmap = ROOT value = 1500 }
+				}
+				
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+			can_get_boon_from_daedra = yes
+			NOR = {
+				daedra_is_isolationist = yes
+				daedra_is_cataclysm = yes
+			}
+			# china_offmap_boon_decisions_enabled_trigger = yes
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				
+				if = {
+					limit = {
+						ROOT = {
+							OR = {
+								is_offmap_tag = oblivion_clavicus
+								is_offmap_tag = oblivion_peryite
+								is_offmap_tag = oblivion_ideal_masters
+							}
+						}
+					}
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -500
+					}
+				}
+				
+				else = {
+					add_offmap_currency = {
+						offmap = ROOT
+						value = -1500
+					}
+				}
+			}
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						ROOT = {
+							NOR = {
+								is_offmap_tag = oblivion_clavicus
+								is_offmap_tag = oblivion_namira
+								is_offmap_tag = oblivion_peryite
+							}
+						}
+					}
+					FROM = {
+						set_character_flag = curing_lich_decay
+						character_event = { id = ekardor.130 }
+					}
+				}
+				if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_clavicus } }
+					FROM = {
+						set_character_flag = curing_lich_decay
+						character_event = { id = ekardor.131 }
+					}
+				}
+				if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_namira } }
+					FROM = {
+						set_character_flag = curing_lich_decay
+						character_event = { id = ekardor.133 }
+					}
+				}
+				if = {
+					limit = { ROOT = { is_offmap_tag = oblivion_peryite } }
+					FROM = {
+						set_character_flag = curing_lich_decay
+						character_event = { id = ekardor.135 }
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5 # slow down
+			}
+			modifier = {
+				FROM = {
+					has_character_flag = wannabe_herald
+				}
+				factor = 0
+			}
+		}
+	}
+}
+
+###
+targetted_decisions = {
+	mass_sacrifice_protect = { # This prisoner shouldn't be targetted by the mass sacrifice
+		only_playable = yes
+		filter = court
+		
+		ai_check_interval = 12
+		
+		from_potential = {
+			ai = no
+			is_ruler = yes
+			has_character_flag = oblivion_mass_sacrifice_ongoing
+		}
+		potential = {
+			prisoner = yes
+			is_adult = yes
+			NOT = { is_heir = yes }
+			NOT = { has_character_flag = he_ded }
+			NOT = { has_character_flag = saved_from_mass_sacrifice }
+			
+			# Can't be a summonded entity, obviously
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_summoner }
+				has_opinion_modifier = { who = ROOT modifier = opinion_bound_dremora }
+			}
+			
+			# Can't have already been taken into account
+			NOT = { has_character_flag = mass_sacrifice_counted }
+		}
+		allow = {
+		}
+		effect = {
+			set_character_flag = saved_from_mass_sacrifice
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	mass_sacrifice_unprotect = { # This prisoner should be targetted by the mass sacrifice
+		only_playable = yes
+		filter = court
+		
+		ai_check_interval = 12
+		
+		from_potential = {
+			ai = no
+			is_ruler = yes
+			has_character_flag = oblivion_mass_sacrifice_ongoing
+		}
+		potential = {
+			prisoner = yes
+			is_adult = yes
+			NOT = { is_heir = yes }
+			NOT = { has_character_flag = he_ded }
+			has_character_flag = saved_from_mass_sacrifice
+			
+			# Can't be a summonded entity, obviously
+			NOR = {
+				has_opinion_modifier = { who = ROOT modifier = opinion_summoner }
+				has_opinion_modifier = { who = ROOT modifier = opinion_bound_dremora }
+			}
+			
+			# Can't have already been taken into account
+			NOT = { has_character_flag = mass_sacrifice_counted }
+		}
+		allow = {
+		}
+		effect = {
+			clr_character_flag = saved_from_mass_sacrifice
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}

@@ -1,0 +1,3210 @@
+###############
+## Alchemy Job Action
+###############
+#126500-126699
+
+#NOTE FROM ETIENNE: 
+#These events are deprecated and no longer in use EXCEPT for 126567
+#126567 is the event that returns polymorphed characters to their original state
+
+#Common Potions ~ MTTH of 360
+#Fertility Potion, Boosts Fertility for a limited amount of time.
+# character_event = {
+	# id = 126500
+	# title = alchemy1t
+	# desc = alchemy1d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126501
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126501
+	# desc = alchemy2d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# trigger = {
+			# NOT = { has_character_modifier = potion_fertility }
+		# }
+		# custom_tooltip = {
+			# text = drinkuptt
+
+			# random_list = {
+				# 66 = {
+					# modifier = {
+						# factor = 0
+						# NOT = { trait = paranoid }
+					# }
+					# add_character_modifier = {
+						# name = potion_fertility
+						# duration = 1095
+					# }
+				# }
+				# 34 = {
+					# modifier = {
+						# factor = 0.8
+						# religion = daedra_vaermina
+					# }
+					# modifier = {
+						# factor = 3
+						# NOT = { learning = 1 }
+					# }		
+					# modifier = {
+						# factor = 2
+						# NOT = { learning = 2 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 3 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 4 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 5 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 6 }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# NOT = { learning = 7 }
+					# }
+					# modifier = {
+						# factor = 1.125
+						# NOT = { learning = 8 }
+					# }
+					# modifier = {
+						# factor = 1.1
+						# NOT = { learning = 9 }
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 11
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 12
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 13
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 14
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 15
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 16
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 17
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 18
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 19
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 20
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 21
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 22
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 23
+					# }
+					# modifier = {
+						# factor = 0.8
+						# learning = 24
+					# }
+					# modifier = {
+						# factor = 0.75
+						# learning = 25
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = diligent
+					# }
+					# modifier = {
+						# factor = 0.85
+						# trait = genius
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = quick
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = perceptive
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = mystic
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = gardener
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = scholar
+					# }
+					# modifier = {
+						# factor = 1.25
+						# trait = arbitrary
+					# }
+					# modifier = {
+						# factor = 1.1
+						# trait = reckless
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slow
+					# }
+					# modifier = {
+						# factor = 2.5
+						# trait = imbecile
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slothful
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slovenly
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = maimed
+					# }
+					# modifier = {
+						# factor = 1.15
+						# OR = {
+							# trait = blind
+							# trait = blinded
+						# }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = absent_minded
+					# }
+					# hidden_tooltip = { character_event = { id = 126502 days = 3 } }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = formypartner
+		# trigger = {
+			# any_spouse = {
+				# NOT = { has_character_modifier = potion_fertility }
+			# }
+		# }
+		# custom_tooltip = {
+			# text = formypartnertt
+			# hidden_tooltip = {
+				# random_spouse = {
+					# limit = {
+						# NOT = { has_character_modifier = potion_fertility }
+					# }
+					# add_character_modifier = {
+						# name = potion_fertility
+						# duration = 1095
+					# }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126502
+	# desc = alchemy3d
+	# picture = GFX_evt_bad_news
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = alchemy3o
+		# if = {
+			# limit = {
+				# trait = hedonist
+			# }
+			# remove_trait = hedonist
+		# }
+		# if = {
+			# limit = {
+				# trait = lustful
+			# }
+			# remove_trait = lustful
+		# }
+		# random = {
+			# chance = 33
+			# add_trait = chaste
+		# }
+	# }
+# }
+# #Health Potion, Boosts Health for a limited amount of time.
+# character_event = {
+	# id = 126505
+	# title = alchemy5t
+	# desc = alchemy5d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126506
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126506
+	# desc = alchemy6d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# random_list = {
+				# 76 = {
+					# add_character_modifier = {
+						# name = potion_health
+						# duration = 2190
+					# }
+				# }
+				# 24 = {
+					# modifier = {
+						# factor = 0.8
+						# religion = daedra_vaermina
+					# }
+					# modifier = {
+						# factor = 3
+						# NOT = { learning = 1 }
+					# }		
+					# modifier = {
+						# factor = 2
+						# NOT = { learning = 2 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 3 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 4 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 5 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 6 }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# NOT = { learning = 7 }
+					# }
+					# modifier = {
+						# factor = 1.125
+						# NOT = { learning = 8 }
+					# }
+					# modifier = {
+						# factor = 1.1
+						# NOT = { learning = 9 }
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 11
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 12
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 13
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 14
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 15
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 16
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 17
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 18
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 19
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 20
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 21
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 22
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 23
+					# }
+					# modifier = {
+						# factor = 0.8
+						# learning = 24
+					# }
+					# modifier = {
+						# factor = 0.75
+						# learning = 25
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = diligent
+					# }
+					# modifier = {
+						# factor = 0.85
+						# trait = genius
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = quick
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = perceptive
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = mystic
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = gardener
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = scholar
+					# }
+					# modifier = {
+						# factor = 1.25
+						# trait = arbitrary
+					# }
+					# modifier = {
+						# factor = 1.1
+						# trait = reckless
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slow
+					# }
+					# modifier = {
+						# factor = 2.5
+						# trait = imbecile
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slothful
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slovenly
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = maimed
+					# }
+					# modifier = {
+						# factor = 1.15
+						# OR = {
+							# trait = blind
+							# trait = blinded
+						# }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = absent_minded
+					# }
+					# hidden_tooltip = { character_event = { id = 126507 days = 3 } }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126507
+	# desc = alchemy7d
+	# picture = GFX_evt_bad_news
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = damn
+		# hidden_tooltip = {
+			# random = {
+				# chance = 25
+				# give_ill_effect = yes
+			# }
+		# }
+	# }
+# }
+# #Restore Magicka, Restores some Magicka
+# character_event = {
+	# id = 126510
+	# title = alchemy10tmagicka
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126506
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126511
+	# desc = alchemy11d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# if = {
+			# limit = { NOT = { check_variable = { which = magicka_current which = magicka_max } } }
+			# change_variable = { which = magicka_current value = 4 }
+		# }
+	# }
+	# option = {
+		# name = ihavenoneed4potions
+	# }
+# }
+# #Stat Potions, Boosts a Stat for a limited time
+# #potion_martial
+# character_event = {
+	# id = 126515
+	# title = alchemy10tmartial
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126516
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126516
+	# desc = alchemy16d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# random_list = {
+				# 76 = {
+					# add_character_modifier = {
+						# name = potion_martial
+						# duration = 2190
+					# }
+				# }
+				# 24 = {
+					# modifier = {
+						# factor = 0.8
+						# religion = daedra_vaermina
+					# }
+					# modifier = {
+						# factor = 3
+						# NOT = { learning = 1 }
+					# }		
+					# modifier = {
+						# factor = 2
+						# NOT = { learning = 2 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 3 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 4 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 5 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 6 }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# NOT = { learning = 7 }
+					# }
+					# modifier = {
+						# factor = 1.125
+						# NOT = { learning = 8 }
+					# }
+					# modifier = {
+						# factor = 1.1
+						# NOT = { learning = 9 }
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 11
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 12
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 13
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 14
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 15
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 16
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 17
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 18
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 19
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 20
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 21
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 22
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 23
+					# }
+					# modifier = {
+						# factor = 0.8
+						# learning = 24
+					# }
+					# modifier = {
+						# factor = 0.75
+						# learning = 25
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = diligent
+					# }
+					# modifier = {
+						# factor = 0.85
+						# trait = genius
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = quick
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = perceptive
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = mystic
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = gardener
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = scholar
+					# }
+					# modifier = {
+						# factor = 1.25
+						# trait = arbitrary
+					# }
+					# modifier = {
+						# factor = 1.1
+						# trait = reckless
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slow
+					# }
+					# modifier = {
+						# factor = 2.5
+						# trait = imbecile
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slothful
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slovenly
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = maimed
+					# }
+					# modifier = {
+						# factor = 1.15
+						# OR = {
+							# trait = blind
+							# trait = blinded
+						# }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = absent_minded
+					# }
+					# hidden_tooltip = { character_event = { id = 126517 days = 3 } }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126517
+	# desc = alchemy17d
+	# picture = GFX_evt_bad_news
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = damn
+		# hidden_tooltip = {
+			# random = {
+				# chance = 38
+				# add_character_modifier = {
+					# name = potion_martial_bad
+					# duration = 1095
+				# }
+			# }
+		# }
+	# }
+# }
+# #potion_diplomacy
+# character_event = {
+	# id = 126520
+	# title = alchemy10tdiplo
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126521
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126521
+	# desc = alchemy21d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# random_list = {
+				# 76 = {
+					# add_character_modifier = {
+						# name = potion_diplomacy
+						# duration = 2190
+					# }
+				# }
+				# 24 = {
+					# modifier = {
+						# factor = 0.8
+						# religion = daedra_vaermina
+					# }
+					# modifier = {
+						# factor = 3
+						# NOT = { learning = 1 }
+					# }		
+					# modifier = {
+						# factor = 2
+						# NOT = { learning = 2 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 3 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 4 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 5 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 6 }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# NOT = { learning = 7 }
+					# }
+					# modifier = {
+						# factor = 1.125
+						# NOT = { learning = 8 }
+					# }
+					# modifier = {
+						# factor = 1.1
+						# NOT = { learning = 9 }
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 11
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 12
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 13
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 14
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 15
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 16
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 17
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 18
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 19
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 20
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 21
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 22
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 23
+					# }
+					# modifier = {
+						# factor = 0.8
+						# learning = 24
+					# }
+					# modifier = {
+						# factor = 0.75
+						# learning = 25
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = diligent
+					# }
+					# modifier = {
+						# factor = 0.85
+						# trait = genius
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = quick
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = perceptive
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = mystic
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = gardener
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = scholar
+					# }
+					# modifier = {
+						# factor = 1.25
+						# trait = arbitrary
+					# }
+					# modifier = {
+						# factor = 1.1
+						# trait = reckless
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slow
+					# }
+					# modifier = {
+						# factor = 2.5
+						# trait = imbecile
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slothful
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slovenly
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = maimed
+					# }
+					# modifier = {
+						# factor = 1.15
+						# OR = {
+							# trait = blind
+							# trait = blinded
+						# }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = absent_minded
+					# }
+					# hidden_tooltip = { character_event = { id = 126522 days = 3 } }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+
+# character_event = {
+	# id = 126522
+	# desc = alchemy22d
+	# picture = GFX_evt_bad_news
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = damn
+		# hidden_tooltip = {
+			# random = {
+				# chance = 38
+				# add_character_modifier = {
+					# name = potion_diplomacy_bad
+					# duration = 1095
+				# }
+			# }
+		# }
+	# }
+# }
+# #potion_stewardship
+# character_event = {
+	# id = 126525
+	# title = alchemy10tsteward
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126526
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126526
+	# desc = alchemy26d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# random_list = {
+				# 76 = {
+					# add_character_modifier = {
+						# name = potion_stewardship
+						# duration = 2190
+					# }
+				# }
+				# 24 = {
+					# modifier = {
+						# factor = 0.8
+						# religion = daedra_vaermina
+					# }
+					# modifier = {
+						# factor = 3
+						# NOT = { learning = 1 }
+					# }		
+					# modifier = {
+						# factor = 2
+						# NOT = { learning = 2 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 3 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 4 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 5 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 6 }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# NOT = { learning = 7 }
+					# }
+					# modifier = {
+						# factor = 1.125
+						# NOT = { learning = 8 }
+					# }
+					# modifier = {
+						# factor = 1.1
+						# NOT = { learning = 9 }
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 11
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 12
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 13
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 14
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 15
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 16
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 17
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 18
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 19
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 20
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 21
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 22
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 23
+					# }
+					# modifier = {
+						# factor = 0.8
+						# learning = 24
+					# }
+					# modifier = {
+						# factor = 0.75
+						# learning = 25
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = diligent
+					# }
+					# modifier = {
+						# factor = 0.85
+						# trait = genius
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = quick
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = perceptive
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = mystic
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = gardener
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = scholar
+					# }
+					# modifier = {
+						# factor = 1.25
+						# trait = arbitrary
+					# }
+					# modifier = {
+						# factor = 1.1
+						# trait = reckless
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slow
+					# }
+					# modifier = {
+						# factor = 2.5
+						# trait = imbecile
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slothful
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slovenly
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = maimed
+					# }
+					# modifier = {
+						# factor = 1.15
+						# OR = {
+							# trait = blind
+							# trait = blinded
+						# }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = absent_minded
+					# }
+					# #hidden_tooltip = { character_event = { id = 126527 days = 3 } }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126527
+	# desc = alchemy27d
+	# picture = GFX_evt_bad_news
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = damn
+		# hidden_tooltip = {
+			# random = {
+				# chance = 38
+				# add_character_modifier = {
+					# name = potion_stewardship_bad
+					# duration = 1095
+				# }
+			# }
+		# }
+	# }
+# }
+# #potion_intrigue
+# character_event = {
+	# id = 126530
+	# title = alchemy10tintrigue
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126531
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126531
+	# desc = alchemy31d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# random_list = {
+				# 76 = {
+					# add_character_modifier = {
+						# name = potion_intrigue
+						# duration = 2190
+					# }
+				# }
+				# 24 = {
+					# modifier = {
+						# factor = 0.8
+						# religion = daedra_vaermina
+					# }
+					# modifier = {
+						# factor = 3
+						# NOT = { learning = 1 }
+					# }		
+					# modifier = {
+						# factor = 2
+						# NOT = { learning = 2 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 3 }
+					# }
+					# modifier = {
+						# factor = 1.5
+						# NOT = { learning = 4 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 5 }
+					# }
+					# modifier = {
+						# factor = 1.25
+						# NOT = { learning = 6 }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# NOT = { learning = 7 }
+					# }
+					# modifier = {
+						# factor = 1.125
+						# NOT = { learning = 8 }
+					# }
+					# modifier = {
+						# factor = 1.1
+						# NOT = { learning = 9 }
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 11
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 12
+					# }
+					# modifier = {
+						# factor = 0.95
+						# learning = 13
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 14
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 15
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 16
+					# }
+					# modifier = {
+						# factor = 0.9
+						# learning = 17
+					# }	
+					# modifier = {
+						# factor = 0.9
+						# learning = 18
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 19
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 20
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 21
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 22
+					# }
+					# modifier = {
+						# factor = 0.85
+						# learning = 23
+					# }
+					# modifier = {
+						# factor = 0.8
+						# learning = 24
+					# }
+					# modifier = {
+						# factor = 0.75
+						# learning = 25
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = diligent
+					# }
+					# modifier = {
+						# factor = 0.85
+						# trait = genius
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = quick
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = perceptive
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = mystic
+					# }
+					# modifier = {
+						# factor = 0.95
+						# trait = gardener
+					# }
+					# modifier = {
+						# factor = 0.9
+						# trait = scholar
+					# }
+					# modifier = {
+						# factor = 1.25
+						# trait = arbitrary
+					# }
+					# modifier = {
+						# factor = 1.1
+						# trait = reckless
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slow
+					# }
+					# modifier = {
+						# factor = 2.5
+						# trait = imbecile
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slothful
+					# }
+					# modifier = {
+						# factor = 2
+						# trait = slovenly
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = maimed
+					# }
+					# modifier = {
+						# factor = 1.15
+						# OR = {
+							# trait = blind
+							# trait = blinded
+						# }
+					# }
+					# modifier = {
+						# factor = 1.15
+						# trait = absent_minded
+					# }
+					# hidden_tooltip = { character_event = { id = 126532 days = 3 } }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+
+# character_event = {
+	# id = 126532
+	# desc = alchemy32d
+	# picture = GFX_evt_bad_news
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = damn
+		# hidden_tooltip = {
+			# random = {
+				# chance = 38
+				# add_character_modifier = {
+					# name = potion_intrigue_bad
+					# duration = 1095
+				# }
+			# }
+		# }
+	# }
+# }
+# #potion_learning
+# character_event = {
+	# id = 126535
+	# title = alchemy10tlearning
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126521
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 7
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126536
+	# desc = alchemy36d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# hidden_tooltip = {
+				# random_list = {
+					# 76 = {
+						# add_character_modifier = {
+							# name = potion_learning
+							# days = 2190
+						# }
+					# }
+					# 24 = {
+						# modifier = {
+							# factor = 0.8
+							# religion = daedra_vaermina
+						# }
+						# modifier = {
+							# factor = 3
+							# NOT = { learning = 1 }
+						# }		
+						# modifier = {
+							# factor = 2
+							# NOT = { learning = 2 }
+						# }
+						# modifier = {
+							# factor = 1.5
+							# NOT = { learning = 3 }
+						# }
+						# modifier = {
+							# factor = 1.5
+							# NOT = { learning = 4 }
+						# }
+						# modifier = {
+							# factor = 1.25
+							# NOT = { learning = 5 }
+						# }
+						# modifier = {
+							# factor = 1.25
+							# NOT = { learning = 6 }
+						# }
+						# modifier = {
+							# factor = 1.15
+							# NOT = { learning = 7 }
+						# }
+						# modifier = {
+							# factor = 1.125
+							# NOT = { learning = 8 }
+						# }
+						# modifier = {
+							# factor = 1.1
+							# NOT = { learning = 9 }
+						# }
+						# modifier = {
+							# factor = 0.95
+							# learning = 11
+						# }
+						# modifier = {
+							# factor = 0.95
+							# learning = 12
+						# }
+						# modifier = {
+							# factor = 0.95
+							# learning = 13
+						# }	
+						# modifier = {
+							# factor = 0.9
+							# learning = 14
+						# }	
+						# modifier = {
+							# factor = 0.9
+							# learning = 15
+						# }
+						# modifier = {
+							# factor = 0.9
+							# learning = 16
+						# }
+						# modifier = {
+							# factor = 0.9
+							# learning = 17
+						# }	
+						# modifier = {
+							# factor = 0.9
+							# learning = 18
+						# }
+						# modifier = {
+							# factor = 0.85
+							# learning = 19
+						# }
+						# modifier = {
+							# factor = 0.85
+							# learning = 20
+						# }
+						# modifier = {
+							# factor = 0.85
+							# learning = 21
+						# }
+						# modifier = {
+							# factor = 0.85
+							# learning = 22
+						# }
+						# modifier = {
+							# factor = 0.85
+							# learning = 23
+						# }
+						# modifier = {
+							# factor = 0.8
+							# learning = 24
+						# }
+						# modifier = {
+							# factor = 0.75
+							# learning = 25
+						# }
+						# modifier = {
+							# factor = 0.9
+							# trait = diligent
+						# }
+						# modifier = {
+							# factor = 0.85
+							# trait = genius
+						# }
+						# modifier = {
+							# factor = 0.9
+							# trait = quick
+						# }
+						# modifier = {
+							# factor = 0.95
+							# trait = perceptive
+						# }
+						# modifier = {
+							# factor = 0.9
+							# trait = mystic
+						# }
+						# modifier = {
+							# factor = 0.95
+							# trait = gardener
+						# }
+						# modifier = {
+							# factor = 0.9
+							# trait = scholar
+						# }
+						# modifier = {
+							# factor = 1.25
+							# trait = arbitrary
+						# }
+						# modifier = {
+							# factor = 1.1
+							# trait = reckless
+						# }
+						# modifier = {
+							# factor = 2
+							# trait = slow
+						# }
+						# modifier = {
+							# factor = 2.5
+							# trait = imbecile
+						# }
+						# modifier = {
+							# factor = 2
+							# trait = slothful
+						# }
+						# modifier = {
+							# factor = 2
+							# trait = slovenly
+						# }
+						# modifier = {
+							# factor = 1.15
+							# trait = maimed
+						# }
+						# modifier = {
+							# factor = 1.15
+							# OR = {
+								# trait = blind
+								# trait = blinded
+							# }
+						# }
+						# modifier = {
+							# factor = 1.15
+							# trait = absent_minded
+						# }
+						# character_event = { id = 126537 days = 3 }
+					# }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+
+# character_event = {
+	# id = 126537
+	# desc = alchemy37d
+	# picture = GFX_evt_bad_news
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = damn
+		# hidden_tooltip = {
+			# random = {
+				# chance = 38
+				# add_character_modifier = {
+					# name = potion_learning_bad
+					# duration = 1095
+				# }
+			# }
+		# }
+	# }
+# }
+# #Special Brew
+# character_event = {
+	# id = 126540
+	# title = alchemy10tspecial
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# capable_only = yes
+	# prisoner = no
+	
+	# trigger = {
+		# trait = alchemist
+	# }
+	
+	# mean_time_to_happen = {
+		# years = 160
+		
+		# modifier = {
+			# factor = 0.8
+			# religion = daedra_vaermina
+		# }
+		# modifier = {
+			# factor = 3
+			# NOT = { learning = 1 }
+		# }		
+		# modifier = {
+			# factor = 2
+			# NOT = { learning = 2 }
+		# }
+		# modifier = {
+			# factor = 1.5
+			# NOT = { learning = 3 }
+		# }
+		# modifier = {
+			# factor = 1.5
+			# NOT = { learning = 4 }
+		# }
+		# modifier = {
+			# factor = 1.25
+			# NOT = { learning = 5 }
+		# }
+		# modifier = {
+			# factor = 1.25
+			# NOT = { learning = 6 }
+		# }
+		# modifier = {
+			# factor = 1.15
+			# NOT = { learning = 7 }
+		# }
+		# modifier = {
+			# factor = 1.125
+			# NOT = { learning = 8 }
+		# }
+		# modifier = {
+			# factor = 1.1
+			# NOT = { learning = 9 }
+		# }
+		# modifier = {
+			# factor = 0.95
+			# learning = 11
+		# }
+		# modifier = {
+			# factor = 0.95
+			# learning = 12
+		# }
+		# modifier = {
+			# factor = 0.95
+			# learning = 13
+		# }	
+		# modifier = {
+			# factor = 0.9
+			# learning = 14
+		# }	
+		# modifier = {
+			# factor = 0.9
+			# learning = 15
+		# }
+		# modifier = {
+			# factor = 0.9
+			# learning = 16
+		# }
+		# modifier = {
+			# factor = 0.9
+			# learning = 17
+		# }	
+		# modifier = {
+			# factor = 0.9
+			# learning = 18
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 19
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 20
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 21
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 22
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 23
+		# }
+		# modifier = {
+			# factor = 0.8
+			# learning = 24
+		# }
+		# modifier = {
+			# factor = 0.75
+			# learning = 25
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = diligent
+		# }
+		# modifier = {
+			# factor = 0.85
+			# trait = genius
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = quick
+		# }
+		# modifier = {
+			# factor = 0.95
+			# trait = perceptive
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = mystic
+		# }
+		# modifier = {
+			# factor = 0.95
+			# trait = gardener
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = scholar
+		# }
+		# modifier = {
+			# factor = 1.25
+			# trait = arbitrary
+		# }
+		# modifier = {
+			# factor = 1.1
+			# trait = reckless
+		# }
+		# modifier = {
+			# factor = 2
+			# trait = slow
+		# }
+		# modifier = {
+			# factor = 2.5
+			# trait = imbecile
+		# }
+		# modifier = {
+			# factor = 2
+			# trait = slothful
+		# }
+		# modifier = {
+			# factor = 2
+			# trait = slovenly
+		# }
+		# modifier = {
+			# factor = 1.15
+			# trait = maimed
+		# }
+		# modifier = {
+			# factor = 1.15
+			# OR = {
+				# trait = blind
+				# trait = blinded
+			# }
+		# }
+		# modifier = {
+			# factor = 1.15
+			# trait = absent_minded
+		# }
+	# }
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126541
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# random = {
+			# chance = 33
+			# wealth = 7
+		# }
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126541
+	# desc = alchemy41d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# hidden_tooltip = {
+				# random_list = {
+					# 20 = { character_event = { id = 126542 } } #Martial
+					# 20 = { character_event = { id = 126543 } } #Diplomacy
+					# 20 = { character_event = { id = 126544 } } #Stewardship
+					# 20 = { character_event = { id = 126545 } } #Intrigue
+					# 20 = { character_event = { id = 126546 } } #Learning
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126542
+	# desc = alchemy42d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = excellent
+		# change_martial = 1
+	# }
+# }
+# character_event = {
+	# id = 126543
+	# desc = alchemy43d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = excellent
+		# change_diplomacy = 1
+	# }
+# }
+# character_event = {
+	# id = 126544
+	# desc = alchemy44d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = excellent
+		# change_stewardship = 1
+	# }
+# }
+# character_event = {
+	# id = 126545
+	# desc = alchemy45d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = excellent
+		# change_intrigue = 1
+	# }
+# }
+# character_event = {
+	# id = 126546
+	# desc = alchemy46d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = excellent
+		# change_learning = 1
+	# }
+# }
+
+# #Batch of Healing Potions
+# #Batch of Fortify Potions
+# character_event = {
+	# id = 126550
+	# title = alchemy10thealing
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126551
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 11
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126551
+	# desc = alchemy51d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = distributethem
+		# capital_scope = {
+			# add_province_modifier = {
+				# name = potion_health_batch
+				# duration = 2190
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126552
+	# title = alchemy10tfortify
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126553
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# wealth = 11
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126553
+	# desc = alchemy53d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = distributethem
+		# capital_scope = {
+			# add_province_modifier = {
+				# name = potion_fortify_batch
+				# duration = 2190
+			# }
+		# }
+	# }
+# }
+# #Polymorph
+# character_event = {
+	# id = 126560
+	# title = alchemy10tpolymorph
+	# desc = alchemy10d
+	# picture = GFX_evt_alchemy
+	
+	# capable_only = yes
+	# prisoner = no
+	
+	# trigger = {
+		# trait = alchemist
+	# }
+	
+	# mean_time_to_happen = {
+		# years = 165
+		
+		# modifier = {
+			# factor = 0.8
+			# religion = daedra_vaermina
+		# }
+		# modifier = {
+			# factor = 3
+			# NOT = { learning = 1 }
+		# }		
+		# modifier = {
+			# factor = 2
+			# NOT = { learning = 2 }
+		# }
+		# modifier = {
+			# factor = 1.5
+			# NOT = { learning = 3 }
+		# }
+		# modifier = {
+			# factor = 1.5
+			# NOT = { learning = 4 }
+		# }
+		# modifier = {
+			# factor = 1.25
+			# NOT = { learning = 5 }
+		# }
+		# modifier = {
+			# factor = 1.25
+			# NOT = { learning = 6 }
+		# }
+		# modifier = {
+			# factor = 1.15
+			# NOT = { learning = 7 }
+		# }
+		# modifier = {
+			# factor = 1.125
+			# NOT = { learning = 8 }
+		# }
+		# modifier = {
+			# factor = 1.1
+			# NOT = { learning = 9 }
+		# }
+		# modifier = {
+			# factor = 0.95
+			# learning = 11
+		# }
+		# modifier = {
+			# factor = 0.95
+			# learning = 12
+		# }
+		# modifier = {
+			# factor = 0.95
+			# learning = 13
+		# }	
+		# modifier = {
+			# factor = 0.9
+			# learning = 14
+		# }	
+		# modifier = {
+			# factor = 0.9
+			# learning = 15
+		# }
+		# modifier = {
+			# factor = 0.9
+			# learning = 16
+		# }
+		# modifier = {
+			# factor = 0.9
+			# learning = 17
+		# }	
+		# modifier = {
+			# factor = 0.9
+			# learning = 18
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 19
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 20
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 21
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 22
+		# }
+		# modifier = {
+			# factor = 0.85
+			# learning = 23
+		# }
+		# modifier = {
+			# factor = 0.8
+			# learning = 24
+		# }
+		# modifier = {
+			# factor = 0.75
+			# learning = 25
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = diligent
+		# }
+		# modifier = {
+			# factor = 0.85
+			# trait = genius
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = quick
+		# }
+		# modifier = {
+			# factor = 0.95
+			# trait = perceptive
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = mystic
+		# }
+		# modifier = {
+			# factor = 0.95
+			# trait = gardener
+		# }
+		# modifier = {
+			# factor = 0.9
+			# trait = scholar
+		# }
+		# modifier = {
+			# factor = 1.25
+			# trait = arbitrary
+		# }
+		# modifier = {
+			# factor = 1.1
+			# trait = reckless
+		# }
+		# modifier = {
+			# factor = 2
+			# trait = slow
+		# }
+		# modifier = {
+			# factor = 2.5
+			# trait = imbecile
+		# }
+		# modifier = {
+			# factor = 2
+			# trait = slothful
+		# }
+		# modifier = {
+			# factor = 2
+			# trait = slovenly
+		# }
+		# modifier = {
+			# factor = 1.15
+			# trait = maimed
+		# }
+		# modifier = {
+			# factor = 1.15
+			# OR = {
+				# trait = blind
+				# trait = blinded
+			# }
+		# }
+		# modifier = {
+			# factor = 1.15
+			# trait = absent_minded
+		# }
+	# }
+	# option = {
+		# name = mixpotion
+		# custom_tooltip = {
+			# text = mixpotiontt
+			# hidden_tooltip = {
+				# character_event = {
+					# id = 126561
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1
+		# }
+	# }
+	# option = {
+		# name = cancelpotion
+		# custom_tooltip = {
+			# text = cancelpotiontt
+		# }
+		# random = {
+			# chance = 33
+			# wealth = 9
+		# }
+		# ai_chance = {
+			# factor = 1
+			
+			# modifier = {
+				# trait = greedy
+				# factor = 1.5
+			# }
+		# }
+	# }
+# }
+
+# character_event = {
+	# id = 126561
+	# desc = alchemy61d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = drinkup
+		# custom_tooltip = {
+			# text = drinkuptt
+			# hidden_tooltip = {
+				# if = {
+					# limit = {
+						# OR = {
+							# trait = ugly
+							# trait = hunchback
+							# trait = clubfooted
+							# trait = harelip
+							# trait = blind
+							# trait = mute
+							# trait = deaf
+							# trait = dwarf
+							# trait = weak
+						# }
+					# }
+					# random_list = {
+						# 55 = { character_event = { id = 126562 } } #Remove Congenital Disorder
+						# 35 = { character_event = { id = 126563 } } #Do nothing
+						# 10 = {
+							# character_event = { id = 126564 }
+						# } #Chicken!
+					# }
+				# }
+				# if = {
+					# limit = {
+						# NOT = { trait = ugly }
+						# NOT = { trait = hunchback }
+						# NOT = { trait = clubfooted }
+						# NOT = { trait = harelip }
+						# NOT = { trait = blind }
+						# NOT = { trait = mute }
+						# NOT = { trait = deaf }
+						# NOT = { trait = dwarf }
+						# NOT = { trait = weak }
+					# }
+					# random_list = {
+						# 55 = { character_event = { id = 126565 } } #Add good congenital disorder
+						# 35 = { character_event = { id = 126563 } } #Do nothing
+						# 10 = {
+							# character_event = { id = 126564 }
+						# } #Chicken!
+					# }
+				# }
+			# }
+		# }
+		# ai_chance = {
+			# factor = 1.5
+			
+			# modifier = {
+				# factor = 1.5
+				# trait = trusting
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = diligent
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = weak
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = sickly
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = ill
+			# }
+			# modifier = {
+				# factor = 1.5
+				# NOT = { health = 3 }
+			# }
+		# }
+	# }
+	# option = {
+		# name = nothanks
+		
+		# ai_chance = {
+			# factor = 1
+			# modifier = {
+				# factor = 1.5
+				# trait = absent_minded
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = reckless
+			# }
+			# modifier = {
+				# factor = 1.5
+				# trait = paranoid
+			# }
+			# modifier = {
+				# factor = 1.5
+				# health = 3
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126562
+	# desc = alchemy62d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = imsopretty
+		# if = {
+			# limit = {
+				# trait = dwarf
+			# }
+			# remove_trait = dwarf
+		# }
+		# if = {
+			# limit = {
+				# trait = clubfooted
+			# }
+			# remove_trait = clubfooted
+		# }
+		# if = {
+			# limit = {
+				# trait = weak
+			# }
+			# remove_trait = weak
+		# }
+		# if = {
+			# limit = {
+				# trait = ugly
+			# }
+			# remove_trait = ugly
+		# }
+		# if = {
+			# limit = {
+				# trait = hunchback
+			# }
+			# remove_trait = hunchback
+		# }
+		# if = {
+			# limit = {
+				# trait = harelip
+			# }
+			# remove_trait = harelip
+		# }
+		# if = {
+			# limit = {
+				# trait = deaf
+			# }
+			# remove_trait = deaf
+		# }
+		# if = {
+			# limit = {
+				# trait = blind
+			# }
+			# remove_trait = blind
+		# }
+		# if = {
+			# limit = {
+				# trait = mute
+			# }
+			# remove_trait = mute
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126563
+	# desc = alchemy63d
+	# picture = GFX_evt_lunatic
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = cluckcluck
+		# add_trait = polymorph_chicken
+		# hidden_tooltip = {
+			# character_event = {
+				# id = 126567
+				# days = 1095
+				# random = 548
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126564
+	# desc = alchemy64d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = damn
+		# prestige = -10
+	# }
+# }
+# character_event = {
+	# id = 126565
+	# desc = alchemy65d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = excellent
+		# if = {
+			# limit = {
+				# NOT = { trait = strong }
+				# NOT = { trait = fair }
+				# NOT = { trait = tall }
+				# NOT = { trait = agile }
+				# NOT = { trait = melodious_voice }
+				# NOT = { trait = powerful_voice }
+				# NOT = { trait = perceptive }
+				# NOT = { trait = fortitude }
+			# }
+			# random_list = {
+				# 33 = { add_trait = fortitude }
+				# 33 = { add_trait = strong }
+				# 33 = { add_trait = tall }
+			# }
+		# }
+		# if = {
+			# limit = {
+				# OR = {
+					# trait = strong
+					# trait = tall
+					# trait = fortitude
+				# }
+				# NOT = { trait = fair }
+				# NOT = { trait = agile }
+				# NOT = { trait = melodious_voice }
+				# NOT = { trait = powerful_voice }
+				# NOT = { trait = perceptive }
+			# }
+			# random_list = {
+				# 33 = { add_trait = fair }
+				# 33 = { add_trait = perceptive }
+				# 33 = { add_trait = agile }
+			# }
+		# }
+		# if = {
+			# limit = {
+				# OR = {
+					# trait = strong
+					# trait = tall
+					# trait = fortitude
+					# trait = fair
+					# trait = agile
+					# trait = perceptive
+				# }
+				# NOT = { trait = melodious_voice }
+				# NOT = { trait = powerful_voice }
+			# }
+			# random_list = {
+				# 50 = { add_trait = melodious_voice }
+				# 50 = { add_trait = powerful_voice }
+			# }
+		# }
+		# if = {
+			# limit = {
+				# OR = {
+					# trait = strong
+					# trait = tall
+					# trait = fortitude
+				# }
+				# OR = {
+					# trait = fair
+					# trait = agile
+					# trait = perceptive
+				# }
+				# OR = {
+					# trait = melodious_voice
+					# trait = powerful_voice
+				# }
+			# }
+			# custom_tooltip = {
+				# text = noeffectalreadyperfect
+				# hidden_tooltip = {
+					# if = {
+						# limit = { ai = yes }
+						# random = {
+							# chance = 1
+							# character_event = {
+								# id = 126566
+								# days = 180
+								# random = 11
+							# }
+						# }
+					# }
+					# if = {
+						# limit = { ai = no }
+						# random = {
+							# chance = 9
+							# character_event = {
+								# id = 126566
+								# days = 180
+								# random = 11
+							# }
+						# }
+					# }
+				# }
+			# }
+		# }
+	# }
+# }
+# character_event = {
+	# id = 126566
+	# desc = alchemy66d
+	# picture = GFX_evt_alchemy
+	
+	# is_triggered_only = yes
+	
+	# option = {
+		# name = mygodimimmortal
+		# random_list = {
+			# 35 = { add_trait = lunatic }
+			# 50 = { add_trait = reckless }
+			# 15 = { add_trait = immortal }
+		# }
+	# }
+# }
+character_event = {
+	id = 126567
+	desc = alchemy67d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = atlastmeagain
+		remove_trait = polymorph_chicken
+	}
+}

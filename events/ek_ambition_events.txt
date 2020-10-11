@@ -1,0 +1,1221 @@
+namespace = aambition
+
+#Adventurers Offer to Quest
+character_event = {
+	id = aambition.1
+	desc = adventurers_offer_quest
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_ambition = obj_obtain_amulet
+		NOT = { has_artifact = amulet_of_kings }
+		NOT = { has_global_flag = amulet_of_kings_active }
+		NOT = { has_character_flag = amulet_event_chain }
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+		modifier = {
+			factor = 0.8
+			trait = proud
+		}
+		modifier = {
+			factor = 0.8
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.8
+			trait = warlord
+		}
+		modifier = {
+			factor = 0.8
+			trait = reckless
+		}
+		modifier = {
+			factor = 0.8
+			trait = just
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.8
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.8
+			trait = adventurer
+		}
+		modifier = {
+			factor = 1.2
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.2
+			trait = patient
+		}
+		modifier = {
+			factor = 1.2
+			trait = cynical
+		}
+		modifier = {
+			factor = 2
+			NOT = { scaled_wealth = 4 }
+		}
+		modifier = {
+			factor = 0.8
+			scaled_wealth = 4
+		}
+	}
+	
+	immediate = {
+		set_character_flag = amulet_event_chain
+	}
+	
+	option = {
+		name = aambition.1.opta
+		scaled_wealth = -2.5
+		hidden_tooltip = {
+			random_list = {
+				35 = { character_event = { id = aambition.2 days = 120 random = 2 } }	#Adventurers fool you
+				35 = { character_event = { id = aambition.3 days = 120 random = 2 } }	#Adventurers got killed
+				30 = { 	#Adventurers give you the Amulet
+					modifier = {
+						has_global_flag = amulet_of_kings_active
+						factor = 0
+					}
+					character_event = { id = aambition.4 days = 120 random = 2 } 
+				}
+			}
+		}
+	}
+	option = {
+		name = aambition.1.optb
+		clr_character_flag = amulet_event_chain
+	}
+}
+
+#Adventurers fool you
+character_event = {
+	id = aambition.2
+	desc = adventurers_fool_you
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.2.opta
+		prestige = -50
+		clr_character_flag = amulet_event_chain
+	}
+}
+
+#Adventurers got killed
+character_event = {
+	id = aambition.3
+	desc = adventurers_got_killed
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.3.opta
+		prestige = -50
+		clr_character_flag = amulet_event_chain
+	}
+	option = {
+		name = aambition.3.optb
+		clr_character_flag = amulet_event_chain
+		create_character = {
+			random_traits = no
+			culture = ROOT
+			religion = ROOT
+			age = 25
+			dynasty = random
+			trait = warrior_4
+			trait = adventurer
+			trait = maimed
+			attributes = {
+				martial = 10
+				learning = 5
+				diplomacy = 8
+				stewardship = 8
+				intrigue = 5
+			}
+		}
+		new_character = {
+			add_artifact = weapon_sword_dwarven
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Adventurers give you the Amulet
+character_event = {
+	id = aambition.4
+	desc = adventurers_give_amulet
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.4.opta
+		prestige = 200
+		add_amulet_of_kings = yes
+		clr_character_flag = amulet_event_chain
+		#set_global_flag = amulet_of_kings_active
+	}
+	option = {
+		name = aambition.4.optb
+		prestige = 200
+		add_amulet_of_kings = yes
+		clr_character_flag = amulet_event_chain
+		create_character = {
+			random_traits = no
+			culture = ROOT
+			religion = ROOT
+			age = 25
+			dynasty = random
+			trait = agent_4
+			trait = adventurer
+			trait = wounded
+			attributes = {
+				martial = 8
+				learning = 5
+				diplomacy = 6
+				stewardship = 8
+				intrigue = 10
+			}
+		}
+		new_character = {
+			add_artifact = weapon_sword_elven
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		create_character = {
+			random_traits = no
+			culture = ROOT
+			religion = ROOT
+			age = 30
+			dynasty = random
+			trait = mage_4
+			trait = adventurer
+			trait = wounded
+			attributes = {
+				martial = 8
+				learning = 8
+				diplomacy = 6
+				stewardship = 8
+				intrigue = 6
+			}
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+		#set_global_flag = amulet_of_kings_active
+	}
+}
+
+#Merchant offers Amulet
+character_event = {
+	id = aambition.5
+	desc = merchant_offer_amulet
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_ambition = obj_obtain_amulet
+		NOT = { has_artifact = amulet_of_kings }
+		NOT = { has_global_flag = amulet_of_kings_active }
+		NOT = { has_character_flag = amulet_event_chain }
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+		modifier = {
+			factor = 0.8
+			trait = proud
+		}
+		modifier = {
+			factor = 0.8
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.8
+			trait = warlord
+		}
+		modifier = {
+			factor = 0.8
+			trait = reckless
+		}
+		modifier = {
+			factor = 0.8
+			trait = just
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.8
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.8
+			trait = mystic
+		}
+		modifier = {
+			factor = 1.2
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.2
+			trait = patient
+		}
+		modifier = {
+			factor = 1.2
+			trait = cynical
+		}
+		modifier = {
+			factor = 2
+			NOT = { scaled_wealth = 5 }
+		}
+		modifier = {
+			factor = 0.8
+			scaled_wealth = 5
+		}
+	}
+	
+	immediate = {
+		set_character_flag = amulet_event_chain
+	}
+	
+	option = {
+		name = aambition.5.opta
+		scaled_wealth = -3
+		hidden_tooltip = {
+			random_list = {
+				80 = { character_event = { id = aambition.6 days = 7 random = 2 } }	#Merchant fool you
+				20 = { #Merchant give you the Amulet
+					modifier = {
+						has_global_flag = amulet_of_kings_active
+						factor = 0
+					}
+					character_event = { id = aambition.17 days = 7 random = 2 } 
+				}
+			}
+		}
+	}
+	option = {
+		name = aambition.5.optb
+		clr_character_flag = amulet_event_chain
+	}
+}
+
+#Merchant fool you
+character_event = {
+	id = aambition.6
+	desc = merchant_fool_you
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "I was a fool..."
+		prestige = -50
+		clr_character_flag = amulet_event_chain
+	}
+}
+
+#Merchant gives you the Amulet
+character_event = {
+	id = aambition.17
+	desc = merchant_give_amulet
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.17.opta
+		trigger = { NOT = { trait = cynical } }
+		piety = 200
+		prestige = 200
+		add_amulet_of_kings = yes
+		clr_character_flag = amulet_event_chain
+		#set_global_flag = amulet_of_kings_active
+	}
+	option = {
+		name = aambition.17.optb
+		trigger = { trait = cynical }
+		clr_character_flag = amulet_event_chain
+	}
+}
+
+#The Blades offers Amulet
+character_event = {
+	id = aambition.7
+	desc = blades_offer_amulet
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		higher_real_tier_than = DUKE
+		NOT = { has_artifact = amulet_of_kings }
+		NOT = { has_global_flag = amulet_of_kings_active }
+		NOT = { has_character_flag = amulet_event_chain }
+		OR = {
+			is_former_emperor_bloodline = yes
+			is_dragonblood = yes
+		}
+		OR = {
+			has_landed_title = c_cloudruler #b_cloudruler
+			has_landed_title = c_karthspire #b_skyhaven
+			has_landed_title = c_belkarth #b_godspeak
+			has_landed_title = c_shalgora #b_dragonport
+			has_landed_title = c_ykalon #b_llugwych
+			OR = {
+				any_vassal = {
+					num_of_count_titles = 2
+					has_landed_title = c_cloudruler
+				}
+				any_vassal = {
+					num_of_count_titles = 2
+					has_landed_title = c_karthspire
+				}
+				any_vassal = {
+					num_of_count_titles = 2
+					has_landed_title = c_belkarth
+				}
+				any_vassal = {
+					num_of_count_titles = 2
+					has_landed_title = c_shalgora
+				}
+				any_vassal = {
+					num_of_count_titles = 2
+					has_landed_title = c_ykalon
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+		modifier = {
+			factor = 0.2
+			has_landed_title = e_tamriel
+		}
+		modifier = {
+			factor = 0.8
+			has_landed_title = e_cyrodiil
+		}
+		modifier = {
+			factor = 0.8
+			trait = proud
+		}
+		modifier = {
+			factor = 0.8
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.8
+			trait = warlord
+		}
+		modifier = {
+			factor = 0.8
+			trait = reckless
+		}
+		modifier = {
+			factor = 0.8
+			trait = just
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.8
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.8
+			has_ambition = obj_obtain_amulet
+		}
+		modifier = {
+			factor = 1.2
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.2
+			trait = patient
+		}
+		modifier = {
+			factor = 1.2
+			trait = cynical
+		}
+	}
+	
+	immediate = {
+		set_character_flag = amulet_event_chain
+		#set_global_flag = amulet_of_kings_active
+	}
+	
+	option = {
+		name = aambition.7.opta
+		scaled_wealth = -2
+		hidden_tooltip = {
+			character_event = { id = aambition.8 }
+			
+			create_character = {
+				random_traits = yes
+				culture = ROOT
+				religion = ROOT
+				age = 40
+				dynasty = random
+				trait = agent_4
+				trait = monk
+				trait = diligent
+				attributes = {
+					martial = 10
+					learning = 8
+					diplomacy = 8
+					stewardship = 8
+					intrigue = 10
+				}
+			}
+			
+			new_character = {
+				#assign_birthsign = yes
+				#assign_racial_trait = yes
+				d_blades = { gain_title = PREV }
+			}
+			
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = c_cloudruler
+						any_vassal = {
+							num_of_count_titles = 2
+							has_landed_title = c_cloudruler
+						}
+					}
+				}
+				d_blades = {
+					holder_scope = {
+						c_cloudruler = {
+							gain_title = PREV
+						}
+						b_cloudruler = {
+							gain_title = PREV
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = c_karthspire
+						any_vassal = {
+							num_of_count_titles = 2
+							has_landed_title = c_karthspire
+						}
+					}
+				}
+				d_blades = {
+					holder_scope = {
+						c_karthspire = {
+							gain_title = PREV
+						}
+						b_skyhaven = {
+							gain_title = PREV
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = c_belkarth
+						any_vassal = {
+							num_of_count_titles = 2
+							has_landed_title = c_belkarth
+						}
+					}
+				}
+				d_blades = {
+					holder_scope = {
+						c_belkarth = {
+							gain_title = PREV
+						}
+						b_godspeak = {
+							gain_title = PREV
+						}
+					}
+				}
+				
+			}
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = c_shalgora
+						any_vassal = {
+							num_of_count_titles = 2
+							has_landed_title = c_shalgora
+						}
+					}
+				}
+				d_blades = {
+					holder_scope = {
+						c_shalgora = {
+							gain_title = PREV
+						}
+						b_dragonport = {
+							gain_title = PREV
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = c_ykalon
+						any_vassal = {
+							num_of_count_titles = 2
+							has_landed_title = c_ykalon
+						}
+					}
+				}
+				d_blades = {
+					holder_scope = {
+						c_ykalon = {
+							gain_title = PREV
+						}
+						b_llugwych = {
+							gain_title = PREV
+						}
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = aambition.7.optb
+		clr_character_flag = amulet_event_chain
+	}
+}
+
+#Blades give you the Amulet
+character_event = {
+	id = aambition.8
+	desc = blades_give_amulet
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.8.opta
+		prestige = 200
+		add_amulet_of_kings = yes
+		clr_character_flag = amulet_event_chain
+		#set_global_flag = amulet_of_kings_active		
+		d_blades = {
+			holder_scope = { set_defacto_liege = ROOT }
+		}
+	}
+	option = {
+		name = aambition.8.optb
+		prestige = 250
+		add_amulet_of_kings = yes
+		clr_character_flag = amulet_event_chain
+		#set_global_flag = amulet_of_kings_active		
+		d_blades = {
+			holder_scope = { set_defacto_liege = ROOT }
+			set_name = "Blades"
+		}		
+	}
+}
+
+#You may adventure yourself!
+character_event = {
+	id = aambition.9
+	desc = you_adventure_yourself
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_ambition = obj_obtain_amulet
+		NOT = { has_artifact = amulet_of_kings }
+		NOT = { has_global_flag = amulet_of_kings_active }
+		NOT = { has_character_flag = amulet_event_chain }
+		OR = {
+			trait = dragonborn
+			trait = adventurer
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 500
+		modifier = {
+			factor = 0.8
+			trait = proud
+		}
+		modifier = {
+			factor = 0.8
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0.8
+			trait = warlord
+		}
+		modifier = {
+			factor = 0.8
+			trait = reckless
+		}
+		modifier = {
+			factor = 0.8
+			trait = just
+		}
+		modifier = {
+			factor = 0.8
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.8
+			trait = greedy
+		}
+		modifier = {
+			factor = 1.2
+			trait = slothful
+		}
+		modifier = {
+			factor = 1.2
+			trait = patient
+		}
+		modifier = {
+			factor = 1.2
+			trait = cynical
+		}
+	}
+	
+	immediate = {
+		set_character_flag = amulet_event_chain
+		#set_global_flag = amulet_of_kings_active
+	}
+	
+	option = {
+		name = aambition.9.opta
+		scaled_wealth = -2.5
+		add_trait = on_adventure
+		hidden_tooltip = {
+			character_event = { id = aambition.10 days = 30 random = 2 }
+		}
+	}
+	option = {
+		name = aambition.9.optb
+		clr_character_flag = amulet_event_chain
+	}
+}
+
+#Goblin Tribe just in the entrance of Sancre Tor's ruins!
+character_event = {
+	id = aambition.10
+	desc = goblin_tribe_outside_sancre_tor
+	picture = GFX_evt_bandits #placeholder
+
+	is_triggered_only=yes
+	
+	immediate = {
+		#Set threat value, 10 is a low medium value
+		set_variable = { which = "ATStr" value = 12 } #how strong it is to fight
+		set_variable = { which = "ATAvoid" value = 12 } #how difficult it is to escape
+		set_variable = { which = "ATDip" value = 25 } #how difficult it is to open up a conversation
+		character_event = {id = 900100} #finds out your chances of winning
+	}
+	
+	#Fight
+	option = {
+		name = aambition.10.opta 
+		custom_tooltip = {
+			text = aambition.fighttooltip
+			hidden_tooltip = {
+				if = {
+					## there are 9 levels for each skill
+					limit = {OR = {has_character_flag = str_1 has_character_flag = str_2 has_character_flag = str_3}} #weak fighter against this threat
+					random_list = {
+						10 = { character_event = { id = aambition.11 } } #Kill Goblins
+						20 = {add_trait = wounded  character_event = { id = aambition.11 } }
+						55 = {
+							add_maimed_trait_effect = yes  
+							character_event = { id = aambition.11 } 
+						}
+						15 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = str_4 has_character_flag = str_5 has_character_flag = str_6}} #average fighter against this threat
+					random_list = {
+						45 = { character_event = { id = aambition.11 } } #Kill Goblins
+						35 = {add_trait = wounded character_event = { id = aambition.11 } }
+						15 = { 
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.11 } 
+						}
+						10 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = str_7 has_character_flag = str_8 has_character_flag = str_9}} #good fighter against this threat
+					random_list = {
+						70 = { character_event = { id = aambition.11 } } #Kill Goblins
+						15 = {add_trait = wounded character_event = { id = aambition.11 } }
+						10 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.11 } 
+						}
+						5 = {death = {death_reason = death_accident}}
+					}
+				}
+			}
+		}
+	}
+	
+	#Avoid
+	option = {
+		name = aambition.10.optb
+		custom_tooltip = {
+			text = aambition.sneaktooltip
+			hidden_tooltip = {
+				if = {
+					limit = {OR = {has_character_flag = avoid_1 has_character_flag = avoid_2 has_character_flag = avoid_3 has_character_flag = avoid_4 has_character_flag = avoid_5}}
+					random_list = {
+						30 = {
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.11 } 
+						}
+						30 = {add_trait = wounded character_event = { id = aambition.11 } }
+						10 = {death = {death_reason = death_accident}}
+						30 = { character_event = { id = aambition.11 } } #escape
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = avoid_6  has_character_flag = avoid_7}} 
+					random_list = {
+						66 = { character_event = { id = aambition.11 } } #escape
+						20 = {add_trait = wounded character_event = { id = aambition.11 } }
+						10 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.11 } 
+						}
+						3 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {has_character_flag = avoid_8}
+					random_list = {
+						80 = { character_event = { id = aambition.11 } } #escape
+						10 = {add_trait = wounded character_event = { id = aambition.11 } }
+						9 = {
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.11 } 
+						}
+						1 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {has_character_flag = avoid_9}
+					character_event = { id = aambition.11 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = aambition.10.optc
+		clr_character_flag = amulet_event_chain
+		remove_trait = on_adventure
+		prestige = -100
+	}
+	
+}
+
+#You enter Sancre Tor
+character_event = {
+	id = aambition.11
+	desc = enter_sancre_tor
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.11.opta
+		character_event = { id = aambition.12 }
+	}
+	option = {
+		name = aambition.11.optb
+		clr_character_flag = amulet_event_chain
+		remove_trait = on_adventure
+	}
+}
+
+#Blade's Skeletons in Sancre Tor!
+character_event = {
+	id = aambition.12
+	desc = blades_skeletons_sancre_tor
+	picture = GFX_evt_bandits #placeholder
+
+	is_triggered_only=yes
+	
+	immediate = {
+		#Set threat value, 10 is a low medium value
+		set_variable = { which = "ATStr" value = 20 } #how strong it is to fight
+		set_variable = { which = "ATAvoid" value = 20 } #how difficult it is to escape
+		set_variable = { which = "ATDip" value = 40 } #how difficult it is to open up a conversation
+		character_event = {id = 900100} #finds out your chances of winning
+	}
+	
+	#Fight
+	option = {
+		name = aambition.12.opta 
+		custom_tooltip = {
+			text = aambition.fighttooltip
+			hidden_tooltip = {
+				if = {
+					## there are 9 levels for each skill
+					limit = {OR = {has_character_flag = str_1 has_character_flag = str_2 has_character_flag = str_3}} #weak fighter against this threat
+					random_list = {
+						10 = { character_event = { id = aambition.13 } } #Kill Blade's Skeletons
+						20 = {add_trait = wounded  character_event = { id = aambition.13 } }
+						55 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.13 } 
+						}
+						15 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = str_4 has_character_flag = str_5 has_character_flag = str_6}} #average fighter against this threat
+					random_list = {
+						45 = { character_event = { id = aambition.13 } } #Kill Blade's Skeletons
+						35 = {add_trait = wounded character_event = { id = aambition.13 } }
+						15 = {
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.13 } 
+						}
+						10 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = str_7 has_character_flag = str_8 has_character_flag = str_9}} #good fighter against this threat
+					random_list = {
+						70 = { character_event = { id = aambition.13 } } #Kill Blade's Skeletons
+						15 = {add_trait = wounded character_event = { id = aambition.13 } }
+						10 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.13 } 
+						}
+						5 = {death = {death_reason = death_accident}}
+					}
+				}
+			}
+		}
+	}
+	
+	#Avoid
+	option = {
+		name = aambition.12.optb
+		custom_tooltip = {
+			text = aambition.sneaktooltip
+			hidden_tooltip = {
+				if = {
+					limit = {OR = {has_character_flag = avoid_1 has_character_flag = avoid_2 has_character_flag = avoid_3 has_character_flag = avoid_4 has_character_flag = avoid_5}}
+					random_list = {
+						30 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.13 } 
+						}
+						30 = {add_trait = wounded character_event = { id = aambition.13 } }
+						10 = {death = {death_reason = death_accident}}
+						30 = { character_event = { id = aambition.13 } } #escape
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = avoid_6  has_character_flag = avoid_7}} 
+					random_list = {
+						66 = { character_event = { id = aambition.13 } } #escape
+						20 = {add_trait = wounded character_event = { id = aambition.13 } }
+						10 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.13 } 
+						}
+						3 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {has_character_flag = avoid_8}
+					random_list = {
+						80 = { character_event = { id = aambition.13 } } #escape
+						10 = {add_trait = wounded character_event = { id = aambition.13 } }
+						9 = {
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.13 } 
+						}
+						1 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {has_character_flag = avoid_9}
+					character_event = { id = aambition.13 }
+				}
+			}
+		}
+	}
+	
+}
+
+#You're deep into Sancre Tor
+character_event = {
+	id = aambition.13
+	desc = deep_into_sancre_tor
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.13.opta
+		random_list = {
+			60 = {add_trait = wounded character_event = { id = aambition.14 } }
+			40 = {
+				add_maimed_trait_effect = yes 
+				character_event = { id = aambition.12 }	
+			}
+		}
+	}
+	option = {
+		name = aambition.13.optb
+		clr_character_flag = amulet_event_chain
+		remove_trait = on_adventure
+	}
+}
+
+#You're in the Tomb of the Reman Emperors
+character_event = {
+	id = aambition.14
+	desc = tomb_of_the_reman_emperors
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = aambition.14.opta
+		random_list = {
+			60 = {add_trait = wounded character_event = { id = aambition.15 } }
+			40 = {
+				add_maimed_trait_effect = yes
+				character_event = { id = aambition.16 } 
+			}
+		}
+	}
+	option = {
+		name = aambition.14.optb
+		clr_character_flag = amulet_event_chain
+		remove_trait = on_adventure		
+	}
+}
+
+#Warden Kastav attacks!
+character_event = {
+	id = aambition.15
+	desc = warden_kastav_sancre_tor
+	picture = GFX_evt_bandits #placeholder
+
+	is_triggered_only=yes
+	
+	immediate = {
+		#Set threat value, 10 is a low medium value
+		set_variable = { which = "ATStr" value = 28 } #how strong it is to fight
+		set_variable = { which = "ATAvoid" value = 30 } #how difficult it is to escape
+		set_variable = { which = "ATDip" value = 40 } #how difficult it is to open up a conversation
+		character_event = {id = 900100} #finds out your chances of winning
+	}
+	
+	#Fight
+	option = {
+		name = aambition.15.opta 
+		custom_tooltip = {
+			text = aambition.fighttooltip
+			hidden_tooltip = {
+				if = {
+					## there are 9 levels for each skill
+					limit = {OR = {has_character_flag = str_1 has_character_flag = str_2 has_character_flag = str_3}} #weak fighter against this threat
+					random_list = {
+						10 = { character_event = { id = aambition.16 } } #Kill Warden Kastav
+						20 = {add_trait = wounded  character_event = { id = aambition.16 } }
+						55 = {
+							add_maimed_trait_effect = yes  
+							character_event = { id = aambition.16 } 
+						}
+						15 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = str_4 has_character_flag = str_5 has_character_flag = str_6}} #average fighter against this threat
+					random_list = {
+						45 = { character_event = { id = aambition.16 } } #Kill Warden Kastav
+						35 = {add_trait = wounded character_event = { id = aambition.16 } }
+						15 = {
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.16 } 
+						}
+						10 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = str_7 has_character_flag = str_8 has_character_flag = str_9}} #good fighter against this threat
+					random_list = {
+						70 = { character_event = { id = aambition.16 } } #Kill Warden Kastav
+						15 = {add_trait = wounded character_event = { id = aambition.16 } }
+						10 = {
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.16 } 
+						}
+						5 = {death = {death_reason = death_accident}}
+					}
+				}
+			}
+		}
+	}
+	
+	#Avoid
+	option = {
+		name = aambition.15.optb
+		custom_tooltip = {
+			text = aambition.sneaktooltip
+			hidden_tooltip = {
+				if = {
+					limit = {OR = {has_character_flag = avoid_1 has_character_flag = avoid_2 has_character_flag = avoid_3 has_character_flag = avoid_4 has_character_flag = avoid_5}}
+					random_list = {
+						30 = {
+							add_maimed_trait_effect = yes
+							character_event = { id = aambition.16 } 
+						}
+						30 = {add_trait = wounded character_event = { id = aambition.16 } }
+						10 = {death = {death_reason = death_accident}}
+						30 = { character_event = { id = aambition.16 } } #escape
+					}
+				}
+				if = {
+					limit = {OR = {has_character_flag = avoid_6  has_character_flag = avoid_7}} 
+					random_list = {
+						66 = { character_event = { id = aambition.16 } } #escape
+						20 = {add_trait = wounded character_event = { id = aambition.16 } }
+						10 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.16 } 
+						}
+						3 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {has_character_flag = avoid_8}
+					random_list = {
+						80 = { character_event = { id = aambition.16 } } #escape
+						10 = {add_trait = wounded character_event = { id = aambition.16 } }
+						9 = {
+							add_maimed_trait_effect = yes 
+							character_event = { id = aambition.16 } 
+						}
+						1 = {death = {death_reason = death_accident}}
+					}
+				}
+				if = {
+					limit = {has_character_flag = avoid_9}
+					character_event = { id = aambition.16 }
+				}
+			}
+		}
+	}
+	
+}
+
+#You made it! The Amulet is yours!?
+character_event = {
+	id = aambition.16
+	desc = {
+		text = amulet_of_kings_sancre_tor
+		trigger = {
+			NOT = { has_global_flag = amulet_of_kings_active }
+		}
+	}
+	desc = {
+		text = amulet_of_kings_sancre_tor_B
+		trigger = {
+			has_global_flag = amulet_of_kings_active
+		}
+	}
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		trigger = {
+			NOT = { has_global_flag = amulet_of_kings_active }
+		}
+		name = aambition.16.opta
+		prestige = 1000
+		add_amulet_of_kings = yes
+		clr_character_flag = amulet_event_chain
+		remove_trait = on_adventure
+		#set_global_flag = amulet_of_kings_active
+	}
+	option = {
+		trigger = {
+			has_global_flag = amulet_of_kings_active
+		}
+		name = aambition.16.optb
+		prestige = 250
+		clr_character_flag = amulet_event_chain
+		remove_trait = on_adventure
+		#set_global_flag = amulet_of_kings_active
+	}
+}

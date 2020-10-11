@@ -1,0 +1,455 @@
+law_groups = {
+	standing_army_law = {
+		law_type = realm
+	}	
+}
+
+laws = {
+	standing_army_law_0 = {
+		group = standing_army_law
+		default = yes
+		
+		potential = {
+			holder_scope = {
+				is_tribal = no
+				is_nomadic = no
+			}
+		}
+		
+		allow = {
+			has_law = standing_army_law_1
+			ec_realm_laws_allowed = yes
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 2
+				OR = {
+					has_law = feudal_administration
+					has_law = ze_administration_laws_0
+				}
+			}
+			modifier = {
+				factor = 0.1
+				OR = {
+					has_law = imperial_administration
+					has_law = ze_administration_laws_2
+				}
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { yearly_income < 20 }
+			}
+			modifier = {
+				factor = 5
+				holder_scope = { yearly_income < 10 }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { realm_size = 100 }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { realm_size = 200 }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { trait = ambitious }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { realm_size < 50 }
+			}
+		}
+		
+		ai_will_revoke = {
+			factor = 0
+		}
+		
+		effect = {
+			ec_legislature_tooltip = yes
+			leg_standing_army_law_flag = yes
+			hidden_tooltip = {
+				revoke_law = standing_army_law_1
+				revoke_law = standing_army_law_2
+			}
+		}
+	}
+
+	standing_army_law_1 = {
+		group = standing_army_law
+		default = yes
+		
+		potential = {
+			holder_scope = {
+				is_tribal = no
+				is_nomadic = no
+			}
+		}
+		
+		allow = {
+			ec_realm_laws_allowed = yes
+			OR = { 
+				has_law = standing_army_law_0
+				has_law = standing_army_law_2
+			}
+			OR = {
+				has_law = centralization_2
+				has_law = centralization_3
+				has_law = centralization_4
+				has_law = crown_authority_2
+				has_law = crown_authority_3
+				has_law = crown_authority_4
+			}
+			OR = {
+				has_law = ze_administration_laws_1
+				has_law = ze_administration_laws_2
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0.1
+
+			## If has 0
+			modifier = {
+				factor = 2
+				holder_scope = { yearly_income = 50 }
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { yearly_income = 100 }
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 0.01
+				holder_scope = { yearly_income < 10 }
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 0.01
+				holder_scope = { yearly_income < 5 }
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { 
+					OR = { 
+						trait = genius
+						trait = quick
+					}
+				}
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = ambitious }
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { trait = slothful }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { has_education_martial_trigger = yes }
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { 
+					OR = {
+						trait = crusader
+						trait = mujahid
+						trait = valhalla_bound
+						trait = sun_warrior
+						trait = ukkos_shield
+						trait = nyames_shield
+						trait = peruns_chosen
+						trait = romuvas_own
+						trait = ares_own
+						trait = tengri_warrior
+						trait = shaddai
+						trait = gondi_shahansha
+					}
+				}
+				has_law = standing_army_law_0
+			}		
+			modifier = {
+				factor = 0.01
+				holder_scope = { 
+					OR = {
+						trait = depressed
+						trait = lunatic
+						trait = incapable
+						trait = possessed
+						trait = infirm
+					}
+				}
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { 
+					OR = {
+						trait = slow
+						trait = imbecile
+					}
+				}
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = { trait = content }
+			}
+			modifier = {
+				factor = 2
+				OR = { 
+					has_law = imperial_administration
+					has_law = ze_administration_laws_2
+				}
+				has_law = standing_army_law_0
+			}
+			modifier = {
+				factor = 0.5
+				OR = { 
+					has_law = feudal_administration
+					has_law = ze_administration_laws_0
+				}
+				has_law = standing_army_law_0
+			}
+
+			## If has 2
+
+			modifier = {
+				factor = 2
+				holder_scope = { realm_size < 50 }
+				has_law = standing_army_law_2
+			}
+			modifier = {
+				factor = 0.01
+				holder_scope = { yearly_income = 50 }
+				has_law = standing_army_law_2
+			}
+			modifier = {
+				factor = 0.01
+				holder_scope = { yearly_income = 100 }
+				has_law = standing_army_law_2
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { yearly_income < 10 }
+				has_law = standing_army_law_2
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { yearly_income < 5 }
+				has_law = standing_army_law_2
+			}
+			modifier = {
+				factor = 0.5
+				OR = { 
+					has_law = imperial_administration
+					has_law = ze_administration_laws_2
+				}
+				has_law = standing_army_law_2
+			}
+			modifier = {
+				factor = 2
+				OR = { 
+					has_law = feudal_administration
+					has_law = ze_administration_laws_0
+				}
+				has_law = standing_army_law_2
+			}
+
+		}
+		
+		ai_will_revoke = {
+			factor = 0
+		}
+		
+		effect = {
+			ec_legislature_tooltip = yes
+			leg_standing_army_law_flag = yes
+			hidden_tooltip = {
+				revoke_law = standing_army_law_0
+				revoke_law = standing_army_law_2
+			}
+		}
+		global_levy_size = -0.25
+		castle_vassal_min_levy = -0.1
+		castle_vassal_max_levy = -0.1
+		temple_vassal_min_levy = -0.1
+		temple_vassal_max_levy = -0.1
+		city_vassal_min_levy = -0.1
+		city_vassal_max_levy = -0.1
+		tribal_vassal_min_levy = -0.1
+		tribal_vassal_max_levy = -0.1
+	}
+
+	standing_army_law_2 = {
+		group = standing_army_law
+		default = yes
+		
+		potential = {
+			holder_scope = {
+				is_tribal = no
+				is_nomadic = no
+			}
+		}
+		
+		allow = {
+			ec_realm_laws_allowed = yes
+			OR = {
+				has_law = ze_administration_laws_2
+			}
+			has_law = standing_army_law_1
+			OR = {
+				has_law = centralization_3
+				has_law = centralization_4
+				has_law = crown_authority_3
+				has_law = crown_authority_4
+			}
+			higher_tier_than = DUKE
+			holder_scope = { independent = yes }
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0.1
+			modifier = {
+				factor = 2
+				holder_scope = { yearly_income = 50 }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { 
+					OR = { 
+						trait = genius
+						trait = quick
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { yearly_income = 100 }
+			}
+			modifier = {
+				factor = 0.01
+				holder_scope = { yearly_income < 10 }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { yearly_income < 25 }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { trait = ambitious }
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { trait = slothful }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { has_education_martial_trigger = yes }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { 
+					OR = {
+						trait = crusader
+						trait = mujahid
+						trait = valhalla_bound
+						trait = sun_warrior
+						trait = ukkos_shield
+						trait = nyames_shield
+						trait = peruns_chosen
+						trait = romuvas_own
+						trait = ares_own
+						trait = tengri_warrior
+						trait = shaddai
+						trait = gondi_shahansha
+					}
+				}
+			}		
+			modifier = {
+				factor = 0.01
+				holder_scope = { 
+					OR = {
+						trait = depressed
+						trait = lunatic
+						trait = incapable
+						trait = possessed
+						trait = infirm
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				holder_scope = { 
+					OR = {
+						trait = slow
+						trait = imbecile
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = { trait = content }
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = { realm_size < 100 }
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = { realm_size < 50 }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { realm_size = 200 }
+			}
+			modifier = {
+				factor = 2
+				holder_scope = { realm_size = 300 }
+			}
+		}
+		
+		ai_will_revoke = {
+			factor = 0
+		}
+		
+		effect = {
+			ec_legislature_tooltip = yes
+			leg_standing_army_law_flag = yes
+			hidden_tooltip = {
+				revoke_law = standing_army_law_0
+				revoke_law = standing_army_law_1
+			}
+		}
+
+		global_levy_size = -0.5
+		castle_vassal_min_levy = -0.25
+		castle_vassal_max_levy = -0.25
+		temple_vassal_min_levy = -0.25
+		temple_vassal_max_levy = -0.25
+		city_vassal_min_levy = -0.25
+		city_vassal_max_levy = -0.25
+		tribal_vassal_min_levy = -0.25
+		tribal_vassal_max_levy = -0.25
+	}
+}

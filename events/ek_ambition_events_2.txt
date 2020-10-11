@@ -1,0 +1,2480 @@
+namespace = kambition
+
+#Obtain Artifact ~ Visit the Market
+character_event = {
+	id = kambition.1
+	desc = kambition1d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		has_ambition = obj_obtain_artifact
+		NOT = { has_character_flag = obtain_art_market }
+		NOT = { has_character_flag = obtain_art_mystery }
+		NOT = { has_character_flag = obt_art_abndn_m }
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+		modifier = {
+			factor = 2
+			NOT = { scaled_wealth = 4 }
+		}
+		modifier = {
+			factor = 0.8
+			scaled_wealth = 4
+		}
+	}
+	
+	immediate = {
+		set_character_flag = obtain_art_market
+	}
+	
+	option = {
+		name = kambition1o1
+		custom_tooltip = {
+			text = kambition1o1tt
+			hidden_tooltip = {
+				random_list = {
+					90 = { character_event = { id = kambition.2 days = 7 random = 3 } }
+					10 = { character_event = { id = kambition.30 days = 7 random = 3 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = kambition1o2
+		custom_tooltip = {
+			text = kambition1o2tt
+		}
+		clr_character_flag = obtain_art_market
+	}
+}
+character_event = {
+	id = kambition.2
+	desc = kambition2d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition2o1
+		custom_tooltip = {
+			text = kambition2o1tt
+			hidden_tooltip = {
+				random_list = {
+					6 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					2 = { character_event = { id = kambition.6 } } #tamriel_map
+					3 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					3 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					3 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.9 } } #vampire_hand
+					1 = { character_event = { id = kambition.10 } } #fists_of_randagulf
+					6 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					3 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					6 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					5 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					3 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					4 = { character_event = { id = kambition.15 } } #elven_bow
+					3 = { character_event = { id = kambition.16 } } #glass_sword
+					6 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					5 = { character_event = { id = kambition.17 } } #mithril_armour
+					4 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					4 = { character_event = { id = kambition.18 } } #elven_armour
+					3 = { character_event = { id = kambition.19 } } #dwarven_armour
+					6 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					4 = { character_event = { id = kambition.20 } } #orcish_armour
+					3 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					5 = { character_event = { id = kambition.21 } } #mundane_staff
+					6 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+				}
+			}
+		}
+	}
+}
+character_event = { #Useless Baubles
+	id = kambition.3
+	desc = kambition3d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition3o
+		add_character_modifier = {
+			name = big_spender
+			duration = 1095
+		}
+		scaled_wealth = -1
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.22 } } #shimsil
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #Religious Trinket
+	id = kambition.4
+	desc = kambition4d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition4o
+		scaled_wealth = -1
+		piety = 100
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #eleidons_ward
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #Trophy Trinket
+	id = kambition.5
+	desc = kambition5d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition5o
+		scaled_wealth = -1
+		prestige = 50
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #tamriel_map
+	id = kambition.6
+	desc = kambition6d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition6o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = map_of_tamriel
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #dragonbone_misc
+	id = kambition.7
+	desc = kambition7d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition7o
+		scaled_wealth = -1
+		custom_tooltip = { text = youleaveshop }
+		#add_trait = dragonbone_misc
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #dwemer_puzzle
+	id = kambition.8
+	desc = kambition8d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition8o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = dwemer_puzzle_cube
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #vampire_hand
+	id = kambition.9
+	desc = kambition9d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition9o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		#add_trait = vampire_hand
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #fists_of_randagulf
+	id = kambition.10
+	desc = kambition10d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition10o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		#add_trait = fists_of_randagulf
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #dragonbone_armor
+	id = kambition.11
+	desc = kambition11d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -3.5
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = armor_dragonbone
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #herders_crook
+	id = kambition.12
+	desc = kambition12d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -2.5
+		custom_tooltip = { text = youleaveshop }
+		#add_trait = herders_crook
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #warlocks_ring
+	id = kambition.13
+	desc = kambition13d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = warlocks_ring
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #orcish_warhammer
+	id = kambition.14
+	desc = kambition14d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition14o
+		scaled_wealth = -2.5
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = weapon_sword_orcish
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #elven_bow
+	id = kambition.15
+	desc = kambition15d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -2.5
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = weapon_sword_elven
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #glass_sword
+	id = kambition.16
+	desc = kambition16d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -2.5
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = weapon_sword_glass
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #mithril_armour
+	id = kambition.17
+	desc = kambition17d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -2.8
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = armor_mithril
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #elven_armour
+	id = kambition.18
+	desc = kambition18d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = armor_elven
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #dwarven_armour
+	id = kambition.19
+	desc = kambition19d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = armor_dwarven
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #orcish_armour
+	id = kambition.20
+	desc = kambition20d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -2.8
+		custom_tooltip = { text = youleaveshop }
+		add_artifact = armor_orcish
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #mundane_staff
+	id = kambition.21
+	desc = kambition21d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -2.4
+		custom_tooltip = { text = youleaveshop }
+		#add_trait = mundane_staff
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #shimsil
+	id = kambition.22
+	desc = kambition22d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		#add_trait = shimsil
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.23 } } #stormforge
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = { #stormforge
+	id = kambition.23
+	desc = kambition23d
+	picture = GFX_evt_market
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition11o
+		scaled_wealth = -3
+		custom_tooltip = { text = youleaveshop }
+		#add_trait = stormforge
+	}
+	option = {
+		name = keeplooking_art_ambo
+		wealth = -5
+		custom_tooltip = {
+			text = keeplooking_art_ambott
+			hidden_tooltip = {
+				random_list = {
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.6 } } #tamriel_map
+					2 = { character_event = { id = kambition.7 } } #dragonbone_misc
+					2 = { character_event = { id = kambition.8 } } #dwemer_puzzle
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.9 } } #vampire_hand
+					7 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					1 = { character_event = { id = kambition.11 } } #dragonbone_armor
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					1 = { character_event = { id = kambition.12 } } #herders_crook
+					1 = { character_event = { id = kambition.13 } } #warlocks_ring
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					3 = { character_event = { id = kambition.14 } } #orcish_warhammer
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.15 } } #elven_bow
+					2 = { character_event = { id = kambition.16 } } #glass_sword
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost Piety
+					3 = { character_event = { id = kambition.17 } } #mithril_armour
+					6 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					2 = { character_event = { id = kambition.18 } } #elven_armour
+					1 = { character_event = { id = kambition.19 } } #dwarven_armour
+					8 = { character_event = { id = kambition.4 } } #RELIGIOUS TRINKET ~ Boost
+					2 = { character_event = { id = kambition.20 } } #orcish_armour
+					5 = { character_event = { id = kambition.3 } } #USELESS BAUBLES
+					3 = { character_event = { id = kambition.21 } } #mundane_staff
+					7 = { character_event = { id = kambition.5 } } #TROPHY TRINKET ~ Boost Prestige
+					1 = { character_event = { id = kambition.22 } } #shimsil
+				}
+			}
+		}
+	}
+	option = {
+		name = leaveemptyhanded
+		custom_tooltip = {
+			text = leaveemptyhandedtt
+		}
+		prestige = -10
+		clr_character_flag = obtain_art_market
+		set_character_flag = obt_art_abndn_m
+	}
+}
+character_event = {
+	id = kambition.30
+	desc = kambition30d
+	picture = GFX_evt_sothabrothel
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition30o1
+		trigger = {
+			NOT = { trait = craven }
+			OR = {
+				trait = mage_1
+				trait = mage_2
+				trait = mage_3
+				trait = mage_4
+			}
+		}
+		random_list = {
+			75 = {
+				custom_tooltip = {
+					text = kambition30o1ttwin
+					hidden_tooltip = {
+						character_event = { id = kambition.31 }
+					}
+				}
+			}
+			25 = {
+				custom_tooltip = {
+					text = kambition30o1ttlose
+					hidden_tooltip = {
+						character_event = { id = kambition.32 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = kambition30o2
+		trigger = {
+			NOT = { trait = craven }
+			OR = {
+				trait = warrior_1
+				trait = warrior_2
+				trait = warrior_3
+				trait = warrior_4
+			}
+		}
+		random_list = {
+			75 = {
+				custom_tooltip = {
+					text = kambition30o1ttwin
+					hidden_tooltip = {
+						character_event = { id = kambition.31 }
+					}
+				}
+			}
+			25 = {
+				custom_tooltip = {
+					text = kambition30o1ttlose
+					hidden_tooltip = {
+						character_event = { id = kambition.32 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = kambition30o3
+		trigger = {
+			OR = {
+				trait = diplomat_1
+				trait = diplomat_2
+				trait = diplomat_3
+				trait = diplomat_4
+			}
+		}
+		random_list = {
+			75 = {
+				custom_tooltip = {
+					text = kambition30o1ttwin
+					hidden_tooltip = {
+						character_event = { id = kambition.31 }
+					}
+				}
+			}
+			25 = {
+				custom_tooltip = {
+					text = kambition30o1ttlose
+					hidden_tooltip = {
+						character_event = { id = kambition.32 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = kambition30o4
+		trigger = {
+			OR = {
+				trait = agent_1
+				trait = agent_2
+				trait = agent_3
+				trait = agent_4
+			}
+		}
+		random_list = {
+			75 = {
+				custom_tooltip = {
+					text = kambition30o1ttwin
+					hidden_tooltip = {
+						character_event = { id = kambition.31 }
+					}
+				}
+			}
+			25 = {
+				custom_tooltip = {
+					text = kambition30o1ttlose
+					hidden_tooltip = {
+						character_event = { id = kambition.32 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = kambition30o5
+		scaled_wealth = -1
+		if = {
+			limit = {
+				trait = brave
+			}
+			random = {
+				chance = 33
+				remove_trait = brave
+			}
+		}
+		if = {
+			limit = {
+				NOT = { trait = brave }
+				NOT = { trait = craven }
+			}
+			random = {
+				chance = 33
+				add_trait = craven
+			}
+		}
+		custom_tooltip = {
+			text = kambition30o5tt
+			clr_character_flag = obtain_art_market
+			set_character_flag = obt_art_abndn_m
+		}
+	}
+}
+character_event = {
+	id = kambition.31
+	desc = kambition31d
+	picture = GFX_evt_sothabrothel
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		prestige = 5
+		custom_tooltip = {
+			text = kambition31ott
+			hidden_tooltip = { character_event = { id = kambition.2 } }
+		}
+	}
+}
+character_event = {
+	id = kambition.32
+	desc = kambition32d
+	picture = GFX_evt_beaten
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		prestige = -5
+		scaled_wealth = -3
+		custom_tooltip = {
+			text = kambition30o5tt
+			clr_character_flag = obtain_art_market
+			set_character_flag = obt_art_abndn_m
+		}
+	}
+}
+
+#Mystery Merchant
+character_event = {
+	id = kambition.50
+	desc = kambition50d
+	picture = GFX_evt_sheo
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		ai = no
+		has_ambition = obj_obtain_artifact
+		NOT = { has_character_flag = obtain_art_market }
+		NOT = { has_character_flag = obtain_art_mystery }
+		NOT = { has_global_flag = sheogorath_surprise_box }
+	}
+	
+	mean_time_to_happen = {
+		months = 720
+		modifier = {
+			factor = 2
+			NOT = { scaled_wealth = 4 }
+		}
+		modifier = {
+			factor = 0.8
+			scaled_wealth = 4
+		}
+		modifier = {
+			factor = 2
+			trait = cruel
+		}
+		modifier = {
+			factor = 2
+			trait = shy
+		}
+		modifier = {
+			factor = 1.5
+			trait = ruthless
+		}
+		modifier = {
+			factor = 1.25
+			trait = slovenly
+		}
+		modifier = {
+			factor = 0.25
+			trait = trusting
+		}
+		modifier = {
+			factor = 0.25
+			trait = paranoid
+		}
+		modifier = {
+			factor = 0.25
+			trait = possessed
+		}
+		modifier = {
+			factor = 0.25
+			trait = stressed
+		}
+		modifier = {
+			factor = 0.25
+			trait = depressed
+		}
+		modifier = {
+			factor = 0.25
+			trait = lunatic
+		}
+		modifier = {
+			factor = 0.25
+			trait = genius
+		}
+	}
+	
+	immediate = {
+		set_character_flag = obtain_art_mystery
+		set_global_flag = sheogorath_surprise_box
+		random = {
+			chance = 33
+			set_character_flag = insanity_on_horizon
+		}
+	}
+	
+	option = {
+		name = chooselittlebox
+		custom_tooltip = {
+			text = youfindinside
+			hidden_tooltip = {
+				random_list = {
+					11 = { character_event = { id = kambition.51 } } #Cheese
+					4 = { character_event = { id = kambition.52 } } #Death
+					5 = { character_event = { id = kambition.53 } } #Slightly used intestine skiprope
+					17 = { character_event = { id = kambition.54 } } #Jewels
+					#Artifacts
+					12 = { character_event = { id = kambition.55 } } #dwemer_puzzle
+					10 = { character_event = { id = kambition.56 } } #dragonbone_misc
+					7 = { character_event = { id = kambition.57 } } #easter_egg_t
+					9 = { character_event = { id = kambition.58 } } #vampire_hand
+					
+					######### TODO UPGRADE TO ARTIFACT SYSTEM
+					
+					# 6 = {
+						# if = {
+							# limit = { NOT = { blackhands_dagger = { is_alive = yes } } }
+							# character_event = { id = kambition.59 }
+						# }
+						# if = {
+							# limit = { blackhands_dagger = { is_alive = yes } }
+							# character_event = { id = kambition.51 }
+						# }	
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { haynek_fang = { is_alive = yes } } }
+							# character_event = { id = kambition.60 }
+						# }
+						# if = {
+							# limit = { haynek_fang = { is_alive = yes } }
+							# character_event = { id = kambition.52 }
+						# }	
+					# }
+					# 1 = {
+						# if = {
+							# limit = { NOT = { elder_scroll = { is_alive = yes } } }
+							# character_event = { id = kambition.61 }
+						# }
+						# if = {
+							# limit = { elder_scroll = { is_alive = yes } }
+							# character_event = { id = kambition.53 }
+						# }
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { ring_phynaster = { is_alive = yes } } }
+							# character_event = { id = kambition.62 }
+						# }
+						# if = {
+							# limit = { ring_phynaster = { is_alive = yes } }
+							# character_event = { id = kambition.54 }
+						# }
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { weapon_clutterbane =  { is_alive = yes } } }
+							# character_event = { id = kambition.63 }
+						# }
+						# if = {
+							# limit = { weapon_clutterbane =  { is_alive = yes } }
+							# character_event = { id = kambition.51 }
+						# }
+					# }
+				}
+			}
+		}
+	}
+	option = {
+		name = choosemediumbox
+		custom_tooltip = {
+			text = youfindinside
+			hidden_tooltip = {
+				random_list = {
+					11 = { character_event = { id = kambition.54 } } #Jewels
+					4 = { character_event = { id = kambition.64 } } #A poisonous snake
+					5 = { character_event = { id = kambition.65 } } #A Baby
+					17 = { character_event = { id = kambition.66 } } #A piece of paper clearly proving you're the Emperor of Tamriel
+					#Artifacts
+					12 = { character_event = { id = kambition.54 } } #dwemer_puzzle
+					10 = { character_event = { id = kambition.55 } } #dragonbone_misc
+					7 = { character_event = { id = kambition.56 } } #easter_egg_t
+					9 = { character_event = { id = kambition.57 } } #vampire_hand
+					
+					##### TODO UPGRADE TO ARTIFACT SYSTEM
+					# 6 = {
+						# if = {
+							# limit = { NOT = { blackhands_dagger = { is_alive = yes } } }
+							# character_event = { id = kambition.59 }
+						# }
+						# if = {
+							# limit = { blackhands_dagger = { is_alive = yes } }
+							# character_event = { id = kambition.51 }
+						# }	
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { haynek_fang = { is_alive = yes } } }
+							# character_event = { id = kambition.60 }
+						# }
+						# if = {
+							# limit = { haynek_fang = { is_alive = yes } }
+							# character_event = { id = kambition.52 }
+						# }	
+					# }
+					# 1 = {
+						# if = {
+							# limit = { NOT = { elder_scroll = { is_alive = yes } } }
+							# character_event = { id = kambition.61 }
+						# }
+						# if = {
+							# limit = { elder_scroll = { is_alive = yes } }
+							# character_event = { id = kambition.53 }
+						# }
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { ring_phynaster = { is_alive = yes } } }
+							# character_event = { id = kambition.62 }
+						# }
+						# if = {
+							# limit = { ring_phynaster = { is_alive = yes } }
+							# character_event = { id = kambition.54 }
+						# }
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { weapon_clutterbane =  { is_alive = yes } } }
+							# character_event = { id = kambition.63 }
+						# }
+						# if = {
+							# limit = { weapon_clutterbane =  { is_alive = yes } }
+							# character_event = { id = kambition.51 }
+						# }
+					# }
+				}
+			}
+		}
+	}
+	option = {
+		name = choosebigbox
+		custom_tooltip = {
+			text = youfindinside
+			hidden_tooltip = {
+				random_list = {
+					11 = { character_event = { id = kambition.67 } } #A one way ticket to the Shivering Isles
+					4 = { character_event = { id = kambition.68 } } #An angry sabrecat
+					5 = { character_event = { id = kambition.69 } } #A new courtier, bound and gagged
+					17 = { character_event = { id = kambition.70 } } #A collection of rare abstract artworks
+					#Artifacts
+					12 = { character_event = { id = kambition.54 } } #dwemer_puzzle
+					10 = { character_event = { id = kambition.55 } } #dragonbone_misc
+					7 = { character_event = { id = kambition.56 } } #easter_egg_t
+					9 = { character_event = { id = kambition.57 } } #vampire_hand
+					
+					################# TODO UPDATE TO ARTIFACT SYSTEM
+					# 6 = {
+						# if = {
+							# limit = { NOT = { blackhands_dagger = { is_alive = yes } } }
+							# character_event = { id = kambition.59 }
+						# }
+						# if = {
+							# limit = { blackhands_dagger = { is_alive = yes } }
+							# character_event = { id = kambition.51 }
+						# }	
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { haynek_fang = { is_alive = yes } } }
+							# character_event = { id = kambition.60 }
+						# }
+						# if = {
+							# limit = { haynek_fang = { is_alive = yes } }
+							# character_event = { id = kambition.52 }
+						# }	
+					# }
+					# 1 = {
+						# if = {
+							# limit = { NOT = { elder_scroll = { is_alive = yes } } }
+							# character_event = { id = kambition.61 }
+						# }
+						# if = {
+							# limit = { elder_scroll = { is_alive = yes } }
+							# character_event = { id = kambition.53 }
+						# }
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { ring_phynaster = { is_alive = yes } } }
+							# character_event = { id = kambition.62 }
+						# }
+						# if = {
+							# limit = { ring_phynaster = { is_alive = yes } }
+							# character_event = { id = kambition.54 }
+						# }
+					# }
+					# 6 = {
+						# if = {
+							# limit = { NOT = { weapon_clutterbane =  { is_alive = yes } } }
+							# character_event = { id = kambition.63 }
+						# }
+						# if = {
+							# limit = { weapon_clutterbane =  { is_alive = yes } }
+							# character_event = { id = kambition.51 }
+						# }
+					# }
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = kambition.51
+	desc = kambition51d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition51o
+		location = {
+			add_province_modifier = {
+				name = cheese_everywhere
+				duration = 3650
+			}
+		}
+	}
+}
+character_event = {
+	id = kambition.52
+	desc = kambition52d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition52o
+		death = { death_reason = death_accident }
+	}
+}
+character_event = {
+	id = kambition.53
+	desc = kambition53d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = kambition53o
+		random = {
+			chance = 66
+			add_depressed = yes
+		}
+	}
+}
+character_event = {
+	id = kambition.54
+	desc = kambition54d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		scaled_wealth = 6.66
+	}
+}
+character_event = {
+	id = kambition.55
+	desc = kambition55d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		add_artifact = dwemer_puzzle_cube
+	}
+}
+character_event = {
+	id = kambition.56
+	desc = kambition56d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		#add_trait = dragonbone_misc
+	}
+}
+character_event = {
+	id = kambition.57
+	desc = kambition57d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ok
+		#add_trait = easter_egg_t
+	}
+}
+character_event = {
+	id = kambition.58
+	desc = kambition58d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		#add_trait = vampire_hand
+	}
+}
+character_event = {
+	id = kambition.59
+	desc = kambition59d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		#add_trait = blackhands_dagger
+	}
+}
+character_event = {
+	id = kambition.60
+	desc = kambition60d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		add_artifact = weapon_dagger_haynekh
+	}
+}
+character_event = {
+	id = kambition.61
+	desc = kambition61d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		#add_trait = elder_scroll
+	}
+}
+character_event = {
+	id = kambition.62
+	desc = kambition62d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		add_artifact = ring_phynaster
+	}
+}
+character_event = {
+	id = kambition.63
+	desc = kambition63d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ok
+		add_artifact = weapon_clutterbane
+	}
+}
+character_event = {
+	id = kambition.64
+	desc = kambition64d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = tamesnake
+		trigger = {
+			NOT = { any_artifact = { has_artifact_flag = dog } }
+			NOT = { has_artifact = pet_cat }
+			NOT = { has_artifact = pet_skeever }
+			NOT = { has_artifact = pet_scamp }
+			NOT = { has_artifact = pet_monkey }
+			NOT = { has_artifact = pet_raven }
+			NOT = { has_artifact = pet_snake }
+		}
+		custom_tooltip = {
+			text = tamesnakett
+			hidden_tooltip = {
+				random_list = {
+					50 = { modifier = { factor = 0 OR = { is_tsaesci = yes trait = argonian } } character_event = { id = kambition.71 } } #Poisons you
+					50 = { character_event = { id = kambition.72 } } #Gain snake
+				}
+			}	
+		}
+	}
+	option = {
+		name = snakebite
+		trigger = {
+			OR = {
+				any_artifact = { has_artifact_flag = dog }
+				has_artifact = pet_cat
+				has_artifact = pet_skeever
+				has_artifact = pet_scamp
+				has_artifact = pet_monkey
+				has_artifact = pet_raven
+				has_artifact = pet_snake
+			}
+			NOT = { trait = argonian }
+			NOT = { is_tsaesci = yes }
+		}
+		custom_tooltip = {
+			text = snakebitett
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_dlc = "Reapers"
+				}
+			}
+			add_trait = ill
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			set_character_flag = disease_not_serious
+			add_trait = vomiting
+			character_event = { id = RIP.11005 days = 10 random = 30 }
+		}
+	}
+	option = {
+		name = snakebitearg
+		trigger = {
+			OR = {
+				any_artifact = { has_artifact_flag = dog }
+				has_artifact = pet_cat
+				has_artifact = pet_skeever
+				has_artifact = pet_scamp
+				has_artifact = pet_monkey
+				has_artifact = pet_raven
+				has_artifact = pet_snake
+			}
+			OR = {
+				trait = argonian
+				is_tsaesci = yes
+			}
+		}
+		add_trait = wounded
+	}
+}
+character_event = {
+	id = kambition.65
+	desc = kambition65d
+	picture = GFX_evt_birth
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ok
+		if = {
+			limit = {
+				is_female = no
+			}
+			create_character = {
+				dynasty = ROOT
+				trait = bastard
+				age = 0
+			}
+			new_character = {
+				set_father = ROOT
+				#assign_birthsign = yes
+				#assign_racial_trait = yes
+			}
+		}
+		if = {
+			limit = {
+				is_female = yes
+			}
+			create_character = {
+				dynasty = ROOT
+				trait = bastard
+				age = 0
+			}
+			new_character = {
+				set_mother = ROOT
+				random_list = {
+					50 = { add_trait = lucky }
+					50 = { add_trait = unlucky }
+				}
+				#assign_birthsign = yes
+				#assign_racial_trait = yes
+			}
+		}
+		random = {
+			chance = 33
+			add_stressed = yes
+		}
+	}
+	
+	after = {
+		new_character = {
+			add_trait = daedric_scion
+			set_character_flag = known_heritage_self
+			set_character_flag = child_of_madness
+			ROOT = { set_character_flag = known_heritage_@PREV }
+		}
+	}
+}
+character_event = {
+	id = kambition.66
+	desc = kambition66d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = irimpror
+		add_claim = e_tamriel
+		random = {
+			chance = 66
+			add_trait = lunatic
+		}
+	}
+	option = {
+		name = dontbecrazycrazyman
+	}
+}
+character_event = {
+	id = kambition.67
+	desc = kambition67d
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = waagh
+		death = { death_reason = death_shivering_isles }
+	}
+}
+character_event = {
+	id = kambition.68
+	desc = kambition68d
+	picture = GFX_evt_sabrecat
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = arghsabrecat
+		custom_tooltip = {
+			text = shreddedbycat
+		}
+		add_trait = scarred
+		add_trait = one_handed
+		add_trait = one_eyed
+		add_trait = one_legged
+		add_trait = disfigured
+	}
+}
+character_event = {
+	id = kambition.69
+	desc = kambition69d
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = wtfsheo
+		custom_tooltip = {
+			text = wtfsheott
+			hidden_tooltip = {
+				random_list = {
+					25 = {
+						create_character = {
+							random_traits = yes
+							dynasty = none
+							age = 323
+							religion = daedra_sheogorath
+							culture = ROOT
+							attributes = {
+								learning = 10
+							}
+							trait = mage_5
+							trait = lunatic
+							trait = mystic
+							trait = diligent
+							trait = humble
+							trait = honest
+							trait = content
+							trait = eunuch
+							trait = one_eyed
+							trait = immortal
+						}
+						new_character = {
+							opinion = {
+								who = ROOT
+								modifier = faithful_servant
+								years = 1000
+							}
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+					25 = {
+						create_character = {
+							random_traits = yes
+							dynasty = none
+							age = 127
+							religion = daedra_sheogorath
+							culture = ROOT
+							attributes = {
+								stewardship = 10
+							}
+							trait = magistrate_5
+							trait = lunatic
+							trait = gardener
+							trait = eunuch
+							trait = blinded
+							trait = immortal
+							trait = craven
+							trait = paranoid
+						}
+						new_character = {
+							opinion = {
+								who = ROOT
+								modifier = faithful_servant
+								years = 1000
+							}
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+					25 = {
+						create_character = {
+							random_traits = yes
+							dynasty = none
+							age = 217
+							religion = daedra_sheogorath
+							culture = ROOT
+							attributes = {
+								intrigue = 10
+							}
+							trait = agent_5
+							trait = lunatic
+							trait = alchemist
+							trait = eunuch
+							trait = immortal
+							trait = ruthless
+							trait = gregarious
+						}
+						new_character = {
+							opinion = {
+								who = ROOT
+								modifier = faithful_servant
+								years = 1000
+							}
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+					25 = {
+						create_character = {
+							random_traits = yes
+							dynasty = none
+							age = 271
+							religion = daedra_sheogorath
+							culture = ROOT
+							attributes = {
+								diplomacy = 10
+							}
+							trait = diplomat_5
+							trait = lunatic
+							trait = poet
+							trait = eunuch
+							trait = one_eyed
+							trait = immortal
+							trait = vain
+							trait = brave
+							trait = arbitrary
+						}
+						new_character = {
+							opinion = {
+								who = ROOT
+								modifier = faithful_servant
+								years = 1000
+							}
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = kambition.70
+	desc = kambition70d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ok
+		prestige = 100
+		random = {
+			chance = 33
+			change_diplomacy = 3
+		}
+	}
+}
+
+character_event = {
+	id = kambition.71
+	desc = kambition71d
+	picture = GFX_evt_illness
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = poisonpoison
+		if = {
+			limit = {
+				NOT = {
+					has_dlc = "Reapers"
+				}
+			}
+			add_trait = ill
+		}
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+			add_symptom_effect = yes
+		}
+		add_trait = wounded
+	}
+}
+character_event = {
+	id = kambition.72
+	desc = kambition72d
+	picture = GFX_evt_lunatic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = excellent
+		add_artifact = pet_snake
+	}
+}

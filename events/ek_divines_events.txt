@@ -1,0 +1,301 @@
+####Eight/Nine Divines Events####
+
+namespace = divines
+
+###Sybil of Dibella### 
+
+#Sybil dies
+character_event = {
+	id = divines.1
+	is_triggered_only = yes
+	hide_window = yes
+	
+	only_women = yes
+	
+	trigger = {
+		has_character_modifier = sybil_of_dibella
+	}
+	
+	immediate = {
+		#Warns relatives and followers
+		any_playable_ruler = {
+			limit = {
+				OR = { 
+					trait = p_odibella
+					trait = p_dibella
+					is_close_relative = ROOT
+				}
+			}
+			character_event = { id = divines.2 days = 2 }
+		}
+		#Chooses a new Sybil
+		random_character = {
+			limit = {
+				#Not already a Sybil
+				NOT = { has_character_modifier = sybil_of_dibella }
+				#Is a woman
+				is_female = yes
+				#Is not a ruler
+				is_ruler = no
+				#Is not a religious head
+				controls_religion = no
+				#Is not married
+				is_married = no
+				#Is not an adult
+				is_adult = no
+				#Follows a Dibellan religion
+				OR = {
+					religion = eight_divines
+					religion = nine_divines
+					religion = old_gods
+				}
+				#Is not dedicated to any other God
+				OR = {
+					trait = p_odibella
+					trait = p_dibella
+					NOR = {
+						trait = p_akatosh
+						trait = p_arkay
+						trait = p_julianos
+						trait = p_kynareth
+						trait = p_mara
+						trait = p_stendarr
+						trait = p_talos
+						trait = p_zenithar
+						trait = p_omara
+						trait = p_omolag
+						trait = p_oazura
+						trait = p_ohircine
+						trait = p_operyite
+						trait = p_onamira
+					}
+				}
+				#Is not ugly, deformed, incapable or unsexy
+				NOR = {
+					trait = leper
+					trait = maimed
+					trait = incapable
+					trait = eunuch
+					trait = diarrhea
+					trait = one_eyed
+					trait = one_handed
+					trait = one_legged
+					trait = disfigured
+					trait = mangled
+					trait = dysentery
+					trait = has_knahaten_flu
+					trait = clubfooted
+					trait = harelip
+					trait = hunchback
+					trait = lisp
+					trait = ugly
+					trait = dwarf
+					trait = wrymouth
+				}
+			}
+			character_event = { id = divines.3 days = 60 random = 300 }
+		}
+	}
+}
+
+#Warns relatives and followers of Sybil's death
+character_event = {
+	id = divines.2
+	desc = divines.2.desc
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "divines.2.opt1"
+	}
+}
+
+#New Sybil chosen
+character_event = {
+	id = divines.3
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		
+		set_special_character_title = sybil
+		add_character_modifier = {
+			modifier = sybil_of_dibella
+			duration = -1
+		}
+		
+		trigger_switch = {
+			on_trigger = religion
+			eight_divines = { add_trait = p_dibella }
+			nine_divines = { add_trait = p_dibella }
+			old_gods = { add_trait = p_odibella }
+		}
+		
+		#What will her liege do?
+		liege = { character_event = { id = divines.4 days = 2 } }
+		
+		#Warns relatives and followers
+		any_playable_ruler = {
+			limit = {
+				OR = { 
+					trait = p_odibella
+					trait = p_dibella
+					is_close_relative = ROOT
+				}
+			}
+			character_event = { id = divines.5 days = 2 }
+		}
+	}
+
+}
+
+#Liege decides what to do
+character_event = {
+	id = divines.4
+	desc = divines.4.desc
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	#Allow her to go to another realm
+	option = {
+		name = "divines.4.opt1"
+		prestige = 250
+		piety = 750
+		FROM = { 
+			add_trait = nun 
+			opinion = { modifier = opinion_grateful who = ROOT years = 5 }
+		}
+		hidden_tooltip = { FROM = { character_event = { id = divines.6 } } }
+	}
+	
+	#Give her a title in your realm
+	option = {
+		name = "divines.4.opt2"
+		trigger = {
+			any_realm_title = {
+				is_theocracy = yes
+			}
+		}
+		FROM = { 
+			add_trait = nun 
+			opinion = { modifier = opinion_grateful who = ROOT years = 10 }
+		}
+		prestige = 500
+		piety = 500
+		random_realm_title = {
+			limit = { is_theocracy = yes }
+			holder_scope = { opinion = { modifier = opinion_usurped_title who = ROOT years = 15 } }
+			gain_title = FROM
+		}
+	}
+	
+	#Hold her
+	option = {
+		name = "divines.4.opt4"
+		trigger = {
+			ai = no
+			NOR = {
+				trait = p_dibella
+				trait = p_odibella
+			}
+		}
+		any_realm_character = {
+			limit = { OR = { trait = p_dibella trait = p_odibella } }
+			opinion = { modifier = opinion_disrespecting_religion who = ROOT years = 5 }
+		}
+		prestige = -250
+		piety = -750
+	}
+	
+}
+
+#Warns relatives and followers of new Sybil
+character_event = {
+	id = divines.5
+	desc = divines.5.desc
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "divines.5.opt1"
+	}
+}
+
+#Sybil moves around
+character_event = {
+	id = divines.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_playable_ruler = {
+			limit = {
+				OR = {
+					religion = eight_divines
+					religion = nine_divines
+					religion = old_gods
+				}
+				any_realm_title = {
+					is_theocracy = yes
+				}
+				NOT = { character = FROM }
+				higher_tier_than = COUNT
+			}
+			reverse_banish = ROOT
+			character_event = { id = divines.7 days = 2 }
+		}
+	}
+}
+
+#Asks other realm if they want the Sybil
+character_event = {
+	id = divines.7
+	desc = divines.7.desc
+	picture = GFX_evt_divines
+	
+	is_triggered_only = yes
+	
+	#Yes, she may take a temple
+	option = {
+		name = "divines.7.opt1"
+		trigger = {
+			any_realm_title = {
+				is_theocracy = yes
+			}
+		}
+		prestige = 100
+		piety = 150
+		FROM = { 
+			add_trait = nun 
+			opinion = { modifier = opinion_grateful who = ROOT years = 10 }
+		}
+		random_realm_title = {
+			limit = { is_theocracy = yes }
+			holder_scope = { opinion = { modifier = opinion_usurped_title who = ROOT years = 15 } } 
+			gain_title = FROM
+		}
+	}
+	
+	#No, she may not take a temple
+	option = {
+		name = "divines.7.opt2"
+		trigger = {
+			ai = no
+			NOR = {
+				trait = p_dibella
+				trait = p_odibella
+			}
+		}
+		piety = -100
+		any_realm_character = {
+			limit = { OR = { trait = p_dibella trait = p_odibella } }
+			opinion = { modifier = opinion_disrespecting_religion who = ROOT years = 5 }
+		}
+		hidden_tooltip = { FROM = { character_event = { id = divines.6 } } }
+	}
+}

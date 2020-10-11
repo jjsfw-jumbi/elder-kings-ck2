@@ -1,0 +1,542 @@
+##### Orsimer Cultural Events #####
+
+namespace = orsimer
+
+#The prelude to the creation of Orsinium!
+
+long_character_event = {
+	id = orsimer.1
+	desc = Orsimer1
+	picture = GFX_evt_orsimer_champion
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer1Acknowledge"
+		if = {
+			limit = {
+				capital_scope = {
+					culture = orsimer
+				}			
+			}
+			capital_scope = {
+				add_province_modifier = { name = orsimer_settler_surge months = 120 }
+			}
+		}
+		if = {
+			limit = {
+				capital_scope = {
+					NOT = { culture = orsimer }
+				}
+			}
+			capital_scope = {
+				culture = orsimer
+				add_province_modifier = { name = orsimer_settler_surge months = 60 }
+			}
+		}		
+	}
+}
+
+#k_orsinium is destroyed if held by a non-orc
+character_event = {
+	id = orsimer.2
+	desc = Orsimer2
+	picture = GFX_evt_orsimer_champion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		ROOT = { 
+			NOR = { 
+				trait = orsimer
+				culture = orsimer
+				AND = {
+					religion = daedra_malacath
+					OR = {
+						father = { trait = orsimer }
+						mother = { trait = orsimer }
+					}
+				}
+			}
+		}
+		has_landed_title = k_orsinium
+	}
+	
+	
+	option = {
+		name = Orsimer2Revolt
+		
+		prestige = -100
+		k_orsinium = { unsafe_destroy_landed_title = THIS }
+	}
+	
+	option = {
+		name = Orsimer2Acknowledge
+		
+		prestige = -100
+		k_orsinium = { unsafe_destroy_landed_title = THIS }
+	}
+}
+
+#Potential Event - An old Wise Woman 
+
+character_event = {
+	id = orsimer.10
+	desc = Orsimer10
+	picture = GFX_evt_adventurer_encounter
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer10Acknowledge"
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = yes
+			age = 70
+			religion = ROOT
+			culture = orsimer
+			trait = mage_3
+			trait = healer_3
+			trait = gardener
+			trait = alchemist
+			trait = ambitious
+			trait = zealous
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Potential Event - A Master Architect
+
+character_event = {
+	id = orsimer.11
+	desc = Orsimer11
+	picture = GFX_evt_adventurer_encounter
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer11Acknowledge"
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 40
+			religion = ROOT
+			culture = orsimer
+			trait = magistrate_4
+			trait = architect
+			trait = diligent
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Potential Event - A Great Smith
+character_event = {
+	id = orsimer.12
+	picture = GFX_evt_adventurer_encounter
+	
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = malacath_weapon_smith }
+		}
+		text = Orsimer12A
+	}
+	desc = {
+		trigger = {
+			has_character_flag = malacath_weapon_smith
+		}
+		text = Orsimer12B
+	}
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer12AcknowledgeA"
+		trigger = {
+			NOT = { has_character_flag = malacath_weapon_smith }
+		}
+		random_list = {
+			50 = { add_artifact = weapon_sword_orcish }
+			50 = { add_artifact = armor_orcish }
+		}
+		
+		set_character_flag = malacath_weapon_smith
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 35
+			religion = ROOT
+			culture = orsimer
+			trait = magistrate_3
+			trait = patient
+			trait = diligent
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	
+	option = {
+		name = "Orsimer12AcknowledgeB"
+		trigger = {
+			has_character_flag = malacath_weapon_smith
+		}
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 35
+			religion = ROOT
+			culture = orsimer
+			trait = magistrate_3
+			trait = patient
+			trait = diligent
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Potential Event - An Orsimer...bard?!?!
+
+character_event = {
+	id = orsimer.13
+	desc = Orsimer13
+	picture = GFX_evt_adventurer_encounter
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer13Acknowledge"
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 25
+			religion = ROOT
+			culture = orsimer
+			trait = diplomat_3
+			trait = bard_2
+			trait = poet
+			trait = erudite
+			trait = proud
+			trait = zealous
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Potential Event - An Orc Berserker
+
+character_event = {
+	id = orsimer.14
+	desc = Orsimer14
+	picture = GFX_evt_adventurer_encounter
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer14Acknowledge"
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 35
+			religion = ROOT
+			culture = orsimer
+			trait = warrior_4
+			trait = berserker
+			trait = wroth
+			trait = reckless
+			trait = brave
+			trait = scarred
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Potential Event - A zealot who worships Malacath
+
+character_event = {
+	id = orsimer.15
+	picture = GFX_evt_adventurer_encounter
+	
+	desc = {
+		trigger = {
+			religion = daedra_malacath
+		}
+		text = Orsimer15A
+	}
+	desc = {
+		trigger = {
+			NOT = { religion = daedra_malacath }
+		}
+		text = Orsimer15B
+	}
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		trigger = {
+			religion = daedra_malacath
+		}
+		name = "Orsimer15AcknowledgeA"
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 30
+			religion = daedra_malacath
+			culture = orsimer
+			trait = mage_3
+			trait = monk_2
+			trait = theologian
+			trait = honest
+			trait = zealous
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+	option = {
+		trigger = {
+			NOT = { religion = daedra_malacath }
+		}
+		name = "Orsimer15AcknowledgeB"
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 30
+			religion = daedra_malacath
+			culture = orsimer
+			trait = mage_3
+			trait = monk_2
+			trait = theologian
+			trait = honest
+			trait = zealous
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Potential Event - A Slow-Witted Powerhouse
+
+character_event = {
+	id = orsimer.16
+	desc = Orsimer16
+	picture = GFX_evt_adventurer_encounter
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer16Acknowledge"
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			age = 30
+			religion = ROOT
+			culture = orsimer
+			trait = warrior_3
+			trait = duelist
+			trait = strong
+			trait = fortitude
+			trait = robust
+			trait = slow
+			trait = content
+			trait = shy
+			trait = brave
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+#Friendly Goblins migrate to Orsinium 
+
+character_event = {
+	id = orsimer.17
+	desc = Orsimer17
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer17Acknowledge"
+		capital_scope = {
+			add_province_modifier = { name = orsimer_goblin_migration months = 60 }
+		}
+	}
+}
+
+#Friendly Ogres migrate to Orsinium 
+
+character_event = {
+	id = orsimer.18
+	desc = Orsimer18
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	only_playable = yes
+	only_independent = yes
+	
+	option = {
+		name = "Orsimer18Acknowledge"
+		capital_scope = {
+			add_province_modifier = { name = orsimer_ogre_migration months = 60 }
+		}
+	}
+}
+
+#Without an Orsinium, the Orcs settle elsewhere! - Loosely based on SOA Holy Order Events by Henrik Fåhraeus
+long_character_event = {
+	id = orsimer.50
+	picture = GFX_evt_comet
+	desc = {
+		trigger = { has_dlc = "Sons of Abraham" }
+		text = "Orsimer50"
+		picture = "GFX_evt_pilgrims_epic_journey"
+	}
+	desc = {
+		trigger = { NOT = { has_dlc = "Sons of Abraham" } }
+		text = "Orsimer50"
+		picture = "GFX_evt_comet"
+	}
+	
+	only_playable = yes
+	only_independent = yes
+	
+	trigger = {
+		has_dlc = "Sons of Abraham"
+		any_demesne_province = {
+			has_empty_holding = yes
+		}
+		k_orsinium = { has_holder = no }
+		NOT = { has_character_modifier = orsimer_orcs_banished }
+		NOT = { trait = undead }
+	}
+	
+	mean_time_to_happen = {
+		years = 1000
+		
+		modifier = {
+			factor = 0.9
+			religion = daedra_malacath
+		}
+		
+		modifier = {
+			factor = 0.9
+			culture = orsimer
+		}
+		modifier = {
+			factor = 10
+			capital_scope = {
+				NOT = { region = nirn_tamriel }
+			}
+		}
+	}
+	
+	option = {
+		name = "Orsimer50Accept"
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = random
+			female = no
+			age = 35
+			attributes = {
+				martial = 5
+			}
+			religion = daedra_malacath
+			culture = orsimer
+			trait = barbarian_3
+			trait = adventurer
+		}
+		new_character = {
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+			wealth = 50
+			opinion = {
+				modifier = opinion_eternally_grateful
+				who = ROOT
+				years = 100
+			}
+			save_event_target_as = target_orsimer_baron
+		}
+		random_demesne_province = {
+			limit = {
+				has_empty_holding = yes
+			}
+			build_holding = {
+				type = castle
+				holder = event_target:target_orsimer_baron
+			}
+		}
+		event_target:target_orsimer_baron = {
+			set_defacto_liege = ROOT
+		}
+		wealth = 50
+	}
+	
+	option = {
+		name = "Orsimer50Decline"
+		add_character_modifier = { name = orsimer_orcs_banished years = 25 hidden = yes }
+	}
+	
+	option = {
+		name = "Orsimer50Evil"
+		random_list = {
+			25 = { add_trait = cruel }
+			25 = { add_trait = deceitful }
+			25 = { add_trait = greedy }
+			25 = { add_trait = ruthless }
+		}
+		wealth = 100
+		add_character_modifier = { name = orsimer_orcs_banished years = 50 hidden = yes }
+	}
+}

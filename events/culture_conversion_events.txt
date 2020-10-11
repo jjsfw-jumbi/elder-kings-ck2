@@ -1,0 +1,414 @@
+#################################################
+#
+# CULTURAL CONVERSION EVENTS
+#
+#################################################
+
+# Province culture changes
+province_event = {
+	id = 55000
+	desc = "EVTDESC55000"
+	picture = GFX_evt_culture_change
+	
+	trigger = {
+		always = no # Disabled
+		owner = {
+			NOT = { culture_group = ROOT }
+			ai = yes
+		}
+		OR = {
+			port = yes
+			any_neighbor_province = {
+				ROOT = {
+					owner = {
+						culture = PREVPREV
+					}
+				}
+				owner = {
+					ROOT = {
+						owner = {
+							culture = PREVPREV
+						}
+					}
+				}
+				NOR = {
+					has_province_modifier = depopulated_1
+					has_province_modifier = depopulated_2
+					has_province_modifier = depopulated_3
+				}
+			}
+		}
+		OR = {
+			owner = { NOT = { culture_group = argonian } }
+			terrain = argonia
+			terrain = marsh
+			terrain = mangrove_swamp
+			terrain = jungle
+			terrain = valen_woods
+		}
+		OR = {
+			owner = { NOT = { culture = bosmer } }
+			terrain = forest
+			terrain = woods
+			terrain = argonia
+			terrain = marsh
+			terrain = mangrove_swamp
+			terrain = jungle
+			terrain = valen_woods
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 200
+
+		modifier = {
+			factor = 5
+			terrain = argonia
+			owner = { NOT = { culture_group = argonian } }
+		}
+		modifier = {
+			factor = 2
+			terrain = valen_woods
+			owner = { NOT = { culture = bosmer } }
+		}
+		modifier = {
+			factor = 2
+			terrain = mangrove_swamp
+			owner = { NOT = { culture = maormer } }
+		}
+		modifier = {
+			factor = 2
+			terrain = desert
+			owner = { culture_group = nedic }
+		}
+		modifier = {
+			factor = 2
+			terrain = arctic
+			owner = { culture_group = khajiit }
+		}
+		modifier = {
+			factor = 2
+			terrain = arctic
+			owner = { culture_group = yokudan_group }
+		}
+		modifier = {
+			factor = 2
+			NOT = { kingdom = { title = k_vvardenfell } }
+			owner = { culture = ashlander }
+		}
+		modifier = {
+			factor = 2
+			NOT = { kingdom = { title = k_summerset } }
+			owner = { culture = altmer }
+		}
+		modifier = {
+			factor = 2
+			NOT = { kingdom = { title = k_morrowind } }
+			owner = { culture = dunmer }
+		}
+		modifier = {
+			factor = 1.5
+			owner = {
+				OR = {
+					culture = ayleid
+					culture = maormer
+					culture = chimer
+				}
+			}
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 1 } }
+		}		
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 2 } }
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 3 } }
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 4 } }
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 5 } }
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 6 } }
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 7 } }
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 8 } }
+		}
+		modifier = {
+			factor = 1.05
+			owner = { NOT = { stewardship = 9 } }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 11 }
+		}		
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 12 }
+		}	
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 13 }
+		}	
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 14 }
+		}	
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 15 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 16 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 17 }
+		}	
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 18 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 19 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 20 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 21 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 22 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 23 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 24 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = { stewardship = 25 }
+		}
+		modifier = {
+			factor = 0.95
+			owner = {
+				job_treasurer = {
+					NOT = {
+						stewardship = 10
+					}
+					has_job_action = action_administer_realm
+				}
+			}
+		}
+		modifier = {
+			factor = 0.75
+			owner = {
+				job_treasurer = {
+					stewardship = 10
+					has_job_action = action_administer_realm
+				}
+			}
+		}
+		modifier = {
+			factor = 0.75
+			has_province_flag = recent_depopulation_1
+		}
+		modifier = {
+			factor = 0.5
+			has_province_flag = recent_depopulation_2
+		}
+		modifier = {
+			factor = 0.25
+			has_province_flag = recent_depopulation_3
+		}
+		modifier = {
+			factor = 3
+			OR = {
+				has_game_rule = {
+					name = culture_conversion
+					value = slower_normal
+				}
+				has_game_rule = {
+					name = culture_conversion
+					value = faster_melting_pots_and_slower_normal
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTA55000"
+		owner = {
+			ROOT = {
+				culture = PREV
+				if = {
+					limit = {
+						NOT = { religion = PREV }
+					}
+					religion = PREV
+				}
+				if = {
+					limit = {
+						has_province_modifier = nomad_agitation
+					}
+					remove_province_modifier = nomad_agitation
+				}
+			}
+		}
+	}
+}
+
+# A ruler is assimilated by the local culture
+character_event = {
+	id = 55010
+	desc = "EVTDESC55010"
+	picture = GFX_evt_stone_church
+	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	lacks_dlc = "Rajas of India" # Controlled by Decision: convert_to_local_culture
+	
+	trigger = {
+		NOT = { government = nomadic_government }
+		primary_title = { 
+			NOT = { conquest_culture = ROOT } 
+			NOT = { culture = ROOT }
+			culture_group = ROOT
+			any_previous_holder = {
+				NOT = { character = ROOT } # The first holder of a title does not convert
+			}
+		}
+		capital_scope = {
+			NOT = { culture = ROOT }
+		}
+		top_liege = {
+			OR = {
+				character = ROOT
+				ROOT = { 
+					capital_scope = {
+						culture = PREVPREV
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+		modifier = {
+			factor = 0.5
+			top_liege = {
+				NOT = { character = ROOT }
+				ROOT = { 
+					capital_scope = {
+						culture = PREVPREV
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			primary_title = {
+				ROOT = {
+					capital_scope = {
+						culture = PREVPREV
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 2.0
+			capital_scope = {
+				culture_group = ROOT # Same culture group: slower assimilation
+			}
+		}
+	}
+
+	option = {
+		name = "EVTOPTA55010"
+		
+		# Piss off the appropriate vassals
+		any_vassal = {
+			limit = {
+				culture = ROOT
+				age = 16
+			}
+			opinion = {
+				who = ROOT
+				modifier = opinion_adopted_foreign_ways
+				years = 10
+			}
+			hidden_tooltip = { character_event = { id = 55011 days = 0 } }
+		}
+		
+		capital_scope = {
+			reverse_culture = ROOT
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB55010"
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+
+character_event = {
+	id = 55011
+	desc = "EVTDESC55011"
+	picture = GFX_evt_scandal
+
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTA55011"
+		tooltip = {
+			opinion = {
+				who = FROM
+				modifier = opinion_adopted_foreign_ways
+				years = 10
+			}
+		}
+	}
+}
+
+character_event = {
+	id = 55100
+	desc = EVTDESC55100
+	picture = GFX_evt_courier
+	
+	notification = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+	}
+}

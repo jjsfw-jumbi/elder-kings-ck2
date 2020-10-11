@@ -1,0 +1,165 @@
+on_startup = { #does it fire the event 2 for ruler designer chars
+    effect = {
+        if = {
+            limit = { 
+                has_landed_title = e_cult_meridia 
+                is_save_game = no
+            }
+
+            export_to_variable = { which = global_second_era_year value = year }
+            subtract_variable = { which = global_second_era_year value = 2920 }
+
+            export_to_variable = { which = global_third_era_year value = year }
+            subtract_variable = { which = global_third_era_year which = global_third_era_start }
+
+            set_variable = { which = global_start_year_2e which = global_second_era_year }
+            set_variable = { which = global_start_year_3e which = global_third_era_year }
+
+            export_to_variable = { which = global_played_years value = total_years_played }
+
+            trigger_switch = {
+                on_trigger = year
+                4259 = { set_variable = { which = global_current_era value = 4 } }
+                3816 = { set_variable = { which = global_current_era value = 3 } }
+                2920 = { set_variable = { which = global_current_era value = 2 } }
+            }
+
+            if = {
+                limit = { #bm_interregnum
+                    start_date == 3370.1.1
+                }
+                1 = { province_event = { id = ekera.2 days = 365 } }
+            }
+            else_if = {
+                limit = { #bm_reachmen
+                    start_date == 3461.1.1
+                }
+                1 = { province_event = { id = ekera.2 days = 365 } }
+            }
+            else_if = {
+                limit = { #bm_kamal
+                    start_date == 3492.6.1
+                }
+                1 = { province_event = { id = ekera.2 days = 214 } }
+            }
+            else_if = {
+                limit = { #bm_varensrebellion
+                    start_date == 3496.1.1
+                }
+                1 = { province_event = { id = ekera.2 days = 365 } }
+            }
+            else_if = {
+                limit = { #bm_alliancewar
+                    start_date == 3520.1.30
+                }
+                1 = { province_event = { id = ekera.2 days = 336 } }
+            }
+            else_if = {
+                limit = { #bm_postbanner
+                    start_date == 3506.1.1
+                }
+                1 = { province_event = { id = ekera.2 days = 365 } }
+            }
+            else_if = {
+                limit = { #bm_warlordrising
+                    start_date == 3525.1.1
+                }
+                1 = { province_event = { id = ekera.2 days = 365 } }
+            }
+            else_if = {
+                limit = { #bm_wintersreturn
+                    start_date == 3732.12.1
+                }
+                1 = { province_event = { id = ekera.2 days = 31 } }
+            }
+            else = {
+                set_global_flag = era_non_bm_start
+                trigger_switch = {
+            	    on_trigger = month
+
+                    11 = { 1 = { province_event = { id = ekera.2 days = 31 } } }
+                    10 = { 1 = { province_event = { id = ekera.2 days = 61 } } }
+                    9 = { 1 = { province_event = { id = ekera.2 days = 92 } } }
+                    8 = { 1 = { province_event = { id = ekera.2 days = 122 } } }
+                    7 = { 1 = { province_event = { id = ekera.2 days = 153 } } }
+                    6 = { 1 = { province_event = { id = ekera.2 days = 184 } } }
+                    5 = { 1 = { province_event = { id = ekera.2 days = 214 } } }
+                    4 = { 1 = { province_event = { id = ekera.2 days = 245 } } }
+                    3 = { 1 = { province_event = { id = ekera.2 days = 275 } } }
+                    2 = { 1 = { province_event = { id = ekera.2 days = 306 } } }
+                    1 = { 1 = { province_event = { id = ekera.2 days = 334 } } }
+                    0 = { 1 = { province_event = { id = ekera.2 days = 365 } } }
+                }
+            }
+        }
+    }
+}
+
+on_decade_pulse = {
+    effect = {
+        if = {
+            limit = { has_landed_title = e_cult_meridia } 
+            export_to_variable = { which = global_second_era_year value = year }
+            subtract_variable = { which = global_second_era_year value = 2920 }
+
+            export_to_variable = { which = global_third_era_year value = year }
+            subtract_variable = { which = global_third_era_year which = global_third_era_start }
+
+            export_to_variable = { which = global_played_years value = total_years_played }
+        }
+    }
+}
+
+on_offmap_monthly_pulse = {
+    effect = {
+        if = {
+            limit = {
+                ROOT = { has_landed_title = e_cult_meridia }
+                month = 0
+                NOT = { month = 1 }
+                has_global_flag = era_non_bm_start
+            } 
+            if = {
+                limit = { NOT = { has_global_flag = era_updated } }
+
+        	    change_variable = { which = global_second_era_year value = 1 }
+        	    change_variable = { which = global_third_era_year value = 1 }
+
+        	    change_variable = { which = global_played_years value = 1 }
+
+			    set_global_flag = era_updated
+
+                1 = { province_event = { id = ekera.2 days = 365 } } #province events so char death don't matter
+            }
+            else = {
+                clr_global_flag = era_updated
+            }
+
+            # export_to_variable = { which = global_second_era_year value = year }
+            # subtract_variable = { which = global_second_era_year value = 2920 }
+
+            # export_to_variable = { which = global_third_era_year value = year }
+            # subtract_variable = { which = global_third_era_year which = global_third_era_start }
+
+            # export_to_variable = { which = global_played_years value = total_years_played }
+        }
+    }
+}
+
+# on_yearly_pulse = {
+#     effect = {
+#         if = {
+#             limit = { is_multiplayer_host_character = yes } 
+
+#             change_variable = { which = global_second_era_year value = 1 }
+#             change_variable = { which = global_third_era_year value = 1 }
+
+#             change_variable = { which = global_played_years value = 1 }
+#         }
+#     }
+# }
+
+#hardcode bookmarks and events. keep redundancy for non bm starts. check with global flag
+#for non-bm get start  month days and use to drive events. can have it calibrate w/ offmap_pulse to see which fires first in january and ajust firing date accordingly
+#global_flag at start of offmap and event that blocks if one before other
+#dec=31 nov=61

@@ -1,0 +1,588 @@
+ansei_guild_tamriel = {
+	primary_attribute = martial
+	society_ranks_gfx = imperial_geographical_society_ranks
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	non_interference = {
+		always = yes
+	}
+	
+	active = {
+		always = yes
+	}
+	indestructible = yes
+	
+	can_join_society = {
+		is_in_society = no
+		NOT = { has_character_modifier = ek_society_pension }
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = {
+					society = ansei_guild_tamriel
+					rank = 1
+				}
+				liege = {
+					is_playable = no
+				}
+			}
+			NOR = {
+				mercenary = yes
+				holy_order = yes
+				trait = clone
+			}
+		}
+		age = 16
+		controls_religion = no
+		OR = {
+			religion_group = yokudan_pantheon
+			culture_group = yokudan_group
+		}
+		martial = 8
+		OR = {
+			is_warrior = yes
+			AND = {
+				has_acceptable_fighters_specialisation = yes
+				martial = 10
+			}
+			AND = {
+				combat_rating = 75
+				martial = 30
+			}
+			AND = {
+				OR = {
+					is_mage = yes
+					is_agent = yes
+				}
+				martial = 25
+			}
+			trait = dragonborn
+		}
+		
+		trigger_if = {
+			limit = { is_ruler = no }
+			liege = {
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel_hammerfell
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+		
+		trigger_else = {
+			capital_scope = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+		}
+		
+		NOT = { trait = sload }
+		NOT = { trait = necromancer }
+		is_inaccessible_trigger = no
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+	}
+
+	show_society = {
+		OR = {
+			society_member_of = ansei_guild_tamriel
+			AND = {
+				is_ruler = no
+				OR = {
+					religion_group = yokudan_pantheon
+					culture_group = yokudan_group
+				}
+				liege = {
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel_hammerfell
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+			AND = {
+				is_ruler = yes
+				OR = {
+					religion_group = yokudan_pantheon
+					culture_group = yokudan_group
+				}
+				capital_scope = {
+					OR = {
+						region = nirn_tamriel_hammerfell
+						region = nirn_yokuda
+					}
+				}
+			}
+		}
+	}
+	
+	potential = {
+		general_society_join_conditions = yes
+		age = 16
+		OR = {
+			is_not_undead = yes
+			is_unknown_vampire = yes
+		}
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		NOR = {
+			holy_order = yes
+			mercenary = yes
+			trait = clone
+		}
+		OR = {
+			religion_group = yokudan_pantheon
+			culture_group = yokudan_group
+		}
+		NOT = { trait = necromancer }
+		controls_religion = no
+	}
+	
+	#Initiate/Student of the Sword/Sword-Singer/Sword Master/Grand Master
+	society_rank = {
+		level = 1
+		limit = 36
+		startup_limit = 10
+		modifier = {
+			monthly_character_prestige = 0.01
+		}
+		decisions = {
+			study_specialization
+			enable_quests_decision
+		}
+		powers = {
+			warrior_training
+			infestation_fighter
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_1_5_CT
+	}
+	society_rank = {
+		level = 2
+		limit = 24
+		startup_limit = 8
+		modifier = {
+			monthly_character_prestige = 0.025
+		}
+		decisions = {
+			ansei_buy_techpoints
+			strengthen_body_fighter
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_2_5_CT
+	}
+	society_rank = {
+		level = 3
+		limit = 12
+		startup_limit = 4
+		modifier = {
+			monthly_character_prestige = 0.05
+		}
+		decisions = {
+			ansei_lifestyle
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_3_5_CT
+	}
+	society_rank = {
+		level = 4
+		limit = 6
+		startup_limit = 2
+		modifier = {
+			monthly_character_prestige = 0.1
+		}
+		decisions = {
+			request_grandmaster_retire
+		}
+		
+		custom_tooltip = QUEST_DIFFICULTY_4_5_CT
+	}
+	society_rank = {
+		level = 5
+		limit = 1
+		startup_limit = 1
+		modifier = {
+			monthly_character_prestige = 0.15
+			build_cost_castle_modifier = -0.1
+			build_cost_tribal_modifier = -0.1
+		}
+		decisions = {
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_ansei_guild_tamriel
+		
+		per_attribute = {
+    		name = martial
+    		value = 0.5
+    	}
+		#Personality
+		has_trait = {
+			value = 1.5
+			trait = diligent
+		}
+		has_trait = {
+			value = 1.0
+			trait = brave
+		}
+		has_trait = {
+			value = 1
+			trait = poet
+		}
+		has_trait = {
+			value = 1.5
+			trait = just
+		}
+		has_trait = {
+			trait = honest
+			value = 1
+		}
+		has_trait = {
+			trait = charitable
+			value = 1
+		}
+		has_trait = {
+			trait = erudite
+			value = 0.5
+		}
+		#Lifestyles
+		has_trait = {
+			value = 0.5
+			trait = strategist
+		}
+		has_trait = {
+			value = 1.25
+			trait = duelist
+		}
+		has_trait = {
+			value = 0.25
+			trait = hunter
+		}
+		has_trait = {
+			value = 1.25
+			trait = adventurer
+		}
+		has_trait = {
+			value = 0.75
+			trait = gladiator
+		}
+		has_trait = {
+			value = 0.75
+			trait = scholar
+		}
+		#Congenital Traits
+		has_trait = {
+			value = 0.5
+			trait = strong
+		}
+		has_trait = {
+			value = 0.5
+			trait = fortitude
+		}
+		has_trait = {
+			value = 0.5
+			trait = robust
+		}
+		has_trait = {
+			value = 0.5
+			trait = agile
+		}
+		has_trait = {
+			value = 0.25
+			trait = perceptive
+		}
+		has_trait = {
+			value = 0.25
+			trait = shrewd
+		}
+		has_trait = {
+			value = 0.25
+			trait = quick
+		}
+		has_trait = {
+			value = 0.25
+			trait = genius
+		}
+		has_trait = {
+			value = 0.25
+			trait = lucky
+		}
+		#Educations
+		has_trait = {
+			value = 1
+			trait = warrior_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = warrior_4
+		}
+		has_trait = {
+			value = 2
+			trait = warrior_5
+		}
+		has_trait = {
+			value = 1
+			trait = mage_4
+		}
+		has_trait = {
+			value = 1.5
+			trait = mage_5
+		}
+		has_trait = {
+			value = 1
+			trait = agent_4
+		}
+		has_trait = {
+			value = 1.5
+			trait = agent_5
+		}
+		#Patrion Deities
+		has_trait = {
+			value = 0.5
+			trait = p_diagna
+		}
+		has_trait = {
+			value = 0.5
+			trait = p_onsi
+		}
+		has_trait = {
+			value = 0.5
+			trait = p_leki
+		}
+		#Sword-Singer/Ansei ranks
+		has_trait = {
+			value = 0.5
+			trait = swordsinger_1
+		}
+		has_trait = {
+			value = 0.75
+			trait = swordsinger_2
+		}
+		has_trait = {
+			value = 1
+			trait = swordsinger_3
+		}
+		has_trait = {
+			value = 1.5
+			trait = ansei_1
+		}
+		has_trait = {
+			value = 2
+			trait = ansei_2
+		}
+		has_trait = {
+			value = 2
+			trait = ansei_3
+		}
+		#Ranks
+		society_rank = {
+			rank = 3
+			value = 0.5
+		}
+		society_rank = {
+			rank = 4
+			value = 1.0
+		}
+		society_rank = {
+			rank = 5
+			value = 3
+		}
+	}
+
+	member_score_per_attribute = 2
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 50
+		
+		modifier = { 
+			factor = 1.25
+			combat_rating = 5 
+			NOT = { combat_rating = 10 } 
+		}
+		modifier = { 
+			factor = 1.5
+			combat_rating = 10
+			NOT = { combat_rating = 15 } 
+		}
+		modifier = { 
+			factor = 2.0
+			combat_rating = 15
+			NOT = { combat_rating = 20 } 
+		}
+		modifier = { 
+			factor = 2.5
+			combat_rating = 20
+			NOT = { combat_rating = 30 } 
+		}
+		modifier = { factor = 3.0 combat_rating >= 30 }
+		modifier = { factor = 2.0 trait = diligent }
+		modifier = { factor = 2.5 trait = just }
+		modifier = { factor = 2.0 trait = brave }
+		modifier = { factor = 1.5 trait = erudite }
+		modifier = { factor = 1.5 trait = poet }
+		modifier = { factor = 1.5 trait = patient }
+		modifier = { factor = 1.5 trait = temperate }
+		modifier = { factor = 2.0 trait = strategist }
+		modifier = { factor = 1.5 trait = adventurer }
+		modifier = { factor = 1.5 trait = duelist }
+		modifier = { factor = 1.25 trait = hunter }
+		modifier = { factor = 1.75 trait = gladiator }
+		modifier = { factor = 1.5 trait = scholar }
+		modifier = { factor = 1.5 is_strong_trigger = yes }
+		modifier = { factor = 1.25 trait = fortitude }
+		modifier = { factor = 1.5 trait = agile }
+		modifier = { factor = 1.25 is_smart_trigger = yes }
+		modifier = { factor = 1.25 trait = warrior_3 }
+		modifier = { factor = 1.5 trait = warrior_4 }
+		modifier = { factor = 2.0 trait = warrior_5 }
+		modifier = { factor = 1.25 trait = mage_5 }
+		modifier = { factor = 1.25 trait = agent_5 }
+		modifier = { factor = 1.25 trait = p_diagna }
+		modifier = { factor = 1.25 trait = p_onsi }
+		modifier = { factor = 1.25 trait = p_leki }
+		modifier = { factor = 1.5 is_assassin = yes }
+		modifier = { factor = 1.2 is_scout = yes }
+		modifier = { factor = 1.5 is_battlemage = yes }
+		modifier = { factor = 1.75 is_spellsword = yes }
+		modifier = { factor = 2.0 is_knight = yes }
+		modifier = { factor = 1.25 is_witchhunter = yes }
+		modifier = { factor = 2.0 is_crusader = yes }
+		modifier = { factor = 2.0 is_barbarian = yes }
+		modifier = { factor = 2.5 trait = dragonborn }
+		modifier = { factor = 2.0 is_dragonblood = yes }
+		modifier = { 
+			factor = 1.25 
+			AND = { 
+				has_bloodline = yes 
+				NOT = {
+					any_owned_bloodline = {
+						has_bloodline_flag = bloodline_frandar
+					}
+				}
+			}
+		}
+		modifier = { factor = 1.50
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_frandar
+			}
+		}
+		modifier = { factor = 1.25 trait = swordsinger_1 }
+		modifier = { factor = 2 trait = swordsinger_2 }
+		modifier = { factor = 3 trait = swordsinger_3 }
+		modifier = { factor = 4 trait = ansei_1 }
+		modifier = {
+			factor = 5
+			OR = {
+				trait = ansei_2
+				trait = ansei_3
+			}
+		}
+		#Negatives
+		modifier = {
+			factor = 0.33
+			is_long_lived = yes
+		}
+		modifier = { factor = 0.75 is_dumb_trigger = yes }
+		modifier = { factor = 0.85 is_weak_trigger = yes }
+		modifier = { factor = 0.95 trait = dwarf }
+		modifier = { factor = 0.95 trait = hunchback }
+		modifier = { factor = 0.95 trait = clubfooted }
+		modifier = { factor = 0.95 trait = unlucky }
+		modifier = { factor = 0.95 OR = { trait = blinded trait = blind trait = blind_moth } }
+		modifier = { factor = 0.95 trait = deaf }
+		modifier = { factor = 0.95 has_severe_disability_trigger = yes }
+		modifier = { factor = 0.95 is_maimed_trigger = yes }
+		modifier = { factor = 0.95 has_mental_disorder_trigger = yes }
+		modifier = { factor = 0.98 trait = absent_minded }
+		modifier = { factor = 0.96 trait = slothful }
+		modifier = { factor = 0.95 trait = arbitrary }
+		modifier = { factor = 0.90 trait = cruel }
+		modifier = { factor = 0.90 trait = wroth }
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+			NOR = {
+				higher_tier_than = DUKE
+				mercenary = yes
+				holy_order = yes
+			}
+			age = 16
+			is_in_society = no
+			is_dumb_trigger = no
+			is_inaccessible_trigger = no
+			martial = 10
+			OR = {
+				is_warrior = yes
+				AND = {
+					has_acceptable_fighters_specialisation = yes
+					martial = 15
+				}
+				AND = {
+					combat_rating = 75
+					martial = 30
+				}
+				AND = {
+					is_mage = yes
+					martial = 25
+				}
+				trait = dragonborn
+			}
+			OR = {
+				is_landed = yes
+				AND = {
+					is_landed = no
+					martial = 15
+				}
+			}
+			NOT = { trait = sload }
+			OR = {
+				is_not_undead = yes
+				AND = {
+					is_undead = yes
+					trait = vampire
+				}
+			}
+			OR = {
+				AND = {
+					is_ruler = no
+					liege = {
+						capital_scope = {
+							OR = {
+								region = nirn_tamriel_hammerfell
+								region = nirn_yokuda
+							}
+						}
+					}
+				}
+				AND = {
+					is_ruler = yes
+					capital_scope = {
+						OR = {
+							region = nirn_tamriel_hammerfell
+							region = nirn_yokuda
+						}
+					}
+				}
+			}
+		}
+	}
+}

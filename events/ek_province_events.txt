@@ -1,0 +1,3876 @@
+#Province disaster events by Korba, updated by Etienne#
+
+namespace = kprov
+
+province_event = {
+	id = kprov.100 # Random roll
+	
+	hide_window = yes
+	
+	trigger = {
+		owner = {
+			higher_tier_than = BARON
+			demesne_size = 2
+		}
+		NOR = { #Don't want characters that can't give away titles normally to get flooded with infestations
+			has_province_modifier = undead_horde_province
+			has_province_modifier = daedric_horde_province
+		}
+		NOT = { has_enough_infestations = yes }
+		NOT = { has_province_modifier = adventurers }
+		NOT = {	any_province_character = {	has_job_action = action_root_cabals } }
+		NOT = {	any_province_character = {	has_job_action = action_assist_arrest } }
+		NOT = { has_province_modifier = enforced_martiallaw }
+	}
+	
+	immediate = {
+		random_list = {
+			# Goblins
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = goblin_infestation }
+					NOT = { has_province_modifier = falmer_infestation }
+					NOT = { has_province_modifier = lycan_infestation }
+					NOT = { has_province_modifier = adventurers }
+				}
+				province_event = { id = kprov.1 }
+			}
+			# Falmer
+			10 = {
+				trigger = {
+					OR = { #Should only popup in Skyrim and part of High Rock
+						de_jure_liege = d_haafingar
+						de_jure_liege = d_volskygge
+						de_jure_liege = d_hjaalmarch
+						de_jure_liege = d_greymarch
+						de_jure_liege = d_whiterun
+						de_jure_liege = d_coldrock
+						de_jure_liege = d_winterhold
+						de_jure_liege = d_ironbind
+						de_jure_liege = d_thepale
+						de_jure_liege = d_korvanjund
+						de_jure_liege = d_eastmarch
+						de_jure_liege = d_morvunskar
+						de_jure_liege = d_ansilvund
+						de_jure_liege = d_falkreath
+						de_jure_liege = d_brittleshin
+						de_jure_liege = d_sunderstone
+						de_jure_liege = d_therift
+						de_jure_liege = d_nilheim
+						de_jure_liege = d_valtgard
+						de_jure_liege = d_reach
+						de_jure_liege = d_bleakwind
+						de_jure_liege = d_dunkarn
+						de_jure_liege = d_scarhammer
+						de_jure_liege = d_jehenna
+					}
+					NOT = { has_province_modifier = goblin_infestation }
+					NOT = { has_province_modifier = falmer_infestation }
+					NOT = { has_province_modifier = lycan_infestation }
+				}
+				province_event = { id = kprov.2 }
+			}
+			# Skeevers
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = trolls }
+					NOT = { has_province_modifier = lycan_infestation }
+					NOT = { has_province_modifier = skeever_infestation }
+					NOT = { has_province_modifier = kwama_infestation }
+					NOT = { has_province_modifier = famine }
+				}
+				province_event = { id = kprov.3 }
+			}
+			# Kwama
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = goblin_infestation }
+					NOT = { has_province_modifier = skeever_infestation }
+					NOT = { has_province_modifier = kwama_infestation }
+					NOT = { has_province_modifier = egg_mines }
+					NOT = { has_province_modifier = famine }
+					
+					OR = { #Only happens in Vvardenfell
+						region = nirn_tamriel_morrowind
+					}
+				}
+				province_event = { id = kprov.4 }
+			}
+			# Trolls
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = trolls }
+					NOT = { has_province_modifier = giants }
+					NOT = { has_province_modifier = lycan_infestation }
+					NOT = { has_province_modifier = adventurers }
+				}
+				province_event = { id = kprov.5 }
+			}
+			# Giants
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = trolls }
+					NOT = { has_province_modifier = giants }
+					NOT = { has_province_modifier = adventurers }
+					
+					OR = { #Should only popup in Skyrim, Solstheim, High Rock and parts of Hammerfell/Cyrodiil
+						de_jure_liege = d_haafingar
+						de_jure_liege = d_volskygge
+						de_jure_liege = d_hjaalmarch
+						de_jure_liege = d_greymarch
+						de_jure_liege = d_whiterun
+						de_jure_liege = d_coldrock
+						de_jure_liege = d_winterhold
+						de_jure_liege = d_ironbind
+						de_jure_liege = d_thepale
+						de_jure_liege = d_korvanjund
+						de_jure_liege = d_eastmarch
+						de_jure_liege = d_morvunskar
+						de_jure_liege = d_ansilvund
+						de_jure_liege = d_falkreath
+						de_jure_liege = d_brittleshin
+						de_jure_liege = d_sunderstone
+						de_jure_liege = d_therift
+						de_jure_liege = d_nilheim
+						de_jure_liege = d_valtgard
+						de_jure_liege = d_reach
+						de_jure_liege = d_bleakwind
+						de_jure_liege = d_dunkarn
+						de_jure_liege = d_scarhammer
+						de_jure_liege = d_jehenna
+						de_jure_liege = d_daggerfall
+						de_jure_liege = d_glenpoint
+						de_jure_liege = d_anticlere
+						de_jure_liege = d_daenia
+						de_jure_liege = d_camlorn
+						de_jure_liege = d_dwynnen
+						de_jure_liege = d_wayrest
+						de_jure_liege = d_bhoriane
+						de_jure_liege = d_orsinium
+						de_jure_liege = d_wrothgarian
+						de_jure_liege = d_northpoint
+						de_jure_liege = d_phrygias
+						de_jure_liege = d_sharnhelm
+						de_jure_liege = d_evermore
+						de_jure_liege = d_dorven
+						de_jure_liege = d_gauvadon
+						de_jure_liege = d_farrun
+						de_jure_liege = d_lainlyn
+						de_jure_liege = d_soma
+						de_jure_liege = d_skaven
+						de_jure_liege = d_farragut
+						de_jure_liege = d_kingscrest
+						de_jure_liege = d_nimbel
+						de_jure_liege = d_dragonstar
+						de_jure_liege = d_lankara
+						de_jure_liege = d_sancretor
+						de_jure_liege = d_frostcrag
+						de_jure_liege = d_frostfire
+						de_jure_liege = d_bruma
+						de_jure_liege = d_solstheim
+						de_jure_liege = d_silgrad
+						AND = {
+							de_jure_liege = d_broadwall
+							NOT = { culture = draugr }
+						}
+						AND = {
+							de_jure_liege = d_haugrheim
+							NOT = { culture = draugr }
+						}
+						AND = {
+							de_jure_liege = d_moraheim
+							NOT = { culture = draugr }
+						}
+						AND = {
+							de_jure_liege = d_isalur
+							NOT = { culture = draugr }
+						}
+						AND = {
+							de_jure_liege = d_ysunn
+							NOT = { culture = draugr }
+						}
+						AND = {
+							de_jure_liege = d_skalrheim
+							NOT = { culture = draugr }
+						}
+					}
+				}
+				province_event = { id = kprov.6 }
+			}
+			# Lycans
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = adventurers }
+					NOT = { has_province_modifier = lycan_infestation }
+				}
+				province_event = { id = kprov.7 }
+			}
+			# Undead
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = adventurers }
+					NOT = { culture = skeleton }
+					NOT = { culture = draugr }
+				}
+				province_event = { id = kprov.8 }
+			}
+			# Bandits
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = adventurers }
+					NOT = { has_province_modifier = highway_robber_band }
+					NOT = { has_province_modifier = thieves_guild_popular }
+					NOT = { has_province_modifier = thieves_guild_noble }
+					NOT = { has_province_modifier = thieves_guild_successful }
+				}
+				province_event = { id = kprov.9 }
+			}
+			# Smugglers
+			10 = {
+				trigger = {
+					NOT = { has_enough_infestations = yes }
+					NOT = { has_province_modifier = adventurers }
+					NOT = { has_province_modifier = thieves_guild_popular }
+					NOT = { has_province_modifier = thieves_guild_noble }
+					NOT = { has_province_modifier = thieves_guild_successful }
+				}
+				province_event = { id = kprov.10 }
+			}
+			# Thieves
+			20 = {
+				trigger = {
+					NOT = { has_province_modifier = thieves_guild }
+				}
+				province_event = { id = kprov.11 }
+			}
+			# Homeless
+			20 = {
+				trigger = {
+					NOT = { has_province_modifier = harbour_the_homeless }
+					NOT = { has_province_modifier = highway_robber_band }
+					NOT = { has_province_modifier = giants }
+					NOT = { has_province_modifier = trolls }
+					NOT = { has_province_modifier = kwama_infestation }
+					NOT = { has_province_modifier = vampire_infestation }
+					NOT = { has_province_modifier = lycan_infestation }
+					NOT = { has_province_modifier = falmer_infestation }
+					NOT = { has_province_modifier = goblin_infestation }
+					NOT = { has_province_modifier = famine }
+					NOT = { has_province_modifier = undead_infestation }
+				}
+				province_event = { id = kprov.12 }
+			}
+			# Adventurers
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = adventurers }
+				}
+				province_event = { id = kprov.13 }
+			}
+			# Vampires
+			10 = {
+				trigger = {
+					NOT = { has_province_modifier = adventurers }
+					NOT = { has_province_modifier = vampire_infestation }
+				}
+				province_event = { id = kprov.18 }
+			}
+			# Magical anomalies
+			20 = {
+				trigger = {
+					NOT = { has_province_modifier = magical_anomalies }
+				}
+				province_event = { id = kprov.20 }
+			}
+			# Propagandist
+			20 = {
+				trigger = {
+					NOT = { has_province_modifier = propagandist }
+				}
+				province_event = { id = kprov.21 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 48
+		
+		#Miscellaneous Modifiers
+		modifier = {
+			factor = 2.0
+			owner = {
+				NOR = {
+					over_max_demesne_size = 1
+					has_regent = yes
+					ROOT = { has_secret_community = yes }
+				}
+			}
+		}
+		modifier = { factor = 0.95 owner = { war = yes } }
+		modifier = { factor = 1.1 owner = { war = no } }
+		modifier = { factor = 1.1 owner = { independent = no } }
+		modifier = { factor = 1.1 owner = { NOT = { ai = no } } }
+		modifier = { factor = 0.95 has_province_modifier = skeever_infestation }
+		modifier = { factor = 1.1 has_province_modifier = famine }
+		modifier = { factor = 0.95 has_province_modifier = cabals }
+		modifier = { factor = 1.50 owner = { religion = daedra_azura } }
+		modifier = { factor = 1.50 religion = daedra_azura }
+		modifier = { factor = 0.50 owner = { has_character_modifier = malacath_weak_chief } }
+		#Positive Trait Mods (Increases MTTH)
+		modifier = { factor = 1.1 owner = { trait = genius } }
+		modifier = { factor = 1.1 owner = { trait = diligent } }
+		modifier = { factor = 1.1 owner = { trait = quick } }
+		modifier = { factor = 1.1 owner = { trait = shrewd } }
+		modifier = { factor = 1.1 owner = { trait = perceptive } }
+		modifier = { factor = 1.1 owner = { trait = zealous } }
+		modifier = { factor = 1.1 owner = { trait = just } }
+		modifier = { factor = 1.1 owner = { trait = content } }
+		modifier = { factor = 1.1 owner = { trait = ambitious } }
+		modifier = { factor = 1.1 owner = { trait = temperate } }
+		modifier = { factor = 1.1 owner = { trait = chaste } }
+		modifier = { factor = 1.1 owner = { trait = paranoid } }
+		modifier = { factor = 1.1 owner = { trait = ruthless } }
+		modifier = { factor = 1.1 owner = { trait = patient } }
+		modifier = { factor = 1.1 owner = { trait = gardener } }
+		modifier = { factor = 1.1 owner = { trait = mane } }
+		modifier = { factor = 1.1 owner = { trait = warlord } }
+		modifier = { factor = 1.1 owner = { trait = pilgrim } }
+		modifier = { factor = 1.1 owner = { trait = greybeard } }
+		#Negative Trait Mods (Decreases MTTH)
+		modifier = { factor = 0.95 owner = { OR = { trait = on_guild trait = on_pilgrimage trait = on_mission trait = on_tour trait = on_diplomatic trait = on_assassination trait = on_adventure } } }
+		modifier = { factor = 0.95 owner = { OR = { trait = drunkard trait = skooma_addiction trait = depressed trait = possessed trait = lunatic trait = stressed } } }
+		modifier = { factor = 0.95 owner = { OR = { trait = infirm trait = incapable } } }
+		modifier = { factor = 0.95 owner = { trait = arbitrary } }
+		modifier = { factor = 0.95 owner = { trait = slothful } }
+		modifier = { factor = 0.95 owner = { trait = absent_minded } }
+		modifier = { factor = 0.95 owner = { trait = reckless } }
+		modifier = { factor = 0.95 owner = { trait = imbecile } }
+		modifier = { factor = 0.75 owner = { is_inaccessible_trigger = yes } }
+		#Negative Demesne Efficiency
+		modifier = { factor = 0.75 owner = { over_max_demesne_size = 3 } }
+		modifier = { factor = 0.5 owner = { over_max_demesne_size = 5 } }
+		modifier = { factor = 0.25 owner = { over_max_demesne_size = 7 } }
+		modifier = { factor = 0.15 owner = { over_max_demesne_size = 9 } }
+		# modifier = { factor = 0.1 owner = { over_max_demesne_size = 11 } }
+		# modifier = { factor = 0.05 owner = { over_max_demesne_size = 13 } } 
+		
+		#Realm Stewardship
+		modifier = { factor = 1.1 owner = { realm_stewardship = 9 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 10 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 11 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 12 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 13 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 14 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 15 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 16 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 17 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 18 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 19 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 20 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 21 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 22 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 23 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 24 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 25 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 26 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 27 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 28 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 29 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 30 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 31 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 32 } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 6 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 5 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 4 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 3 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 2 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 1 } } }
+		
+		#Misc
+		modifier = { factor = 1.1 any_province_character = { has_job_action = action_squeeze_peasants } }
+		modifier = { factor = 1.15 any_province_character = { has_job_action = action_oversee_construction } }
+		modifier = { factor = 1.25 any_province_character = { has_job_action = action_survey } }
+		modifier = { factor = 1.5 any_province_character = { has_job_action = action_uncover_plots } }
+		modifier = { factor = 1.15 any_province_character = { has_job_action = action_advance_mil_tech } }
+		modifier = { factor = 2.0 any_province_character = { has_job_action = action_train_troops } }
+		modifier = { factor = 1.15 any_province_character = { has_job_action = action_inquisition } }
+		modifier = { factor = 1.1 any_province_character = { has_job_action = action_charity } }
+		modifier = { factor = 2.0 any_province_character = { has_job_action = action_warmagic } }
+		#modifier = { factor = 1.5 any_province_character = { has_job_action = action_mage } }
+		
+		#Infrastructure
+		modifier = { factor = 0.75 OR = { has_damaged_infrastructure = yes has_infrastructure = no } }
+		modifier = { factor = 1.25 AND = { has_province_modifier = infrastructure_3 has_damaged_infrastructure = no } }
+		modifier = { factor = 1.5 AND = { has_province_modifier = infrastructure_4 has_damaged_infrastructure = no } }
+		
+		### Some societies reduce your infestations, depending on its influence
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 10
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 20
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 30
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 40
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 50
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 60
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 70
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 80
+		}
+		modifier = {
+			factor = 1.1
+			owner = { OR = { society_member_of = elder_council is_member_great_house_society = yes } }
+			society_influence >= 90
+		}
+	}
+}
+
+#Goblins
+province_event = {
+	id = kprov.1
+	desc = kprov1d
+	picture = GFX_evt_goblins
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.10 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.10 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.16 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = goblin_infestation
+			duration = 7300
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Falmer
+province_event = {
+	id = kprov.2
+	desc = kprov2d
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.20 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.20 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.26 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = falmer_infestation
+			duration = 7300
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Skeevers
+province_event = {
+	id = kprov.3
+	desc = kprov3d
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.30 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.30 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.36 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = skeever_infestation
+			duration = 1825
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Kwama
+province_event = {
+	id = kprov.4
+	desc = kprov4d
+	picture = GFX_evt_kwama
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			mercantile_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			mercantile_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { stewardship = 12 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireMerchantsTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.40 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireMerchantsTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.40 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.46 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = kwama_infestation
+			duration = 4015
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Trolls
+province_event = {
+	id = kprov.5
+	desc = kprov5d
+	picture = GFX_evt_trolls
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.50 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.50 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.56 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = trolls
+			duration = 4015
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Giants
+province_event = {
+	id = kprov.6
+	desc = kprov6d
+	picture = GFX_evt_giants
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.60 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.60 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.66 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = giants
+			duration = 8760
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Lycans
+province_event = {
+	id = kprov.7
+	desc = Lycan1
+	picture = GFX_evt_werewolfblood
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 75 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.70 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 75 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.70 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.76 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = lycan_infestation
+			duration = 8760
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Undead
+province_event = {
+	id = kprov.8
+	desc = kprov8d
+	picture = GFX_evt_undead
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.80 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.80 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.86 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = undead_infestation
+			duration = 6570
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Bandits ~ highway_robber_band
+province_event = {
+	id = kprov.9
+	desc = kprov9d
+	picture = GFX_evt_adventurers
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.90 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.90 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.96 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = highway_robber_band
+			duration = 2190
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Smugglers
+province_event = {
+	id = kprov.10
+	desc = kprov10d
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = { region = nirn_tamriel }
+			}
+			thieves_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			thieves_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_morrowind
+					owner = { culture = dunmer }
+					AND = {
+						region = nirn_tamriel
+						culture = dunmer
+					}
+				}
+			}
+			camonna_tong_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { diplomacy = 12 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireThievesTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.100 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireThievesTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.100 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.106 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = smugglers_ring
+			duration = 3285
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Thieves - Unaffiliated Thieves
+province_event = {
+	id = kprov.11
+	desc = kprov11d
+	picture = GFX_evt_thieves
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = { region = nirn_tamriel }
+			}
+			thieves_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			thieves_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_morrowind
+					owner = { culture = dunmer }
+					AND = {
+						region = nirn_tamriel
+						culture = dunmer
+					}
+				}
+			}
+			camonna_tong_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 48 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireThievesTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.110 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireThievesTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.110 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.116 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = thieves_guild
+			duration = 2555
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Homeless
+province_event = {
+	id = kprov.12
+	desc = kprov12d
+	picture = GFX_evt_peasants
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			mercantile_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			mercantile_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { stewardship = 12 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireMerchantsTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.120 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireMerchantsTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.120 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.126 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = harbour_the_homeless
+			duration = 2190
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Adventurers
+province_event = {
+	id = kprov.13
+	desc = kprov13d
+	picture = GFX_evt_adventurer_encounter
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ok
+		add_province_modifier = {
+			name = adventurers
+			duration = 2555
+		}
+	}
+}
+#Adventurers Remove Negative Province Mods
+province_event = {
+	id = kprov.14
+	desc = kprov14d
+	picture = GFX_evt_adventurers_rest
+	
+	trigger = {
+		has_province_modifier = adventurers
+		OR = {
+			has_province_modifier = highway_robber_band
+			has_province_modifier = smugglers_ring
+			has_province_modifier = thieves_guild
+			has_province_modifier = kwama_infestation
+			has_province_modifier = giants
+			has_province_modifier = trolls
+			has_province_modifier = vampire_infestation
+			has_province_modifier = lycan_infestation
+			has_province_modifier = undead_infestation
+			has_province_modifier = skeever_infestation
+			has_province_modifier = falmer_infestation
+			has_province_modifier = goblin_infestation
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 768
+		
+		modifier = { factor = 1.1 owner = { war = yes } }
+		modifier = { factor = 0.99 owner = { war = no } }
+		modifier = { factor = 0.99 owner = { independent = no } }
+		modifier = { factor = 0.99 owner = { NOT = { ai = no } } }
+		modifier = { factor = 2 has_province_modifier = famine }
+		modifier = { factor = 1.5 has_province_modifier = cabals }
+	}
+	
+	option = {
+		name = excellent
+		owner = { prestige = 5 }
+		if = {
+			limit = { has_province_modifier = highway_robber_band }
+			remove_province_modifier = highway_robber_band
+		}
+		if = {
+			limit = { has_province_modifier = vampire_infestation }
+			remove_province_modifier = vampire_infestation
+		}
+		if = {
+			limit = { has_province_modifier = smugglers_ring }
+			remove_province_modifier = smugglers_ring
+		}
+		if = {
+			limit = { has_province_modifier = thieves_guild }
+			remove_province_modifier = thieves_guild
+		}
+		if = {
+			limit = { has_province_modifier = giants }
+			remove_province_modifier = giants
+		}
+		if = {
+			limit = { has_province_modifier = trolls }
+			remove_province_modifier = trolls
+		}
+		if = {
+			limit = { has_province_modifier = kwama_infestation }
+			remove_province_modifier = kwama_infestation
+		}
+		if = {
+			limit = { has_province_modifier = undead_infestation }
+			remove_province_modifier = undead_infestation
+		}
+		if = {
+			limit = { has_province_modifier = lycan_infestation }
+			remove_province_modifier = lycan_infestation
+		}
+		if = {
+			limit = { has_province_modifier = skeever_infestation }
+			remove_province_modifier = skeever_infestation
+		}
+		if = {
+			limit = { has_province_modifier = falmer_infestation }
+			remove_province_modifier = falmer_infestation
+		}
+	}
+}
+#Adventurers Ruin local economy
+province_event = {
+	id = kprov.15
+	desc = kprov15d
+	picture = GFX_evt_outside_tavern_hf
+	
+	trigger = {
+		has_province_modifier = adventurers
+		NOT = { has_province_modifier = ruined_economy }
+		NOT = { has_province_modifier = booming_economy }
+	}
+	
+	mean_time_to_happen = {
+		months = 384
+		
+		modifier = { factor = 1.50 owner = { religion = daedra_azura } }
+		modifier = { factor = 1.50 religion = daedra_azura }
+	}
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			mercantile_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			mercantile_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { stewardship = 12 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireMerchantsTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.150 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireMerchantsTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.150 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.156 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = ruined_economy
+			duration = 4015
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Adventurers Boost local economy
+province_event = {
+	id = kprov.16
+	desc = kprov16d
+	picture = GFX_evt_prospering_province
+	
+	trigger = {
+		has_province_modifier = adventurers
+		NOT = { has_province_modifier = ruined_economy }
+		NOT = { has_province_modifier = booming_economy }
+	}
+	
+	mean_time_to_happen = {
+		months = 408
+	}
+	
+	option = {
+		name = excellent
+		add_province_modifier = {
+			name = booming_economy
+			duration = 3285
+		}
+	}
+}
+#Adventurer turns up at court
+province_event = {
+	id = kprov.17
+	desc = kprov17d
+	picture = GFX_evt_throne_room
+	
+	trigger = {
+		has_province_modifier = adventurers
+		owner = {
+			NOT = { has_character_modifier = adventurer_courtier_modifier }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+		
+		modifier = { factor = 1.5 owner = { trait = warlord } }
+		modifier = { factor = 1.25 owner = { trait = cruel } }
+		modifier = { factor = 1.35 owner = { trait = impaler } }
+	}
+	
+	option = {
+		name = helloandwelcome
+		owner = { scaled_wealth = -0.15 } #Must be character scope not Province scope or it defaults to 1 gold
+		random_list = {
+			10 = {
+				custom_tooltip = {
+					text = awildmageappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = no
+							trait = mage_4
+							trait = adventurer
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildbmageappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = yes
+							trait = mage_3
+							trait = battlemage_2
+							trait = adventurer
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildknightappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = yes
+							trait = warrior_3
+							trait = knight_2
+							trait = adventurer
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildwarriorappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = no
+							trait = warrior_4
+							trait = adventurer
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildbardappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = no
+							trait = diplomat_3
+							trait = bard_2
+							trait = adventurer
+							trait = melodious_voice
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildthiefappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = yes
+							trait = agent_3
+							trait = thief_2
+							trait = adventurer
+							trait = agile
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildpriestappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = yes
+							trait = mage_3
+							trait = priest_2
+							trait = adventurer
+							trait = perceptive
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildmonkappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = no
+							trait = agent_3
+							trait = monk_2
+							trait = adventurer
+							trait = quick
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildpilgrimappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = no
+							trait = magistrate_3
+							trait = wayfarer_2
+							trait = adventurer
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+			10 = {
+				custom_tooltip = {
+					text = awildnightbladeappears
+					hidden_tooltip = {
+						create_character = {
+							random_traits = yes
+							culture = random
+							religion = random
+							female = yes
+							trait = agent_3
+							trait = nightblade_2
+							trait = adventurer
+							trait = quick
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+						}
+					}
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				add_character_modifier = {
+					name = adventurer_courtier_modifier
+					duration = 5475
+					hidden = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = fuckoffyoudamnadventurer
+		if = {
+			limit = { owner = { NOT = { trait = shy } } }
+			random = {
+				chance = 10
+				owner = { add_trait = shy }
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				add_character_modifier = {
+					name = adventurer_courtier_modifier
+					duration = 5475
+					hidden = yes
+				}
+			}
+		}
+	}
+}
+#Vampires
+province_event = {
+	id = kprov.18
+	desc = Vamp1
+	picture = GFX_evt_burning_house
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		if = {
+			limit = {
+				region = nirn_tamriel_skyrim
+			}
+			companions_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else_if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel_hammerfell
+					region = nirn_yokuda
+				}
+			}
+			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { combat_rating = 60 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 75 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.180 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireFightersTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 75 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.180 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.186 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = vampire_infestation
+			duration = 8760
+		}
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+#Sload
+province_event = {
+	id = kprov.19
+	desc = kprovSload
+	picture = GFX_evt_comet
+	
+	trigger = { #Irrelevant to other province events and vice versa. This exists to pressure Summerset if it goes expansionist
+		owner = {
+			higher_tier_than = BARON
+			OR = {
+				war = yes
+				any_liege = {
+					war = yes
+				}
+				over_max_demesne_size = 1
+				has_regent = yes
+				ROOT = { has_secret_community = yes }
+			}
+		}
+		port = yes
+		region = nirn_tamriel_summerset
+		NOT = { has_province_modifier = sload_scouts }
+		NOT = {	any_province_character = {	has_job_action = action_root_cabals } }
+		NOT = {	any_province_character = {	has_job_action = action_assist_arrest } }
+	}
+	
+	mean_time_to_happen = {
+		months = 6400
+		
+		#Miscellaneous Modifiers
+		modifier = { #Owner being on offensive wars makes this far more likely
+			factor = 0.5
+			OR = {
+				owner = {
+					any_war = {
+						any_attacker = {
+							character = PREVPREV
+						}
+					}
+				}
+				owner = {
+					any_liege = {
+						any_war = {
+							any_attacker = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+			}
+		}
+		modifier = { factor = 1.5 owner = { war = no } }
+		modifier = { factor = 1.1 owner = { independent = no } }
+		modifier = { factor = 1.1 owner = { NOT = { ai = no } } }
+		modifier = { factor = 1.1 has_province_modifier = famine }
+		modifier = { factor = 0.95 has_province_modifier = cabals }
+		modifier = { factor = 1.50 owner = { religion = daedra_azura } }
+		modifier = { factor = 1.50 religion = daedra_azura }
+		modifier = { factor = 0.50 owner = { has_character_modifier = malacath_weak_chief } }
+		#Positive Trait Mods (Increases MTTH)
+		modifier = { factor = 1.1 owner = { trait = genius } }
+		modifier = { factor = 1.1 owner = { trait = diligent } }
+		modifier = { factor = 1.1 owner = { trait = quick } }
+		modifier = { factor = 1.1 owner = { trait = shrewd } }
+		modifier = { factor = 1.1 owner = { trait = perceptive } }
+		modifier = { factor = 1.1 owner = { trait = zealous } }
+		modifier = { factor = 1.1 owner = { trait = just } }
+		modifier = { factor = 1.1 owner = { trait = content } }
+		modifier = { factor = 1.1 owner = { trait = ambitious } }
+		modifier = { factor = 1.1 owner = { trait = temperate } }
+		modifier = { factor = 1.1 owner = { trait = chaste } }
+		modifier = { factor = 1.1 owner = { trait = paranoid } }
+		modifier = { factor = 1.1 owner = { trait = ruthless } }
+		modifier = { factor = 1.1 owner = { trait = patient } }
+		modifier = { factor = 1.1 owner = { trait = gardener } }
+		modifier = { factor = 1.1 owner = { trait = mane } }
+		modifier = { factor = 1.1 owner = { trait = warlord } }
+		modifier = { factor = 1.1 owner = { trait = pilgrim } }
+		modifier = { factor = 1.1 owner = { trait = greybeard } }
+		#Negative Trait Mods (Decreases MTTH)
+		modifier = { factor = 0.95 owner = { OR = { trait = on_guild trait = on_pilgrimage trait = on_mission trait = on_tour trait = on_diplomatic trait = on_assassination trait = on_adventure } } }
+		modifier = { factor = 0.95 owner = { OR = { trait = drunkard trait = skooma_addiction trait = depressed trait = possessed trait = lunatic trait = stressed } } }
+		modifier = { factor = 0.95 owner = { OR = { trait = infirm trait = incapable } } }
+		modifier = { factor = 0.95 owner = { trait = arbitrary } }
+		modifier = { factor = 0.95 owner = { trait = slothful } }
+		modifier = { factor = 0.95 owner = { trait = absent_minded } }
+		modifier = { factor = 0.95 owner = { trait = reckless } }
+		modifier = { factor = 0.95 owner = { trait = imbecile } }
+		modifier = { factor = 0.75 owner = { is_inaccessible_trigger = yes } }
+		#Negative Demesne Efficiency
+		modifier = { factor = 0.75 owner = { over_max_demesne_size = 3 } }
+		modifier = { factor = 0.5 owner = { over_max_demesne_size = 5 } }
+		modifier = { factor = 0.25 owner = { over_max_demesne_size = 7 } }
+		modifier = { factor = 0.15 owner = { over_max_demesne_size = 9 } }
+		# modifier = { factor = 0.1 owner = { over_max_demesne_size = 11 } }
+		# modifier = { factor = 0.05 owner = { over_max_demesne_size = 13 } } 
+		
+		#Realm Stewardship
+		modifier = { factor = 1.1 owner = { realm_stewardship = 9 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 10 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 11 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 12 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 13 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 14 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 15 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 16 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 17 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 18 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 19 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 20 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 21 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 22 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 23 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 24 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 25 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 26 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 27 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 28 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 29 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 30 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 31 } }
+		modifier = { factor = 1.1 owner = { realm_stewardship = 32 } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 6 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 5 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 4 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 3 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 2 } } }
+		modifier = { factor = 0.95 owner = { NOT = { realm_stewardship = 1 } } }
+		
+		#Misc
+		modifier = { factor = 1.1 any_province_character = { has_job_action = action_squeeze_peasants } }
+		modifier = { factor = 1.15 any_province_character = { has_job_action = action_oversee_construction } }
+		modifier = { factor = 1.25 any_province_character = { has_job_action = action_survey } }
+		modifier = { factor = 1.5 any_province_character = { has_job_action = action_uncover_plots } }
+		modifier = { factor = 1.15 any_province_character = { has_job_action = action_advance_mil_tech } }
+		modifier = { factor = 2.0 any_province_character = { has_job_action = action_train_troops } }
+		modifier = { factor = 1.15 any_province_character = { has_job_action = action_inquisition } }
+		modifier = { factor = 1.1 any_province_character = { has_job_action = action_charity } }
+		modifier = { factor = 2.0 any_province_character = { has_job_action = action_warmagic } }
+		#modifier = { factor = 1.5 any_province_character = { has_job_action = action_mage } }
+	}
+	
+	option = {
+		name = damn
+		add_province_modifier = {
+			name = sload_scouts
+			duration = 3650
+		}
+	}
+}
+#Magical anomalies
+province_event = {
+	id = kprov.20
+	desc = kprov20d
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			mages_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			mages_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { learning = 15 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireMagesTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.190 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireMagesTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.190 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.196 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = magical_anomalies
+			duration = 7300
+		}	
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}
+# Propagandist
+province_event = {
+	id = kprov.21
+	desc = kprov21d
+	picture = GFX_evt_goblins
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Check which generic guild can be called
+		if = {
+			limit = {
+				OR = {
+					region = nirn_tamriel
+					region = nirn_yokuda
+				}
+			}
+			scenarist_guild_tamriel = { save_event_target_as = generic_guild }
+		}
+		
+		else_if = {
+			limit = {
+				region = nirn_akavir
+			}
+			scenarist_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		# Check which cultural guild can be called
+		
+		# Assuming the character can deal with the infestation themselves, should the AI do it?
+		if = {
+			limit = { owner = { diplomacy = 15 } }
+			owner = { set_character_flag = should_hire_self }
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = damn
+		ai_chance = {
+			factor = 2
+		}
+	}
+	
+	## Hire Generic Guild
+	option = {
+		name = HireGenericGuild
+		custom_tooltip = { text = HireScenaristsTooltip }
+		trigger = {
+			event_target:generic_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:generic_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:generic_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.200 }
+			}
+		}
+	}
+	
+	## Hire Cultural Guild
+	option = {
+		name = HireCulturalGuild
+		custom_tooltip = { text = HireScenaristsTooltip }
+		trigger = {
+			event_target:cultural_guild = { society_is_active = yes }
+			owner = { wealth = 50 }
+			any_society_member = {
+				society_member_of = event_target:cultural_guild
+				has_any_quest = no
+				is_society_grandmaster = no
+				NOT = { has_character_modifier = quest_cooldown_timer }
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+				NOT = {
+					owns = ROOT
+				}
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			random_society_member = {
+				limit = {
+					society_member_of = event_target:cultural_guild
+					has_any_quest = no
+					is_society_grandmaster = no
+					NOT = { has_character_modifier = quest_cooldown_timer }
+					is_adult = yes
+					prisoner = no
+					is_inaccessible_trigger = no
+					NOT = {
+						owns = ROOT
+					}
+				}
+				society_quest_event = { id = ekguildquests.200 }
+			}
+		}
+	}
+	
+	## Take care of it personally
+	option = {
+		name = HireSelf
+		trigger = {
+			owner = {
+				OR = {
+					society_member_of = event_target:generic_guild
+					society_member_of = event_target:cultural_guild
+				}
+				has_any_quest = no
+				is_adult = yes
+				prisoner = no
+				is_inaccessible_trigger = no
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.05
+				owner = {
+					is_society_grandmaster = yes
+					NOT = { has_character_flag = should_hire_self }
+				}
+			}
+		}
+		hidden_tooltip = {
+			owner = {
+				society_quest_event = { id = ekguildquests.206 }
+			}
+		}
+	}
+	
+	after = {
+		add_province_modifier = {
+			name = propagandist
+			duration = 7300
+		}	
+		
+		owner = { clr_character_flag = should_hire_self }
+	}
+}

@@ -1,0 +1,4869 @@
+# Safety clearing of any quest-added flags and variables
+ec_clear_quest_flags = {
+	hidden_tooltip = {
+		clr_character_flag = ec_quest_embezzled
+		clr_character_flag = ec_quest_supplemented
+		clr_character_flag = ec_quest_development
+		clr_character_flag = ec_quest_recruitment
+		clr_character_flag = ec_quest_taxation
+		clr_character_flag = ec_quest_crime
+		clr_character_flag = ec_quest_magicka
+		clr_character_flag = ec_quest_defences
+		# setting vars to 0 ensures reset and 0-vars aren't stored in saves
+		set_variable = { which = ec_quest_treasury value = 0 }
+		set_variable = { which = ec_quest_skill value = 0 }
+	}
+}
+
+# THIS is the war leader for the Elder Council
+# ROOT is the pretender
+elder_council_pretender_war = {
+	save_event_target_as = target_council_war_leader
+	hidden_tooltip = {
+		any_war = {
+			limit = {
+				defender = {
+					event_target:target_council_war_leader = {
+						character = PREV
+					}
+				}
+			}
+			end_war = invalid
+		}
+	}
+	reverse_unsafe_war = { 
+		target = ROOT 
+		casus_belli = pretender_attack_council_cb
+		infamy = 100
+	}
+	character_event = { id = eldercouncil.29 }
+}
+
+ec_join_elder_council = {
+	if = { limit = { is_in_society = yes } leave_society = yes }
+	join_society = elder_council
+	clr_character_flag = society_join_block
+	clr_character_flag = ec_hc_appointed_successor
+	clr_character_flag = ec_expressed_interest
+	
+	ec_calculate_imperialism = yes
+	if = { # Given 1 amulet per lifetime
+		limit = {
+			NOT = {
+				has_character_flag = received_elder_amulet
+			}
+		}
+		add_artifact = elder_council_amulet
+		set_character_flag = received_elder_amulet
+	}
+
+	hidden_tooltip = {
+		if = {
+			limit = {
+				OR = {
+					always = no
+					elder_council = {
+						NOT = {
+							any_society_member = {
+								is_society_grandmaster = yes
+							}
+						}
+					}
+				}
+			}
+			set_society_grandmaster = yes
+		}
+	}
+}
+
+# Save the Emperor as target_emperor
+ec_get_emperor_target = {
+	if = {
+		limit = {
+			ec_empire_exists = yes
+		}
+		if = {
+			limit = {
+				e_cyrodiil = {
+					has_title_flag = elder_council_empire
+				}
+			}
+			e_cyrodiil = {
+				holder_scope = {
+					save_event_target_as = target_emperor
+				}
+			}
+		}
+		else = {
+			e_tamriel = {
+				holder_scope = {
+					save_event_target_as = target_emperor
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			e_pretender_empire = {
+				has_holder = yes
+			}
+		}
+		e_pretender_empire = {
+			holder_scope = {
+				save_event_target_as = target_emperor
+			}
+		}
+	}
+}
+
+ec_get_empire_target = {
+	if = {
+		limit = {
+			e_pretender_empire = {
+				has_holder = yes
+			}
+		}
+		e_pretender_empire = {
+			save_event_target_as = target_empire
+		}
+	}
+	else_if = {
+		limit = {
+			e_cyrodiil = {
+				has_title_flag = elder_council_empire
+			}
+		}
+		e_cyrodiil = {
+			save_event_target_as = target_empire
+		}
+	}
+	else_if = {
+		limit = {
+			e_tamriel = {
+				has_title_flag = elder_council_empire
+			}
+		}
+		e_tamriel = {
+			save_event_target_as = target_empire
+		}
+	}
+}
+
+# TODO:JJPERF evaluate where this is used
+ec_recalc_entire_council = {
+	custom_tooltip = {
+		text = ec_recalc_imperialism
+		hidden_tooltip = {
+			generate_tooltip = no
+			elder_council = {
+				any_society_member = {
+					ec_calculate_imperialism = yes
+				}
+			}
+		}
+	}
+}
+
+clr_imperialism_flags = {
+	clr_character_flag = ec_debug_hc_non_dynast
+	clr_character_flag = ec_debug_indp_non_dynast
+	clr_character_flag = ec_debug_indp_dynast
+	clr_character_flag = ec_debug_not_imp_appt
+	clr_character_flag = ec_debug_imp_claimant
+	clr_character_flag = ec_debug_prt_claimant
+	clr_character_flag = ec_debug_imp_dynast
+	clr_character_flag = ec_debug_prt_dynasty
+	clr_character_flag = ec_debug_warlord
+	clr_character_flag = ec_debug_diff_culture
+	clr_character_flag = ec_debug_diff_religion
+	clr_character_flag = ec_debug_cult_rel_bonus
+	clr_character_flag = ec_debug_foe
+	clr_character_flag = ec_debug_fired_council
+
+	clr_character_flag = ec_debug_neg100
+	clr_character_flag = ec_debug_neg90
+	clr_character_flag = ec_debug_neg80
+	clr_character_flag = ec_debug_neg70
+	clr_character_flag = ec_debug_neg60
+	clr_character_flag = ec_debug_neg50
+	clr_character_flag = ec_debug_neg40
+	clr_character_flag = ec_debug_neg30
+	clr_character_flag = ec_debug_neg20
+	clr_character_flag = ec_debug_neg10
+	clr_character_flag = ec_debug_pos0
+	clr_character_flag = ec_debug_pos10
+	clr_character_flag = ec_debug_pos20
+	clr_character_flag = ec_debug_pos30
+	clr_character_flag = ec_debug_pos40
+	clr_character_flag = ec_debug_pos50
+	clr_character_flag = ec_debug_pos60
+	clr_character_flag = ec_debug_pos70
+	clr_character_flag = ec_debug_pos80
+	clr_character_flag = ec_debug_pos90
+	clr_character_flag = ec_debug_pos100
+	clr_character_flag = ec_debug_pos100plus
+}
+
+ec_calculate_imperialism = {
+	hidden_tooltip = {
+		if = {
+			limit = {
+				OR = {
+					ai = yes
+					NOR = {
+						trait = councilist
+						trait = imperialist
+					}
+				}
+			}
+			remove_trait = imperialist
+			remove_trait = councilist
+			#set_variable = { which = ec_imperialism value = -25 } # Prefer councilism by default
+
+			## Non-dynast outside of Empire
+			#if = {
+			#	limit = {
+			#		top_liege = {
+			#			ec_is_emperor = no
+			#		}
+			#		NOT = {
+			#			any_dynasty_member = {
+			#				any_demesne_title = {
+			#					has_title_flag = elder_council_empire
+			#				}
+			#			}
+			#		}
+			#	}
+			#	change_variable = { which = ec_imperialism value = -25 }
+			#	#set_character_flag = ec_debug_indp_non_dynast
+			#}
+			## Dynast outside of Empire
+			#else_if = {
+			#	limit = {
+			#		top_liege = {
+			#			ec_is_emperor = no
+			#		}
+			#		# Is nec. a member of the Imperial Family
+			#	}
+			#	change_variable = { which = ec_imperialism value = -10 }
+			#	#set_character_flag = ec_debug_indp_dynast
+			#}
+			## Not appointed by the Emperor
+			#if = {
+			#	limit = {
+			#		NOT = {
+			#			has_character_flag = ec_imperial_appointee
+			#		}
+			#	}
+			#	change_variable = { which = ec_imperialism value = -10 }
+			#	#set_character_flag = ec_debug_not_imp_appt
+			#}
+			## Imperial claimants
+			#if = {
+			#	limit = {
+			#		any_claim = {
+			#			has_title_flag = elder_council_empire
+			#		}
+			#	}
+			#	change_variable = { which = ec_imperialism value = 50 }
+			#	#set_character_flag = ec_debug_imp_claimant
+			#}
+			## Pretentious claimants
+			#else_if = {
+			#	limit = {
+			#		any_claim = {
+			#			title = e_pretender_empire
+			#		}
+			#	}
+			#	change_variable = { which = ec_imperialism value = 30 }
+			#	#set_character_flag = ec_debug_prt_claimant
+			#}
+			## Dynasts - Imperial
+			#if = {
+			#	limit = {
+			#		any_dynasty_member = {
+			#			any_demesne_title = {
+			#				has_title_flag = elder_council_empire
+			#			}
+			#		}
+			#	}
+			#	change_variable = { which = ec_imperialism value = 30 }
+			#	#set_character_flag = ec_debug_imp_dynast
+			#}
+			## Dynastys - Pretenders
+			#if = {
+			#	limit = {
+			#		any_dynasty_member = {
+			#			has_landed_title = e_pretender_empire
+			#		}
+			#	}
+			#	change_variable = { which = ec_imperialism value = 20 }
+			#	#set_character_flag = ec_debug_prt_dynasty
+			#}
+			## Scope to Empire - Culture, Religion, Opinion
+			#if = {
+			#	limit = {
+			#		e_pretender_empire = {
+			#			has_holder = no
+			#		}
+			#	}
+			#	#any_landed_title = {
+			#	#	limit = {
+			#	#		has_title_flag = elder_council_empire
+			#	#	}
+			#	#	holder_scope = {
+			#	#		PREVPREV = {
+			#	#			#set_character_flag = ec_debug_imp_checked
+			#	#		}
+			#	#		ec_rel_cul_opn_imperialism_calculation = yes
+			#	#	}
+			#	#}
+			#	if = {
+			#		limit = {
+			#			e_tamriel = {
+			#				has_holder = yes
+			#				has_title_flag = elder_council_empire
+			#			}
+			#		}
+			#		e_tamriel = {
+			#			holder_scope = {
+			#				PREVPREV = {
+			#					#set_character_flag = ec_debug_imp_checked
+			#				}
+			#				ec_rel_cul_opn_imperialism_calculation = yes
+			#			}
+			#		}
+			#	}
+			#	else_if = {
+			#		limit = {
+			#			e_cyrodiil = {
+			#				has_holder = yes
+			#				has_title_flag = elder_council_empire
+			#			}
+			#		}
+			#		e_cyrodiil = {
+			#			holder_scope = {
+			#				PREVPREV = {
+			#					#set_character_flag = ec_debug_imp_checked
+			#				}
+			#				ec_rel_cul_opn_imperialism_calculation = yes
+			#			}
+			#		}
+			#	}
+			#}
+			#else = {
+			#	e_pretender_empire = {
+			#		holder_scope = {
+			#			PREVPREV = {
+			#				#set_character_flag = ec_debug_prt_checked
+			#			}
+			#			ec_rel_cul_opn_imperialism_calculation = yes
+			#		}
+			#	}
+			#}
+			ec_calculate_imperialism_no_traits = yes
+			if = {
+				limit = {
+					check_variable = { which = ec_imperialism value = 0 }
+				}
+				add_trait = imperialist
+			}
+			else = {
+				add_trait = councilist
+			}
+			ec_faction_count = yes
+		}
+	}
+}
+
+# Calculation without changing traits - useful for choosing EC candidates
+ec_calculate_imperialism_no_traits = {
+	hidden_tooltip = {
+		clr_imperialism_flags = yes
+		set_variable = { which = ec_imperialism value = -25 } # Prefer councilism by default
+
+		# Non-dynast High Chancellor
+		if = {
+			limit = {
+				NOT = {
+					any_dynasty_member = {
+						ec_is_emperor = yes
+					}
+				}
+				society_member_of = elder_council # Just in case >.>
+				is_society_grandmaster = yes
+			}
+			change_variable = { which = ec_imperialism value = -10 }
+			set_character_flag = ec_debug_hc_non_dynast
+		}
+		# Non-dynast outside of Empire
+		if = {
+			limit = {
+				top_liege = {
+					ec_is_emperor = no
+				}
+				NOT = {
+					any_dynasty_member = {
+						ec_is_emperor = yes
+					}
+				}
+			}
+			change_variable = { which = ec_imperialism value = -25 }
+			set_character_flag = ec_debug_indp_non_dynast
+		}
+		# Dynast outside of Empire
+		else_if = {
+			limit = {
+				top_liege = {
+					ec_is_emperor = no
+				}
+				# Is nec. a member of the Imperial Family
+			}
+			change_variable = { which = ec_imperialism value = -10 }
+			set_character_flag = ec_debug_indp_dynast
+		}
+		# Not appointed by the Emperor
+		if = {
+			limit = {
+				NOT = {
+					has_character_flag = ec_imperial_appointee
+				}
+			}
+			change_variable = { which = ec_imperialism value = -10 }
+			set_character_flag = ec_debug_not_imp_appt
+		}
+		# Imperial claimants
+		if = {
+			limit = {
+				any_claim = {
+					has_title_flag = elder_council_empire
+				}
+			}
+			change_variable = { which = ec_imperialism value = 50 }
+			set_character_flag = ec_debug_imp_claimant
+		}
+		# Pretentious claimants
+		else_if = {
+			limit = {
+				any_claim = {
+					title = e_pretender_empire
+				}
+			}
+			change_variable = { which = ec_imperialism value = 30 }
+			set_character_flag = ec_debug_prt_claimant
+		}
+		# Dynasts - Imperial
+		if = {
+			limit = {
+				any_dynasty_member = {
+					is_alive = yes
+					is_landed = yes
+					any_demesne_title = {
+						has_title_flag = elder_council_empire
+					}
+				}
+			}
+			change_variable = { which = ec_imperialism value = 30 }
+			set_character_flag = ec_debug_imp_dynast
+		}
+		# Dynastys - Pretenders
+		if = {
+			limit = {
+				any_dynasty_member = {
+					has_landed_title = e_pretender_empire
+				}
+			}
+			change_variable = { which = ec_imperialism value = 20 }
+			set_character_flag = ec_debug_prt_dynasty
+		}
+		# Sway effects
+		if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 1 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 2 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 10 }
+			set_character_flag = ec_impcalc_sway_imp_1
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 2 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 3 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 20 }
+			set_character_flag = ec_impcalc_sway_imp_2
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 3 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 4 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 30 }
+			set_character_flag = ec_impcalc_sway_imp_3
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 4 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 5 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 40 }
+			set_character_flag = ec_impcalc_sway_imp_4
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 5 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 6 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 50 }
+			set_character_flag = ec_impcalc_sway_imp_5
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 6 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 7 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 60 }
+			set_character_flag = ec_impcalc_sway_imp_6
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 7}
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 8 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 70 }
+			set_character_flag = ec_impcalc_sway_imp_7
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 8 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 9 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 80 }
+			set_character_flag = ec_impcalc_sway_imp_8
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 9 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 10 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = 90 }
+			set_character_flag = ec_impcalc_sway_imp_9
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_imperial amount = 10 }
+			}
+			change_variable = { which = ec_imperialism value = 100 }
+			set_character_flag = ec_impcalc_sway_imp_10
+		}
+		if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 1 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 2 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -10 }
+			set_character_flag = ec_impcalc_sway_council_1
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 2 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 3 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -20 }
+			set_character_flag = ec_impcalc_sway_council_2
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 3 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 4 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -30 }
+			set_character_flag = ec_impcalc_sway_council_3
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 4 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 5 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -40 }
+			set_character_flag = ec_impcalc_sway_council_4
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 5 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 6 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -50 }
+			set_character_flag = ec_impcalc_sway_council_5
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 6 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 7 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -60 }
+			set_character_flag = ec_impcalc_sway_council_6
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 7}
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 8 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -70 }
+			set_character_flag = ec_impcalc_sway_council_7
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 8 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 9 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -80 }
+			set_character_flag = ec_impcalc_sway_council_8
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 9 }
+				NOT = {
+					has_instances_of_character_modifier = { modifier = ec_sway_council amount = 10 }
+				}
+			}
+			change_variable = { which = ec_imperialism value = -90 }
+			set_character_flag = ec_impcalc_sway_council_9
+		}
+		else_if = {
+			limit = {
+				has_instances_of_character_modifier = { modifier = ec_sway_council amount = 10 }
+			}
+			change_variable = { which = ec_imperialism value = -100 }
+			set_character_flag = ec_impcalc_sway_council_10
+		}
+		# Scope to Empire - Culture, Religion, Opinion
+		if = {
+			limit = {
+				e_pretender_empire = {
+					has_holder = no
+				}
+			}
+			any_landed_title = {
+				limit = {
+					has_title_flag = elder_council_empire
+				}
+				holder_scope = {
+					PREVPREV = {
+						#set_character_flag = ec_debug_imp_checked
+					}
+					ec_rel_cul_opn_imperialism_calculation = yes
+				}
+			}
+		}
+		else = {
+			e_pretender_empire = {
+				holder_scope = {
+					PREVPREV = {
+						#set_character_flag = ec_debug_prt_checked
+					}
+					ec_rel_cul_opn_imperialism_calculation = yes
+				}
+			}
+		}
+	}
+}
+
+# THIS is the Emperor
+# PREV is the Empire
+# PREVPREV is the councillor
+ec_rel_cul_opn_imperialism_calculation = {
+	# Fired from council extra malus - help prevent abuse of rotating imperialists onto your council and having them voted in, then swapping them out
+	if = {
+		limit = {
+			PREVPREV = {
+				has_opinion_modifier = { who = PREV modifier = opinion_fired_from_council }
+			}
+		}
+		PREVPREV = {
+			change_variable = { which = ec_imperialism value = -30 }
+			set_character_flag = ec_debug_fired_council
+		}
+	}
+	# Emperor is warlord, not dynast
+	if = {
+		limit = {
+			trait = warlord
+			NOT = {
+				dynasty = PREVPREV
+			}
+		}
+		PREVPREV = {
+			change_variable = { which = ec_imperialism value = -50 }
+			set_character_flag = ec_debug_warlord
+		}
+	}
+	# Culture
+	if = {
+		limit = {
+			NOT = {
+				culture_group = PREVPREV
+			}
+		}
+		PREVPREV = {
+			change_variable = { which = ec_imperialism value = -10 }
+			set_character_flag = ec_debug_diff_culture
+		}
+	}
+	# Religion
+	if = {
+		limit = {
+			NOT = {
+				religion = PREVPREV
+			}
+		}
+		PREVPREV = {
+			change_variable = { which = ec_imperialism value = -20 }
+			set_character_flag = ec_debug_diff_religion
+		}
+	}
+	# Same culture & religion bonus
+	if = {
+		limit = {
+			culture = PREVPREV
+			religion = PREVPREV
+		}
+		PREVPREV = {
+			change_variable = { which = ec_imperialism value = 15 }
+			set_character_flag = ec_debug_cult_rel_bonus
+		}
+	}
+	# Rival - override everything
+	if = {
+		limit = {
+			is_foe = PREVPREV
+		}
+		PREVPREV = {
+			change_variable = { which = ec_imperialism value = -999 }
+			set_character_flag = ec_debug_foe
+		}
+	}
+	# Opinion
+	# Negative opinion counts for the full amount, positive is halved
+	if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -100 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -999 }
+			set_character_flag = ec_debug_neg100
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -90 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -100 }
+			set_character_flag = ec_debug_neg90
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -80 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -90 }
+			set_character_flag = ec_debug_neg80
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -70 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -80 }
+			set_character_flag = ec_debug_neg70
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -60 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -70 }
+			set_character_flag = ec_debug_neg60
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -50 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -60 }
+			set_character_flag = ec_debug_neg50
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -40 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -50 }
+			set_character_flag = ec_debug_neg40
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -30 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -40 }
+			set_character_flag = ec_debug_neg30
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -20 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -30 }
+			set_character_flag = ec_debug_neg20
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = -10 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -20 }
+			set_character_flag = ec_debug_neg10
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 0 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = -10 }
+			set_character_flag = ec_debug_pos0
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 10 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 0 }
+			set_character_flag = ec_debug_pos10
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 20 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 5 }
+			set_character_flag = ec_debug_pos20
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 30 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 10 }
+			set_character_flag = ec_debug_pos30
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 40 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 15 }
+			set_character_flag = ec_debug_pos40
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 50 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 20 }
+			set_character_flag = ec_debug_pos50
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 60 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 25 }
+			set_character_flag = ec_debug_pos60
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 70 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 30 }
+			set_character_flag = ec_debug_pos70
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 80 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 35 }
+			set_character_flag = ec_debug_pos80
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 90 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 40 }
+			set_character_flag = ec_debug_pos90
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				reverse_opinion = { who = PREVPREV value = 100 }
+			}
+		}
+		PREVPREV = { 
+			change_variable = { which = ec_imperialism value = 50 }
+			set_character_flag = ec_debug_pos100
+		}
+	}
+	else_if = {
+		limit = {
+			reverse_opinion = { who = PREVPREV value = 100 }
+		}
+		PREVPREV = {
+			change_variable = { which = ec_imperialism value = 60 } # You get an extra 10 :3
+			set_character_flag = ec_debug_pos100plus
+		}
+	}
+}
+
+# event_target:target_empire is elder_council_empire
+ec_become_pretender = {
+	custom_tooltip = {
+		text = become_pretender_emperor
+		set_character_flag = ec_pretender
+		primary_title = {
+			save_event_target_as = target_old_primary
+			hidden_tooltip = {
+				e_pretender_empire = {
+					set_name = ""
+					event_target:target_empire = {
+						e_pretender_empire = {
+							copy_title_history = PREV
+							set_coa = PREV
+						}
+					}
+					grant_title = ROOT
+					event_target:target_old_primary = { # finally copying laws properly :)
+						PREV = {
+							copy_title_laws = PREV
+						}
+					}
+					#make_primary_title = yes
+					set_name = PRETENDER_EMPIRE
+				}
+			}
+		}
+	}
+}
+
+# Elder Council receives normal income - split between treasury and allowance
+# Parametres:
+# ec_income_value - the wealth to be split b/w treasury and allowance. From the Elder Council's point of view (i.e. +ve is Council income, THIS expense)
+ec_income = {
+	custom_tooltip = {
+		text = ec_paid
+	}
+	if = {
+		limit = {
+			OR = {
+				ec_imperial_allowance_0 = yes
+				check_variable = { which = ec_income_value value < 0 } # Don't bill the Emperor for expenses, only the Council
+			}
+		}
+		hidden_tooltip = {
+			change_variable = { which = global_ec_treasury which = ec_income_value }
+			change_variable = { which = global_ec_income_1 which = ec_income_value }
+			multiply_variable = { which = ec_income_value value = -1 }
+		}
+		wealth = ec_income_value
+		hidden_tooltip = {
+			set_variable = { which = ec_income_value value = 0 } # won't be stored in saves
+		}
+	}
+	else = {
+		hidden_tooltip = {
+			multiply_variable = { which = ec_income_value value = -1 }
+		}
+		wealth = ec_income_value
+		hidden_tooltip = {
+			multiply_variable = { which = ec_income_value value = -1 }
+			set_variable = { which = global_imp_allow_inc which = ec_income_value }
+			if = {
+				limit = {
+					has_global_flag = ec_imperial_allowance_10
+				}
+				# split wealth
+				multiply_variable = { which = global_imp_allow_inc value = 0.1 }
+				multiply_variable = { which = ec_income_value value = 0.9 }
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ec_imperial_allowance_20
+				}
+				# split wealth
+				multiply_variable = { which = global_imp_allow_inc value = 0.2 }
+				multiply_variable = { which = ec_income_value value = 0.8 }
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ec_imperial_allowance_30
+				}
+				# split wealth
+				multiply_variable = { which = global_imp_allow_inc value = 0.3 }
+				multiply_variable = { which = ec_income_value value = 0.7 }
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ec_imperial_allowance_40
+				}
+				# split wealth
+				multiply_variable = { which = global_imp_allow_inc value = 0.4 }
+				multiply_variable = { which = ec_income_value value = 0.6 }
+			}
+			else_if = {
+				limit = {
+					has_global_flag = ec_imperial_allowance_50
+				}
+				# split wealth
+				multiply_variable = { which = global_imp_allow_inc value = 0.5 }
+				multiply_variable = { which = ec_income_value value = 0.5 }
+			}
+			# give allowance to Emperor or store if there is no Emperor
+			if = {
+				limit = {
+					ec_recognises_emperor = yes
+				}
+				if = {
+					limit = {
+						e_cyrodiil = {
+							has_title_flag = elder_council_empire
+							has_holder = yes
+						}
+					}
+					e_cyrodiil = {
+						holder_scope = {
+							set_variable = { which = ec_imperial_allowance which = global_imp_allow_inc }
+							wealth = ec_imperial_allowance
+							#set_variable = { which = ec_imperial_allowance value = 0 }
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						e_tamriel = {
+							has_title_flag = elder_council_empire
+							has_holder = yes
+						}
+					}
+					e_tamriel = {
+						holder_scope = {
+							set_variable = { which = ec_imperial_allowance which = global_imp_allow_inc }
+							wealth = ec_imperial_allowance
+							set_variable = { which = ec_imperial_allowance value = 0 }
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						e_pretender_empire = {
+							has_holder = yes
+						}
+					}
+					e_pretender_empire = {
+						holder_scope = {
+							set_variable = { which = ec_imperial_allowance which = global_imp_allow_inc }
+							wealth = ec_imperial_allowance
+							set_variable = { which = ec_imperial_allowance value = 0 }
+						}
+					}
+				}
+			}
+			else = {
+				change_variable = { which = global_ec_interregnum_treasury which = global_imp_allow_inc }
+				set_variable = { which = ec_imperial_allowance value = 0 }
+			}
+			# pay the Council
+			change_variable = { which = global_ec_treasury which = ec_income_value }
+			change_variable = { which = global_ec_income_1 which = ec_income_value }
+
+			set_variable = { which = ec_income_value value = 0 } # won't be stored in saves
+			set_variable = { which = global_imp_allow_inc value = 0 }
+		}
+	}
+}
+
+# Put budgeted money back into the global treasury
+# THIS is the councillor whose services were refused
+ec_refund_budget = {
+	hidden_tooltip = {
+		change_variable = { which = global_ec_treasury which = ec_quest_treasury }
+		change_variable = { which = global_ec_income_1 which = ec_quest_treasury }
+		set_variable = { which = ec_quest_treasury value = 0 }
+	}
+}
+
+# Take money from the Council, allocate to quest treasury
+
+ec_budget_quest = {
+	if = {
+		limit = {
+			has_global_flag = ec_funding_quests_0
+		}
+		ec_budget_money_0 = yes
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_quests_25
+		}
+		ec_budget_money_25 = yes
+	}
+	else_if = {
+		limit = {
+			ec_funding_quests_50 = yes
+		}
+		ec_budget_money_50 = yes
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_quests_75
+		}
+		ec_budget_money_75 = yes
+	}
+}
+# THIS is the questing councillor
+ec_budget_money_0 = {
+	custom_tooltip = {
+		text = ec_quest_treasury_update
+	}
+	set_variable = { which = ec_quest_treasury value = 0 }
+	custom_tooltip = {
+		text = ec_treasury_update
+	}
+	change_variable = { which = global_ec_treasury value = -0 }
+	hidden_tooltip = {
+		change_variable = { which = global_ec_income_1 value = -0 }
+	}
+}
+
+ec_budget_money_25 = {
+	custom_tooltip = {
+		text = ec_quest_treasury_update
+	}
+	set_variable = { which = ec_quest_treasury value = 25 }
+	custom_tooltip = {
+		text = ec_treasury_update
+	}
+	change_variable = { which = global_ec_treasury value = -25 }
+	hidden_tooltip = {
+		change_variable = { which = global_ec_income_1 value = -25 }
+	}
+}
+
+ec_budget_money_50 = {
+	custom_tooltip = {
+		text = ec_quest_treasury_update
+	}
+	set_variable = { which = ec_quest_treasury value = 50 }
+	custom_tooltip = {
+		text = ec_treasury_update
+	}
+	change_variable = { which = global_ec_treasury value = -50 }
+	hidden_tooltip = {
+		change_variable = { which = global_ec_income_1 value = -50 }
+	}
+}
+
+ec_budget_money_75 = {
+	custom_tooltip = {
+		text = ec_quest_treasury_update
+	}
+	set_variable = { which = ec_quest_treasury value = 75 }
+	custom_tooltip = {
+		text = ec_treasury_update
+	}
+	change_variable = { which = global_ec_treasury value = -75 }
+	hidden_tooltip = {
+		change_variable = { which = global_ec_income_1 value = -75 }
+	}
+}
+
+# Take money from THIS, allocate to quest treasury
+ec_quest_supp_money_25 = {
+	wealth = -25
+	event_target:target_quest_councillor = {
+		show_scope_change = no
+		change_variable = { which = ec_quest_treasury value = 25 }
+	}
+}
+
+# Take money from the Councillor's quest treasury, give to this
+ec_quest_take_money_25 = {
+	wealth = 25
+	event_target:target_quest_councillor = {
+		show_scope_change = no
+		change_variable = { which = ec_quest_treasury value = -25 }
+	}
+}
+
+ec_budget_status = {
+	event_target:target_quest_councillor = {
+		custom_tooltip = {
+			text = ec_quest_treasury_update
+		}
+	}
+}
+
+# Take money from the Council, give it to THIS
+ec_take_money_25 = {
+	wealth = 25
+	custom_tooltip = {
+		text = ec_treasury_update
+	}
+	change_variable = { which = global_ec_treasury value = -25 }
+	change_variable = { which = global_ec_income_1 value = -25 }
+}
+
+# THIS is the character being charged
+ec_add_wealth_scaled = {
+	# TODO
+}
+
+# THIS is the embezzling character
+ec_embezzlement_discovery_chance = {
+	random_list = {
+		80 = {
+			# Stacking intrigue
+			modifier = {
+				factor = 0.75
+				intrigue = 10
+			}
+			modifier = {
+				factor = 0.75
+				intrigue = 15
+			}
+			modifier = {
+				factor = 0.75
+				intrigue = 20
+			}
+			modifier = {
+				factor = 0.75
+				intrigue = 25
+			}
+			modifier = {
+				factor = 0.75
+				intrigue = 30
+			}
+			add_character_modifier = { name = ec_embezzled_money days = 3650 }
+		}
+		20 = {
+			custom_tooltip = {
+				text = ec_embezzlement_undiscovered
+			}
+		}
+	}
+}
+
+### Policy Tooltips ###
+
+ec_tooltip_policy_all = {
+	ec_tooltip_policy_funding_guards = yes
+	ec_tooltip_policy_funding_quests = yes
+	ec_tooltip_policy_join_reqs = yes
+	ec_tooltip_policy_law_proposals = yes
+	ec_tooltip_policy_hc_succ = yes
+	ec_tooltip_policy_imperial_allowance = yes
+	ec_tooltip_imperial_legislature = yes
+	ec_tooltip_imperial_council = yes
+	# TODO:JJ tooltips for new laws
+}
+
+# Guard funding
+ec_tooltip_policy_funding_guards = {
+	if = {
+		limit = {
+			ec_funding_guards = no
+		}
+		custom_tooltip = {
+			text = ec_policy_guards_none
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_guards_light
+		}
+		custom_tooltip = {
+			text = ec_policy_guards_light
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_guards_full
+		}
+		custom_tooltip = {
+			text = ec_policy_guards_full
+		}
+	}
+}
+
+# Quest funding
+ec_tooltip_policy_funding_quests = {
+	if = {
+		limit = {
+			ec_funding_quests_50 = yes
+		}
+		custom_tooltip = {
+			text = ec_policy_quests_50
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_quests_0
+		}
+		custom_tooltip = {
+			text = ec_policy_quests_0
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_quests_25
+		}
+		custom_tooltip = {
+			text = ec_policy_quests_25
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_quests_75
+		}
+		custom_tooltip = {
+			text = ec_policy_quests_75
+		}
+	}
+}
+
+# Join requirement
+# Vote-appoint
+# Emp-HC
+# Quality-$$$
+ec_tooltip_policy_join_reqs = {
+	custom_tooltip = {
+		text = ec_policy_appointment
+	}
+	custom_tooltip = {
+		text = ec_policy_join_requirements
+	}
+}
+
+# Who can propose laws
+ec_tooltip_policy_law_proposals = {
+	if = {
+		limit = {
+			ec_policy_law_proposals_hc = yes
+		}
+		custom_tooltip = {
+			text = ec_policy_law_proposals_hc
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_law_proposals_both
+		}
+		custom_tooltip = {
+			text = ec_policy_law_proposals_both
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_law_proposals_emp
+		}
+		custom_tooltip = {
+			text = ec_policy_law_proposals_emp
+		}
+	}
+}
+
+# High Chancellor appointment
+ec_tooltip_policy_hc_succ = {
+	if = {
+		limit = {
+			ec_policy_hc_succ_society = yes
+		}
+		custom_tooltip = {
+			text = ec_policy_hc_succ_society
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_hc_succ_appointed
+		}
+		custom_tooltip = {
+			text = ec_policy_hc_succ_appointed
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_hc_succ_elected
+		}
+		custom_tooltip = {
+			text = ec_policy_hc_succ_elected
+		}
+	}
+}
+
+# % of Elder Council income given to the Emperor
+ec_tooltip_policy_imperial_allowance = {
+	if = {
+		limit = {
+			ec_imperial_allowance_0 = yes
+		}
+		custom_tooltip = {
+			text = ec_imperial_allowance_0
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_10
+		}
+		custom_tooltip = {
+			text = ec_imperial_allowance_10
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_20
+		}
+		custom_tooltip = {
+			text = ec_imperial_allowance_20
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_30
+		}
+		custom_tooltip = {
+			text = ec_imperial_allowance_30
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_40
+		}
+		custom_tooltip = {
+			text = ec_imperial_allowance_40
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_50
+		}
+		custom_tooltip = {
+			text = ec_imperial_allowance_50
+		}
+	}
+}
+
+# Elder Council approving realm laws
+ec_tooltip_imperial_legislature = {
+	if = {
+		limit = {
+			ec_imperial_legislature_none = yes
+		}
+		custom_tooltip = {
+			text = ec_imperial_legislature_none
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_legislature_advisory
+		}
+		custom_tooltip = {
+			text = ec_imperial_legislature_advisory
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_legislature_de_facto
+		}
+		custom_tooltip = {
+			text = ec_imperial_legislature_de_facto
+		}
+	}
+}
+
+# Restrictions on the Emperor's Council
+ec_tooltip_imperial_council = {
+	if = {
+		limit = {
+			ec_imperial_council_none = yes
+		}
+		custom_tooltip = {
+			text = ec_imperial_council_none
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_council_confirmed
+		}
+		custom_tooltip = {
+			text = ec_imperial_council_confirmed
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_council_restricted
+		}
+		custom_tooltip = {
+			text = ec_imperial_council_restricted
+		}
+	}
+}
+
+### End Policy Tooltips ###
+
+# THIS is the title
+ec_legislature_tooltip = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+		}
+		if = {
+			limit = {
+				has_global_flag = ec_imperial_legislature_advisory
+			}
+			holder_scope = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = legislature_offer_opinion
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_global_flag = ec_imperial_legislature_de_facto
+			}
+			holder_scope = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = legislature_must_ratify
+				}
+			}
+		}
+	}
+}
+
+# THIS is the High Chancellor or Emperor
+ec_vote_prepare = {
+	custom_tooltip = {
+		text = elder_council_vote
+		hidden_tooltip = {
+			set_global_flag = ec_voting
+			if = { # Proposed by HC
+				limit = {
+					FROMFROMFROM = {
+						character = ROOT
+					}
+				}
+				set_global_flag = ec_law_cooldown_hc
+				save_event_target_as = target_proposer
+			}
+			else = { # Proposed by emp
+				set_global_flag = ec_law_cooldown_emp
+				FROM = {
+					save_event_target_as = target_proposer
+				}
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+					}
+					save_event_target_as = target_high_chancellor
+				}
+				set_variable = { which = global_ec_votes value = 0 }
+				set_variable = { which = global_ec_yes value = 0 }
+				set_variable = { which = global_ec_no value = 0 }
+			}
+			ec_get_emperor_target = yes # used for notification events
+			ec_faction_count = yes
+		}
+	}
+}
+
+ec_vote_prepare_no_cooldown = {
+	custom_tooltip = {
+		text = elder_council_vote
+		hidden_tooltip = {
+			set_global_flag = ec_voting
+			save_event_target_as = target_proposer
+			elder_council = {
+				any_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+					}
+					save_event_target_as = target_high_chancellor
+					set_variable = { which = global_ec_votes value = 0 }
+					set_variable = { which = global_ec_yes value = 0 }
+					set_variable = { which = global_ec_no value = 0 }
+				}
+			}
+			ec_get_emperor_target = yes # used for notification events
+			ec_faction_count = yes
+		}
+	}
+}
+
+ec_end_vote = {
+	ec_clr_leg_flags = yes
+	clr_global_flag = ec_voting
+	ec_recalc_entire_council = yes
+}
+
+ec_legislature_prepare = {
+	custom_tooltip = {
+		text = elder_council_vote
+		hidden_tooltip = {
+			set_global_flag = ec_voting
+			ec_clr_leg_flags = yes
+			elder_council = {
+				any_society_member = {
+					limit = {
+						is_society_grandmaster = yes
+					}
+					save_event_target_as = target_high_chancellor
+					set_variable = { which = global_ec_votes value = 0 }
+					set_variable = { which = global_ec_yes value = 0 }
+					set_variable = { which = global_ec_no value = 0 }
+				}
+			}
+			ec_get_emperor_target = yes # used for notification events
+			ec_faction_count = yes
+		}
+	}
+}
+
+ec_vote_clr_flags = {
+	clr_character_flag = ec_yes
+	clr_character_flag = ec_no
+	clr_character_flag = ec_voted_for_warlord
+}
+
+# Count how many councillors support either faction, store result
+# target_emperor
+# target_high_chancellor
+ec_faction_count = {
+	set_variable = { which = global_ec_imperialists value = 0 }
+	set_variable = { which = global_ec_councilists value = 0 }
+	elder_council = {
+		any_society_member = {
+			if = {
+				limit = {
+					trait = councilist
+				}
+				change_variable = { which = global_ec_councilists value = 1 }
+			}
+			else = {
+				change_variable = { which = global_ec_imperialists value = 1 }
+			}
+		}
+	}
+}
+
+ec_vote_yes = {
+	hidden_tooltip = {
+		elder_council = {
+			change_variable = { which = global_ec_votes value = 1 }
+			change_variable = { which = global_ec_yes value = 1 }
+		}
+		clr_character_flag = ec_vote_no
+		set_character_flag = ec_vote_yes
+	}
+}
+
+ec_vote_no = {
+	hidden_tooltip = {
+		elder_council = {
+			change_variable = { which = global_ec_votes value = -1 }
+			change_variable = { which = global_ec_no value = 1 }
+		}
+		clr_character_flag = ec_vote_yes
+		set_character_flag = ec_vote_no
+	}
+}
+
+### Policy Changes
+
+# Triggered by bankruptcy, set all policies to their lowest level
+ec_disable_all_policies = {
+	# Guards
+	clr_global_flag = ec_funding_guards_full
+	clr_global_flag = ec_funding_guards_light
+	hidden_tooltip = {
+		elder_council = {
+			any_society_member = {
+				remove_character_modifier = ec_guards_light
+				remove_character_modifier = ec_guards_full
+			}
+		}
+	}
+	# Quests
+	clr_global_flag = ec_funding_quests_25
+	clr_global_flag = ec_funding_quests_75
+	set_global_flag = ec_funding_quests_0
+}
+
+ec_bankruptcy_tooltip = {
+	custom_tooltip = {
+		text = implement_policy.funding_guards.none
+	}
+	custom_tooltip = {
+		text = implement_policy.funding_quests.0
+	}
+}
+
+ec_change_policy_nominate_more_hc = {
+	if = {
+		limit = {
+			ec_policy_join_none_hc = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.vote_hc
+
+			set_global_flag = ec_policy_join_vote_hc
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_join_vote_hc
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.appoint_hc
+
+			clr_global_flag = ec_policy_join_vote_hc
+			set_global_flag = ec_policy_join_appoint_hc
+		}
+	}
+}
+
+ec_change_policy_nominate_less_hc = {
+	if = {
+		limit = {
+			has_global_flag = ec_policy_join_appoint_hc
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.vote_hc
+
+			clr_global_flag = ec_policy_join_appoint_hc
+			set_global_flag = ec_policy_join_vote_hc
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_join_vote_hc
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.none_hc
+
+			clr_global_flag = ec_policy_join_vote_hc
+		}
+	}
+}
+
+ec_change_policy_nominate_more_emp = {
+	if = {
+		limit = {
+			ec_policy_join_none_emp = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.vote_emp
+
+			set_global_flag = ec_policy_join_vote_emp
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_join_vote_emp
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.appoint_emp
+
+			clr_global_flag = ec_policy_join_vote_emp
+			set_global_flag = ec_policy_join_appoint_emp
+		}
+	}
+}
+
+ec_change_policy_nominate_less_emp = {
+	if = {
+		limit = {
+			has_global_flag = ec_policy_join_appoint_emp
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.vote_emp
+
+			clr_global_flag = ec_policy_join_appoint_emp
+			set_global_flag = ec_policy_join_vote_emp
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_join_vote_emp
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.none_emp
+
+			clr_global_flag = ec_policy_join_vote_emp
+		}
+	}
+}
+
+ec_change_policy_more_skill = {
+	if = {
+		limit = {
+			has_global_flag = ec_policy_join_payment
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.skill
+
+			clr_global_flag = ec_policy_join_payment
+		}
+	}
+}
+
+ec_change_policy_less_skill = {
+	if = {
+		limit = {
+			ec_policy_join_quality = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.join_reqs.payment
+
+			set_global_flag = ec_policy_join_payment
+		}
+	}
+}
+
+# ec_change_policy_join_reqs_vote_hc = {
+# 	custom_tooltip = {
+# 		text = implement_policy.join_reqs.vote_hc
+# 		hidden_tooltip = {
+# 			clr_global_flag = ec_policy_join_vote_emp
+# 			clr_global_flag = ec_policy_join_appoint_emp
+# 			clr_global_flag = ec_policy_join_appoint_hc
+# 			clr_global_flag = ec_policy_join_payment
+# 			set_global_flag = ec_policy_join_vote_hc
+# 		}
+# 	}
+# }
+
+# ec_change_policy_join_reqs_appoint_hc = {
+# 	custom_tooltip = {
+# 		text = implement_policy.join_reqs.appoint_hc
+# 		hidden_tooltip = {
+# 			clr_global_flag = ec_policy_join_vote_emp
+# 			clr_global_flag = ec_policy_join_appoint_emp
+# 			clr_global_flag = ec_policy_join_vote_hc
+# 			clr_global_flag = ec_policy_join_payment
+# 			set_global_flag = ec_policy_join_appoint_hc
+# 		}
+# 	}
+# }
+
+# ec_change_policy_join_reqs_vote_emp = {
+# 	custom_tooltip = {
+# 		text = implement_policy.join_reqs.vote_emp
+# 		hidden_tooltip = {
+# 			clr_global_flag = ec_policy_join_vote_hc
+# 			clr_global_flag = ec_policy_join_appoint_emp
+# 			clr_global_flag = ec_policy_join_appoint_hc
+# 			clr_global_flag = ec_policy_join_payment
+# 			set_global_flag = ec_policy_join_vote_emp
+# 		}
+# 	}
+# }
+
+# ec_change_policy_join_reqs_appoint_emp = {
+# 	custom_tooltip = {
+# 		text = implement_policy.join_reqs.appoint_emp
+# 		hidden_tooltip = {
+# 			clr_global_flag = ec_policy_join_vote_emp
+# 			clr_global_flag = ec_policy_join_vote_hc
+# 			clr_global_flag = ec_policy_join_appoint_hc
+# 			clr_global_flag = ec_policy_join_payment
+# 			set_global_flag = ec_policy_join_appoint_emp
+# 		}
+# 	}
+# }
+
+# ec_change_policy_join_reqs_quality = {
+# 	custom_tooltip = {
+# 		text = implement_policy.join_reqs.quality
+# 		hidden_tooltip = {
+# 			clr_global_flag = ec_policy_join_vote_emp
+# 			clr_global_flag = ec_policy_join_vote_hc
+# 			clr_global_flag = ec_policy_join_appoint_hc
+# 			clr_global_flag = ec_policy_join_payment
+# 			clr_global_flag = ec_policy_join_appoint_emp
+# 		}
+# 	}
+# }
+
+# ec_change_policy_join_reqs_payment = {
+# 	custom_tooltip = {
+# 		text = implement_policy.join_reqs.payment
+# 		hidden_tooltip = {
+# 			clr_global_flag = ec_policy_join_vote_emp
+# 			clr_global_flag = ec_policy_join_vote_hc
+# 			clr_global_flag = ec_policy_join_appoint_hc
+# 			set_global_flag = ec_policy_join_payment
+# 			clr_global_flag = ec_policy_join_appoint_emp
+# 		}
+# 	}
+# }
+
+ec_increase_policy_funding_guards = {
+	if = {
+		limit = {
+			ec_funding_guards = no
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_guards.light
+			hidden_tooltip = {
+				set_global_flag = ec_funding_guards_light
+				elder_council = {
+					any_society_member = {
+						remove_character_modifier = ec_guards_light
+						remove_character_modifier = ec_guards_full
+						add_character_modifier = { name = ec_guards_light days = 365 }
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_guards_light
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_guards.full
+			hidden_tooltip = {
+				clr_global_flag = ec_funding_guards_light
+				set_global_flag = ec_funding_guards_full
+				elder_council = {
+					any_society_member = {
+						remove_character_modifier = ec_guards_light
+						remove_character_modifier = ec_guards_full
+						add_character_modifier = { name = ec_guards_full days = 365 }
+					}
+				}
+			}
+		}
+	}
+}
+
+ec_decrease_policy_funding_guards = {
+	if = {
+		limit = {
+			has_global_flag = ec_funding_guards_full
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_guards.light
+			hidden_tooltip = {
+				clr_global_flag = ec_funding_guards_full
+				set_global_flag = ec_funding_guards_light
+				elder_council = {
+					any_society_member = {
+						remove_character_modifier = ec_guards_light
+						remove_character_modifier = ec_guards_full
+						add_character_modifier = { name = ec_guards_light days = 365 }
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_guards_light
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_guards.none
+			hidden_tooltip = {
+				clr_global_flag = ec_funding_guards_light
+				elder_council = {
+					any_society_member = {
+						remove_character_modifier = ec_guards_light
+						remove_character_modifier = ec_guards_full
+					}
+				}
+			}
+		}
+	}
+}
+
+ec_increase_policy_funding_quests = {
+	if = {
+		limit = {
+			has_global_flag = ec_funding_quests_0
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_quests.25
+			hidden_tooltip = {
+				clr_global_flag = ec_funding_quests_0
+				set_global_flag = ec_funding_quests_25
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_quests_25
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_quests.50
+			hidden_tooltip = {
+				clr_global_flag = ec_funding_quests_25
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			ec_funding_quests_50 = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_quests.75
+			hidden_tooltip = {
+				set_global_flag = ec_funding_quests_75
+			}
+		}
+	}
+}
+
+ec_decrease_policy_funding_quests = {
+	if = {
+		limit = {
+			has_global_flag = ec_funding_quests_75
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_quests.50
+			hidden_tooltip = {
+				clr_global_flag = ec_funding_quests_75
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_funding_quests_25
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_quests.0
+			hidden_tooltip = {
+				clr_global_flag = ec_funding_quests_25
+				set_global_flag = ec_funding_quests_0
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			ec_funding_quests_50 = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.funding_quests.25
+			hidden_tooltip = {
+				set_global_flag = ec_funding_quests_25
+			}
+		}
+	}
+}
+
+ec_council_law_proposals = {
+	if = {
+		limit = {
+			has_global_flag = ec_policy_law_proposals_emp
+		}
+		custom_tooltip = {
+			text = implement_policy.law_proposals.both
+			clr_global_flag = ec_policy_law_proposals_emp
+			set_global_flag = ec_policy_law_proposals_both
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_law_proposals_both
+		}
+		custom_tooltip = {
+			text = implement_policy.law_proposals.hc
+			clr_global_flag = ec_policy_law_proposals_both
+		}
+	}
+}
+
+ec_imperial_law_proposals = {
+	if = {
+		limit = {
+			ec_policy_law_proposals_hc = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.law_proposals.both
+			set_global_flag = ec_policy_law_proposals_both
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_law_proposals_both
+		}
+		custom_tooltip = {
+			text = implement_policy.law_proposals.emp
+			clr_global_flag = ec_policy_law_proposals_both
+			set_global_flag = ec_policy_law_proposals_emp
+		}
+	}
+}
+
+ec_council_hc_succ = {
+	if = {
+		limit = {
+			has_global_flag = ec_policy_hc_succ_appointed
+		}
+		custom_tooltip = {
+			text = implement_policy.hc_succ.society
+			clr_global_flag = ec_policy_hc_succ_appointed
+			elder_council = {
+				any_society_member = {
+					clr_character_flag = ec_hc_appointed_successor
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_hc_succ_elected
+		}
+		custom_tooltip = {
+			text = implement_policy.hc_succ.elected
+			set_global_flag = ec_policy_hc_succ_elected
+			clr_global_flag = ec_policy_hc_succ_appointed
+			elder_council = {
+				any_society_member = {
+					clr_character_flag = ec_hc_appointed_successor
+				}
+			}
+		}
+	}
+}
+
+ec_imperial_hc_succ = {
+	if = {
+		limit = {
+			ec_policy_hc_succ_society = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.hc_succ.elected
+			set_global_flag = ec_policy_hc_succ_elected
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_policy_hc_succ_elected
+		}
+		custom_tooltip = {
+			text = implement_policy.hc_succ.appointed
+			set_global_flag = ec_policy_hc_succ_appointed
+			clr_global_flag = ec_policy_hc_succ_elected
+		}
+	}
+}
+
+ec_council_allowance = {
+	if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_50
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.40
+			clr_global_flag = ec_imperial_allowance_50
+			set_global_flag = ec_imperial_allowance_40
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_40
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.30
+			clr_global_flag = ec_imperial_allowance_40
+			set_global_flag = ec_imperial_allowance_30
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_30
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.20
+			clr_global_flag = ec_imperial_allowance_30
+			set_global_flag = ec_imperial_allowance_20
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_20
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.10
+			clr_global_flag = ec_imperial_allowance_20
+			set_global_flag = ec_imperial_allowance_10
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_10
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.0
+			clr_global_flag = ec_imperial_allowance_10
+		}
+	}
+}
+
+ec_imperial_allowance = {
+	if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_30
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.40
+			clr_global_flag = ec_imperial_allowance_30
+			set_global_flag = ec_imperial_allowance_40
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_20
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.30
+			clr_global_flag = ec_imperial_allowance_20
+			set_global_flag = ec_imperial_allowance_30
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_10
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.20
+			clr_global_flag = ec_imperial_allowance_10
+			set_global_flag = ec_imperial_allowance_20
+		}
+	}
+	else_if = {
+		limit = {
+			ec_imperial_allowance_0 = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.10
+			set_global_flag = ec_imperial_allowance_10
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_allowance_40
+		}
+		custom_tooltip = {
+			text = implement_policy.allowance.50
+			clr_global_flag = ec_imperial_allowance_40
+			set_global_flag = ec_imperial_allowance_50
+		}
+	}
+}
+
+ec_council_imperial_legislature = {
+	if = {
+		limit = {
+			has_global_flag = ec_imperial_legislature_advisory
+		}
+		custom_tooltip = {
+			text = implement_policy.legislature.de_facto
+			clr_global_flag = ec_imperial_legislature_advisory
+			set_global_flag = ec_imperial_legislature_de_facto
+		}
+	}
+	else_if = {
+		limit = {
+			ec_imperial_legislature_none = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.legislature.advisory
+			set_global_flag = ec_imperial_legislature_advisory
+		}
+	}
+}
+
+ec_imperial_imperial_legislature = {
+	if = {
+		limit = {
+			has_global_flag = ec_imperial_legislature_advisory
+		}
+		custom_tooltip = {
+			text = implement_policy.legislature.none
+			clr_global_flag = ec_imperial_legislature_advisory
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_legislature_de_facto
+		}
+		custom_tooltip = {
+			text = implement_policy.legislature.advisory
+			clr_global_flag = ec_imperial_legislature_de_facto
+			set_global_flag = ec_imperial_legislature_advisory
+		}
+	}
+}
+
+ec_council_imperial_council = {
+	if = {
+		limit = {
+			ec_imperial_council_none = yes
+		}
+		custom_tooltip = {
+			text = implement_policy.imperial_council.confirmed
+			set_global_flag = ec_imperial_council_confirmed
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_council_confirmed
+		}
+		custom_tooltip = {
+			text = implement_policy.imperial_council.restricted
+			clr_global_flag = ec_imperial_council_confirmed
+			set_global_flag = ec_imperial_council_restricted
+		}
+	}
+}
+
+ec_imperial_imperial_council = {
+	if = {
+		limit = {
+			has_global_flag = ec_imperial_council_restricted
+		}
+		custom_tooltip = {
+			text = implement_policy.imperial_council.confirmed
+			clr_global_flag = ec_imperial_council_restricted
+			set_global_flag = ec_imperial_council_confirmed
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = ec_imperial_council_confirmed
+		}
+		custom_tooltip = {
+			text = implement_policy.imperial_council.none
+			clr_global_flag = ec_imperial_council_confirmed
+		}
+	}
+}
+
+### End Policy Changes
+
+# Update income months
+# Should only be called in eldercouncil.501 - calling more frequently can push months back pre-emptively
+ec_income_next_month = {
+	ec_calc_income = yes
+	set_variable = { which = global_ec_income_12 which = global_ec_income_11 }
+	set_variable = { which = global_ec_income_11 which = global_ec_income_10 }
+	set_variable = { which = global_ec_income_10 which = global_ec_income_9 }
+	set_variable = { which = global_ec_income_9 which = global_ec_income_8 }
+	set_variable = { which = global_ec_income_8 which = global_ec_income_7 }
+	set_variable = { which = global_ec_income_7 which = global_ec_income_6 }
+	set_variable = { which = global_ec_income_6 which = global_ec_income_5 }
+	set_variable = { which = global_ec_income_5 which = global_ec_income_4 }
+	set_variable = { which = global_ec_income_4 which = global_ec_income_3 }
+	set_variable = { which = global_ec_income_3 which = global_ec_income_2 }
+	set_variable = { which = global_ec_income_2 which = global_ec_income_1 }
+	set_variable = { which = global_ec_income_1 value = 0 }
+}
+
+# Can be called at anytime
+ec_calc_income = {
+	set_variable = { which = global_ec_income value = 0 }
+	change_variable = { which = global_ec_income which = global_ec_income_1 }
+	change_variable = { which = global_ec_income which = global_ec_income_2 }
+	change_variable = { which = global_ec_income which = global_ec_income_3 }
+	change_variable = { which = global_ec_income which = global_ec_income_4 }
+	change_variable = { which = global_ec_income which = global_ec_income_5 }
+	change_variable = { which = global_ec_income which = global_ec_income_6 }
+	change_variable = { which = global_ec_income which = global_ec_income_7 }
+	change_variable = { which = global_ec_income which = global_ec_income_8 }
+	change_variable = { which = global_ec_income which = global_ec_income_9 }
+	change_variable = { which = global_ec_income which = global_ec_income_10 }
+	change_variable = { which = global_ec_income which = global_ec_income_11 }
+	change_variable = { which = global_ec_income which = global_ec_income_12 }
+}
+
+# THIS is the councillor
+ec_calculate_quest_skill = {
+	if = {
+		limit = {
+			always = no
+		}
+		export_to_variable = { which = ec_quest_skill value = diplomacy }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_quest = quest_elder_recruitment
+				has_quest = quest_elder_defences
+			}
+		}
+		export_to_variable = { which = ec_quest_skill value = martial }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_quest = quest_elder_development
+				has_quest = quest_elder_taxation
+			}
+		}
+		export_to_variable = { which = ec_quest_skill value = stewardship }
+	}
+	else_if = {
+		limit = {
+			has_quest = quest_elder_crime
+		}
+		export_to_variable = { which = ec_quest_skill value = intrigue }
+	}
+	else_if = {
+		limit = {
+			has_quest = quest_elder_magicka
+		}
+		export_to_variable = { which = ec_quest_skill value = learning }
+	}
+}
+
+# Expenses
+# Annual fees ONLY
+# ROOT is the High Chancellor
+ec_annual_expenses = {
+	# Council guards
+	if = {
+		limit = {
+			# Light - 3 gp/councillor
+			has_global_flag = ec_funding_guards_light
+		}
+		elder_council = {
+			any_society_member = {
+				ROOT = {
+					change_variable = { which = global_ec_treasury value = -3 }
+					hidden_tooltip = {
+						change_variable = { which = global_ec_income_1 value = -3 }
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			# Full - 6 gp/councillor
+			has_global_flag = ec_funding_guards_full
+		}
+		elder_council = {
+			any_society_member = {
+				ROOT = {
+					change_variable = { which = global_ec_treasury value = -6 }
+					hidden_tooltip = {
+						change_variable = { which = global_ec_income_1 value = -6 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Influence changes
+
+ec_add_influence_250 = {
+	if = {
+		limit = {
+			society_member_of = elder_council
+		}
+		change_society_currency = 250
+	}
+	else_if = {
+		limit = {
+			ec_is_emperor = yes
+		}
+		change_variable = { which = global_imperial_influence value = 250 }
+	}
+}
+
+ec_sub_influence_250 = {
+	if = {
+		limit = {
+			society_member_of = elder_council
+		}
+		change_society_currency = -250
+	}
+	else_if = {
+		limit = {
+			ec_is_emperor = yes
+		}
+		change_variable = { which = global_imperial_influence value = -250 }
+	}
+}
+
+ec_sub_influence_500 = {
+	if = {
+		limit = {
+			society_member_of = elder_council
+		}
+		change_society_currency = -500
+	}
+	else_if = {
+		limit = {
+			ec_is_emperor = yes
+		}
+		change_variable = { which = global_imperial_influence value = -500 }
+	}
+}
+
+ec_sub_influence_1000 = {
+	if = {
+		limit = {
+			society_member_of = elder_council
+		}
+		change_society_currency = -1000
+	}
+	else_if = {
+		limit = {
+			ec_is_emperor = yes
+		}
+		change_variable = { which = global_imperial_influence value = -1000 }
+	}
+}
+
+ec_sub_influence_2000 = {
+	if = {
+		limit = {
+			society_member_of = elder_council
+		}
+		change_society_currency = -2000
+	}
+	else_if = {
+		limit = {
+			ec_is_emperor = yes
+		}
+		change_variable = { which = global_imperial_influence value = -2000 }
+	}
+}
+
+ec_sub_influence_4000 = {
+	if = {
+		limit = {
+			society_member_of = elder_council
+		}
+		change_society_currency = -4000
+	}
+	else_if = {
+		limit = {
+			ec_is_emperor = yes
+		}
+		change_variable = { which = global_imperial_influence value = -4000 }
+	}
+}
+
+# THIS is the Emperor NOT THE HIGH CHANCELLOR
+ec_dismiss_hc_effect = {
+	elder_council = {
+		any_society_member = {
+			limit = {
+				is_society_grandmaster = yes
+			}
+			custom_tooltip = {
+				text = high_chancellor_dismissed
+				
+				set_society_grandmaster = no
+				opinion = {
+					modifier = opinion_dismissed_high_chancellor
+					who = PREVPREV
+				}
+			}
+		}
+		any_society_member = {
+			limit = {
+				trait = councilist
+			}
+			opinion = {
+				modifier = opinion_ec_imperialist_boo
+				who = PREVPREV
+				years = 20
+			}
+		}
+	}
+}
+
+# THIS is the councillor
+# Gain/lose influence based on councillor stats, for when the
+ec_opportunity_influence_change = {
+	custom_tooltip = {
+		text = ec_opportunity_influence_change
+	}
+	random_list = {
+		5 = {
+			change_society_currency = 1000
+			modifier = {
+				factor = 2
+				trait = councilist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = imperialist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = imperialist
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				diplomacy = 20
+			}
+			modifier = {
+				factor = 1.5
+				intrigue = 20
+			}
+			modifier = {
+				factor = 2
+				diplomacy = 25
+			}
+			modifier = {
+				factor = 2
+				intrigue = 25
+			}
+			modifier = {
+				factor = 2
+				diplomacy = 30
+			}
+			modifier = {
+				factor = 2
+				intrigue = 30
+			}
+		}
+		15 = {
+			change_society_currency = 500
+			modifier = {
+				factor = 2
+				trait = councilist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = imperialist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = imperialist
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				diplomacy = 15
+			}
+			modifier = {
+				factor = 1.5
+				intrigue = 15
+			}
+			modifier = {
+				factor = 2
+				diplomacy = 20
+			}
+			modifier = {
+				factor = 2
+				intrigue = 20
+			}
+			modifier = {
+				factor = 1.5
+				diplomacy = 25
+			}
+			modifier = {
+				factor = 1.5
+				intrigue = 25
+			}
+		}
+		25 = {
+			change_society_currency = 250
+			modifier = {
+				factor = 2
+				trait = councilist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = imperialist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = imperialist
+					}
+				}
+			}
+			modifier = {
+				factor = 3
+				diplomacy = 15
+			}
+			modifier = {
+				factor = 3
+				intrigue = 15
+			}
+			modifier = {
+				factor = 2
+				diplomacy = 20
+			}
+			modifier = {
+				factor = 2
+				intrigue = 20
+			}
+		}
+		50 = {
+			# no effect
+		}
+		25 = {
+			change_society_currency = -250
+			modifier = {
+				factor = 2
+				trait = imperialist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = councilist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = imperialist
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				diplomacy < 15
+			}
+			modifier = {
+				factor = 1.25
+				intrigue < 15
+			}
+			modifier = {
+				factor = 2
+				diplomacy < 10
+			}
+			modifier = {
+				factor = 2
+				intrigue < 10
+			}
+			modifier = {
+				factor = 2
+				diplomacy < 5
+			}
+			modifier = {
+				factor = 2
+				intrigue < 5
+			}
+		}
+		15 = {
+			change_society_currency = -500
+			modifier = {
+				factor = 2
+				trait = imperialist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = councilist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = imperialist
+					}
+				}
+			}
+			modifier = {
+				factor = 3
+				diplomacy < 10
+			}
+			modifier = {
+				factor = 3
+				intrigue < 10
+			}
+			modifier = {
+				factor = 3
+				diplomacy < 5
+			}
+			modifier = {
+				factor = 3
+				intrigue < 5
+			}
+		}
+		5 = {
+			change_society_currency = -1000
+			modifier = {
+				factor = 2
+				trait = imperialist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = councilist
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				trait = councilist
+				elder_council = {
+					any_society_member = {
+						is_society_grandmaster = yes
+						trait = imperialist
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				diplomacy < 10
+			}
+			modifier = {
+				factor = 2
+				intrigue < 10
+			}
+			modifier = {
+				factor = 6
+				diplomacy < 5
+			}
+			modifier = {
+				factor = 6
+				intrigue < 5
+			}
+		}
+	}
+}
+
+# THIS is the Emperor
+ec_veto_council = {
+	custom_tooltip = {
+		text = veto_discontent
+		hidden_tooltip = {
+			change_variable = { which = ec_vetoes value = 1 }
+			change_variable = { which = ec_cumulative_vetoes value = 1 }
+			elder_council = {
+				any_society_member = {
+					limit = {
+						trait = councilist
+					}
+					opinion = { modifier = opinion_vetoed_council_councilist who = PREVPREV }
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { which = ec_vetoes value = 2 }
+				}
+				elder_council = {
+					any_society_member = {
+						limit = {
+							trait = imperialist
+						}
+						opinion = { modifier = opinion_vetoed_council_imperialist who = PREVPREV }
+					}
+				}
+			}
+			any_realm_lord = {
+				limit = {
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_vetoed_council_vassal who = PREV }
+			}
+			ec_recalc_entire_council = yes
+			ec_end_vote = yes
+			if = {
+				limit = {
+					check_variable = { which = ec_vetoes value = 3 }
+				}
+				random_list = {
+					75 = {
+						modifier = {
+							factor = 0
+							check_variable = { which = ec_vetoes value = 7 }
+						}
+					}
+					25 = {
+						modifier = {
+							factor = 0.5
+							check_variable = { which = ec_vpc value == 1 }
+						}
+						modifier = {
+							factor = 0.1
+							check_variable = { which = ec_vpc value == 2 }
+						}
+						modifier = {
+							factor = 0
+							check_variable = { which = ec_vpc value = 3 }
+						}
+						modifier = {
+							factor = 2
+							check_variable = { which = ec_vetoes value == 4 }
+						}
+						modifier = {
+							factor = 4
+							check_variable = { which = ec_vetoes value == 5 }
+						}
+						modifier = {
+							factor = 6
+							check_variable = { which = ec_vetoes value = 6 }
+						}
+						if = {
+							limit = {
+								OR = {
+									ec_policy_law_proposals_hc = yes
+									has_global_flag = ec_imperial_legislature_de_facto
+									has_global_flag = ec_policy_join_appoint_hc
+								}
+							}
+							character_event = { id = eldercouncil.1002 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+ec_ignore_advisement = {
+	custom_tooltip = {
+		text = advisement_discontent
+		hidden_tooltip = {
+			elder_council = {
+				any_society_member = {
+					limit = {
+						trait = councilist
+					}
+					opinion = { modifier = opinion_defied_advisement_councilist who = PREVPREV }
+				}
+			}
+			any_realm_lord = {
+				limit = {
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_defied_advisement_vassal who = PREV }
+			}
+			ec_recalc_entire_council = yes
+			ec_end_vote = yes
+		}
+	}
+}
+
+# Legislation flags
+# THIS is the title being legislated
+
+ec_clr_leg_flags = {
+	clr_global_flag = ec_leg_slavery_0
+	clr_global_flag = ec_leg_slavery_1
+	clr_global_flag = ec_leg_investiture_law_0
+	clr_global_flag = ec_leg_investiture_law_1
+	clr_global_flag = ec_leg_centralization_0
+	clr_global_flag = ec_leg_centralization_1
+	clr_global_flag = ec_leg_centralization_2
+	clr_global_flag = ec_leg_centralization_3
+	clr_global_flag = ec_leg_centralization_4
+	clr_global_flag = ec_leg_vice_royalty_0
+	clr_global_flag = ec_leg_vice_royalty_1
+	clr_global_flag = ec_leg_vice_royalty_2
+	clr_global_flag = ec_leg_ze_administration_laws_0
+	clr_global_flag = ec_leg_ze_administration_laws_1
+	clr_global_flag = ec_leg_ze_administration_laws_2
+	clr_global_flag = ec_leg_standing_army_law_0
+	clr_global_flag = ec_leg_standing_army_law_1
+	clr_global_flag = ec_leg_standing_army_law_2
+	clr_global_flag = ec_leg_out_of_realm_inheritance_law_0
+	clr_global_flag = ec_leg_out_of_realm_inheritance_law_1
+	clr_global_flag = ec_leg_vassal_wars_law_0
+	clr_global_flag = ec_leg_vassal_wars_law_1
+	clr_global_flag = ec_leg_vassal_wars_law_2
+	clr_global_flag = ec_leg_revoke_title_law_0
+	clr_global_flag = ec_leg_revoke_title_law_1
+	clr_global_flag = ec_leg_revoke_title_law_2
+	clr_global_flag = ec_leg_resettlement_0
+	clr_global_flag = ec_leg_resettlement_1
+	clr_global_flag = ec_leg_resettlement_2
+	clr_global_flag = ec_leg_mutilation_0
+	clr_global_flag = ec_leg_mutilation_1
+	clr_global_flag = ec_leg_mutilation_2
+	clr_global_flag = ec_leg_vassal_titular_kings_0
+	clr_global_flag = ec_leg_vassal_titular_kings_1
+	elder_council = {
+		clr_flag = vote.inc.slavery
+		clr_flag = vote.dec.slavery
+		clr_flag = vote.rel.investiture
+		clr_flag = vote.sec.investiture
+		clr_flag = vote.inc.centralisation
+		clr_flag = vote.dec.centralisation
+		clr_flag = vote.inc.viceroyalties
+		clr_flag = vote.dec.viceroyalties
+		clr_flag = vote.inc.administration
+		clr_flag = vote.dec.administration
+		clr_flag = vote.inc.standing_army
+		clr_flag = vote.dec.standing_army
+		clr_flag = vote.forbid.out_of_realm_inheritance
+		clr_flag = vote.allow.out_of_realm_inheritance
+		clr_flag = vote.inc.vassal_wars_restrictions
+		clr_flag = vote.dec.vassal_wars_restrictions
+		clr_flag = vote.inc.title_revocation
+		clr_flag = vote.dec.title_revocation
+		clr_flag = vote.inc.displacement
+		clr_flag = vote.dec.displacement
+		clr_flag = vote.inc.mutilation
+		clr_flag = vote.dec.mutilation
+		clr_flag = vote.inc.vassal_titular_kings
+		clr_flag = vote.dec.vassal_titular_kings
+		clr_flag = vote.inc.slavery
+		clr_flag = vote.dec.slavery
+		clr_flag = vote.rel.investiture
+		clr_flag = vote.sec.investiture
+		clr_flag = vote.inc.centralisation
+		clr_flag = vote.dec.centralisation
+		clr_flag = vote.inc.viceroyalties
+		clr_flag = vote.dec.viceroyalties
+		clr_flag = vote.inc.administration
+		clr_flag = vote.dec.administration
+		clr_flag = vote.inc.standing_army
+		clr_flag = vote.dec.standing_army
+		clr_flag = vote.forbid.out_of_realm_inheritance
+		clr_flag = vote.allow.out_of_realm_inheritance
+		clr_flag = vote.inc.vassal_wars_restrictions
+		clr_flag = vote.dec.vassal_wars_restrictions
+		clr_flag = vote.inc.title_revocation
+		clr_flag = vote.dec.title_revocation
+		clr_flag = vote.inc.displacement
+		clr_flag = vote.dec.displacement
+		clr_flag = vote.inc.mutilation
+		clr_flag = vote.dec.mutilation
+		clr_flag = vote.inc.vassal_titular_kings
+		clr_flag = vote.dec.vassal_titular_kings
+		clr_flag = vote.inc.guards
+		clr_flag = vote.dec.guards
+		clr_flag = vote.inc.quests
+		clr_flag = vote.dec.quests
+		clr_flag = vote.inc.nominate_emp
+		clr_flag = vote.dec.nominate_emp
+		clr_flag = vote.inc.nominate_hc
+		clr_flag = vote.dec.nominate_hc
+		clr_flag = vote.inc.join_skill
+		clr_flag = vote.dec.join_skill
+		clr_flag = vote.council.law_proposals
+		clr_flag = vote.imperial.law_proposals
+		clr_flag = vote.council.hc_succ
+		clr_flag = vote.imperial.hc_succ
+		clr_flag = vote.inc.imperial_allowance
+		clr_flag = vote.dec.imperial_allowance
+		clr_flag = vote.dismiss.hc
+		clr_flag = vote.inc.imperial_legislature
+		clr_flag = vote.dec.imperial_legislature
+		clr_flag = vote.inc.imperial_council
+		clr_flag = vote.dec.imperial_council
+		clr_flag = vote.induct_councillor
+	}
+}
+
+leg_slavery_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = slavery_0
+			}
+			set_global_flag = ec_leg_slavery_0
+		}
+		else_if = {
+			limit = {
+				has_law = slavery_1
+			}
+			set_global_flag = ec_leg_slavery_1
+		}
+	}
+}
+
+leg_investiture_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = investiture_law_1
+			}
+			set_global_flag = ec_leg_investiture_law_1
+		}
+		else_if = {
+			limit = {
+				has_law = investiture_law_0
+			}
+			set_global_flag = ec_leg_investiture_law_0
+		}
+	}
+}
+
+leg_centralization_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = centralization_0
+			}
+			set_global_flag = ec_leg_centralization_0
+		}
+		else_if = {
+			limit = {
+				has_law = centralization_1
+			}
+			set_global_flag = ec_leg_centralization_1
+		}
+		else_if = {
+			limit = {
+				has_law = centralization_2
+			}
+			set_global_flag = ec_leg_centralization_2
+		}
+		else_if = {
+			limit = {
+				has_law = centralization_3
+			}
+			set_global_flag = ec_leg_centralization_3
+		}
+		else_if = {
+			limit = {
+				has_law = centralization_4
+			}
+			set_global_flag = ec_leg_centralization_4
+		}
+	}
+}
+
+leg_vice_royalty_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = vice_royalty_0
+			}
+			set_global_flag = ec_leg_vice_royalty_0
+		}
+		else_if = {
+			limit = {
+				has_law = vice_royalty_1
+			}
+			set_global_flag = ec_leg_vice_royalty_1
+		}
+		else_if = {
+			limit = {
+				has_law = vice_royalty_2
+			}
+			set_global_flag = ec_leg_vice_royalty_2
+		}
+	}
+}
+
+leg_administration_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = ze_administration_laws_0
+			}
+			set_global_flag = ec_leg_ze_administration_laws_0
+		}
+		else_if = {
+			limit = {
+				has_law = ze_administration_laws_1
+			}
+			set_global_flag = ec_leg_ze_administration_laws_1
+		}
+		else_if = {
+			limit = {
+				has_law = ze_administration_laws_2
+			}
+			set_global_flag = ec_leg_ze_administration_laws_2
+		}
+	}
+}
+
+leg_standing_army_law_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = standing_army_law_0
+			}
+			set_global_flag = ec_leg_standing_army_law_0
+		}
+		else_if = {
+			limit = {
+				has_law = standing_army_law_1
+			}
+			set_global_flag = ec_leg_standing_army_law_1
+		}
+		else_if = {
+			limit = {
+				has_law = standing_army_law_2
+			}
+			set_global_flag = ec_leg_standing_army_law_2
+		}
+	}
+}
+
+leg_out_of_realm_inheritance_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = out_of_realm_inheritance_law_0
+			}
+			set_global_flag = ec_leg_out_of_realm_inheritance_law_0
+		}
+		else_if = {
+			limit = {
+				has_law = out_of_realm_inheritance_law_1
+			}
+			set_global_flag = ec_leg_out_of_realm_inheritance_law_1
+		}
+	}
+}
+
+leg_vassal_wars_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = vassal_wars_law_0
+			}
+			set_global_flag = ec_leg_vassal_wars_law_0
+		}
+		else_if = {
+			limit = {
+				has_law = vassal_wars_law_1
+			}
+			set_global_flag = ec_leg_vassal_wars_law_1
+		}
+		else_if = {
+			limit = {
+				has_law = vassal_wars_law_2
+			}
+			set_global_flag = ec_leg_vassal_wars_law_2
+		}
+	}
+}
+
+leg_revoke_title_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = revoke_title_law_0
+			}
+			set_global_flag = ec_leg_revoke_title_law_0
+		}
+		else_if = {
+			limit = {
+				has_law = revoke_title_law_1
+			}
+			set_global_flag = ec_leg_revoke_title_law_1
+		}
+		else_if = {
+			limit = {
+				has_law = revoke_title_law_2
+			}
+			set_global_flag = ec_leg_revoke_title_law_2
+		}
+	}
+}
+
+leg_resettlement_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = resettlement_0
+			}
+			set_global_flag = ec_leg_resettlement_0
+		}
+		else_if = {
+			limit = {
+				has_law = resettlement_1
+			}
+			set_global_flag = ec_leg_resettlement_1
+		}
+		else_if = {
+			limit = {
+				has_law = resettlement_2
+			}
+			set_global_flag = ec_leg_resettlement_2
+		}
+	}
+}
+
+leg_mutilation_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = mutilation_0
+			}
+			set_global_flag = ec_leg_mutilation_0
+		}
+		else_if = {
+			limit = {
+				has_law = mutilation_1
+			}
+			set_global_flag = ec_leg_mutilation_1
+		}
+		else_if = {
+			limit = {
+				has_law = mutilation_2
+			}
+			set_global_flag = ec_leg_mutilation_2
+		}
+	}
+}
+
+leg_vassal_titular_kings_flag = {
+	if = {
+		limit = {
+			ec_is_empire = yes
+			ec_has_leg_flag = no
+		}
+		if = {
+			limit = {
+				has_law = vassal_titular_kings_0
+			}
+			set_global_flag = ec_leg_vassal_titular_kings_0
+		}
+		else_if = {
+			limit = {
+				has_law = vassal_titular_kings_1
+			}
+			set_global_flag = ec_leg_vassal_titular_kings_1
+		}
+	}
+}
+
+# Legislation commands
+# THIS is the title being affected
+ec_leg_decrease_centralization = {
+	if = {
+		limit = {
+			has_law = centralization_1
+		}
+		revoke_law = centralization_1
+		add_law = { law = centralization_0 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = centralization_2
+		}
+		revoke_law = centralization_2
+		add_law = { law = centralization_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = centralization_3
+		}
+		revoke_law = centralization_3
+		add_law = { law = centralization_2 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = centralization_4
+		}
+		revoke_law = centralization_4
+		add_law = { law = centralization_3 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_centralization = {
+	if = {
+		limit = {
+			has_law = centralization_0
+		}
+		revoke_law = centralization_0
+		add_law = { law = centralization_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = centralization_1
+		}
+		revoke_law = centralization_1
+		add_law = { law = centralization_2 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = centralization_2
+		}
+		revoke_law = centralization_2
+		add_law = { law = centralization_3 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = centralization_3
+		}
+		revoke_law = centralization_3
+		add_law = { law = centralization_4 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_decrease_vice_royalty = {
+	if = {
+		limit = {
+			has_law = vice_royalty_2
+		}
+		revoke_law = vice_royalty_2
+		add_law = { law = vice_royalty_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = vice_royalty_1
+		}
+		revoke_law = vice_royalty_1
+		add_law = { law = vice_royalty_0 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_vice_royalty = {
+	if = {
+		limit = {
+			has_law = vice_royalty_0
+		}
+		revoke_law = vice_royalty_0
+		add_law = { law = vice_royalty_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = vice_royalty_1
+		}
+		revoke_law = vice_royalty_1
+		add_law = { law = vice_royalty_2 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_administration = {
+	if = {
+		limit = {
+			has_law = ze_administration_laws_0
+		}
+		revoke_law = ze_administration_laws_0
+		add_law = { law = ze_administration_laws_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = ze_administration_laws_1
+		}
+		revoke_law = ze_administration_laws_1
+		add_law = { law = ze_administration_laws_2 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_decrease_administration = {
+	if = {
+		limit = {
+			has_law = ze_administration_laws_2
+		}
+		revoke_law = ze_administration_laws_2
+		add_law = { law = ze_administration_laws_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = ze_administration_laws_1
+		}
+		revoke_law = ze_administration_laws_1
+		add_law = { law = ze_administration_laws_0 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_decrease_standing_army_law = {
+	if = {
+		limit = {
+			has_law = standing_army_law_2
+		}
+		revoke_law = standing_army_law_2
+		add_law = { law = standing_army_law_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = standing_army_law_1
+		}
+		revoke_law = standing_army_law_1
+		add_law = { law = standing_army_law_0 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_standing_army_law = {
+	if = {
+		limit = {
+			has_law = standing_army_law_0
+		}
+		revoke_law = standing_army_law_0
+		add_law = { law = standing_army_law_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = standing_army_law_1
+		}
+		revoke_law = standing_army_law_1
+		add_law = { law = standing_army_law_2 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_decrease_out_of_realm_inheritance_law = {
+	if = {
+		limit = {
+			has_law = out_of_realm_inheritance_law_1
+		}
+		revoke_law = out_of_realm_inheritance_law_1
+		add_law = { law = out_of_realm_inheritance_law_0 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_out_of_realm_inheritance_law = {
+	if = {
+		limit = {
+			has_law = out_of_realm_inheritance_law_0
+		}
+		revoke_law = out_of_realm_inheritance_law_0
+		add_law = { law = out_of_realm_inheritance_law_1 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_decrease_vassal_wars_law = {
+	if = {
+		limit = {
+			has_law = vassal_wars_law_2
+		}
+		revoke_law = vassal_wars_law_2
+		add_law = { law = vassal_wars_law_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = vassal_wars_law_1
+		}
+		revoke_law = vassal_wars_law_1
+		add_law = { law = vassal_wars_law_0 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_vassal_wars_law = {
+	if = {
+		limit = {
+			has_law = vassal_wars_law_0
+		}
+		revoke_law = vassal_wars_law_0
+		add_law = { law = vassal_wars_law_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = vassal_wars_law_1
+		}
+		revoke_law = vassal_wars_law_1
+		add_law = { law = vassal_wars_law_2 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_decrease_revoke_title_law = {
+	if = {
+		limit = {
+			has_law = revoke_title_law_2
+		}
+		revoke_law = revoke_title_law_2
+		add_law = { law = revoke_title_law_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = revoke_title_law_1
+		}
+		revoke_law = revoke_title_law_1
+		add_law = { law = revoke_title_law_0 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_revoke_title_law = {
+	if = {
+		limit = {
+			has_law = revoke_title_law_0
+		}
+		revoke_law = revoke_title_law_0
+		add_law = { law = revoke_title_law_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = revoke_title_law_1
+		}
+		revoke_law = revoke_title_law_1
+		add_law = { law = revoke_title_law_2 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_displacement = {
+	if = {
+		limit = {
+			has_law = resettlement_0
+		}
+		revoke_law = resettlement_0
+		add_law = { law = resettlement_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = resettlement_1
+		}
+		revoke_law = resettlement_1
+		add_law = { law = resettlement_2 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_restrict_displacement = {
+	if = {
+		limit = {
+			has_law = resettlement_1
+		}
+		revoke_law = resettlement_1
+		add_law = { law = resettlement_0 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = resettlement_2
+		}
+		revoke_law = resettlement_2
+		add_law = { law = resettlement_1 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_mutilation = {
+	if = {
+		limit = {
+			has_law = mutilation_0
+		}
+		revoke_law = mutilation_0
+		add_law = { law = mutilation_1 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = mutilation_1
+		}
+		revoke_law = mutilation_1
+		add_law = { law = mutilation_2 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_restrict_mutilation = {
+	if = {
+		limit = {
+			has_law = mutilation_1
+		}
+		revoke_law = mutilation_1
+		add_law = { law = mutilation_0 cooldown = no opinion_effect = no }
+	}
+	else_if = {
+		limit = {
+			has_law = mutilation_2
+		}
+		revoke_law = mutilation_2
+		add_law = { law = mutilation_1 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_restrict_titular_kings = {
+	if = {
+		limit = {
+			has_law = vassal_titular_kings_1
+		}
+		revoke_law = vassal_titular_kings_1
+		add_law = { law = vassal_titular_kings_0 cooldown = no opinion_effect = no }
+	}
+}
+
+ec_leg_increase_titular_kings = {
+	if = {
+		limit = {
+			has_law = vassal_titular_kings_0
+		}
+		revoke_law = vassal_titular_kings_0
+		add_law = { law = vassal_titular_kings_1 cooldown = no opinion_effect = no }
+	}
+}
+
+
+# Show how each councillor voted
+ec_show_votes = {
+	elder_council = {
+		show_scope_change = no
+		any_society_member = {
+			if = {
+				limit = {
+					has_character_flag = ec_vote_yes
+				}
+				if = {
+					limit = {
+						ec_imperialism_high = yes
+					}
+					custom_tooltip = {
+						text = voted_yes.imperialism.high
+					}
+				}
+				else_if = {
+					limit = {
+						ec_imperialism_high = no
+						ec_imperialism_med = yes
+					}
+					custom_tooltip = {
+						text = voted_yes.imperialism.med
+					}
+				}
+				else_if = {
+					limit = {
+						ec_imperialism_med = no
+						ec_imperialism_low = yes
+					}
+					custom_tooltip = {
+						text = voted_yes.imperialism.low
+					}
+				}
+				else_if = {
+					limit = {
+						ec_imperialism_low = no
+						trait = imperialist
+					}
+					custom_tooltip = {
+						text = voted_yes.imperialism.nominal
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_high = yes
+					}
+					custom_tooltip = {
+						text = voted_yes.councilism.high
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_high = no
+						ec_councilism_med = yes
+					}
+					custom_tooltip = {
+						text = voted_yes.councilism.med
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_med = no
+						ec_councilism_low = yes
+					}
+					custom_tooltip = {
+						text = voted_yes.councilism.low
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_low = no
+						trait = councilist
+					}
+					custom_tooltip = {
+						text = voted_yes.councilism.nominal
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					has_character_flag = ec_vote_no
+				}
+				if = {
+					limit = {
+						ec_imperialism_high = yes
+					}
+					custom_tooltip = {
+						text = voted_no.imperialism.high
+					}
+				}
+				else_if = {
+					limit = {
+						ec_imperialism_high = no
+						ec_imperialism_med = yes
+					}
+					custom_tooltip = {
+						text = voted_no.imperialism.med
+					}
+				}
+				else_if = {
+					limit = {
+						ec_imperialism_med = no
+						ec_imperialism_low = yes
+					}
+					custom_tooltip = {
+						text = voted_no.imperialism.low
+					}
+				}
+				else_if = {
+					limit = {
+						ec_imperialism_low = no
+						trait = imperialist
+					}
+					custom_tooltip = {
+						text = voted_no.imperialism.nominal
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_high = yes
+					}
+					custom_tooltip = {
+						text = voted_no.councilism.high
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_high = no
+						ec_councilism_med = yes
+					}
+					custom_tooltip = {
+						text = voted_no.councilism.med
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_med = no
+						ec_councilism_low = yes
+					}
+					custom_tooltip = {
+						text = voted_no.councilism.low
+					}
+				}
+				else_if = {
+					limit = {
+						ec_councilism_low = no
+						trait = councilist
+					}
+					custom_tooltip = {
+						text = voted_no.councilism.nominal
+					}
+				}
+			}
+		}
+	}
+}
+
+# Start confirmation vote for Imperial Council
+imperial_council_confirmation = {
+	set_character_flag = imperial_council_nominee
+	set_global_flag = ec_voting
+	liege = {
+		set_character_flag = appoint_council_cooldown
+		character_event = { id = eldercouncil.1444 }
+	}
+}
+
+ec_show_nominee = {
+	event_target:target_nominee = {
+		custom_tooltip = {
+			text = ec_is_nominee
+		}
+	}
+}
+
+ec_expel_member = {
+	custom_tooltip = {
+		text = ec_will_be_expelled
+
+		set_character_flag = ec_join_rejected
+		leave_society = yes
+		destroy_artifact = elder_council_amulet
+	}
+}
+
+ec_tally_prepare = {
+	1 = {
+		if = {
+			limit = {
+				multiplayer = no
+			}
+			province_event = { id = eldercouncil.1298 days = 3 }
+			province_event = { id = eldercouncil.1007 days = 30 }
+		}
+		else = {
+			province_event = { id = eldercouncil.1298 days = 30 }
+			province_event = { id = eldercouncil.1007 days = 60 }
+		}
+	}
+}
+
+ec_increase_slavery = {
+	revoke_law = slavery_0
+	add_law = { law = slavery_1 cooldown = no opinion_effect = no }
+}
+
+ec_decrease_slavery = {
+	revoke_law = slavery_1
+	add_law = { law = slavery_0 cooldown = no opinion_effect = no }
+}
+
+ec_secularise_investiture = {
+	revoke_law = investiture_law_0
+	add_law = { law = investiture_law_1 cooldown = no opinion_effect = no }
+}
+
+ec_desecularise_investiture = {
+	revoke_law = investiture_law_1
+	add_law = { law = investiture_law_0 cooldown = no opinion_effect = no }
+}
+
+# TODO:JJ racial tensions between impressed and disappointed cultures when one affects the other
+
+### Cultural
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_cultural_vassals = {
+	custom_tooltip = {
+		text = disappoint_cultural_vassals_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_against_culture who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_cultural_vassals_mild = {
+	custom_tooltip = {
+		text = disappoint_cultural_vassals_mild_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_against_culture_minor who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_cultural_vassals = {
+	custom_tooltip = {
+		text = impress_cultural_vassals_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_for_culture who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_cultural_vassals_mild = {
+	custom_tooltip = {
+		text = impress_cultural_vassals_mild_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_for_culture_minor who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_cultural_vassals_including_ec = {
+	custom_tooltip = {
+		text = disappoint_cultural_vassals_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_against_culture who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						culture = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_against_culture who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_cultural_vassals_mild_including_ec = {
+	custom_tooltip = {
+		text = disappoint_cultural_vassals_mild_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_against_culture_minor who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						culture = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_against_culture_minor who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_cultural_vassals_including_ec = {
+	custom_tooltip = {
+		text = impress_cultural_vassals_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_for_culture who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						culture = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_for_culture who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-cultured characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_cultural_vassals_mild_including_ec = {
+	custom_tooltip = {
+		text = impress_cultural_vassals_mild_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					culture = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_for_culture_minor who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						culture = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_for_culture_minor who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+### Religious
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_religious_vassals = {
+	custom_tooltip = {
+		text = disappoint_religious_vassals_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_against_religion who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_religious_vassals_mild = {
+	custom_tooltip = {
+		text = disappoint_religious_vassals_mild_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_against_religion_minor who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_religious_vassals = {
+	custom_tooltip = {
+		text = impress_religious_vassals_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_for_religion who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_religious_vassals_mild = {
+	custom_tooltip = {
+		text = impress_religious_vassals_mild_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+				}
+				opinion = { modifier = opinion_acted_for_religion_minor who = PREV }
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_religious_vassals_including_ec = {
+	custom_tooltip = {
+		text = disappoint_religious_vassals_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_against_religion who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						religion = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_against_religion who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+disappoint_religious_vassals_mild_including_ec = {
+	custom_tooltip = {
+		text = disappoint_religious_vassals_mild_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_against_religion_minor who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						religion = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_against_religion_minor who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_religious_vassals_including_ec = {
+	custom_tooltip = {
+		text = impress_religious_vassals_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_for_religion who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						religion = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_for_religion who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+# THIS is the character with whom similarly-faithed characters will be affected
+# PREV is the liege of the realm where characters will be affected
+impress_religious_vassals_mild_including_ec = {
+	custom_tooltip = {
+		text = impress_religious_vassals_mild_including_ec_tooltip
+		PREV = {
+			any_realm_character = {
+				limit = {
+					religion = PREVPREV
+					NOT = {
+						society_member_of = elder_council
+					}
+				}
+				opinion = { modifier = opinion_acted_for_religion_minor who = PREV }
+			}
+			elder_council = {
+				any_society_member = {
+					limit = {
+						religion = PREVPREVPREV
+					}
+					opinion = { modifier = opinion_acted_for_religion_minor who = PREVPREV }
+				}
+			}
+		}
+	}
+}
+
+# Requires target_ec_swayer being set
+ec_end_sway = {
+	event_target:target_ec_swayer = {
+		clr_character_flag = ec_influencing
+	}
+	event_target:target_ec_sway_third_party = {
+		diplomatic_immunity = no
+	}
+	event_target:target_ec_swayee = {
+		diplomatic_immunity = no
+		clr_character_flag = ec_being_influenced
+	}
+	ec_recalc_entire_council = yes
+}
+
+ec_sway_fail = {
+	event_target:target_ec_swayee = {
+		opinion = { modifier = opinion_failed_sway who = event_target:target_ec_swayer }
+	}
+	event_target:target_ec_swayer = {
+		ec_sub_influence_500 = yes
+	}
+
+	ec_end_sway = yes
+}
+
+ec_sway_succeed_major = {
+	custom_tooltip = {
+		text = ec_sway_succeed_major_tooltip
+
+		event_target:target_ec_swayee = {
+			if = {
+				limit = {
+					event_target:target_ec_swayer = {
+						ec_is_councilist = yes
+					}
+				}
+				add_character_modifier = { name = ec_sway_council years = 10 stacking = yes }
+				add_character_modifier = { name = ec_sway_council years = 20 stacking = yes }
+				add_character_modifier = { name = ec_sway_council years = 30 stacking = yes }
+			}
+			else_if = {
+				limit = {
+					event_target:target_ec_swayer = {
+						ec_is_imperialist = yes
+					}
+				}
+				add_character_modifier = { name = ec_sway_imperial years = 10 stacking = yes }
+				add_character_modifier = { name = ec_sway_imperial years = 20 stacking = yes }
+				add_character_modifier = { name = ec_sway_imperial years = 30 stacking = yes }
+			}
+		}
+	}
+	
+	ec_end_sway = yes
+}
+
+ec_sway_succeed_moderate = {
+	custom_tooltip = {
+		text = ec_sway_succeed_moderate_tooltip
+
+		event_target:target_ec_swayee = {
+			if = {
+				limit = {
+					event_target:target_ec_swayer = {
+						ec_is_councilist = yes
+					}
+				}
+				add_character_modifier = { name = ec_sway_council years = 10 stacking = yes }
+				add_character_modifier = { name = ec_sway_council years = 20 stacking = yes }
+			}
+			else_if = {
+				limit = {
+					event_target:target_ec_swayer = {
+						ec_is_imperialist = yes
+					}
+				}
+				add_character_modifier = { name = ec_sway_imperial years = 10 stacking = yes }
+				add_character_modifier = { name = ec_sway_imperial years = 20 stacking = yes }
+			}
+		}
+	}
+	
+	ec_end_sway = yes
+}
+
+ec_sway_succeed_minor = {
+	custom_tooltip = {
+		text = ec_sway_succeed_minor_tooltip
+
+		event_target:target_ec_swayee = {
+			if = {
+				limit = {
+					event_target:target_ec_swayer = {
+						ec_is_councilist = yes
+					}
+				}
+				add_character_modifier = { name = ec_sway_council years = 10 stacking = yes }
+			}
+			else_if = {
+				limit = {
+					event_target:target_ec_swayer = {
+						ec_is_imperialist = yes
+					}
+				}
+				add_character_modifier = { name = ec_sway_imperial years = 10 stacking = yes }
+			}
+		}
+	}
+
+	ec_end_sway = yes
+}
+
+# Re-save sway event targets after a claimant war
+ec_sway_save_postwar_targets_claimant = {
+	save_event_target_as = target_ec_swayer
+	FROM = {
+		save_event_target_as = target_ec_swayee
+	}
+	FROMFROM = {
+		save_event_target_as = target_ec_sway_third_party
+	}
+	FROMFROMFROM = {
+		save_event_target_as = target_ec_sway_kingdom
+	}
+}
+
+ec_become_emperor = {
+	hidden_tooltip = {
+		tamriel_emperor = {
+			remove_trait = tamriel_emperor
+			add_trait = tamriel_emperor_former
+			clr_character_flag = has_emperor_trait
+		}
+		remove_trait = tamriel_emperor_former
+		set_variable = { which = ec_cumulative_vetoes value = 0 }
+	}
+	add_trait = tamriel_emperor
+	save_global_event_target_as = gt_tamriel_emperor
+	set_character_flag = has_emperor_trait # for pre-triggers
+}
+
+# N.B. culture breakdowns are based on de facto land, not the empire's de jure borders
+ec_calculate_culture_religion_breakdown = {
+	event_target:gt_tamriel_emperor = {
+		any_realm_province = {
+			culture_scope = {
+				set_variable = { which = ec_culture_provinces value = 0 }
+				set_variable = { which = ec_culture_councillors value = 0 }
+			}
+			religion_scope = {
+				set_variable = { which = ec_religion_provinces value = 0 }
+				set_variable = { which = ec_religion_councillors value = 0 }
+			}
+		}
+		elder_council = {
+			any_society_member = {
+				culture_scope = {
+					set_variable = { which = ec_culture_provinces value = 0 }
+					set_variable = { which = ec_culture_councillors value = 0 }
+				}
+				religion_scope = {
+					set_variable = { which = ec_religion_provinces value = 0 }
+					set_variable = { which = ec_religion_councillors value = 0 }
+				}
+			}
+		}
+		any_realm_province = {
+			culture_scope = {
+				change_variable = { which = ec_culture_provinces value = 1 }
+			}
+			religion_scope = {
+				change_variable = { which = ec_religion_provinces value = 1 }
+			}
+		}
+		elder_council = {
+			any_society_member = {
+				culture_scope = {
+					change_variable = { which = ec_culture_councillors value = 1 }
+				}
+				religion_scope = {
+					change_variable = { which = ec_religion_councillors value = 1 }
+				}
+			}
+		}
+		# Putting this here for now - will only calculate on-demand if it should prove unperformant
+		ec_calculate_cpp_rpp_ratios = yes
+	}
+}
+
+ec_calculate_cpp_rpp_ratios = {
+	any_realm_province = {
+		culture_scope = {
+			set_variable = { which = ec_cpp_ratio which = ec_culture_councillors }
+			divide_variable = { which = ec_cpp_ratio which = ec_culture_provinces }
+		}
+		religion_scope = {
+			set_variable = { which = ec_rpp_ratio which = ec_religion_councillors }
+			divide_variable = { which = ec_rpp_ratio which = ec_religion_provinces }
+		}
+	}
+}
+
+ec_get_random_empire_religion_culture = {
+	ec_get_empire_target = yes
+
+	event_target:target_empire = {
+		if = {
+			limit = {
+				has_holder = yes
+			}
+			holder_scope = {
+				random_realm_province = {
+					save_event_target_as = ec_random_province
+					culture_scope = {
+						save_event_target_as = ec_empire_random_culture
+					}
+					religion_scope = {
+						save_event_target_as = ec_empire_random_religion
+					}
+				}
+			}
+		}
+		else = {
+			# Get kingdom
+			random_direct_de_jure_vassal_title = {
+				limit = {
+					is_titular = no
+				}
+				# Get duchy
+				random_direct_de_jure_vassal_title = {
+					limit = {
+						is_titular = no
+					}
+					# Get county
+					random_direct_de_jure_vassal_title = {
+						limit = {
+							is_titular = no
+						}
+						location = {
+							save_event_target_as = ec_random_province
+							culture_scope = {
+								save_event_target_as = ec_empire_random_culture
+							}
+							religion_scope = {
+								save_event_target_as = ec_empire_random_religion
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+### Bureaucrat creation effects
+
+ec_create_tax_bureaucrat = {
+	ec_get_random_empire_religion_culture = yes
+
+	create_random_steward = {
+		random_traits = yes
+		dynasty = none
+		female = 50
+		culture = event_target:ec_empire_random_culture
+		religion = event_target:ec_empire_random_religion
+	}
+	new_character = {
+		set_character_flag = ai_flag_refuse_concubinage
+		set_character_flag = ai_flag_refuse_marriage
+		set_character_flag = no_court_invites
+		set_character_flag = ec_bureaucrat
+
+		add_character_modifier = {
+			name = ec_tax_bureaucrat
+			duration = -1
+		}
+
+		save_event_target_as = target_ec_bureaucrat
+
+		assign_birthsign = yes
+		assign_racial_trait = yes
+	}
+}
+
+ec_create_quartermaster = {
+	ec_get_random_empire_religion_culture = yes
+
+	create_random_steward = {
+		random_traits = yes
+		dynasty = none
+		female = 50
+		culture = event_target:ec_empire_random_culture
+		religion = event_target:ec_empire_random_religion
+	}
+	new_character = {
+		set_character_flag = ai_flag_refuse_concubinage
+		set_character_flag = ai_flag_refuse_marriage
+		set_character_flag = no_court_invites
+		set_character_flag = ec_bureaucrat
+
+		add_character_modifier = {
+			name = ec_quartermaster
+			duration = -1
+		}
+
+		save_event_target_as = target_ec_bureaucrat
+
+		assign_birthsign = yes
+		assign_racial_trait = yes
+	}
+}
+
+ec_create_administrator = {
+	ec_get_random_empire_religion_culture = yes
+
+	create_random_steward = {
+		random_traits = yes
+		dynasty = none
+		female = 50
+		culture = event_target:ec_empire_random_culture
+		religion = event_target:ec_empire_random_religion
+	}
+	new_character = {
+		set_character_flag = ai_flag_refuse_concubinage
+		set_character_flag = ai_flag_refuse_marriage
+		set_character_flag = no_court_invites
+		set_character_flag = ec_bureaucrat
+
+		add_character_modifier = {
+			name = ec_administrator
+			duration = -1
+		}
+
+		save_event_target_as = target_ec_bureaucrat
+
+		assign_birthsign = yes
+		assign_racial_trait = yes
+	}
+}
+
+### End bureaucrat creation effects
+
+ec_debate_decide_opponent_disposition = {
+	random_list = {
+		50 = {
+			set_character_flag = ec_debate_nice_opponent
+
+			modifier = {
+				is_benevolent_trigger = yes
+
+				factor = 2
+			}
+			modifier = {
+				has_pleasant_personality_trigger = yes
+
+				factor = 1.3
+			}
+			modifier = {
+				trait = content
+
+				factor = 2
+			}
+			modifier = {
+				ec_is_imperialist = yes
+				FROM = {
+					ec_is_imperialist = yes
+				}
+
+				factor = 2
+			}
+			modifier = {
+				ec_is_councilist = yes
+				FROM = {
+					ec_is_councilist = yes
+				}
+
+				factor = 2
+			}
+			modifier = {
+				opinion = { who = FROM value = 30 }
+
+				factor = 1.5
+			}
+			modifier = {
+				is_foe = FROM
+
+				factor = 0	
+			}
+		}
+		50 = {
+			set_character_flag = ec_debate_mean_opponent
+
+			modifier = {
+				is_evil_trigger = yes
+
+				factor = 2
+			}
+			modifier = {
+				has_unpleasant_personality_trigger = yes
+
+				factor = 1.3
+			}
+			modifier = {
+				trait = ambitious
+
+				factor = 1.5
+			}
+			modifier = {
+				trait = wroth
+
+				factor = 2
+			}
+			modifier = {
+				trait = uncouth
+
+				factor = 1.5
+			}
+			modifier = {
+				NOT = {
+					opinion = { who = FROM value = 0 }
+				}
+
+				factor = 1.5
+			}
+		}
+	}
+}
+
+ec_clear_debate_flags = {
+	hidden_tooltip = {
+		clr_character_flag = ec_debate_chancellor
+		clr_character_flag = ec_debate_marshal
+		clr_character_flag = ec_debate_treasurer
+		clr_character_flag = ec_debate_spymaster
+		clr_character_flag = ec_debate_spiritual
+		clr_character_flag = ec_debate_win
+		clr_character_flag = ec_debate_draw
+		clr_character_flag = ec_debate_lose
+		clr_character_flag = ec_debating
+		clr_character_flag = ec_debate_mean_opponent
+		clr_character_flag = ec_debate_nice_opponent
+	}
+}

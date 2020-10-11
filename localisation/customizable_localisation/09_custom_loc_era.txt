@@ -1,0 +1,263 @@
+# defined_text = {
+# 	name = GetEra
+	
+# 	text = {
+# 		localisation_key = 2_ERA
+# 		trigger = { check_variable = { which = global_current_era value == 2 } }
+# 	}
+# 	text = {
+# 		localisation_key = 3_ERA
+# 		trigger = { check_variable = { which = global_current_era value == 3 } } 
+# 	}
+# 	#text = {
+# 	#	localisation_key = 4_ERA
+# 	#	trigger = { check_variable = { which = global_current_era value == 4 } }
+# 	#}
+# }
+
+defined_text = {
+	name = GetEraYear
+	
+	text = {
+		localisation_key = 2_ERA_YEAR
+		trigger = { check_variable = { which = global_current_era value == 2 } }
+	}
+	text = {
+		localisation_key = 3_ERA_YEAR
+		trigger = { check_variable = { which = global_current_era value == 3 } } 
+	}
+	text = {
+		localisation_key = 4_ERA_YEAR
+		trigger = { check_variable = { which = global_current_era value == 4 } }
+	}
+}
+
+defined_text = {
+	name = GetStartEra
+	use_first_valid = yes
+	
+	text = {
+		localisation_key = 4_ERA
+		trigger = { start_date = 4259.1.1 } 
+	}
+	text = {
+		localisation_key = 3_ERA
+		trigger = { start_date = 3816.1.1 } 
+	}
+	text = {
+		localisation_key = 2_ERA
+		trigger = { start_date = 2920.1.1 }
+	}
+}
+
+defined_text = {
+	name = GetStartYear
+	use_first_valid = yes
+	
+	text = {
+		localisation_key = 4_ERA_YEAR
+		trigger = { start_date = 4259.1.1 } 
+	}
+	text = {
+		localisation_key = START_YEAR_3E
+		trigger = { start_date = 3816.1.1 } 
+	}
+	text = {
+		localisation_key = START_YEAR_2E
+		trigger = { start_date = 2920.1.1 }
+	}
+}
+
+defined_text = {
+	name = GetPlayedYears
+	
+	text = {
+		localisation_key = PLAYED_YEARS
+		trigger = { always = yes }
+	}
+}
+
+### Era features
+defined_text = {
+	name = GetEraFeatures
+	
+	text = {
+		localisation_key = ERA_FEATURES_LIST
+	}
+}
+
+defined_text = {
+	name = GetDragonbornCanAppear
+	
+	text = {
+		localisation_key = "The Last Dragonborn has §Ralready appeared§!, but lesser Doom-Driven heroes can still rise..."
+		trigger = {
+			year = 4435
+		}
+	}
+	
+	text = {
+		localisation_key = "Dragonborns and other Doom-Driven heroes will §Yrarely§! appear"
+		trigger = {
+			NOT = { year = 4435 }	# Last Dragonborn
+			NOR = {
+				has_global_flag = daedric_invasion_of_tamriel
+				has_global_flag = daedric_invasion_of_akavir
+				has_global_flag = daedric_invasion_of_atmora
+			}
+		}
+	}
+	
+	text = {
+		localisation_key = "Dragonborns and other Doom-Driven heroes will §Yoften§! appear to defeat the current crisis"
+		trigger = {
+			NOT = { year = 4435 }	# Last Dragonborn
+			OR = {
+				has_global_flag = daedric_invasion_of_tamriel
+				has_global_flag = daedric_invasion_of_akavir
+				has_global_flag = daedric_invasion_of_atmora
+			}
+		}
+	}
+}
+
+defined_text = {
+	name = GetWarlordCanAppear
+	
+	text = {
+		localisation_key = "Poorly-managed realms can be the target of a Warlord Uprising"
+		trigger = {
+			NOT = { check_variable = { which = global_current_era value == 3 } }
+		}
+	}
+	
+	text = {
+		localisation_key = "No Warlord Uprising can occur"
+		trigger = {
+			check_variable = { which = global_current_era value == 3 }
+		}
+	}
+}
+
+### Current events
+defined_text = {
+	name = GetCurrentEvents
+	
+	text = {
+		localisation_key = CURRENT_EVENTS_LIST
+	}
+}
+
+defined_text = {
+	name = GetDragonbornExist
+	
+	text = {
+		localisation_key = "No Dragonborn has been revealed to the world."
+		trigger = {
+			NOT = {
+				event_target:current_dragonborn = {
+					is_alive = yes
+				}
+			}
+		}
+	}
+	
+	text = {
+		localisation_key = "A Dragonborn walks in this world!"
+		trigger = {
+			event_target:current_dragonborn = {
+				is_alive = yes
+			}
+		}
+	}
+}
+
+defined_text = {
+	name = GetDaedricInvasion
+	
+	text = {
+		localisation_key = "The World is not suffering from a Daedric invasion."
+		trigger = {
+			NOR = {
+				has_global_flag = daedric_invasion_of_tamriel
+				has_global_flag = daedric_invasion_of_akavir
+				has_global_flag = daedric_invasion_of_atmora
+			}
+		}
+	}
+	
+	text = {
+		localisation_key = "A Daedric Prince is §Rcurrently invading§! Tamriel."
+		trigger = {
+			has_global_flag = daedric_invasion_of_tamriel
+		}
+	}
+	
+	text = {
+		localisation_key = "A Daedric Prince is §Rcurrently invading§! Akavir."
+		trigger = {
+			has_global_flag = daedric_invasion_of_akavir
+		}
+	}
+	
+	text = {
+		localisation_key = "A Daedric Prince is §Rcurrently invading§! Atmora."
+		trigger = {
+			has_global_flag = daedric_invasion_of_atmora
+		}
+	}
+}
+
+defined_text = {
+	name = GetDragonfires
+	
+	text = {
+		localisation_key = "The Dragonfires are out. The barrier between Nirn and Oblivion is weakened."
+		trigger = {
+			NOT = {
+				event_target:lit_dragonfires = {
+					is_alive = yes
+				}
+			}
+		}
+	}
+	
+	text = {
+		localisation_key = "The Dragonfires are burning. §GThe world is safe.§!"
+		trigger = {
+			event_target:lit_dragonfires = {
+				is_alive = yes
+			}
+		}
+	}
+}
+
+defined_text = {
+	name = GetAoK
+	
+	text = {
+		localisation_key = "The Amulet of Kings remains hidden."
+		trigger = {
+			NAND = {
+				has_global_flag = amulet_of_kings_active
+				event_target:the_amulet_of_kings = {
+					artifact_owner = {
+						is_alive = yes
+					}
+				}
+			}
+		}
+	}
+	
+	text = {
+		localisation_key = "Someone is in possession of the Amulet of Kings!"
+		trigger = {
+			has_global_flag = amulet_of_kings_active
+			event_target:the_amulet_of_kings = {
+				artifact_owner = {
+					is_alive = yes
+				}
+			}
+		}
+	}
+}

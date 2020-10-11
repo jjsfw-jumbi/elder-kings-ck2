@@ -1,0 +1,1127 @@
+# I can find no reference to these events anywhere else in the mod and there are several very low MTTHs in here
+# As part of the reworking of low MTTH events, I have commented these out -JJ
+
+# namespace = sora_escapeprison
+
+# #In Prison Modifiers:
+# #house_arrest
+# #the_dungeon
+# #the_oubliette
+
+# ##Character Flees successfully from Prison #ID 0
+# character_event = {
+# 	id = sora_escapeprison.0
+# 	title= sora_escapeprison_freedom_title
+# 	desc = sora_escapeprison_freedom_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_freedom_opt
+# 		#picture = GFX_evt_dungeon_emerge
+				
+# 		if = {
+# 			limit = {
+# 				has_character_flag = sora_escapeprison_fightwayout
+# 			}
+			
+# 			change_martial = 1
+			
+# 			hidden_tooltip = {
+# 				host = { character_event = { id = sora_escapeprison.1 } }
+# 			}
+# 		}
+		
+# 		if = {
+# 			limit = {
+# 				has_character_flag = sora_escapeprison_Prisonrevolt
+# 			}
+			
+# 			change_diplomacy = 1
+# 			change_martial = 1
+			
+# 			hidden_tooltip = {
+# 				host = { character_event = { id = sora_escapeprison.2 } }
+# 			}		
+# 		}
+		
+# 		if = {
+# 			limit = {
+# 				has_character_flag = sora_escapeprison_digtunnel
+# 			}
+			
+# 			change_stewardship = 1
+			
+# 			hidden_tooltip = {
+# 				host = { character_event = { id = sora_escapeprison.3 } }
+# 			}			
+# 		}
+		
+# 		if = {
+# 			limit = {
+# 				has_character_flag = sora_escapeprison_sneakout
+# 			}
+			
+# 			change_intrigue = 2
+			
+# 			hidden_tooltip = {
+# 				host = { character_event = { id = sora_escapeprison.4 } }
+# 			}			
+# 		}
+		
+# 		if = {
+# 			limit = {
+# 				has_character_flag = sora_escapeprison_playdead
+# 			}
+			
+# 			change_intrigue = 1
+			
+# 			hidden_tooltip = {
+# 				host = { character_event = { id = sora_escapeprison.5 } }
+# 			}			
+# 		}
+		
+# 		prestige = 50
+# 		imprison = no
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 		}
+# 	}
+# }
+
+# ##Former "Host" is informed about the Fled Prisoner #IDs 1 - 5
+# #Fightwayout ID 1
+# character_event = {
+# 	id = sora_escapeprison.1
+# 	title = sora_escapeprison_FledPrisoner_fightwayout_title
+# 	desc = sora_escapeprison_FledPrisoner_fightwayout_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_FledPrisoner_fightwayout_opt
+		
+# 		prestige = -50
+# 	}
+# }
+
+# #Prisonrevolt ID 2
+# character_event = {
+# 	id = sora_escapeprison.2
+# 	title = sora_escapeprison_FledPrisoner_prisonrevolt_title
+# 	desc = sora_escapeprison_FledPrisoner_prisonrevolt_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_FledPrisoner_prisonrevolt_opt
+		
+# 		#NYI : Needs proper Testing to make sure only "own" prisoners are affected (and Former Courtiers need to flee to differen Court afterall)
+# 		#      Also Opinion Modifiers need to be set up
+# 		#any_courtier = {
+# 		#	limit = {
+# 		#		prisoner = yes
+# 		#		has_character_flag = sora_escapeprison_RevoltParticipant
+# 		#	}
+# 		#	
+# 		#	imprison = no	
+# 		#	character_event = {id = sora_escapeprison.6}
+# 		#	
+# 		#	PREV = {
+# 		#		prestige = -50			
+# 		#	}
+# 		#}
+# 		#	
+# 		#any_courtier = {
+# 		#	limit = {
+# 		#		prisoner = yes
+# 		#		NOT = { has_character_flag = sora_escapeprison_RevoltParticipant }
+# 		#	}
+# 		#	
+# 		#	random = {
+# 		#		chance = 50
+# 		#		
+# 		#		imprison = no	
+# 		#		character_event = {id = sora_escapeprison.6}	
+# 		#		
+# 		#		PREV = {
+# 		#			prestige = -50				
+# 		#		}
+# 		#	}
+# 		#}
+		
+# 		prestige = -50
+# 	}
+# }
+
+# #Digtunnel ID 3
+# character_event = {
+# 	id = sora_escapeprison.3
+# 	title = sora_escapeprison_FledPrisoner_digtunnel_title
+# 	desc = sora_escapeprison_FledPrisoner_digtunnel_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_FledPrisoner_digtunnel_opt
+		
+# 		prestige = -50
+# 	}
+# }
+
+# #Sneakout ID 4
+# character_event = {
+# 	id = sora_escapeprison.4
+# 	title = sora_escapeprison_FledPrisoner_sneakout_title
+# 	desc = sora_escapeprison_FledPrisoner_sneakout_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_FledPrisoner_sneakout_opt
+		
+# 		prestige = -50
+# 	}
+# }
+
+# #Playdead ID 5
+# character_event = {
+# 	id = sora_escapeprison.5
+# 	title = sora_escapeprison_FledPrisoner_Playeddead_title
+# 	desc = sora_escapeprison_FledPrisoner_Playeddead_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_FledPrisoner_Playeddead_opt
+		
+# 		prestige = -50
+# 	}
+# }
+
+# ##Prisoner does wait for a Chance to flee #IDs 11-15
+# #Fightwayout ID 11
+# character_event = {
+# 	id = sora_escapeprison.11
+# 	title = sora_escapeprison_fightwayout_title
+# 	desc = sora_escapeprison_fightwayout_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	trigger = {
+# 		has_character_flag = sora_EscapePrison_decision_taken
+# 		#NOT = { has_character_flag = sora_escapeprison_fightwayout}
+# 		NOT = { has_character_flag = sora_escapeprison_Prisonrevolt}
+# 		NOT = { has_character_flag = sora_escapeprison_digtunnel}
+# 		NOT = { has_character_flag = sora_escapeprison_sneakout}
+# 		NOT = { has_character_flag = sora_escapeprison_playdead}
+# 	}
+	
+# 	mean_time_to_happen = {
+# 		days = 7
+# 	}
+	
+# 	immediate = {
+# 		set_character_flag = sora_escapeprison_fightwayout
+# 	}		
+	
+# 	option = {
+# 		name = sora_escapeprison_fightwayout_doit_opt
+		
+# 		character_event = { id = sora_escapeprison.100 tooltip = sora_escapeprison_fightwayout_reciveeventtooltip }
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_wait_opt
+		
+# 		random = {
+# 			chance = 5
+# 			add_trait = craven
+# 		}
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 			if = {
+# 				limit = {
+# 					NOT = { has_character_modifier = house_arrest }							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_Prisonrevolt					
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_digtunnel				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}
+# 			if = {
+# 				limit = {
+# 					has_character_modifier = house_arrest							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_sneakout				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}				
+# 		}
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_canceldecision_opt
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 		}
+# 	}
+# }
+
+# #Prisonrevolt ID 12
+# character_event = {
+# 	id = sora_escapeprison.12
+# 	title = sora_escapeprison_Prisonrevolt_title
+# 	desc = sora_escapeprison_Prisonrevolt_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	trigger = {
+# 		has_character_flag = sora_EscapePrison_decision_taken
+# 		NOT = { has_character_flag = sora_escapeprison_fightwayout}
+# 		#NOT = { has_character_flag = sora_escapeprison_Prisonrevolt}
+# 		NOT = { has_character_flag = sora_escapeprison_digtunnel}
+# 		NOT = { has_character_flag = sora_escapeprison_sneakout}
+# 		NOT = { has_character_flag = sora_escapeprison_playdead}
+# 		NOT = { has_character_modifier = house_arrest }
+# 	}
+	
+# 	mean_time_to_happen = {
+# 		days = 7
+# 	}
+	
+# 	immediate = {
+# 		set_character_flag = sora_escapeprison_Prisonrevolt
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_Prisonrevolt_doit_opt
+		
+# 		character_event = { id = sora_escapeprison.200 tooltip = sora_escapeprison_Prisonrevolt_reciveeventtooltip }
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_wait_opt
+		
+# 		random = {
+# 			chance = 5
+# 			add_trait = craven
+# 		}
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			if = {
+# 				limit = {
+# 					NOT = { has_character_modifier = house_arrest }							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_Prisonrevolt					
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_digtunnel				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}
+# 			if = {
+# 				limit = {
+# 					has_character_modifier = house_arrest							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_sneakout				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}				
+# 		}
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_canceldecision_opt
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 		}
+# 	}
+# }
+
+# #Digtunnel ID 13
+# character_event = {
+# 	id = sora_escapeprison.13
+# 	title = sora_escapeprison_digtunnel_title
+# 	desc = sora_escapeprison_digtunnel_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	trigger = {
+# 		has_character_flag = sora_EscapePrison_decision_taken
+# 		NOT = { has_character_flag = sora_escapeprison_fightwayout}
+# 		NOT = { has_character_flag = sora_escapeprison_Prisonrevolt}
+# 		#NOT = { has_character_flag = sora_escapeprison_digtunnel}
+# 		NOT = { has_character_flag = sora_escapeprison_sneakout}
+# 		NOT = { has_character_flag = sora_escapeprison_playdead}
+# 		NOT = { has_character_modifier = house_arrest }
+# 	}
+	
+# 	mean_time_to_happen = {
+# 		days = 7
+# 	}
+	
+# 	immediate = {
+# 		set_character_flag = sora_escapeprison_digtunnel
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_digtunnel_doit_opt
+		
+# 		character_event = { id = sora_escapeprison.300 tooltip = sora_escapeprison_digtunnel_reciveeventtooltip }
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_wait_opt
+		
+# 		random = {
+# 			chance = 5
+# 			add_trait = craven
+# 		}
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			if = {
+# 				limit = {
+# 					NOT = { has_character_modifier = house_arrest }							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_Prisonrevolt					
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_digtunnel				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}
+# 			if = {
+# 				limit = {
+# 					has_character_modifier = house_arrest							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_sneakout				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}			
+# 		}
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_canceldecision_opt
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 		}
+# 	}
+# }
+
+# #Sneakout ID 14
+# character_event = {
+# 	id = sora_escapeprison.14
+# 	title = sora_escapeprison_sneakout_title
+# 	desc = sora_escapeprison_sneakout_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	trigger = {
+# 		has_character_flag = sora_EscapePrison_decision_taken
+# 		NOT = { has_character_flag = sora_escapeprison_fightwayout}
+# 		NOT = { has_character_flag = sora_escapeprison_Prisonrevolt}
+# 		NOT = { has_character_flag = sora_escapeprison_digtunnel}
+# 		#NOT = { has_character_flag = sora_escapeprison_sneakout}
+# 		NOT = { has_character_flag = sora_escapeprison_playdead}
+# 		has_character_modifier = house_arrest
+# 	}
+	
+# 	mean_time_to_happen = {
+# 		days = 7
+# 	}
+	
+# 	immediate = {
+# 		set_character_flag = sora_escapeprison_sneakout
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_sneakout_doit_opt
+		
+# 		character_event = { id = sora_escapeprison.400 tooltip = sora_escapeprison_sneakout_reciveeventtooltip }
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_wait_opt
+		
+# 		random = {
+# 			chance = 5
+# 			add_trait = craven
+# 		}
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			if = {
+# 				limit = {
+# 					NOT = { has_character_modifier = house_arrest }							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_Prisonrevolt					
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_digtunnel				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}
+# 			if = {
+# 				limit = {
+# 					has_character_modifier = house_arrest							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_sneakout				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}			
+# 		}
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_canceldecision_opt
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 		}
+# 	}
+# }
+
+# #Playdead ID 15
+# character_event = {
+# 	id = sora_escapeprison.15
+# 	title = sora_escapeprison_playdead_title
+# 	desc = sora_escapeprison_playdead_desc
+# 	picture = GFX_evt_dungeon_emerge
+	
+# 	trigger = {
+# 		has_character_flag = sora_EscapePrison_decision_taken
+# 		NOT = { has_character_flag = sora_escapeprison_fightwayout}
+# 		NOT = { has_character_flag = sora_escapeprison_Prisonrevolt}
+# 		NOT = { has_character_flag = sora_escapeprison_digtunnel}
+# 		NOT = { has_character_flag = sora_escapeprison_sneakout}
+# 		#NOT = { has_character_flag = sora_escapeprison_playdead}
+# 	}
+	
+# 	mean_time_to_happen = {
+# 		days = 7
+# 	}
+	
+# 	immediate = {
+# 		set_character_flag = sora_escapeprison_playdead
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_playdead_doit_opt
+		
+# 		character_event = { id = sora_escapeprison.500 tooltip = sora_escapeprison_playdead_reciveeventtooltip }
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_wait_opt
+		
+# 		random = {
+# 			chance = 5
+# 			add_trait = craven
+# 		}
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			if = {
+# 				limit = {
+# 					NOT = { has_character_modifier = house_arrest }							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_Prisonrevolt					
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_digtunnel				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}
+# 			if = {
+# 				limit = {
+# 					has_character_modifier = house_arrest							
+# 				}					
+# 				random_list = {
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_fightwayout
+# 					}
+# 					10 = {			
+# 						set_character_flag = sora_escapeprison_sneakout				
+# 					}
+# 					10 = {
+# 						set_character_flag = sora_escapeprison_playdead
+# 					}
+# 				}
+# 			}			
+# 		}
+# 	}
+	
+# 	option = {
+# 		name = sora_escapeprison_canceldecision_opt
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 		}
+# 	}
+# }
+
+# ##Random Events to give Boons that help escape the Prison #IDs 50-99
+
+# ##Fight your Way out Events #IDs 100 - 199
+# character_event = {
+# 	id = sora_escapeprison.100
+# 	title = sora_escapeprison_fightwayout_trigger_title
+# 	desc = sora_escapeprison_fightwayout_trigger_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_fightwayout_trigger_opt
+		
+# 		random_list = {
+# 			60 = {
+# 				character_event = { id = sora_escapeprison.197 tooltip = sora_escapeprison_fightwayout_fail_tooltip }
+# 			}
+# 			10 = {
+# 				character_event = { id = sora_escapeprison.198 tooltip = sora_escapeprison_fightwayout_dead_tooltip }
+# 			}
+# 			30 = {
+# 				character_event = { id = sora_escapeprison.199 tooltip = sora_escapeprison_fightwayout_success_tooltip }
+# 			}
+# 		}
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.197
+# 	title = sora_escapeprison_fightwayout_fail_title
+# 	desc = sora_escapeprison_fightwayout_fail_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_fightwayout_fail_opt
+		
+# 		#cancel_ambition = yes #NYI Cooldown needs to be removed
+		
+# 		add_character_modifier = {name = sora_escapeprison_failed duration = 30}
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 		}	
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.198
+# 	title = sora_escapeprison_fightwayout_dead_title
+# 	desc = sora_escapeprison_fightwayout_dead_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_fightwayout_dead_opt
+		
+# 		death = {death_reason = death_dungeon} #Want to add a custom Deadreason here
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout			
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.199
+# 	title = sora_escapeprison_fightwayout_success_title
+# 	desc = sora_escapeprison_fightwayout_success_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_fightwayout_success_opt
+		
+# 		hidden_tooltip = {
+# 			character_event = { id = sora_escapeprison.0 }
+# 		}
+# 	}
+# }
+
+# ##Prisonrevolt Events #IDs 200-299
+# character_event = {
+# 	id = sora_escapeprison.200
+# 	title = sora_escapeprison_prisonrevolt_trigger_title
+# 	desc = sora_escapeprison_prisonrevolt_trigger_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_prisonrevolt_trigger_opt
+		
+# 		random_list = {
+# 			40 = {
+# 				character_event = { id = sora_escapeprison.297 tooltip = sora_escapeprison_prisonrevolt_fail_tooltip }
+# 			}
+# 			20 = {
+# 				character_event = { id = sora_escapeprison.298 tooltip = sora_escapeprison_prisonrevolt_dead_tooltip }
+# 			}
+# 			40 = {
+# 				character_event = { id = sora_escapeprison.299 tooltip = sora_escapeprison_prisonrevolt_success_tooltip }
+# 			}
+# 		}	
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.297
+# 	title = sora_escapeprison_prisonrevolt_fail_title
+# 	desc = sora_escapeprison_prisonrevolt_fail_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_prisonrevolt_fail_opt
+		
+# 		#cancel_ambition = yes #NYI ooldown needs to be removed
+		
+# 		add_character_modifier = {name = sora_escapeprison_failed duration = 30}
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.298
+# 	title = sora_escapeprison_prisonrevolt_dead_title
+# 	desc = sora_escapeprison_prisonrevolt_dead_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_prisonrevolt_dead_opt
+		
+# 		death = {death_reason = death_dungeon} #Want to add a custom Deadreason here
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout			
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.299
+# 	title = sora_escapeprison_prisonrevolt_success_title
+# 	desc = sora_escapeprison_prisonrevolt_success_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_prisonrevolt_success_opt
+		
+# 		hidden_tooltip = {
+# 			character_event = { id = sora_escapeprison.0 }
+# 		}
+# 	}
+# }
+
+# ##Digtunnel Events #IDs 300-399
+# character_event = {
+# 	id = sora_escapeprison.300
+# 	title = sora_escapeprison_digtunnel_trigger_title
+# 	desc = sora_escapeprison_digtunnel_trigger_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_digtunnel_trigger_opt
+		
+# 		random_list = {
+# 			80 = {
+# 				character_event = { id = sora_escapeprison.397 tooltip = sora_escapeprison_digtunnel_fail_tooltip }
+# 			}
+# 			5 = {
+# 				character_event = { id = sora_escapeprison.398 tooltip = sora_escapeprison_digtunnel_dead_tooltip }
+# 			}
+# 			15 = {
+# 				character_event = { id = sora_escapeprison.399 tooltip = sora_escapeprison_digtunnel_success_tooltip }
+# 			}
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.397
+# 	title = sora_escapeprison_digtunnel_fail_title
+# 	desc = sora_escapeprison_digtunnel_fail_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_digtunnel_fail_opt
+		
+# 		#cancel_ambition = yes #NYI Cooldown needs to be removed
+		
+# 		add_character_modifier = {name = sora_escapeprison_failed duration = 30}
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.398
+# 	title = sora_escapeprison_digtunnel_dead_title
+# 	desc = sora_escapeprison_digtunnel_dead_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_digtunnel_dead_opt
+		
+# 		death = {death_reason = death_dungeon} #Want to add a custom Deadreason here
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout			
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.399
+# 	title = sora_escapeprison_digtunnel_success_title
+# 	desc = sora_escapeprison_digtunnel_success_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_digtunnel_success_opt
+		
+# 		hidden_tooltip = {
+# 			character_event = { id = sora_escapeprison.0 }
+# 		}
+# 	}
+# }
+
+# ##Sneakout Events #IDs 400-499
+# character_event = {
+# 	id = sora_escapeprison.400
+# 	title = sora_escapeprison_sneakout_trigger_title
+# 	desc = sora_escapeprison_sneakout_trigger_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_sneakout_trigger_opt
+		
+# 		random_list = {
+# 			30 = {
+# 				character_event = { id = sora_escapeprison.497 tooltip = sora_escapeprison_sneakout_fail_tooltip }
+# 			}
+# 			10 = {
+# 				character_event = { id = sora_escapeprison.498 tooltip = sora_escapeprison_sneakout_dead_tooltip }
+# 			}
+# 			60 = {
+# 				character_event = { id = sora_escapeprison.499 tooltip = sora_escapeprison_sneakout_success_tooltip }
+# 			}
+# 		}
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.497
+# 	title = sora_escapeprison_sneakout_fail_title
+# 	desc = sora_escapeprison_sneakout_fail_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_sneakout_fail_opt
+		
+# 		#cancel_ambition = yes #NYI Cooldown needs to be removed
+		
+# 		add_character_modifier = {name = sora_escapeprison_failed duration = 30}
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.498
+# 	title = sora_escapeprison_sneakout_dead_title
+# 	desc = sora_escapeprison_sneakout_dead_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_sneakout_dead_opt
+		
+# 		death = {death_reason = death_dungeon} #Want to add a custom Deadreason here
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout			
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.499
+# 	title = sora_escapeprison_sneakout_success_title
+# 	desc = sora_escapeprison_sneakout_success_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_sneakout_success_opt
+		
+# 		hidden_tooltip = {
+# 			character_event = { id = sora_escapeprison.0 }
+# 		}
+# 	}
+# }
+
+# ##Playdead Events #IDs 500-599
+# character_event = {
+# 	id = sora_escapeprison.500
+# 	title = sora_escapeprison_playdead_trigger_title
+# 	desc = sora_escapeprison_playdead_trigger_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_playdead_trigger_opt
+		
+# 		random_list = {
+# 			30 = {
+# 				character_event = { id = sora_escapeprison.597 tooltip = sora_escapeprison_playdead_fail_tooltip }
+# 			}
+# 			40 = {
+# 				character_event = { id = sora_escapeprison.598 tooltip = sora_escapeprison_playdead_dead_tooltip }
+# 			}
+# 			40 = {
+# 				character_event = { id = sora_escapeprison.599 tooltip = sora_escapeprison_playdead_success_tooltip }
+# 			}
+# 		}
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.597
+# 	title = sora_escapeprison_playdead_fail_title
+# 	desc = sora_escapeprison_playdead_fail_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_playdead_fail_opt
+		
+# 		#cancel_ambition = yes
+		
+# 		add_character_modifier = {name = sora_escapeprison_failed duration = 30}
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout
+# 		}		
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.598
+# 	title = sora_escapeprison_playdead_dead_title
+# 	desc = sora_escapeprison_playdead_dead_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_playdead_dead_opt
+		
+# 		death = {death_reason = death_dungeon} #Want to add a custom Deadreason here
+		
+# 		hidden_tooltip = {
+# 			clr_character_flag = sora_EscapePrison_decision_taken
+# 			clr_character_flag = sora_escapeprison_playdead
+# 			clr_character_flag = sora_escapeprison_sneakout
+# 			clr_character_flag = sora_escapeprison_digtunnel
+# 			clr_character_flag = sora_escapeprison_Prisonrevolt
+# 			clr_character_flag = sora_escapeprison_fightwayout			
+# 		}
+# 	}
+# }
+
+# character_event = {
+# 	id = sora_escapeprison.599
+# 	title = sora_escapeprison_playdead_success_title
+# 	desc = sora_escapeprison_playdead_success_desc
+# 	picture = GFX_evt_dungeon_emerge #Placeholder
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = sora_escapeprison_playdead_success_opt
+		
+# 		hidden_tooltip = {
+# 			character_event = { id = sora_escapeprison.0 }
+# 		}
+# 	}
+# }
+
+
+
+
+
+
+
+
+

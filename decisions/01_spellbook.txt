@@ -1,0 +1,5615 @@
+###############################
+#Spellbook Decisions by Novacat
+#Based upon previous version by Korbah and Teotl
+###############################
+decisions = {
+	### AI basic spells
+	spells_ai_basic = { #Decision that allows the AI rudimentary access to alchemy
+		ai_check_interval = 24
+		only_playable = yes
+		
+		potential = {
+			ai = yes
+			is_adult = yes
+			is_mage = yes
+			OR = {
+				NOT = { has_character_flag = ai_recent_spell_used }
+				had_character_flag = { flag = ai_recent_spell_used days = 3650 }
+			}
+			
+			learning = 1
+			NOT = { trait = infirm }
+			NOT = { trait = imbecile }
+			NOT = { trait = incapable }
+		}
+		allow = {
+			prisoner = no
+		}
+		effect = {
+			set_character_flag = ai_recent_spell_used
+			if = {
+				limit = {
+					OR = {
+						has_bottom_tier_education_trait_trigger = yes
+						has_2nd_tier_education_trait_trigger = yes
+					}
+				}
+				random_list = { #TODO: Weights based on current situation
+					10 = { add_character_modifier = { name = spell_fortify_health_1 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_fertility_1 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_diplomacy_1 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_martial_1 years = 10 } }	
+					10 = { add_character_modifier = { name = spell_fortify_stewardship_1 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_intrigue_1 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_learning_1 years = 10 } }
+				}
+			}
+			
+			else_if = {
+				limit = {
+					OR = {
+						has_3rd_tier_education_trait_trigger = yes
+						has_top_tier_education_trait_trigger = yes
+					}
+				}
+				random_list = { #TODO: Weights based on current situation
+					10 = { add_character_modifier = { name = spell_fortify_health_2 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_fertility_2 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_diplomacy_2 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_martial_2 years = 10 } }	
+					10 = { add_character_modifier = { name = spell_fortify_stewardship_2 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_intrigue_2 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_learning_2 years = 10 } }
+				}
+			}
+			
+			else_if = {
+				limit = {
+					maxed_education = yes
+				}
+				random_list = { #TODO: Weights based on current situation
+					10 = { add_character_modifier = { name = spell_fortify_health_3 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_fertility_3 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_diplomacy_3 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_martial_3 years = 10 } }	
+					10 = { add_character_modifier = { name = spell_fortify_stewardship_3 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_intrigue_3 years = 10 } }
+					10 = { add_character_modifier = { name = spell_fortify_learning_3 years = 10 } }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0.5
+			modifier = {
+				factor = 0.5
+				has_bottom_tier_education_trait_trigger = yes
+			}
+			modifier = {
+				factor = 0.75
+				has_2nd_tier_education_trait_trigger = yes
+			}
+			modifier = {
+				factor = 1.25
+				has_top_tier_education_trait_trigger = yes
+			}
+			modifier = {
+				factor = 1.5
+				maxed_education = yes
+			}
+		}
+	}
+	### Non-AI spells
+	spellbook_open = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+			learning = 1
+			NOT = { trait = infirm }
+			NOT = { trait = imbecile }
+			NOT = { trait = incapable }
+			has_submenu_open = no
+		}
+		allow = {}
+		effect = {set_character_flag = spellbook_open}
+	}
+	spellbook_close = {
+		ai_check_interval = 6000
+		is_high_prio = yes
+		
+		potential = {
+			ai = no
+			has_character_flag = spellbook_open
+		}
+
+		allow = {}
+
+		effect = {
+			clr_character_flag = spellbook_open
+		}
+	}
+	cancel_buffs = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 1
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 1 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600000 }
+		}
+	}
+	nuke_troops = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 5 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600033 }
+		}
+	}
+	restore_troops = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 5 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600034 }
+		}
+	}
+	summon_lesser_daedra = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_8
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 8 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			custom_tooltip = { text = NO_SUMMONS_ACTIVE
+				hidden_tooltip = {
+					NOT = { has_earmarked_regiments = summoned_troops }
+				}
+			}
+			piety = 25
+		}
+		effect = {
+			character_event = { id = 600094 }
+		}
+	}
+	summon_greater_daedra = {
+		ai_check_interval = 6000
+		potential = {
+			NOT = { has_dlc = "Jade Dragon" }
+			NOT = { has_character_flag = summoned_daedric_horde }
+			ai = no
+			learning = 25
+			has_character_flag = spellbook_open
+			trait = mage_5
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_30
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 30 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			custom_tooltip = { text = NO_DAEDRA_INCURSION
+				hidden_tooltip = {
+					capital_scope = { NOT = { has_province_modifier = daedric_incursion } }
+				}
+			}
+			custom_tooltip = { text = NO_SUMMONS_ACTIVE
+				hidden_tooltip = {
+					NOT = { has_earmarked_regiments = summoned_troops }
+				}
+			}
+			piety = 1000
+		}
+		effect = {
+			character_event = { id = 600095 }
+		}
+	}
+	summon_ghost_fleet = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 22
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_10
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 10 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			custom_tooltip = { text = NO_SUMMONS_ACTIVE_SHIPS
+				hidden_tooltip = {
+					NOT = { has_earmarked_regiments = summoned_ships }
+				}
+			}
+			piety = 100
+		}
+		effect = {
+			character_event = { id = 600099 }
+		}
+	}
+	spell_immortality = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			is_immortal = no
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_60
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 60 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			wealth = 100
+			piety = 100
+		}
+		effect = {
+			character_event = { id = 600100 }
+		}
+	}
+	summon_physician = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+			has_dlc = "Reapers"
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_15
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 15 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600166 }
+		}
+	}
+	#Pet Spells
+	conjure_atronach = {
+		ai_check_interval = 6000
+		potential = {
+			always = no #Currently disabled.
+			ai = no
+			learning = 17		
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_25
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 25 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600107 }
+		}
+	}
+	conjure_scamp = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_25
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 25 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600108 }
+		}
+	}
+	conjure_wisp = {
+		ai_check_interval = 6000
+		potential = {
+			always = no #Currently disabled.
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_25
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 25 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600109 }
+		}
+	}
+	find_familiar = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_25
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 25 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600110 }
+		}
+	}
+	#Necromancer Spells
+	summon_undead = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			trait = necromancer
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_8
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 8 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			custom_tooltip = { text = NO_SUMMONS_ACTIVE
+				hidden_tooltip = {
+					NOT = { has_earmarked_regiments = summoned_troops }
+				}
+			}
+			piety = 25
+		}
+		effect = {
+			character_event = { id = 600111 }
+		}
+	}
+	summon_undead_courtier = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			trait = necromancer
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_15
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 15 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+		}
+		effect = {
+			character_event = { id = 600112 }
+		}
+	}
+	spell_lichdom = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			trait = necromancer
+			is_master_mage = yes
+			is_immortal = no
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_40
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 40 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			wealth = 100
+			piety = 100
+		}
+		effect = {
+			character_event = { id = 600116 }
+		}
+	}
+	transform_imperial = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = imperial
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600119 }
+		}
+	}
+	transform_nord = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = nord
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600120 }
+		}
+	}
+	transform_breton = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = breton
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600121 }
+		}
+	}
+	transform_redguard = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = redguard
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600122 }
+		}
+	}
+	transform_altmer = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = altmer
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600123 }
+		}
+	}
+	transform_bosmer = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = bosmer
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600124 }
+		}
+	}
+	transform_maormer = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = maormer
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600125 }
+		}
+	}
+	transform_ayleid = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = ayleid
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600126 }
+		}
+	}
+	transform_falmer = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = falmer
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600127 }
+		}
+	}
+	transform_dunmer = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = dunmer
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600128 }
+		}
+	}
+	transform_chimer = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = chimer
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600129 }
+		}
+	}
+	transform_orsimer = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = orsimer
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600130 }
+		}
+	}
+	transform_suthay = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = khajiit
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600131 }
+		}
+	}
+	transform_suthayraht = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				AND = {
+					trait = khajiit
+					trait = raht
+				}
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600132 }
+		}
+	}
+	transform_argonian = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = argonian
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600133 }
+		}
+	}
+	transform_islander = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = quey
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600135 }
+		}
+	}
+	transform_akaviri = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = akaviri
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600136 }
+		}
+	}
+	transform_potun = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = potun
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600137 }
+		}
+	}
+	transform_tangmo = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = tangmo
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600138 }
+		}
+	}
+	transform_tsaesci = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = tsaesci
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600139 }
+		}
+	}
+	transform_kamal = {
+		ai_check_interval = 6000
+		potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = mage_5
+			NOR = {
+				trait = undead
+				trait = kamal
+			}
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_55
+				hidden_tooltip = {
+					check_variable = { which = magicka_current value = 55 }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					NOT = { has_character_flag = casting_spell }
+				}
+			}
+			is_pregnant = no
+			NOT = { any_spouse = { is_pregnant = yes } }
+			NOT = { any_consort = { is_pregnant = yes } }
+			NOT = { any_lover = { is_pregnant = yes } }
+		}
+		effect = {
+			character_event = { id = 600140 }
+		}
+	}
+}
+
+targetted_decisions = {
+
+	spellbook_open_1 = {
+		diplomacy_icon = GFX_spellbook_open
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+			learning = 1
+			NOT = { trait = infirm }
+			NOT = { trait = imbecile }
+			NOT = { trait = incapable }
+			NOT = { has_character_flag = spellbook_open }
+		}
+		allow = {}
+		effect = { FROM = { set_character_flag = spellbook_open } }
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spellbook_close_1 = {
+		diplomacy_icon = GFX_spellbook_close
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			has_character_flag = spellbook_open
+		}
+		allow = {}
+		effect = {
+			FROM = { clr_character_flag = spellbook_open }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	remove_curse = {
+		diplomacy_icon = GFX_remove_curse
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600011 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_ward_character = {
+		diplomacy_icon = GFX_spell_ward
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600051 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_health = {
+		diplomacy_icon = GFX_fortify_health
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600001 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_fertility = {
+		diplomacy_icon = GFX_fortify_fertility
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600002 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_diplomacy = {
+		diplomacy_icon = GFX_fortify_diplomacy
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600003 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_martial = {
+		diplomacy_icon = GFX_fortify_martial
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600004 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_stewardship = {
+		diplomacy_icon = GFX_fortify_stewardship
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600005 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_intrigue = {
+		diplomacy_icon = GFX_fortify_intrigue
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600006 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_learning = {
+		diplomacy_icon = GFX_fortify_learning
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_8
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 8 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600007 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_prestige = {
+		diplomacy_icon = GFX_fortify_prestige
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600008 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fortify_piety = {
+		diplomacy_icon = GFX_fortify_piety
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600009 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	transmute_spell = {
+		diplomacy_icon = GFX_transmute_spell
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_8
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 8 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600010 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_global_opinion = {
+		diplomacy_icon = GFX_boost_global_opinion
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600013 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_construct_building = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600014 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_combat_rating = {
+		diplomacy_icon = GFX_boost_combat_rating
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600015 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	increase_global_income = {
+		diplomacy_icon = GFX_increase_global_income
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_6
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 6 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600016 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	global_tranquility = {
+		diplomacy_icon = GFX_global_tranquility
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600017 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_local_opinion = {
+		diplomacy_icon = GFX_boost_local_opinion
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_2
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 2 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600018 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_global_morale = {
+		diplomacy_icon = GFX_boost_global_morale
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600019 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	regen_global_morale = {
+		diplomacy_icon = GFX_regen_global_morale
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600020 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	bless_army_weapons = {
+		diplomacy_icon = GFX_enchant_weapons
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600021 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	bless_army_armor = {
+		diplomacy_icon = GFX_enchant_armor
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600022 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_global_recruitment = {
+		diplomacy_icon = GFX_boost_global_recruitment
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600024 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	#Negative Spells#
+	drain_health = {
+		diplomacy_icon = GFX_drain_health
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600141 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_fertility = {
+		diplomacy_icon = GFX_drain_fertility
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600142 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_diplomacy = {
+		diplomacy_icon = GFX_drain_diplomacy
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600143 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_martial = {
+		diplomacy_icon = GFX_drain_martial
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600144 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_stewardship = {
+		diplomacy_icon = GFX_drain_stewardship
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600145 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_intrigue = {
+		diplomacy_icon = GFX_drain_intrigue
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 7
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600146 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_learning = {
+		diplomacy_icon = GFX_drain_learning
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_8
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 8 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600147 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_prestige = {
+		diplomacy_icon = GFX_drain_prestige
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600148 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	drain_piety = {
+		diplomacy_icon = GFX_drain_piety
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600149 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	fools_gold_spell = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_8
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 8 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600150 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	reduce_global_opinion = {
+		diplomacy_icon = GFX_reduce_global_opinion
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600151 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_curse_construction = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600152 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	reduce_combat_rating = {
+		diplomacy_icon = GFX_reduce_combat_rating
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600153 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	reduce_global_income = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_6
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 6 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600154 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	global_frenzy = {
+		diplomacy_icon = GFX_global_frenzy
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600155 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	reduce_local_opinion = {
+		diplomacy_icon = GFX_reduce_local_opinion
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600156 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	reduce_global_morale = {
+		diplomacy_icon = GFX_reduce_global_morale
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600157 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	decay_global_morale = {
+		diplomacy_icon = GFX_decay_global_morale
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600158 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	break_army_weapons = {
+		diplomacy_icon = GFX_break_weapons
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600159 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	break_army_armor = {
+		diplomacy_icon = GFX_break_armor
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600160 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	reduce_global_recruitment = {
+		diplomacy_icon = GFX_decay_local_recruitment
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600161 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_repulsive = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			OR = {
+				learning = 15
+				diplomacy = 20
+			}
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600162 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	frenzy_vassals = {
+		diplomacy_icon = GFX_frenzy_vassals
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			OR = {
+				learning = 20
+				diplomacy = 25
+			}
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600163 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	frenzy_self = {
+		diplomacy_icon = GFX_frenzy_self
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600164 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_polymorph_chicken = {
+		diplomacy_icon = GFX_trait_polymorph_chicken
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_30
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 30 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					NOT = { has_character_modifier = spell_ward }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600062 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	#Trait Spells#
+	boost_morale_defence = {
+		diplomacy_icon = GFX_boost_morale_defence
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600057 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_morale_offence = {
+		diplomacy_icon = GFX_boost_morale_offence
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600058 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	increase_defence = {
+		diplomacy_icon = GFX_protective_wardings
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600059 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	increase_damage = {
+		diplomacy_icon = GFX_increase_damage
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600060 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	hasten_army = {
+		diplomacy_icon = GFX_hasten_army
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600066 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	smoke_screen = {
+		diplomacy_icon = GFX_smoke_screen
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600067 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	slow_enemy = {
+		diplomacy_icon = GFX_slow_enemy
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 22
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_2
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 2 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600068 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	sheogorath_tactic = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_2
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 2 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600069 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	religious_fervor = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_2
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 2 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600070 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	conjure_siege = {
+		diplomacy_icon = GFX_conjure_siege
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 22
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600071 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	final_stand = {
+		#diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600072 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_charm = {
+		diplomacy_icon = GFX_spell_charm
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600073 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	pacify_vassals = {
+		diplomacy_icon = GFX_pacify_vassals
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600074 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	pacify_self = {
+		diplomacy_icon = GFX_pacify_self
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600075 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	#improve_tolerance = {
+		#filter = all_including_me
+		#ai_target_filter = none
+		#ai_check_interval = 6000
+		#from_potential = {
+			#ai = no
+			#learning = 15
+			#has_character_flag = spellbook_open
+			#OR = {
+				#trait = mage_2
+				#trait = mage_3
+				#is_master_mage = yes
+			#}
+		#}
+		#potential = {
+			#is_within_diplo_range = FROM
+		#}
+		#allow = {
+			#custom_tooltip = { text = MAGICKA_COST_1
+				#hidden_tooltip = {
+					#FROM = { check_variable = { which = magicka_current value = 1 } }
+				#}
+			#}
+			#custom_tooltip = { text = NOT_CASTING_SPELL
+				#hidden_tooltip = {
+					#FROM = { NOT = { has_character_flag = casting_spell } }
+				#}
+			#}
+		#}
+		#effect = {
+			#FROM = { character_event = { id = 600076 } }
+		#}
+		#revoke_allowed = {
+			#always = no
+		#}
+		#ai_will_do = {
+			#factor = 0
+		#}
+	#}
+	#Unique Spells#
+	terrain_knowlege = {
+		# diplomacy_icon = GFX_TBD
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_2
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 6 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600077 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	heal_wounds = {
+		diplomacy_icon = GFX_heal_wounds
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600080 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	regenerate_body = {
+		diplomacy_icon = GFX_regenerate_body
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_20
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 20 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600081 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	remove_deformity = {
+		diplomacy_icon = GFX_remove_deformity
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 22
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_30
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 30 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600084 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	heal_senses = {
+		diplomacy_icon = GFX_heal_senses
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 18
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_30
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 30 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600085 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	heal_voice = {
+		diplomacy_icon = GFX_heal_voice
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 18
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_30
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 30 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600086 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	soothing_melody = {
+		diplomacy_icon = GFX_soothing_melody
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_20
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 20 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600087 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	tame_inner_demons = {
+		diplomacy_icon = GFX_tame_inner_demons
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 22
+			has_character_flag = spellbook_open
+			is_master_mage = yes
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_25
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 25 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600088 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_beautify = {
+		diplomacy_icon = GFX_spell_beautify
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 22
+			has_character_flag = spellbook_open
+			trait = mage_5
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_35
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 35 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600089 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_strengthen = {
+		diplomacy_icon = GFX_spell_strengthen
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 25
+			has_character_flag = spellbook_open
+			trait = mage_5
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_35
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 35 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600090 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_quicken = {
+		diplomacy_icon = GFX_spell_quicken
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 25
+			has_character_flag = spellbook_open
+			trait = mage_5
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_40
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 40 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600091 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	cure_disease_symptom = {
+		diplomacy_icon = GFX_cure_disease_self
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			has_dlc = "Reapers"
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600061 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	cure_disease_self = {
+		diplomacy_icon = GFX_cure_disease_self
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { NOT = { has_dlc = "Reapers" } }
+				FROM = { character_event = { id = 600092 } }
+			}
+			if = {
+				limit = { has_dlc = "Reapers" }
+				FROM = { character_event = { id = 600083 } }
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	check_health = {
+		diplomacy_icon = GFX_check_health
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600103 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	check_fertility = {
+		diplomacy_icon = GFX_check_fertility
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_1
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 1 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600105 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_charm_person = {
+		diplomacy_icon = GFX_spell_charm
+		filter = all_including_me
+		ai_target_filter = none
+		ai_check_interval = 6000
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_within_diplo_range = FROM
+			NOT = { character = ROOT }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600023 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}
+
+settlement_decisions = {
+	spellbook_open_2 = {
+		diplomacy_icon = GFX_spellbook_open
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+			learning = 1
+			NOT = { trait = infirm }
+			NOT = { trait = imbecile }
+			NOT = { trait = incapable }
+			NOT = { has_character_flag = spellbook_open }
+		}
+		allow = {}
+		effect = { FROM = { set_character_flag = spellbook_open } }
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spellbook_close_2 = {
+		diplomacy_icon = GFX_spellbook_close
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			has_character_flag = spellbook_open
+		}
+		allow = {}
+		effect = {
+			FROM = { clr_character_flag = spellbook_open }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	#Province Spells#
+	remove_curse_province = {
+		diplomacy_icon = GFX_remove_curse
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600012 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spell_ward_region = {
+		diplomacy_icon = GFX_spell_ward
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 5
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600052 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	protective_wardings = {
+		diplomacy_icon = GFX_protective_wardings
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600025 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	decay_walls = {
+		diplomacy_icon = GFX_decay_walls
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_6
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 6 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600026 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	increase_local_levy = {
+		diplomacy_icon = GFX_boost_local_recruitment
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600027 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	decrease_local_levy = {
+		diplomacy_icon = GFX_decay_local_recruitment
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_6
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 6 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600028 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_local_recruitment = {
+		diplomacy_icon = GFX_boost_local_recruitment
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600029 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	decay_local_recruitment = {
+		diplomacy_icon = GFX_decay_local_recruitment
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600030 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	increase_garrison = {
+		diplomacy_icon = GFX_increase_garrison
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600031 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	decrease_garrison = {
+		diplomacy_icon = GFX_affect_garrison
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600032 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	resist_disease = {
+		diplomacy_icon = GFX_resist_disease
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600035 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	weaken_resist = {
+		diplomacy_icon = GFX_weaken_resist
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600036 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_supply = {
+		diplomacy_icon = GFX_boost_supply
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_6
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 6 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600041 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	decrease_supply = {
+		diplomacy_icon = GFX_decrease_supply
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_8
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 8 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600042 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	pacify_province = {
+		diplomacy_icon = GFX_pacify_province
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600043 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	enrage_province = {
+		diplomacy_icon = GFX_enrage_province
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600044 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	increase_local_income = {
+		diplomacy_icon = GFX_increase_local_income
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 10
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600045 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	decrease_local_income = {
+		diplomacy_icon = GFX_decrease_local_income
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 12
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_6
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 6 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600046 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	knowlege_transfer = {
+		diplomacy_icon = GFX_knowlege_transfer
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_2
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 2 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600047 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	dull_memory = {
+		diplomacy_icon = GFX_dull_memory
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600048 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	boost_local_morale = {
+		diplomacy_icon = GFX_boost_local_morale
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_2
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 2 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600049 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	reduce_local_morale = {
+		diplomacy_icon = GFX_reduce_local_morale
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_4
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 4 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600050 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	enchant_weapons = {
+		diplomacy_icon = GFX_enchant_weapons
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600053 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	break_weapons = {
+		diplomacy_icon = GFX_break_weapons
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600054 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	enchant_armor = {
+		diplomacy_icon = GFX_enchant_armor
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_3
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 3 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600055 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	break_armor = {
+		diplomacy_icon = GFX_break_armor
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_5
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 5 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600056 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	cure_disease_province = {
+		diplomacy_icon = GFX_cure_disease_province
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 15
+			has_character_flag = spellbook_open
+			OR = {
+				is_mage = yes
+				has_court_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_10
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 10 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600093 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	scorched_earth = {
+		diplomacy_icon = GFX_scorched_earth
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 17
+			has_character_flag = spellbook_open
+			trait = necromancer
+			OR = {
+				trait = mage_2
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_20
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 20 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600114 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	spread_disease = {
+		diplomacy_icon = GFX_spread_disease
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 20
+			has_character_flag = spellbook_open
+			trait = necromancer
+			OR = {
+				trait = mage_3
+				is_master_mage = yes
+			}
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_10
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 10 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600115 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	conjure_plague = {
+		# diplomacy_icon = GFX_TBD
+		ai_target_filter = none
+		ai_check_interval = 6000
+		filter = all
+		from_potential = {
+			ai = no
+			learning = 30
+			has_character_flag = spellbook_open
+			trait = necromancer
+			is_master_mage = yes
+			has_dlc = "Reapers"
+		}
+		potential = {
+			is_capital = yes
+			location = { NOT = { distance = { who = FROM distance = 400 } } }
+		}
+		allow = {
+			custom_tooltip = { text = MAGICKA_COST_30
+				hidden_tooltip = {
+					FROM = { check_variable = { which = magicka_current value = 10 } }
+				}
+			}
+			custom_tooltip = { text = NOT_CASTING_SPELL
+				hidden_tooltip = {
+					FROM = { NOT = { has_character_flag = casting_spell } }
+				}
+			}
+			custom_tooltip = { text = NOT_WARDED
+				hidden_tooltip = {
+					location = { NOT = { has_province_modifier = province_spell_ward } }
+				}
+			}
+		}
+		effect = {
+			FROM = { character_event = { id = 600165 } }
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}

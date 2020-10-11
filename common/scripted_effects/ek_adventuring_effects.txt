@@ -1,0 +1,194 @@
+#Abandon all hope, ye who enter here.
+
+endadventure = {
+	custom_tooltip = { text = endadventuretext }
+	hidden_tooltip = {
+		clear_event_target = adventure_target
+		set_variable = { which = partymorale value = 0 }
+		set_variable = { which = partyfatigue value = 0 }
+		set_variable = { which = partystarvation value = 0 }
+		set_variable = { which = encountersuccesses value = 0 }
+		set_variable = { which = encounterdefeats value = 0 }
+		set_variable = { which = adventurechapter value = 0 }
+		remove_trait = on_adventure
+		clr_character_flag = adventure_allow_generic #This flag is used to allow for generic encounters and events. Otherwise only events you specifically set to fire will happen.
+		clr_character_flag = adventure_allow_camp # This flag is to be used to allow the player to set up camp during appropriate times and situations.
+		#Clear triggered enemy flags for neutral factions
+		clr_character_flag = adv_skaal_enemy
+		#Clear distance flags
+		clr_character_flag = adventure_short
+		clr_character_flag = adventure_medium
+		clr_character_flag = adventure_long
+		#Clear hired help flags
+		clr_character_flag = adventure_hired_guide
+		clr_character_flag = adventure_hired_mercenaries
+		#Clear transportation flags
+		clr_character_flag = adventure_transportation_guildguide
+		clr_character_flag = adventure_transportation_conventional
+		clr_character_flag = adventure_transportation_hitchhiking
+		# Clear any more preparatory flags here if another preparation step is ever added.
+		
+		#Clear flags gained on adventure
+		clear_encounter_flags = yes
+		clr_character_flag = adv_prov_timer
+		clr_character_flag = adv_starv_timer
+		clr_character_flag = adv_encounter_timer
+		##Clear adventure-specific flags here so you don't have to remember to cleanup every time the adventure is terminated.
+		#Snowprince:
+		clr_character_flag = adventure_snowprince
+		clr_character_flag = thirsk_started_fight
+		clr_character_flag = thirsk_found_information
+		clr_character_flag = skaal_refused_to_help
+		clr_character_flag = skaal_village_attacked
+		clr_character_flag = helped_skaal
+		clr_character_flag = refused_to_help_skaal
+		#:
+	}
+}
+
+adventurerefund = {
+	hidden_tooltip = {
+		if = {
+			limit = {
+				has_character_flag = adventure_hired_guide
+			}
+			wealth = 80
+			clr_character_flag = adventure_hired_guide
+		}
+		if = {
+			limit = {
+				has_character_flag = adventure_hired_mercenaries
+			}
+			wealth = 150
+			clr_character_flag = adventure_hired_mercenaries
+		}
+		if = {
+			limit = {
+				has_character_flag = adventure_transportation_conventional
+			}
+			wealth = 75
+			clr_character_flag = adventure_transportation_conventional
+		}
+		if = {
+			limit = {
+				has_character_flag = adventure_transportation_guildguide
+			}
+			wealth = 150
+			clr_character_flag = adventure_transportation_guild
+		}
+	}
+}
+
+clear_encounter_flags = {
+	clr_character_flag = adv_encounter_noloot
+	clr_character_flag = adv_encounter_victory
+	clr_character_flag = adv_encounter_defeat
+	clr_character_flag = adv_encounter_bandits
+	clr_character_flag = adv_encounter_berserker
+	clr_character_flag = adv_encounter_werewolves
+	clr_character_flag = adv_encounter_nordwarriors
+	clr_character_flag = instant_kill_on_failure
+}
+
+generate_encounter_loot = { #Update this effect for generating loot for specific encounters.
+	custom_tooltip = { text = encounterloottext }
+	hidden_tooltip = {
+		if = {
+			limit = {
+				has_character_flag = adv_encounter_bandits
+			}
+			random_list = {
+				5 = { generate_weapon_sword_steel = yes }
+				4 = { generate_armor_steel = yes }
+				3 = { generate_weapon_sword_dwarven = yes }
+				2 = { generate_armor_dwarven = yes }
+				1 = { generate_weapon_sword_elven = yes }
+			}
+			wealth = 25
+		}
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = adv_encounter_berserker
+					has_character_flag = adv_encounter_nordwarriors
+				}
+			}
+			random_list = {
+				5 = { generate_weapon_sword_nord = yes }
+				4 = { generate_armor_skaal_coat = yes }
+				3 = { generate_armor_nord_carved = yes }
+			}
+			wealth = 15
+		}
+		else = { generate_loot_generic = yes }
+	}
+}
+
+adventure_wound_effect = {
+	random_list = {
+		70 = { #BURN- I mean WOUND (unless already wounded, then maim)
+			if = {
+				limit = {
+					trait = wounded
+				}
+				add_maimed_trait_effect = yes
+			}
+			else = {
+				add_trait_wounded_effect = yes
+			}
+			modifier = {
+				factor = 0
+				has_character_flag = instant_kill_on_failure
+			}
+		}
+		25 = { #MAIM
+			add_maimed_trait_effect = yes
+			modifier = {
+				factor = 0
+				has_character_flag = instant_kill_on_failure
+			}
+		}
+		5 = { #KILL
+			death = { death_reason = death_vanish_wilderness }
+			modifier = {
+				factor = 0.5
+				trait = wounded
+			}
+		}
+	}
+}
+
+prepareadventure = {
+	add_trait = on_adventure
+	calculate_adventure_distance = yes
+	set_variable = { which = partymorale value = 10 }
+	set_variable = { which = partyfatigue value = 0 }
+	set_variable = { which = partystarvation value = 0 }
+	set_variable = { which = encountersuccesses value = 0 }
+	set_variable = { which = encounterdefeats value = 0 }
+}
+
+calculate_adventure_distance = {
+	if = {
+		limit = {
+			event_target:adventure_target = {
+				region = ROOT
+			}
+		}
+		set_character_flag = adventure_short
+	}
+	else_if = {
+		limit = {
+			any_province = {
+				region = ROOT
+				any_neighbor_province = {
+					region = event_target:adventure_target
+				}
+			}
+		}
+		set_character_flag = adventure_medium
+	}
+	else = {
+		set_character_flag = adventure_long
+	}
+}

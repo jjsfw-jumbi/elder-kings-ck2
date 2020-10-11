@@ -1,0 +1,732 @@
+namespace = ekmerhealth
+
+#Apply age effects to Mer. Set to a five year pulse (some mer will end up being young for a few years more or less than others, which is fairly normal)
+character_event = {
+	id = ekmerhealth.0
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	min_age = 17
+	max_age = 255 #Immortal_Age can stack overflow...
+	
+	trigger = {
+		is_long_lived = yes
+		is_undead = no
+		NOT = { trait = dremora }
+		NOT = { trait = immortal }
+	}
+	
+	immediate = {
+		if = {
+			limit = { is_altmer = yes }
+			add_altmer_trait = yes
+		}
+		else_if = {
+			limit = { is_ayleid = yes }
+			add_ayleid_trait = yes
+		}
+		else_if = {
+			limit = { is_bosmer = yes }
+			add_bosmer_trait = yes
+		}
+		else_if = {
+			limit = { is_chimer = yes }
+			add_chimer_trait = yes
+		}
+		else_if = {
+			limit = { is_dunmer = yes }
+			add_dunmer_trait = yes
+		}
+		else_if = {
+			limit = { is_dwemer = yes }
+			add_dwemer_trait = yes
+		}
+		else_if = {
+			limit = { is_falmer = yes }
+			add_falmer_trait = yes
+		}
+		else_if = {
+			limit = { is_maormer = yes }
+			add_maormer_trait = yes
+		}
+		else_if = {
+			limit = { is_tsaesci = yes }
+			add_tsaesci_trait = yes
+		}
+	}
+}
+
+
+# Let's kill some old mer!
+character_event = {
+	id = ekmerhealth.1
+	
+	hide_window = yes
+	
+	min_age = 165
+
+	trigger = {
+		is_long_lived = yes
+		NOT = { is_immortal = yes }
+	}
+	
+	mean_time_to_happen = {
+		years = 300
+		
+		modifier = {
+			factor = 0.25
+			NOT = { health = 1 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { health = 2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { health = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			health = 5
+		}
+		modifier = {
+			factor = 1.5
+			health = 6
+		}
+		modifier = {
+			factor = 2
+			health = 7
+		}
+		modifier = {
+			factor = 3
+			health = 8
+		}
+		modifier = {
+			factor = 5
+			health = 9
+		}
+		modifier = {
+			factor = 3
+			trait = fortitude
+		}
+		modifier = {
+			factor = 3
+			is_strong_trigger = yes
+		}
+		modifier = {
+			factor = 0.85
+			is_weak_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = sickly
+		}
+		modifier = {
+			factor = 5
+			NOT = { age = 200 }
+		}
+		modifier = {
+			factor = 3
+			age = 200
+			NOT = { age = 250 }
+		}
+		modifier = {
+			factor = 2
+			age = 250
+			NOT = { age = 300 }
+		}
+		modifier = {
+			factor = 1.5
+			age = 300
+			NOT = { age = 350 }
+		}
+		modifier = {
+			factor = 1.25
+			age = 350
+			NOT = { age = 400 }
+		}
+		modifier = {
+			factor = 0.75
+			age = 450
+			NOT = { age = 500 }
+		}
+		modifier = {
+			factor = 0.5
+			age = 500
+			NOT = { age = 650 }
+		}
+		modifier = {
+			factor = 0.25
+			age = 650
+			NOT = { age = 700 }
+		}
+		modifier = {
+			factor = 0.01
+			age = 700
+		}
+		modifier = {
+			factor = 0.9
+			trait = impure_altmer
+		}
+		modifier = {
+			factor = 0.75
+			trait = inbred
+		}
+		modifier = {
+			factor = 0.85
+			has_negative_congenital_trigger = yes
+		}
+		modifier = {
+			factor = 0.85
+			trait = reckless
+		}
+		modifier = {
+			factor = 0.95
+			trait = temperate
+		}
+		modifier = {
+			factor = 0.9
+			trait = absent_minded
+		}
+		modifier = {
+			factor = 0.9
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.9
+			trait = greedy
+		}
+		modifier = {
+			factor = 0.9
+			trait = adventurer
+		}
+		modifier = {
+			factor = 0.85
+			trait = gladiator
+		}
+		modifier = {
+			factor = 0.85
+			trait = gluttonous
+		}
+		modifier = {
+			factor = 0.65
+			trait = skooma_addiction
+		}
+		modifier = {
+			factor = 0.7
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.75
+			has_mental_disorder_trigger = yes
+		}
+		modifier = {
+			factor = 0.75
+			character_disease_trigger = yes
+		}
+		modifier = {
+			factor = 0.85
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			has_severe_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.65
+			has_medium_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.75
+			has_minor_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			trait = infirm
+		}
+		modifier = {
+			factor = 0.25
+			trait = incapable
+		}
+		modifier = {
+			factor = 0.65
+			trait = rebel_slave
+		}
+		modifier = {
+			factor = 0.75
+			trait = bandit_leader
+		}
+		modifier = {
+			factor = 0.8
+			trait = peasant_leader
+		}
+		modifier = {
+			factor = 0.7
+			trait = exslave
+		}
+		modifier = {
+			factor = 0.85
+			trait = warlord
+		}
+		modifier = {
+			factor = 0.75
+			is_mixed_race = yes
+		}
+	}
+	
+	immediate = {
+		death = { death_reason = death_natural }
+	}
+}
+
+#Let's kill some ill, wounded or ugly people!... just kidding on that last one.
+character_event = {
+	id = ekmerhealth.2
+	hide_window = yes
+
+	trigger = {
+		is_long_lived = yes
+		health_traits = 1
+		OR = {
+			has_injury_trigger = yes
+			is_maimed_trigger = yes
+			has_symptom_trigger = yes
+			character_disease_trigger = yes
+			is_weak_trigger = yes
+			has_minor_disability_trigger = yes
+			has_medium_disability_trigger = yes
+			has_severe_disability_trigger = yes
+			has_disability_trigger = yes
+			has_negative_congenital_trigger = yes
+		}
+		NOT = { is_immortal = yes }
+	}
+	
+	mean_time_to_happen = {
+		years = 125
+		
+		modifier = {
+			factor = 0.1
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 0.85
+			has_symptom_trigger = yes
+		}
+		modifier = {
+			factor = 0.50
+			character_disease_trigger = yes
+		}
+		modifier = {
+			factor = 0.85
+			is_maimed_trigger = yes
+		}
+		modifier = {
+			factor = 0.9
+			has_injury_trigger = yes
+		}
+		modifier = {
+			factor = 0.95
+			is_weak_trigger = yes
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { health = 1 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { health = 2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { health = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			health = 4
+		}
+		modifier = {
+			factor = 1.5
+			health = 5
+		}
+		modifier = {
+			factor = 1.75
+			health = 6
+		}
+		modifier = {
+			factor = 2
+			health = 7
+		}
+		modifier = {
+			factor = 3
+			health = 8
+		}
+		modifier = {
+			factor = 0.85
+			trait = impure_altmer
+		}
+		modifier = {
+			factor = 5
+			NOT = { age = 100 }
+		}
+		modifier = {
+			factor = 3
+			age = 125
+			NOT = { age = 150 }
+		}
+		modifier = {
+			factor = 2
+			age = 150
+			NOT = { age = 175 }
+		}
+		modifier = {
+			factor = 1.5
+			age = 175
+			NOT = { age = 200 }
+		}
+		modifier = {
+			factor = 1.25
+			age = 200
+			NOT = { age = 300 }
+		}
+		modifier = {
+			factor = 0.75
+			age = 300
+			NOT = { age = 350 }
+		}
+		modifier = {
+			factor = 0.5
+			age = 350
+			NOT = { age = 400 }
+		}
+		modifier = {
+			factor = 0.25
+			age = 400
+			NOT = { age = 450 }
+		}
+		modifier = {
+			factor = 0.1
+			age = 450
+		}
+		modifier = {
+			factor = 0.01
+			age = 500
+		}
+		modifier = {
+			factor = 0.95
+			is_mixed_race = yes
+		}
+		modifier = {
+			factor = 0.9
+			has_negative_congenital_trigger = yes
+		}
+		modifier = {
+			factor = 0.5
+			has_severe_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.7
+			has_medium_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.9
+			has_minor_disability_trigger = yes
+		}
+	}
+	
+	immediate = {
+		death = { death_reason = death_trait }
+	}
+}
+
+#Additional death event to handle Knahaten Flu and Incapables
+character_event = {
+	id = ekmerhealth.3
+	
+	hide_window = yes
+	
+	trigger = {
+		is_long_lived = yes
+		OR = {
+			AND = {
+				trait = has_knahaten_flu
+				is_knahaten_immune = no
+			}
+			trait = incapable
+		}
+		is_immortal = no
+	}
+	
+	mean_time_to_happen = {
+		years = 105
+		
+		modifier = {
+			factor = 0.1
+			trait = has_knahaten_flu
+		}
+		modifier = {
+			factor = 0.5
+			character_disease_trigger = yes
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { health = 1 }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { health = 2 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { health = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			health = 4
+		}
+		modifier = {
+			factor = 1.5
+			health = 5
+		}
+		modifier = {
+			factor = 1.75
+			health = 6
+		}
+		modifier = {
+			factor = 2
+			health = 7
+		}
+		modifier = {
+			factor = 3
+			health = 8
+		}
+		modifier = {
+			factor = 0.85
+			trait = impure_altmer
+		}
+		modifier = {
+			factor = 5
+			NOT = { age = 100 }
+		}
+		modifier = {
+			factor = 3
+			age = 125
+			NOT = { age = 150 }
+		}
+		modifier = {
+			factor = 2
+			age = 150
+			NOT = { age = 175 }
+		}
+		modifier = {
+			factor = 1.5
+			age = 175
+			NOT = { age = 200 }
+		}
+		modifier = {
+			factor = 1.25
+			age = 200
+			NOT = { age = 300 }
+		}
+		modifier = {
+			factor = 0.75
+			age = 300
+			NOT = { age = 350 }
+		}
+		modifier = {
+			factor = 0.5
+			age = 350
+			NOT = { age = 400 }
+		}
+		modifier = {
+			factor = 0.25
+			age = 400
+			NOT = { age = 450 }
+		}
+		modifier = {
+			factor = 0.1
+			age = 450
+		}
+		modifier = {
+			factor = 0.01
+			age = 500
+		}
+		modifier = {
+			factor = 0.85
+			is_mixed_race = yes
+		}
+		modifier = {
+			factor = 0.9
+			is_weak_trigger = yes
+		}
+		modifier = {
+			factor = 0.9
+			has_minor_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.85
+			has_medium_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.8
+			has_severe_disability_trigger = yes
+		}
+		modifier = {
+			factor = 0.95
+			has_negative_congenital_trigger = yes
+		}
+	}
+	
+	immediate = {
+		death = { death_reason = death_trait }
+	}
+}
+
+#Mer live a long time. Sometimes they forget that they can get married.
+character_event = {
+	id = ekmerhealth.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	only_rulers = yes
+	min_age = 100
+	max_age = 300
+	is_married = no
+	only_capable = yes
+	prisoner = no
+	ai = yes
+	
+	trigger = {
+		can_marry = yes
+		is_long_lived = yes
+		is_daedric_prince = no
+		NOR = { 
+			trait = dremora
+			trait = almalexia
+			trait = sothasil
+			trait = vivec
+			trait = the_ideal_masters
+			has_inheritance_blocker = yes
+			has_living_children = yes
+			
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+		
+		modifier = { trait = shy factor = 0.5 }
+		modifier = { trait = craven factor = 0.65 }
+		modifier = { trait = absent_minded factor = 0.25 }
+		modifier = { trait = slothful factor = 0.75 }
+		modifier = { age < 115 factor = 0.75 }
+		modifier = { age >= 115 age < 125 factor = 0.85 }
+		modifier = { age >= 125 age < 130 factor = 0.95 }
+		modifier = { age >= 135 age < 150 factor = 1.05 }
+		modifier = { age >= 150 age < 160 factor = 1.15 }
+		modifier = { age >= 150 age < 175 factor = 1.25 }
+		modifier = { age >= 175 age < 200 factor = 1.35 }
+		modifier = { age >= 200 age < 225 factor = 0.85 }
+		modifier = { age >= 225 age < 250 factor = 0.75 }
+		modifier = { age >= 225 age < 250 factor = 0.5 }
+		modifier = { age >= 250 age < 275 factor = 0.25 }
+		modifier = { age >= 275 factor = 0.1 }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_lover = yes
+				is_female = no
+				any_lover = {
+					is_married = no
+					is_female = yes
+					NOT = { any_lover = { NOT = { character = ROOT } } }
+				}
+			}
+			random_lover = {
+				limit = {
+					is_married = no
+					is_female = yes
+					NOT = { any_lover = { NOT = { character = ROOT } } }
+				}
+				add_spouse = ROOT
+			}
+		}
+		else_if = {
+			limit = {
+				has_lover = yes
+				is_female = yes
+				any_lover = {
+					is_married = no
+					is_female = no
+					NOT = { any_lover = { NOT = { character = ROOT } } }
+				}
+			}
+			random_lover = {
+				limit = {
+					is_married = no
+					is_female = no
+					NOT = { any_lover = { NOT = { character = ROOT } } }
+				}
+				add_spouse_matrilineal = ROOT
+			}
+		}
+		else_if = {
+			limit = { is_female = yes }
+			create_character = {
+				dynasty = NONE
+				female = no
+				religion = ROOT
+				culture = ROOT
+			}
+			new_character = {
+				assign_birthsign = yes
+				assign_racial_trait = yes
+				random_list = {
+					10 = { chancellor_education_assignment = yes }
+					10 = { mage_education_assignment = yes }
+					10 = { marshal_education_assignment = yes }
+					10 = { spymaster_education_assignment = yes }
+					10 = { steward_education_assignment = yes }
+				}
+				add_spouse_matrilineal = ROOT
+			}
+		}
+		else_if = {
+			limit = { is_female = no }
+			create_character = {
+				dynasty = NONE
+				female = yes
+				religion = ROOT
+				culture = ROOT
+			}
+			new_character = {
+				assign_birthsign = yes
+				assign_racial_trait = yes
+				random_list = {
+					10 = { chancellor_education_assignment = yes }
+					10 = { mage_education_assignment = yes }
+					10 = { marshal_education_assignment = yes }
+					10 = { spymaster_education_assignment = yes }
+					10 = { steward_education_assignment = yes }
+				}
+				add_spouse = ROOT
+			}
+		}
+	}
+}
+
+#Mer live a long time. And they need to be reminded of it when they become adults.
+character_event = {
+	id = ekmerhealth.15
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = { should_receive_elven_immortality = yes }
+	
+	immediate = { update_elven_immortality = yes }
+}

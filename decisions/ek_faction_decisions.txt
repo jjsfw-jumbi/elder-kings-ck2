@@ -1,0 +1,117 @@
+plot_decisions = {
+	faction_succ_feudal_confirmation_ultimatum = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 3
+		
+		potential = {
+			is_playable = yes
+			NOT = { trait = undead }
+			has_submenu_open = no
+			leads_faction = faction_succ_feudal_confirmation
+			
+			OR = {
+				NOT = { has_character_flag = faction_succ_feudal_confirmation_ultimatum_taken }
+				had_character_flag = { flag = faction_succ_feudal_confirmation_ultimatum_taken days = 7 }
+			}
+		}
+		allow = {
+			war = no
+			prisoner = no
+			liege = {
+				in_revolt = no
+				NOT = { war_with = ROOT }
+				NOT = { reverse_has_truce = ROOT }
+			}
+			NOT = {
+				any_realm_title = {
+					NOT = { higher_tier_than = count }
+					is_occupied = yes
+				}
+			}
+
+			liege = {
+				OR = {
+					independent = yes
+					AND = {
+						will_liege_enforce_peace = no
+						has_liege_enforced_peace = no
+					}
+				}
+			}
+		}
+		effect = {
+			liege = {
+				letter_event = { id = EKplots.100 days = 3 tooltip = "EVTTOOLTIP8005" }
+			}
+			hidden_tooltip = {
+				set_character_flag = faction_succ_feudal_confirmation_ultimatum_taken
+			}
+		}
+
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1
+				NOT = {
+					faction_power = {
+						faction = faction_succ_feudal_confirmation
+						power = 1.0
+					}
+				}
+			}	
+			modifier = {
+				factor = 0.1
+				NOT = {
+					faction_power = {
+						faction = faction_succ_feudal_confirmation
+						power = 1.5
+					}
+				}
+			}				
+			modifier = {
+				factor = 0
+				NOT = {
+					faction_power = {
+						faction = faction_succ_feudal_confirmation
+						power = 0.75
+					}
+				}
+			}
+			
+			modifier = {
+				factor = 0.5 # Slow it down a bit
+			}
+			
+			modifier = {
+				factor = 0
+				liege = {
+					any_war = {
+						OR = {
+							AND = {
+								defender = { character = PREV }
+								NOT = { using_cb = depose_liege }
+								NOT = { using_cb = overthrow_ruler }
+								NOT = { using_cb = overthrow_ruler_no_calls }
+							}
+							AND = {
+								attacker = { character = PREV }
+								OR = {
+									using_cb = invasion
+									using_cb = religious
+									using_cb = tribal_invasion
+									using_cb = muslim_invasion
+									using_cb = viking_invasion
+									using_cb = claim_all
+									using_cb = claim
+									using_cb = other_claim
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

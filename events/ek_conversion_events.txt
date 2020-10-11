@@ -1,0 +1,184 @@
+##### Conversion events #####
+
+namespace = conversion
+
+letter_event = {
+	id = conversion.1
+	desc = Conversion1
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = conversion_requested
+	}
+
+	option = {
+		name = Conversion1Accept
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				is_hedonistic_religion = yes
+				FROM = { is_prudish_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_prudish_religion = yes
+				FROM = { is_hedonistic_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_necromancy_religion = yes
+				FROM = { is_anti_necromancy_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_anti_necromancy_religion = yes
+				FROM = { is_necromancy_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_warlike_religion = yes
+				FROM = { is_pacifist_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_pacifist_religion = yes
+				FROM = { is_warlike_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_honest_religion = yes
+				FROM = { is_clandestine_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_clandestine_religion = yes
+				FROM = { is_honest_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_generous_religion = yes
+				FROM = { is_selfish_religion = yes }
+			}
+			modifier = {
+				factor = 0.5
+				is_selfish_religion = yes
+				FROM = { is_generous_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_hedonistic_religion = yes
+				FROM = { is_hedonistic_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_prudish_religion = yes
+				FROM = { is_prudish_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_necromancy_religion = yes
+				FROM = { is_necromancy_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_anti_necromancy_religion = yes
+				FROM = { is_anti_necromancy_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_warlike_religion = yes
+				FROM = { is_warlike_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_pacifist_religion = yes
+				FROM = { is_pacifist_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_honest_religion = yes
+				FROM = { is_honest_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_clandestine_religion = yes
+				FROM = { is_clandestine_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_generous_religion = yes
+				FROM = { is_generous_religion = yes }
+			}
+			modifier = {
+				factor = 1.5
+				is_selfish_religion = yes
+				FROM = { is_selfish_religion = yes }
+			}
+			modifier = { #Religions that don't take kindly to conversion attempts
+				factor = 0.1
+				OR = {
+					religion = almsivi_old_velothi
+					religion = nerevarine
+					religion = sixth_house
+				}
+			}
+		}
+		add_character_modifier = { name = request_conversion_timer months = 60 }
+		liege = {
+			reverse_religion = ROOT
+			letter_event = { id = conversion.2 }
+		}
+	}
+	option = {
+		name = Conversion1Decline
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.5
+				trait = proud #Proud characters are less likely to believe they are wrong
+			}
+			modifier = {
+				factor = 0.15
+				trait = cynical #Cynical characters tend to not really care
+			}
+			modifier = {
+				factor = 0.75
+				trait = humble #Humble characters are more likely to believe they are wrong
+			}
+		}
+		add_character_modifier = { name = request_conversion_timer months = 60 }
+		liege = {
+			letter_event = { id = conversion.3 }
+		}
+	}
+}
+
+letter_event = {
+	id = conversion.2
+	desc = Conversion2
+	
+	is_triggered_only = yes
+
+	option = {
+		name = Conversion2Acknowledge
+		FROM = {
+			clr_character_flag = conversion_requested
+		}
+	}
+}
+
+letter_event = {
+	id = conversion.3
+	desc = Conversion3
+	
+	is_triggered_only = yes
+
+	option = {
+		name = Conversion3Acknowledge
+		FROM = {
+			clr_character_flag = conversion_requested
+		}
+	}
+}

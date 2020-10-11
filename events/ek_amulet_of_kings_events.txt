@@ -1,0 +1,2012 @@
+#Events for the AMULET OF KINGS, the Dragonfires, and other such concerns#
+
+#Something something Jauffre#
+#Something something Weynon Priory#
+#Something something Kvatch#
+#Something something 'One does not simply light the Dragonfires'#
+
+namespace = amuletofkings
+
+# character_event = {
+	# id = amuletofkings.0
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# immediate = {
+		# add_amulet_of_kings = yes
+		# set_global_flag = amulet_of_kings_active
+	# }
+# }
+
+#Deprecated events below; commented out. Kept for reference purposes.
+# #Special event to make sure someone doesn't have the Amulet of Kings trait if they don't have the Amulet
+# #Loosely based on MNM Hermetics ingredient inheritance event
+# character_event = {
+	# id = amuletofkings.1
+	# hide_window = yes
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# FROM = { has_artifact_flag = amulet_of_kings_flag }
+	# }
+	
+	# immediate = {
+		# FROMFROM = { remove_trait = owns_amulet_of_kings }
+		# add_trait = owns_amulet_of_kings
+	# }
+# }
+
+# #Emergency event for removing amulet of kings trait from those who don't own it
+# character_event = {
+	# id = amuletofkings.3
+	# hide_window = yes
+	
+	# trigger = {
+		# trait = owns_amulet_of_kings
+		# NOT = { has_artifact = amulet_of_kings }
+	# }
+	
+	# mean_time_to_happen = {
+		# days = 1
+	# }
+	
+	# immediate = {
+		# remove_trait = owns_amulet_of_kings
+	# }
+# }
+# #Likewise, emergency event for adding amulet of kings trait to whoever has the amulet
+# character_event = {
+	# id = amuletofkings.4
+	# hide_window = yes
+	
+	# trigger = {
+		# has_artifact = amulet_of_kings
+		# NOT = { trait = owns_amulet_of_kings }
+	# }
+	
+	# mean_time_to_happen = {
+		# days = 1
+	# }
+	
+	# immediate = {
+		# add_trait = owns_amulet_of_kings
+		# set_global_flag = amulet_of_kings_active
+	# }
+# }
+
+#The "Currently Seeking the Amulet" Fork - Does the Amulet have an owner? or not?
+character_event = {
+	id = amuletofkings.10
+	desc = {
+		text = AmuletOfKings10A #Someone owns the Amulet
+		picture = GFX_evt_whispers
+		trigger = {
+			has_global_flag = amulet_of_kings_active
+		}
+	}
+	desc = {
+		text = AmuletOfKings10B #No one has the Amulet
+		picture = GFX_evt_into_the_dungeon
+		trigger = {
+			NOT = { has_global_flag = amulet_of_kings_active }
+		}
+	}
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	immediate = { #Does anyone actually own the Chim-el Adabal?
+		if = { #If the Amulet already is unearthed, ping its holder
+			limit = { has_global_flag = amulet_of_kings_active }
+			event_target:the_amulet_of_kings = {
+				artifact_owner = {
+					save_event_target_as = ek_amulet_owner
+					set_character_flag = wants_coronation
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings10OptA
+		trigger = { has_global_flag = amulet_of_kings_active }
+		event_target:ek_amulet_owner = {
+			character_event = { id = amuletofkings.15 }
+		}
+	}
+	option = {
+		name = AmuletOfKings10OptB
+		trigger = { NOT = { has_global_flag = amulet_of_kings_active } }
+		narrative_event = { id = amuletofkings.150 }
+	}
+}
+character_event = {
+	id = amuletofkings.15
+	desc = AmuletOfKings15
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = { #Give the Amulet away
+		name = AmuletOfKings15Accept
+		ai_chance = {
+			factor = 5
+			
+			modifier = { #Dragonblooded characters will never give the Amulet away.
+				factor = 0
+				OR = {
+					is_former_emperor_bloodline = yes
+					is_dragonblood = yes
+				}
+			}
+			modifier = {
+				factor = 0.1
+				is_rival = FROM
+			}
+			modifier = {
+				factor = 50
+				is_friend = FROM
+			}
+		}
+		random_artifact = {
+			limit = { has_artifact_flag = amulet_of_kings_flag }
+			transfer_artifact = {
+				from = ROOT
+				to = FROM
+			}
+		}
+		hidden_tooltip = {
+			clr_character_flag = wants_coronation
+		}
+		FROM = {
+			character_event = { id = amuletofkings.20 } 
+		}
+	}
+	option = { #Keep the Amulet - May be hazardous to your health
+		name = AmuletOfKings15Decline
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 5
+				is_rival = FROM
+			}
+		}
+		FROM = { character_event = { id = amuletofkings.25 } }
+	}
+	option = { #Keep the Amulet, but perform a sham Dragonfire coronation to falsely take credit
+		name = AmuletOfKings15Compromise
+		trigger = {
+			independent = yes
+			OR = {
+				has_landed_title = c_imperialisle
+				any_vassal = {
+					has_landed_title = c_imperialisle
+				}
+			}
+		}
+		ai_chance = {
+			factor = 5
+			
+			modifier = { #Dragonblooded characters will never give the Amulet away.
+				factor = 0
+				OR = {
+					is_former_emperor_bloodline = yes
+					is_dragonblood = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				trait = envious
+			}
+			modifier = {
+				factor = 10
+				trait = craven
+			}
+		}
+		custom_tooltip = { text = AmuletOfKings15CompromiseTooltip }
+		FROM = { character_event = { id = amuletofkings.30 } }
+	}
+}
+#The Amulet is mine!
+character_event = {
+	id = amuletofkings.20
+	desc = AmuletOfKings20
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings20Accept
+		character_event = { id = amuletofkings.50 }
+	}
+}
+#Amulet isn't mine, maybe it should be?
+character_event = {
+	id = amuletofkings.25
+	desc = AmuletOfKings25
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings25OptA
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 10
+				OR = {
+					trait = ambitious
+					trait = reckless
+					trait = envious
+					trait = greedy
+					trait = wroth
+				}
+			}
+		}
+		FROM = { character_event = { id = amuletofkings.35 } }
+	}
+	option = {
+		name = AmuletOfKings25OptB
+		trigger = {
+			d_blades = {
+				holder_scope = {
+					NOT = { war_with = ROOT }
+					any_courtier = {
+						prisoner = no
+						is_incapable = no
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 25
+				OR = {
+					trait = craven
+					trait = kind
+					trait = content
+					trait = slothful
+				}
+			}
+		}
+		long_character_event = { id = amuletofkings.55 }
+	}
+}
+#Amulet isn't mine, but they want me to help with the Dragonfires
+#A sham coronation?!
+character_event = {
+	id = amuletofkings.30
+	desc = AmuletOfKings30
+	picture = GFX_evt_whispers
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings30OptA
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 10
+				OR = {
+					trait = ambitious
+					trait = reckless
+					trait = envious
+					trait = greedy
+					trait = wroth
+				}
+			}
+		}
+		FROM = { character_event = { id = amuletofkings.35 } }
+	}
+	option = {
+		name = AmuletOfKings30OptB
+		trigger = {
+			d_blades = {
+				holder_scope = {
+					NOT = { war_with = ROOT }
+					any_courtier = {
+						prisoner = no
+						is_incapable = no
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 25
+				OR = {
+					trait = craven
+					trait = kind
+					trait = content
+					trait = slothful
+				}
+			}
+		}
+		long_character_event = { id = amuletofkings.55 }
+	}
+	option = {
+		name = AmuletOfKings30OptC
+		ai_chance = {
+			factor = 10
+			
+			modifier = {
+				factor = 25
+				OR = {
+					trait = deceitful
+					trait = patient
+					trait = humble
+					trait = diligent
+					trait = dragonborn
+				}
+			}
+		}
+		character_event = { id = amuletofkings.70 }
+	}
+}
+
+
+
+#Fighting the Amulet's owner
+character_event = {
+	id = amuletofkings.35
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the assassin ambushed the character, the assassin has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				10 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				20 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				10 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				1 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				30 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				15 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				5 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				35 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				15 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				5 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				40 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				20 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				10 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				40 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				25 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				10 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				40 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				30 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				10 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				35 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				35 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				15 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				35 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				40 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				15 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				30 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				40 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				20 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				25 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				35 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				35 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { long_character_event = { id = amuletofkings.40 } } #Amulet owner defeated, no injuries on Amulet usurper
+				10 = { long_character_event = { id = amuletofkings.41 } } #Amulet owner defeated, Amulet usurper wounded
+				30 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				59 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				10 = { FROM = { long_character_event = { id = amuletofkings.42 } } } #Amulet owner wounded, Amulet usurper killed
+				90 = { FROM = { long_character_event = { id = amuletofkings.43 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+	}
+}
+
+#Fallout for the combat event
+
+#Amulet owner defeated, Amulet usurper victorious
+long_character_event = {
+	id = amuletofkings.40
+	desc = AmuletOfKings40
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_artifact = {
+			limit = { has_artifact_flag = amulet_of_kings_flag }
+			transfer_artifact = {
+				from = ROOT
+				to = FROMFROM
+			}
+		}
+		FROMFROM = {
+			long_character_event = { id = amuletofkings.45 } 
+		} #Notify Amulet usurper
+	}
+	
+	option = {
+		name = AmuletOfKings40Accept
+		death = { 
+			death_reason = death_duel
+			killer = FROMFROM
+		}
+	}
+}
+
+#Amulet owner defeated, Amulet usurper wounded
+long_character_event = {
+	id = amuletofkings.41
+	desc = AmuletOfKings41
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_artifact = {
+			limit = { has_artifact_flag = amulet_of_kings_flag }
+			transfer_artifact = {
+				from = ROOT
+				to = FROMFROM
+			}
+		}
+		FROMFROM = {
+			long_character_event = { id = amuletofkings.46 } 
+		} #Notify Amulet usurper
+	}
+	
+	option = {
+		name = AmuletOfKings41Accept
+		death = { 
+			death_reason = death_duel 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Amulet owner victorious, but wounded
+long_character_event = {
+	id = amuletofkings.42
+	desc = AmuletOfKings42
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { long_character_event = { id = amuletofkings.47 } } #Notify Amulet owner
+	}
+	
+	option = {
+		name = AmuletOfKings42Accept
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Amulet owner victorious and uninjured
+long_character_event = {
+	id = amuletofkings.43
+	desc = AmuletOfKings43
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { long_character_event = { id = amuletofkings.48 } } #Notify Amulet owner
+	}
+	
+	option = {
+		name = AmuletOfKings43Accept
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Amulet usurper notified, no injuries
+long_character_event = {
+	id = amuletofkings.45
+	desc = AmuletOfKings45
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings45Accept
+		character_event = { id = amuletofkings.50 }
+	}
+}
+
+#Amulet usurper notified, injured
+long_character_event = {
+	id = amuletofkings.46
+	desc = AmuletOfKings46
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings46Accept
+		character_event = { id = amuletofkings.50 }
+	}
+}
+
+#Amulet owner defeats Amulet usurper, but is injured
+long_character_event = {
+	id = amuletofkings.47
+	desc = AmuletOfKings47
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings47Accept
+		clr_character_flag = wants_coronation
+	}
+}
+
+#Amulet owner defeats Amulet usurper with no injuries
+long_character_event = {
+	id = amuletofkings.48
+	desc = AmuletOfKings48
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings48Accept
+		clr_character_flag = wants_coronation
+	}
+}
+
+#With the Amulet of Kings, getting ready to light the Dragonfires...
+character_event = {
+	id = amuletofkings.50
+	desc = {
+		text = AmuletOfKings50A
+		trigger = {
+			independent = yes
+			OR = {
+				has_landed_title = c_imperialisle
+				any_vassal = {
+					has_landed_title = c_imperialisle
+				}
+			}
+		}
+	}
+	desc = {
+		text = AmuletOfKings50B
+		trigger = {
+			NAND = {
+				independent = yes
+				OR = {
+					has_landed_title = c_imperialisle
+					any_vassal = {
+						has_landed_title = c_imperialisle
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_cyrodiil
+	
+	hide_from = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings50Accept
+		character_event = { id = aflavor.8 }
+	}
+}
+
+long_character_event = {
+	id = amuletofkings.55
+	desc = AmuletOfKings55
+	picture = GFX_evt_courtiers_talking
+	
+	hide_from = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		d_blades = {
+			holder_scope = {
+				random_courtier = {
+					limit = {
+						prisoner = no
+						is_incapable = no
+					}
+					save_event_target_as = amulet_blades_agent
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings55Accept
+		FROMFROM = { long_character_event = { id = amuletofkings.60 } }
+	}
+}
+
+long_character_event = {
+	id = amuletofkings.60
+	desc = AmuletOfKings60
+	picture = GFX_evt_shadow
+	
+	hide_from = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		random_artifact = {
+			limit = { has_artifact_flag = amulet_of_kings_flag }
+			transfer_artifact = {
+				from = ROOT
+				to = FROM
+			}
+		}
+		clr_character_flag = wants_coronation
+	}
+	
+	option = {
+		name = AmuletOfKings60Accept
+		FROM = {
+			character_event = { id = amuletofkings.65 } 
+		}
+	}
+}
+
+character_event = {
+	id = amuletofkings.65
+	desc = AmuletOfKings65
+	picture = GFX_evt_brothel
+	
+	hide_from = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings65Accept
+		character_event = { id = amuletofkings.50 }
+	}
+}
+
+#Sham Coronation - Dragonborn lights the fires, Amulet owner takes credit...or do they?
+character_event = {
+	id = amuletofkings.70
+	desc = AmuletOfKings70
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings70Accept
+		FROMFROM = { long_character_event = { id = amuletofkings.75 } }
+	}
+}
+#Amulet holder confirms
+long_character_event = {
+	id = amuletofkings.75
+	desc = AmuletOfKings75
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings75Accept
+		FROM = { character_event = { id = amuletofkings.80 } }
+	}
+}
+#Dragonfires burn! Acceptable, or double-cross?
+character_event = {
+	id = amuletofkings.80
+	desc = AmuletOfKings80
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		save_global_event_target_as = lit_dragonfires #Mass Daedric invasions CANNOT happen while this character lives
+		if = {
+			limit = { has_dlc = "Jade Dragon" }
+			light_dragonfires_offmap_effect = yes
+		}
+		if = {
+			limit = { NOT = { has_dlc = "Jade Dragon" } }
+			light_dragonfires_alternate_effect = yes
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings80OptA
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 25
+				OR = {
+					trait = craven
+					trait = kind
+					trait = content
+					trait = slothful
+				}
+			}
+		}
+		custom_tooltip = { text = AmuletOfKingsGoHome }
+		FROM = { long_character_event = { id = amuletofkings.101 } }
+	}
+	option = {
+		name = AmuletOfKings80OptB
+		ai_chance = {
+			factor = 5
+			
+			modifier = {
+				factor = 1000
+				OR = {
+					trait = ambitious
+					trait = wroth
+					trait = reckless
+					trait = brave
+					trait = envious
+					trait = greedy
+				}
+			}
+		}
+		FROM = { character_event = { id = amuletofkings.85 } }
+	}
+}
+
+#Fighting the Amulet's owner
+character_event = {
+	id = amuletofkings.85
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = { #A combat check - Since the assassin ambushed the character, the assassin has a slight upper hand
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				90 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				10 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 10
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 15
+						}
+					}
+				}
+			}
+			random_list = {
+				69 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				20 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				10 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				1 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 8
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 10
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				30 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				15 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				5 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 6
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 8
+						}
+					}
+				}
+			}
+			random_list = {
+				45 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				35 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				15 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				5 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 4
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 6
+						}
+					}
+				}
+			}
+			random_list = {
+				30 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				40 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				20 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				10 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				FROM = {
+					combat_rating_diff = {
+						character = ROOT
+						value = 2
+					}
+				}
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 4
+						}
+					}
+				}
+			}
+			random_list = {
+				25 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				40 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				25 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				10 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					FROM = {
+						combat_rating_diff = {
+							character = ROOT
+							value = 2
+						}
+					}
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 2
+					}
+				}
+			}
+			random_list = {
+				20 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				40 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				30 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				10 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+			break = yes
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 2
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 4
+					}
+				}
+			}
+			random_list = {
+				15 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				35 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				35 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				15 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 4
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 6
+					}
+				}
+			}
+			random_list = {
+				10 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				35 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				40 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				15 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 6
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 8
+					}
+				}
+			}
+			random_list = {
+				10 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				30 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				40 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				20 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 8
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 10
+					}
+				}
+			}
+			random_list = {
+				5 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				25 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				35 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				35 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 10
+				}
+				NOT = {
+					combat_rating_diff = {
+						character = FROM
+						value = 15
+					}
+				}
+			}
+			random_list = {
+				1 = { long_character_event = { id = amuletofkings.90 } } #Amulet owner defeated, no injuries on Amulet usurper
+				10 = { long_character_event = { id = amuletofkings.91 } } #Amulet owner defeated, Amulet usurper wounded
+				30 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				59 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+		if = {
+			limit = {
+				combat_rating_diff = {
+					character = FROM
+					value = 15
+				}
+			}
+			random_list = {
+				10 = { FROM = { long_character_event = { id = amuletofkings.92 } } } #Amulet owner wounded, Amulet usurper killed
+				90 = { FROM = { long_character_event = { id = amuletofkings.93 } } } #Amulet owner kills Amulet usurper, no injuries
+			}
+		}
+	}
+}
+
+#Fallout for the combat event
+
+#Amulet owner defeated, Amulet usurper victorious
+long_character_event = {
+	id = amuletofkings.90
+	desc = AmuletOfKings90
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_artifact = {
+			limit = { has_artifact_flag = amulet_of_kings_flag }
+			transfer_artifact = {
+				from = ROOT
+				to = FROMFROM
+			}
+		}
+		FROMFROM = {
+			long_character_event = { id = amuletofkings.95 } 
+		} #Notify Amulet usurper
+	}
+	
+	option = {
+		name = AmuletOfKings90Accept
+		FROMFROM = { inherit = ROOT }
+		death = { 
+			death_reason = death_duel
+			killer = FROMFROM
+		}
+	}
+}
+
+#Amulet owner defeated, Amulet usurper wounded
+long_character_event = {
+	id = amuletofkings.91
+	desc = AmuletOfKings91
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_artifact = {
+			limit = { has_artifact_flag = amulet_of_kings_flag }
+			transfer_artifact = {
+				from = ROOT
+				to = FROMFROM
+			}
+		}
+		FROMFROM = {
+			long_character_event = { id = amuletofkings.96 } 
+		} #Notify Amulet usurper
+	}
+	
+	option = {
+		name = AmuletOfKings91Accept
+		FROMFROM = { inherit = ROOT }
+		death = { 
+			death_reason = death_duel 
+			killer = FROMFROM
+		}
+	}
+}
+
+#Amulet owner victorious, but wounded
+long_character_event = {
+	id = amuletofkings.92
+	desc = AmuletOfKings92
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { long_character_event = { id = amuletofkings.97 } } #Notify Amulet owner
+	}
+	
+	option = {
+		name = AmuletOfKings92Accept
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Amulet owner victorious and uninjured
+long_character_event = {
+	id = amuletofkings.93
+	desc = AmuletOfKings93
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROM = { long_character_event = { id = amuletofkings.98 } } #Notify Amulet owner
+	}
+	
+	option = {
+		name = AmuletOfKings93Accept
+		death = {
+			death_reason = death_duel
+			killer = FROM
+		}
+	}
+}
+
+#Amulet usurper notified, no injuries
+long_character_event = {
+	id = amuletofkings.95
+	desc = AmuletOfKings95
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings95Accept
+		long_character_event = { id = amuletofkings.100 }
+	}
+}
+
+#Amulet usurper notified, injured
+long_character_event = {
+	id = amuletofkings.96
+	desc = AmuletOfKings96
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings96Accept
+		long_character_event = { id = amuletofkings.100 }
+	}
+}
+
+#Amulet owner defeats Amulet usurper, but is injured
+long_character_event = {
+	id = amuletofkings.97
+	desc = AmuletOfKings97
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			20 = { 
+				add_maimed_trait_effect = yes
+			}
+			80 = { 
+				add_trait = wounded
+			}
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings97Accept
+		long_character_event = { id = amuletofkings.105 }
+	}
+}
+
+#Amulet owner defeats Amulet usurper with no injuries
+long_character_event = {
+	id = amuletofkings.98
+	desc = AmuletOfKings98
+	picture = GFX_evt_battle
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings98Accept
+		long_character_event = { id = amuletofkings.105 }
+	}
+}
+
+#Amulet usurper recognized with Amulet
+long_character_event = {
+	id = amuletofkings.100
+	desc = AmuletOfKings100
+	picture = GFX_evt_dragonborn
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings100Accept
+		remove_trait = on_mission
+		clr_character_flag = do_not_disturb
+		prestige = 200
+		piety = 100
+		add_character_modifier = { name = ignited_the_dragonfires duration = -1 }
+	}
+}
+
+#Amulet owner falsely takes credit, everyone buys it.
+long_character_event = {
+	id = amuletofkings.101
+	desc = AmuletOfKings101
+	picture = GFX_evt_cyrodiil
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings101Accept
+		prestige = 200
+		piety = 100
+		add_character_modifier = { name = ignited_the_dragonfires duration = -1 }
+	}
+}
+
+#Dragonfires flame out. Amulet owner ridiculed.
+long_character_event = {
+	id = amuletofkings.105
+	desc = AmuletOfKings105
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings105Accept
+	}
+}
+
+##### Searching for the Amulet of Kings #####
+
+narrative_event = {
+	id = amuletofkings.150
+	title = AmuletOfKings150Title
+	desc = AmuletOfKings150
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings150Accept
+		long_character_event = { id = amuletofkings.151 }
+	}
+}
+long_character_event = {
+	id = amuletofkings.151
+	desc = AmuletOfKings151
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings151Accept
+		if = {
+			limit = {
+				NOT = { combat_rating = 16 }
+			}
+			random_list = {
+				50 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				20 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				10 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 16
+				NOT = { combat_rating = 20 }
+			}
+			random_list = {
+				40 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				30 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				10 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 20
+				NOT = { combat_rating = 24 }
+			}
+			random_list = {
+				30 = { 
+					death = { death_reason = death_battle }
+				}
+				20 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				35 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				15 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 24
+				NOT = { combat_rating = 28 }
+			}
+			random_list = {
+				25 = { 
+					death = { death_reason = death_battle }
+				}
+				15 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				40 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				20 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 28
+				NOT = { combat_rating = 32 }
+			}
+			random_list = {
+				20 = { 
+					death = { death_reason = death_battle }
+				}
+				10 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				45 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				25 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 32
+				NOT = { combat_rating = 36 }
+			}
+			random_list = {
+				10 = { 
+					death = { death_reason = death_battle }
+				}
+				10 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				45 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				35 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 36
+				NOT = { combat_rating = 40 }
+			}
+			random_list = {
+				5 = { 
+					death = { death_reason = death_battle }
+				}
+				5 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				40 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				50 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 44
+				NOT = { combat_rating = 48 }
+			}
+			random_list = {
+				1 = { 
+					death = { death_reason = death_battle }
+				}
+				9 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				30 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				60 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 44
+				NOT = { combat_rating = 48 }
+			}
+			random_list = {
+				5 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				25 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				70 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 48
+				NOT = { combat_rating = 52 }
+			}
+			random_list = {
+				1 = { 
+					add_maimed_trait_effect = yes
+					long_character_event = { id = amuletofkings.152 }
+				}
+				19 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				80 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 52
+				NOT = { combat_rating = 56 }
+			}
+			random_list = {
+				10 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				90 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 56
+				NOT = { combat_rating = 60 }
+			}
+			random_list = {
+				5 = { 
+					add_trait = wounded
+					long_character_event = { id = amuletofkings.152 }
+				}
+				95 = { long_character_event = { id = amuletofkings.152 } }
+			}
+		}
+		if = {
+			limit = {
+				combat_rating = 60
+			}
+			long_character_event = { id = amuletofkings.152 }
+		}
+	}
+}
+long_character_event = {
+	id = amuletofkings.152
+	desc = AmuletOfKings152
+	picture = GFX_evt_comet
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings152Accept
+		long_character_event = { id = amuletofkings.155 }
+	}
+	# option = {
+		# name = AmuletOfKings152OptB
+		# trigger = {
+			# d_blades = {
+				# holder_scope = {
+					# war_with = ROOT
+				# }
+			# }
+		# }
+		# long_character_event = { id = amuletofkings.160 }
+	# }
+}
+long_character_event = {
+	id = amuletofkings.155
+	desc = AmuletOfKings155
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			50 = {
+				d_blades = {
+					holder_scope = {
+						create_random_soldier = {
+							random_traits = yes
+							dynasty = NONE
+							female = yes
+							age = 33
+							religion = ROOT
+							culture = ROOT
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+							remove_trait = warrior_1
+							remove_trait = warrior_2
+							remove_trait = warrior_3
+							remove_trait = warrior_4
+							remove_trait = warrior_5
+							random_list = {
+								60 = {
+									add_trait = warrior_3
+								}
+								40 = {
+									add_trait = warrior_4
+								}
+							}
+							random_list = {
+								15 = {
+									add_trait = barbarian_2
+								}
+								10 = {
+									add_trait = barbarian_3
+								}
+								15 = {
+									add_trait = crusader_2
+								}
+								10 = {
+									add_trait = crusader_3
+								}
+								15 = {
+									add_trait = knight_2
+								}
+								10 = {
+									add_trait = knight_3
+								}
+								15 = {
+									add_trait = scout_2
+								}
+								10 = {
+									add_trait = scout_3
+								}
+								15 = {
+									add_trait = spellsword_2
+								}
+								10 = {
+									add_trait = spellsword_3
+								}
+							}
+							if = {
+								limit = { NOT = { has_global_flag = nine_divines_founded } }
+								religion = eight_divines
+							}
+							if = {
+								limit = { has_global_flag = nine_divines_founded }
+								religion = nine_divines
+							}
+							save_event_target_as = sancre_tor_blade
+						}
+					}
+				}
+			}
+			50 = {
+				d_blades = {
+					holder_scope = {
+						create_random_soldier = {
+							random_traits = yes
+							dynasty = NONE
+							female = no
+							age = 33
+							religion = ROOT
+							culture = ROOT
+							flag = ai_flag_refuse_conversion
+						}
+						new_character = {
+							#assign_birthsign = yes
+							#assign_racial_trait = yes
+							remove_trait = warrior_1
+							remove_trait = warrior_2
+							remove_trait = warrior_3
+							remove_trait = warrior_4
+							remove_trait = warrior_5
+							random_list = {
+								60 = {
+									add_trait = warrior_3
+								}
+								40 = {
+									add_trait = warrior_4
+								}
+							}
+							random_list = {
+								15 = {
+									add_trait = barbarian_2
+								}
+								10 = {
+									add_trait = barbarian_3
+								}
+								15 = {
+									add_trait = crusader_2
+								}
+								10 = {
+									add_trait = crusader_3
+								}
+								15 = {
+									add_trait = knight_2
+								}
+								10 = {
+									add_trait = knight_3
+								}
+								15 = {
+									add_trait = scout_2
+								}
+								10 = {
+									add_trait = scout_3
+								}
+								15 = {
+									add_trait = spellsword_2
+								}
+								10 = {
+									add_trait = spellsword_3
+								}
+							}
+							if = {
+								limit = { NOT = { has_global_flag = nine_divines_founded } }
+								religion = eight_divines
+							}
+							if = {
+								limit = { has_global_flag = nine_divines_founded }
+								religion = nine_divines
+							}
+							save_event_target_as = sancre_tor_blade
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = AmuletOfKings155Accept
+		long_character_event = { id = amuletofkings.160 }
+	}
+}
+
+long_character_event = {
+	id = amuletofkings.160
+	desc = AmuletOfKings160
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = AmuletOfKings160Accept
+		long_character_event = { id = amuletofkings.165 }
+	}
+}
+#Recovering the Amulet of Kings!
+long_character_event = {
+	id = amuletofkings.165
+	desc = AmuletOfKings165
+	picture = GFX_evt_into_the_dungeon
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_amulet_of_kings = yes
+		#set_global_flag = amulet_of_kings_active
+	}
+	
+	option = {
+		name = AmuletOfKings165Accept
+		character_event = { id = amuletofkings.50 }
+	}
+}

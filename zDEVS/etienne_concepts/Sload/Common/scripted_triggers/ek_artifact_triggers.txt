@@ -1,0 +1,39 @@
+has_flawless_artifact = {
+	any_artifact = {
+		has_artifact_flag = quality_flawless
+	}
+}
+has_superior_artifact = {
+	any_artifact = {
+		has_artifact_flag = quality_superior
+	}
+}
+has_legendary_artifact = { #Legendary artifacts in most cases will be uniques, such as artifacts of the Daedric Princes.
+	any_artifact = {
+		OR = {
+			has_artifact_flag = quality_legendary
+			AND = { #Legacy band-aid
+				has_artifact_flag = unique
+				has_artifact_flag = daedric_artifact
+				NOT = {
+					artifact_has_quality_flag = yes
+				}
+			}
+		}
+	}
+}
+
+artifact_has_quality_flag = {
+	OR = {
+		has_artifact_flag = quality_normal
+		has_artifact_flag = quality_superior
+		has_artifact_flag = quality_flawless
+		has_artifact_flag = quality_legendary
+	}
+}
+
+artifact_has_quality_defined = {
+	NOT = {
+		quality = 0
+	}
+}

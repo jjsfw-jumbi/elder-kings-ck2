@@ -1,0 +1,1069 @@
+#Special events for special governments
+#Writen by jjsfw/jumbi
+#And Percy, and Korba, and Ev.
+namespace = custgovts
+
+#orsimer_government
+
+#Testing Events
+
+#Add son that is of age
+character_event = {
+	id = custgovts.1
+	# desc = custgovts.desc.1
+	# picture = GFX_evt_melee
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_character = {
+			age = 16
+			culture = ROOT
+			religion = ROOT
+			female = no
+			dynasty = ROOT
+			random_traits = yes
+		}
+		new_character = {
+			set_father = ROOT
+			#assign_birthsign = yes
+			#assign_racial_trait = yes
+		}
+	}
+}
+
+###################
+#orsimer_government #100-199
+###################
+
+# From Way of Life duel startup
+# Get challenged (sent from duel_decision )
+character_event = {
+    id = custgovts.100
+    desc = custgovts.100.desc
+    picture = GFX_evt_orsimer_duel
+    border = GFX_event_normal_frame_war    
+
+    is_triggered_only = yes
+    
+    immediate = {
+        event_target:combatant_1 = {
+        	set_character_flag = orsimer_duel@event_target:combatant_2
+        }
+        set_character_flag = orsimer_duel@event_target:combatant_1
+        if = {
+            limit = { NOT = { has_character_modifier = recent_duel_timer } }
+            add_character_modifier = {
+                modifier = recent_duel_timer
+                hidden = yes
+                months = 3
+            }
+        }
+        event_target:combatant_1 = { #combatant_1/attacker
+            if = {
+                limit = { NOT = { has_character_modifier = recent_duel_timer } }
+                #special circumstances, like initiation duel, etc
+                add_character_modifier = { #OUTCOMMENT FOR TESTING PURPOSES
+                    modifier = recent_duel_timer
+                    hidden = yes
+                    months = 3
+                }
+            }
+        }
+    }
+    
+    option = { #Challenge accepted
+        name = custgovts.100.accept
+        clr_character_flag = flag_duel_no_backsies
+        ai_chance = {
+            factor = 50
+            modifier = {
+                factor = 2
+                trait = proud
+            }
+            modifier = {
+                factor = 0.05
+                trait = craven
+            }
+        }
+        if = {
+            limit = { trait = craven }
+            random = {
+                chance = 20
+                remove_trait = craven
+            }
+        }
+        pacifists_lose_piety_effect = yes
+        if = { #If they previously offended you, this rectifies that.
+            limit = { 
+                event_target:combatant_1 = {
+                    has_opinion_modifier = { who = ROOT modifier = grievously_offended }
+                }
+            }
+            event_target:combatant_1 = {
+                remove_opinion = { who = ROOT modifier = grievously_offended }
+            }
+        }
+        # if = {
+        #     limit = { #Warriors like a warrior who acts like one...
+        #         is_member_of_any_warrior_lodge_trigger = yes
+        #     }
+        #     add_legend_progress_trivial_effect = yes
+        # }
+        event_target:combatant_1 = {
+            character_event = { id = custgovts.101 days = 3 }
+        }
+        set_character_flag = add_duel_xp
+        clr_character_flag = punish_declining
+        ai_chance = {
+            factor = 80 # TODO: second ai_chance block!?
+        }
+    }
+
+    option = { #No, that sounds dangerous
+        name = custgovts.100.refuse
+        ai_chance = {
+            factor = 10
+            modifier = {
+                trait = craven
+                factor = 1.5
+            }
+            # Only willing to refuse so many times
+            modifier = {
+            	factor = 0.75
+            	has_instances_of_character_modifier = { modifier = orsimer_cowardly_ruler amount == 1 }
+            }
+            modifier = {
+            	factor = 0.5
+            	has_instances_of_character_modifier = { modifier = orsimer_cowardly_ruler amount == 2 }
+            }
+            modifier = {
+            	factor = 0.25
+            	has_instances_of_character_modifier = { modifier = orsimer_cowardly_ruler amount == 3 }
+            }
+            modifier = {
+            	factor = 0
+            	has_instances_of_character_modifier = { modifier = orsimer_cowardly_ruler amount == 4 }
+            }
+        }
+        if = {
+            limit = {
+                OR = {
+                    NOT = { has_character_modifier = declined_prestige_duel_timer }
+                }
+            }
+            add_character_modifier = {
+                modifier = declined_prestige_duel_timer
+                duration = 1095
+                hidden = yes
+            }
+            set_character_flag = punish_declining
+        }
+        if = {
+            limit = { has_character_flag = punish_declining }
+            if = {
+                limit = {
+                    trait = brave
+                }
+                remove_trait = brave
+            }
+            if = {
+            	limit = {
+            		NOT = {
+            			trait = craven
+            		}
+            	}
+            	random = {
+                    chance = 50
+                    add_trait = craven
+                    hidden_tooltip = {
+                        character_event = {
+                            id = 38257 #Notify Craven
+                        }
+                    }
+                }
+            }
+            add_character_modifier = { modifier = orsimer_cowardly_ruler duration = 3650 stacking = yes }
+            prestige = -300
+            add_character_modifier = {
+                modifier = declined_prestige_duel_timer
+                hidden = yes
+                duration = 1095
+            }
+        }
+        hidden_tooltip = {
+            remove_character_modifier = recent_duel_timer
+        }
+        event_target:combatant_1 = { #the attacker/combatant_1
+            hidden_tooltip = {
+                remove_character_modifier = recent_duel_timer
+                if = {
+                    limit = {
+                        NOT = { has_character_modifier = duels_declined }
+                    }
+                    opinion = {
+                        modifier = opinion_fled_duel
+                        who = ROOT
+                        years = 100
+                    }
+                }
+                else = {
+                    opinion = {
+                        modifier = opinion_declined_my_duel #For visuals
+                        who = ROOT
+                        years = 100
+                    }
+                }
+                character_event = { id = custgovts.102 days = 3 } #Duel rejected...
+            }
+        }
+        increase_cowardly_status_effect = yes #tracks duel cowardice
+        clr_character_flag = punish_declining
+
+        # Malacath does not approve
+        set_offmap_currency = { offmap = oblivion_malacath value = 0 }
+    }
+}
+
+# Start the duel - For the attacker (combatant_1)
+character_event = {
+    id = custgovts.101
+    desc = custgovts.101
+    is_triggered_only = yes
+    picture = GFX_evt_orsimer_duel
+    border = GFX_event_normal_frame_war
+
+    
+    option = {
+        name = custgovts.101.fight
+        custom_tooltip = { text = EVTOPTA_HFP_10096_TT }
+
+        #FALLBACK:
+        if = { #If FROM is no longer alive, clear relevant flags, etc...
+            limit = { FROM = { NOT = { is_alive = yes } } }
+            reset_warrior_lodge_joining_chain_effect = yes
+            character_event = { id = HFP.10197 }
+        }
+        else = {
+            hidden_effect = {
+                set_character_flag = add_duel_xp
+                reset_duel_timers_effect = yes
+                character_event = { id = HFP.10100 } #Send hidden set-up of duel (from there: result)
+                #character_event = { id = MIL.600 } #Milla's debug event
+            }
+        }
+        ai_chance = {
+            factor = 80
+        }
+    }
+}
+
+# Duel rejected
+character_event = {
+    id = custgovts.102
+    is_triggered_only = yes
+    desc = custgovts.102.desc
+    picture = GFX_evt_bad_news
+    border = GFX_event_normal_frame_war
+    title = getDuelTitle
+
+    option = {
+        name = custgovts.102.pathetic #Pathethic.
+    }
+    after = {
+        clr_character_flag = likely_to_succeed
+        clr_character_flag = likely_to_fail
+        clr_character_flag = claim_duel@event_target:combatant_2
+        clr_character_flag = wants_multiple_titles_from@event_target:combatant_2
+        clr_character_flag = wants_single_title_from@event_target:combatant_2
+        clr_character_flag = orsimer_duel@event_target:combatant_1
+        FROM = {
+        	clr_character_flag = orsimer_duel@event_target:combatant_2
+        }
+    }
+}
+
+# #Check for valid challengers
+# character_event = {
+# 	id = custgovts.100
+# 	# desc = custgovts.desc.100
+# 	hide_window = yes
+	
+# 	is_triggered_only = yes
+	
+# 	min_age = 30
+# 	only_rulers = yes
+# 	prisoner = no
+	
+	
+# 	trigger = {
+# 		culture = orsimer
+# 		religion = daedra_malacath
+# 		is_patrician = no
+# 		OR = {
+# 			has_dlc = "Way of Life"
+# 			ai = yes
+# 		}
+# 	}
+# 	weight_multiplier = {
+# 		days = 182
+# 		modifier = {
+# 			factor = 5
+# 			trait = weak
+# 		}
+# 		modifier = {
+# 			factor = 3
+# 			trait = content
+# 		}
+# 		modifier = {
+# 			factor = 2
+# 			OR = {
+# 				is_maimed_trigger = yes
+# 				trait = infirm
+# 			}
+# 		}
+# 		modifier = {
+# 			factor = 5
+# 			NOT = {
+# 				prestige = 0
+# 			}
+# 		}
+# 		modifier = {
+# 			factor = 5
+# 			age = 50
+# 		}
+# 	}
+	
+# 	immediate = {
+# 		random_child = {
+# 			limit = {
+# 				is_female = no
+# 				culture = orsimer
+# 				religion = daedra_malacath
+# 				is_adult = yes
+# 				is_ill = no
+# 				lower_tier_than = ROOT
+# 				NOT = {
+# 					trait = incapable
+# 				}
+# 			}
+# 			character_event = { id = custgovts.101 days = 1 }
+# 		}
+# 	}
+# }
+
+# #The Challenger gets this event...
+
+# character_event = {
+# 	id = custgovts.101
+# 	desc = custgovts.desc.101
+# 	picture = GFX_evt_orsimer_duel
+	
+# 	is_triggered_only = yes
+	
+# 	option = { #CHALLENGE
+# 		name = custgovts.a.101
+# 		ai_chance = {
+# 			factor = 1000
+# 		}
+# 		prestige = 5
+		
+# 		FROM = {
+# 			save_event_target_as = ors_challenger
+# 			character_event = { id = custgovts.102 days = 3 }
+# 		}
+# 	}
+# 	option = { #DONT CHALLENGE
+# 		name = custgovts.b.101
+# 		ai_chance = {
+# 			factor = 1
+# 		}
+# 		prestige = -5
+# 	}
+# }
+
+# #The current title holder decides what to do...fight or yield?
+
+# character_event = {
+# 	id = custgovts.102
+# 	desc = custgovts.desc.102
+# 	picture = GFX_evt_orsimer_duel
+	
+# 	is_triggered_only = yes
+	
+# 	option = { #FIGHT
+# 		name = custgovts.a.102
+		
+# 		save_event_target_as = ors_opponent
+# 		FROM = {
+# 			save_event_target_as = ors_challenger
+# 			character_event = { id = custgovts.104 }
+# 		}
+# 	}
+# 	option = { #YIELD
+# 		name = custgovts.b.102
+		
+# 		prestige = -500
+# 		abdicate_to = FROM
+# 		FROM = {
+# 			character_event = { id = custgovts.103 }
+# 		}
+# 	}
+# }
+
+# character_event = {
+# 	id = custgovts.103
+# 	desc = custgovts.desc.103
+# 	picture = GFX_evt_orsimer_duel
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = custgovts.a.103
+		
+# 		hidden_tooltip = {
+# 			wealth = FROM
+# 			FROM = {
+# 				clear_wealth = yes
+# 			}
+# 		}
+# 	}
+# }
+
+# character_event = { #Start the duel - Opponent receives event BASED OFF OF WOL DUEL CHAIN BY JOEL HANSSON
+# 	id = custgovts.104
+# 	desc = custgovts.desc.104
+# 	picture = GFX_evt_melee
+# 	border = GFX_event_normal_frame_war
+	
+# 	is_triggered_only = yes
+	
+# 	option = {
+# 		name = custgovts.a.104
+# 		character_event = { id = custgovts.105 }
+# 	}
+# }
+
+# character_event = { #Challenger
+# 	id = custgovts.105
+# 	hide_window = yes
+	
+# 	is_triggered_only = yes
+	
+# 	immediate = {
+# 		if = {
+# 			limit = { NOT = { has_character_modifier = recent_duel_timer } }
+# 			add_character_modifier = {
+# 				modifier = recent_duel_timer
+# 				hidden = yes
+# 				duration = 365
+# 			}
+# 		}
+# 		event_target:ors_opponent = {
+# 			if = {
+# 				limit = { NOT = { has_character_modifier = recent_duel_timer } }
+# 				add_character_modifier = {
+# 					modifier = recent_duel_timer
+# 					hidden = yes
+# 					duration = 365
+# 				}
+# 			}
+# 		}
+# 		opinion = {
+# 			modifier = opinion_fought_duel
+# 			who = event_target:ors_opponent
+# 			years = 150
+# 		}
+# 		if = {
+# 			limit = {
+# 				has_character_modifier = recent_duel_victory
+# 			}
+# 			remove_character_modifier = recent_duel_victory
+# 		}
+# 		event_target:ors_opponent = {
+# 			opinion = {
+# 				modifier = opinion_fought_duel
+# 				who = ROOT
+# 				years = 150
+# 			}
+# 			hidden_tooltip = {
+# 				character_event = { id = custgovts.106 }
+# 			}
+# 		}
+# 	}
+# }
+
+# character_event = { #Opponent
+# 	id = custgovts.106
+# 	hide_window = yes
+	
+# 	is_triggered_only = yes
+	
+# 	immediate = {
+# 		if = {
+# 			limit = {
+# 				has_character_modifier = recent_duel_victory
+# 			}
+# 			remove_character_modifier = recent_duel_victory
+# 		}
+# 		FROM = {
+# 			character_event = { id = custgovts.107 }
+# 		}
+# 	}
+# }
+
+# character_event = { #Challenger
+# 	id = custgovts.107
+# 	hide_window = yes
+	
+# 	is_triggered_only = yes
+	
+# 	immediate = {
+# 		random_list = {
+# 			200 = { # challenger win
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 1 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 2 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 3 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 4 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 5 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 6 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 7 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 8 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 9 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 10 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 11 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 12 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 13 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 14 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					FROM = {
+# 						combat_rating_diff = { who = ROOT value = 15 }
+# 					}
+# 					factor = 0.7
+# 				}
+# 				### effects
+# 				random_list = {
+# 					100 = {
+# 						add_character_modifier = {
+# 							modifier = recent_duel_victory
+# 							months = 12
+# 						}
+# 						long_character_event = { id = custgovts.108 }
+# 					}
+# 				}
+# 			}
+# 			200 = { # opponent win
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 1 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 2 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 3 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 4 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 5 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 6 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 7 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 8 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 9 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 10 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 11 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 12 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 13 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 14 }
+# 					factor = 0.7
+# 				}
+# 				modifier = {
+# 					combat_rating_diff = { who = FROM value = 15 }
+# 					factor = 0.7
+# 				}
+# 				### effects
+# 				random_list = {
+# 					100 = {
+# 						FROM = {
+# 							add_character_modifier = {
+# 								modifier = recent_duel_victory
+# 								months = 12
+# 							}
+# 							long_character_event = { id = custgovts.108  } 
+# 						}
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+
+# long_character_event = { #Victory!
+# 	id = custgovts.108
+# 	desc = {
+# 		text = custgovts.desc.challenger.108 # Winning over opponent
+# 		trigger = {
+# 			event_target:ors_challenger = { character = ROOT }
+
+# 		}
+# 	}
+# 	desc = {
+# 		text = custgovts.desc.opponent.108 # Winning over challenger
+# 		trigger = {
+# 			NOT = { event_target:ors_challenger = { character = ROOT } }
+# 		}
+# 	}
+# 	picture = GFX_evt_melee
+# 	border = GFX_event_long_frame_war
+# 	title = duel_title
+	
+# 	is_triggered_only = yes
+	
+# 	option = { #Challenger wins - kill/inherit opponent
+# 		name = custgovts.a.108
+# 		trigger = {
+# 			event_target:ors_challenger = { character = ROOT }
+# 		}
+# 		hidden_tooltip = {
+# 			wealth = event_target:ors_opponent
+# 		}
+# 		event_target:ors_opponent = {
+# 			hidden_tooltip = {
+# 				clear_wealth = yes
+# 			}
+# 			abdicate_to = ROOT
+# 			death = {
+# 				death_reason = death_duel
+# 				killer = event_target:ors_challenger
+# 			}
+# 		}
+# 	}
+# 	option = { #Opponent wins - kill/inherit challenger
+# 		name = custgovts.b.108
+# 		trigger = {
+# 			NOT = {
+# 				event_target:ors_challenger = { character = ROOT }
+# 			}
+# 		}
+# 		hidden_tooltip = {
+# 			wealth = event_target:ors_challenger
+# 		}
+# 		event_target:ors_challenger = {
+# 			hidden_tooltip = {
+# 				clear_wealth = yes
+# 			}
+# 			abdicate_to = ROOT
+# 			death = {
+# 				death_reason = death_duel
+# 				killer = event_target:ors_opponent
+# 			}
+# 		}
+# 	}
+# }
+
+########## Colovian Confederacy 200-299 ##########
+
+#on_startup maintenance to ensure that Colovia appears as a confederacy in the BM screen
+#character_event = {
+#	id = custgovts.200
+#
+#	hide_window = yes
+#	is_triggered_only = yes
+#
+#	only_rulers = yes
+#
+#	trigger = {
+#		government = confederacy_government
+#		is_save_game = no
+#		any_demesne_title = {
+#			title = k_colovia
+#		}
+#	}
+#
+#	immediate = {
+#		set_character_flag = confed_start
+#	}
+#}
+
+######## Imperial Commune #########
+# Flag imperial_commune_active is set in history. #haha no it isn't whoops
+#Set Government Maintenance Event
+character_event = {
+	id = custgovts.300
+	hide_window = yes
+	
+	only_playable = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				independent = yes
+				has_global_flag = imperial_commune_active
+				primary_title = {
+					OR = {
+						title = k_heartlands
+						title = d_imperialisle
+						title = c_imperialisle
+					}
+				}
+				NOT = { government = imperial_commune_government }
+			}
+			set_government_type = imperial_commune_government
+			primary_title = { succession = succ_imperial_commune_elective }
+		}
+		#Failsafe, if the Commune shouldn't be used but for some reason is being used.
+		if = {
+			limit = {
+				NOT = { has_global_flag = imperial_commune_active }
+				government = imperial_commune_government
+			}
+			set_government_type = confederacy_government
+			primary_title = { succession = succ_confederacy_elective }
+		}
+	}
+}
+
+character_event = {
+	id = custgovts.301
+	hide_window = yes
+	
+	only_playable = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				independent = yes
+				has_global_flag = imperial_republic_active
+				primary_title = {
+					OR = {
+						title = k_cyrodiil
+						title = k_heartlands
+						title = d_imperialisle
+						title = c_imperialisle
+					}
+				}
+				NOT = { government = reformed_imperial_commune_government }
+			}
+			set_government_type = reformed_imperial_commune_government
+			primary_title = { succession = succ_imperial_commune_elective }
+		}
+		#Failsafe, if the Republic shouldn't be used but for some reason is being used.
+		if = {
+			limit = {
+				NOT = { has_global_flag = imperial_republic_active }
+				government = reformed_imperial_commune_government
+			}
+			set_government_type = confederacy_government
+			primary_title = { succession = succ_confederacy_elective }
+		}
+	}
+}
+
+narrative_event = { #Commune Reform Event Announcement
+	id = custgovts.395
+	desc = custgovts395desc
+	title = "Rise of the Republic"
+	picture = GFX_evt_whitegoldfar
+	major = yes
+	only_rulers = yes
+	border = GFX_event_narrative_frame_diplomacy
+	is_triggered_only = yes
+	
+	option = {
+		name = custgovts395opta
+	}
+}
+
+long_character_event = { #Commune/Republic Destroyed event. Note to self- Make version of this to be compatible with  polity being annexed in a single war, I.E. Warlord Focus.
+	id = custgovts.396
+	title = "The Imperial City has Fallen!"
+	picture = GFX_evt_whitegoldfar
+	
+	desc = custgovts396desc
+	only_playable = yes
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	trigger = {
+		OR = {
+			has_global_flag = imperial_commune_active
+			has_global_flag = imperial_republic_active
+		}
+		OR = {
+			government = reformed_imperial_commune_government
+			government = imperial_commune_government
+		}
+		NOR = {
+			has_landed_title = c_imperialisle
+			any_realm_character = {
+				has_landed_title = c_imperialisle
+			}
+		}
+	}
+	
+	immediate = {
+		clr_global_flag = imperial_commune_active
+		clr_global_flag = imperial_republic_active
+	}
+	
+	option = {
+		name = custgovts396opta
+		prestige = -750
+		set_government_type = feudal_government
+	}
+}
+
+long_character_event = { #Imperial Commune Reform Event
+	id = custgovts.397
+	title = "A New Dawn"
+	picture = GFX_evt_whitegoldfar
+	
+	desc = custgovts397desc
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_global_flag = imperial_commune_active
+		set_global_flag = imperial_republic_active
+	}
+	option = {
+		name = custgovts397opta
+		prestige = 500
+		set_government_type = reformed_imperial_commune_government
+		give_nickname = nick_the_great
+		create_bloodline = {
+			type = bloodline_imperial_commune_reformer
+		}
+		primary_title = {
+			add_law = { law = succession_voting_power_0 cooldown = no }
+		}
+		narrative_event = { id = custgovts.395 days = 14 }
+	}
+}
+
+character_event = { #Debug event to see if the flag is active
+	id = custgovts.398
+	desc = "This is a debug event!"
+	picture = GFX_evt_whitegoldfar
+	is_triggered_only = yes
+	
+	option = {
+		name = "Commune Flag Inactive"
+		trigger = { NOT = { has_global_flag = imperial_commune_active } }
+	}
+	option = {
+		name = "Commune Flag Active"
+		trigger = { has_global_flag = imperial_commune_active }
+	}
+	option = {
+		name = "Republic Flag Inactive"
+		trigger = { NOT = { has_global_flag = imperial_republic_active } }
+	}
+	option = {
+		name = "Republic Flag Active"
+		trigger = { has_global_flag = imperial_republic_active }
+	}
+	option = {
+		name = "Commune Debug Flag Inactive"
+		trigger = { NOT = { has_global_flag = commune399debug } }
+	}
+	option = {
+		name = "Commune Debug Flag Active"
+		trigger = { has_global_flag = commune399debug }
+	}
+}
+	
+character_event = {
+	id = custgovts.399 #Set global flag at gamestart because I don't know how to set it in history woohoo
+	hide_window = yes
+	
+	only_playable = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				is_save_game = no
+				NOT = {
+					has_global_flag = imperial_commune_active
+				}
+				NOT = {
+					year >= 3455 # 3454 is when the commune ends in history
+				}
+			}
+			set_global_flag = imperial_commune_active
+			set_global_flag = commune399debug
+		}
+	}
+}
+
+###
+#Empire Collapse Events 400-499
+###
+
+#Cyrodiil Collapse (Prototype)
+#character_event = {
+#	title = custgovts400title
+#	id = custgovts.400
+#	desc = custgovts400desc
+#	
+#	mean_time_to_happen = {
+#		months = 12
+#		modifier = { #Anti-frustration
+#			factor = 2
+#			ai = no
+#		}
+#		modifier = {
+#			factor = 0.5
+#			war = yes
+#		}
+#	}
+#	trigger = {
+#		always = no
+#	}
+#	
+#}
+#narrative_event = { #Announcement
+#	title = custgovts400title
+#	id = custgovts.401
+#	desc = custgovts401desc
+#	
+#	major = yes
+#	is_triggered_only = yes
+#}
+
+###################
+#Tsaesci Matriarchy #500-599
+###################
+
+#Male Matriarch gained
+character_event = {
+	id = custgovts.500
+	hide_window = yes
+	picture = GFX_evt_two_moon_aurora
+	
+	only_rulers = yes
+	only_men = yes
+	religion = five_courts
+
+    is_triggered_only = yes
+	
+	trigger = {
+		government = matriarchy_government
+		NOT = { has_character_modifier = male_matriarch }
+	}
+	
+	immediate = {
+		add_character_modifier = { name = male_matriarch duration = -1 }
+	}
+}
