@@ -1,6 +1,6 @@
 name = "Elder Kings Dev"
-path = "mod/EKSVN"
-user_dir = "EKSVN"
+path = "mod/elder-kings-ck2"
+user_dir = "elder-kings-ck2"
 
 replace_path = "common"
 replace_path = "common/alternate_start"
