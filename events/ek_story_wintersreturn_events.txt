@@ -1,0 +1,80 @@
+namespace = story_wintersreturn
+
+##### Start up events
+narrative_event = { #Winter's Return startup narrative event
+	id = story_wintersreturn.1
+	title = story_wintersreturn.1.t
+	picture = GFX_evt_kamal_invasion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		start_date = 3732.12.1
+		OR = { #Only triggers if you're in Cyrodiil or you are Kyuha Tharn
+			capital_scope = { region = nirn_tamriel_cyrodiil }
+			c_136511 = { character = ROOT } # Queen Kyuha Tharn of Rimmen
+		}
+		is_save_game = no
+	}
+	
+	desc = {
+		trigger = { c_125400 = { character = ROOT } } #playing as Irmaku
+		text = story_wintersreturn.1.d1
+		picture = GFX_evt_kamal_invasion
+	}
+	desc = {
+		trigger = { c_3714 = { character = ROOT } } #playing as Hestra Varo of Nibenay
+		text = story_wintersreturn.1.d2
+		picture = GFX_evt_kamal_invasion
+	}
+	desc = {
+		trigger = { c_7103 = { character = ROOT } } #playing as Sura Riol of the Colovian Estates
+		text = story_wintersreturn.1.d3
+		picture = GFX_evt_kamal_invasion
+	}
+	desc = {
+		trigger = { c_136511 = { character = ROOT } } #playing as Kyuha Tharn of Rimmen
+		text = story_wintersreturn.1.d4
+		picture = GFX_evt_kamal_invasion
+	}
+	desc = {
+		trigger = { #playing as some other Cyrodiilic ruler
+			NOR = {
+				c_125400 = { character = ROOT }
+				c_3714 = { character = ROOT }
+				c_7103 = { character = ROOT }
+				c_136511 = { character = ROOT }
+			}
+		} 
+		text = story_wintersreturn.1.d5
+		picture = GFX_evt_kamal_invasion
+	}		
+	
+	option = {
+		name = story_wintersreturn.1.optA
+		trigger = { c_125400 = { character = ROOT } } #playing as Irmaku
+	}
+	option = {
+		name = story_wintersreturn.1.optB
+		trigger = { c_3714 = { character = ROOT } } #playing as Hestra Varo of Nibenay
+	}	
+	option = {
+		name = story_wintersreturn.1.optC
+		trigger = { c_7103 = { character = ROOT } } #playing as Sura Riol of the Colovian Estates
+	}
+	option = {
+		name = story_wintersreturn.1.optD
+		trigger = { c_136511 = { character = ROOT } } #playing as Kyuha Tharn of Rimmen
+	}
+	option = {
+		name = story_wintersreturn.1.optE
+		trigger = { #playing as some other Schmuck
+			NOR = {
+				c_125400 = { character = ROOT }
+				c_3714 = { character = ROOT }
+				c_7103 = { character = ROOT }
+				c_136511 = { character = ROOT }
+			}
+		}
+	}			
+}
