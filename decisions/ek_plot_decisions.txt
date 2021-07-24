@@ -1,0 +1,38 @@
+plot_decisions = {
+
+	plot_refute_claim_decision = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 12
+		
+		potential = {
+			always = yes # Disabled
+			is_playable = yes
+			has_plot = plot_refute_claim
+			NOT = { has_character_flag = plot_refute_claim_decision_taken }
+		}
+		allow = {
+			plot_power = 1.0
+			num_of_plot_backers = 1
+		}
+		effect = {
+			plot_target_char = {
+				letter_event = { id = sorplots.0 days = 3 tooltip = "EVTTOOLTIP8000" }
+			}
+			hidden_tooltip = {
+				set_character_flag = plot_refute_claim_decision_taken
+				activate_plot = yes
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { plot_power = 1.1 }
+			}
+		}
+	}
+}
