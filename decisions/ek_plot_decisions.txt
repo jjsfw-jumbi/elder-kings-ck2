@@ -9,19 +9,27 @@ plot_decisions = {
 			always = yes # Disabled
 			is_playable = yes
 			has_plot = plot_refute_claim
-			NOT = { has_character_flag = plot_refute_claim_decision_taken }
 			has_submenu_open = no
 		}
 		allow = {
 			plot_power = 1.0
 			num_of_plot_backers = 1
+			custom_tooltip = {
+				text = refute_claim_cooldown_tooltip
+				hidden_tooltip = {
+					OR = {
+						NOT = { has_character_flag = refute_claim_cooldown }
+						had_character_flag = { flag = refute_claim_cooldown days = 365 }
+					}
+				}
+			}
 		}
 		effect = {
 			plot_target_char = {
 				letter_event = { id = sorplots.0 days = 3 tooltip = "EVTTOOLTIP8000" }
 			}
 			hidden_tooltip = {
-				set_character_flag = plot_refute_claim_decision_taken
+				set_character_flag = refute_claim_cooldown
 				activate_plot = yes
 			}
 		}
