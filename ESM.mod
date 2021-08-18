@@ -1,6 +1,6 @@
 name = "Elder Kings Dev"
-path = "mod/elder-kings-ck2"
-user_dir = "elder-kings-ck2"
+path = "mod/elder-kings-ck2-master"
+user_dir = "elder-kings-ck2-master"
 
 replace_path = "common"
 replace_path = "common/alternate_start"
