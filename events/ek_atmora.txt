@@ -1,0 +1,376 @@
+namespace = atmora
+
+narrative_event = {
+	id = atmora.1
+        title = atmora.1.title
+	desc = atmora.1
+	picture = "GFX_evt_seas"
+		is_triggered_only = yes 
+
+		# Try to find a trade path
+		option = {
+			name = atmora.1.opta
+			wealth = -200
+
+			custom_tooltip = {
+				text = atmora.1.tooltipa
+			}
+                        hidden_tooltip = {
+                                narrative_event = {
+                                        id = atmora.2
+                                        days = 7
+                                        random = 3
+                                }
+                        }
+		}
+
+		# Leave atmora
+		option = {
+			name = atmora.1.optb
+			custom_tooltip = {
+				text = atmora.1.tooltipb
+			}
+		}
+
+		# Do nothing
+		option = {
+			name = atmora.1.optc
+		}
+}
+
+# Atmoran expedition: Select leader of an expedition
+narrative_event = {
+	id = atmora.2
+        title = atmora.2.title
+	desc = atmora.2
+	picture = GFX_evt_trade_post_republic
+        is_triggered_only = yes
+
+        # Select random couriter
+        immediate = {
+                hidden_tooltip = {
+                        random_courtier = {
+                                limit = {
+                                        is_adult = yes
+                                        religion = ROOT
+                                        NOR = {
+                                                trait = incapable
+                                                trait = craven
+                                                is_inaccessible_trigger = yes
+                                        }
+                                        prisoner = no
+                                        #max_age = 50
+                                        #min_age = 20
+                                }
+                                preferred_limit = {
+                                        stewardship = 5
+                                        OR = {
+                                               trait = ravager
+                                               trait = viking
+                                               trait = seaking
+                                               trait = sea_queen
+                                               trait = pirate
+                                        }
+                                }
+                                preferred_limit = {
+                                        stewardship = 7
+                                        OR = {
+                                               trait = trader_1
+                                               trait = trader_2
+                                               trait = trader_3
+                                               trait = adventurer
+                                               trait = scout_1
+                                               trait = scout_2
+                                               trait = scout_3
+                                        }
+                                }
+                                preferred_limit = {
+                                        stewardship = 7
+                                        combat_rating = 10
+                                }
+                                save_event_target_as = expedition_leader_courtier
+                        }
+
+                        create_character = {
+                                random_traits = yes
+                                dynasty = random
+                                culture = atmoran
+                                religion = animisim
+                                female = no
+                                min_age = 25
+                                max_age = 50
+                        }
+                        new_character = {
+                                save_event_target_as = expedition_leader_random
+                        }
+                }
+        }
+
+        # Select one of your courtiers
+        option = {
+                name = atmora.2.opta
+                trigger = {
+                        event_target:expedition_leader_courtier = { always = yes }
+                }
+                event_target:expedition_leader_courtier = {
+                        tooltip = { add_trait = on_adventure }
+                        save_event_target_as = atmoran_expedition_leader
+                }
+                # Kill the new character
+                hidden_tooltip = {
+                        event_target:expedition_leader_random = {
+                                death = { death_reason = death_missing }
+                        }
+                }
+        }
+
+        # Select a voulenteer from the hold
+        option = {
+                name = atmora.2.optb
+                event_target:expedition_leader_random = {
+                        tooltip = { add_trait = on_adventure }
+                        save_event_target_as = atmoran_expedition_leader
+                }
+        }
+
+        # Select the outcome and report it to ruler
+        after = {
+                hidden_tooltip = { 
+                        event_target:atmoran_expedition_leader = {
+                                character_event = { id = atmora.3 }
+                        }
+                }
+                hidden_tooltip = { narrative_event = { id = atmora.4 days = 120 random = 90 }}
+        }
+}
+
+# Atmora expedition: Leader notification: start
+character_event = {
+ 	id = atmora.3
+        title = atmora.3.title
+	desc = atmora.3
+	picture = GFX_evt_trade_post_republic
+        is_triggered_only = yes 
+       
+        option = {
+                name = atmora.3.opta
+                add_trait = on_adventure
+        }
+}
+
+# Atmoran expedition: success
+narrative_event = {
+	id = atmora.4
+        title = atmora.4.title
+	desc = {
+                text = atmora.4a
+                trigger = { has_character_flag =  atmoran_expedition_success }
+                picture = GFX_evt_trade_post_republic
+        }
+	desc = {
+                text = atmora.4b
+                trigger = { NOT = { has_character_flag =  atmoran_expedition_success }}
+                picture = GFX_evt_seas
+        }
+        is_triggered_only = yes 
+
+        immediate = {
+                random_list = {
+                        20 = {
+                                modifier = {
+                                        factor = 1.3
+                                        any_realm_province = {
+                                                has_wonder = wonder_jylkurfyk
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.5
+                                        capital_scope = { TECH_NAVAL >= 1 }
+                                }
+                                modifier = {
+                                        factor = 1.3
+                                        capital_scope = { TECH_NAVAL >= 2 }
+                                }
+                                modifier = {
+                                        factor = 1.3
+                                        capital_scope = { TECH_NAVAL >= 3 }
+                                }
+                                modifier = {
+                                        factor = 1.3
+                                        capital_scope = { TECH_NAVAL >= 4 }
+                                }
+                                modifier = {
+                                        factor = 0.66
+                                        event_target:atmoran_expedition_leader = {
+                                                NOT = { stewardship = 8 }
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.3
+                                        event_target:atmoran_expedition_leader = {
+                                                stewardship = 10
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.3
+                                        event_target:atmoran_expedition_leader = {
+                                                stewardship = 13
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.3
+                                        event_target:atmoran_expedition_leader = {
+                                                stewardship = 16
+                                        }
+                                }
+                                # knows something about the sea
+                                modifier = {
+                                        factor = 1.5
+                                        event_target:atmoran_expedition_leader = {
+                                                OR = {
+                                                        trait = pirate
+                                                        trait = ravager
+                                                        trait = viking
+                                                        trait = sea_queen
+                                                        trait = seaking
+                                                }
+                                        }
+                                }
+                                # Has education that serves the job
+                                modifier = {
+                                        factor = 1.4
+                                        event_target:atmoran_expedition_leader = {
+                                                OR = {
+                                                        trait = trader_1
+                                                        trait = trader_2
+                                                        trait = trader_3
+                                                        trait = scout_1
+                                                        trait = scout_2
+                                                        trait = scout_3
+                                                }
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.2
+                                        event_target:atmoran_expedition_leader = {
+                                                trait = brave
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.2
+                                        event_target:atmoran_expedition_leader = {
+                                                martial = 8
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.2
+                                        event_target:atmoran_expedition_leader = {
+                                                martial = 13
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.2
+                                        event_target:atmoran_expedition_leader = {
+                                                martial = 17
+                                        }
+                                }
+                                modifier = {
+                                        factor = 1.2
+                                        event_target:atmoran_expedition_leader = {
+                                                has_artifact = map_of_nirn
+                                        }
+                                }
+                                # Decide outcome
+                                if = {
+                                        limit = {
+                                                event_target:atmoran_expedition_leader = {
+                                                        is_alive = yes
+                                                }
+                                        }
+                                        set_character_flag = atmoran_expedition_success
+                                }
+                        }
+                        80 = { }
+                }
+        }
+
+        option = {
+                name = atmora.4.opta
+                trigger = { has_character_flag = atmoran_expedition_success }
+                prestige = 400
+                custom_tooltip = {
+                        text = atmora_reconnected_tooltip
+                        set_global_flag = atmora_reconnected
+                }
+                custom_tooltip = {
+                        text = atmora_depopulation_prevented_tooltip
+                }
+                event_target:atmoran_expedition_leader = {
+                        tooltip = { remove_trait = on_adventure }
+                        hidden_tooltip = { character_event = { id = atmora.5}}
+                }
+        }
+
+        option = {
+                name = atmora.4.optb
+                trigger = { NOT = { has_character_flag = atmoran_expedition_success }}
+                prestige = -400
+                event_target:atmoran_expedition_leader = {
+                        tooltip = { 
+                                death = { death_reason = death_missing }
+                        }
+                        hidden_tooltip = { character_event = { id = atmora.6}}
+                }
+        }
+}
+
+# Atmoran expedition: leader notification: success
+character_event = {
+	id = atmora.5
+        desc = atmora.5
+	picture = GFX_evt_trade_post_republic
+        is_triggered_only = yes 
+        option = {
+                name = atmora.5.opta
+                remove_trait = on_adventure
+                prestige = 300
+        }
+}
+
+# Atmoran expedition: leader notification: failure
+character_event = {
+	id = atmora.6
+        desc = atmora.6
+	picture = GFX_evt_seas
+        is_triggered_only = yes 
+        option = {
+                name = atmora.6.opta
+                remove_trait = on_adventure
+                death = { death_reason = death_missing }
+        }
+}
+
+
+## Trade routes are established
+#narrative_event = {
+#	id = atmora.5
+#        title = atmora.5.title
+#	desc = atmora.5
+#	picture = GFX_evt_trade_post_republic
+#        is_triggered_only = yes 
+#
+#        # Great!
+#        option = {
+#                name = atmora.4.opta
+#        }
+#                create_character = {
+#                        random_traits = yes
+#                        dynasty = random
+#                        culture = atmoran
+#                        religion = animisim
+#                        female = no
+#                        min_age = 25
+#                        max_age = 50
+#                }
+#        }
+#}
