@@ -1,0 +1,137 @@
+##########################
+# I AM THE SHARMAT       #
+# I AM OLDER THAN MUSIC  #
+# WHAT I BRING IS LIGHT  #
+# WHAT I BRING IS A STAR #
+# WHAT I BRING IS        #
+# AN ANCIENT SEA         #
+##########################
+
+namespace = dagoth
+
+###Dagoth begins to wake up in Red Mountain...
+character_event = {
+	id = dagoth.0
+	hide_window = yes
+	
+	trigger = {
+		#province_id = 
+		
+		# Time - depends on the game rules
+		# Based on the mongol spawn event
+		OR = {
+			year = 3802 #2E 882 right?
+			AND = {
+				has_game_rule = {
+					name = dagoth_ur
+					value = random
+				}
+				total_years_played = 50
+			}
+		}
+		NOR = { 
+			year = 3805
+			has_game_rule = {
+				name = dagoth_ur
+				value = off
+			}
+		}
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		years = 100
+		
+		modifier = {
+			factor = 0.8
+			year = 3803
+		}
+		modifier = {
+			factor = 0.8
+			year = 3804
+		}
+		
+		# Set to historical - Has to spawn
+		modifier = {
+			factor = 0.01
+			has_game_rule = {
+				name = dagoth_ur
+				value = historical
+			}
+		}
+		
+		# Set to random, delay it a bit
+		modifier = {
+			factor = 2
+			has_game_rule = {
+				name = dagoth_ur
+				value = random
+			}
+			NOT = { total_years_played = 100 }
+		}
+	}
+	
+	immediate = {
+		set_global_flag = dagoth_awakes
+	}
+	character_event = { id = dagoth.1 days = 3 }
+	
+	}
+}
+
+narrative_event = {
+	id = dagoth.1
+	major = yes
+	only_rulers = yes
+	title = dagoth.1.title
+	desc = dagoth.1.desc
+	picture = GFX_evt_dragonborn #placeholder
+	is_triggered_only = yes
+	
+	#Oh boy, Dagoth Ur wakes!
+	option = {
+		name = dagoth.1.A
+		trigger = { religion = sixth_house }
+	}
+	
+	#Oh no, Dagoth Ur wakes!
+	option = {
+		name = dagoth.1.B
+		trigger = { 
+			NOT = { religion = sixth_house }
+		}
+	}
+}
+	
+#####ash statue events
+# An Ash Statue appears at my court?
+##Get rid of it!
+###Tribunal ardor, piety
+##May as well keep it
+###Acquires ash statue artifact
+
+# Ash statue begins converting my court...
+##Invisible event
+##random courtier becomes secret dagoth ur worshipper
+##If randomly chosen person is player's ward, trigger education event
+
+#The child I'm educating is becoming a sleeper!
+##Do nothing -- nothing happens, the child is likely to continue having bad dreams
+##Send in the inquisitors! -- they could cure the child, kill the child, or rarely fail to cure the child but think they succeeded
+##Try to reason with the child! chance of converting them or becoming a sleeper based on your prestige
+
+#####sleeper events
+
+#Strange ramblings that freak people out
+##give negative court opinion. maybe if you have high learning you can figure it out and imprison them?
+
+#Tries to convert someone at court
+##lower chance than the ash statue artifact
+
+#Tries to assassinate outlander in the court
+##not sure if this needs to be an event - maybe give the trait a massive hate-on for outlanders
+
+#Fucks off to Red Mountain
+##vanished without a trace? maybe a special version of this for members of your dynasty where you can catch them
+
+#Locals in the province are having strange dreams...
+##establishes groundwork for a secret dagoth cult if left unchecked
