@@ -13,7 +13,7 @@ The aim of the mod is to deliver a great strategy experience to CK2 players set 
 
 To install this mod from this git repo, use the following steps.
 
-1. Download this repository as a zip
+1. Download this repository as a zip - to do this click 'Code' in the top right and then Download ZIP.
 2. Extract the files to your Crusader Kings 2 mod directory. On Windows this is usually `%userprofile%\Documents\Paradox Interactive\Crusader Kings II\mod`
 3. Make sure your files are in a folder called 'elder-kings-ck2-master'.
 4. Go inside this folder, and move the 'ESM.mod' up into the `Crusader Kings II\mod` - so that 'elder-kings-ck2-master' and 'ESM.mod' are on the same level.
