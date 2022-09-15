@@ -1,0 +1,90 @@
+decisions = {
+
+        # Decide atmoran future: once per ruler liftime
+	atmoran_exodus = {
+		is_high_prio = yes
+		ai_check_interval = 128
+		
+		potential = {
+                        is_ruler = yes
+			age = 16
+                        stewardship = 7
+                        independent = yes
+                        culture = atmoran
+			is_indisposed = no
+			is_inaccessible_trigger = no
+                        NOT = { trait = undead }
+                        NOT = { has_global_flag = atmora_colonized }
+                        NOT = { has_character_flag = reconnecting_atmora }
+			has_submenu_open = no
+                        # Specific status of atmora
+                        regional_percentage = {
+                            percentage >= 0.25
+                            region = nirn_atmora
+                            NOT = { culture_group = undead }
+                        }
+                        # We hold a capital in it
+                        capital_scope = { region = region_atmora }
+		}
+		allow = {
+			war = no
+			wealth = 50
+                        regional_percentage = {
+                            region = nirn_atmora
+                            percentage >= 0.25
+                            NOT = { culture_group = undead }
+                            controlled_by = ROOT
+                        }
+                        OR = {
+                            k_atmora = { holder = ROOT }
+                            d_broadwall = { holder = ROOT }
+                            d_haugrheim = { holder = ROOT }
+                            d_isalur = { holder = ROOT }
+                            d_moraheim = { holder = ROOT }
+                            d_skalrheim = { holder = ROOT }
+                            d_ysunn = { holder = ROOT }
+                        }
+		}
+		effect = {
+                        set_character_flag = reconnecting_atmora
+                        narrative_event = { id = atmora.1 days = 3 }
+		}
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { #Monthly randomizer for when AI takes decision (1% chance)
+				factor = 0
+				random = 1
+			}
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.5
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0.33
+				trait = content
+			}
+			modifier = {
+				factor = 1.2
+				trait = diligent
+			}
+			modifier = {
+				factor = 0
+				NOT = { wealth = 50 }
+			}
+			modifier = {
+				factor = 0.9
+				NOT = { stewardship = 8 }
+			}
+			modifier = {
+				factor = 1.1
+				stewardship = 10
+			}
+		}
+	}
+}
