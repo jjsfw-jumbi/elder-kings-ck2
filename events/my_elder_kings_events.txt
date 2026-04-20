@@ -1,0 +1,163 @@
+namespace = myelderking
+
+character_event = {
+	id = myelderking.1
+	desc = MYEVT01
+	picture = GFX_evt_eparsian_boost
+
+	trigger = {
+		learning = 30
+		culture = eparsian
+		#is_alive = yes
+		NOT = { has_character_flag = tech_boost_event_happened }
+		higher_tier_than = BARON
+	}
+
+	mean_time_to_happen = {
+		months = 1
+		modifier = {
+			factor = 0.1
+			NOT = { has_character_flag = tech_boost_event_happened }
+		}
+	}
+	
+	option = {
+		name = MYEVD01
+		capital_scope = {
+			add_province_modifier = {
+				name = eparsian_technology_boost
+				duration = 1460
+			}
+		}
+		set_character_flag = tech_boost_event_happened
+	}
+}
+
+#non on_action event
+character_event = {
+	id = myelderking.2
+	desc = MYEVT02
+	picture = GFX_evt_mine_looting
+
+	trigger = {
+		#is_alive = yes
+		independent = yes
+		NOT = { has_character_flag = sack_mine_event_happened }
+		religion = old_gods
+		has_landed_title = c_ormond
+	}
+
+	mean_time_to_happen = {
+		months = 1
+		modifier = {
+			factor = 0.1
+			NOT = { has_character_flag = sack_mine_event_happened }
+		}
+	}
+    
+	option = {
+		name = MYEVD02
+		any_realm_province = {
+			add_province_modifier = {
+				name = mine_looting_extra_income
+				duration = 1825
+			}
+		}
+		set_character_flag = sack_mine_event_happened
+	}
+}
+
+character_event = {
+	id = myelderking.3
+	desc = MYEVT03
+	picture = GFX_evt_peasants
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	trigger = {
+		culture = mummy
+		FROM = {
+			owner = {
+				NOT = { culture = mummy }
+			}
+		}
+	}
+
+	option = {
+		name = MYEVD03
+		capital_scope = {
+			ROOT = {
+				spawn_unit = {
+					province = THIS
+					owner = ROOT
+					troops = {
+						light_infantry = { 200 200 }
+						heavy_infantry = { 50 50 }
+						archers = { 200 200 }
+					}
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = myelderking.4
+	desc = MYEVT04
+	picture = "GFX_evt_siege"
+	border = GFX_event_normal_frame_war
+	
+	major = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		culture = orc
+		NOT = { has_character_flag = orc_sack_cooldown }
+		FROM = {
+			owner = {
+				NOT = { culture = orc }
+			}
+		}
+	}
+	
+	option = {
+		name = MYEVD04
+		trigger = {
+			culture = orc
+		}
+		prestige = 20
+		wealth = 20
+		set_character_flag = orc_sack_cooldown
+		add_character_modifier = {
+			modifier = orc_sack_cooldown
+			hidden = yes
+			duration = 365
+		}
+	}
+}
+
+character_event = {
+	id = myelderking.5
+	desc = MYEVT05
+	picture = "GFX_evt_siege"
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+		
+	trigger = {
+		NOT = { has_global_flag = sack_zion_reach }
+		FROM = { title = b_zion_reach }
+	}
+	
+	immediate = {
+		set_global_flag = sack_zion_reach
+	}
+	
+	option = {
+		name = MYEVD05
+		prestige = 1000
+		wealth = 10000
+		add_trait = warrior_4
+	}
+}

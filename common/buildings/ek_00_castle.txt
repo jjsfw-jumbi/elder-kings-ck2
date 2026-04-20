@@ -5616,6 +5616,7 @@ castle = {
 		potential = {
 			building_holding_is_tower = no
 			OR = {
+			culture = colovian
 			culture = imperial
 			}
 		}
@@ -9242,5 +9243,74 @@ castle = {
 	}
 	
 	#Todo: Mothpriests, Assassins, Syndicates.
+
+#vampire
+	ca_vampire_citadel_1 = {
+		desc = ca_vampire_citadel_1_desc
+		
+		potential = { FROM = { trait = vampire } }	
+		trigger = { 
+			TECH_CASTLE_CONSTRUCTION = 1
+			is_capital = yes 
+		}
+		
+		prerequisites = { ca_walls_2 }
+		ai_creation_factor = 100
+		
+		fort_level = 2
+		tax_income = 1
+		monthly_character_prestige = 0.25
+		gold_cost = 495
+		
+		build_time = 1095
+		
+		extra_tech_building_start = 10.0
+	}
 	
+	ca_vampire_citadel_2 = {
+		desc = ca_vampire_citadel_2_desc
+		
+		potential = { FROM = { trait = vampire } }
+		trigger = { 
+			TECH_CASTLE_CONSTRUCTION = 3
+			is_capital = yes					 
+		}
+		
+		upgrades_from = ca_vampire_citadel_1
+		ai_creation_factor = 99
+		
+		fort_level = 4
+		tax_income = 2
+		knights = 25
+		knights_offensive = 0.15
+		monthly_character_prestige = 0.5
+		
+		gold_cost = 750
+		build_time = 1825
+		
+		extra_tech_building_start = 10.0
+	}
+	
+	ca_vampire_catacomb = {
+		desc = ca_vampire_catacomb_desc
+		
+		potential = { 
+			FROM = { 
+				trait = vampire
+				culture_group = vampire_group
+			} 
+		}
+		trigger = { TECH_CASTLE_CONSTRUCTION = 1 }
+		
+		ai_creation_factor = 99
+		
+		monthly_character_piety = 0.05
+		heavy_infantry = 100
+		pikemen = 100
+		
+		gold_cost = 225
+		build_time = 400
+		
+		extra_tech_building_start = 10.0
+	}
 }
