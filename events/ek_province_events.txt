@@ -459,22 +459,16 @@ province_event = {
 	picture = GFX_evt_goblins
 	
 	immediate = {
-		# Check which generic guild can be called
+		# Check which generic guild can be called (always saved so option tooltips never use an unset event target)
 		if = {
-			limit = {
-				OR = {
-					region = nirn_tamriel
-					region = nirn_yokuda
-				}
-			}
-			fighters_guild_tamriel = { save_event_target_as = generic_guild }
-		}
-		
-		else_if = {
 			limit = {
 				region = nirn_akavir
 			}
 			fighters_guild_akavir = { save_event_target_as = generic_guild }
+		}
+		
+		else = {
+			fighters_guild_tamriel = { save_event_target_as = generic_guild }
 		}
 		
 		# Check which cultural guild can be called
@@ -493,6 +487,10 @@ province_event = {
 				}
 			}
 			ansei_guild_tamriel = { save_event_target_as = cultural_guild }
+		}
+		
+		else = {
+			fighters_guild_tamriel = { save_event_target_as = cultural_guild }
 		}
 		
 		# Assuming the character can deal with the infestation themselves, should the AI do it?
@@ -516,28 +514,10 @@ province_event = {
 		name = HireGenericGuild
 		custom_tooltip = { text = HireFightersTooltip }
 		trigger = {
-			event_target:generic_guild = { society_is_active = yes }
 			owner = { wealth = 50 }
-			any_society_member = {
-				society_member_of = event_target:generic_guild
-				has_any_quest = no
-				is_society_grandmaster = no
-				NOT = { has_character_modifier = quest_cooldown_timer }
-				is_adult = yes
-				prisoner = no
-				is_inaccessible_trigger = no
-				NOT = {
-					owns = ROOT
-				}
-			}
-		}
-		ai_chance = {
-			factor = 10
-		}
-		hidden_tooltip = {
-			random_society_member = {
-				limit = {
-					society_member_of = event_target:generic_guild
+			event_target:generic_guild = {
+				society_is_active = yes
+				any_society_member = {
 					has_any_quest = no
 					is_society_grandmaster = no
 					NOT = { has_character_modifier = quest_cooldown_timer }
@@ -548,7 +528,27 @@ province_event = {
 						owns = ROOT
 					}
 				}
-				society_quest_event = { id = ekguildquests.10 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+		hidden_tooltip = {
+			event_target:generic_guild = {
+				random_society_member = {
+					limit = {
+						has_any_quest = no
+						is_society_grandmaster = no
+						NOT = { has_character_modifier = quest_cooldown_timer }
+						is_adult = yes
+						prisoner = no
+						is_inaccessible_trigger = no
+						NOT = {
+							owns = ROOT
+						}
+					}
+					society_quest_event = { id = ekguildquests.10 }
+				}
 			}
 		}
 	}
@@ -558,28 +558,15 @@ province_event = {
 		name = HireCulturalGuild
 		custom_tooltip = { text = HireFightersTooltip }
 		trigger = {
-			event_target:cultural_guild = { society_is_active = yes }
 			owner = { wealth = 50 }
-			any_society_member = {
-				society_member_of = event_target:cultural_guild
-				has_any_quest = no
-				is_society_grandmaster = no
-				NOT = { has_character_modifier = quest_cooldown_timer }
-				is_adult = yes
-				prisoner = no
-				is_inaccessible_trigger = no
-				NOT = {
-					owns = ROOT
-				}
+			OR = {
+				region = nirn_tamriel_skyrim
+				region = nirn_tamriel_hammerfell
+				region = nirn_yokuda
 			}
-		}
-		ai_chance = {
-			factor = 15 #The AI prefers to use its cultural guild
-		}
-		hidden_tooltip = {
-			random_society_member = {
-				limit = {
-					society_member_of = event_target:cultural_guild
+			event_target:cultural_guild = {
+				society_is_active = yes
+				any_society_member = {
 					has_any_quest = no
 					is_society_grandmaster = no
 					NOT = { has_character_modifier = quest_cooldown_timer }
@@ -590,7 +577,27 @@ province_event = {
 						owns = ROOT
 					}
 				}
-				society_quest_event = { id = ekguildquests.10 }
+			}
+		}
+		ai_chance = {
+			factor = 15 #The AI prefers to use its cultural guild
+		}
+		hidden_tooltip = {
+			event_target:cultural_guild = {
+				random_society_member = {
+					limit = {
+						has_any_quest = no
+						is_society_grandmaster = no
+						NOT = { has_character_modifier = quest_cooldown_timer }
+						is_adult = yes
+						prisoner = no
+						is_inaccessible_trigger = no
+						NOT = {
+							owns = ROOT
+						}
+					}
+					society_quest_event = { id = ekguildquests.10 }
+				}
 			}
 		}
 	}
